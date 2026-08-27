@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "split_rule": "independent_generator_seed",
+  "train_group": "synthetic-seed-3100",
+  "validation_group": "synthetic-seed-4100",
+  "leakage_check": "passed"
+}

@@ -1,0 +1,1 @@
+uv run python scripts/run_m3_synthetic.py --variant S0 --case short_nonlinear_memory --seed 0 --run-id m3_s0_short_memory_seed0_v1

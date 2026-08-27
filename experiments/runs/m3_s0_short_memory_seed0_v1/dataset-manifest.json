@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "tier": "SYNTHETIC",
+  "case": "short_nonlinear_memory",
+  "sample_rate": 48000,
+  "sample_count": 8192,
+  "train_seed": 3100,
+  "validation_seed": 4100,
+  "train_input_sha256": "66e6dffa2e8406dd3e79b3e6640128aa8dffeee96a735a7abf04958e2468fe8a",
+  "train_target_sha256": "24c809110991573ad801d8c12d8f42527510390572c7b157f1279f6ec264f6dd",
+  "validation_input_sha256": "9135d3a93a50e4cc71c1812fa112d6d3e251e8e70b8b3429f25eb4860629646e",
+  "validation_target_sha256": "672b1b0ffb50a7b54e8d6980053857a4a917f643b367ff94216f8b6a94798c62"
+}
