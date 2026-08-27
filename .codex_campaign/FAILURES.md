@@ -177,3 +177,7 @@ Static analysis rejected long report and autopsy prose literals in the initial s
 ## 2026-08-27 — F-M4-017 — M4 summary required configured formatting
 
 The corrected summary generator passed lint, then the formatter compacted one median expression and normalized quotes in two formatted report fields. Resolution: apply the configured formatter and rerun validation before generating the aggregate.
+
+## 2026-08-27 — F-M4-018 — Fixed M4 smoke gate failed
+
+All 24 counted runs completed, but A2 Full has lower median test ESR on both devices. Fulltone medians are `0.0639` for A2 versus `0.2112`/`0.2158` for S3/S4; Big Muff medians are `0.5969` versus `0.9670`/`0.9595`. Neither non-inferiority nor physical antialiasing evidence is present. Resolution: keep M4 in recovery, preserve the negative results, complete the ordered autopsy, and authorize only the preregistered width-31 equal-parameter diagnostic before selecting a negative-result pivot.

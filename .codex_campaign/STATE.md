@@ -1,9 +1,9 @@
 # Campaign State
 
-- Updated: 2026-08-27T14:39:51+02:00
+- Updated: 2026-08-27T14:50:00+02:00
 - Maturity: M4 — principal smoke test
 - Status: in progress
-- Current task: aggregate the complete 24-run M4 matrix, benchmark inference cost, and execute the ordered failure autopsy before any pivot or maturation work.
+- Current task: execute the single authorized equal-parameter S3 recovery diagnostic on both M4 devices; stop broad expansion if it does not materially close the ESR gap.
 - External results accessed: no
 - External retest authorized: false
 
@@ -30,6 +30,7 @@
 - Completed corrected v2 preflights for all four model paths; step-0 eligibility and block/reset behavior now pass.
 - Completed and audited the first four counted Fulltone seed-0 runs; A2 leads this single condition, while all model paths satisfy the operational run checks.
 - Completed all 24 counted M4 runs with no failed seed or missing metric. Preliminary medians favor A2 on both devices, so the M4 gate awaits cost audit and formal autopsy.
+- Generated `reports/M4_CORE.md`, the machine-readable aggregate, the ordered autopsy, and corrected Python streaming benchmark. The fixed M4 gate failed.
 
 ## M0 gate
 

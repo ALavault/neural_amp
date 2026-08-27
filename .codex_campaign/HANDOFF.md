@@ -2,11 +2,11 @@
 
 ## Current position
 
-M0 through M3 passed, and all 24 counted M4 runs completed without a missing metric. Preliminary median ESR favors A2 on both devices; neither S3 nor S4 meets the quality condition. Cost and the required ordered autopsy are not yet complete, so no pivot or gate decision is final. External evaluation remains locked.
+M0 through M3 passed. The complete M4 matrix failed all three smoke conditions, and the ordered autopsy is recorded in `experiments/summaries/m4_smoke/autopsy.json`. S3/S4 used only 1,244 parameters versus A2's 12,145, and Big Muff outputs collapsed in gain. One equal-parameter diagnostic is authorized before a negative-result pivot. External evaluation remains locked.
 
 ## Resume action
 
-Generate the M4 aggregate, measure Python development inference cost against the pinned A2 Core reference, and perform the section-21 checks in order. Record a pivot decision only after those artifacts exist.
+Run S3 with residual width 31 for seed 0 on both devices, with all other M4 settings fixed. Compare against the existing seed-0 A2 and width-8 S3 runs. Stop architecture expansion if the ESR gap does not materially close.
 
 ## Absolute blockers
 

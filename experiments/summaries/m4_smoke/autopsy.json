@@ -1,0 +1,70 @@
+{
+  "ordered_checks": [
+    {
+      "order": 1,
+      "name": "alignment",
+      "finding": "Fulltone marker grids are exact. Big Muff keeps the published pair because nonlinear correlation is inconsistent. Failure on Fulltone rules out alignment as the sole cause."
+    },
+    {
+      "order": 2,
+      "name": "gain_and_calibration",
+      "finding": "Median Big Muff gain error is about -0.93 for B2/S3/S4, showing collapse toward a low-energy output; A2 is -0.45."
+    },
+    {
+      "order": 3,
+      "name": "data_leakage",
+      "finding": "No path crosses a released source file. Fulltone source identities are disjoint; Big Muff session identity remains unpublished."
+    },
+    {
+      "order": 4,
+      "name": "context_length",
+      "finding": "Every model receives 6,346 warm-up samples. This covers A2 and provides 99 slow-state updates, but FSSR's fast receptive field is much shorter than A2 and may limit delayed nonlinear behavior."
+    },
+    {
+      "order": 5,
+      "name": "state_stability",
+      "finding": "All outputs and gradients are finite; alternate block differences are below 2e-5 for every run."
+    },
+    {
+      "order": 6,
+      "name": "numeric_clipping",
+      "finding": "Prepared inputs and targets contain no samples at or above 0.999 and no non-finite values."
+    },
+    {
+      "order": 7,
+      "name": "residual_energy",
+      "finding": "The residual remains negligible on Fulltone and near 0.2% of output energy on Big Muff; it does not repair the structured core."
+    },
+    {
+      "order": 8,
+      "name": "undertraining",
+      "finding": "Big Muff FSSR validation stays near ESR 1 despite 200 steps, consistent with a low-energy local solution."
+    },
+    {
+      "order": 9,
+      "name": "overtraining",
+      "finding": "Checkpoint selection rejects late regressions. Fulltone has a source-generalization gap, but Big Muff fails on validation and test."
+    },
+    {
+      "order": 10,
+      "name": "budget_allocation",
+      "finding": "S3/S4 have 1,244 parameters versus A2 Full's 12,145. M4 tested an efficiency-sized FSSR, not the equal-cost H1 point."
+    },
+    {
+      "order": 11,
+      "name": "metric_listening_conflict",
+      "finding": "Correlation, magnitude error, log spectral distance, and ESR agree on the ranking; no metric conflict is currently evident."
+    },
+    {
+      "order": 12,
+      "name": "real_cost",
+      "finding": "At block 64, S3/S4 Python require about 21.5/24.4 microseconds per sample and are not real-time. A2 Core C++ is 2.86 microseconds, but cross-engine values are not final H2 evidence."
+    }
+  ],
+  "primary_diagnosis": [
+    "FSSR output-energy collapse on the hard-clipping device.",
+    "A tenfold parameter-budget mismatch leaves H1 equal-cost untested.",
+    "The short fast receptive field may be marginal for the published Big Muff pair."
+  ],
+  "authorized_next_experiment": "One-seed, two-device S3 diagnostic with residual width 31, matching A2 parameter count while keeping the architecture and loss fixed. Stop if it does not materially close the ESR gap."
+}
