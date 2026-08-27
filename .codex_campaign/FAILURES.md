@@ -125,3 +125,7 @@ After lint and tests passed, `ruff format --check` requested the configured comp
 ## 2026-08-27 — F-M4-004 — Repository-wide Ruff command entered pinned submodules
 
 After all 67 project tests and the data audit passed, an ad hoc `ruff check .` traversed the pinned NAM and Eigen repositories and reported their upstream formatting. Those repositories are immutable campaign dependencies and must not be edited. Resolution: use the established `make lint` target, which scopes checks to `src`, `tests`, and `scripts`, and preserve the third-party pins unchanged.
+
+## 2026-08-27 — F-M4-005 — B2 streaming fixture exceeded line length
+
+The first B2 focused suite passed all numerical checks, then static analysis rejected one 95-character list literal in the block-equivalence test. Resolution: expand the list without changing the tested block schedule or model behavior and rerun the focused validation.

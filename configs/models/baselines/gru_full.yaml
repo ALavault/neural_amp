@@ -1,0 +1,17 @@
+schema_version: 1
+code: B2
+model: causal_gru
+hidden_size: 62
+input_channels: 1
+output_channels: 1
+layers: 1
+latency_samples: 0
+estimated_macs_per_sample: 11780
+parameters: 12153
+comparison_target:
+  model: NAM A2 Full
+  parameters: 12145
+  parameter_difference_percent: 0.0659
+notes:
+  - Operations are estimates; the M4 decision uses measured CPU timing.
+  - The state is reset at each independent training segment.

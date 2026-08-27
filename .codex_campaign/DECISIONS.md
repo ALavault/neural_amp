@@ -65,3 +65,7 @@ Advance to M4 because all ten aggregate implementation checks pass: S3 learns tw
 ## 2026-08-27 — D-M4-001 — Physical smoke-test devices and alignment
 
 Assign the checksum-verified Fulltone Full Drive 2 and Electro-Harmonix Big Muff archives permanently to `INTERNAL_DEV` before model-output inspection. Use Fulltone setting `V100_T050_O050_B000` for moderate saturation and Big Muff setting `S050_V100` for hard clipping. Fulltone marker peaks occupy the same sample grid, so apply no delay correction and remove two seconds at each boundary. For Big Muff, retain the published paired split without extra delay correction: windowed correlations are inconsistent under its strong nonlinearity, so selecting one inferred delay would be unjustified. Resample both members jointly from 44.1 to 48 kHz without level normalization. Keep each complete upstream source file in one split and disclose that Big Muff performer/session provenance is unavailable.
+
+## 2026-08-27 — D-M4-002 — Cost-targeted recurrent baseline
+
+Use a one-layer causal mono GRU with 62 hidden states for B2 Full. Its 12,153 trainable parameters differ from official A2 Full's 12,145 by 0.066%, and its estimated 11,780 multiply-accumulates per sample closely match A2 Full's 11,777. Treat those estimates only as sizing criteria; retain or reject cost comparability using the measured block CPU benchmark.
