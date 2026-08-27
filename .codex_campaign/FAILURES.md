@@ -209,3 +209,11 @@ The first root-level `sha256sum -c` validation found no file because the checksu
 ## 2026-08-27 — F-M6-003 — Final archive builder required formatting
 
 The archive builder passed lint, then the formatter compacted one prohibited-path predicate before any archive was created. Resolution: apply the configured formatter and rerun validation before packaging.
+
+## 2026-08-27 — F-M6-004 — Archive policy rejected synthetic M0 WAV fixtures
+
+The first final archive build compressed the tracked tree, then rejected `experiments/summaries/m0_identity/input.wav` and `output.wav` because the verifier prohibited every WAV extension. These are deterministic synthetic identity fixtures, not raw or restricted audio. Resolution: retain path-based prohibitions for raw datasets, predictions, licensed listening examples, logs, and checkpoints while allowing tracked synthetic fixtures; rebuild from a new clean commit.
+
+## 2026-08-27 — F-M6-005 — Corrected archive predicate required formatting
+
+The corrected archive policy passed lint, then the formatter compacted its path-filter comprehension. Resolution: apply the configured formatter and rerun static checks before rebuilding.

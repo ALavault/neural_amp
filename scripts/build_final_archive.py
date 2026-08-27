@@ -59,9 +59,7 @@ def main() -> None:
         text=True,
     ).stdout.splitlines()
     prohibited = [
-        member
-        for member in listing
-        if member.endswith(".wav") or any(part in member for part in PROHIBITED_PARTS)
+        member for member in listing if any(part in member for part in PROHIBITED_PARTS)
     ]
     if prohibited:
         raise RuntimeError(f"archive contains prohibited paths: {prohibited[:5]}")
