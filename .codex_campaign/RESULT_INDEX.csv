@@ -12,3 +12,4 @@ m3_s0_slow_sag_seed0_v1,M3,S0,slow_sag,0,completed,esr=4.97488457e-05,experiment
 m3_s1_slow_sag_seed0_v1,M3,S1,slow_sag,0,completed,esr=4.07967418e-05,experiments/runs/m3_s1_slow_sag_seed0_v1
 m3_s3_slow_sag_seed0_v1,M3,S3,slow_sag,0,completed,esr=4.00112751e-05,experiments/runs/m3_s3_slow_sag_seed0_v1
 m3_s0_short_memory_seed0_v1,M3,S0,short_nonlinear_memory,0,completed,esr=0.000534528532,experiments/runs/m3_s0_short_memory_seed0_v1
+m3_s2_short_memory_seed0_v1,M3,S2,short_nonlinear_memory,0,completed,esr=0.000363346861,experiments/runs/m3_s2_short_memory_seed0_v1

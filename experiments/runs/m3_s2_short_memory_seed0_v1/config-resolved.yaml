@@ -1,0 +1,55 @@
+campaign:
+  schema_version: 1
+  sample_rate: 48000
+  sample_count: 8192
+  train_seed: 3100
+  validation_seed: 4100
+  optimizer: adam
+  learning_rate: 0.01
+  gradient_clip_norm: 1.0
+  loss:
+    normalized_time_error: 1.0
+    spline_curvature: 1.0e-05
+    normalized_residual_energy: 0.001
+  model:
+    taps: 17
+    num_knots: 17
+    slow_hidden_size: 8
+    slow_decimation: 64
+    residual_channels: 8
+    oversampling_filter_taps: 33
+  runs:
+  - variant: S0
+    case: tanh
+    steps: 250
+  - variant: S3
+    case: tanh
+    steps: 250
+  - variant: S4
+    case: tanh
+    steps: 250
+  - variant: S0
+    case: slow_sag
+    steps: 300
+  - variant: S1
+    case: slow_sag
+    steps: 400
+  - variant: S3
+    case: slow_sag
+    steps: 400
+  - variant: S0
+    case: short_nonlinear_memory
+    steps: 300
+  - &id001
+    variant: S2
+    case: short_nonlinear_memory
+    steps: 400
+  selection_tier: SYNTHETIC
+  notes:
+  - Diagnostic M3 only; no physical-device claim is permitted.
+  - Each run sees the same number of complete training samples per optimizer step.
+selected_run: *id001
+variant: S2
+case: short_nonlinear_memory
+seed: 0
+latency_samples: 0
