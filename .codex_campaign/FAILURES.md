@@ -49,3 +49,15 @@ The first invocation of `build/nam_core/tools/run_tests` aborted because the ups
 ## 2026-08-27 — F-M2-002 — Packed A2 inspector used an absent attribute
 
 The first architecture inspection assumed that `PackedWaveNet` exposed a `submodels` collection. The pinned v0.13.0 API instead exposes `num_submodels` and `extract_submodel(index)`. Resolution: use the public extraction method and rerun the inspection; no model or upstream source was modified.
+
+## 2026-08-27 — F-M2-003 — M2 runner test could not import scripts
+
+The first focused runner test failed during collection because `scripts/` lacked an `__init__.py` marker. Resolution: add the marker so configuration construction can be tested directly, then rerun the unchanged assertions. No training was started.
+
+## 2026-08-27 — F-M2-004 — Package marker did not enter the editable import path
+
+The attempted `scripts/__init__.py` remedy did not change the Hatch editable package import path, so the same focused test still failed during collection. Resolution: move the reusable configuration adapter into the packaged `fssr_nam.training` module and import it from both the command and test. The ineffective marker was removed; no training was started.
+
+## 2026-08-27 — F-M2-005 — Extracted adapter test exceeded line length
+
+The first lint pass after moving the adapter found one 92-character fixture path in the test. Resolution: split the path construction across components and rerun the full focused validation; no lint rule or behavior changed.

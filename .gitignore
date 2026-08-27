@@ -17,4 +17,6 @@ experiments/runs/*/checkpoints/
 experiments/runs/*/predictions/
 experiments/runs/*/stdout.log
 experiments/runs/*/stderr.log
+experiments/runs/*/*.ckpt
+experiments/runs/*/lightning_logs/
 artifacts/*.tar.zst
