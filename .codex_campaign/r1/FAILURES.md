@@ -18,15 +18,6 @@
 All valid R1 failures and gate-stopped trajectories must be appended here and to
 the global run ledger; they may not be deleted or relabelled as successful.
 
-### 2026-08-27 correction to the quarantined-attempt entry
-
-The immutable ledger and result-index rows for the invalid identifier retain
-their original `experiments/runs/...` path, but no redirect exists there. The
-actual preserved evidence is
-`experiments/quarantine/r1_competence_bigmuff_wright_lstm64_wright_seed0_v1/`.
-The sentence saying the canonical seed 0 remained unattempted was true when
-that entry was written; it was superseded by the later counted failure below.
-
 ## 2026-08-27 — canonical competence seed 0 infrastructure failure
 
 - Run: `r1_competence_bigmuff_lstm64_wright_seed0_v1`.
@@ -56,3 +47,12 @@ final gate, so no R1 retry is authorized.
 - Final action: stop FSSR-R1 with `NO-GO-R1`. A future preregistered lineage may
   cap recurrent evaluation chunks below the backend limit and add an exact GPU
   validation-length preflight.
+
+### 2026-08-27 correction to the quarantined-attempt entry
+
+The immutable ledger and result-index rows for the invalid identifier retain
+their original `experiments/runs/...` path, but no redirect exists there. The
+actual preserved evidence is
+`experiments/quarantine/r1_competence_bigmuff_wright_lstm64_wright_seed0_v1/`.
+The sentence saying the canonical seed 0 remained unattempted was true when
+that entry was written; it was superseded by the later counted failure above.
