@@ -2,11 +2,11 @@
 
 ## Current position
 
-M0 through M3 passed. Four corrected v2 M4 preflights completed with finite outputs and block parity at or below `4.47e-8`; v1 remains preserved as evidence of the repaired selection defect. No counted M4 run has started. External evaluation remains locked.
+M0 through M3 passed. Corrected preflight passed, and four of 24 counted M4 runs are complete. Fulltone seed 0 currently favors A2, but this is not a gate decision. All four runs used the fixed budget and passed finite/block checks. External evaluation remains locked.
 
 ## Resume action
 
-Run the four Fulltone seed-0 counted conditions and audit validation selection, gradients, and output finiteness before launching the remaining 20 matrix cells.
+Execute Fulltone seeds 1–2 and Big Muff seeds 0–2 for B0, B2, S3, and S4 without changing configuration. Preserve failed runs and stop for diagnosis if a protocol-level defect appears.
 
 ## Absolute blockers
 

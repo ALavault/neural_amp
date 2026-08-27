@@ -81,3 +81,7 @@ Include the initialized model as checkpoint step 0 in validation-ESR selection. 
 ## 2026-08-27 — D-M4-005 — Corrected preflight passed
 
 Permit counted M4 training after all four v2 paths completed with finite predictions and alternate-block differences no larger than `4.47e-8`. B0 and B2 selected trained steps; S3 and S4 correctly retained step 0 after their two diagnostic updates degraded validation ESR. Run the four Fulltone seed-0 conditions first, audit them, and only then continue the other 20 matrix cells.
+
+## 2026-08-27 — D-M4-006 — First counted wave is operationally valid
+
+Continue the remaining M4 matrix after the four Fulltone seed-0 runs each consumed exactly 3,276,800 output samples, selected a non-final checkpoint, produced finite metrics, and passed alternate-block comparison within `1.2e-7`. Do not change the protocol in response to A2's initial Fulltone lead (`0.0668` test ESR versus approximately `0.2318` for S3/S4); one seed on one device is insufficient for a gate decision.
