@@ -77,3 +77,7 @@ The first run-index row used the CSV writer's default CRLF terminator, which fai
 ## 2026-08-27 — F-M2-009 — Lightning overrode PyTorch warn-only determinism
 
 Run `m2_a2_tanh_seed0_v2` failed on the same MRSTFT reflection-pad backward because the adapter still passed `Trainer(deterministic=True)`, causing Lightning to restore strict mode after PyTorch had been configured for warnings. Resolution: map the preregistered `warn_only` mode to Lightning's native `deterministic="warn"` value and relaunch under a new identifier. No architecture, loss, data, optimizer, or seed changed.
+
+## 2026-08-27 — F-M2-010 — CPU audit had an unused import
+
+The first static check of the new CPU audit rejected an unused `re` import before any benchmark was launched. Resolution: remove the import and rerun lint, formatting, compilation, and tests without disabling the rule.
