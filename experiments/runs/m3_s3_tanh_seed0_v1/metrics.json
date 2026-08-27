@@ -1,0 +1,38 @@
+{
+  "initial": {
+    "esr": 0.3945713212647997,
+    "nmse": 0.3946360218283112,
+    "mae": 0.1169840406283743,
+    "gain_error": -0.628006377351434,
+    "dc_error": -0.0018074522472467797,
+    "correlation": 0.999352638459702,
+    "mrstft": 1.631869295634674,
+    "magnitude_error": 0.6263117795832692,
+    "log_spectral_distance_db": 9.008235455172663,
+    "phase_error_radians": 0.06054006240451022,
+    "residual_energy_ratio": 0.0
+  },
+  "final": {
+    "esr": 4.4283868586942276e-05,
+    "nmse": 4.429113011634806e-05,
+    "mae": 0.001053029200909314,
+    "gain_error": 0.0002526868815786454,
+    "dc_error": -1.6486019872488655e-05,
+    "correlation": 0.9999779011972085,
+    "mrstft": 0.045206993168206255,
+    "magnitude_error": 0.0039902624695570925,
+    "log_spectral_distance_db": 0.5954417098467861,
+    "phase_error_radians": 0.01082959526406814,
+    "residual_energy_ratio": 4.964526306139305e-05
+  },
+  "improvement_relative_esr": 0.9998877671381564,
+  "checks": {
+    "reload_max_abs": 0.0,
+    "irregular_stream_max_abs": 5.960464477539063e-08,
+    "reset_max_abs": 0.0,
+    "causal_prefix_max_abs": 0.0,
+    "finite_output": true
+  },
+  "parameters": 1244,
+  "latency_samples": 0
+}
