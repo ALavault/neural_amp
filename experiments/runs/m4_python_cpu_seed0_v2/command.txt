@@ -1,0 +1,1 @@
+uv run python scripts/benchmark_m4_python.py --run-id m4_python_cpu_seed0_v2

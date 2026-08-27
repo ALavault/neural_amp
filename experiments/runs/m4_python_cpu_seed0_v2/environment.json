@@ -1,0 +1,12 @@
+{
+  "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.43",
+  "python": "3.12.13",
+  "numpy": "2.5.2",
+  "torch": "2.13.0+cu130",
+  "cpu": "",
+  "threads": 1,
+  "affinity": [
+    0
+  ],
+  "affinity_applied": true
+}

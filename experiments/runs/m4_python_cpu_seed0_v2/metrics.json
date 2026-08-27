@@ -1,0 +1,215 @@
+{
+  "python_streaming": {
+    "B2": {
+      "source_run": "m4_fulltone_b2_seed0_v1",
+      "checkpoint_sha256": "dcefc796da39110194a6de4e742891f910c98b5754160edf56c64381c16eec25",
+      "parameters": 12153,
+      "blocks": [
+        {
+          "block_size": 1,
+          "warmup_blocks": 100,
+          "timed_blocks": 2000,
+          "median_block_ns": 152986.0,
+          "p95_block_ns": 188484.1,
+          "median_ns_per_sample": 152986.0,
+          "p95_ns_per_sample": 188484.1,
+          "median_realtime_factor": 0.1361780380775583,
+          "p95_realtime_factor": 0.11053098554909052
+        },
+        {
+          "block_size": 16,
+          "warmup_blocks": 100,
+          "timed_blocks": 1500,
+          "median_block_ns": 557643.5,
+          "p95_block_ns": 618242.6,
+          "median_ns_per_sample": 34852.71875,
+          "p95_ns_per_sample": 38640.1625,
+          "median_realtime_factor": 0.597753463159408,
+          "p95_realtime_factor": 0.5391626738974851
+        },
+        {
+          "block_size": 64,
+          "warmup_blocks": 100,
+          "timed_blocks": 1000,
+          "median_block_ns": 1703343.0,
+          "p95_block_ns": 2032892.0999999999,
+          "median_ns_per_sample": 26614.734375,
+          "p95_ns_per_sample": 31763.939062499998,
+          "median_realtime_factor": 0.7827744226109089,
+          "p95_realtime_factor": 0.6558800308847348
+        },
+        {
+          "block_size": 128,
+          "warmup_blocks": 100,
+          "timed_blocks": 1000,
+          "median_block_ns": 3031541.5,
+          "p95_block_ns": 3493763.4999999995,
+          "median_ns_per_sample": 23683.91796875,
+          "p95_ns_per_sample": 27295.027343749996,
+          "median_realtime_factor": 0.879640495327762,
+          "p95_realtime_factor": 0.763264790724005
+        }
+      ],
+      "state_bytes": 248
+    },
+    "S3": {
+      "source_run": "m4_fulltone_s3_seed0_v1",
+      "checkpoint_sha256": "6326fbd2fc35b6d8388a80807a5e9f37ebdcbb07f2d9bce6f6919a9d09ea99b6",
+      "parameters": 1244,
+      "blocks": [
+        {
+          "block_size": 1,
+          "warmup_blocks": 100,
+          "timed_blocks": 2000,
+          "median_block_ns": 1219910.0,
+          "p95_block_ns": 1384709.7,
+          "median_ns_per_sample": 1219910.0,
+          "p95_ns_per_sample": 1384709.7,
+          "median_realtime_factor": 0.017077762567183918,
+          "p95_realtime_factor": 0.015045271462555172
+        },
+        {
+          "block_size": 16,
+          "warmup_blocks": 100,
+          "timed_blocks": 1500,
+          "median_block_ns": 1272477.5,
+          "p95_block_ns": 1464563.4,
+          "median_ns_per_sample": 79529.84375,
+          "p95_ns_per_sample": 91535.2125,
+          "median_realtime_factor": 0.26195617080328204,
+          "p95_realtime_factor": 0.2275991147486912
+        },
+        {
+          "block_size": 64,
+          "warmup_blocks": 100,
+          "timed_blocks": 1000,
+          "median_block_ns": 1375542.5,
+          "p95_block_ns": 1522654.45,
+          "median_ns_per_sample": 21492.8515625,
+          "p95_ns_per_sample": 23791.47578125,
+          "median_realtime_factor": 0.9693145310547172,
+          "p95_realtime_factor": 0.8756637681867566
+        },
+        {
+          "block_size": 128,
+          "warmup_blocks": 100,
+          "timed_blocks": 1000,
+          "median_block_ns": 1630840.0,
+          "p95_block_ns": 1814815.5499999998,
+          "median_ns_per_sample": 12740.9375,
+          "p95_ns_per_sample": 14178.246484374999,
+          "median_realtime_factor": 1.6351491664827125,
+          "p95_realtime_factor": 1.4693871598503039
+        }
+      ],
+      "state_bytes": 1140
+    },
+    "S4": {
+      "source_run": "m4_fulltone_s4_seed0_v1",
+      "checkpoint_sha256": "51b37f6a7cae11eb6aff8bc9b76de43a3ed15dc411b5f10519dda8ce9beee817",
+      "parameters": 1244,
+      "blocks": [
+        {
+          "block_size": 1,
+          "warmup_blocks": 100,
+          "timed_blocks": 2000,
+          "median_block_ns": 1430509.0,
+          "p95_block_ns": 1631302.7,
+          "median_ns_per_sample": 1430509.0,
+          "p95_ns_per_sample": 1631302.7,
+          "median_realtime_factor": 0.014563580748763785,
+          "p95_realtime_factor": 0.012770979495916567
+        },
+        {
+          "block_size": 16,
+          "warmup_blocks": 100,
+          "timed_blocks": 1500,
+          "median_block_ns": 1514627.5,
+          "p95_block_ns": 1737469.7,
+          "median_ns_per_sample": 94664.21875,
+          "p95_ns_per_sample": 108591.85625,
+          "median_realtime_factor": 0.22007611332379304,
+          "p95_realtime_factor": 0.19184986842264548
+        },
+        {
+          "block_size": 64,
+          "warmup_blocks": 100,
+          "timed_blocks": 1000,
+          "median_block_ns": 1559731.5,
+          "p95_block_ns": 1745429.2499999995,
+          "median_ns_per_sample": 24370.8046875,
+          "p95_ns_per_sample": 27272.332031249993,
+          "median_realtime_factor": 0.8548479871909578,
+          "p95_realtime_factor": 0.763899959470333
+        },
+        {
+          "block_size": 128,
+          "warmup_blocks": 100,
+          "timed_blocks": 1000,
+          "median_block_ns": 1777162.0,
+          "p95_block_ns": 2047410.3499999999,
+          "median_ns_per_sample": 13884.078125,
+          "p95_ns_per_sample": 15995.393359374999,
+          "median_realtime_factor": 1.5005197425258174,
+          "p95_realtime_factor": 1.3024583306744868
+        }
+      ],
+      "state_bytes": 1588
+    }
+  },
+  "official_a2_core_cpp_reference": [
+    {
+      "block_size": 1,
+      "iterations": 10,
+      "timed_blocks": 960000,
+      "mean_block_ns": 3118.57616979,
+      "median_block_ns": 3046,
+      "p95_block_ns": 3390,
+      "median_ns_per_sample": 3046,
+      "p95_ns_per_sample": 3390,
+      "median_realtime_factor": 6.83957102211,
+      "p95_realtime_factor": 6.14552605703
+    },
+    {
+      "block_size": 16,
+      "iterations": 10,
+      "timed_blocks": 60000,
+      "mean_block_ns": 58320.5998167,
+      "median_block_ns": 56090,
+      "p95_block_ns": 72990.2,
+      "median_ns_per_sample": 3505.625,
+      "p95_ns_per_sample": 4561.8875,
+      "median_realtime_factor": 5.94282997563,
+      "p95_realtime_factor": 4.56682312603
+    },
+    {
+      "block_size": 64,
+      "iterations": 10,
+      "timed_blocks": 15000,
+      "mean_block_ns": 188961.340467,
+      "median_block_ns": 183183.5,
+      "p95_block_ns": 225317.15,
+      "median_ns_per_sample": 2862.2421875,
+      "p95_ns_per_sample": 3520.58046875,
+      "median_realtime_factor": 7.27867593606,
+      "p95_realtime_factor": 5.91758476145
+    },
+    {
+      "block_size": 128,
+      "iterations": 10,
+      "timed_blocks": 7500,
+      "mean_block_ns": 354184.472133,
+      "median_block_ns": 346264,
+      "p95_block_ns": 416765.7,
+      "median_ns_per_sample": 2705.1875,
+      "p95_ns_per_sample": 3255.98203125,
+      "median_realtime_factor": 7.70125299386,
+      "p95_realtime_factor": 6.39847920946
+    }
+  ],
+  "comparability": {
+    "python_alternatives_are_mutually_comparable": true,
+    "python_vs_cpp_is_final_h2_evidence": false,
+    "reason": "FSSR C++ inference is not implemented at M4; cross-engine timings are diagnostic only."
+  }
+}

@@ -46,3 +46,4 @@ m4_bigmuff_b2_seed2_v1,M4,B2,electro_harmonix_big_muff,2,completed,esr=0.9308522
 m4_bigmuff_s3_seed2_v1,M4,S3,electro_harmonix_big_muff,2,completed,esr=0.996089432,experiments/runs/m4_bigmuff_s3_seed2_v1
 m4_bigmuff_s4_seed2_v1,M4,S4,electro_harmonix_big_muff,2,completed,esr=0.959458537,experiments/runs/m4_bigmuff_s4_seed2_v1
 m4_python_cpu_seed0_v1,M4,B2_S3_S4_python_benchmark,host_cpu,0,completed,s3_block64_ns=22473.0234,experiments/runs/m4_python_cpu_seed0_v1
+m4_python_cpu_seed0_v2,M4,B2_S3_S4_python_benchmark,host_cpu,0,completed,s3_block64_ns=21492.8516,experiments/runs/m4_python_cpu_seed0_v2

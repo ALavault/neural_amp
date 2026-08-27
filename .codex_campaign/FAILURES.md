@@ -169,3 +169,11 @@ Run `m4_python_cpu_seed0_v1` completed all timing measurements, but its `state_b
 ## 2026-08-27 — F-M4-015 — Runtime-state correction exceeded line length
 
 The first static check of the runtime-state correction rejected one 91-character compound condition before v2 ran. Resolution: wrap the unchanged condition and rerun lint and formatting.
+
+## 2026-08-27 — F-M4-016 — First M4 summary lint pass
+
+Static analysis rejected long report and autopsy prose literals in the initial summary generator before aggregation ran. Resolution: wrap the source literals and generated Markdown at readable boundaries, replace an ambiguous dash, and rerun lint and formatting without changing any metric or gate calculation.
+
+## 2026-08-27 — F-M4-017 — M4 summary required configured formatting
+
+The corrected summary generator passed lint, then the formatter compacted one median expression and normalized quotes in two formatted report fields. Resolution: apply the configured formatter and rerun validation before generating the aggregate.
