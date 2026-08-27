@@ -1,0 +1,21 @@
+.venv/
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Raw or downloaded datasets never belong in Git.
+datasets/raw/
+datasets/downloads/
+datasets/cache/
+
+# Large run products are indexed by manifests, not committed by default.
+experiments/runs/*/checkpoints/
+experiments/runs/*/predictions/
+experiments/runs/*/stdout.log
+experiments/runs/*/stderr.log
+artifacts/*.tar.zst
+

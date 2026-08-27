@@ -1,0 +1,11 @@
+schema_version: 1
+tier: SYNTHETIC
+master_sample_rate: 192000
+derived_sample_rates: [96000, 48000]
+seed: 0
+duration_seconds: 1.0
+amplitude: 0.25
+decimation:
+  method: polyphase_fir
+  window: [kaiser, 8.6]
+

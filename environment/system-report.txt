@@ -1,0 +1,21 @@
+capture_date: 2026-08-27
+os: Ubuntu 26.04 LTS (Linux 7.0.0-30-generic, x86_64)
+cpu: 2 x Intel Xeon E5-2630 v3, 8 cores/socket, SMT enabled, 32 logical CPUs
+ram: 121 GiB
+gpu: NVIDIA RTX PRO 4000 Blackwell, 24467 MiB
+nvidia_driver: 595.84
+reported_cuda_capability: 13.2
+workspace_filesystem: /dev/sdd1, 1.8 TiB total, 765 GiB available at capture
+system_python: 3.14.4 (not selected for the campaign)
+campaign_python: 3.12.13 (managed by uv)
+torch: 2.13.0+cu130
+torchaudio: 2.11.0+cu130
+pytorch_lightning: 2.6.1
+nam_trainer_package: 0.13.0
+torch_cuda_runtime: 13.0
+cudnn: 92000
+cuda_smoke_test: passed (tensor square-and-sum on GPU returned 5.0)
+compiler: GCC 15.2.0
+cmake: 4.2.3
+make: 4.4.1
+git: 2.53.0

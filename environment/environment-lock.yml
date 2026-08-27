@@ -1,0 +1,12 @@
+name: fssr-nam
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - -r requirements-lock.txt
+
+# The authoritative fully resolved Python dependency list is
+# requirements-lock.txt. Creation and validation use uv via `make bootstrap`.
+

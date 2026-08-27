@@ -1,0 +1,19 @@
+schema_version: 1
+status: draft_not_frozen
+protocol_version: null
+git_commit: null
+data_manifests: []
+split_hashes: []
+models: []
+hyperparameters: null
+training_budget: null
+seeds: []
+primary_metrics: []
+secondary_metrics: []
+cpu_protocol: null
+exclusion_rules: []
+success_thresholds: null
+external_datasets: []
+external_retest_authorized: false
+lock_sha256: null
+

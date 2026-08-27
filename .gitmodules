@@ -1,0 +1,6 @@
+[submodule "third_party/neural-amp-modeler"]
+	path = third_party/neural-amp-modeler
+	url = https://github.com/sdatkinson/neural-amp-modeler.git
+[submodule "third_party/NeuralAmpModelerCore"]
+	path = third_party/NeuralAmpModelerCore
+	url = https://github.com/sdatkinson/NeuralAmpModelerCore.git

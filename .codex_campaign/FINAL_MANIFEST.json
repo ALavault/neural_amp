@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "status": "not_ready",
+  "maturity": "M0",
+  "created_at": null,
+  "git_commit": null,
+  "protocol_lock": null,
+  "included_artifacts": [],
+  "excluded_artifacts": [],
+  "verdict": null
+}
+

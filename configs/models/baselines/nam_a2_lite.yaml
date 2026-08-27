@@ -1,0 +1,14 @@
+schema_version: 1
+code: B1
+name: NAM A2 Lite
+trainer_repository: https://github.com/sdatkinson/neural-amp-modeler.git
+trainer_commit: f26112906de06ec6b796ad6d1982e29eed83144e
+trainer_version: v0.13.0
+core_repository: https://github.com/sdatkinson/NeuralAmpModelerCore.git
+core_commit: 1f42f88535884450104b8711d7595019afa0495b
+core_version: v0.5.4
+packed_submodel: channels_3
+sample_rate: 48000
+precision: float32
+status: pinned_not_reproduced
+

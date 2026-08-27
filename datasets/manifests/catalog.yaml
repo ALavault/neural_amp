@@ -1,0 +1,204 @@
+schema_version: 1
+audit_date: 2026-08-27
+download_policy: license_must_be_verified_before_download
+resources:
+  - name: FSSR-NAM deterministic synthetic corpus
+    source: repository://src/fssr_nam/data/synthetic.py
+    version: 0.1.0
+    commit_or_release: working_tree_before_first_commit
+    license: repository_license_pending
+    download_date: null
+    download_method: generated_locally
+    sha256: null
+    source_checksum: null
+    sample_rate: [192000, 96000, 48000]
+    bit_depth: float32
+    channels: 1
+    paired_input_output: true
+    alignment_information: exact_by_construction
+    device_information: deterministic mathematical systems
+    control_parameters: stored_in_resolved_generator_config
+    allowed_usage: unrestricted_internal_generation
+    assigned_tier: SYNTHETIC
+    known_limitations: not physical hardware evidence
+
+  - name: ToneTwist AFx - Fulltone Full Drive 2
+    source: https://zenodo.org/records/10794615
+    version: Zenodo record 10794615
+    commit_or_release: ToneTwist catalog commit 76ae7c875781bc7e2cec2df73b395d1a12d9cdbd
+    license: CC-BY-NC-4.0
+    download_date: null
+    download_method: null
+    sha256: null
+    source_checksum: md5:0bb9809efe4545071ea117f86adce529
+    sample_rate: 48000
+    bit_depth: float32
+    channels: 1
+    paired_input_output: true
+    alignment_information: synchronization markers documented by ToneTwist; verify per file
+    device_information: physical overdrive pedal; moderate-saturation candidate
+    control_parameters: inspect archive manifest before assignment
+    allowed_usage: noncommercial research with attribution
+    assigned_tier: UNASSIGNED
+    known_limitations: noncommercial license; split provenance and exact settings not yet locally verified
+
+  - name: ToneTwist AFx - Blackstar HT1 Overdrive
+    source: https://zenodo.org/records/10794425
+    version: "1.0"
+    commit_or_release: ToneTwist catalog commit 76ae7c875781bc7e2cec2df73b395d1a12d9cdbd
+    license: CC-BY-NC-4.0
+    download_date: null
+    download_method: null
+    sha256: null
+    source_checksum: md5:a748ac0fa6608a2dd57444bac6f132b7
+    sample_rate: 48000
+    bit_depth: float32
+    channels: 1
+    paired_input_output: true
+    alignment_information: synchronization markers documented by ToneTwist; verify per file
+    device_information: physical amplifier overdrive channel; high-gain candidate
+    control_parameters: inspect archive manifest before assignment
+    allowed_usage: noncommercial research with attribution
+    assigned_tier: UNASSIGNED
+    known_limitations: noncommercial license; exact capture path and settings not yet locally verified
+
+  - name: ToneTwist AFx - Electro-Harmonix Big Muff
+    source: https://zenodo.org/records/10891515
+    version: "1.0"
+    commit_or_release: ToneTwist catalog commit 76ae7c875781bc7e2cec2df73b395d1a12d9cdbd
+    license: CC-BY-NC-4.0
+    download_date: null
+    download_method: null
+    sha256: null
+    source_checksum: md5:45bdd8ea776e1182b9db1d60f62b7930
+    sample_rate: 48000
+    bit_depth: float32
+    channels: 1
+    paired_input_output: true
+    alignment_information: external ToneTwist pair; verify sample alignment locally
+    device_information: physical fuzz pedal; hard-clipping candidate
+    control_parameters: inspect archive manifest before assignment
+    allowed_usage: noncommercial research with attribution
+    assigned_tier: UNASSIGNED
+    known_limitations: short external archive; source diversity and settings not yet verified
+
+  - name: ToneTwist AFx - UA 6176 1176LN Limiter
+    source: https://zenodo.org/records/10798151
+    version: "1.0"
+    commit_or_release: ToneTwist catalog commit 76ae7c875781bc7e2cec2df73b395d1a12d9cdbd
+    license: CC-BY-NC-4.0
+    download_date: null
+    download_method: null
+    sha256: null
+    source_checksum: md5:94b6ab8efad3afe2237b0a089ea137af
+    sample_rate: 48000
+    bit_depth: float32
+    channels: 1
+    paired_input_output: true
+    alignment_information: external ToneTwist pair; verify sample alignment locally
+    device_information: physical dynamic processor; slow-memory candidate
+    control_parameters: inspect archive manifest before assignment
+    allowed_usage: noncommercial research with attribution
+    assigned_tier: UNASSIGNED
+    known_limitations: not a guitar amplifier; use only if measurable dynamics suit the memory hypothesis
+
+  - name: Marshall JVM410H OD1 original dataset
+    source: https://zenodo.org/records/7970723
+    version: Zenodo record 7970723
+    commit_or_release: grey-box-amp commit 86f5a4a62255d27260c397d6df9ca668943d0f79
+    license: CC-BY-4.0
+    download_date: null
+    download_method: null
+    sha256: null
+    source_checksum: md5:4d08dac89b44f618f2d6c2a69739e104
+    sample_rate: null
+    bit_depth: null
+    channels: null
+    paired_input_output: true
+    alignment_information: not yet verified; paper/repository describe paired amplifier data
+    device_information: Marshall JVM410H OD1, speaker output into reactive load
+    control_parameters: tone-stack settings and gain conditions; inspect archive manifest
+    allowed_usage: research and redistribution with attribution under CC-BY-4.0
+    assigned_tier: UNASSIGNED
+    known_limitations: 4.4 GB archive; local format, overlap, and alignment audit required before tiering
+
+  - name: EGFxSet
+    source: https://zenodo.org/records/7044411
+    version: Version 1.0
+    commit_or_release: DOI 10.5281/zenodo.7044411
+    license: CC-BY-4.0
+    download_date: null
+    download_method: null
+    sha256: null
+    source_checksum: per-file MD5 values published by Zenodo
+    sample_rate: null
+    bit_depth: null
+    channels: null
+    paired_input_output: true
+    alignment_information: clean/effected correspondence documented; sample alignment not verified
+    device_information: 690 isolated guitar tones processed by 12 physical effects
+    control_parameters: string, fret, pickup, effect, hardware mode, and knob settings
+    allowed_usage: research and redistribution with attribution under CC-BY-4.0
+    assigned_tier: UNASSIGNED
+    known_limitations: isolated notes; insufficient alone for training; archive totals 5.8 GB
+
+  - name: Open-Amp framework and Proteus model collection
+    source: https://github.com/Alec-Wright/OpenAmp
+    version: commit b57993408a61d94bf9425ca0acf7af4b3c27f3eb
+    commit_or_release: b57993408a61d94bf9425ca0acf7af4b3c27f3eb
+    license: no repository license found
+    download_date: null
+    download_method: null
+    sha256: null
+    source_checksum: null
+    sample_rate: runtime-defined
+    bit_depth: runtime-defined
+    channels: 1
+    paired_input_output: generated_from_input_and_neural_effect_models
+    alignment_information: online rendering; inspect implementation before use
+    device_information: crowd-sourced neural captures, not direct physical targets
+    control_parameters: model selection and augmentation controls
+    allowed_usage: metadata_review_only_pending_explicit_license
+    assigned_tier: UNASSIGNED
+    known_limitations: no license file found; synthetic model outputs cannot be sole physical-fidelity evidence
+
+  - name: GOAT
+    source: https://zenodo.org/records/15690894
+    version: Zenodo record 15690894
+    commit_or_release: helper repository commit 55c6e6668ef4546e4635c5e7eaad3062cf7f036b
+    license: CC-BY-NC-4.0
+    download_date: null
+    download_method: access by request only
+    sha256: null
+    source_checksum: null
+    sample_rate: null
+    bit_depth: null
+    channels: null
+    paired_input_output: false
+    alignment_information: DI audio paired with tablatures; augmented amplifier renders are not physical references
+    device_information: multiple guitars and performers; digital amplifier augmentation available
+    control_parameters: tablature, strings, frets, and playing techniques
+    allowed_usage: research_only_after_access_approval_with_attribution
+    assigned_tier: UNASSIGNED
+    known_limitations: restricted access; useful mainly as diverse DI input unless a compatible reference is produced
+
+  - name: NAM standard reamping input v3_0_0
+    source: https://drive.google.com/file/d/1Pgf8PdE0rKB1TD4TRPKbpNo1ByR3IOm9/view
+    version: v3_0_0
+    commit_or_release: referenced by NAM trainer v0.13.0
+    license: no explicit audio license found
+    download_date: null
+    download_method: null
+    sha256: null
+    source_checksum: known hashes exist in NAM trainer code but are not a usage license
+    sample_rate: 48000
+    bit_depth: 24-bit
+    channels: 1
+    paired_input_output: false
+    alignment_information: standardized calibration markers recognized by NAM
+    device_information: input excitation only
+    control_parameters: none
+    allowed_usage: metadata_review_only_pending_explicit_license
+    assigned_tier: UNASSIGNED
+    known_limitations: no target output; Google Drive asset license not established
+
