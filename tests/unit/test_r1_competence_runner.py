@@ -136,6 +136,7 @@ def test_seed_execution_finalizes_through_r1_executor(
         {},
         {},
         data_sha256="a" * 64,
+        protocol_sha256="b" * 64,
         commit="deadbeef",
         command="unit-test",
     )
@@ -166,6 +167,7 @@ def test_seed_execution_registers_failure_through_r1_executor(
             {},
             {},
             data_sha256="a" * 64,
+            protocol_sha256="b" * 64,
             commit="deadbeef",
             command="unit-test",
         )
@@ -174,6 +176,40 @@ def test_seed_execution_registers_failure_through_r1_executor(
     assert entries[0]["run_id"] == spec.run_id
     assert entries[0]["status"] == "failed"
     assert entries[0]["failure_reason"] == "RuntimeError: injected failure"
+
+
+def test_gate_registry_merge_is_idempotent_and_rejects_divergence(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    summary_path = tmp_path / "experiments/summaries/r1_competence_gate.json"
+    gates_path = tmp_path / ".codex_campaign/r1/GATES.json"
+    summary_path.parent.mkdir(parents=True)
+    payload = {
+        "campaign_version": "FSSR-R1-v1",
+        "stage": "competence",
+        "status": "passed",
+        "created_at": "2026-08-27T17:00:00+02:00",
+        "protocol_sha256": "c" * 64,
+        "gates": {
+            "competence_seed0": {"decision": "passed", "passed": True},
+            "competence": {"status": "passed", "passed": True},
+        },
+    }
+    summary_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    monkeypatch.setattr(runner, "ROOT", tmp_path)
+    monkeypatch.setattr(runner, "SUMMARY_PATH", summary_path)
+    monkeypatch.setattr(runner, "GATES_PATH", gates_path)
+
+    runner._publish_gate_decisions(payload)
+    first = gates_path.read_bytes()
+    runner._publish_gate_decisions(payload)
+    assert gates_path.read_bytes() == first
+
+    document = json.loads(first)
+    document["gates"]["competence"]["passed"] = False
+    gates_path.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
+    with pytest.raises(RuntimeError, match="divergent immutable gate"):
+        runner._publish_gate_decisions(payload)
 
 
 def test_preflight_is_synthetic_non_scientific_and_write_free() -> None:

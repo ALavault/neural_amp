@@ -99,9 +99,7 @@ DIAGNOSTIC_IMPLEMENTATION_PATHS = (
     "src/fssr_nam/training/wright.py",
 )
 DIAGNOSTIC_ACTIVE_PATH = ".codex_campaign/r1/DIAGNOSTIC_LOCK_ACTIVE"
-DIAGNOSTIC_AMENDMENT_PATH = (
-    ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_1.yaml"
-)
+DIAGNOSTIC_AMENDMENT_PATH = ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_1.yaml"
 
 
 def _git(root: Path, *arguments: str) -> str:
@@ -343,9 +341,7 @@ def validate_lock_digest(root: Path) -> str:
         ):
             raise RuntimeError("diagnostic lock amendment is inconsistent")
         expected_amendment = hashlib.sha256(amendment_path.read_bytes()).hexdigest()
-        recorded_amendment = amendment_checksum_path.read_text(
-            encoding="utf-8"
-        ).strip()
+        recorded_amendment = amendment_checksum_path.read_text(encoding="utf-8").strip()
         if (
             not re.fullmatch(r"[0-9a-f]{64}", recorded_amendment)
             or recorded_amendment != expected_amendment
