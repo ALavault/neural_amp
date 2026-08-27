@@ -1,0 +1,1 @@
+uv run python scripts/audit_m2_a2_inference.py

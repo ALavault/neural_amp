@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import csv
 import hashlib
 import json
@@ -24,8 +25,8 @@ from fssr_nam.reporting.ledger import append_run
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "configs/evaluation/m2_cpu.yaml"
-RUN_ID = "m2_a2_cpu_seed0_v1"
-RUN_DIR = ROOT / "experiments/runs" / RUN_ID
+RUN_ID = ""
+RUN_DIR = ROOT / "experiments/runs"
 LEDGER = ROOT / ".codex_campaign/RUN_LEDGER.jsonl"
 RESULT_INDEX = ROOT / ".codex_campaign/RESULT_INDEX.csv"
 BLOCK_RUNNER = ROOT / "build/fssr_cpp/nam_block_runner"
@@ -328,7 +329,17 @@ def benchmark_audit(config: dict, core: int, stdout_log, stderr_log) -> dict:
     return {"custom": results, "official_fast_vs_generic_raw": official_output}
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--run-id", required=True)
+    return parser.parse_args()
+
+
 def main() -> None:
+    global RUN_ID, RUN_DIR
+    args = parse_args()
+    RUN_ID = args.run_id
+    RUN_DIR = ROOT / "experiments/runs" / RUN_ID
     config_bytes = CONFIG_PATH.read_bytes()
     config = yaml.safe_load(config_bytes)
     source_run = ROOT / "experiments/runs" / config["training_run"]
@@ -346,7 +357,7 @@ def main() -> None:
     (RUN_DIR / "config-resolved.yaml").write_text(
         yaml.safe_dump(config, sort_keys=False), encoding="utf-8"
     )
-    command = "uv run python scripts/audit_m2_a2_inference.py"
+    command = f"uv run python scripts/audit_m2_a2_inference.py --run-id {RUN_ID}"
     (RUN_DIR / "command.txt").write_text(command + "\n", encoding="utf-8")
     (RUN_DIR / "git-commit.txt").write_text(commit + "\n", encoding="utf-8")
     (RUN_DIR / "environment.json").write_text(

@@ -1,19 +1,35 @@
 schema_version: 1
 training_run: m2_a2_tanh_seed0_v3
-models: [lite, full]
+models:
+- lite
+- full
 sample_rate: 48000
 precision: float32_internal_a2_fast
 host_interface: double
-block_sizes: [1, 16, 64, 128]
+block_sizes:
+- 1
+- 16
+- 64
+- 128
 seconds_per_iteration: 2
 iterations: 10
 warmup_iterations: 3
 threads: 1
 pin_cpu_core: true
 parity_patterns:
-  regular: [1, 16, 64, 128]
-  irregular: [1, 7, 64, 3, 128, 17]
+  regular:
+  - 1
+  - 16
+  - 64
+  - 128
+  irregular:
+  - 1
+  - 7
+  - 64
+  - 3
+  - 128
+  - 17
 tolerances:
-  python_cpp_max_abs: 5.0e-5
-  block_cpp_max_abs: 5.0e-7
-  reset_cpp_max_abs: 5.0e-7
+  python_cpp_max_abs: 5.0e-05
+  block_cpp_max_abs: 1.0e-07
+  reset_cpp_max_abs: 1.0e-07

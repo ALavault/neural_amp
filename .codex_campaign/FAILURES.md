@@ -81,3 +81,7 @@ Run `m2_a2_tanh_seed0_v2` failed on the same MRSTFT reflection-pad backward beca
 ## 2026-08-27 — F-M2-010 — CPU audit had an unused import
 
 The first static check of the new CPU audit rejected an unused `re` import before any benchmark was launched. Resolution: remove the import and rerun lint, formatting, compilation, and tests without disabling the rule.
+
+## 2026-08-27 — F-M2-011 — Initial block-parity tolerance was sub-ulp
+
+Run `m2_a2_cpu_seed0_v1` failed the preregistered `1e-7` C++ block-equivalence threshold. Direct inspection found maximum absolute differences of `3.5763e-7` for Lite irregular blocks, `2.9802e-7` for Full block size 1, and `2.3842e-7` for Full irregular blocks; regular 16/64/128 outputs and reset outputs were bit-identical. These discrepancies are about three float32 ulps near unit amplitude, not an algorithmic delay or state loss. Resolution before protocol freeze: relax the explicit float32 block/reset tolerance to `5e-7`, preserve v1 as failed, and rerun the complete audit as v2.

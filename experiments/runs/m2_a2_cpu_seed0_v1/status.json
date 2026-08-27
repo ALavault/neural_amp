@@ -1,0 +1,6 @@
+{
+  "status": "failed",
+  "started_at": "2026-08-27T13:02:00+02:00",
+  "finished_at": "2026-08-27T13:02:07+02:00",
+  "failure_reason": "RuntimeError: parity checks failed: {'lite_python_cpp': True, 'lite_regular_blocks': True, 'lite_irregular_blocks': False, 'lite_reset': True, 'lite_official_render': True, 'full_python_cpp': True, 'full_regular_blocks': False, 'full_irregular_blocks': False, 'full_reset': True, 'full_official_render': True}"
+}
