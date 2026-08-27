@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "tier": "INTERNAL_DEV",
+  "source_device": "Fulltone Full Drive 2",
+  "source_setting": "V100_T050_O050_B000",
+  "source_license": "CC-BY-NC-4.0",
+  "redistribution_in_final_archive": false,
+  "sample_rate": 48000,
+  "start_sample": 240000,
+  "stop_sample": 720000,
+  "duration_seconds": 10.0,
+  "common_playback_gain": 1.393704588658315,
+  "scientific_metrics_use_playback_normalization": false,
+  "error_amplification": 4.0,
+  "model_runs": {
+    "A2": "m4_fulltone_b0_seed0_v1",
+    "B2": "m4_fulltone_b2_seed0_v1",
+    "S3": "m4_fulltone_s3_seed0_v1",
+    "S4": "m4_fulltone_s4_seed0_v1"
+  },
+  "files": [
+    {
+      "name": "input",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/input.wav",
+      "sha256": "7bd77e6450d702905dc8357bcb8d3144f1541f1f3cc53cb267a0a67d02ca4f0f",
+      "peak": 0.8912509083747864
+    },
+    {
+      "name": "reference",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/reference.wav",
+      "sha256": "655b554c63e9bfbd8dfdc4418d701af43924968f62f72cebdec53da1146f137d",
+      "peak": 0.6991345882415771
+    },
+    {
+      "name": "a2",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/a2.wav",
+      "sha256": "7fa6bdd2ef2db68fbddddd07c40e545ab6b5fcdf81843a9d9b4511ced780ba41",
+      "peak": 0.6369017958641052
+    },
+    {
+      "name": "b2",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/b2.wav",
+      "sha256": "70b90f396c8a0516dbbcc382d004187ac70d3b8cb162d00398f87e3727805535",
+      "peak": 0.8056182265281677
+    },
+    {
+      "name": "s3",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/s3.wav",
+      "sha256": "bacc08c3d7d0965b64dc1b55c0dc7609efcbaf1faca1247785734985cbb2583a",
+      "peak": 0.6438983082771301
+    },
+    {
+      "name": "s4",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/s4.wav",
+      "sha256": "835d66648c864b4bcb8cec66e13725a221bd84410fc51b96d6835af738cc3858",
+      "peak": 0.6449527740478516
+    },
+    {
+      "name": "s3_residual",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/s3_residual.wav",
+      "sha256": "92be7cb75c60397f1aec63c0c8ae89a7bc5d7e9cc95c3ae8f2ee94ea93b8f617",
+      "peak": 0.00039696801104582846
+    },
+    {
+      "name": "s4_residual",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/s4_residual.wav",
+      "sha256": "2c3bafaeffd979f4060f800ed9f07b0272e2743c29155a91d57df143356dd771",
+      "peak": 0.00040057182195596397
+    },
+    {
+      "name": "a2_error_x4",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/a2_error_x4.wav",
+      "sha256": "15a362a0eff55a9905a6118c88347360200b81c3bf08fec621e48dd830857019",
+      "peak": 0.8912509083747864,
+      "independent_error_playback_gain": 1.2250501277731285
+    },
+    {
+      "name": "b2_error_x4",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/b2_error_x4.wav",
+      "sha256": "ed12f1c1a410041c7ad0b966e438dee2a7eb64f7d5279fec0343e5dfbaefbbb6",
+      "peak": 0.8912509083747864,
+      "independent_error_playback_gain": 1.1337171982373693
+    },
+    {
+      "name": "s3_error_x4",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/s3_error_x4.wav",
+      "sha256": "3ad0d092dfad043b25d4fa21b319c66a10d30c43c87f5e1bf4772c69970c0936",
+      "peak": 0.8912509083747864,
+      "independent_error_playback_gain": 0.8864176282074493
+    },
+    {
+      "name": "s4_error_x4",
+      "path": "experiments/audio_examples/m4_fulltone_seed0/s4_error_x4.wav",
+      "sha256": "7638ddd2e9284083bc8c421cfbfb0f1af1a850222f4552b4cb422041531758e6",
+      "peak": 0.8912509083747864,
+      "independent_error_playback_gain": 0.8872857310949511
+    }
+  ]
+}

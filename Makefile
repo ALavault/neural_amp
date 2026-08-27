@@ -39,6 +39,9 @@ m4-recovery-summary:
 audio-examples:
 	uv run python scripts/generate_m4_audio_examples.py
 
+final-archive:
+	uv run python scripts/build_final_archive.py --output artifacts/fssr_nam_final_audit_2026-08-27.tar.zst
+
 smoke:
 	uv run python scripts/smoke_identity.py
 

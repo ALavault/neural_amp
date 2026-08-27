@@ -205,3 +205,7 @@ The listening-example generator passed lint, then the formatter compacted two pa
 ## 2026-08-27 — F-M6-002 — Protocol checksum path was relative to the wrong directory
 
 The first root-level `sha256sum -c` validation found no file because the checksum record named `PROTOCOL_LOCK.yaml` relative to the repository root instead of `.codex_campaign`. Resolution: store the repository-relative path and rerun verification; the lock content and expected digest are unchanged.
+
+## 2026-08-27 — F-M6-003 — Final archive builder required formatting
+
+The archive builder passed lint, then the formatter compacted one prohibited-path predicate before any archive was created. Resolution: apply the configured formatter and rerun validation before packaging.
