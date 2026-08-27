@@ -1,0 +1,64 @@
+import json
+from pathlib import Path
+
+import numpy as np
+import torch
+import yaml
+
+from fssr_nam.training.m4 import (
+    causal_predict,
+    delay_target,
+    model_factory,
+    training_prediction,
+)
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def test_m4_matrix_and_equal_sample_budget() -> None:
+    config = yaml.safe_load((ROOT / "configs/training/m4_smoke.yaml").read_text())
+    assert len(config["devices"]) * len(config["models"]) * len(config["seeds"]) == 24
+    assert config["context_samples"] == 6346
+    samples_seen = (
+        config["optimizer_steps"] * config["batch_size"] * config["output_samples"]
+    )
+    assert samples_seen == 3_276_800
+    manifest = json.loads((ROOT / "datasets/manifests/m4_internal.json").read_text())
+    assert {item["device"] for item in manifest["files"]} == set(config["devices"])
+
+
+def test_declared_target_delay() -> None:
+    target = np.arange(6, dtype=np.float32)
+    assert np.array_equal(delay_target(target, 2), [0, 0, 0, 1, 2, 3])
+
+
+def test_all_m4_models_produce_expected_training_shape() -> None:
+    model_config = yaml.safe_load(
+        (ROOT / "configs/training/m3_synthetic.yaml").read_text()
+    )["model"]
+    windows = torch.randn(1, 6346 + 64)
+    for code in ("B0", "B2", "S3", "S4"):
+        model = model_factory(code, root=ROOT, model_config=model_config).eval()
+        with torch.inference_mode():
+            output = training_prediction(model, code, windows, 64)
+        assert output.shape == (1, 64)
+        assert torch.isfinite(output).all()
+
+
+def test_b0_overlap_blocks_match_official_complete_inference() -> None:
+    model_config = yaml.safe_load(
+        (ROOT / "configs/training/m3_synthetic.yaml").read_text()
+    )["model"]
+    model = model_factory("B0", root=ROOT, model_config=model_config).eval()
+    signal = np.random.default_rng(7).normal(size=10_123).astype(np.float32)
+    with torch.inference_mode():
+        complete = model(torch.from_numpy(signal), pad_start=True).numpy()
+    blocked = causal_predict(
+        model,
+        "B0",
+        signal,
+        device=torch.device("cpu"),
+        context_samples=6346,
+        block_samples=1000,
+    )
+    assert np.max(np.abs(complete - blocked)) < 2.0e-6

@@ -18,6 +18,9 @@ data-audit:
 m4-data:
 	uv run python scripts/prepare_m4_data.py
 
+m4-preflight:
+	uv run python scripts/run_m4_preflight.py
+
 smoke:
 	uv run python scripts/smoke_identity.py
 

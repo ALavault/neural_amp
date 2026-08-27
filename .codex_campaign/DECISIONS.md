@@ -69,3 +69,7 @@ Assign the checksum-verified Fulltone Full Drive 2 and Electro-Harmonix Big Muff
 ## 2026-08-27 — D-M4-002 — Cost-targeted recurrent baseline
 
 Use a one-layer causal mono GRU with 62 hidden states for B2 Full. Its 12,153 trainable parameters differ from official A2 Full's 12,145 by 0.066%, and its estimated 11,780 multiply-accumulates per sample closely match A2 Full's 11,777. Treat those estimates only as sizing criteria; retain or reject cost comparability using the measured block CPU benchmark.
+
+## 2026-08-27 — D-M4-003 — Common bounded smoke protocol
+
+Give B0, B2, S3, and S4 the same 6,346-sample causal context, two 8,192-sample output regions per optimizer step, 200 Adam steps, float32 precision, and MSE plus the official A2 MR-STFT weight. This fixes 3,276,800 output samples seen per run. Select checkpoints only by ESR on the first 240,000 validation samples. Add the preregistered FSSR curvature and residual penalties without changing the shared data budget. Compare S4 to its target delayed by its declared 16-sample algorithmic latency. Require a two-step end-to-end preflight for all four paths before launching the 24 counted runs.

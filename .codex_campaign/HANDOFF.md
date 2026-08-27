@@ -2,11 +2,11 @@
 
 ## Current position
 
-M0 through M3 passed. The two M4 physical devices are checksum-verified, permanently internal, and prepared as six finite, unclipped 48 kHz pairs. Fulltone uses disjoint published guitar sources; Big Muff retains its published file splits with upstream session identity disclosed as unknown. External evaluation remains locked.
+M0 through M3 passed. M4 data, the cost-targeted B2 GRU, and the common four-model training path are implemented. The fixed full-run budget is 3,276,800 output samples, and preflight uses two steps without counting toward the 24-run matrix. External evaluation remains locked.
 
 ## Resume action
 
-Implement the cost-matched B2 recurrent baseline and common M4 run harness. Validate one end-to-end physical run for B0, B2, S3, and S4 before launching the remaining 24-run smoke matrix.
+Run `make m4-preflight`. Preserve and diagnose any failed immutable run; launch the counted matrix only after B0, B2, S3, and S4 all complete the physical preflight.
 
 ## Absolute blockers
 

@@ -129,3 +129,19 @@ After all 67 project tests and the data audit passed, an ad hoc `ruff check .` t
 ## 2026-08-27 — F-M4-005 — B2 streaming fixture exceeded line length
 
 The first B2 focused suite passed all numerical checks, then static analysis rejected one 95-character list literal in the block-equivalence test. Resolution: expand the list without changing the tested block schedule or model behavior and rerun the focused validation.
+
+## 2026-08-27 — F-M4-006 — M4 common-path style check failed after numerical pass
+
+All four M4 model factories and the official A2 block-overlap parity test passed, but static analysis rejected one tuple concatenation and one long budget assertion. Resolution: use tuple unpacking and a named `samples_seen` expression without changing the 3,276,800-sample budget, then rerun the focused validation.
+
+## 2026-08-27 — F-M4-007 — Common-path files required configured formatting
+
+After the corrected common-path tests and lint passed, the formatter requested compact forms for two expressions. Resolution: apply the configured formatter to the two new files and rerun all focused checks; no behavior or budget changed.
+
+## 2026-08-27 — F-M4-008 — First M4 run-harness lint pass
+
+Static analysis stopped the first run-harness check on two long function signatures before any run directory was created. Resolution: wrap the signatures and remove an unused draft regularizer helper, retaining the active explicit loss calculation, then rerun lint, formatting, and tests.
+
+## 2026-08-27 — F-M4-009 — Run harness required configured formatting
+
+The corrected run harness passed lint, after which the formatter requested five compact expression forms. Resolution: apply the configured formatter before any experimental run and rerun the static and numerical checks.

@@ -3,7 +3,7 @@
 - Updated: 2026-08-27T13:47:27+02:00
 - Maturity: M4 — principal smoke test
 - Status: in progress
-- Current task: implement and smoke-test the cost-matched B2 recurrent baseline and physical-device training harness before executing the 24-run B0/B2/S3/S4 matrix.
+- Current task: execute the four-path M4 preflight, audit failures, then launch the 24-run B0/B2/S3/S4 matrix only if every path completes.
 - External results accessed: no
 - External retest authorized: false
 
@@ -25,6 +25,7 @@
 - Implemented S0 through S4 and passed the synthetic implementation gate with trained export/block checks, slow/residual ablations, and controlled local-x2 validation.
 - Verified the downloaded ToneTwist archives against official checksums and licenses, permanently assigned them to `INTERNAL_DEV`, and selected Fulltone Full Drive 2 plus Big Muff for M4.
 - Prepared six bounded 48 kHz pairs without level normalization: source-disjoint Fulltone files and the published Big Muff train/validation/test files. All are finite and unclipped.
+- Implemented the 12,153-parameter B2 GRU and a common M4 training/inference path with official A2 overlap-block parity below `2e-6`.
 
 ## M0 gate
 
