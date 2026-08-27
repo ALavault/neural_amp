@@ -19,3 +19,9 @@
 - CPU frequency pinning, turbo control, and core isolation may require privileges not currently established.
 - The expected wall-clock and energy budget for the minimum 100+ training runs is not specified; gates, disk checks, and bounded searches govern resource use.
 - A DAFx submission year/deadline and author list have not been provided; paper preparation can proceed without inventing either.
+
+## M4 updates on 2026-08-27
+
+- The previously absent public physical archives are now present and checksum-verified. They are development data, not private physical captures or 192 kHz references.
+- Fulltone source identities are published and disjoint across splits. Big Muff supplies distinct complete train, validation, and test files, but does not publish performer/session identity; its leakage audit therefore passes only at the released-file level.
+- Strong Big Muff nonlinearity makes windowed delay correlation inconsistent. The campaign preserves the published sample pairing rather than selecting an unsupported compensation delay.

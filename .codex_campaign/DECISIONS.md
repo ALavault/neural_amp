@@ -61,3 +61,7 @@ Oversample only the nonlinear residual `phi(x)-x` by two using 33-tap Kaiser-win
 ## 2026-08-27 — D-M3-004 — M3 gate passed
 
 Advance to M4 because all ten aggregate implementation checks pass: S3 learns two synthetic systems, S1 and S2 improve their discriminating cases, the residual remains below 0.11% of output energy, trained exports preserve causal block behavior, S4's declared delay is aligned, and estimated linear MACs remain below A2 Full. Treat every quality and antialiasing result as synthetic-only until multi-device evidence exists.
+
+## 2026-08-27 — D-M4-001 — Physical smoke-test devices and alignment
+
+Assign the checksum-verified Fulltone Full Drive 2 and Electro-Harmonix Big Muff archives permanently to `INTERNAL_DEV` before model-output inspection. Use Fulltone setting `V100_T050_O050_B000` for moderate saturation and Big Muff setting `S050_V100` for hard clipping. Fulltone marker peaks occupy the same sample grid, so apply no delay correction and remove two seconds at each boundary. For Big Muff, retain the published paired split without extra delay correction: windowed correlations are inconsistent under its strong nonlinearity, so selecting one inferred delay would be unjustified. Resample both members jointly from 44.1 to 48 kHz without level normalization. Keep each complete upstream source file in one split and disclose that Big Muff performer/session provenance is unavailable.

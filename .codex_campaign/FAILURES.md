@@ -109,3 +109,19 @@ The initial 200-step S0 short-segment test reached MSE `3.10e-6`, above its decl
 ## 2026-08-27 — F-M3-005 — First overfit extension remained above target
 
 At 300 steps the same focused overfit reached MSE `2.35e-6`, still above the unchanged `2e-6` threshold. Resolution: use the actual 17-knot S0 configuration instead of the reduced 13-knot fixture and allow 400 steps. The threshold, data, optimizer, and production runs remain unchanged.
+
+## 2026-08-27 — F-M4-001 — Resampling fixture included filter boundaries
+
+The first physical-data unit test required a resampled affine pair to remain within `2e-3` through the first and last samples. Joint polyphase filtering preserved the relation in the signal interior, but zero extension produced a maximum boundary discrepancy of `6.1e-3` for the artificial DC offset. Resolution: retain the tolerance and test the interior after 64 boundary samples; keep a separate peak assertion to prove that preparation performs no gain normalization.
+
+## 2026-08-27 — F-M4-002 — Initial M4 preparation script exceeded line length
+
+The first static check rejected seven long provenance and limitation literals before data preparation ran. Resolution: wrap the expressions without changing their serialized text, configuration, or signal processing, then rerun the focused checks.
+
+## 2026-08-27 — F-M4-003 — Physical-data test required configured formatting
+
+After lint and tests passed, `ruff format --check` requested the configured compact form for one multiline assertion and stopped the command before data generation. Resolution: apply the repository formatter to that test and rerun the complete focused validation before preparation.
+
+## 2026-08-27 — F-M4-004 — Repository-wide Ruff command entered pinned submodules
+
+After all 67 project tests and the data audit passed, an ad hoc `ruff check .` traversed the pinned NAM and Eigen repositories and reported their upstream formatting. Those repositories are immutable campaign dependencies and must not be edited. Resolution: use the established `make lint` target, which scopes checks to `src`, `tests`, and `scripts`, and preserve the third-party pins unchanged.

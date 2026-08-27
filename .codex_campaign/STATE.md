@@ -1,9 +1,9 @@
 # Campaign State
 
-- Updated: 2026-08-27T13:33:03+02:00
+- Updated: 2026-08-27T13:47:27+02:00
 - Maturity: M4 — principal smoke test
 - Status: in progress
-- Current task: acquire and verify two license-compatible paired INTERNAL_DEV devices, freeze source-group splits, then execute the 24-run B0/B2/S3/S4 smoke matrix.
+- Current task: implement and smoke-test the cost-matched B2 recurrent baseline and physical-device training harness before executing the 24-run B0/B2/S3/S4 matrix.
 - External results accessed: no
 - External retest authorized: false
 
@@ -23,6 +23,8 @@
 - Inspected the exact official A2 packed topology, reproduced Lite and Full training on two seeds, and validated official exports.
 - Validated complete-file Python/C++ parity, regular and irregular block processing, exact reset behavior, and a pinned-core CPU reference.
 - Implemented S0 through S4 and passed the synthetic implementation gate with trained export/block checks, slow/residual ablations, and controlled local-x2 validation.
+- Verified the downloaded ToneTwist archives against official checksums and licenses, permanently assigned them to `INTERNAL_DEV`, and selected Fulltone Full Drive 2 plus Big Muff for M4.
+- Prepared six bounded 48 kHz pairs without level normalization: source-disjoint Fulltone files and the published Big Muff train/validation/test files. All are finite and unclipped.
 
 ## M0 gate
 
@@ -42,9 +44,8 @@ M3 passed on 2026-08-27. Evidence is summarized in `reports/M3_MODEL.md`.
 
 ## M4 gate remaining
 
-- Verify and irreversibly assign two paired device datasets to INTERNAL_DEV.
-- Build complete-source, non-overlapping train/validation/test splits.
 - Implement a cost-matched recurrent B2 baseline.
+- Validate one end-to-end physical run per model before launching the matrix.
 - Run B0, B2, S3, and S4 for seeds 0, 1, and 2 on both devices.
 - Measure fidelity, diagnostic spectra, residual energy, training time, and inference cost for every valid run.
 - Apply the preregistered quality, efficiency, or antialiasing smoke condition before entering MATURATION.

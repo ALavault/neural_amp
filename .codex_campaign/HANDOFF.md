@@ -2,12 +2,12 @@
 
 ## Current position
 
-M0 through M3 passed. S0–S4 are implemented and numerically validated; eight one-seed synthetic runs establish the slow and residual mechanisms, trained block/reload parity, and the local x2 diagnostic. External evaluation remains locked. M4 is in progress.
+M0 through M3 passed. The two M4 physical devices are checksum-verified, permanently internal, and prepared as six finite, unclipped 48 kHz pairs. Fulltone uses disjoint published guitar sources; Big Muff retains its published file splits with upstream session identity disclosed as unknown. External evaluation remains locked.
 
 ## Resume action
 
-Verify the selected ToneTwist archives and licenses, assign two paired devices to INTERNAL_DEV before inspecting any outputs, then create source-complete splits. Implement B2 and launch no large matrix until one end-to-end run per model passes.
+Implement the cost-matched B2 recurrent baseline and common M4 run harness. Validate one end-to-end physical run for B0, B2, S3, and S4 before launching the remaining 24-run smoke matrix.
 
 ## Absolute blockers
 
-No absolute blocker while public ToneTwist archives remain available under the recorded CC-BY-NC-4.0 terms. If downloads or archive contents cannot provide at least two valid paired devices with source-boundary metadata, record that as the M4 data blocker and continue all non-data B2 and inference work.
+No absolute blocker. Public ToneTwist archives are locally available under the recorded CC-BY-NC-4.0 terms. Their noncommercial restriction must remain visible in any checkpoint or archive redistribution decision.

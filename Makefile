@@ -15,6 +15,9 @@ lint:
 data-audit:
 	uv run python scripts/data_audit.py datasets/manifests/catalog.yaml
 
+m4-data:
+	uv run python scripts/prepare_m4_data.py
+
 smoke:
 	uv run python scripts/smoke_identity.py
 
