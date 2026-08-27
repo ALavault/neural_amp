@@ -32,6 +32,7 @@ from fssr_nam.losses import WrightLoss
 from fssr_nam.metrics.time import time_metrics
 from fssr_nam.models import WrightLSTM
 from fssr_nam.reporting.ledger import read_runs
+from fssr_nam.reporting.r1_preflight import validate_lock_digest
 from fssr_nam.training.r1_competence import (
     CompetenceGateDecision,
     evaluate_competence_gate,
@@ -53,6 +54,10 @@ MANIFEST_PATH = ROOT / "datasets/manifests/r1_wright_bigmuff_native.json"
 SPLIT_PATH = ROOT / "datasets/splits/r1_wright_bigmuff_native.json"
 LEDGER_PATH = ROOT / ".codex_campaign/RUN_LEDGER.jsonl"
 SUMMARY_PATH = ROOT / "experiments/summaries/r1_competence_gate.json"
+GATES_PATH = ROOT / ".codex_campaign/r1/GATES.json"
+LOCK_PATH = ROOT / ".codex_campaign/r1/DIAGNOSTIC_LOCK.yaml"
+LOCK_DIGEST_PATH = ROOT / ".codex_campaign/r1/DIAGNOSTIC_LOCK.sha256"
+ACTIVE_LOCK_PATH = ROOT / ".codex_campaign/r1/DIAGNOSTIC_LOCK_ACTIVE"
 
 EVALUATION_CHUNK_SAMPLES = 100_000
 PARITY_CHUNK_SAMPLES = 4_093
@@ -419,7 +424,7 @@ def _write_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
 
 
-def _copy_provenance(run_dir: Path, data_sha256: str) -> None:
+def _copy_provenance(run_dir: Path, data_sha256: str, protocol_sha256: str) -> None:
     provenance_dir = run_dir / "provenance"
     provenance_dir.mkdir()
     names = {
@@ -428,14 +433,26 @@ def _copy_provenance(run_dir: Path, data_sha256: str) -> None:
         MODEL_CONFIG_PATH: "model-config.yaml",
         MANIFEST_PATH: "dataset-manifest.json",
         SPLIT_PATH: "split-manifest.json",
+        LOCK_PATH: "diagnostic-lock.yaml",
+        LOCK_DIGEST_PATH: "diagnostic-lock.sha256",
     }
+    if ACTIVE_LOCK_PATH.is_file():
+        active_relative = ACTIVE_LOCK_PATH.read_text(encoding="utf-8").strip()
+        active_lock = ROOT / active_relative
+        names[ACTIVE_LOCK_PATH] = "diagnostic-lock-active.txt"
+        names[active_lock] = "diagnostic-lock-amendment.yaml"
+        names[active_lock.with_suffix(".sha256")] = "diagnostic-lock-amendment.sha256"
     digests = {}
     for source, name in names.items():
         shutil.copy2(source, provenance_dir / name)
         digests[str(source.relative_to(ROOT))] = _sha256(source)
     _write_json(
         provenance_dir / "source-digests.json",
-        {"combined_data_sha256": data_sha256, "files": digests},
+        {
+            "combined_data_sha256": data_sha256,
+            "diagnostic_protocol_sha256": protocol_sha256,
+            "files": digests,
+        },
     )
     for name in ("checkpoints", "predictions", "figures"):
         (run_dir / name).mkdir()
@@ -671,6 +688,8 @@ def _validate_completed_artifacts(
         "provenance/model-config.yaml",
         "provenance/dataset-manifest.json",
         "provenance/split-manifest.json",
+        "provenance/diagnostic-lock.yaml",
+        "provenance/diagnostic-lock.sha256",
         "provenance/source-digests.json",
     )
     missing = [path for path in required if not (run_dir / path).is_file()]
@@ -692,6 +711,7 @@ def _run_seed(
     manifest: Mapping[str, Any],
     *,
     data_sha256: str,
+    protocol_sha256: str,
     commit: str,
     command: str,
 ) -> dict[str, Any]:
@@ -708,7 +728,7 @@ def _run_seed(
     metrics: dict[str, Any] | None = None
     caught: BaseException | None = None
     try:
-        _copy_provenance(run_dir, data_sha256)
+        _copy_provenance(run_dir, data_sha256, protocol_sha256)
         metrics = _train_seed(spec, run_dir, config, data_config, manifest)
         _validate_completed_artifacts(run_dir, metrics)
         status = "completed"
@@ -791,6 +811,7 @@ def _gate_payload(
     *,
     config_sha256: str,
     data_sha256: str,
+    protocol_sha256: str,
     commit: str,
     noncanonical_attempts: tuple[dict[str, Any], ...],
 ) -> dict[str, object]:
@@ -826,6 +847,7 @@ def _gate_payload(
         },
         "training_config_sha256": config_sha256,
         "data_sha256": data_sha256,
+        "protocol_sha256": protocol_sha256,
         "commit": commit,
         "created_at": datetime.now().astimezone().isoformat(timespec="seconds"),
     }
@@ -850,13 +872,81 @@ def _existing_summary() -> dict[str, Any] | None:
     return summary
 
 
+def _publish_gate_decisions(summary: Mapping[str, Any]) -> None:
+    protocol_sha256 = summary.get("protocol_sha256")
+    if not isinstance(protocol_sha256, str):
+        raise RuntimeError("competence summary lacks the diagnostic protocol digest")
+    created_at = summary.get("created_at")
+    if not isinstance(created_at, str):
+        raise RuntimeError("competence summary lacks its evaluation timestamp")
+    summary_gates = summary.get("gates")
+    if not isinstance(summary_gates, dict) or set(summary_gates) != {
+        "competence_seed0",
+        "competence",
+    }:
+        raise RuntimeError("competence summary has an invalid gate mapping")
+    summary_reference = str(SUMMARY_PATH.relative_to(ROOT))
+    summary_sha256 = _sha256(SUMMARY_PATH)
+    proposed = {}
+    for name, value in summary_gates.items():
+        if not isinstance(value, dict):
+            raise RuntimeError(f"competence gate {name} must be a mapping")
+        decision = dict(value)
+        decision.update(
+            {
+                "evaluated_at": created_at,
+                "protocol_sha256": protocol_sha256,
+                "evidence": summary_reference,
+                "evidence_sha256": summary_sha256,
+            }
+        )
+        proposed[name] = decision
+
+    if GATES_PATH.exists():
+        document = _load_json(GATES_PATH)
+        if (
+            document.get("schema_version") != 1
+            or document.get("campaign_version") != "FSSR-R1-v1"
+        ):
+            raise RuntimeError("existing R1 gate registry has an invalid header")
+    else:
+        document = {
+            "schema_version": 1,
+            "campaign_version": "FSSR-R1-v1",
+            "gates": {},
+        }
+    gates = document.get("gates")
+    if not isinstance(gates, dict):
+        raise RuntimeError("existing R1 gate registry has no gate mapping")
+    changed = False
+    for name, decision in proposed.items():
+        if name in gates:
+            if gates[name] != decision:
+                raise RuntimeError(f"refusing divergent immutable gate: {name}")
+        else:
+            gates[name] = decision
+            changed = True
+    if not changed:
+        return
+    document["updated_at"] = created_at
+    GATES_PATH.parent.mkdir(parents=True, exist_ok=True)
+    temporary = GATES_PATH.with_name(f".{GATES_PATH.name}.{os.getpid()}.tmp")
+    with temporary.open("x", encoding="utf-8") as stream:
+        stream.write(json.dumps(document, indent=2) + "\n")
+    os.replace(temporary, GATES_PATH)
+
+
 def _run_gate(
     config: dict[str, Any],
     data_config: dict[str, Any],
     manifest: dict[str, Any],
 ) -> dict[str, object]:
+    protocol_sha256 = validate_lock_digest(ROOT)
     existing_summary = _existing_summary()
     if existing_summary is not None:
+        if existing_summary.get("protocol_sha256") != protocol_sha256:
+            raise RuntimeError("competence summary belongs to a different protocol")
+        _publish_gate_decisions(existing_summary)
         return existing_summary
     _require_clean_worktree()
     commit = _git_commit()
@@ -897,6 +987,7 @@ def _run_gate(
                 data_config,
                 manifest,
                 data_sha256=data_sha256,
+                protocol_sha256=protocol_sha256,
                 commit=commit,
                 command=command,
             )
@@ -930,10 +1021,12 @@ def _run_gate(
         evidence,
         config_sha256=config_sha256,
         data_sha256=data_sha256,
+        protocol_sha256=protocol_sha256,
         commit=commit,
         noncanonical_attempts=noncanonical_attempts,
     )
     _write_summary_once(payload)
+    _publish_gate_decisions(payload)
     return payload
 
 
