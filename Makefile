@@ -36,6 +36,9 @@ m4-recovery:
 m4-recovery-summary:
 	uv run python scripts/summarize_m4_recovery.py
 
+audio-examples:
+	uv run python scripts/generate_m4_audio_examples.py
+
 smoke:
 	uv run python scripts/smoke_identity.py
 

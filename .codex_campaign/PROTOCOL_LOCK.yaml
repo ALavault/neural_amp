@@ -1,18 +1,68 @@
 schema_version: 1
-status: draft_not_frozen
-protocol_version: null
-git_commit: null
-data_manifests: []
-split_hashes: []
-models: []
-hyperparameters: null
-training_budget: null
-seeds: []
-primary_metrics: []
-secondary_metrics: []
-cpu_protocol: null
-exclusion_rules: []
-success_thresholds: null
+status: frozen_posthoc_negative_record
+protocol_version: M4-P4-v1
+frozen_at: 2026-08-27T14:59:07+02:00
+git_commit: c29a56a876bec7bd433b0ddb99878000e0e3a537
+freeze_scope: completed_internal_m4_and_equal_parameter_recovery
+deviation_notice: >-
+  The formal lock was created after the bounded M4 campaign. The effective
+  configurations were committed before their runs and are hash-pinned below.
+  This record cannot support a confirmatory claim; it preserves the negative
+  protocol and prevents external result access.
+data_manifests:
+  - path: datasets/manifests/m4_internal.json
+    sha256: e87ae6217d40401e5156eb87418977684b219fd6a13c4dafcf179478a371e18e
+split_hashes:
+  - path: datasets/splits/m4_internal.json
+    sha256: 06e092b2237e77a235e19cf16595aba972794199fbc48dc334e1c19e5e134a47
+models:
+  - B0_NAM_A2_Full
+  - B2_GRU_62
+  - S3_FSSR_width_8
+  - S4_FSSR_width_8_local_x2
+  - S3_FSSR_width_31_recovery
+hyperparameters:
+  smoke_config:
+    path: configs/training/m4_smoke.yaml
+    sha256: f9ed226a1b317b0d7ca6ddcc1c53e6ac55d0ae28592f1e6f006962a64f559cc3
+  recovery_config:
+    path: configs/training/m4_recovery.yaml
+    sha256: 834769fd1434c301bfa9a46bfa0c88c9d6856ccaf0b6c149bd567ecd0cc087b3
+training_budget:
+  optimizer_steps: 200
+  batch_size: 2
+  output_samples_per_segment: 8192
+  output_samples_seen_per_run: 3276800
+seeds: [0, 1, 2]
+primary_metrics: [test_esr]
+secondary_metrics:
+  - nmse
+  - mae
+  - gain_error
+  - dc_error
+  - correlation
+  - mrstft
+  - magnitude_error
+  - log_spectral_distance_db
+  - phase_error_radians
+  - residual_energy_ratio
+cpu_protocol:
+  official_a2_reference_run: m2_a2_cpu_seed0_v2
+  python_diagnostic_run: m4_python_cpu_seed0_v2
+  threads: 1
+  block_sizes: [1, 16, 64, 128]
+  precision: float32
+  limitation: FSSR C++ path unavailable; cross-engine H2 comparison prohibited
+exclusion_rules:
+  - M4_PREFLIGHT runs are wiring diagnostics and excluded from aggregate results.
+  - Recovery runs are excluded from the fixed 24-run primary matrix.
+  - No completed counted seed is excluded.
+success_thresholds:
+  quality: candidate median test ESR below A2 on both smoke devices
+  efficiency: noninferiority within 5 percent plus measured CPU reduction
+  antialiasing: physical parasite reduction with harmonic preservation
+  recovery: at least 50 percent seed-0 ESR-gap closure on both devices
 external_datasets: []
 external_retest_authorized: false
-lock_sha256: null
+external_results_accessed: false
+lock_sha256: stored_in_.codex_campaign/PROTOCOL_LOCK.sha256

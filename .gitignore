@@ -20,3 +20,6 @@ experiments/runs/*/stderr.log
 experiments/runs/*/*.ckpt
 experiments/runs/*/lightning_logs/
 artifacts/*.tar.zst
+
+# Listening examples derived from noncommercial source audio remain local.
+experiments/audio_examples/**/*.wav
