@@ -2,7 +2,7 @@
   "schema_version": 1,
   "campaign_version": "FSSR-R1-v1",
   "historical_verdict": "NO-GO",
-  "status": "reopened_amendment_pending",
+  "status": "reopened_amendment_frozen_no_gpu_run",
   "protocol_revision": "FSSR-R1-v1-a2",
   "post_observation_deviation": true,
   "current_stage": "competence",
@@ -25,6 +25,8 @@
   "superseded_verdict": "NO-GO-R1",
   "invalid_run_id": "r1_competence_bigmuff_lstm64_wright_seed0_v1",
   "replacement_run_id": "r1_competence_bigmuff_lstm64-retry1_wright_seed0_v1",
+  "gpu_job_launched": false,
+  "run_reserved": false,
   "superseded_final_audit": "reports/R1_FINAL_AUDIT.md",
   "reopen_audit": "reports/R1_REOPEN_AUDIT.md"
 }

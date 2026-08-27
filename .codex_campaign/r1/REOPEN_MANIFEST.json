@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "campaign_version": "FSSR-R1-v1",
+  "protocol_revision": "FSSR-R1-v1-a2",
+  "status": "reopened",
+  "verdict": null,
+  "supersedes_manifest": ".codex_campaign/r1/FINAL_MANIFEST.json",
+  "supersedes_manifest_sha256": "4cce3f0df3129a4dbb1e324a331cd12aaa07b113abb50a0c023950f20ca62694",
+  "supersedes_audit": "reports/R1_FINAL_AUDIT.md",
+  "supersedes_audit_sha256": "46d53fc1132f672019c95c8d0a128669c1aa6f1c792f257006c8adb734f0eaea",
+  "post_observation_deviation": true,
+  "capacity_accounting_changed": true,
+  "scientific_model_data_metrics_changed": false,
+  "diagnostic_trajectories_used": 0,
+  "infrastructure_invalid_attempts": 1,
+  "confirmatory_runs_used": 0,
+  "gpu_job_launched": false,
+  "external_report_only_accessed": false,
+  "evidence": [
+    ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_2.yaml",
+    ".codex_campaign/r1/GATES_AMENDMENT_2.json",
+    "experiments/summaries/r1_competence_failure_reclassification.json",
+    "reports/R1_REOPEN_AUDIT.md"
+  ]
+}

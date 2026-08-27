@@ -2,7 +2,7 @@
 
 - Campaign: `FSSR-R1-v1`
 - Lineage: prospective; the M0–M6 `NO-GO` remains immutable
-- State: reopened; infrastructure amendment 2 pending freeze
+- State: reopened; infrastructure amendment 2 frozen, no GPU job launched
 - Protocol revision: `FSSR-R1-v1-a2` (post-observation capacity deviation)
 - Diagnostic scientific trajectories used: 0 / 19
 - Infrastructure-invalid canonical attempts: 1
@@ -15,7 +15,8 @@
 
 The canonical seed-0 execution and terminal audit remain immutable historical
 evidence. R1-D-009 reclassifies that execution as infrastructure-invalid and
-authorizes one fresh replacement ID after amendment 2 is frozen. The exact CUDA
-validation path at 32,768 samples must pass before reservation. Seeds 1/2 and all
-later stages remain locked until their original gates pass. The historical final
-audit is superseded by `reports/R1_REOPEN_AUDIT.md`.
+authorizes one fresh replacement ID under frozen amendment 2. The exact CUDA
+validation path at 32,768 samples must pass before reservation. No GPU job has
+been launched or reserved. Seeds 1/2 and all later stages remain locked until
+their original gates pass. The historical final audit is superseded by
+`reports/R1_REOPEN_AUDIT.md`.

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "campaign_version": "FSSR-R1-v1",
+  "protocol_revision": "FSSR-R1-v1-a2",
+  "status": "reopened_pending_competence",
+  "verdict": null,
+  "supersedes": ".codex_campaign/r1/GATES.json",
+  "supersedes_sha256": "1432e9d53bca4d60b1bf661c6ae8ad0005b8c504f54bc679a7d640ccc7d08cb9",
+  "diagnostic_lock_amendment_sha256": "b297a57afc7e89a1e7e0ddfd310880b5ae1a1cbf4447a44f41bcd3e86b037f32",
+  "invalid_infrastructure_source": {
+    "run_id": "r1_competence_bigmuff_lstm64_wright_seed0_v1",
+    "ledger_status": "failed",
+    "scientific_validity": "invalid",
+    "counts_toward_cap": false
+  },
+  "gates": {},
+  "later_stages_authorized": false,
+  "external_report_only_locked": true,
+  "created_at": "2026-08-27T18:00:00+02:00"
+}
