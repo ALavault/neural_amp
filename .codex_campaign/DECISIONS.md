@@ -29,3 +29,7 @@ Use MR-STFT, not the causal envelope metric, as the primary detector for short n
 ## 2026-08-27 — D-M1-002 — EGFxSet is internal development data
 
 Assign EGFxSet permanently to `INTERNAL_DEV` before downloading any file. Use only its CC-BY-4.0 `Clean.zip` archive to validate ingestion of a real rights-compatible DI excerpt during M1. Its isolated-note structure is diagnostic and cannot establish general amplifier fidelity; it is excluded from future external report-only evaluation.
+
+## 2026-08-27 — D-M1-003 — M1 gate passed
+
+Advance to M2 because the 41-test suite, data audit, synthetic audit, and all controlled metric checks pass from commit `a9af90d` with clean provenance. Preserve the seven M1 failure entries and the metric limitations in the M1 report. Do not treat the controlled x2 result as validation of H3.

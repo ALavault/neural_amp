@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "not_ready",
-  "maturity": "M0",
+  "maturity": "M1",
   "created_at": null,
   "git_commit": null,
   "protocol_lock": null,

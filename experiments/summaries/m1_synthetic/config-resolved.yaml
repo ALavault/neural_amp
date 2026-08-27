@@ -1,7 +1,7 @@
 amplitude: 0.25
 decimation:
   cutoff_fraction_of_target_nyquist: 0.9
-  method: polyphase_fir
+  method: linear_phase_fir_then_stride
   stages:
   - 2
   - 2

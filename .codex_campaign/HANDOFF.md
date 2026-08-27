@@ -2,12 +2,12 @@
 
 ## Current position
 
-M0 passed. The reproducible Python 3.12/CUDA environment, official NAM pins, campaign ledger, license-aware dataset inventory, and identity round-trip evidence are present. External evaluation remains locked. M1 is in progress.
+M0 and M1 passed. Synthetic systems, controlled decimation, alignment, metric perturbations, figures, and the licensed EGFxSet DI diagnostic are validated. External evaluation remains locked. M2 is in progress.
 
 ## Resume action
 
-Implement the complete deterministic synthetic-system family, controlled multirate references, alignment, and metric perturbation validation. Do not begin A2 reproduction until the M1 gate passes.
+Inspect the exact pinned A2 packed configuration and official Core fast path, then define the minimal two-seed reproduction, export/parity checks, and CPU benchmark protocol. Do not modify either submodule.
 
 ## Absolute blockers
 
-None for synthetic M1. Physical paired archives are not yet downloaded or assigned to tiers, but this does not block M1.
+No absolute blocker for architecture inspection or synthetic A2 reproduction. Physical paired device archives are not yet downloaded or assigned (except EGFxSet INTERNAL_DEV), so final physical-device reproduction remains pending later license/data selection.

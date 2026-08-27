@@ -1,9 +1,9 @@
 # Campaign State
 
-- Updated: 2026-08-27T12:15:00+02:00
-- Maturity: M1 — Metrics and synthetic systems
+- Updated: 2026-08-27T12:39:19+02:00
+- Maturity: M2 — NAM A2 reproduction
 - Status: in progress
-- Current task: implement the deterministic 192 kHz synthetic systems, controlled decimation, alignment, and metric perturbation suite.
+- Current task: inspect the pinned A2 architecture/configuration, reproduce minimal Full/Lite training and export, validate block causality, and establish stable CPU benchmarks.
 - External results accessed: no
 - External retest authorized: false
 
@@ -17,14 +17,22 @@
 - Audited public dataset metadata and licenses without downloading audio.
 - Passed lint, eight M0 tests, the catalog audit, and the persisted float32 identity round trip.
 - Created the first local commit `f51b511`.
+- Completed the 192/96/48 kHz synthetic corpus, including eight prescribed systems and a licensed real-DI ingestion diagnostic.
+- Validated alignment and all prescribed metric perturbations; generated inspected diagnostic figures.
+- Demonstrated a controlled synthetic parasite reduction from `-19.56 dB` to `-71.68 dB` under x2 processing, without promoting it to a hardware claim.
 
 ## M0 gate
 
 M0 passed on 2026-08-27. Evidence is summarized in `reports/M0_BOOTSTRAP.md`.
 
-## M1 gate remaining
+## M1 gate
 
-- Implement all eight prescribed synthetic nonlinear systems at 192 kHz.
-- Validate controlled 192→96→48 kHz decimation.
-- Implement integer/fractional alignment and the prescribed time, spectral, harmonic, transient, and parasite diagnostics.
-- Demonstrate metric responses to all twelve controlled perturbations and produce `reports/M1_METRICS.md`.
+M1 passed on 2026-08-27. Evidence is summarized in `reports/M1_METRICS.md`.
+
+## M2 gate remaining
+
+- Document the exact official A2 Full/Lite topology and training/export configs.
+- Train and export minimal A2 models without undocumented source changes.
+- Validate full-file, sample, regular-block, and irregular-block parity and reset behavior.
+- Reproduce at least two seeds with plausible learning behavior.
+- Establish stable Python and official C++ CPU benchmarks, recording any divergence.
