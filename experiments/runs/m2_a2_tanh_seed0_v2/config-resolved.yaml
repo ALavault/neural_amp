@@ -1,0 +1,204 @@
+campaign:
+  schema_version: 1
+  model_config: third_party/neural-amp-modeler/nam/train/_resources/config_model_packed.json
+  dataset_config: configs/data/m2_synthetic_tanh.yaml
+  seeds:
+  - 0
+  - 1
+  precision: 32-true
+  deterministic_mode: warn_only
+  accelerator: gpu
+  devices: 1
+  max_epochs: 8
+  train_dataloader:
+    batch_size: 8
+    shuffle: true
+    drop_last: true
+    num_workers: 0
+    pin_memory: true
+  validation_dataloader:
+    batch_size: 1
+    num_workers: 0
+    pin_memory: true
+  segment_output_samples: 8192
+  checkpoint_policy: official_packed_best_and_epoch
+  selection_metric: validation_esr
+  notes:
+  - Minimal official A2 reproduction on a deterministic synthetic tanh system.
+  - This run validates the toolchain; it is not evidence about physical devices.
+  - Strict CUDA determinism is unavailable for MRSTFT reflection-pad backward.
+data:
+  common:
+    delay: 0
+    require_input_pre_silence: null
+  train:
+    x_path: /fastdata/lavaulta/neural_amp/datasets/raw/synthetic_m2/train_input.wav
+    y_path: /fastdata/lavaulta/neural_amp/datasets/raw/synthetic_m2/train_output.wav
+    ny: 8192
+  validation:
+    x_path: /fastdata/lavaulta/neural_amp/datasets/raw/synthetic_m2/validation_input.wav
+    y_path: /fastdata/lavaulta/neural_amp/datasets/raw/synthetic_m2/validation_output.wav
+    ny: null
+  joint: []
+model:
+  net:
+    name: PackedWaveNet
+    config:
+      submodels:
+      - name: channels_3
+        config:
+          layers_configs:
+          - input_size: 1
+            condition_size: 1
+            channels: 3
+            kernel_sizes:
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 15
+            - 15
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            dilations:
+            - 1
+            - 3
+            - 7
+            - 17
+            - 41
+            - 101
+            - 239
+            - 1
+            - 3
+            - 7
+            - 17
+            - 41
+            - 101
+            - 239
+            - 1
+            - 13
+            - 1
+            - 3
+            - 7
+            - 17
+            - 41
+            - 101
+            - 239
+            activation: LeakyReLU
+            gated: false
+            head:
+              out_channels: 1
+              kernel_size: 16
+              bias: true
+          head_scale: 0.01
+      - name: channels_8
+        config:
+          layers_configs:
+          - input_size: 1
+            condition_size: 1
+            channels: 8
+            kernel_sizes:
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 15
+            - 15
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            - 6
+            dilations:
+            - 1
+            - 3
+            - 7
+            - 17
+            - 41
+            - 101
+            - 239
+            - 1
+            - 3
+            - 7
+            - 17
+            - 41
+            - 101
+            - 239
+            - 1
+            - 13
+            - 1
+            - 3
+            - 7
+            - 17
+            - 41
+            - 101
+            - 239
+            activation: LeakyReLU
+            gated: false
+            head:
+              out_channels: 1
+              kernel_size: 16
+              bias: true
+          head_scale: 0.01
+      export:
+        container_max_values: uniform
+  loss:
+    val_loss: esr
+    mrstft_weight: 0.0005
+  optimizer:
+    lr: 0.004
+    weight_decay: 3.17e-07
+  lr_scheduler:
+    class: ExponentialLR
+    kwargs:
+      gamma: 0.994
+learning:
+  train_dataloader:
+    batch_size: 8
+    shuffle: true
+    drop_last: true
+    num_workers: 0
+    pin_memory: true
+  val_dataloader:
+    batch_size: 1
+    num_workers: 0
+    pin_memory: true
+  trainer:
+    accelerator: gpu
+    devices: 1
+    max_epochs: 8
+    precision: 32-true
+    deterministic: true
+    num_sanity_val_steps: 0
+    enable_progress_bar: false
+    enable_model_summary: false
+    logger: true
+  trainer_fit_kwargs: {}
+seed: 0

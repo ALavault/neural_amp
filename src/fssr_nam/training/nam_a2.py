@@ -14,6 +14,12 @@ def make_configs(
     model_config_path: Path,
 ) -> tuple[dict, dict, dict]:
     """Resolve one official packed A2 run without altering upstream sources."""
+    deterministic_mode = campaign["deterministic_mode"]
+    trainer_deterministic: bool | str = {
+        "strict": True,
+        "warn_only": "warn",
+        "off": False,
+    }[deterministic_mode]
     files = {entry["name"]: entry for entry in manifest["files"]}
     data = {
         "common": {"delay": 0, "require_input_pre_silence": None},
@@ -38,7 +44,7 @@ def make_configs(
             "devices": int(campaign["devices"]),
             "max_epochs": int(campaign["max_epochs"]),
             "precision": campaign["precision"],
-            "deterministic": campaign["deterministic_mode"] != "off",
+            "deterministic": trainer_deterministic,
             "num_sanity_val_steps": 0,
             "enable_progress_bar": False,
             "enable_model_summary": False,

@@ -30,5 +30,5 @@ def test_m2_training_uses_disjoint_files_and_official_a2_config():
         "channels_8",
     ]
     assert learning["trainer"]["precision"] == "32-true"
-    assert learning["trainer"]["deterministic"] is True
+    assert learning["trainer"]["deterministic"] == "warn"
     assert campaign["deterministic_mode"] == "warn_only"

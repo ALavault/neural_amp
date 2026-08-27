@@ -1,0 +1,15 @@
+{
+  "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.43",
+  "python": "3.12.13",
+  "numpy": "2.5.2",
+  "torch": "2.13.0+cu130",
+  "pytorch_lightning": "2.6.1",
+  "cuda_runtime": "13.0",
+  "cudnn": 92000,
+  "gpu": "NVIDIA RTX PRO 4000 Blackwell",
+  "cuda_available": true,
+  "cudnn_benchmark": false,
+  "cudnn_deterministic": true,
+  "deterministic_algorithms": true,
+  "deterministic_warn_only": true
+}

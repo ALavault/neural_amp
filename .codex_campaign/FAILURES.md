@@ -73,3 +73,7 @@ The immutable environment snapshot in failed run `m2_a2_tanh_seed0_v1` was writt
 ## 2026-08-27 — F-M2-008 — Result index used CRLF
 
 The first run-index row used the CSV writer's default CRLF terminator, which failed `git diff --check` in this LF-normalized repository. Resolution: preserve the row values, normalize only its terminator, and configure subsequent writes with `lineterminator="\\n"`.
+
+## 2026-08-27 — F-M2-009 — Lightning overrode PyTorch warn-only determinism
+
+Run `m2_a2_tanh_seed0_v2` failed on the same MRSTFT reflection-pad backward because the adapter still passed `Trainer(deterministic=True)`, causing Lightning to restore strict mode after PyTorch had been configured for warnings. Resolution: map the preregistered `warn_only` mode to Lightning's native `deterministic="warn"` value and relaunch under a new identifier. No architecture, loss, data, optimizer, or seed changed.

@@ -1,0 +1,26 @@
+{
+    "train_dataloader": {
+        "batch_size": 8,
+        "shuffle": true,
+        "drop_last": true,
+        "num_workers": 0,
+        "pin_memory": true
+    },
+    "val_dataloader": {
+        "batch_size": 1,
+        "num_workers": 0,
+        "pin_memory": true
+    },
+    "trainer": {
+        "accelerator": "gpu",
+        "devices": 1,
+        "max_epochs": 8,
+        "precision": "32-true",
+        "deterministic": true,
+        "num_sanity_val_steps": 0,
+        "enable_progress_bar": false,
+        "enable_model_summary": false,
+        "logger": true
+    },
+    "trainer_fit_kwargs": {}
+}
