@@ -161,3 +161,11 @@ Static analysis rejected a long benchmark signature and an unread campaign-confi
 ## 2026-08-27 — F-M4-013 — CPU benchmark required configured formatting
 
 The corrected benchmark passed lint, then the formatter requested compact generator expressions in two block-64 lookups. Resolution: apply the configured formatter and rerun validation before creating the immutable benchmark run.
+
+## 2026-08-27 — F-M4-014 — Python benchmark omitted dynamic streaming state
+
+Run `m4_python_cpu_seed0_v1` completed all timing measurements, but its `state_bytes` field counted registered buffers before streaming and therefore reported zero for B2 while omitting dynamic FIR, GRU, and TCN histories. Timing values are unaffected. Resolution: preserve v1, count materialized runtime state tensors by their explicit state fields after benchmarking, and rerun the complete benchmark as v2.
+
+## 2026-08-27 — F-M4-015 — Runtime-state correction exceeded line length
+
+The first static check of the runtime-state correction rejected one 91-character compound condition before v2 ran. Resolution: wrap the unchanged condition and rerun lint and formatting.

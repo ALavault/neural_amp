@@ -25,7 +25,7 @@ m4-matrix:
 	uv run python scripts/run_m4_matrix.py
 
 m4-benchmark:
-	uv run python scripts/benchmark_m4_python.py --run-id m4_python_cpu_seed0_v1
+	uv run python scripts/benchmark_m4_python.py --run-id m4_python_cpu_seed0_v2
 
 smoke:
 	uv run python scripts/smoke_identity.py

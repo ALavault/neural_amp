@@ -1,0 +1,17 @@
+schema_version: 1
+campaign_config_sha256: f9ed226a1b317b0d7ca6ddcc1c53e6ac55d0ae28592f1e6f006962a64f559cc3
+models:
+  B2: m4_fulltone_b2_seed0_v1
+  S3: m4_fulltone_s3_seed0_v1
+  S4: m4_fulltone_s4_seed0_v1
+block_sizes:
+- 1
+- 16
+- 64
+- 128
+threads: 1
+affinity:
+- 0
+precision: float32
+sample_rate: 48000
+timing_scope: model.stream only

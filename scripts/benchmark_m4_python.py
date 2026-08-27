@@ -116,6 +116,29 @@ def benchmark_model(
     }
 
 
+def runtime_state_bytes(model) -> int:
+    """Count materialized streaming tensors, excluding fixed coefficients."""
+    names = ("_state", "_stream_state", "_hidden", "_accumulator")
+    tensors = []
+    seen = set()
+    integer_fields = 0
+    for module in model.modules():
+        for name in names:
+            value = getattr(module, name, None)
+            if (
+                isinstance(value, torch.Tensor)
+                and value.numel()
+                and id(value) not in seen
+            ):
+                seen.add(id(value))
+                tensors.append(value)
+        if hasattr(module, "_count") and isinstance(module._count, int):
+            integer_fields += 1
+    return sum(tensor.numel() * tensor.element_size() for tensor in tensors) + (
+        8 * integer_fields
+    )
+
+
 def append_result_index(entry: list[object]) -> None:
     with RESULT_INDEX.open("a", encoding="utf-8", newline="") as stream:
         csv.writer(stream, lineterminator="\n").writerow(entry)
@@ -219,15 +242,12 @@ def main() -> None:
                     "parameters": sum(
                         parameter.numel() for parameter in model.parameters()
                     ),
-                    "state_bytes": sum(
-                        buffer.numel() * buffer.element_size()
-                        for buffer in model.buffers()
-                    ),
                     "blocks": [
                         benchmark_model(model, signal_tensor, block_size)
                         for block_size in resolved["block_sizes"]
                     ],
                 }
+                results[code]["state_bytes"] = runtime_state_bytes(model)
                 block64 = next(
                     item for item in results[code]["blocks"] if item["block_size"] == 64
                 )
