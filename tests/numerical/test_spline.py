@@ -73,4 +73,5 @@ def test_spline_learns_tanh():
         )
         loss.backward()
         optimizer.step()
-    assert float(torch.mean((spline(inputs) - target) ** 2)) < 2.0e-5
+    final_error = torch.mean((spline(inputs) - target) ** 2)
+    assert float(final_error.detach()) < 2.0e-5

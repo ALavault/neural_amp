@@ -93,3 +93,7 @@ The first M2 closure command stopped at `ruff format --check` after the inspecto
 ## 2026-08-27 — F-M3-001 — S0 model exports were not import-sorted
 
 The first S0 static check rejected the new model package's relative import order before numerical tests ran. Resolution: apply Ruff's prescribed lexical order and rerun lint, formatting, and all focused spline/FIR tests.
+
+## 2026-08-27 — F-M3-002 — Slow-controller test concatenated the feature axis
+
+The first S1–S3 focused suite failed because its test concatenated scalar-controller outputs shaped `(3, samples)` along the default feature axis instead of time. Resolution: concatenate along the last axis and detach a separate diagnostic scalar conversion; model code and expected values are unchanged.

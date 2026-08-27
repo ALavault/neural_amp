@@ -1,0 +1,16 @@
+schema_version: 1
+code: S2
+base: configs/models/fssr/s0.yaml
+fast_residual:
+  type: causal_tcn
+  channels: 8
+  kernel_size: 3
+  dilations: [1, 2, 4, 8]
+  receptive_field_samples: 31
+  inputs: [raw_signal, structured_output]
+  maximum_output_scale: 0.5
+  initial_output_scale: 0.025
+  output_initialization: zero
+regularization:
+  normalized_residual_energy: 1.0e-3
+latency_samples: 0

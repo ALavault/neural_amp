@@ -1,0 +1,9 @@
+schema_version: 1
+code: S3
+name: fast_slow_structured_residual
+components:
+  structured_core: configs/models/fssr/s0.yaml
+  slow_state: configs/models/fssr/s1.yaml
+  fast_residual: configs/models/fssr/s2.yaml
+latency_samples: 0
+causal: true

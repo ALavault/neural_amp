@@ -76,12 +76,40 @@ class S0Structured(nn.Module):
         self.post.reset_state()
 
     def forward(self, signal: Tensor) -> Tensor:
-        shaped = self.shaper(self.drive * self.pre(signal) + self.offset)
-        return self.output_gain * self.post(shaped)
+        return self.forward_modulated(signal, None)
 
     def stream(self, signal: Tensor) -> Tensor:
-        shaped = self.shaper(self.drive * self.pre.stream(signal) + self.offset)
-        return self.output_gain * self.post.stream(shaped)
+        return self.stream_modulated(signal, None)
+
+    def forward_modulated(self, signal: Tensor, modulation: Tensor | None) -> Tensor:
+        return self._modulated(signal, modulation, streaming=False)
+
+    def stream_modulated(self, signal: Tensor, modulation: Tensor | None) -> Tensor:
+        return self._modulated(signal, modulation, streaming=True)
+
+    def _modulated(
+        self, signal: Tensor, modulation: Tensor | None, *, streaming: bool
+    ) -> Tensor:
+        batched, scalar = _batch(signal)
+        filtered = self.pre.stream(batched) if streaming else self.pre(batched)
+        if modulation is None:
+            drive_factor = 1.0
+            offset_delta = 0.0
+            gain_factor = 1.0
+        else:
+            if scalar and modulation.ndim == 2:
+                modulation = modulation[None, :, :]
+            if modulation.shape != (len(batched), 3, batched.shape[-1]):
+                raise ValueError("modulation must have shape (batch,3,samples)")
+            drive_factor = modulation[:, 0]
+            offset_delta = modulation[:, 1]
+            gain_factor = modulation[:, 2]
+        shaped = self.shaper(
+            self.drive * drive_factor * filtered + self.offset + offset_delta
+        )
+        output = self.post.stream(shaped) if streaming else self.post(shaped)
+        result = self.output_gain * gain_factor * output
+        return result[0] if scalar else result
 
     def regularization(self) -> Tensor:
         return self.shaper.curvature_penalty()

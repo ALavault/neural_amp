@@ -49,3 +49,7 @@ Advance to M3. The official packed A2 recipe converged for two seeds on the prer
 ## 2026-08-27 — D-M3-001 — S0 spline and FIR foundation
 
 Implement S0 with one 17-tap causal FIR before and after a 17-knot cubic Hermite spline. Share one learned slope at each knot to guarantee C1 continuity, use linear endpoint extrapolation, initialize exactly to identity, and expose analytic first derivatives and primitives for later ADAA work. Do not impose monotonicity; retain curvature regularization as an explicit loss term.
+
+## 2026-08-27 — D-M3-002 — Initial slow and residual branches
+
+Use a one-layer GRU with eight states updated after each completed 64-sample interval; zero-order-hold modulation is therefore strictly causal and independent of caller block boundaries. Use a four-layer 8-channel TCN with kernel 3 and dilations `[1,2,4,8]` for the fast residual. Its 31-sample receptive field is below 1 ms, its output layer starts at zero, and a sigmoid-controlled scale is capped at 0.5. Keep normalized residual-energy regularization mandatory in training configurations.

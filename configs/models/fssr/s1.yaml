@@ -1,0 +1,12 @@
+schema_version: 1
+code: S1
+base: configs/models/fssr/s0.yaml
+slow_state:
+  type: gru_cell
+  features: [absolute_envelope, squared_energy, signed_mean]
+  hidden_size: 8
+  layers: 1
+  decimation: 64
+  interpolation: causal_zero_order_hold_after_completed_interval
+  modulates: [drive, offset, output_gain]
+latency_samples: 0
