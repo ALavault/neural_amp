@@ -1,0 +1,1 @@
+uv run python scripts/run_m4_smoke.py --model S3 --device electro_harmonix_big_muff --seed 0 --run-id m4_recovery_bigmuff_s3w31_seed0_v1 --recovery-wide

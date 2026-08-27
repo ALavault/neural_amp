@@ -185,3 +185,11 @@ All 24 counted runs completed, but A2 Full has lower median test ESR on both dev
 ## 2026-08-27 — F-M4-019 — Recovery files required configured formatting
 
 The recovery implementation passed lint, after which formatting checks requested compact forms in the runner and parameter-budget test before tests executed. Resolution: apply the configured formatter and rerun focused validation before creating any recovery run.
+
+## 2026-08-27 — F-M4-020 — Recovery summary table exceeded line length
+
+The first recovery-summary lint pass rejected two long formatted Markdown table rows before aggregation ran. Resolution: construct the rows from wrapped source expressions and rerun static validation without changing the values.
+
+## 2026-08-27 — F-M4-021 — Recovery summary required configured formatting
+
+The corrected recovery summary passed lint, then the formatter compacted one dictionary comprehension. Resolution: apply the configured formatter and rerun checks before aggregation.
