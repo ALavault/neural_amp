@@ -1,0 +1,16 @@
+{
+  "combined_data_sha256": "d2d95336c1af5569f6ded9dc437d9a38b4731d9de7882afd988c8a8eb2795a39",
+  "diagnostic_protocol_sha256": "5c85e6aadace532462340828eef7493b2ad177fa12a6aa0ae86845b6888d7ae0",
+  "files": {
+    "configs/training/r1_competence.yaml": "8d328bebd8c3991094184db52647fb465cdef62e6cc8b3fa5644820b02675e67",
+    "configs/data/r1_wright_bigmuff_native.yaml": "18e2d070873a8e2c8adba21158607ff6fddeab2b98a416f61dfcd97574559151",
+    "configs/models/r1/wright_lstm64.yaml": "542496b6d8c2ff75ba13ea0bf7723b7525e7079e116b009731d448fc9ab30980",
+    "datasets/manifests/r1_wright_bigmuff_native.json": "b037d41670b4739c247922e5f6764d6f4fb5ba61e85898ffe4d59be8a76fb642",
+    "datasets/splits/r1_wright_bigmuff_native.json": "cac89ea29646aafbfee5f4da783592ff626933f75468465470ebcc36334cf5a3",
+    ".codex_campaign/r1/DIAGNOSTIC_LOCK.yaml": "fc1bb26765521484aa4407cc5f4399ca451e1fd39cef4a60b342ccf94f9034f3",
+    ".codex_campaign/r1/DIAGNOSTIC_LOCK.sha256": "08e9fd78873830cfd05ce8a30496de36c9acf522540545173f5da794cb1d2918",
+    ".codex_campaign/r1/DIAGNOSTIC_LOCK_ACTIVE": "c65db82194c02ba5fa3f7c43b22f4d53d5e18b0104f52fdbc648d7d3c9798a59",
+    ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_1.yaml": "3142dc6c7c8d0e882a002aa2c7dd2ccdd1905d0af6340aeced3f4db4cba1a60f",
+    ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_1.sha256": "2b2b60d38d3a381a997760f995e4f25ba80c7b2b119eb72d9f84d49276b81ffc"
+  }
+}

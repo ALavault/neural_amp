@@ -1,0 +1,17 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+status: frozen
+amendment_number: 1
+base_lock_path: .codex_campaign/r1/DIAGNOSTIC_LOCK.yaml
+base_lock_sha256: fc1bb26765521484aa4407cc5f4399ca451e1fd39cef4a60b342ccf94f9034f3
+reason: replace the nonconforming competence orchestration after an unauthorized post-lock
+  launch; no valid counted trajectory existed
+quarantine_evidence: experiments/quarantine/r1_competence_bigmuff_wright_lstm64_wright_seed0_v1/QUARANTINE.json
+unauthorized_run_id: r1_competence_bigmuff_wright_lstm64_wright_seed0_v1
+capacity_exclusion_basis: the attempt was never reserved or authorized by R1Executor
+  and its identifier is outside the frozen 3/8/4/4 matrix; it remains recorded as
+  an engineering protocol failure, not a diagnostic trajectory
+scientific_protocol_changed: false
+protocol_sha256: 5c85e6aadace532462340828eef7493b2ad177fa12a6aa0ae86845b6888d7ae0
+effective_implementation_commit: 3686ed9cefd340109faedb92b759a7aca58c6544
+external_report_only_locked: true

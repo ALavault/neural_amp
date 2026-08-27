@@ -1,0 +1,9 @@
+[
+  {
+    "epoch": 1,
+    "training_wright_loss": 0.7462371961249934,
+    "optimizer_updates": 308,
+    "learning_rate": 0.005,
+    "wall_seconds": 4.360911065014079
+  }
+]

@@ -46,3 +46,12 @@ ledger row. Exclude it from diagnostic capacity because it is outside the frozen
 matrix, and require every counted competence seed to use the canonical identifier,
 fresh `R1Executor` reservation, sealed test boundary, and uninterrupted execution.
 This correction changes no scientific threshold, dataset, loss, seed, or model.
+
+## 2026-08-27 — R1-D-007 — Technical retry policy trigger
+
+The canonical seed 0 run failed before validation because the preregistered runner
+used a cuDNN-unsupported 100,000-sample inference chunk. A controlled probe reproduced
+the failure at 100,000 and 65,536 samples and succeeded at 32,768 and 16,384. Preserve
+the failed run. Before any retry, freeze a single exact replacement identifier and
+the 32,768-sample implementation fix; do not alter data, initialization, optimizer,
+loss, checkpoint selection, gates, seeds, or external locks.

@@ -1,0 +1,14 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+model: wright_lstm
+sample_rate: 44100
+input_channels: 1
+output_channels: 1
+unit_type: LSTM
+layers: 1
+hidden_size: 64
+direct_skip: true
+head: linear
+latency_samples: 0
+reference_model: third_party/Automated-GuitarAmpModelling/Results/muff-muff2/model_best.json
+reference_commit: e3146386b0fd0b562bc393231be3a5938cf9feac

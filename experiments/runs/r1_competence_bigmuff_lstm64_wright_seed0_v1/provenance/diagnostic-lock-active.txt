@@ -1,0 +1,1 @@
+.codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_1.yaml

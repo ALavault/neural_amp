@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "campaign_version": "FSSR-R1-v1",
+  "dataset": "r1_wright_bigmuff_native",
+  "rule": "complete official files remain in one split",
+  "leakage_check": "passed_at_published_file_level",
+  "groups": {
+    "train": [
+      "dafx19_official_train"
+    ],
+    "validation": [
+      "dafx19_official_validation"
+    ],
+    "test": [
+      "dafx19_official_test"
+    ]
+  },
+  "path_overlap": []
+}

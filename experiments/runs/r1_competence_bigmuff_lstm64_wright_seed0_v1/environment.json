@@ -1,0 +1,29 @@
+{
+  "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.43",
+  "python": "3.12.13",
+  "executable": "/fastdata/lavaulta/neural_amp/.venv/bin/python3",
+  "packages": {
+    "fssr-nam": "0.1.0",
+    "numpy": "2.5.2",
+    "soundfile": "0.14.0",
+    "torch": "2.13.0",
+    "pyyaml": "6.0.3"
+  },
+  "torch_cuda_runtime": "13.0",
+  "torch_cudnn": 92000,
+  "cuda_device_count": 1,
+  "training_device": "cuda:0",
+  "gpu": {
+    "index": 0,
+    "name": "NVIDIA RTX PRO 4000 Blackwell",
+    "total_memory_bytes": 25149898752,
+    "compute_capability": [
+      12,
+      0
+    ]
+  },
+  "precision": "float32",
+  "deterministic_algorithms": true,
+  "cudnn_deterministic": true,
+  "tf32": false
+}

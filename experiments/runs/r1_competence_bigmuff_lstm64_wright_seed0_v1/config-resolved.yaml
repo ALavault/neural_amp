@@ -1,0 +1,72 @@
+campaign_version: FSSR-R1-v1
+stage_config:
+  schema_version: 1
+  campaign_version: FSSR-R1-v1
+  stage: competence
+  tier: INTERNAL_DEV
+  device: bigmuff
+  setting: S050_V100
+  sample_rate: 44100
+  model: lstm64
+  loss_mode: wright
+  checkpoint_steps: []
+  phase_schedule:
+  - name: official_wright_training
+    start_epoch: 1
+    end_epoch: 2000
+    trainable:
+    - all
+  receptive_field: stateful
+  seeds:
+  - 0
+  - 1
+  - 2
+  conditional_seed_rule:
+    first_seed: 0
+    additional_seeds:
+    - 1
+    - 2
+    launch_if_seed0_esr_test_at_most: 0.15
+  segment_samples: 22050
+  warmup_samples: 200
+  tbptt_samples: 1000
+  batch_size: 50
+  maximum_epochs: 2000
+  validation_frequency_epochs: 2
+  optimizer:
+    name: Adam
+    learning_rate: 0.005
+    weight_decay: 0.0001
+  scheduler:
+    name: ReduceLROnPlateau
+    mode: min
+    factor: 0.5
+    patience_validations: 5
+  early_stopping:
+    patience_validations: 25
+    comparison: strict_improvement
+  loss:
+    preemphasis:
+    - -0.85
+    - 1.0
+    esr_preemphasized_weight: 0.75
+    dc_weight: 0.25
+    epsilon: 1.0e-05
+  checkpoint_policy: lowest_validation_wright_loss
+  promotion_gate:
+    median_esr_test_at_most: 0.15
+    maximum_seed_esr_test_at_most: 0.2
+    required_seeds: 3
+  failure_action: stop_r1_and_audit_loss_tbptt_alignment_weight_conversion
+selected_run:
+  run_id: r1_competence_bigmuff_lstm64_wright_seed0_v1
+  stage: competence
+  device: bigmuff
+  model: lstm64
+  loss: wright
+  seed: 0
+  gate_requirements: []
+authorization:
+  gate_decisions: {}
+  confirmatory_lock: null
+  stopped_by_gate: null

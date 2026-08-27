@@ -1,0 +1,9 @@
+{
+  "run_id": "r1_competence_bigmuff_lstm64_wright_seed0_v1",
+  "stage": "competence",
+  "device": "bigmuff",
+  "model": "lstm64",
+  "loss": "wright",
+  "seed": 0,
+  "gate_requirements": []
+}
