@@ -55,3 +55,20 @@ the failure at 100,000 and 65,536 samples and succeeded at 32,768 and 16,384. Pr
 the failed run. Before any retry, freeze a single exact replacement identifier and
 the 32,768-sample implementation fix; do not alter data, initialization, optimizer,
 loss, checkpoint selection, gates, seeds, or external locks.
+
+## 2026-08-27 — R1-D-008 — Supersede retry and stop R1
+
+This entry supersedes R1-D-007 after the preregistered capacity and gate logic
+were audited together. The canonical seed-0 trajectory was reserved by
+`R1Executor`, executed 308 optimizer updates in its first durably recorded
+epoch, and failed at the first scheduled validation before checkpoint or test
+evaluation. Unlike R1-D-006, it is a valid counted trajectory. R1-D-004 states
+that a failed branch releases no budget; the remaining two competence slots
+cannot supply both a replacement seed-0 result and the required three final
+seeds.
+
+A retry, `v2`/replacement identifier, fourth competence slot, or
+post-observation exclusion would therefore change the frozen matrix. Seeds 1/2
+and every later stage remain unauthorized, and the terminal verdict is
+`NO-GO-R1`. The failure is operational rather than a measured rejection of
+Wright LSTM-64; its prospective repair belongs to a newly preregistered lineage.

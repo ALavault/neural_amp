@@ -2,20 +2,22 @@
   "schema_version": 1,
   "campaign_version": "FSSR-R1-v1",
   "historical_verdict": "NO-GO",
-  "status": "setup",
-  "current_stage": "competence",
+  "status": "terminal_no_go_r1",
+  "current_stage": "audit",
   "gates": {
-    "competence": "not_started",
-    "factorial": "locked",
-    "horizon": "locked",
-    "cascade": "locked",
-    "confirmatory_lock": "locked",
-    "confirmation": "locked",
-    "audit": "locked"
+    "competence": "failed_execution",
+    "factorial": "not_authorized",
+    "horizon": "not_authorized",
+    "cascade": "not_authorized",
+    "confirmatory_lock": "not_authorized",
+    "confirmation": "not_authorized",
+    "audit": "in_progress"
   },
-  "diagnostic_trajectories_used": 0,
+  "diagnostic_trajectories_used": 1,
   "diagnostic_trajectories_maximum": 19,
   "confirmatory_runs_used": 0,
   "confirmatory_runs_maximum": 76,
-  "external_report_only_locked": true
+  "external_report_only_locked": true,
+  "verdict": "NO-GO-R1",
+  "terminal_run_id": "r1_competence_bigmuff_lstm64_wright_seed0_v1"
 }

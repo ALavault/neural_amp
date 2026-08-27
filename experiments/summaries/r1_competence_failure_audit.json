@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "campaign_version": "FSSR-R1-v1",
+  "stage": "competence",
+  "status": "failed_execution",
+  "verdict": "NO-GO-R1",
+  "run_id": "r1_competence_bigmuff_lstm64_wright_seed0_v1",
+  "run_commit": "e3d33e359cadd5097beac41672173710e9b5fed4",
+  "ledger_status": "failed",
+  "counted_trajectory": true,
+  "diagnostic_capacity_used": 1,
+  "persisted_training": {
+    "epochs": 1,
+    "optimizer_updates": 308,
+    "selected_checkpoint": null
+  },
+  "test": {
+    "opened": false,
+    "esr": null
+  },
+  "failure": {
+    "point": "first_scheduled_validation",
+    "configured_validation_chunk_samples": 100000,
+    "exception": "RuntimeError: cuDNN error: CUDNN_STATUS_NOT_SUPPORTED. This error may appear if you passed in a non-contiguous input."
+  },
+  "backend_reproduction": {
+    "input_contiguous": true,
+    "dtype": "float32",
+    "passing_sequence_lengths": [1000, 4093, 32768, 65535],
+    "failing_sequence_lengths": [65536, 100000],
+    "inference": "The error is the cuDNN recurrent sequence-length boundary on the recorded stack, not input contiguity."
+  },
+  "focused_audit": {
+    "wright_loss": "passed numerical tests",
+    "tbptt": "passed focused tests; failure occurred in validation inference",
+    "data_alignment": "prepared manifest and split checks passed",
+    "published_weight_conversion": "passed with independent reference artifact",
+    "sealed_test": "remained sealed; no test-seal.json or checkpoint exists"
+  },
+  "normative_disposition": {
+    "seed_0_retry_authorized": false,
+    "seeds_1_2_authorized": false,
+    "later_diagnostic_stages_authorized": false,
+    "confirmation_authorized": false,
+    "reason": "A valid failed trajectory consumes one competence slot; the two remaining slots cannot provide the required seed-0 continuation result plus all three final seeds."
+  },
+  "prospective_repair_only": {
+    "campaign": "new preregistered lineage required",
+    "evaluation_chunk_samples_recommendation": 32768,
+    "required_preflight": "execute the exact CUDA validation path at the frozen chunk length before reserving a run"
+  },
+  "created_at": "2026-08-27T17:14:43+02:00"
+}
