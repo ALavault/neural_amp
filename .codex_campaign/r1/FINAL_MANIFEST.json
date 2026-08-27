@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "campaign_version": "FSSR-R1-v1",
+  "verdict": "NO-GO-R1",
+  "historical_verdict_preserved": "NO-GO",
+  "terminal_stage": "competence",
+  "terminal_run_id": "r1_competence_bigmuff_lstm64_wright_seed0_v1",
+  "diagnostic_trajectories_used": 1,
+  "confirmatory_runs_used": 0,
+  "external_report_only_accessed": false,
+  "protocol_sha256": "5c85e6aadace532462340828eef7493b2ad177fa12a6aa0ae86845b6888d7ae0",
+  "evidence": [
+    ".codex_campaign/r1/GATES.json",
+    ".codex_campaign/r1/STATE.md",
+    ".codex_campaign/r1/MATURITY.json",
+    ".codex_campaign/r1/CLAIMS.md",
+    ".codex_campaign/r1/DECISIONS.md",
+    ".codex_campaign/r1/FAILURES.md",
+    "experiments/summaries/r1_competence_failure_audit.json",
+    "experiments/runs/r1_competence_bigmuff_lstm64_wright_seed0_v1/status.json",
+    "reports/R1_FINAL_AUDIT.md"
+  ]
+}

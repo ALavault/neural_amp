@@ -4,6 +4,9 @@ R1 is terminal with `NO-GO-R1`. The steering documents are committed separately
 at `ca10058`; the initial implementation, quarantine correction, native sweep,
 and versioned lock amendment remain in the subsequent local commits.
 
+The terminal evidence and adversarial assessment are consolidated in
+`reports/R1_FINAL_AUDIT.md`; the R1 audit gate is complete.
+
 Do not invoke `r1-competence`, `r1-factorial`, `r1-horizon`, `r1-cascade`,
 `r1-lock`, or `r1-confirm`. The canonical seed-0 competence directory is a
 counted immutable failure and may not be resumed, replaced, or excluded. The

@@ -11,7 +11,7 @@
     "cascade": "not_authorized",
     "confirmatory_lock": "not_authorized",
     "confirmation": "not_authorized",
-    "audit": "in_progress"
+    "audit": "complete"
   },
   "diagnostic_trajectories_used": 1,
   "diagnostic_trajectories_maximum": 19,
@@ -19,5 +19,6 @@
   "confirmatory_runs_maximum": 76,
   "external_report_only_locked": true,
   "verdict": "NO-GO-R1",
-  "terminal_run_id": "r1_competence_bigmuff_lstm64_wright_seed0_v1"
+  "terminal_run_id": "r1_competence_bigmuff_lstm64_wright_seed0_v1",
+  "final_audit": "reports/R1_FINAL_AUDIT.md"
 }
