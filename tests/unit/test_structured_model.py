@@ -49,3 +49,21 @@ def test_s0_is_causal_and_has_finite_gradients():
         parameter.grad is not None and torch.isfinite(parameter.grad).all()
         for parameter in model.parameters()
     )
+
+
+def test_s0_relearns_identity_after_parameter_perturbation():
+    torch.manual_seed(16)
+    model = S0Structured(taps=7, num_knots=9)
+    with torch.no_grad():
+        model.drive.fill_(0.75)
+        model.output_gain.fill_(1.15)
+        model.offset.fill_(0.04)
+    signal = torch.rand(512) - 0.5
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.03)
+    for _ in range(150):
+        optimizer.zero_grad()
+        loss = (model(signal) - signal).square().mean()
+        loss.backward()
+        optimizer.step()
+    final_error = (model(signal) - signal).square().mean()
+    assert float(final_error.detach()) < 1.0e-6

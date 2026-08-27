@@ -97,3 +97,7 @@ The first S0 static check rejected the new model package's relative import order
 ## 2026-08-27 — F-M3-002 — Slow-controller test concatenated the feature axis
 
 The first S1–S3 focused suite failed because its test concatenated scalar-controller outputs shaped `(3, samples)` along the default feature axis instead of time. Resolution: concatenate along the last axis and detach a separate diagnostic scalar conversion; model code and expected values are unchanged.
+
+## 2026-08-27 — F-M3-003 — M3 summary limitations exceeded line length
+
+The first static check of the M3 aggregation script rejected two 94-character limitation strings before summary generation. Resolution: wrap the literals without changing their text or any gate threshold, then rerun focused numerical validation.
