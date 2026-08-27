@@ -5,6 +5,7 @@
   "historical_verdict_preserved": "NO-GO",
   "terminal_stage": "competence",
   "terminal_run_id": "r1_competence_bigmuff_lstm64_wright_seed0_v1",
+  "final_audit_commit": "5fc50587911bdb4f77068b8a6bd27a559f1ae115",
   "diagnostic_trajectories_used": 1,
   "confirmatory_runs_used": 0,
   "external_report_only_accessed": false,
