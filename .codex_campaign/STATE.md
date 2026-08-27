@@ -1,9 +1,9 @@
 # Campaign State
 
-- Updated: 2026-08-27T14:59:07+02:00
+- Updated: 2026-08-27T15:07:55+02:00
 - Maturity: M6 — negative-result audit and publication dossier
-- Status: in progress under pivot P4
-- Current task: freeze the negative protocol record, generate the final audit, claims-to-evidence dossier, paper outline, final manifest, and redistribution-safe archive.
+- Status: completed under pivot P4 — NO-GO
+- Current task: none; regenerate validation or the safe archive with Make targets as needed.
 - External results accessed: no
 - External retest authorized: false
 
@@ -32,6 +32,7 @@
 - Completed all 24 counted M4 runs with no failed seed or missing metric. Preliminary medians favor A2 on both devices, so the M4 gate awaits cost audit and formal autopsy.
 - Generated `reports/M4_CORE.md`, the machine-readable aggregate, the ordered autopsy, and corrected Python streaming benchmark. The fixed M4 gate failed.
 - Completed the equal-parameter recovery; its stop rule failed on both devices. Selected pivot P4 and skipped the gated MATURATION phase.
+- Froze the negative protocol record, generated local licensed listening examples, completed the final audit and paper dossier, and prepared the safe-archive manifest.
 
 ## M0 gate
 
@@ -53,9 +54,6 @@ M3 passed on 2026-08-27. Evidence is summarized in `reports/M3_MODEL.md`.
 
 M4 completed as a failed gate on 2026-08-27. All 24 runs and the bounded recovery are retained. MATURATION was not entered.
 
-## M6 remaining
+## M6 gate
 
-- Create a frozen negative-result protocol record without authorizing external access.
-- Complete `reports/FINAL_AUDIT.md` with a `NO-GO` classification.
-- Finalize paper claims, outline, evidence links, manifest, and archive.
-- Run full repository validation and verify the archive excludes raw/restricted data.
+M6 completed as `NO-GO` on 2026-08-27. Full validation and archive verification are the final reproducibility checks; they do not change the scientific verdict.

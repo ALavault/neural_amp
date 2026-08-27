@@ -2,12 +2,12 @@
 
 ## Current position
 
-M0 through M3 passed. M4 and its equal-parameter recovery failed their fixed gates. Pivot P4 is selected, MATURATION is skipped, and M6 negative-result audit work is in progress. External evaluation remains locked and no external report-only model output has been accessed.
+M0 through M3 passed. M4 and recovery failed; MATURATION was skipped by gate. M6 is complete under pivot P4 with a `NO-GO` verdict. External evaluation remained locked and no external report-only model output was accessed.
 
 ## Resume action
 
-Create a frozen protocol record reflecting the completed negative path, then generate the final audit, paper dossier, final manifest, and redistribution-safe archive. Do not claim H1-H3 or implement more model variants.
+Use `make test`, `make data-audit`, and `make final-archive` to reproduce final checks. Any future model work is a new campaign version and must not rewrite this record.
 
 ## Absolute blockers
 
-No absolute blocker. Public ToneTwist archives are locally available under the recorded CC-BY-NC-4.0 terms. Their noncommercial restriction must remain visible in any checkpoint or archive redistribution decision.
+No unresolved execution blocker. Redistribution remains constrained: raw/derived ToneTwist audio and ignored checkpoints are excluded from the final archive.
