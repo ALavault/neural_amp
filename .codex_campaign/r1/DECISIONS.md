@@ -72,3 +72,20 @@ post-observation exclusion would therefore change the frozen matrix. Seeds 1/2
 and every later stage remain unauthorized, and the terminal verdict is
 `NO-GO-R1`. The failure is operational rather than a measured rejection of
 Wright LSTM-64; its prospective repair belongs to a newly preregistered lineage.
+
+## 2026-08-27 — R1-D-009 — PI override: infrastructure-invalid replacement
+
+This entry supersedes the disposition in R1-D-008 without deleting it. The PI
+rules that a cuDNN sequence-length limitation is not scientific evidence against
+Wright competence, H1, or H2. Reclassify the canonical seed-0 execution as
+`invalid_infrastructure`: its global ledger status remains `failed`, but it no
+longer consumes scientific diagnostic capacity.
+
+This is an acknowledged post-observation protocol deviation. Revision
+`FSSR-R1-v1-a2` changes capacity accounting and authorizes exactly one replacement,
+`r1_competence_bigmuff_lstm64-retry1_wright_seed0_v1`. It changes no model,
+weights initialization, seed, data, split, loss, optimizer, checkpoint rule,
+metric, threshold, or external-data lock. Evaluation chunks are fixed at 32,768
+and the exact CUDA path must pass before reservation. The replacement consumes
+one competence trajectory; seeds 1/2 retain their original conditional gate.
+No further replacement is authorized.

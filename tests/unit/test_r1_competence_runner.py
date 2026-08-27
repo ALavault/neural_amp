@@ -182,8 +182,16 @@ def test_gate_registry_merge_is_idempotent_and_rejects_divergence(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     summary_path = tmp_path / "experiments/summaries/r1_competence_gate.json"
-    gates_path = tmp_path / ".codex_campaign/r1/GATES.json"
+    gates_path = tmp_path / ".codex_campaign/r1/GATES_AMENDMENT_2.json"
+    lock_pointer = tmp_path / ".codex_campaign/r1/DIAGNOSTIC_LOCK_ACTIVE"
+    lock_path = tmp_path / ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_2.yaml"
     summary_path.parent.mkdir(parents=True)
+    lock_path.parent.mkdir(parents=True)
+    lock_path.write_text("amendment: 2\n", encoding="utf-8")
+    lock_pointer.write_text(
+        ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_2.yaml\n",
+        encoding="utf-8",
+    )
     payload = {
         "campaign_version": "FSSR-R1-v1",
         "stage": "competence",
@@ -199,6 +207,7 @@ def test_gate_registry_merge_is_idempotent_and_rejects_divergence(
     monkeypatch.setattr(runner, "ROOT", tmp_path)
     monkeypatch.setattr(runner, "SUMMARY_PATH", summary_path)
     monkeypatch.setattr(runner, "GATES_PATH", gates_path)
+    monkeypatch.setattr(runner, "ACTIVE_LOCK_PATH", lock_pointer)
 
     runner._publish_gate_decisions(payload)
     first = gates_path.read_bytes()
@@ -219,3 +228,47 @@ def test_preflight_is_synthetic_non_scientific_and_write_free() -> None:
     assert result["real_audio_opened"] is False
     assert result["test_audio_opened"] is False
     assert result["optimizer_steps_observed"] == 1
+
+
+def test_counted_validation_chunk_is_below_the_recorded_cudnn_boundary() -> None:
+    assert runner.EVALUATION_CHUNK_SAMPLES == 32_768
+    assert runner.EVALUATION_CHUNK_SAMPLES < 65_536
+
+
+def test_cuda_validation_preflight_precedes_reservation_checks(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    gates_path = tmp_path / ".codex_campaign/r1/GATES_AMENDMENT_2.json"
+    gates_path.parent.mkdir(parents=True)
+    active_gates = tmp_path / ".codex_campaign/r1/GATES_ACTIVE"
+    active_gates.write_text(
+        ".codex_campaign/r1/GATES_AMENDMENT_2.json\n", encoding="utf-8"
+    )
+    events: list[str] = []
+    monkeypatch.setattr(runner, "ROOT", tmp_path)
+    monkeypatch.setattr(runner, "SUMMARY_PATH", tmp_path / "missing-summary.json")
+    monkeypatch.setattr(runner, "GATES_PATH", gates_path)
+    monkeypatch.setattr(runner, "GATES_ACTIVE_PATH", active_gates)
+    monkeypatch.setattr(runner, "validate_lock_digest", lambda root: "a" * 64)
+    monkeypatch.setattr(
+        runner,
+        "load_active_infrastructure_amendment",
+        lambda root: {
+            "evaluation_chunk_samples": 32_768,
+            "protocol_revision": "FSSR-R1-v1-a2",
+        },
+    )
+    monkeypatch.setattr(
+        runner,
+        "_cuda_validation_preflight",
+        lambda config: events.append("cuda_preflight") or {},
+    )
+
+    def stop_at_clean_check() -> None:
+        events.append("clean_check")
+        raise RuntimeError("stop before reservation")
+
+    monkeypatch.setattr(runner, "_require_clean_worktree", stop_at_clean_check)
+    with pytest.raises(RuntimeError, match="stop before reservation"):
+        runner._run_gate(_config(), {}, {})
+    assert events == ["cuda_preflight", "clean_check"]

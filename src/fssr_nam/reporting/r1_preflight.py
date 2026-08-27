@@ -99,7 +99,8 @@ DIAGNOSTIC_IMPLEMENTATION_PATHS = (
     "src/fssr_nam/training/wright.py",
 )
 DIAGNOSTIC_ACTIVE_PATH = ".codex_campaign/r1/DIAGNOSTIC_LOCK_ACTIVE"
-DIAGNOSTIC_AMENDMENT_PATH = ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_1.yaml"
+DIAGNOSTIC_AMENDMENT_1_PATH = ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_1.yaml"
+DIAGNOSTIC_AMENDMENT_2_PATH = ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_2.yaml"
 
 
 def _git(root: Path, *arguments: str) -> str:
@@ -265,6 +266,13 @@ def validate_prepared_manifests(root: Path) -> dict[str, int]:
         raise RuntimeError("physical R1 manifest has wrong campaign version")
     if physical.get("external_report_only_accessed") is not False:
         raise RuntimeError("physical R1 manifest accessed external report-only data")
+    physical_config = root / str(physical.get("configuration", ""))
+    if (
+        not physical_config.is_file()
+        or physical.get("configuration_sha256")
+        != hashlib.sha256(physical_config.read_bytes()).hexdigest()
+    ):
+        raise RuntimeError("physical R1 manifest configuration binding mismatch")
     groups: dict[str, dict[str, set[str]]] = {}
     for entry in physical["files"]:
         groups.setdefault(entry["device"], {}).setdefault(entry["split"], set()).add(
@@ -307,6 +315,30 @@ def protocol_digest(
     return digest.hexdigest()
 
 
+def _validated_sha256_file(path: Path) -> str:
+    expected = hashlib.sha256(path.read_bytes()).hexdigest()
+    recorded = path.with_suffix(".sha256").read_text(encoding="utf-8").strip()
+    if not re.fullmatch(r"[0-9a-f]{64}", recorded) or recorded != expected:
+        raise RuntimeError(f"lock amendment digest mismatch: {path.name}")
+    return expected
+
+
+def load_active_infrastructure_amendment(root: Path) -> dict[str, Any] | None:
+    """Load amendment 2 only when the tracked active pointer selects it."""
+    active_path = root / DIAGNOSTIC_ACTIVE_PATH
+    if not active_path.is_file():
+        return None
+    active_relative = active_path.read_text(encoding="utf-8").strip()
+    if active_relative != DIAGNOSTIC_AMENDMENT_2_PATH:
+        return None
+    validate_lock_digest(root)
+    amendment = load_yaml(root / active_relative)
+    from fssr_nam.campaign.r1 import validate_infrastructure_amendment
+
+    validate_infrastructure_amendment(amendment)
+    return amendment
+
+
 def validate_lock_digest(root: Path) -> str:
     lock_path = root / ".codex_campaign/r1/DIAGNOSTIC_LOCK.yaml"
     checksum_path = root / ".codex_campaign/r1/DIAGNOSTIC_LOCK.sha256"
@@ -322,32 +354,43 @@ def validate_lock_digest(root: Path) -> str:
         raise RuntimeError("diagnostic lock digest mismatch")
     implementation_commit = lock.get("implementation_commit")
 
+    amendment_1_path = root / DIAGNOSTIC_AMENDMENT_1_PATH
+    amendment_1 = load_yaml(amendment_1_path)
+    amendment_1_sha256 = _validated_sha256_file(amendment_1_path)
+    if (
+        amendment_1.get("status") != "frozen"
+        or amendment_1.get("campaign_version") != CAMPAIGN_VERSION
+        or amendment_1.get("amendment_number") != 1
+        or amendment_1.get("base_lock_sha256") != expected_lock
+        or amendment_1.get("protocol_sha256") != expected_protocol
+        or amendment_1.get("scientific_protocol_changed") is not False
+        or amendment_1.get("external_report_only_locked") is not True
+    ):
+        raise RuntimeError("diagnostic lock amendment 1 is inconsistent")
+
     active_path = root / DIAGNOSTIC_ACTIVE_PATH
     if active_path.exists():
         active_relative = active_path.read_text(encoding="utf-8").strip()
-        if active_relative != DIAGNOSTIC_AMENDMENT_PATH:
+        if active_relative == DIAGNOSTIC_AMENDMENT_1_PATH:
+            implementation_commit = amendment_1.get("effective_implementation_commit")
+        elif active_relative == DIAGNOSTIC_AMENDMENT_2_PATH:
+            amendment_path = root / active_relative
+            amendment = load_yaml(amendment_path)
+            _validated_sha256_file(amendment_path)
+            from fssr_nam.campaign.r1 import validate_infrastructure_amendment
+
+            validate_infrastructure_amendment(amendment)
+            if (
+                amendment.get("status") != "frozen"
+                or amendment.get("campaign_version") != CAMPAIGN_VERSION
+                or amendment.get("base_amendment_path") != DIAGNOSTIC_AMENDMENT_1_PATH
+                or amendment.get("base_amendment_sha256") != amendment_1_sha256
+                or amendment.get("protocol_sha256") != expected_protocol
+            ):
+                raise RuntimeError("diagnostic lock amendment 2 is inconsistent")
+            implementation_commit = amendment.get("effective_implementation_commit")
+        else:
             raise RuntimeError("unexpected active diagnostic lock amendment")
-        amendment_path = root / active_relative
-        amendment_checksum_path = amendment_path.with_suffix(".sha256")
-        amendment = load_yaml(amendment_path)
-        if (
-            amendment.get("status") != "frozen"
-            or amendment.get("campaign_version") != CAMPAIGN_VERSION
-            or amendment.get("amendment_number") != 1
-            or amendment.get("base_lock_sha256") != expected_lock
-            or amendment.get("protocol_sha256") != expected_protocol
-            or amendment.get("scientific_protocol_changed") is not False
-            or amendment.get("external_report_only_locked") is not True
-        ):
-            raise RuntimeError("diagnostic lock amendment is inconsistent")
-        expected_amendment = hashlib.sha256(amendment_path.read_bytes()).hexdigest()
-        recorded_amendment = amendment_checksum_path.read_text(encoding="utf-8").strip()
-        if (
-            not re.fullmatch(r"[0-9a-f]{64}", recorded_amendment)
-            or recorded_amendment != expected_amendment
-        ):
-            raise RuntimeError("diagnostic lock amendment digest mismatch")
-        implementation_commit = amendment.get("effective_implementation_commit")
 
     if not isinstance(implementation_commit, str) or not re.fullmatch(
         r"[0-9a-f]{40}", implementation_commit

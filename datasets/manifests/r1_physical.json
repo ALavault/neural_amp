@@ -34,7 +34,7 @@
   },
   "campaign_version": "FSSR-R1-v1",
   "configuration": "configs/data/r1_physical.yaml",
-  "configuration_sha256": "aa0ce48a6d28788dc1f94a521f8c3f0dc605e4c4677dfef5ae986f178b218283",
+  "configuration_sha256": "756b145f16535b08fc7f427001df857cf8729aff66327684b6752bd5b3c6d009",
   "equal_total_seconds": {
     "test": 30,
     "train": 120,

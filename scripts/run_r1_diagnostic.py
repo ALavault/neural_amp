@@ -21,8 +21,10 @@ import yaml
 from fssr_nam.campaign.r1 import (
     R1Executor,
     RunSpec,
+    active_gate_registry_path,
     load_gate_decisions,
     parse_run_id,
+    validate_active_gate_registry,
     validate_repository_configs,
 )
 from fssr_nam.reporting.r1_preflight import validate_lock_digest
@@ -37,12 +39,12 @@ from fssr_nam.training.r1_diagnostic import (
     load_synthetic_cascade_dataset,
     make_model,
     run_training,
+    seed_everything,
     sha256_file,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GATES = ROOT / ".codex_campaign/r1/GATES.json"
-MATURITY_PATH = ROOT / ".codex_campaign/r1/MATURITY.json"
+DEFAULT_GATES = active_gate_registry_path(ROOT)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -110,15 +112,10 @@ def _require_clean_worktree() -> None:
 
 
 def _decisions(path: Path) -> dict[str, object]:
-    decisions: dict[str, object] = {}
-    if MATURITY_PATH.is_file():
-        maturity = json.loads(MATURITY_PATH.read_text(encoding="utf-8"))
-        gates = maturity.get("gates", {})
-        if isinstance(gates, dict):
-            decisions.update(gates)
-    if path.is_file():
-        decisions.update(load_gate_decisions(path))
-    return decisions
+    active = validate_active_gate_registry(ROOT)
+    if path.resolve() != active.resolve():
+        raise RuntimeError("counted diagnostics require the active gate registry")
+    return load_gate_decisions(active)
 
 
 def _passed(value: object) -> bool:
@@ -266,6 +263,7 @@ def _preflight(
     )
     # Counted physical cascade runs must load the gate-selected state.  Preflight
     # deliberately uses a fresh RF2047 because it cannot depend on future results.
+    seed_everything(spec.seed)
     model, kind = make_model(ROOT, stage=spec.stage, model_name=spec.model)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     result = run_training(
@@ -388,6 +386,7 @@ def main() -> None:
         (run_dir / "environment.json").write_text(
             json.dumps(_environment(device), indent=2) + "\n", encoding="utf-8"
         )
+        seed_everything(spec.seed)
         model, model_kind = make_model(
             ROOT,
             stage=spec.stage,

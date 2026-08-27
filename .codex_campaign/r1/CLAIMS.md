@@ -15,3 +15,10 @@
 
 Mechanistic observations cannot change the verdict unless the frozen H1 or H2
 gate passes.
+
+## Revision FSSR-R1-v1-a2
+
+The terminal `NO-GO-R1` claim above is superseded, not erased. Its cause was an
+infrastructure-invalid validation call and no scientific rejection was observed.
+R1 is reopened under the disclosed post-observation capacity amendment. H1/H2
+remain unevaluated; only their original gates can establish `GO-A` or `GO-B`.

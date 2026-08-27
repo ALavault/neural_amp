@@ -22,3 +22,12 @@ campaign/run identifiers and must not reinterpret the R1 result.
 
 Never use `EXTERNAL_REPORT_ONLY`, reuse a run identifier, overwrite a run
 directory, or edit the M0–M6 campaign files.
+
+## Superseding handoff — FSSR-R1-v1-a2
+
+R1-D-009 supersedes the terminal instructions above. Preserve every old file and
+ledger row, but treat the canonical cuDNN failure as scientifically invalid. Once
+`DIAGNOSTIC_LOCK_AMENDMENT_2` is frozen, execute the exact CUDA preflight and the
+single replacement ID `r1_competence_bigmuff_lstm64-retry1_wright_seed0_v1`.
+It counts as seed 0 and as one scientific trajectory. Continue to seeds 1/2 only
+if its sealed-test ESR is at most 0.15. No second replacement is authorized.

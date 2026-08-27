@@ -102,16 +102,18 @@ def predict_streaming(
     model.eval()
     model.reset_state()
     output = np.empty(signal.shape, dtype=np.float32)
-    with torch.inference_mode():
-        for start in range(0, signal.size, chunk_samples):
-            stop = min(start + chunk_samples, signal.size)
-            chunk = torch.from_numpy(np.ascontiguousarray(signal[start:stop])).to(
-                device
-            )
-            output[start:stop] = model.stream(chunk).cpu().numpy()
-            if progress is not None:
-                progress(stop, signal.size)
-    model.reset_state()
+    try:
+        with torch.inference_mode():
+            for start in range(0, signal.size, chunk_samples):
+                stop = min(start + chunk_samples, signal.size)
+                chunk = torch.from_numpy(np.ascontiguousarray(signal[start:stop])).to(
+                    device
+                )
+                output[start:stop] = model.stream(chunk).cpu().numpy()
+                if progress is not None:
+                    progress(stop, signal.size)
+    finally:
+        model.reset_state()
     if not np.isfinite(output).all():
         raise RuntimeError("non-finite Wright prediction")
     return output

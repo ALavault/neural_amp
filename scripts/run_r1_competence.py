@@ -27,12 +27,15 @@ import soundfile as sf
 import torch
 import yaml
 
-from fssr_nam.campaign.r1 import R1Executor, RunSpec
+from fssr_nam.campaign.r1 import R1Executor, RunSpec, competence_run_spec
 from fssr_nam.losses import WrightLoss
 from fssr_nam.metrics.time import time_metrics
 from fssr_nam.models import WrightLSTM
 from fssr_nam.reporting.ledger import read_runs
-from fssr_nam.reporting.r1_preflight import validate_lock_digest
+from fssr_nam.reporting.r1_preflight import (
+    load_active_infrastructure_amendment,
+    validate_lock_digest,
+)
 from fssr_nam.training.r1_competence import (
     CompetenceGateDecision,
     evaluate_competence_gate,
@@ -54,12 +57,13 @@ MANIFEST_PATH = ROOT / "datasets/manifests/r1_wright_bigmuff_native.json"
 SPLIT_PATH = ROOT / "datasets/splits/r1_wright_bigmuff_native.json"
 LEDGER_PATH = ROOT / ".codex_campaign/RUN_LEDGER.jsonl"
 SUMMARY_PATH = ROOT / "experiments/summaries/r1_competence_gate.json"
-GATES_PATH = ROOT / ".codex_campaign/r1/GATES.json"
+GATES_PATH = ROOT / ".codex_campaign/r1/GATES_AMENDMENT_2.json"
+GATES_ACTIVE_PATH = ROOT / ".codex_campaign/r1/GATES_ACTIVE"
 LOCK_PATH = ROOT / ".codex_campaign/r1/DIAGNOSTIC_LOCK.yaml"
 LOCK_DIGEST_PATH = ROOT / ".codex_campaign/r1/DIAGNOSTIC_LOCK.sha256"
 ACTIVE_LOCK_PATH = ROOT / ".codex_campaign/r1/DIAGNOSTIC_LOCK_ACTIVE"
 
-EVALUATION_CHUNK_SAMPLES = 100_000
+EVALUATION_CHUNK_SAMPLES = 32_768
 PARITY_CHUNK_SAMPLES = 4_093
 PARITY_PREFIX_SAMPLES = 262_144
 MINIMUM_GPU_MEMORY_BYTES = 23_000_000_000
@@ -420,6 +424,51 @@ def _training_device() -> torch.device:
     return device
 
 
+def _cuda_validation_preflight(config: Mapping[str, Any]) -> dict[str, object]:
+    """Exercise the exact recurrent validation chunk before any run reservation."""
+    device = _training_device()
+    _seed_everything(0)
+    model = WrightLSTM(hidden_size=64, sample_rate=int(config["sample_rate"])).to(
+        device=device, dtype=torch.float32
+    )
+    signal_length = 2 * EVALUATION_CHUNK_SAMPLES + 17
+    signal = np.linspace(-0.1, 0.1, signal_length, dtype=np.float32)
+    with torch.inference_mode():
+        expected = predict_streaming(
+            model,
+            signal,
+            device=device,
+            chunk_samples=EVALUATION_CHUNK_SAMPLES,
+        )
+        alternate = predict_streaming(
+            model,
+            signal,
+            device=device,
+            chunk_samples=PARITY_CHUNK_SAMPLES,
+        )
+    difference = float(np.max(np.abs(expected - alternate), initial=0.0))
+    if (
+        expected.shape != signal.shape
+        or not np.isfinite(expected).all()
+        or difference > 2.0e-5
+    ):
+        raise RuntimeError(
+            f"exact CUDA validation preflight failed: max_abs={difference:.9g}"
+        )
+    del model
+    torch.cuda.empty_cache()
+    return {
+        "scientific_result": False,
+        "writes_performed": False,
+        "real_audio_opened": False,
+        "test_audio_opened": False,
+        "evaluation_chunk_samples": EVALUATION_CHUNK_SAMPLES,
+        "alternate_chunk_samples": PARITY_CHUNK_SAMPLES,
+        "samples": signal_length,
+        "block_parity_max_abs": difference,
+    }
+
+
 def _write_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
 
@@ -440,8 +489,17 @@ def _copy_provenance(run_dir: Path, data_sha256: str, protocol_sha256: str) -> N
         active_relative = ACTIVE_LOCK_PATH.read_text(encoding="utf-8").strip()
         active_lock = ROOT / active_relative
         names[ACTIVE_LOCK_PATH] = "diagnostic-lock-active.txt"
-        names[active_lock] = "diagnostic-lock-amendment.yaml"
-        names[active_lock.with_suffix(".sha256")] = "diagnostic-lock-amendment.sha256"
+        names[active_lock] = "diagnostic-lock-active-amendment.yaml"
+        names[active_lock.with_suffix(".sha256")] = (
+            "diagnostic-lock-active-amendment.sha256"
+        )
+        prior_relative = _load_yaml(active_lock).get("base_amendment_path")
+        if isinstance(prior_relative, str):
+            prior_lock = ROOT / prior_relative
+            names[prior_lock] = "diagnostic-lock-prior-amendment.yaml"
+            names[prior_lock.with_suffix(".sha256")] = (
+                "diagnostic-lock-prior-amendment.sha256"
+            )
     digests = {}
     for source, name in names.items():
         shutil.copy2(source, provenance_dir / name)
@@ -814,6 +872,8 @@ def _gate_payload(
     protocol_sha256: str,
     commit: str,
     noncanonical_attempts: tuple[dict[str, Any], ...],
+    infrastructure_amendment: Mapping[str, Any],
+    cuda_preflight: Mapping[str, object],
 ) -> dict[str, object]:
     seed_zero = dict(decision.seed_esr)[0]
     seed_zero_decision = "passed" if decision.seed_zero_continuation else "failed"
@@ -823,6 +883,9 @@ def _gate_payload(
         "stage": "competence",
         "status": decision.status,
         "scientific_result": True,
+        "protocol_revision": infrastructure_amendment["protocol_revision"],
+        "post_observation_deviation": True,
+        "cuda_validation_preflight": dict(cuda_preflight),
         "decision": decision.as_dict(),
         "gates": {
             "competence_seed0": {
@@ -835,6 +898,12 @@ def _gate_payload(
         },
         "evidence": evidence,
         "audit": {
+            "invalid_infrastructure_source": {
+                "run_id": infrastructure_amendment["invalid_run_id"],
+                "ledger_status": "failed",
+                "scientific_status": "invalid",
+                "counted_toward_gate": False,
+            },
             "quarantined_noncanonical_attempts": [
                 {
                     "run_id": entry["run_id"],
@@ -843,7 +912,7 @@ def _gate_payload(
                     "counted_toward_gate": False,
                 }
                 for entry in noncanonical_attempts
-            ]
+            ],
         },
         "training_config_sha256": config_sha256,
         "data_sha256": data_sha256,
@@ -904,15 +973,29 @@ def _publish_gate_decisions(summary: Mapping[str, Any]) -> None:
 
     if GATES_PATH.exists():
         document = _load_json(GATES_PATH)
+        active_lock_digest = _sha256(ROOT / ACTIVE_LOCK_PATH.read_text().strip())
         if (
             document.get("schema_version") != 1
             or document.get("campaign_version") != "FSSR-R1-v1"
+            or document.get("protocol_revision") != "FSSR-R1-v1-a2"
+            or document.get("supersedes") != ".codex_campaign/r1/GATES.json"
+            or document.get("supersedes_sha256")
+            != "1432e9d53bca4d60b1bf661c6ae8ad0005b8c504f54bc679a7d640ccc7d08cb9"
+            or document.get("diagnostic_lock_amendment_sha256") != active_lock_digest
         ):
             raise RuntimeError("existing R1 gate registry has an invalid header")
     else:
         document = {
             "schema_version": 1,
             "campaign_version": "FSSR-R1-v1",
+            "protocol_revision": "FSSR-R1-v1-a2",
+            "supersedes": ".codex_campaign/r1/GATES.json",
+            "supersedes_sha256": (
+                "1432e9d53bca4d60b1bf661c6ae8ad0005b8c504f54bc679a7d640ccc7d08cb9"
+            ),
+            "diagnostic_lock_amendment_sha256": _sha256(
+                ROOT / ACTIVE_LOCK_PATH.read_text(encoding="utf-8").strip()
+            ),
             "gates": {},
         }
     gates = document.get("gates")
@@ -942,12 +1025,27 @@ def _run_gate(
     manifest: dict[str, Any],
 ) -> dict[str, object]:
     protocol_sha256 = validate_lock_digest(ROOT)
+    infrastructure_amendment = load_active_infrastructure_amendment(ROOT)
+    if infrastructure_amendment is None:
+        raise RuntimeError("competence replacement requires active amendment 2")
+    if (
+        int(infrastructure_amendment["evaluation_chunk_samples"])
+        != EVALUATION_CHUNK_SAMPLES
+    ):
+        raise RuntimeError("runner chunk differs from active infrastructure amendment")
+    expected_gates = str(GATES_PATH.relative_to(ROOT))
+    if (
+        not GATES_ACTIVE_PATH.is_file()
+        or GATES_ACTIVE_PATH.read_text(encoding="utf-8").strip() != expected_gates
+    ):
+        raise RuntimeError("active gate registry does not select amendment 2")
     existing_summary = _existing_summary()
     if existing_summary is not None:
         if existing_summary.get("protocol_sha256") != protocol_sha256:
             raise RuntimeError("competence summary belongs to a different protocol")
         _publish_gate_decisions(existing_summary)
         return existing_summary
+    cuda_preflight = _cuda_validation_preflight(config)
     _require_clean_worktree()
     commit = _git_commit()
     data_sha256 = _combined_digest((DATA_CONFIG_PATH, MANIFEST_PATH, SPLIT_PATH))
@@ -955,7 +1053,10 @@ def _run_gate(
     command = shlex.join([sys.executable, *sys.argv])
     evidence: list[dict[str, object]] = []
     observed: dict[int, float] = {}
-    audit_executor = R1Executor(ROOT, stage_configs={"competence": config})
+    audit_executor = R1Executor(
+        ROOT,
+        stage_configs={"competence": config},
+    )
     noncanonical_attempts = audit_executor.quarantined_noncanonical_attempts()
 
     for declared_seed in config["seeds"]:
@@ -973,7 +1074,7 @@ def _run_gate(
             stage_configs={"competence": config},
             gate_decisions=decisions,
         )
-        spec = RunSpec("competence", "bigmuff", "lstm64", "wright", seed)
+        spec = competence_run_spec(seed, infrastructure_amendment)
         registered = _registered_result(
             spec,
             expected_commit=commit,
@@ -1024,6 +1125,8 @@ def _run_gate(
         protocol_sha256=protocol_sha256,
         commit=commit,
         noncanonical_attempts=noncanonical_attempts,
+        infrastructure_amendment=infrastructure_amendment,
+        cuda_preflight=cuda_preflight,
     )
     _write_summary_once(payload)
     _publish_gate_decisions(payload)

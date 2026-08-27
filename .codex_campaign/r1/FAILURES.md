@@ -56,3 +56,13 @@ actual preserved evidence is
 `experiments/quarantine/r1_competence_bigmuff_wright_lstm64_wright_seed0_v1/`.
 The sentence saying the canonical seed 0 remained unattempted was true when
 that entry was written; it was superseded by the later counted failure above.
+
+### 2026-08-27 correction to the terminal capacity disposition
+
+R1-D-009 supersedes only the scientific-capacity interpretation in R1-D-008.
+The run remains an immutable `failed` execution in the global ledger. Its
+scientific validity is now `invalid_infrastructure`, it contributes no ESR or
+gate outcome, and it consumes zero of the 19 scientific diagnostic trajectories.
+This post-observation accounting change is recorded as protocol revision
+`FSSR-R1-v1-a2`; it is not presented as part of the original prospective plan.
+Evidence: `experiments/summaries/r1_competence_failure_reclassification.json`.

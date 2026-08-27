@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 import torch
 
 from fssr_nam.losses import WrightLoss
@@ -60,3 +61,43 @@ def test_stream_prediction_and_evaluation_are_block_invariant() -> None:
     reference_loss, esr = evaluate_prediction(expected, signal, WrightLoss())
     assert np.isfinite(reference_loss)
     assert np.isfinite(esr)
+
+
+def test_long_uneven_prediction_is_invariant_at_frozen_chunk() -> None:
+    signal = np.linspace(-0.1, 0.1, 2 * 32_768 + 17, dtype=np.float32)
+    model = WrightLSTM(hidden_size=4)
+    expected = predict_streaming(
+        model, signal, device=torch.device("cpu"), chunk_samples=32_768
+    )
+    alternate = predict_streaming(
+        model, signal, device=torch.device("cpu"), chunk_samples=4_093
+    )
+    assert expected.shape == signal.shape
+    assert np.isfinite(expected).all()
+    np.testing.assert_allclose(alternate, expected, rtol=2.0e-5, atol=2.0e-5)
+
+
+def test_stream_state_resets_when_prediction_raises(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    model = WrightLSTM(hidden_size=4)
+    original_stream = model.stream
+    calls = 0
+
+    def fail_second_chunk(chunk: torch.Tensor) -> torch.Tensor:
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise RuntimeError("injected streaming failure")
+        return original_stream(chunk)
+
+    monkeypatch.setattr(model, "stream", fail_second_chunk)
+    with pytest.raises(RuntimeError, match="injected streaming failure"):
+        predict_streaming(
+            model,
+            np.linspace(-0.1, 0.1, 10, dtype=np.float32),
+            device=torch.device("cpu"),
+            chunk_samples=5,
+        )
+    assert model._stream_hidden.numel() == 0
+    assert model._stream_cell.numel() == 0

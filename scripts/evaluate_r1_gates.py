@@ -12,7 +12,11 @@ from typing import Any
 
 import yaml
 
-from fssr_nam.campaign.r1 import make_run_id
+from fssr_nam.campaign.r1 import (
+    active_gate_registry_path,
+    make_run_id,
+    validate_active_gate_registry,
+)
 from fssr_nam.campaign.r1_gates import (
     R1GateEvidenceError,
     evaluate_cascade_physical_gate,
@@ -24,8 +28,7 @@ from fssr_nam.reporting.r1_preflight import validate_lock_digest
 from fssr_nam.training.r1_diagnostic import sha256_file
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_GATES = ROOT / ".codex_campaign/r1/GATES.json"
-MATURITY_PATH = ROOT / ".codex_campaign/r1/MATURITY.json"
+DEFAULT_GATES = active_gate_registry_path(ROOT)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -56,19 +59,14 @@ def _passed(value: object) -> bool:
 
 
 def _existing_decisions(path: Path) -> dict[str, object]:
-    decisions: dict[str, object] = {}
-    if MATURITY_PATH.is_file():
-        maturity = _load_json(MATURITY_PATH)
-        gates = maturity.get("gates", {})
-        if isinstance(gates, dict):
-            decisions.update(gates)
-    if path.is_file():
-        document = _load_json(path)
-        gates = document.get("gates", document)
-        if not isinstance(gates, dict):
-            raise R1GateEvidenceError("gate artifact 'gates' must be a mapping")
-        decisions.update(gates)
-    return decisions
+    active = validate_active_gate_registry(ROOT)
+    if path.resolve() != active.resolve():
+        raise R1GateEvidenceError("gate evaluation requires the active registry")
+    document = _load_json(active)
+    gates = document.get("gates", document)
+    if not isinstance(gates, dict):
+        raise R1GateEvidenceError("gate artifact 'gates' must be a mapping")
+    return dict(gates)
 
 
 def _require_gate(decisions: dict[str, object], name: str) -> dict[str, Any] | object:

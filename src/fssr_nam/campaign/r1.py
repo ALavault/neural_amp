@@ -55,6 +55,11 @@ TERMINAL_STATUSES = frozenset({"completed", "failed", "stopped_by_gate"})
 QUARANTINED_NONCANONICAL_RUN_IDS = frozenset(
     {"r1_competence_bigmuff_wright_lstm64_wright_seed0_v1"}
 )
+INFRASTRUCTURE_INVALID_RUN_ID = "r1_competence_bigmuff_lstm64_wright_seed0_v1"
+INFRASTRUCTURE_REPLACEMENT_RUN_ID = (
+    "r1_competence_bigmuff_lstm64-retry1_wright_seed0_v1"
+)
+INFRASTRUCTURE_FAILURE_SIGNATURE = "CUDNN_STATUS_NOT_SUPPORTED"
 
 _ID_TOKEN = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -82,6 +87,51 @@ class R1AuthorizationError(R1CampaignError):
 
 class R1RunReuseError(R1CampaignError):
     """A run identifier or immutable run directory would be reused."""
+
+
+def validate_infrastructure_amendment(amendment: Mapping[str, Any]) -> None:
+    """Validate the sole PI-authorized replacement of invalid infrastructure."""
+    expected = {
+        "amendment_number": 2,
+        "protocol_revision": "FSSR-R1-v1-a2",
+        "post_observation_deviation": True,
+        "capacity_accounting_changed": True,
+        "scientific_model_data_metrics_changed": False,
+        "invalid_run_id": INFRASTRUCTURE_INVALID_RUN_ID,
+        "invalid_scientific_status": "invalid_infrastructure",
+        "invalid_run_counts_toward_cap": False,
+        "replacement_run_id": INFRASTRUCTURE_REPLACEMENT_RUN_ID,
+        "replacement_counts_toward_cap": True,
+        "maximum_replacements": 1,
+        "further_replacement_authorized": False,
+        "evaluation_chunk_samples": 32768,
+        "external_report_only_locked": True,
+    }
+    for field, value in expected.items():
+        if amendment.get(field) != value:
+            raise R1ConfigError(f"infrastructure amendment requires {field}={value!r}")
+    if amendment.get("failure_signature") != INFRASTRUCTURE_FAILURE_SIGNATURE:
+        raise R1ConfigError("infrastructure amendment has the wrong failure signature")
+    if amendment.get("declared_condition_run_id") != INFRASTRUCTURE_INVALID_RUN_ID:
+        raise R1ConfigError("replacement is not bound to the declared seed-0 condition")
+    if not isinstance(amendment.get("invalid_run_commit"), str) or not re.fullmatch(
+        r"[0-9a-f]{40}", amendment["invalid_run_commit"]
+    ):
+        raise R1ConfigError("infrastructure amendment requires invalid_run_commit")
+    for field in (
+        "invalid_config_sha256",
+        "invalid_data_sha256",
+        "invalid_status_sha256",
+        "invalid_failure_audit_sha256",
+        "invalid_ledger_entry_sha256",
+        "invalid_run_spec_sha256",
+        "invalid_metrics_sha256",
+        "reclassification_sha256",
+    ):
+        if not isinstance(amendment.get(field), str) or not _SHA256.fullmatch(
+            amendment[field]
+        ):
+            raise R1ConfigError(f"infrastructure amendment requires {field}")
 
 
 def _id_token(value: str, field: str) -> str:
@@ -148,6 +198,57 @@ def parse_run_id(run_id: str) -> RunSpec:
         loss=match.group("loss"),
         seed=int(match.group("seed")),
     )
+
+
+def competence_run_spec(
+    seed: int, infrastructure_amendment: Mapping[str, Any] | None = None
+) -> RunSpec:
+    """Return the declared competence condition or its sole frozen replacement."""
+    if seed == 0 and infrastructure_amendment is not None:
+        validate_infrastructure_amendment(infrastructure_amendment)
+        return parse_run_id(INFRASTRUCTURE_REPLACEMENT_RUN_ID)
+    return RunSpec("competence", "bigmuff", "lstm64", "wright", seed)
+
+
+def active_gate_registry_path(root: Path) -> Path:
+    """Resolve the versioned R1 gate registry selected by its tracked pointer."""
+    campaign_dir = root / ".codex_campaign/r1"
+    pointer = campaign_dir / "GATES_ACTIVE"
+    if not pointer.is_file():
+        return campaign_dir / "GATES.json"
+    relative = pointer.read_text(encoding="utf-8").strip()
+    path = root / relative
+    if (
+        path.parent.resolve() != campaign_dir.resolve()
+        or path.name != "GATES_AMENDMENT_2.json"
+    ):
+        raise R1ConfigError("active gate registry pointer escapes the R1 campaign")
+    return path
+
+
+def validate_active_gate_registry(root: Path) -> Path:
+    """Bind the active gate registry to the superseded registry and lock A2."""
+    path = active_gate_registry_path(root)
+    document = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(document, dict):
+        raise R1ConfigError("active gate registry must be a JSON mapping")
+    if path.name == "GATES.json":
+        return path
+    old_path = root / ".codex_campaign/r1/GATES.json"
+    amendment_path = root / ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_2.yaml"
+    expected = {
+        "schema_version": 1,
+        "campaign_version": CAMPAIGN_VERSION,
+        "protocol_revision": "FSSR-R1-v1-a2",
+        "supersedes": ".codex_campaign/r1/GATES.json",
+        "supersedes_sha256": hashlib.sha256(old_path.read_bytes()).hexdigest(),
+        "diagnostic_lock_amendment_sha256": hashlib.sha256(
+            amendment_path.read_bytes()
+        ).hexdigest(),
+    }
+    if any(document.get(field) != value for field, value in expected.items()):
+        raise R1ConfigError("active gate registry provenance is inconsistent")
+    return path
 
 
 def _load_yaml_mapping(path: Path) -> dict[str, Any]:
@@ -561,6 +662,118 @@ class R1Executor:
             else None
         )
         self.gate_decisions = dict(gate_decisions or {})
+        from fssr_nam.reporting.r1_preflight import (
+            load_active_infrastructure_amendment,
+        )
+
+        self.infrastructure_amendment = load_active_infrastructure_amendment(self.root)
+        if self.infrastructure_amendment is not None:
+            validate_infrastructure_amendment(self.infrastructure_amendment)
+
+    def _is_infrastructure_invalid(self, run_id: str) -> bool:
+        return (
+            self.infrastructure_amendment is not None
+            and run_id == INFRASTRUCTURE_INVALID_RUN_ID
+        )
+
+    def _validate_infrastructure_evidence(self) -> None:
+        if self.infrastructure_amendment is None:
+            raise R1AuthorizationError("replacement requires the active amendment")
+        matching = [
+            entry
+            for entry in read_runs(self.ledger_path)
+            if entry.get("run_id") == INFRASTRUCTURE_INVALID_RUN_ID
+        ]
+        if len(matching) != 1:
+            raise R1AuthorizationError(
+                "replacement requires exactly one registered source failure"
+            )
+        entry = matching[0]
+        if entry.get(
+            "status"
+        ) != "failed" or INFRASTRUCTURE_FAILURE_SIGNATURE not in str(
+            entry.get("failure_reason", "")
+        ):
+            raise R1AuthorizationError(
+                "replacement source is not the preregistered infrastructure failure"
+            )
+        expected_entry = {
+            "commit": self.infrastructure_amendment["invalid_run_commit"],
+            "config_sha256": self.infrastructure_amendment["invalid_config_sha256"],
+            "data_sha256": self.infrastructure_amendment["invalid_data_sha256"],
+        }
+        if any(entry.get(field) != value for field, value in expected_entry.items()):
+            raise R1AuthorizationError(
+                "replacement source provenance differs from the frozen failure"
+            )
+        ledger_lines = self.ledger_path.read_bytes().splitlines(keepends=True)
+        source_lines = [
+            line
+            for line in ledger_lines
+            if json.loads(line).get("run_id") == INFRASTRUCTURE_INVALID_RUN_ID
+        ]
+        if (
+            len(source_lines) != 1
+            or hashlib.sha256(source_lines[0]).hexdigest()
+            != self.infrastructure_amendment["invalid_ledger_entry_sha256"]
+        ):
+            raise R1AuthorizationError("replacement source ledger evidence changed")
+        status_path = self.runs_dir / INFRASTRUCTURE_INVALID_RUN_ID / "status.json"
+        if not status_path.is_file():
+            raise R1AuthorizationError("replacement source status evidence is absent")
+        status = json.loads(status_path.read_text(encoding="utf-8"))
+        if status.get(
+            "status"
+        ) != "failed" or INFRASTRUCTURE_FAILURE_SIGNATURE not in str(
+            status.get("failure_reason", "")
+        ):
+            raise R1AuthorizationError(
+                "replacement source status does not match the frozen failure"
+            )
+        if (
+            hashlib.sha256(status_path.read_bytes()).hexdigest()
+            != self.infrastructure_amendment["invalid_status_sha256"]
+        ):
+            raise R1AuthorizationError("replacement source status digest changed")
+        failure_audit = self.root / str(
+            self.infrastructure_amendment.get("invalid_failure_audit_path", "")
+        )
+        if (
+            not failure_audit.is_file()
+            or hashlib.sha256(failure_audit.read_bytes()).hexdigest()
+            != self.infrastructure_amendment["invalid_failure_audit_sha256"]
+        ):
+            raise R1AuthorizationError("replacement failure audit evidence changed")
+        source_dir = self.runs_dir / INFRASTRUCTURE_INVALID_RUN_ID
+        for name, field in (
+            ("run-spec.json", "invalid_run_spec_sha256"),
+            ("metrics.json", "invalid_metrics_sha256"),
+        ):
+            source_path = source_dir / name
+            if (
+                not source_path.is_file()
+                or hashlib.sha256(source_path.read_bytes()).hexdigest()
+                != self.infrastructure_amendment[field]
+            ):
+                raise R1AuthorizationError(
+                    f"replacement source {name} evidence changed"
+                )
+        if (source_dir / "test-seal.json").exists() or (
+            source_dir / "checkpoints/best-model.pt"
+        ).exists():
+            raise R1AuthorizationError("replacement source unexpectedly opened test")
+        metrics = json.loads((source_dir / "metrics.json").read_text(encoding="utf-8"))
+        if "test_esr" in metrics:
+            raise R1AuthorizationError("replacement source contains a test ESR")
+        reclassification = self.root / str(
+            self.infrastructure_amendment.get("reclassification_path", "")
+        )
+        if (
+            not reclassification.is_file()
+            or hashlib.sha256(reclassification.read_bytes()).hexdigest()
+            != self.infrastructure_amendment["reclassification_sha256"]
+        ):
+            raise R1AuthorizationError("replacement reclassification evidence changed")
 
     def stage_config(self, stage: str) -> dict[str, Any]:
         if stage not in STAGE_CONFIG_PATHS:
@@ -577,7 +790,15 @@ class R1Executor:
     def plan(
         self, stage: str, *, resolved_loss: str | None = None
     ) -> tuple[RunSpec, ...]:
-        return expand_stage(self.stage_config(stage), resolved_loss=resolved_loss)
+        specs = expand_stage(self.stage_config(stage), resolved_loss=resolved_loss)
+        if stage == "competence" and self.infrastructure_amendment is not None:
+            return tuple(
+                parse_run_id(INFRASTRUCTURE_REPLACEMENT_RUN_ID)
+                if spec.run_id == INFRASTRUCTURE_INVALID_RUN_ID
+                else spec
+                for spec in specs
+            )
+        return specs
 
     def _attempted_run_ids(self, stages: set[str]) -> set[str]:
         attempted: set[str] = set()
@@ -587,6 +808,8 @@ class R1Executor:
                 continue
             if run_id in QUARANTINED_NONCANONICAL_RUN_IDS:
                 continue
+            if self._is_infrastructure_invalid(run_id):
+                continue
             parsed = parse_run_id(run_id)
             if parsed.stage in stages:
                 attempted.add(run_id)
@@ -595,6 +818,8 @@ class R1Executor:
                 if not path.is_dir() or not path.name.startswith("r1_"):
                     continue
                 if path.name in QUARANTINED_NONCANONICAL_RUN_IDS:
+                    continue
+                if self._is_infrastructure_invalid(path.name):
                     continue
                 parsed = parse_run_id(path.name)
                 if parsed.stage in stages:
@@ -652,8 +877,16 @@ class R1Executor:
             candidate.run_id
             for candidate in expand_stage(config, resolved_loss=resolved_loss)
         }
-        if spec.run_id not in declared:
+        declared_run_id = (
+            INFRASTRUCTURE_INVALID_RUN_ID
+            if spec.run_id == INFRASTRUCTURE_REPLACEMENT_RUN_ID
+            and self.infrastructure_amendment is not None
+            else spec.run_id
+        )
+        if declared_run_id not in declared:
             raise R1ConfigError(f"run is outside the declared matrix: {spec.run_id}")
+        if spec.run_id == INFRASTRUCTURE_REPLACEMENT_RUN_ID:
+            self._validate_infrastructure_evidence()
         validate_gate_authorization(
             spec,
             self.gate_decisions,
@@ -677,9 +910,7 @@ class R1Executor:
         if not isinstance(commit, str) or not commit:
             raise ValueError("commit must be a non-empty string")
         if stopped_by_gate is None:
-            config = self._validate_declared(
-                spec, confirmatory_lock=confirmatory_lock
-            )
+            config = self._validate_declared(spec, confirmatory_lock=confirmatory_lock)
         else:
             if stopped_by_gate not in gate_requirements(spec):
                 raise R1AuthorizationError(
@@ -716,6 +947,7 @@ class R1Executor:
                     dict(confirmatory_lock) if confirmatory_lock is not None else None
                 ),
                 "stopped_by_gate": stopped_by_gate,
+                "infrastructure_amendment": self.infrastructure_amendment,
             },
         }
         config_bytes = yaml.safe_dump(resolved, sort_keys=False).encode("utf-8")
