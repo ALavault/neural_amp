@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "name": "m2_synthetic_tanh",
+  "tier": "SYNTHETIC",
+  "configuration": "configs/data/m2_synthetic_tanh.yaml",
+  "configuration_sha256": "55c83b7bf361ca2e23879d519a0c13190b661dab476fa207eef61a868461340f",
+  "system": "tanh",
+  "normalization": "none",
+  "files": [
+    {
+      "name": "train",
+      "tier": "SYNTHETIC",
+      "source_group": "m2-generated-train",
+      "input_path": "datasets/raw/synthetic_m2/train_input.wav",
+      "output_path": "datasets/raw/synthetic_m2/train_output.wav",
+      "input_sha256": "40d9dc105fbd783fcc38ee1e5827f4aab6923f64b1c4bda288c798766b32c0b6",
+      "output_sha256": "a8d4cc83089b8fce7ec82f5de5d471908c563dd73c157f724944be937650bb82",
+      "sample_rate": 48000,
+      "num_samples": 384000,
+      "parts": [
+        {
+          "name": "multisine",
+          "seed": 200,
+          "start_sample": 0,
+          "num_samples": 96000
+        },
+        {
+          "name": "colored_noise",
+          "seed": 201,
+          "start_sample": 96000,
+          "num_samples": 96000
+        },
+        {
+          "name": "level_changes",
+          "seed": 202,
+          "start_sample": 192000,
+          "num_samples": 96000
+        },
+        {
+          "name": "procedural_plucks",
+          "seed": 203,
+          "start_sample": 288000,
+          "num_samples": 96000
+        }
+      ]
+    },
+    {
+      "name": "validation",
+      "tier": "SYNTHETIC",
+      "source_group": "m2-generated-validation",
+      "input_path": "datasets/raw/synthetic_m2/validation_input.wav",
+      "output_path": "datasets/raw/synthetic_m2/validation_output.wav",
+      "input_sha256": "72b007c95f5c5c8432fe16e587c8b1d794928592e95119a628c29d89658082d1",
+      "output_sha256": "da323df74e032ac9807a388ba6095f0f28768ff42f07f6cfb7cb7d6e2005259e",
+      "sample_rate": 48000,
+      "num_samples": 192000,
+      "parts": [
+        {
+          "name": "two_tone",
+          "seed": 1200,
+          "start_sample": 0,
+          "num_samples": 48000
+        },
+        {
+          "name": "logarithmic_sweep",
+          "seed": 1201,
+          "start_sample": 48000,
+          "num_samples": 48000
+        },
+        {
+          "name": "bursts",
+          "seed": 1202,
+          "start_sample": 96000,
+          "num_samples": 48000
+        },
+        {
+          "name": "procedural_plucks",
+          "seed": 1203,
+          "start_sample": 144000,
+          "num_samples": 48000
+        }
+      ]
+    }
+  ]
+}

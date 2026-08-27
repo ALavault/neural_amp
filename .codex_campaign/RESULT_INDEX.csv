@@ -4,3 +4,4 @@ m2_a2_tanh_seed0_v2,M2,NAM_A2_packed,synthetic_tanh,0,failed,,experiments/runs/m
 m2_a2_tanh_seed0_v3,M2,NAM_A2_packed,synthetic_tanh,0,completed,full_esr=0.689422688,experiments/runs/m2_a2_tanh_seed0_v3
 m2_a2_tanh_seed1_v1,M2,NAM_A2_packed,synthetic_tanh,1,completed,full_esr=0.528332863,experiments/runs/m2_a2_tanh_seed1_v1
 m2_a2_cpu_seed0_v1,M2,NAM_A2_Full_Lite,cpu,0,failed,,experiments/runs/m2_a2_cpu_seed0_v1
+m2_a2_cpu_seed0_v2,M2,NAM_A2_Full_Lite,cpu,0,completed,full_b64_median_ns_per_sample=2862.24,experiments/runs/m2_a2_cpu_seed0_v2

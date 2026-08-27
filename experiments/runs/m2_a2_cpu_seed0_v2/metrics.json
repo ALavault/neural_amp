@@ -1,0 +1,154 @@
+{
+  "parity": {
+    "results": {
+      "lite": {
+        "num_samples": 192000,
+        "python_cpp_max_abs": 4.76837158203125e-07,
+        "regular_block_max_abs_vs_64": {
+          "1": 0.0,
+          "16": 0.0,
+          "64": 0.0,
+          "128": 0.0
+        },
+        "irregular_block_max_abs_vs_64": 3.5762786865234375e-07,
+        "reset_max_abs": 0.0,
+        "official_render_max_abs_vs_runner_64": 0.0
+      },
+      "full": {
+        "num_samples": 192000,
+        "python_cpp_max_abs": 5.960464477539062e-07,
+        "regular_block_max_abs_vs_64": {
+          "1": 2.980232238769531e-07,
+          "16": 0.0,
+          "64": 0.0,
+          "128": 0.0
+        },
+        "irregular_block_max_abs_vs_64": 2.384185791015625e-07,
+        "reset_max_abs": 0.0,
+        "official_render_max_abs_vs_runner_64": 0.0
+      }
+    },
+    "checks": {
+      "lite_python_cpp": true,
+      "lite_regular_blocks": true,
+      "lite_irregular_blocks": true,
+      "lite_reset": true,
+      "lite_official_render": true,
+      "full_python_cpp": true,
+      "full_regular_blocks": true,
+      "full_irregular_blocks": true,
+      "full_reset": true,
+      "full_official_render": true
+    },
+    "tolerances": {
+      "python_cpp_max_abs": 5e-05,
+      "block_cpp_max_abs": 5e-07,
+      "reset_cpp_max_abs": 5e-07
+    }
+  },
+  "benchmark": {
+    "custom": {
+      "lite": [
+        {
+          "block_size": 1,
+          "iterations": 10,
+          "timed_blocks": 960000,
+          "mean_block_ns": 1512.39265,
+          "median_block_ns": 1432,
+          "p95_block_ns": 1619,
+          "median_ns_per_sample": 1432,
+          "p95_ns_per_sample": 1619,
+          "median_realtime_factor": 14.5484171322,
+          "p95_realtime_factor": 12.8680255302
+        },
+        {
+          "block_size": 16,
+          "iterations": 10,
+          "timed_blocks": 60000,
+          "mean_block_ns": 9000.20333333,
+          "median_block_ns": 8311,
+          "p95_block_ns": 10153,
+          "median_ns_per_sample": 519.4375,
+          "p95_ns_per_sample": 634.5625,
+          "median_realtime_factor": 40.107488068,
+          "p95_realtime_factor": 32.8310187465
+        },
+        {
+          "block_size": 64,
+          "iterations": 10,
+          "timed_blocks": 15000,
+          "mean_block_ns": 27835.2349333,
+          "median_block_ns": 27174.5,
+          "p95_block_ns": 34543.25,
+          "median_ns_per_sample": 424.6015625,
+          "p95_ns_per_sample": 539.73828125,
+          "median_realtime_factor": 49.0656068496,
+          "p95_realtime_factor": 38.5989544508
+        },
+        {
+          "block_size": 128,
+          "iterations": 10,
+          "timed_blocks": 7500,
+          "mean_block_ns": 54303.6098667,
+          "median_block_ns": 52571,
+          "p95_block_ns": 68298.25,
+          "median_ns_per_sample": 410.7109375,
+          "p95_ns_per_sample": 533.580078125,
+          "median_realtime_factor": 50.7250512006,
+          "p95_realtime_factor": 39.0444362288
+        }
+      ],
+      "full": [
+        {
+          "block_size": 1,
+          "iterations": 10,
+          "timed_blocks": 960000,
+          "mean_block_ns": 3118.57616979,
+          "median_block_ns": 3046,
+          "p95_block_ns": 3390,
+          "median_ns_per_sample": 3046,
+          "p95_ns_per_sample": 3390,
+          "median_realtime_factor": 6.83957102211,
+          "p95_realtime_factor": 6.14552605703
+        },
+        {
+          "block_size": 16,
+          "iterations": 10,
+          "timed_blocks": 60000,
+          "mean_block_ns": 58320.5998167,
+          "median_block_ns": 56090,
+          "p95_block_ns": 72990.2,
+          "median_ns_per_sample": 3505.625,
+          "p95_ns_per_sample": 4561.8875,
+          "median_realtime_factor": 5.94282997563,
+          "p95_realtime_factor": 4.56682312603
+        },
+        {
+          "block_size": 64,
+          "iterations": 10,
+          "timed_blocks": 15000,
+          "mean_block_ns": 188961.340467,
+          "median_block_ns": 183183.5,
+          "p95_block_ns": 225317.15,
+          "median_ns_per_sample": 2862.2421875,
+          "p95_ns_per_sample": 3520.58046875,
+          "median_realtime_factor": 7.27867593606,
+          "p95_realtime_factor": 5.91758476145
+        },
+        {
+          "block_size": 128,
+          "iterations": 10,
+          "timed_blocks": 7500,
+          "mean_block_ns": 354184.472133,
+          "median_block_ns": 346264,
+          "p95_block_ns": 416765.7,
+          "median_ns_per_sample": 2705.1875,
+          "p95_ns_per_sample": 3255.98203125,
+          "median_realtime_factor": 7.70125299386,
+          "p95_realtime_factor": 6.39847920946
+        }
+      ]
+    },
+    "official_fast_vs_generic_raw": "\n== /fastdata/lavaulta/neural_amp/experiments/runs/m2_a2_tanh_seed0_v3/model_lite.nam  (A2 nano, Channels=3) ==\n   audio=2000ms @ 48000Hz, block=64, iters=10 (15000 blocks timed each)\n   per-block audio deadline: 1333.3 us\n                  min     p50     p99     p99.9   max    mean\n   fast    (us):   25.48   27.44   52.15   65.85  108.73   28.73\n   generic (us):  145.51  156.00  211.02  233.45  277.92  160.50\n   RTF (p50):  fast=48.59x  generic=8.55x  speedup=5.69x\n\n== /fastdata/lavaulta/neural_amp/experiments/runs/m2_a2_tanh_seed0_v3/model_full.nam  (A2 standard, Channels=8) ==\n   audio=2000ms @ 48000Hz, block=64, iters=10 (15000 blocks timed each)\n   per-block audio deadline: 1333.3 us\n                  min     p50     p99     p99.9   max    mean\n   fast    (us):  171.29  183.06  238.07  261.25  293.94  185.87\n   generic (us):  185.80  198.92  260.02  285.70  342.92  203.43\n   RTF (p50):  fast=7.28x  generic=6.70x  speedup=1.09x\n"
+  }
+}

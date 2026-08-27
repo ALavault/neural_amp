@@ -1,0 +1,16 @@
+
+== /fastdata/lavaulta/neural_amp/experiments/runs/m2_a2_tanh_seed0_v3/model_lite.nam  (A2 nano, Channels=3) ==
+   audio=2000ms @ 48000Hz, block=64, iters=10 (15000 blocks timed each)
+   per-block audio deadline: 1333.3 us
+                  min     p50     p99     p99.9   max    mean
+   fast    (us):   25.48   27.44   52.15   65.85  108.73   28.73
+   generic (us):  145.51  156.00  211.02  233.45  277.92  160.50
+   RTF (p50):  fast=48.59x  generic=8.55x  speedup=5.69x
+
+== /fastdata/lavaulta/neural_amp/experiments/runs/m2_a2_tanh_seed0_v3/model_full.nam  (A2 standard, Channels=8) ==
+   audio=2000ms @ 48000Hz, block=64, iters=10 (15000 blocks timed each)
+   per-block audio deadline: 1333.3 us
+                  min     p50     p99     p99.9   max    mean
+   fast    (us):  171.29  183.06  238.07  261.25  293.94  185.87
+   generic (us):  185.80  198.92  260.02  285.70  342.92  203.43
+   RTF (p50):  fast=7.28x  generic=6.70x  speedup=1.09x
