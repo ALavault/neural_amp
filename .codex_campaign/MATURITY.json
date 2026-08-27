@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "current_level": "M0",
+  "current_level": "M1",
   "status": "in_progress",
-  "highest_completed_level": null,
-  "updated_at": "2026-08-27T12:05:15+02:00",
+  "highest_completed_level": "M0",
+  "updated_at": "2026-08-27T12:15:00+02:00",
   "gates": {
-    "M0": "in_progress",
-    "M1": "not_started",
+    "M0": "completed",
+    "M1": "in_progress",
     "M2": "not_started",
     "M3": "not_started",
     "M4": "not_started",
@@ -14,4 +14,3 @@
     "M6": "not_started"
   }
 }
-

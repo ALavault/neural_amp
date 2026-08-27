@@ -18,3 +18,6 @@ Initialize all external evaluation access controls to false. Inventory metadata 
 
 Do not presume authority to grant an open-source license. The root `LICENSE` reserves rights provisionally; third-party and dataset licenses remain independent. Revisit before public release.
 
+## 2026-08-27 — D-M0-005 — Initial physical-data candidates
+
+Retain four license-compatible ToneTwist candidates for later local audit: Fulltone Full Drive 2, Blackstar HT1 Overdrive, Electro-Harmonix Big Muff, and UA 6176/1176LN. They cover the requested moderate saturation, high gain, fuzz, and slow dynamics behaviors. Their tiers remain `UNASSIGNED` until archives, source boundaries, and alignment are inspected. Open-Amp and NAM’s Google Drive excitation remain metadata-only because no explicit asset license was found.

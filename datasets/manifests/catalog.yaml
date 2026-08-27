@@ -201,4 +201,3 @@ resources:
     allowed_usage: metadata_review_only_pending_explicit_license
     assigned_tier: UNASSIGNED
     known_limitations: no target output; Google Drive asset license not established
-

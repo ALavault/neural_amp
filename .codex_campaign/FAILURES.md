@@ -9,3 +9,7 @@ Entries are append-only and include failed experiments as well as infrastructure
 ## 2026-08-27 — F-M0-002 — Initial format check failed
 
 The first `make lint` passed all Ruff lint rules but failed `ruff format --check` because ten newly created Python files required canonical end-of-file formatting. Tests and the dataset audit passed independently. Resolution: apply the configured Ruff formatter and rerun lint and tests; no rule was disabled.
+
+## 2026-08-27 — F-M0-003 — Whitespace check did not stop first commit
+
+`git diff --cached --check` reported trailing blank lines and one Markdown trailing-space line, but command sequencing allowed the first commit to continue. No source behavior or experimental result was affected. Resolution: preserve the original commit, normalize tracked text mechanically, require a clean `git diff --check`, and commit the correction separately instead of rewriting history.

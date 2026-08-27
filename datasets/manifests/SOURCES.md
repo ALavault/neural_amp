@@ -12,4 +12,3 @@ Metadata was inspected on 2026-08-27. No audio archive was downloaded and no ext
 - Official NAM trainer documentation and source pinned under `third_party/neural-amp-modeler`.
 
 License statements in `catalog.yaml` come from the individual Zenodo API records. A GitHub repository license is not assumed to license linked audio. Unknown licenses deliberately block download and use.
-

@@ -9,4 +9,3 @@ dependencies:
 
 # The authoritative fully resolved Python dependency list is
 # requirements-lock.txt. Creation and validation use uv via `make bootstrap`.
-

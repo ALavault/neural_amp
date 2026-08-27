@@ -8,4 +8,3 @@ amplitude: 0.25
 decimation:
   method: polyphase_fir
   window: [kaiser, 8.6]
-

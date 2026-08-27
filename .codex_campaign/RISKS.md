@@ -9,4 +9,3 @@
 | R-005 | Residual network bypasses the structured core | Medium | High | Penalize and report residual energy; include a no-core comparable-budget ablation. |
 | R-006 | Spectral metrics mislabel harmless harmonics as aliasing | Medium | High | Validate controlled synthetic perturbations and use qualified terminology. |
 | R-007 | Run artifacts exhaust disk space | Low | High | Check space before matrices, index artifacts, and avoid duplicate checkpoints. |
-

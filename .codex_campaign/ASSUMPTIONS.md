@@ -17,4 +17,3 @@
 - CPU frequency pinning, turbo control, and core isolation may require privileges not currently established.
 - The expected wall-clock and energy budget for the minimum 100+ training runs is not specified; gates, disk checks, and bounded searches govern resource use.
 - A DAFx submission year/deadline and author list have not been provided; paper preparation can proceed without inventing either.
-

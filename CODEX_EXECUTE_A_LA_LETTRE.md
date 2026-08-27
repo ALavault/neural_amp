@@ -47,4 +47,3 @@ Après chaque étape importante, mettre à jour `STATE.md`, `MATURITY.json`, `DE
 ## Verdict
 
 Le classement final est `GO-A` (H1), `GO-B` (H2), `GO-C` (H3), `GO-D` (gain robuste de la branche lente), ou `NO-GO`. Un résultat négatif reste un résultat et doit produire le même registre, les limites et l’audit final sans reformulation opportuniste des critères.
-

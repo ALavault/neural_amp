@@ -30,4 +30,3 @@ Use concise imperative subjects such as `Validate synthetic identity metric`. Ke
 ## Provenance and Safety
 
 Do not overwrite run directories. Register every training or benchmark in `.codex_campaign/RUN_LEDGER.jsonl`, including failures. Preserve source-file boundaries in data splits. Do not commit secrets, private datasets, caches, or redistributed artifacts whose licenses are unclear.
-

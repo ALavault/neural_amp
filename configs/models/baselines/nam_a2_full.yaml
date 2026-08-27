@@ -11,4 +11,3 @@ packed_submodel: channels_8
 sample_rate: 48000
 precision: float32
 status: pinned_not_reproduced
-
