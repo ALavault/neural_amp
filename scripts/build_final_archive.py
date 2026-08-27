@@ -64,8 +64,16 @@ def main() -> None:
     if prohibited:
         raise RuntimeError(f"archive contains prohibited paths: {prohibited[:5]}")
     archive_hash = sha256(output)
+    source_commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
     sidecar = output.with_suffix(output.suffix + ".sha256")
-    sidecar.write_text(f"{archive_hash}  {output.name}\n", encoding="utf-8")
+    relative_output = output.relative_to(ROOT)
+    sidecar.write_text(f"{archive_hash}  {relative_output}\n", encoding="utf-8")
     verification = {
         "schema_version": 1,
         "archive": str(output.relative_to(ROOT)),
@@ -73,6 +81,7 @@ def main() -> None:
         "tracked_members": len(listing),
         "prohibited_members": prohibited,
         "source": "git archive HEAD",
+        "source_commit": source_commit,
         "raw_audio_included": False,
         "checkpoints_included": False,
         "prediction_audio_included": False,

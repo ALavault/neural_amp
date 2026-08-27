@@ -217,3 +217,7 @@ The first final archive build compressed the tracked tree, then rejected `experi
 ## 2026-08-27 — F-M6-005 — Corrected archive predicate required formatting
 
 The corrected archive policy passed lint, then the formatter compacted its path-filter comprehension. Resolution: apply the configured formatter and rerun static checks before rebuilding.
+
+## 2026-08-27 — F-M6-006 — Archive sidecar path was directory-relative
+
+The successful safe archive wrote a conventional basename-only checksum sidecar, which requires changing into `artifacts/` before verification. Resolution: write the repository-relative archive path and record the exact source commit in the verification JSON, then rebuild from the corrected clean commit. Archive contents and exclusion policy are unchanged.
