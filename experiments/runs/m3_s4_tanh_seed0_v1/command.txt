@@ -1,0 +1,1 @@
+uv run python scripts/run_m3_synthetic.py --variant S4 --case tanh --seed 0 --run-id m3_s4_tanh_seed0_v1

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "tier": "SYNTHETIC",
+  "case": "tanh",
+  "sample_rate": 48000,
+  "sample_count": 8192,
+  "train_seed": 3100,
+  "validation_seed": 4100,
+  "train_input_sha256": "66e6dffa2e8406dd3e79b3e6640128aa8dffeee96a735a7abf04958e2468fe8a",
+  "train_target_sha256": "fc810b18a75972fac6cddc7d92660438e2b2d293b3a417a2aa4432932d7fbf17",
+  "validation_input_sha256": "9135d3a93a50e4cc71c1812fa112d6d3e251e8e70b8b3429f25eb4860629646e",
+  "validation_target_sha256": "9a1e844fbcb5461b905ece73c8edd03eb391ec4312ad738cb0beb59783b47711"
+}
