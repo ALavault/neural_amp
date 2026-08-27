@@ -89,3 +89,14 @@ metric, threshold, or external-data lock. Evaluation chunks are fixed at 32,768
 and the exact CUDA path must pass before reservation. The replacement consumes
 one competence trajectory; seeds 1/2 retain their original conditional gate.
 No further replacement is authorized.
+
+## 2026-08-27 — R1-D-010 — Minimal FSSR optimization discriminator
+
+Pre-register the existing eight-run loss × budget factorial as the least costly
+local experiment that can distinguish the S3 optimization hypothesis from its
+invalidator while retaining a paired A2 control. Use seed 0 only, 5,000 updates,
+common checkpoints 200/1,000/5,000, validation ESR as the primary metric, and the
+three unchanged promotion checks in `r1_factorial.yaml`. The matrix is indivisible
+and cannot start before Wright competence passes. It does not test H1/H2 and
+cannot by itself yield a GO verdict. Full specification:
+`reports/R1_MINIMAL_FACTORIAL_PREREGISTRATION.md`.
