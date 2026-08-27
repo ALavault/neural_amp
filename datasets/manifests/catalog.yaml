@@ -127,20 +127,20 @@ resources:
     version: Version 1.0
     commit_or_release: DOI 10.5281/zenodo.7044411
     license: CC-BY-4.0
-    download_date: null
-    download_method: null
-    sha256: null
+    download_date: 2026-08-27
+    download_method: uv run python scripts/fetch_egfxset_clean.py
+    sha256: baa01d1d040c044eef81453e2c96c560722ed8e26736aff52a9490bfd94d3aaa
     source_checksum: per-file MD5 values published by Zenodo
-    sample_rate: null
-    bit_depth: null
-    channels: null
+    sample_rate: 48000
+    bit_depth: 24-bit PCM
+    channels: 1
     paired_input_output: true
     alignment_information: clean/effected correspondence documented; sample alignment not verified
     device_information: 690 isolated guitar tones processed by 12 physical effects
     control_parameters: string, fret, pickup, effect, hardware mode, and knob settings
     allowed_usage: research and redistribution with attribution under CC-BY-4.0
-    assigned_tier: UNASSIGNED
-    known_limitations: isolated notes; insufficient alone for training; archive totals 5.8 GB
+    assigned_tier: INTERNAL_DEV
+    known_limitations: only Clean.zip downloaded; one selected file header verified; isolated notes are insufficient alone for training
 
   - name: Open-Amp framework and Proteus model collection
     source: https://github.com/Alec-Wright/OpenAmp

@@ -1,0 +1,45 @@
+amplitude: 0.25
+decimation:
+  cutoff_fraction_of_target_nyquist: 0.9
+  method: polyphase_fir
+  stages:
+  - 2
+  - 2
+  taps_per_stage: 255
+  window:
+  - kaiser
+  - 8.6
+derived_sample_rates:
+- 96000
+- 48000
+duration_seconds: 1.0
+excitations:
+- fixed_sine
+- logarithmic_sweep
+- two_tone
+- multisine
+- bursts
+- colored_noise
+- impulses
+- level_changes
+- procedural_plucks
+external_di_diagnostic:
+  file_sha256: 7aa3c7a4ed1ebdbd647a9456c8c93422d972ba8d033a0b95e0fb36468a2da61a
+  license: CC-BY-4.0
+  master_interpolation: scipy.signal.resample_poly up=4 window=[kaiser, 8.6]
+  path: datasets/raw/egfxset/selected/6-22.wav
+  source: https://zenodo.org/records/7044411
+  tier: INTERNAL_DEV
+master_sample_rate: 192000
+schema_version: 1
+seed: 0
+systems:
+- polynomial
+- tanh
+- asymmetric_waveshaper
+- wiener
+- hammerstein
+- wiener_hammerstein
+- memory_clipper
+- slow_sag
+tier: SYNTHETIC

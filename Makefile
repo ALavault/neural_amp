@@ -1,4 +1,4 @@
-.PHONY: bootstrap test lint data-audit smoke campaign-status
+.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit
 
 bootstrap:
 	uv python install 3.12
@@ -20,3 +20,10 @@ smoke:
 
 campaign-status:
 	uv run python scripts/campaign_status.py
+
+fetch-egfxset-clean:
+	uv run python scripts/fetch_egfxset_clean.py
+
+m1-audit:
+	uv run python scripts/validate_synthetic_corpus.py
+	uv run python scripts/validate_metrics.py

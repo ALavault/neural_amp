@@ -1,0 +1,23 @@
+schema_version: 1
+sample_rate: 48000
+time:
+  metrics: [esr, nmse, mae, gain_error, dc_error, correlation]
+  epsilon: 1.0e-12
+  implicit_alignment: false
+spectral:
+  fft_sizes: [256, 1024, 4096]
+  hop_fraction: 0.25
+  window: hann
+  floor_db: -100.0
+nonlinear:
+  harmonic_coefficients: complex
+  maximum_harmonic: 12
+  known_reference_parasite_only: true
+transient:
+  envelope: causal_peak
+  attack_seconds: 0.002
+  release_seconds: 0.05
+alignment:
+  convention: positive_delay_means_target_lags_reference
+  maximum_diagnostic_lag_samples: 32
+  fractional_refinement: weighted_cross_spectrum_phase_slope

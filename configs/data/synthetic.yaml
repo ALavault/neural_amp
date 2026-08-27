@@ -5,6 +5,35 @@ derived_sample_rates: [96000, 48000]
 seed: 0
 duration_seconds: 1.0
 amplitude: 0.25
+excitations:
+  - fixed_sine
+  - logarithmic_sweep
+  - two_tone
+  - multisine
+  - bursts
+  - colored_noise
+  - impulses
+  - level_changes
+  - procedural_plucks
+systems:
+  - polynomial
+  - tanh
+  - asymmetric_waveshaper
+  - wiener
+  - hammerstein
+  - wiener_hammerstein
+  - memory_clipper
+  - slow_sag
+external_di_diagnostic:
+  path: datasets/raw/egfxset/selected/6-22.wav
+  source: https://zenodo.org/records/7044411
+  license: CC-BY-4.0
+  tier: INTERNAL_DEV
+  file_sha256: 7aa3c7a4ed1ebdbd647a9456c8c93422d972ba8d033a0b95e0fb36468a2da61a
+  master_interpolation: scipy.signal.resample_poly up=4 window=[kaiser, 8.6]
 decimation:
   method: polyphase_fir
+  stages: [2, 2]
+  taps_per_stage: 255
+  cutoff_fraction_of_target_nyquist: 0.9
   window: [kaiser, 8.6]
