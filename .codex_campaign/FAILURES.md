@@ -145,3 +145,7 @@ Static analysis stopped the first run-harness check on two long function signatu
 ## 2026-08-27 — F-M4-009 — Run harness required configured formatting
 
 The corrected run harness passed lint, after which the formatter requested five compact expression forms. Resolution: apply the configured formatter before any experimental run and rerun the static and numerical checks.
+
+## 2026-08-27 — F-M4-010 — Initial model omitted from checkpoint selection
+
+All four v1 physical preflights completed with finite outputs and block parity at or below `4.47e-8`. They exposed that S3 and S4 initial validation ESRs (`0.1265` and `0.1263`) were lower than every two-step checkpoint, but the harness initialized the best score to infinity and could only select steps 1 or 2. Resolution before any counted M4 run: save and register step 0 as the initial candidate, preserve all v1 runs unchanged, and require a new four-path v2 preflight from the corrected commit.

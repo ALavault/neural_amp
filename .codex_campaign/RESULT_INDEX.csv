@@ -13,3 +13,7 @@ m3_s1_slow_sag_seed0_v1,M3,S1,slow_sag,0,completed,esr=4.07967418e-05,experiment
 m3_s3_slow_sag_seed0_v1,M3,S3,slow_sag,0,completed,esr=4.00112751e-05,experiments/runs/m3_s3_slow_sag_seed0_v1
 m3_s0_short_memory_seed0_v1,M3,S0,short_nonlinear_memory,0,completed,esr=0.000534528532,experiments/runs/m3_s0_short_memory_seed0_v1
 m3_s2_short_memory_seed0_v1,M3,S2,short_nonlinear_memory,0,completed,esr=0.000363346861,experiments/runs/m3_s2_short_memory_seed0_v1
+m4_preflight_fulltone_b0_seed0_v1,M4_PREFLIGHT,B0,fulltone_full_drive_2,0,completed,esr=0.998671261,experiments/runs/m4_preflight_fulltone_b0_seed0_v1
+m4_preflight_fulltone_b2_seed0_v1,M4_PREFLIGHT,B2,fulltone_full_drive_2,0,completed,esr=0.942652347,experiments/runs/m4_preflight_fulltone_b2_seed0_v1
+m4_preflight_fulltone_s3_seed0_v1,M4_PREFLIGHT,S3,fulltone_full_drive_2,0,completed,esr=0.197121152,experiments/runs/m4_preflight_fulltone_s3_seed0_v1
+m4_preflight_fulltone_s4_seed0_v1,M4_PREFLIGHT,S4,fulltone_full_drive_2,0,completed,esr=0.197303416,experiments/runs/m4_preflight_fulltone_s4_seed0_v1

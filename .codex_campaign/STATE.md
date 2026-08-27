@@ -1,9 +1,9 @@
 # Campaign State
 
-- Updated: 2026-08-27T13:47:27+02:00
+- Updated: 2026-08-27T14:00:15+02:00
 - Maturity: M4 — principal smoke test
 - Status: in progress
-- Current task: execute the four-path M4 preflight, audit failures, then launch the 24-run B0/B2/S3/S4 matrix only if every path completes.
+- Current task: correct the step-0 checkpoint omission exposed by the completed v1 preflights, then require a four-path v2 preflight before the 24-run matrix.
 - External results accessed: no
 - External retest authorized: false
 
@@ -26,6 +26,7 @@
 - Verified the downloaded ToneTwist archives against official checksums and licenses, permanently assigned them to `INTERNAL_DEV`, and selected Fulltone Full Drive 2 plus Big Muff for M4.
 - Prepared six bounded 48 kHz pairs without level normalization: source-disjoint Fulltone files and the published Big Muff train/validation/test files. All are finite and unclipped.
 - Implemented the 12,153-parameter B2 GRU and a common M4 training/inference path with official A2 overlap-block parity below `2e-6`.
+- Completed four immutable v1 physical preflights; all paths were finite and block-consistent, and the runs exposed a checkpoint-selection defect before any counted training.
 
 ## M0 gate
 
