@@ -27,60 +27,63 @@ resources:
     version: Zenodo record 10794615
     commit_or_release: ToneTwist catalog commit 76ae7c875781bc7e2cec2df73b395d1a12d9cdbd
     license: CC-BY-NC-4.0
-    download_date: null
-    download_method: null
-    sha256: null
+    download_date: 2026-08-27
+    download_method: curl Zenodo API file content
+    sha256: 06c09fbca4ecaa4fd36b577c64afa7e385f2715ff99822d87910afdfcb8dfbac
+    local_archive: datasets/raw/external/tone_twist_fulltone/Fulltone-FullDrive2.zip
     source_checksum: md5:0bb9809efe4545071ea117f86adce529
     sample_rate: 48000
     bit_depth: float32
     channels: 1
     paired_input_output: true
-    alignment_information: synchronization markers documented by ToneTwist; verify per file
+    alignment_information: target archive paired by basename with shared dry-marker resource; offsets pending
     device_information: physical overdrive pedal; moderate-saturation candidate
     control_parameters: inspect archive manifest before assignment
     allowed_usage: noncommercial research with attribution
-    assigned_tier: UNASSIGNED
-    known_limitations: noncommercial license; split provenance and exact settings not yet locally verified
+    assigned_tier: INTERNAL_DEV
+    known_limitations: noncommercial license; dry inputs are a separate archive and pair offsets require audit
 
   - name: ToneTwist AFx - Blackstar HT1 Overdrive
     source: https://zenodo.org/records/10794425
     version: "1.0"
     commit_or_release: ToneTwist catalog commit 76ae7c875781bc7e2cec2df73b395d1a12d9cdbd
     license: CC-BY-NC-4.0
-    download_date: null
-    download_method: null
-    sha256: null
+    download_date: 2026-08-27
+    download_method: curl Zenodo API file content
+    sha256: 78c35a60cb0309aa6c244f2763ff347a82228bbed090eebbdbd3d82bf9ffefdd
+    local_archive: datasets/raw/external/tone_twist_blackstar/Blackstar-HT1-ChOverdrive.zip
     source_checksum: md5:a748ac0fa6608a2dd57444bac6f132b7
-    sample_rate: 48000
-    bit_depth: float32
+    sample_rate: 44100
+    bit_depth: PCM16
     channels: 1
     paired_input_output: true
-    alignment_information: synchronization markers documented by ToneTwist; verify per file
+    alignment_information: marker-bearing trainval/test layout; sample offsets pending audit
     device_information: physical amplifier overdrive channel; high-gain candidate
     control_parameters: inspect archive manifest before assignment
     allowed_usage: noncommercial research with attribution
-    assigned_tier: UNASSIGNED
-    known_limitations: noncommercial license; exact capture path and settings not yet locally verified
+    assigned_tier: INTERNAL_DEV
+    known_limitations: noncommercial license; native 44.1 kHz requires controlled resampling
 
   - name: ToneTwist AFx - Electro-Harmonix Big Muff
     source: https://zenodo.org/records/10891515
     version: "1.0"
     commit_or_release: ToneTwist catalog commit 76ae7c875781bc7e2cec2df73b395d1a12d9cdbd
     license: CC-BY-NC-4.0
-    download_date: null
-    download_method: null
-    sha256: null
+    download_date: 2026-08-27
+    download_method: curl Zenodo API file content
+    sha256: 200bee0dc2887d331f6aef61df1f08d52a0067c938e8e435bb2493ad53c639fa
+    local_archive: datasets/raw/external/tone_twist_bigmuff/ElectroHarmonix-BigMuff.zip
     source_checksum: md5:45bdd8ea776e1182b9db1d60f62b7930
-    sample_rate: 48000
-    bit_depth: float32
+    sample_rate: 44100
+    bit_depth: PCM16
     channels: 1
     paired_input_output: true
-    alignment_information: external ToneTwist pair; verify sample alignment locally
+    alignment_information: marker-bearing trainval/test layout; sample offsets pending audit
     device_information: physical fuzz pedal; hard-clipping candidate
     control_parameters: inspect archive manifest before assignment
     allowed_usage: noncommercial research with attribution
-    assigned_tier: UNASSIGNED
-    known_limitations: short external archive; source diversity and settings not yet verified
+    assigned_tier: INTERNAL_DEV
+    known_limitations: short archive; native 44.1 kHz requires controlled resampling
 
   - name: ToneTwist AFx - UA 6176 1176LN Limiter
     source: https://zenodo.org/records/10798151
@@ -100,27 +103,49 @@ resources:
     control_parameters: inspect archive manifest before assignment
     allowed_usage: noncommercial research with attribution
     assigned_tier: UNASSIGNED
-    known_limitations: not a guitar amplifier; use only if measurable dynamics suit the memory hypothesis
+    known_limitations: noncommercial license; exact archive and paired source not downloaded
 
   - name: Marshall JVM410H OD1 original dataset
     source: https://zenodo.org/records/7970723
     version: Zenodo record 7970723
     commit_or_release: grey-box-amp commit 86f5a4a62255d27260c397d6df9ca668943d0f79
     license: CC-BY-4.0
-    download_date: null
-    download_method: null
-    sha256: null
+    download_date: 2026-08-27
+    download_method: curl Zenodo API file content
+    sha256: 7517cb07478f44de283c513f37417b225b93cd143918226dbf05311eed196a6b
+    local_archive: datasets/raw/external/marshall_jvm410h/MarshallJVM410H.zip
     source_checksum: md5:4d08dac89b44f618f2d6c2a69739e104
-    sample_rate: null
-    bit_depth: null
-    channels: null
+    sample_rate: 44100
+    bit_depth: PCM24
+    channels: 1
     paired_input_output: true
-    alignment_information: not yet verified; paper/repository describe paired amplifier data
+    alignment_information: input/preamp/speakerout triplets; sample alignment pending audit
     device_information: Marshall JVM410H OD1, speaker output into reactive load
     control_parameters: tone-stack settings and gain conditions; inspect archive manifest
     allowed_usage: research and redistribution with attribution under CC-BY-4.0
-    assigned_tier: UNASSIGNED
-    known_limitations: 4.4 GB archive; local format, overlap, and alignment audit required before tiering
+    assigned_tier: INTERNAL_DEV
+    known_limitations: 4.4 GB archive; source/session overlap and alignment audit required
+
+  - name: ToneTwist AFx shared dry inputs with markers
+    source: https://zenodo.org/records/10455730
+    version: Zenodo record 10455730
+    commit_or_release: ToneTwist catalog commit 76ae7c875781bc7e2cec2df73b395d1a12d9cdbd
+    license: CC-BY-NC-4.0
+    download_date: 2026-08-27
+    download_method: curl Zenodo API file content
+    sha256: e23935658160c7693544c7daf125366c8f141cf72728e5b5780709ec96dc29d3
+    local_archive: datasets/raw/external/tone_twist_dry_markers/DRY-with-markers.zip
+    source_checksum: md5:bc1d1490f6c6cfe5643c0798eb5fb5a4
+    sample_rate: mixed; selected idmt-gtr2 is 48000
+    bit_depth: mixed source PCM/float
+    channels: 1
+    paired_input_output: true only when matched by basename to ToneTwist target
+    alignment_information: two synchronization impulses documented; offsets pending audit
+    device_information: shared clean guitar/bass inputs for ToneTwist AFx targets
+    control_parameters: source basename and target setting directory
+    allowed_usage: noncommercial research with attribution
+    assigned_tier: INTERNAL_DEV
+    known_limitations: separate resource; do not pair across unmatched source basenames
 
   - name: EGFxSet
     source: https://zenodo.org/records/7044411
