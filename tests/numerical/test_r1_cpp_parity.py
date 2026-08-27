@@ -85,7 +85,7 @@ def test_native_export_matches_python_for_blocks_reset_and_slow_controller(
         taps=5,
         num_knots=7,
         receptive_field=receptive_field,
-        slow_hidden_size=3,
+        slow_hidden_size=8,
         slow_decimation=16,
     )
     _make_nontrivial(model)

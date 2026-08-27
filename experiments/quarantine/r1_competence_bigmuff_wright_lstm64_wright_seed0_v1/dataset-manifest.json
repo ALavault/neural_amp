@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "campaign_version": "FSSR-R1-v1",
+  "name": "r1_wright_bigmuff_native",
+  "tier": "INTERNAL_DEV",
+  "configuration": "configs/data/r1_wright_bigmuff_native.yaml",
+  "configuration_sha256": "18e2d070873a8e2c8adba21158607ff6fddeab2b98a416f61dfcd97574559151",
+  "source_repository": "https://github.com/Alec-Wright/Automated-GuitarAmpModelling",
+  "source_commit": "e3146386b0fd0b562bc393231be3a5938cf9feac",
+  "code_license": "GPL-3.0-only",
+  "dataset_source": "https://zenodo.org/records/10891515",
+  "dataset_license": "CC-BY-NC-4.0",
+  "archive_path": "datasets/raw/external/tone_twist_bigmuff/ElectroHarmonix-BigMuff.zip",
+  "archive_sha256": "200bee0dc2887d331f6aef61df1f08d52a0067c938e8e435bb2493ad53c639fa",
+  "reference_model": {
+    "path": "third_party/Automated-GuitarAmpModelling/Results/muff-muff2/model_best.json",
+    "sha256": "f57e12b19a8a5df8e827f9c8fde9026f05c943cef42540a86335c81df63b2946",
+    "result_directory": "Results/muff-muff2"
+  },
+  "files": [
+    {
+      "split": "train",
+      "tier": "INTERNAL_DEV",
+      "source_group": "dafx19_official_train",
+      "sample_rate": 44100,
+      "input_source": "third_party/Automated-GuitarAmpModelling/Data/train/muff-input.wav",
+      "target_source": "third_party/Automated-GuitarAmpModelling/Data/train/muff-target.wav",
+      "input_path": "datasets/raw/r1_wright_bigmuff/train/input.wav",
+      "target_path": "datasets/raw/r1_wright_bigmuff/train/target.wav",
+      "input_sha256": "8277f7c0f3c42625621c8c5ba7da1572280397795755bb6ccd602442238388d0",
+      "target_sha256": "6d49f5cda56bc42ecf76d8a7be58c7cb8ad89e94a6eb7ca01528f0cdfc6df290",
+      "input_summary": {
+        "samples": 14994001,
+        "peak": 0.5509033203125,
+        "rms": 0.06959552611409985,
+        "nonfinite": 0,
+        "clipped_samples": 0
+      },
+      "target_summary": {
+        "samples": 14994001,
+        "peak": 0.420562744140625,
+        "rms": 0.04729486316061602,
+        "nonfinite": 0,
+        "clipped_samples": 0
+      },
+      "alignment": "official_published_pair_no_compensation",
+      "normalization": "none"
+    },
+    {
+      "split": "validation",
+      "tier": "INTERNAL_DEV",
+      "source_group": "dafx19_official_validation",
+      "sample_rate": 44100,
+      "input_source": "third_party/Automated-GuitarAmpModelling/Data/val/muff-input.wav",
+      "target_source": "third_party/Automated-GuitarAmpModelling/Data/val/muff-target.wav",
+      "input_path": "datasets/raw/r1_wright_bigmuff/validation/input.wav",
+      "target_path": "datasets/raw/r1_wright_bigmuff/validation/target.wav",
+      "input_sha256": "2749a3afca80725efd088c0f4c0b39a89c4fffafad994379548294d1d9e0d223",
+      "target_sha256": "cfbdaccf5b01de031c760ae094a2ec3145e60873230410baeec13ef5c583ea7c",
+      "input_summary": {
+        "samples": 2251753,
+        "peak": 0.552337646484375,
+        "rms": 0.06685597432944526,
+        "nonfinite": 0,
+        "clipped_samples": 0
+      },
+      "target_summary": {
+        "samples": 2251753,
+        "peak": 0.419189453125,
+        "rms": 0.04948998688680857,
+        "nonfinite": 0,
+        "clipped_samples": 0
+      },
+      "alignment": "official_published_pair_no_compensation",
+      "normalization": "none"
+    },
+    {
+      "split": "test",
+      "tier": "INTERNAL_DEV",
+      "source_group": "dafx19_official_test",
+      "sample_rate": 44100,
+      "input_source": "third_party/Automated-GuitarAmpModelling/Data/test/muff-input.wav",
+      "target_source": "third_party/Automated-GuitarAmpModelling/Data/test/muff-target.wav",
+      "input_path": "datasets/raw/r1_wright_bigmuff/test/input.wav",
+      "target_path": "datasets/raw/r1_wright_bigmuff/test/target.wav",
+      "input_sha256": "c192e2464bc430b88fab9e9c230443db50a2276c443513eb31bd1677e2e57805",
+      "target_sha256": "affe5cfa32db7763eaa53cd4ef073d23e8df42ff3eae9f892346e4ac6df802f2",
+      "input_summary": {
+        "samples": 2646001,
+        "peak": 0.564910888671875,
+        "rms": 0.1028581890328458,
+        "nonfinite": 0,
+        "clipped_samples": 0
+      },
+      "target_summary": {
+        "samples": 2646001,
+        "peak": 0.42974853515625,
+        "rms": 0.05019581480608601,
+        "nonfinite": 0,
+        "clipped_samples": 0
+      },
+      "alignment": "official_published_pair_no_compensation",
+      "normalization": "none"
+    }
+  ],
+  "limitations": [
+    "Performer and session identities are not published.",
+    "This dataset is used only for the R1 competence gate and INTERNAL_DEV."
+  ]
+}

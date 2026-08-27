@@ -23,7 +23,7 @@ The required root fields are:
   "precision": "float32",
   "sample_rate_hz": 48000,
   "latency_samples": 0,
-  "slow_controller": {},
+  "slow_controller": "none",
   "core": {},
   "residual": null
 }
@@ -61,7 +61,8 @@ three FIRs):
 ```
 
 For FIR coefficients, index zero multiplies the oldest sample and the last
-coefficient multiplies the current sample.  A core executes
+coefficient multiplies the current sample.  Spline knots must form the uniform
+grid used by `SmoothHermiteSpline`.  A core executes
 `H0 -> (drive*spline input + offset) -> spline1 -> H1`, optionally followed by
 `spline2 -> H2`, then `output_gain`.  The Hermite formula and linear endpoint
 extrapolation match `SmoothHermiteSpline`.

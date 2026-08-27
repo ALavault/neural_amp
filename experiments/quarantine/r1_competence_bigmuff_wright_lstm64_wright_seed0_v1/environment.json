@@ -1,0 +1,13 @@
+{
+  "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.43",
+  "python": "3.12.13",
+  "numpy": "2.5.2",
+  "torch": "2.13.0+cu130",
+  "cuda_runtime": "13.0",
+  "cudnn": 92000,
+  "gpu": "NVIDIA RTX PRO 4000 Blackwell",
+  "training_device": "cuda",
+  "precision": "float32",
+  "cudnn_deterministic": false,
+  "deterministic_warn_only": false
+}

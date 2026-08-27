@@ -202,6 +202,22 @@ def test_stage_cap_counts_all_terminal_statuses(tmp_path: Path) -> None:
     assert executor.stage_usage("competence") == (3, 3)
 
 
+def test_quarantined_noncanonical_attempt_does_not_consume_cap(
+    tmp_path: Path,
+) -> None:
+    config = _stage_configs()["competence"]
+    executor = R1Executor(tmp_path, stage_configs={"competence": config})
+    ledger = tmp_path / ".codex_campaign/RUN_LEDGER.jsonl"
+    ledger.parent.mkdir(parents=True)
+    run_id = "r1_competence_bigmuff_wright_lstm64_wright_seed0_v1"
+    ledger.write_text(
+        json.dumps({"run_id": run_id, "status": "failed"}) + "\n",
+        encoding="utf-8",
+    )
+    assert executor.stage_usage("competence") == (0, 3)
+    assert executor.quarantined_noncanonical_attempts()[0]["run_id"] == run_id
+
+
 def test_confirmatory_pending_lock_refuses_reservation(tmp_path: Path) -> None:
     config = _stage_configs()["confirm"]
     executor = R1Executor(tmp_path, stage_configs={"confirm": config})

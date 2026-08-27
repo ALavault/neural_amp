@@ -68,6 +68,40 @@ DIAGNOSTIC_PROTOCOL_PATHS = (
     "configs/data/r1_physical.yaml",
     "configs/data/r1_wright_bigmuff_native.yaml",
 )
+DIAGNOSTIC_IMPLEMENTATION_PATHS = (
+    "Makefile",
+    "cpp/CMakeLists.txt",
+    "cpp/R1_NATIVE_FORMAT.md",
+    "cpp/benchmarks/r1_benchmark.cpp",
+    "cpp/include/fssr_r1_native.hpp",
+    "cpp/src/fssr_r1_native.cpp",
+    "cpp/tests/r1_block_runner.cpp",
+    "scripts/freeze_r1_diagnostic.py",
+    "scripts/prepare_r1_data.py",
+    "scripts/prepare_r1_wright_data.py",
+    "scripts/run_r1_competence.py",
+    "scripts/run_r1_competence_gate.py",
+    "scripts/run_r1_diagnostic.py",
+    "scripts/run_r1_preflight.py",
+    "scripts/run_r1_stage.py",
+    "scripts/summarize_r1.py",
+    "scripts/validate_r1_wright.py",
+    "src/fssr_nam/campaign",
+    "src/fssr_nam/inference",
+    "src/fssr_nam/losses",
+    "src/fssr_nam/models/r1.py",
+    "src/fssr_nam/models/wright.py",
+    "src/fssr_nam/reporting/r1_preflight.py",
+    "src/fssr_nam/statistics/r1.py",
+    "src/fssr_nam/training/r1.py",
+    "src/fssr_nam/training/r1_competence.py",
+    "src/fssr_nam/training/r1_diagnostic.py",
+    "src/fssr_nam/training/wright.py",
+)
+DIAGNOSTIC_ACTIVE_PATH = ".codex_campaign/r1/DIAGNOSTIC_LOCK_ACTIVE"
+DIAGNOSTIC_AMENDMENT_PATH = (
+    ".codex_campaign/r1/DIAGNOSTIC_LOCK_AMENDMENT_1.yaml"
+)
 
 
 def _git(root: Path, *arguments: str) -> str:
@@ -288,4 +322,58 @@ def validate_lock_digest(root: Path) -> str:
     recorded = checksum_path.read_text(encoding="utf-8").strip()
     if not re.fullmatch(r"[0-9a-f]{64}", recorded) or recorded != expected_lock:
         raise RuntimeError("diagnostic lock digest mismatch")
+    implementation_commit = lock.get("implementation_commit")
+
+    active_path = root / DIAGNOSTIC_ACTIVE_PATH
+    if active_path.exists():
+        active_relative = active_path.read_text(encoding="utf-8").strip()
+        if active_relative != DIAGNOSTIC_AMENDMENT_PATH:
+            raise RuntimeError("unexpected active diagnostic lock amendment")
+        amendment_path = root / active_relative
+        amendment_checksum_path = amendment_path.with_suffix(".sha256")
+        amendment = load_yaml(amendment_path)
+        if (
+            amendment.get("status") != "frozen"
+            or amendment.get("campaign_version") != CAMPAIGN_VERSION
+            or amendment.get("amendment_number") != 1
+            or amendment.get("base_lock_sha256") != expected_lock
+            or amendment.get("protocol_sha256") != expected_protocol
+            or amendment.get("scientific_protocol_changed") is not False
+            or amendment.get("external_report_only_locked") is not True
+        ):
+            raise RuntimeError("diagnostic lock amendment is inconsistent")
+        expected_amendment = hashlib.sha256(amendment_path.read_bytes()).hexdigest()
+        recorded_amendment = amendment_checksum_path.read_text(
+            encoding="utf-8"
+        ).strip()
+        if (
+            not re.fullmatch(r"[0-9a-f]{64}", recorded_amendment)
+            or recorded_amendment != expected_amendment
+        ):
+            raise RuntimeError("diagnostic lock amendment digest mismatch")
+        implementation_commit = amendment.get("effective_implementation_commit")
+
+    if not isinstance(implementation_commit, str) or not re.fullmatch(
+        r"[0-9a-f]{40}", implementation_commit
+    ):
+        raise RuntimeError("diagnostic lock has no valid implementation commit")
+    subprocess.run(
+        ["git", "cat-file", "-e", f"{implementation_commit}^{{commit}}"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    drift = _git(
+        root,
+        "diff",
+        "--name-only",
+        implementation_commit,
+        "--",
+        *DIAGNOSTIC_IMPLEMENTATION_PATHS,
+    ).strip()
+    if drift:
+        raise RuntimeError(
+            "diagnostic implementation differs from the active lock: "
+            + ", ".join(drift.splitlines())
+        )
     return expected_protocol

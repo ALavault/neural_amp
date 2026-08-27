@@ -1,1 +1,2 @@
 run_id,stage,device,model,seed,status,metrics_path
+r1_competence_bigmuff_wright_lstm64_wright_seed0_v1,competence,bigmuff,wright_lstm64,0,failed,experiments/runs/r1_competence_bigmuff_wright_lstm64_wright_seed0_v1/metrics.json

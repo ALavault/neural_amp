@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "disposition": "quarantined_non_counted_protocol_attempt",
+  "original_path": "experiments/runs/r1_competence_bigmuff_wright_lstm64_wright_seed0_v1",
+  "quarantine_path": "experiments/quarantine/r1_competence_bigmuff_wright_lstm64_wright_seed0_v1",
+  "canonical_seed0_run_id": "r1_competence_bigmuff_lstm64_wright_seed0_v1",
+  "timing": "Occurred after the initial diagnostic lock and before any valid counted R1 trajectory; a versioned lock amendment is required before relaunch.",
+  "reason": "The launched implementation used a non-canonical identifier, did not reserve through R1Executor, exposed test files before checkpoint selection, and offered forbidden directory reuse through --resume.",
+  "measurements_admissible": false,
+  "ledger_entry_created": true,
+  "ledger_entry_note": "The legacy runner appended one immutable failed row with the invalid identifier and the original path before shutdown; FAILURES.md records the quarantine resolution.",
+  "preservation": "All generated files are retained byte-for-byte except status.json, which records the stop disposition."
+}

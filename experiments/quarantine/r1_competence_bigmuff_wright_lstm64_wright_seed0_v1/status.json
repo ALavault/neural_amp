@@ -1,0 +1,8 @@
+{
+  "status": "invalid_protocol_attempt",
+  "first_started_at": "2026-08-27T16:49:43+02:00",
+  "stopped_at": "2026-08-27T16:52:13+02:00",
+  "last_completed_epoch": 24,
+  "counted_trajectory": false,
+  "failure_reason": "Non-canonical run ID and runner bypassed the immutable R1Executor; test audio was loaded before checkpoint selection. The first process was stopped with SIGTERM before evaluation; the legacy gate then attempted a forbidden resume and failed while restoring RNG state."
+}

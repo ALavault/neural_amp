@@ -17,9 +17,9 @@ from .r1_native import R1NativeReference, load_r1_native_payload
 
 def _comparison(
     expected: np.ndarray, actual: np.ndarray, *, atol: float, rtol: float
-) -> tuple[bool, float]:
+) -> tuple[bool, float | None]:
     if expected.shape != actual.shape or not np.isfinite(actual).all():
-        return False, float("inf")
+        return False, None
     errors = np.abs(expected.astype(np.float64) - actual.astype(np.float64))
     maximum = float(errors.max(initial=0.0))
     limits = atol + rtol * np.abs(expected.astype(np.float64))
@@ -97,7 +97,10 @@ def verify_r1_cpp_parity(
         "regular_vs_irregular": _comparison(regular, irregular, atol=0.0, rtol=0.0),
     }
     passed = all(result[0] for result in comparisons.values())
-    maximum = max(result[1] for result in comparisons.values())
+    finite_errors = [
+        result[1] for result in comparisons.values() if result[1] is not None
+    ]
+    maximum = max(finite_errors) if len(finite_errors) == len(comparisons) else None
     residual = payload.get("residual")
     slow = payload["slow_controller"]
     coverage = {

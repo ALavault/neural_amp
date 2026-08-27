@@ -38,3 +38,11 @@ normalization, scheduler, or training history. R1 therefore tests conversion
 of those published tensors separately and trains competence seeds from scratch
 under the locked recipe; it does not claim that the JSON itself proves which
 historical loss produced the weights.
+
+## 2026-08-27 — R1-D-006 — Prospective correction after invalid launch
+
+Quarantine the non-canonical competence attempt without deleting its failed global
+ledger row. Exclude it from diagnostic capacity because it is outside the frozen
+matrix, and require every counted competence seed to use the canonical identifier,
+fresh `R1Executor` reservation, sealed test boundary, and uninterrupted execution.
+This correction changes no scientific threshold, dataset, loss, seed, or model.

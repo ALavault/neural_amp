@@ -47,6 +47,14 @@ PLACEHOLDER_LOSSES = frozenset(
     {"selected_by_factorial_gate", "frozen_by_confirmatory_lock"}
 )
 TERMINAL_STATUSES = frozenset({"completed", "failed", "stopped_by_gate"})
+# A nonconforming, unauthorized implementation used this non-canonical
+# identifier after the initial R1 lock but before any valid counted trajectory.
+# Its failed ledger line is immutable and its artifacts are quarantined, so it
+# must remain auditable without consuming a declared competence slot or making
+# canonical planning impossible.  The incident motivates an amended lock.
+QUARANTINED_NONCANONICAL_RUN_IDS = frozenset(
+    {"r1_competence_bigmuff_wright_lstm64_wright_seed0_v1"}
+)
 
 _ID_TOKEN = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -469,6 +477,20 @@ def _decision_passed(value: object) -> bool:
     return False
 
 
+def _decision_failed(value: object) -> bool:
+    if value is False:
+        return True
+    if isinstance(value, str):
+        return value in {"failed", "rejected", "stopped_by_gate"}
+    if isinstance(value, Mapping):
+        return value.get("passed") is False or value.get("decision") in {
+            "failed",
+            "rejected",
+            "stopped_by_gate",
+        }
+    return False
+
+
 def validate_confirmatory_lock(lock: Mapping[str, Any]) -> None:
     """Require an explicit H1/H2 authorization and verified Python/C++ parity."""
     if lock.get("confirmation_runs_authorized") is not True:
@@ -563,6 +585,8 @@ class R1Executor:
             run_id = entry.get("run_id")
             if not isinstance(run_id, str) or not run_id.startswith("r1_"):
                 continue
+            if run_id in QUARANTINED_NONCANONICAL_RUN_IDS:
+                continue
             parsed = parse_run_id(run_id)
             if parsed.stage in stages:
                 attempted.add(run_id)
@@ -570,10 +594,20 @@ class R1Executor:
             for path in self.runs_dir.iterdir():
                 if not path.is_dir() or not path.name.startswith("r1_"):
                     continue
+                if path.name in QUARANTINED_NONCANONICAL_RUN_IDS:
+                    continue
                 parsed = parse_run_id(path.name)
                 if parsed.stage in stages:
                     attempted.add(path.name)
         return attempted
+
+    def quarantined_noncanonical_attempts(self) -> tuple[dict[str, Any], ...]:
+        """Return immutable legacy attempts excluded from canonical R1 caps."""
+        return tuple(
+            dict(entry)
+            for entry in read_runs(self.ledger_path)
+            if entry.get("run_id") in QUARANTINED_NONCANONICAL_RUN_IDS
+        )
 
     def stage_usage(self, stage: str) -> tuple[int, int]:
         """Return attempted unique IDs and the immutable cap for one run stage."""
@@ -635,13 +669,38 @@ class R1Executor:
         commit: str,
         command: str = "",
         confirmatory_lock: Mapping[str, Any] | None = None,
+        stopped_by_gate: str | None = None,
         dry_run: bool = False,
     ) -> dict[str, object]:
         """Validate and reserve one fresh run; dry-run performs no filesystem write."""
         _validate_sha256(data_sha256, "data_sha256")
         if not isinstance(commit, str) or not commit:
             raise ValueError("commit must be a non-empty string")
-        config = self._validate_declared(spec, confirmatory_lock=confirmatory_lock)
+        if stopped_by_gate is None:
+            config = self._validate_declared(
+                spec, confirmatory_lock=confirmatory_lock
+            )
+        else:
+            if stopped_by_gate not in gate_requirements(spec):
+                raise R1AuthorizationError(
+                    f"{stopped_by_gate!r} is not a required gate for {spec.run_id}"
+                )
+            if not _decision_failed(self.gate_decisions.get(stopped_by_gate)):
+                raise R1AuthorizationError(
+                    f"gate stop requires an explicit failed decision: {stopped_by_gate}"
+                )
+            config = self.stage_config(spec.stage)
+            resolved_loss = (
+                spec.loss if spec.stage in {"horizon", "cascade", "confirm"} else None
+            )
+            declared = {
+                candidate.run_id
+                for candidate in expand_stage(config, resolved_loss=resolved_loss)
+            }
+            if spec.run_id not in declared:
+                raise R1ConfigError(
+                    f"gate-stopped run is outside the declared matrix: {spec.run_id}"
+                )
         self._validate_fresh_capacity(spec)
         started = datetime.now().astimezone().isoformat(timespec="seconds")
         resolved = {
@@ -650,11 +709,13 @@ class R1Executor:
             "selected_run": spec.as_dict(),
             "authorization": {
                 "gate_decisions": {
-                    gate: self.gate_decisions[gate] for gate in gate_requirements(spec)
+                    gate: self.gate_decisions.get(gate, "not_reached")
+                    for gate in gate_requirements(spec)
                 },
                 "confirmatory_lock": (
                     dict(confirmatory_lock) if confirmatory_lock is not None else None
                 ),
+                "stopped_by_gate": stopped_by_gate,
             },
         }
         config_bytes = yaml.safe_dump(resolved, sort_keys=False).encode("utf-8")
@@ -695,6 +756,37 @@ class R1Executor:
             encoding="utf-8",
         )
         return result
+
+    def record_gate_stop(
+        self,
+        spec: RunSpec,
+        *,
+        gate: str,
+        reason: str,
+        data_sha256: str,
+        commit: str,
+        command: str = "",
+    ) -> dict[str, object]:
+        """Register a declared trajectory that an explicit failed gate forbids."""
+        if not reason.strip():
+            raise ValueError("gate stop requires a non-empty reason")
+        self.prepare_run(
+            spec,
+            data_sha256=data_sha256,
+            commit=commit,
+            command=command,
+            stopped_by_gate=gate,
+        )
+        run_dir = self.runs_dir / spec.run_id
+        (run_dir / "gate-stop.json").write_text(
+            json.dumps({"gate": gate, "reason": reason}, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        return self.finalize_run(
+            spec,
+            status="stopped_by_gate",
+            failure_reason=reason,
+        )
 
     def finalize_run(
         self,

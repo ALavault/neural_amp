@@ -1,0 +1,1 @@
+/fastdata/lavaulta/neural_amp/scripts/run_r1_competence.py --seed 0 --run-id r1_competence_bigmuff_wright_lstm64_wright_seed0_v1

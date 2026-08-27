@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/fastdata/lavaulta/neural_amp/scripts/run_r1_competence.py", line 359, in main
+    generator.set_state(resume["generator_state"])
+TypeError: RNG state must be a torch.ByteTensor

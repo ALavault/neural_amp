@@ -1,0 +1,105 @@
+campaign:
+  batch_size: 50
+  campaign_version: FSSR-R1-v1
+  checkpoint_policy: lowest_validation_wright_loss
+  checkpoint_steps: []
+  conditional_seed_rule:
+    additional_seeds:
+    - 1
+    - 2
+    first_seed: 0
+    launch_if_seed0_esr_test_at_most: 0.15
+  device: bigmuff
+  early_stopping:
+    comparison: strict_improvement
+    patience_validations: 25
+  failure_action: stop_r1_and_audit_loss_tbptt_alignment_weight_conversion
+  loss:
+    dc_weight: 0.25
+    epsilon: 1.0e-05
+    esr_preemphasized_weight: 0.75
+    preemphasis:
+    - -0.85
+    - 1.0
+  loss_mode: wright
+  maximum_epochs: 2000
+  model: lstm64
+  optimizer:
+    learning_rate: 0.005
+    name: Adam
+    weight_decay: 0.0001
+  phase_schedule:
+  - end_epoch: 2000
+    name: official_wright_training
+    start_epoch: 1
+    trainable:
+    - all
+  promotion_gate:
+    maximum_seed_esr_test_at_most: 0.2
+    median_esr_test_at_most: 0.15
+    required_seeds: 3
+  receptive_field: stateful
+  sample_rate: 44100
+  scheduler:
+    factor: 0.5
+    mode: min
+    name: ReduceLROnPlateau
+    patience_validations: 5
+  schema_version: 1
+  seeds:
+  - 0
+  - 1
+  - 2
+  segment_samples: 22050
+  setting: S050_V100
+  stage: competence
+  tbptt_samples: 1000
+  tier: INTERNAL_DEV
+  validation_frequency_epochs: 2
+  warmup_samples: 200
+data:
+  archive_path: datasets/raw/external/tone_twist_bigmuff/ElectroHarmonix-BigMuff.zip
+  archive_sha256: 200bee0dc2887d331f6aef61df1f08d52a0067c938e8e435bb2493ad53c639fa
+  campaign_version: FSSR-R1-v1
+  code_license: GPL-3.0-only
+  dataset_license: CC-BY-NC-4.0
+  dataset_source: https://zenodo.org/records/10891515
+  name: r1_wright_bigmuff_native
+  normalization: none
+  reference_model:
+    path: third_party/Automated-GuitarAmpModelling/Results/muff-muff2/model_best.json
+    result_directory: Results/muff-muff2
+    sha256: f57e12b19a8a5df8e827f9c8fde9026f05c943cef42540a86335c81df63b2946
+  sample_rate: 44100
+  schema_version: 1
+  source_commit: e3146386b0fd0b562bc393231be3a5938cf9feac
+  source_repository: https://github.com/Alec-Wright/Automated-GuitarAmpModelling
+  splits:
+    test:
+      input_path: datasets/raw/r1_wright_bigmuff/test/input.wav
+      input_sha256: c192e2464bc430b88fab9e9c230443db50a2276c443513eb31bd1677e2e57805
+      input_source: third_party/Automated-GuitarAmpModelling/Data/test/muff-input.wav
+      source_group: dafx19_official_test
+      target_path: datasets/raw/r1_wright_bigmuff/test/target.wav
+      target_sha256: affe5cfa32db7763eaa53cd4ef073d23e8df42ff3eae9f892346e4ac6df802f2
+      target_source: third_party/Automated-GuitarAmpModelling/Data/test/muff-target.wav
+    train:
+      input_path: datasets/raw/r1_wright_bigmuff/train/input.wav
+      input_sha256: 8277f7c0f3c42625621c8c5ba7da1572280397795755bb6ccd602442238388d0
+      input_source: third_party/Automated-GuitarAmpModelling/Data/train/muff-input.wav
+      source_group: dafx19_official_train
+      target_path: datasets/raw/r1_wright_bigmuff/train/target.wav
+      target_sha256: 6d49f5cda56bc42ecf76d8a7be58c7cb8ad89e94a6eb7ca01528f0cdfc6df290
+      target_source: third_party/Automated-GuitarAmpModelling/Data/train/muff-target.wav
+    validation:
+      input_path: datasets/raw/r1_wright_bigmuff/validation/input.wav
+      input_sha256: 2749a3afca80725efd088c0f4c0b39a89c4fffafad994379548294d1d9e0d223
+      input_source: third_party/Automated-GuitarAmpModelling/Data/val/muff-input.wav
+      source_group: dafx19_official_validation
+      target_path: datasets/raw/r1_wright_bigmuff/validation/target.wav
+      target_sha256: cfbdaccf5b01de031c760ae094a2ec3145e60873230410baeec13ef5c583ea7c
+      target_source: third_party/Automated-GuitarAmpModelling/Data/val/muff-target.wav
+  tier: INTERNAL_DEV
+  transformation: none
+run_id: r1_competence_bigmuff_wright_lstm64_wright_seed0_v1
+seed: 0

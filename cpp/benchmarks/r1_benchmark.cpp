@@ -106,7 +106,8 @@ public:
     : width_(width),
       weight_ih_(4 * width),
       weight_hh_(4 * width * width),
-      bias_(4 * width),
+      bias_ih_(4 * width),
+      bias_hh_(4 * width),
       head_(width),
       hidden_(width, 0.0f),
       cell_(width, 0.0f),
@@ -116,10 +117,13 @@ public:
       weight_ih_[index] = deterministic_value(index, 11);
     for (std::size_t index = 0; index < weight_hh_.size(); ++index)
       weight_hh_[index] = deterministic_value(index, 23);
-    for (std::size_t index = 0; index < bias_.size(); ++index)
-      bias_[index] = deterministic_value(index, 37);
+    for (std::size_t index = 0; index < bias_ih_.size(); ++index)
+      bias_ih_[index] = deterministic_value(index, 37);
+    for (std::size_t index = 0; index < bias_hh_.size(); ++index)
+      bias_hh_[index] = deterministic_value(index, 43);
     for (std::size_t index = 0; index < head_.size(); ++index)
       head_[index] = deterministic_value(index, 53);
+    head_bias_ = deterministic_value(0, 67);
   }
 
   void reset() noexcept
@@ -134,7 +138,8 @@ public:
     {
       for (std::size_t gate = 0; gate < 4 * width_; ++gate)
       {
-        float value = bias_[gate] + weight_ih_[gate] * input[sample];
+        float value = bias_ih_[gate] + weight_ih_[gate] * input[sample]
+                      + bias_hh_[gate];
         const auto row = gate * width_;
         for (std::size_t unit = 0; unit < width_; ++unit)
           value += weight_hh_[row + unit] * hidden_[unit];
@@ -149,7 +154,7 @@ public:
         cell_[unit] = forget_gate * cell_[unit] + input_gate * candidate;
         hidden_[unit] = output_gate * std::tanh(cell_[unit]);
       }
-      float value = input[sample];
+      float value = input[sample] + head_bias_;
       for (std::size_t unit = 0; unit < width_; ++unit)
         value += head_[unit] * hidden_[unit];
       output[sample] = value;
@@ -186,8 +191,10 @@ private:
   std::size_t width_;
   std::vector<float> weight_ih_;
   std::vector<float> weight_hh_;
-  std::vector<float> bias_;
+  std::vector<float> bias_ih_;
+  std::vector<float> bias_hh_;
   std::vector<float> head_;
+  float head_bias_ = 0.0f;
   std::vector<float> hidden_;
   std::vector<float> cell_;
   std::vector<float> gates_;

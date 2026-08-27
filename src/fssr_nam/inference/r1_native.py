@@ -456,6 +456,9 @@ def validate_r1_native_payload(payload: Mapping[str, Any]) -> None:
             raise ValueError(
                 "spline knots must contain at least four increasing values"
             )
+        uniform = np.linspace(knots[0], knots[-1], len(knots), dtype=np.float32)
+        if not np.allclose(knots, uniform, atol=1.0e-6, rtol=1.0e-6):
+            raise ValueError("spline knots must use the registered uniform grid")
         if len(values) != len(slopes):
             raise ValueError("spline vectors differ in length")
         for scalar in ("drive", "offset"):
@@ -648,6 +651,9 @@ class _Spline:
         self.knots = np.asarray(payload["knots"], dtype=np.float32)
         self.values = np.asarray(payload["values"], dtype=np.float32)
         self.slopes = np.asarray(payload["slopes"], dtype=np.float32)
+        self.spacing = np.float32(
+            (self.knots[-1] - self.knots[0]) / (len(self.knots) - 1)
+        )
         self.drive = np.float32(payload["drive"])
         self.offset = np.float32(payload["offset"])
 
@@ -666,10 +672,11 @@ class _Spline:
             return np.float32(
                 self.values[-1] + self.slopes[-1] * (value - self.knots[-1])
             )
-        index = int(np.searchsorted(self.knots, value, side="right") - 1)
+        coordinate = np.float32((value - self.knots[0]) / self.spacing)
+        index = int(np.floor(coordinate))
         index = min(max(index, 0), len(self.knots) - 2)
-        spacing = np.float32(self.knots[index + 1] - self.knots[index])
-        local = np.float32((value - self.knots[index]) / spacing)
+        spacing = self.spacing
+        local = np.float32(coordinate - index)
         local2 = np.float32(local * local)
         local3 = np.float32(local2 * local)
         h00 = np.float32(2.0 * local3 - 3.0 * local2 + 1.0)

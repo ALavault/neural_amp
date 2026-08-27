@@ -8,7 +8,6 @@ from .r1_native import (
     validate_r1_native_payload,
     write_r1_native_payload,
 )
-from .r1_parity import verify_r1_cpp_parity
 
 __all__ = [
     "R1NativeReference",
@@ -19,3 +18,11 @@ __all__ = [
     "verify_r1_cpp_parity",
     "write_r1_native_payload",
 ]
+
+
+def __getattr__(name: str) -> object:
+    if name == "verify_r1_cpp_parity":
+        from .r1_parity import verify_r1_cpp_parity
+
+        return verify_r1_cpp_parity
+    raise AttributeError(name)

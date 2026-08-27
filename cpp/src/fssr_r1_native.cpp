@@ -153,6 +153,15 @@ public:
     for (std::size_t index = 1; index < knots_.size(); ++index)
       if (!(knots_[index - 1] < knots_[index]))
         throw std::runtime_error("spline knots must be strictly increasing");
+    spacing_ = (knots_.back() - knots_.front()) / static_cast<float>(knots_.size() - 1);
+    for (std::size_t index = 1; index + 1 < knots_.size(); ++index)
+    {
+      const float expected = knots_.front() + spacing_ * static_cast<float>(index);
+      const float tolerance = 32.0f * std::numeric_limits<float>::epsilon()
+                              * std::max(1.0f, std::abs(expected));
+      if (std::abs(knots_[index] - expected) > tolerance)
+        throw std::runtime_error("spline knots must use the registered uniform grid");
+    }
   }
 
   float process(
@@ -165,19 +174,18 @@ public:
       return values_.front() + slopes_.front() * (value - knots_.front());
     if (value > knots_.back())
       return values_.back() + slopes_.back() * (value - knots_.back());
-    const auto upper = std::upper_bound(knots_.begin(), knots_.end(), value);
-    const auto raw_index = static_cast<std::size_t>(std::distance(knots_.begin(), upper));
-    const auto index = std::min(std::max<std::size_t>(raw_index, 1) - 1, knots_.size() - 2);
-    const float spacing = knots_[index + 1] - knots_[index];
-    const float local = (value - knots_[index]) / spacing;
+    const float coordinate = (value - knots_.front()) / spacing_;
+    const auto raw_index = static_cast<std::size_t>(std::max(0.0f, std::floor(coordinate)));
+    const auto index = std::min(raw_index, knots_.size() - 2);
+    const float local = coordinate - static_cast<float>(index);
     const float local2 = local * local;
     const float local3 = local2 * local;
     const float h00 = 2.0f * local3 - 3.0f * local2 + 1.0f;
     const float h10 = local3 - 2.0f * local2 + local;
     const float h01 = -2.0f * local3 + 3.0f * local2;
     const float h11 = local3 - local2;
-    return h00 * values_[index] + h10 * spacing * slopes_[index]
-           + h01 * values_[index + 1] + h11 * spacing * slopes_[index + 1];
+    return h00 * values_[index] + h10 * spacing_ * slopes_[index]
+           + h01 * values_[index + 1] + h11 * spacing_ * slopes_[index + 1];
   }
 
 private:
@@ -186,6 +194,7 @@ private:
   std::vector<float> slopes_;
   float drive_;
   float offset_;
+  float spacing_ = 0.0f;
 };
 
 class SlowController
