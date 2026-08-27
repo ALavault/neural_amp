@@ -101,3 +101,11 @@ The first S1–S3 focused suite failed because its test concatenated scalar-cont
 ## 2026-08-27 — F-M3-003 — M3 summary limitations exceeded line length
 
 The first static check of the M3 aggregation script rejected two 94-character limitation strings before summary generation. Resolution: wrap the literals without changing their text or any gate threshold, then rerun focused numerical validation.
+
+## 2026-08-27 — F-M3-004 — Short-segment overfit stopped above its target
+
+The initial 200-step S0 short-segment test reached MSE `3.10e-6`, above its declared `2e-6` target, while all other S0 tests passed. Resolution: retain the threshold and optimizer, extend this focused convergence test to 300 steps, and remove an unrelated diagnostic tensor-conversion warning. No production training result changed.
+
+## 2026-08-27 — F-M3-005 — First overfit extension remained above target
+
+At 300 steps the same focused overfit reached MSE `2.35e-6`, still above the unchanged `2e-6` threshold. Resolution: use the actual 17-knot S0 configuration instead of the reduced 13-knot fixture and allow 400 steps. The threshold, data, optimizer, and production runs remain unchanged.

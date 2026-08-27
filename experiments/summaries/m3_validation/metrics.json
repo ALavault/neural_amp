@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "provenance": {
+    "commit": "38fdff8cb7c73ba42e59d42a002d18b469e61526",
+    "dirty": false
+  },
+  "runs": {
+    "s0_tanh": "m3_s0_tanh_seed0_v1",
+    "s3_tanh": "m3_s3_tanh_seed0_v1",
+    "s4_tanh": "m3_s4_tanh_seed0_v1",
+    "s0_slow": "m3_s0_slow_sag_seed0_v1",
+    "s1_slow": "m3_s1_slow_sag_seed0_v1",
+    "s3_slow": "m3_s3_slow_sag_seed0_v1",
+    "s0_short": "m3_s0_short_memory_seed0_v1",
+    "s2_short": "m3_s2_short_memory_seed0_v1"
+  },
+  "final_esr": {
+    "s0_tanh": 5.988027726274857e-05,
+    "s3_tanh": 4.4283868586942276e-05,
+    "s4_tanh": 6.709383338706327e-05,
+    "s0_slow": 4.974884566718909e-05,
+    "s1_slow": 4.079674183958614e-05,
+    "s3_slow": 4.001127512109499e-05,
+    "s0_short": 0.0005345285321539782,
+    "s2_short": 0.00036334686149517664
+  },
+  "s1_relative_improvement_over_s0_slow_sag": 0.17994596070612234,
+  "s2_relative_improvement_over_s0_short_memory": 0.3202479575206106,
+  "residual_energy_ratios": {
+    "s3_tanh": 4.964526306139305e-05,
+    "s4_tanh": 3.745682261069305e-05,
+    "s3_slow": 3.9540493162348866e-05,
+    "s2_short": 0.0010877589229494333
+  },
+  "maximum_reload_stream_reset_causal_error": {
+    "s0_tanh": 4.76837158203125e-07,
+    "s3_tanh": 5.960464477539063e-08,
+    "s4_tanh": 1.6391277313232422e-07,
+    "s0_slow": 2.9802322387695312e-08,
+    "s1_slow": 4.470348358154297e-07,
+    "s3_slow": 5.960464477539063e-08,
+    "s0_short": 2.086162567138672e-07,
+    "s2_short": 1.862645149230957e-07
+  },
+  "theoretical_cost": {
+    "S0": {
+      "parameters": 71,
+      "linear_macs_per_sample": 34
+    },
+    "S1": {
+      "parameters": 410,
+      "linear_macs_per_sample_approx": 38.5
+    },
+    "S2": {
+      "parameters": 905,
+      "linear_macs_per_sample_approx": 826
+    },
+    "S3": {
+      "parameters": 1244,
+      "linear_macs_per_sample_approx": 830.5
+    },
+    "S4": {
+      "parameters": 1244,
+      "linear_macs_per_sample_approx": 962.5,
+      "declared_latency_samples": 16
+    },
+    "A2_Full": {
+      "parameters": 12145,
+      "linear_macs_per_sample": 11777
+    }
+  },
+  "controlled_alias_9khz": {
+    "naive_known_reference_parasite_db": -19.55848985972743,
+    "s4_known_reference_parasite_db": -36.71267594770001,
+    "reduction_db": 17.154186087972583,
+    "s4_complex_fundamental_error": 1.6446437980341015e-07
+  },
+  "checks": {
+    "s3_learns_tanh": true,
+    "s3_learns_slow_sag": true,
+    "s1_improves_slow_sag": true,
+    "s2_improves_short_memory": true,
+    "residual_not_dominant": true,
+    "trained_reload_stream_reset_causal": true,
+    "s4_declares_expected_latency": true,
+    "s3_theoretical_cost_below_a2": true,
+    "s4_reduces_controlled_alias": true,
+    "s4_preserves_controlled_fundamental": true
+  },
+  "all_checks_passed": true,
+  "limitations": [
+    "All M3 optimization evidence uses one seed and synthetic targets.",
+    "MAC counts exclude activations, additions, memory traffic, and Python overhead.",
+    "S4's controlled alias result remains a synthetic diagnostic, not H3 validation."
+  ]
+}
