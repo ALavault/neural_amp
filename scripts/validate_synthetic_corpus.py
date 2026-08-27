@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import subprocess
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -15,24 +14,7 @@ from scipy.signal import freqz
 
 from fssr_nam.data.corpus import build_corpus_manifest
 from fssr_nam.dsp.multirate import DEFAULT_DECIMATION_CONFIG, design_decimation_filter
-
-
-def _git_state() -> dict[str, object]:
-    commit = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.strip()
-    dirty = bool(
-        subprocess.run(
-            ["git", "status", "--porcelain"],
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout
-    )
-    return {"commit": commit, "dirty": dirty}
+from fssr_nam.reporting.provenance import git_state
 
 
 def _sha256(path: Path) -> str:
@@ -65,7 +47,12 @@ def main() -> None:
             "file_sha256": external_config["file_sha256"],
         }
     )
-    manifest["git"] = _git_state()
+    manifest["git"] = git_state(
+        ignored_generated_paths=(
+            "experiments/summaries/m1_metric_validation",
+            "experiments/summaries/m1_synthetic",
+        )
+    )
     manifest["decimation"] = {
         "stages": [2, 2],
         "factor_per_stage": DEFAULT_DECIMATION_CONFIG.factor,

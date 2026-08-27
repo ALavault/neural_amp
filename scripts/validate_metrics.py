@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 import json
-import subprocess
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 from fssr_nam.metrics.validation import validate_metric_suite
+from fssr_nam.reporting.provenance import git_state
 
 DISPLAY_METRICS = (
     "esr",
@@ -21,27 +21,14 @@ DISPLAY_METRICS = (
 )
 
 
-def _git_state() -> dict[str, object]:
-    commit = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.strip()
-    dirty = bool(
-        subprocess.run(
-            ["git", "status", "--porcelain"],
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout
-    )
-    return {"commit": commit, "dirty": dirty}
-
-
 def main() -> None:
     validation = validate_metric_suite()
-    validation["git"] = _git_state()
+    validation["git"] = git_state(
+        ignored_generated_paths=(
+            "experiments/summaries/m1_metric_validation",
+            "experiments/summaries/m1_synthetic",
+        )
+    )
     if not validation["all_checks_passed"]:
         failed = [name for name, passed in validation["checks"].items() if not passed]
         raise RuntimeError(f"metric checks failed: {', '.join(failed)}")
