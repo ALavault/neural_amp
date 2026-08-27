@@ -53,16 +53,23 @@ class SlowStateController(nn.Module):
         count: int,
     ) -> tuple[Tensor, Tensor, Tensor, int]:
         outputs = []
-        for index in range(signal.shape[-1]):
+        position = 0
+        while position < signal.shape[-1]:
+            take = min(self.decimation - count, signal.shape[-1] - position)
             raw = self.projection(hidden)
-            outputs.append(self._bounded_modulation(raw))
-            accumulator = accumulator + self._features(signal[:, index])
-            count += 1
+            modulation = self._bounded_modulation(raw)
+            outputs.append(modulation[..., None].expand(-1, -1, take))
+            chunk = signal[:, position : position + take]
+            accumulator = accumulator + torch.stack(
+                (chunk.abs().sum(-1), chunk.square().sum(-1), chunk.sum(-1)), dim=-1
+            )
+            position += take
+            count += take
             if count == self.decimation:
                 hidden = self.gru(accumulator / self.decimation, hidden)
                 accumulator = torch.zeros_like(accumulator)
                 count = 0
-        return torch.stack(outputs, dim=-1), hidden, accumulator, count
+        return torch.cat(outputs, dim=-1), hidden, accumulator, count
 
     def forward(self, signal: Tensor) -> Tensor:
         batched, scalar = _batch(signal)
