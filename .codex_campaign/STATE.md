@@ -1,9 +1,9 @@
 # Campaign State
 
-- Updated: 2026-08-27T14:08:58+02:00
+- Updated: 2026-08-27T14:39:51+02:00
 - Maturity: M4 — principal smoke test
 - Status: in progress
-- Current task: execute the remaining 20 cells of the fixed M4 matrix, committing immutable evidence in bounded waves and stopping for autopsy only if a run exposes a protocol defect.
+- Current task: aggregate the complete 24-run M4 matrix, benchmark inference cost, and execute the ordered failure autopsy before any pivot or maturation work.
 - External results accessed: no
 - External retest authorized: false
 
@@ -29,6 +29,7 @@
 - Completed four immutable v1 physical preflights; all paths were finite and block-consistent, and the runs exposed a checkpoint-selection defect before any counted training.
 - Completed corrected v2 preflights for all four model paths; step-0 eligibility and block/reset behavior now pass.
 - Completed and audited the first four counted Fulltone seed-0 runs; A2 leads this single condition, while all model paths satisfy the operational run checks.
+- Completed all 24 counted M4 runs with no failed seed or missing metric. Preliminary medians favor A2 on both devices, so the M4 gate awaits cost audit and formal autopsy.
 
 ## M0 gate
 

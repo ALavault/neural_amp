@@ -1,0 +1,1 @@
+uv run python scripts/run_m4_smoke.py --model S3 --device fulltone_full_drive_2 --seed 1 --run-id m4_fulltone_s3_seed1_v1

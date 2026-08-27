@@ -1,0 +1,1 @@
+uv run python scripts/run_m4_smoke.py --model S3 --device electro_harmonix_big_muff --seed 1 --run-id m4_bigmuff_s3_seed1_v1

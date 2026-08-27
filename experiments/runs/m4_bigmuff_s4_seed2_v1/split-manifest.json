@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "dataset": "m4_internal",
+  "rule": "complete upstream files remain in one split; no window crosses a file",
+  "leakage_check": "passed_at_published_file_level",
+  "groups": {
+    "fulltone_full_drive_2": {
+      "train": [
+        "idmt_smt_guitar_dataset_2"
+      ],
+      "validation": [
+        "idmt_smt_guitar_dataset_4_career_sg"
+      ],
+      "test": [
+        "idmt_smt_guitar_dataset_4_ibanez_2820"
+      ]
+    },
+    "electro_harmonix_big_muff": {
+      "train": [
+        "dafx19_published_train_file"
+      ],
+      "validation": [
+        "dafx19_published_validation_file"
+      ],
+      "test": [
+        "dafx19_published_test_file"
+      ]
+    }
+  },
+  "path_overlap": [],
+  "known_limitation": "Big Muff performer/session identity is not published"
+}

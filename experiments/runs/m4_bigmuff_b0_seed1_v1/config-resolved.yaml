@@ -1,0 +1,53 @@
+campaign:
+  schema_version: 1
+  sample_rate: 48000
+  tier: INTERNAL_DEV
+  devices:
+  - fulltone_full_drive_2
+  - electro_harmonix_big_muff
+  models:
+  - B0
+  - B2
+  - S3
+  - S4
+  seeds:
+  - 0
+  - 1
+  - 2
+  context_samples: 6346
+  output_samples: 8192
+  batch_size: 2
+  optimizer_steps: 200
+  validation_interval_steps: 40
+  validation_samples: 240000
+  evaluation_block_samples: 8192
+  optimizer:
+    name: Adam
+    learning_rate: 0.004
+    weight_decay: 3.17e-07
+  gradient_clip_norm: 1.0
+  loss:
+    mse: 1.0
+    mrstft: 0.0005
+    spline_curvature: 1.0e-05
+    normalized_residual_energy: 0.001
+  deterministic_mode: warn_only
+  precision: float32
+  checkpoint_policy: lowest_validation_esr
+  preflight:
+    optimizer_steps: 2
+    validation_interval_steps: 1
+    validation_samples: 32768
+  notes:
+  - Every optimizer step sees the same two 8192-sample output regions.
+  - A shared 6346-sample causal context covers the official A2 receptive field.
+  - M4 is a bounded smoke test and cannot establish final hypotheses.
+model: B0
+device: electro_harmonix_big_muff
+seed: 1
+preflight: false
+execution:
+  optimizer_steps: 200
+  validation_interval_steps: 40
+  validation_samples: 240000
+fssr_model: null

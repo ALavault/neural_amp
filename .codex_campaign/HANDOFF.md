@@ -2,11 +2,11 @@
 
 ## Current position
 
-M0 through M3 passed. Corrected preflight passed, and four of 24 counted M4 runs are complete. Fulltone seed 0 currently favors A2, but this is not a gate decision. All four runs used the fixed budget and passed finite/block checks. External evaluation remains locked.
+M0 through M3 passed, and all 24 counted M4 runs completed without a missing metric. Preliminary median ESR favors A2 on both devices; neither S3 nor S4 meets the quality condition. Cost and the required ordered autopsy are not yet complete, so no pivot or gate decision is final. External evaluation remains locked.
 
 ## Resume action
 
-Execute Fulltone seeds 1–2 and Big Muff seeds 0–2 for B0, B2, S3, and S4 without changing configuration. Preserve failed runs and stop for diagnosis if a protocol-level defect appears.
+Generate the M4 aggregate, measure Python development inference cost against the pinned A2 Core reference, and perform the section-21 checks in order. Record a pivot decision only after those artifacts exist.
 
 ## Absolute blockers
 
