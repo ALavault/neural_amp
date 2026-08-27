@@ -1,0 +1,20 @@
+{
+    "submodels": [
+        {
+            "submodel_index": 0,
+            "submodel_name": "channels_3",
+            "best_metric": 0.9088783264160156,
+            "epoch": 7,
+            "step": 40,
+            "checkpoint_path": "/fastdata/lavaulta/neural_amp/experiments/runs/m2_a2_tanh_seed0_v3/packed_best_submodel_0.ckpt"
+        },
+        {
+            "submodel_index": 1,
+            "submodel_name": "channels_8",
+            "best_metric": 0.6837019324302673,
+            "epoch": 7,
+            "step": 40,
+            "checkpoint_path": "/fastdata/lavaulta/neural_amp/experiments/runs/m2_a2_tanh_seed0_v3/packed_best_submodel_1.ckpt"
+        }
+    ]
+}

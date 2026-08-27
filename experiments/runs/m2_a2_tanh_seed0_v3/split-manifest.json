@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "dataset": "m2_synthetic_tanh",
+  "rule": "complete_generated_source_file",
+  "leakage_check": "passed",
+  "groups": {
+    "train": [
+      "m2-generated-train"
+    ],
+    "validation": [
+      "m2-generated-validation"
+    ]
+  },
+  "path_overlap": []
+}

@@ -1,0 +1,30 @@
+{
+  "lite": {
+    "esr": 0.9155008524781147,
+    "nmse": 0.9155009900658111,
+    "mae": 0.33545651902692536,
+    "gain_error": -0.9049745794256556,
+    "dc_error": -0.0004433780136145624,
+    "correlation": 0.29248850661041315,
+    "mrstft": 3.2674731440397236,
+    "magnitude_error": 0.8358837044059346,
+    "log_spectral_distance_db": 14.381049628375214,
+    "phase_error_radians": 1.718286261498212,
+    "parameters": 1870,
+    "exported_weights": 1871
+  },
+  "full": {
+    "esr": 0.6894226876457155,
+    "nmse": 0.6894227912568471,
+    "mae": 0.26019522032703735,
+    "gain_error": -0.6088924152349038,
+    "dc_error": 0.020987925392142257,
+    "correlation": 0.5706728087334509,
+    "mrstft": 3.0357044114566616,
+    "magnitude_error": 0.4998902831997273,
+    "log_spectral_distance_db": 11.621983655693208,
+    "phase_error_radians": 1.1544855094922695,
+    "parameters": 12145,
+    "exported_weights": 12146
+  }
+}
