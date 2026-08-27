@@ -326,6 +326,12 @@ def main() -> None:
             initial_esr = esr(
                 initial_prediction, validation_target[:validation_samples]
             )
+            best_esr = initial_esr
+            best_step = 0
+            torch.save(
+                model.state_dict(),
+                run_dir / "checkpoints/model-state.pt",
+            )
             print(f"Starting {args.run_id}: initial_esr={initial_esr:.9g}")
             for step in range(1, steps + 1):
                 starts = rng.integers(

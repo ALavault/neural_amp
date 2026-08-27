@@ -14,7 +14,7 @@ DEVICE = "fulltone_full_drive_2"
 
 def main() -> None:
     for model in ("B0", "B2", "S3", "S4"):
-        run_id = f"m4_preflight_fulltone_{model.lower()}_seed0_v1"
+        run_id = f"m4_preflight_fulltone_{model.lower()}_seed0_v2"
         run_dir = ROOT / "experiments/runs" / run_id
         if run_dir.exists():
             status = json.loads((run_dir / "status.json").read_text())["status"]
