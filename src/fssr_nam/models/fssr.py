@@ -5,9 +5,10 @@ from __future__ import annotations
 import torch
 from torch import Tensor, nn
 
+from .oversampling import LocalOversampledSpline2x
 from .residual import FastResidualTCN, residual_energy_ratio
 from .slow import SlowStateController
-from .structured import S0Structured, _batch
+from .structured import CausalDelay, S0Structured, _batch
 
 
 class S1Slow(nn.Module):
@@ -133,3 +134,48 @@ class S3FastSlowResidual(nn.Module):
     def energy_ratio(self, signal: Tensor) -> Tensor:
         output, _, residual = self.forward_components(signal)
         return residual_energy_ratio(residual, output)
+
+
+class S4Antialiased(S3FastSlowResidual):
+    code = "S4"
+
+    def __init__(
+        self,
+        taps: int = 17,
+        num_knots: int = 17,
+        hidden_size: int = 8,
+        decimation: int = 64,
+        residual_channels: int = 8,
+        oversampling_filter_taps: int = 33,
+    ):
+        nn.Module.__init__(self)
+        shaper = LocalOversampledSpline2x(num_knots, oversampling_filter_taps)
+        self.core = S0Structured(taps, num_knots, shaper=shaper)
+        self.slow = SlowStateController(hidden_size, decimation)
+        self.residual = FastResidualTCN(channels=residual_channels)
+        self.latency_samples = shaper.latency_samples
+        self.input_delay = CausalDelay(self.latency_samples)
+
+    def reset_state(self) -> None:
+        super().reset_state()
+        self.input_delay.reset_state()
+
+    def _components(self, signal: Tensor, *, streaming: bool):
+        batched, scalar = _batch(signal)
+        modulation = self.slow.stream(batched) if streaming else self.slow(batched)
+        core = (
+            self.core.stream_modulated(batched, modulation)
+            if streaming
+            else self.core.forward_modulated(batched, modulation)
+        )
+        delayed = (
+            self.input_delay.stream(batched) if streaming else self.input_delay(batched)
+        )
+        features = torch.stack((delayed, core), dim=1)
+        residual = (
+            self.residual.stream(features) if streaming else self.residual(features)
+        )
+        output = core + residual
+        if scalar:
+            return output[0], core[0], residual[0]
+        return output, core, residual

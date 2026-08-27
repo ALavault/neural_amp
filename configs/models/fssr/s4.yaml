@@ -1,0 +1,18 @@
+schema_version: 1
+code: S4
+base: configs/models/fssr/s3.yaml
+local_antialiasing:
+  factor: 2
+  scope: spline_nonlinear_residual_only
+  upsampling: zero_insertion_then_fir
+  downsampling: fir_then_decimation
+  filter:
+    type: kaiser_windowed_sinc
+    taps_at_2x: 33
+    beta: 8.6
+    cutoff_cycles_per_high_rate_sample: 0.25
+  linear_path: causally_delayed_bypass
+  declared_latency_samples: 16
+  phase: linear
+latency_samples: 16
+causal: true

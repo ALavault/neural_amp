@@ -53,3 +53,7 @@ Implement S0 with one 17-tap causal FIR before and after a 17-knot cubic Hermite
 ## 2026-08-27 — D-M3-002 — Initial slow and residual branches
 
 Use a one-layer GRU with eight states updated after each completed 64-sample interval; zero-order-hold modulation is therefore strictly causal and independent of caller block boundaries. Use a four-layer 8-channel TCN with kernel 3 and dilations `[1,2,4,8]` for the fast residual. Its 31-sample receptive field is below 1 ms, its output layer starts at zero, and a sigmoid-controlled scale is capped at 0.5. Keep normalized residual-energy regularization mandatory in training configurations.
+
+## 2026-08-27 — D-M3-003 — S4 causal local x2 filter
+
+Oversample only the nonlinear residual `phi(x)-x` by two using 33-tap Kaiser-windowed sinc interpolation and decimation filters. Add it to an exactly delayed linear path, align slow gain and fast-residual inputs to the same declared 16-sample causal latency, and never compensate by looking ahead. On the controlled 9 kHz M1 case this implementation must reduce known-reference parasite energy by at least 3 dB while keeping complex fundamental error below `1e-5`.
