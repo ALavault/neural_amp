@@ -1,0 +1,1 @@
+uv run python scripts/run_m2_a2.py --seed 0 --run-id m2_a2_tanh_seed0_v1

@@ -3,6 +3,7 @@ model_config: third_party/neural-amp-modeler/nam/train/_resources/config_model_p
 dataset_config: configs/data/m2_synthetic_tanh.yaml
 seeds: [0, 1]
 precision: 32-true
+deterministic_mode: warn_only
 accelerator: gpu
 devices: 1
 max_epochs: 8
@@ -22,3 +23,4 @@ selection_metric: validation_esr
 notes:
   - Minimal official A2 reproduction on a deterministic synthetic tanh system.
   - This run validates the toolchain; it is not evidence about physical devices.
+  - Strict CUDA determinism is unavailable for MRSTFT reflection-pad backward.

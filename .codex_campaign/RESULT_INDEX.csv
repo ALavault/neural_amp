@@ -1,1 +1,2 @@
 run_id,phase,model,device,seed,status,primary_metric,path
+m2_a2_tanh_seed0_v1,M2,NAM_A2_packed,synthetic_tanh,0,failed,,experiments/runs/m2_a2_tanh_seed0_v1

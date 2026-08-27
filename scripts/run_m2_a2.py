@@ -78,7 +78,7 @@ def git_commit() -> str:
     ).stdout.strip()
 
 
-def seed_everything(seed: int) -> None:
+def seed_everything(seed: int, deterministic_mode: str) -> None:
     os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
     random.seed(seed)
     np.random.seed(seed)
@@ -87,7 +87,11 @@ def seed_everything(seed: int) -> None:
     pl.seed_everything(seed, workers=True, verbose=True)
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
-    torch.use_deterministic_algorithms(True)
+    if deterministic_mode not in {"strict", "warn_only", "off"}:
+        raise ValueError(f"unknown deterministic mode: {deterministic_mode}")
+    torch.use_deterministic_algorithms(
+        deterministic_mode != "off", warn_only=deterministic_mode == "warn_only"
+    )
 
 
 def environment() -> dict[str, object]:
@@ -105,6 +109,9 @@ def environment() -> dict[str, object]:
         "cudnn_benchmark": torch.backends.cudnn.benchmark,
         "cudnn_deterministic": torch.backends.cudnn.deterministic,
         "deterministic_algorithms": torch.are_deterministic_algorithms_enabled(),
+        "deterministic_warn_only": (
+            torch.is_deterministic_algorithms_warn_only_enabled()
+        ),
     }
 
 
@@ -209,7 +216,7 @@ def checkpoint_index(run_dir: Path) -> None:
 
 def append_result(run_id: str, seed: int, status: str, primary: str) -> None:
     with RESULT_INDEX.open("a", encoding="utf-8", newline="") as stream:
-        csv.writer(stream).writerow(
+        csv.writer(stream, lineterminator="\n").writerow(
             [
                 run_id,
                 "M2",
@@ -266,6 +273,7 @@ def main() -> None:
     )
     (run_dir / "command.txt").write_text(command + "\n", encoding="utf-8")
     (run_dir / "git-commit.txt").write_text(commit + "\n", encoding="utf-8")
+    seed_everything(args.seed, campaign["deterministic_mode"])
     (run_dir / "environment.json").write_text(
         json.dumps(environment(), indent=2) + "\n", encoding="utf-8"
     )
@@ -280,7 +288,6 @@ def main() -> None:
         json.dumps({"status": "running", "started_at": timestamp}, indent=2) + "\n",
         encoding="utf-8",
     )
-    seed_everything(args.seed)
     if torch.cuda.is_available():
         torch.cuda.reset_peak_memory_stats()
     started = time.perf_counter()
@@ -318,9 +325,24 @@ def main() -> None:
         raise
     finally:
         elapsed = time.perf_counter() - started
+        if not (run_dir / "metrics.json").exists():
+            (run_dir / "metrics.json").write_text(
+                json.dumps(
+                    {
+                        "status": "unavailable",
+                        "reason": failure_reason or "run did not reach evaluation",
+                    },
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+        if not (run_dir / "checkpoints/index.json").exists():
+            checkpoint_index(run_dir)
         timings = {
             "wall_seconds": elapsed,
-            "training_and_evaluation": True,
+            "scope": "training_and_evaluation",
+            "completed": status == "completed",
             "gpu_peak_memory_bytes": (
                 torch.cuda.max_memory_allocated() if torch.cuda.is_available() else None
             ),

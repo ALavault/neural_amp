@@ -1,0 +1,17 @@
+{
+    "common": {
+        "delay": 0,
+        "require_input_pre_silence": null
+    },
+    "train": {
+        "x_path": "/fastdata/lavaulta/neural_amp/datasets/raw/synthetic_m2/train_input.wav",
+        "y_path": "/fastdata/lavaulta/neural_amp/datasets/raw/synthetic_m2/train_output.wav",
+        "ny": 8192
+    },
+    "validation": {
+        "x_path": "/fastdata/lavaulta/neural_amp/datasets/raw/synthetic_m2/validation_input.wav",
+        "y_path": "/fastdata/lavaulta/neural_amp/datasets/raw/synthetic_m2/validation_output.wav",
+        "ny": null
+    },
+    "joint": []
+}

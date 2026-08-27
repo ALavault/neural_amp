@@ -61,3 +61,15 @@ The attempted `scripts/__init__.py` remedy did not change the Hatch editable pac
 ## 2026-08-27 — F-M2-005 — Extracted adapter test exceeded line length
 
 The first lint pass after moving the adapter found one 92-character fixture path in the test. Resolution: split the path construction across components and rerun the full focused validation; no lint rule or behavior changed.
+
+## 2026-08-27 — F-M2-006 — Strict CUDA determinism unsupported by official loss
+
+Run `m2_a2_tanh_seed0_v1` failed during its first backward pass because PyTorch 2.13 reports no deterministic CUDA implementation for `reflection_pad1d_backward`, reached through the official A2 MRSTFT loss. The failed run and partial export remain registered. Resolution: preregister `deterministic_mode: warn_only`, retain all explicit seeds and deterministic cuDNN settings, record this limitation in each environment, and relaunch as a new run identifier. Architecture, loss, data, and optimizer are unchanged.
+
+## 2026-08-27 — F-M2-007 — Failed-run environment snapshot preceded seed setup
+
+The immutable environment snapshot in failed run `m2_a2_tanh_seed0_v1` was written before strict deterministic algorithms were enabled, even though the subsequent runtime error proves strict mode was active during training. Resolution: preserve the run unchanged and move seed/determinism setup before environment capture for all later runs. The failed run has no reported scientific metric.
+
+## 2026-08-27 — F-M2-008 — Result index used CRLF
+
+The first run-index row used the CSV writer's default CRLF terminator, which failed `git diff --check` in this LF-normalized repository. Resolution: preserve the row values, normalize only its terminator, and configure subsequent writes with `lineterminator="\\n"`.

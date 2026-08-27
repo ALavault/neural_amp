@@ -38,7 +38,7 @@ def make_configs(
             "devices": int(campaign["devices"]),
             "max_epochs": int(campaign["max_epochs"]),
             "precision": campaign["precision"],
-            "deterministic": True,
+            "deterministic": campaign["deterministic_mode"] != "off",
             "num_sanity_val_steps": 0,
             "enable_progress_bar": False,
             "enable_model_summary": False,
