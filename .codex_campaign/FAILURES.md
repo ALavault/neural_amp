@@ -153,3 +153,11 @@ All four v1 physical preflights completed with finite outputs and block parity a
 ## 2026-08-27 — F-M4-011 — Matrix runner required configured formatting
 
 The resumable matrix runner passed lint, then its first format check requested a one-line run identifier expression. Resolution: apply the configured formatter and rerun static validation before starting the runner.
+
+## 2026-08-27 — F-M4-012 — First Python CPU benchmark lint pass
+
+Static analysis rejected a long benchmark signature and an unread campaign-config payload before any benchmark run was created. Resolution: wrap the signature and retain the payload through its SHA256 in the resolved benchmark configuration, then rerun static checks.
+
+## 2026-08-27 — F-M4-013 — CPU benchmark required configured formatting
+
+The corrected benchmark passed lint, then the formatter requested compact generator expressions in two block-64 lookups. Resolution: apply the configured formatter and rerun validation before creating the immutable benchmark run.
