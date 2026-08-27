@@ -29,7 +29,10 @@ The cuDNN diagnostic text mentions non-contiguous input, but the probe tensors
 were explicitly contiguous and the boundary is exactly the recurrent sequence
 length. Loss numerics, TBPTT, data alignment, published-weight conversion, and
 test sealing pass their focused checks; the observed trace occurs in validation
-inference. The sealed test was never opened.
+inference. The canonical counted trajectory never opened the sealed test. The
+earlier quarantined, unauthorized implementation attempt did decode its test
+pair prematurely, but it computed no test metric and is excluded from the
+declared diagnostic matrix.
 
 A prospective repair is straightforward—freeze a chunk such as 32,768 and run
 the exact CUDA validation path before reserving a trajectory—but applying it to
@@ -78,6 +81,13 @@ verdict because competence blocks them:
    exact 76-run ledger, seed matrix, all five families, and immutable run digests.
 5. Seven of the nine requested Make interfaces and the actual 76-run
    A2/LSTM/NablAFx/ablation/final executor were not completed before the stop.
+6. The native comparison was not yet build-equivalent: NAM/A2 uses `-Ofast`
+   with interprocedural optimization, while the R1 library uses `-O3`; this
+   could bias a ±5% or −25% CPU gate. The blind LSTM sweep also uses
+   deterministic synthetic weights and never froze a width for training.
+7. The byte audit covers 715 pre-R1 files within the frozen evidence roots and
+   the two append-only registries. It must not be generalized to every file
+   that existed in the repository before R1.
 
 These omissions must be resolved and preregistered for a future campaign; they
 must not be retrofitted into FSSR-R1 or described as validated R1 capabilities.
