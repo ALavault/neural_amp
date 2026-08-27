@@ -39,6 +39,7 @@ from fssr_nam.training.m4 import (
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "configs/training/m4_smoke.yaml"
+RECOVERY_CONFIG_PATH = ROOT / "configs/training/m4_recovery.yaml"
 MODEL_CONFIG_PATH = ROOT / "configs/training/m3_synthetic.yaml"
 MANIFEST_PATH = ROOT / "datasets/manifests/m4_internal.json"
 SPLIT_PATH = ROOT / "datasets/splits/m4_internal.json"
@@ -68,6 +69,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", required=True, type=int)
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--preflight", action="store_true")
+    parser.add_argument("--recovery-wide", action="store_true")
     return parser.parse_args()
 
 
@@ -216,6 +218,16 @@ def main() -> None:
     split_manifest = json.loads(split_bytes)
     if args.device not in config["devices"] or args.seed not in config["seeds"]:
         raise ValueError("device or seed is outside the preregistered M4 matrix")
+    recovery = None
+    if args.recovery_wide:
+        recovery = yaml.safe_load(RECOVERY_CONFIG_PATH.read_text(encoding="utf-8"))
+        if (
+            args.preflight
+            or args.model != recovery["model"]
+            or args.seed != recovery["seed"]
+            or args.device not in recovery["devices"]
+        ):
+            raise ValueError("run is outside the preregistered M4 recovery")
     run_dir = ROOT / "experiments/runs" / args.run_id
     run_dir.mkdir(parents=True, exist_ok=False)
     for directory in ("checkpoints", "predictions", "figures"):
@@ -232,12 +244,15 @@ def main() -> None:
     model_config = yaml.safe_load(MODEL_CONFIG_PATH.read_text(encoding="utf-8"))[
         "model"
     ]
+    if recovery is not None:
+        model_config["residual_channels"] = int(recovery["residual_channels"])
     resolved = {
         "campaign": config,
         "model": args.model,
         "device": args.device,
         "seed": args.seed,
         "preflight": args.preflight,
+        "recovery": recovery,
         "execution": {
             "optimizer_steps": steps,
             "validation_interval_steps": validation_interval,
@@ -254,6 +269,7 @@ def main() -> None:
         f"uv run python scripts/run_m4_smoke.py --model {args.model} "
         f"--device {args.device} --seed {args.seed} --run-id {args.run_id}"
         + (" --preflight" if args.preflight else "")
+        + (" --recovery-wide" if args.recovery_wide else "")
     )
     (run_dir / "config-resolved.yaml").write_bytes(resolved_bytes)
     (run_dir / "command.txt").write_text(command + "\n", encoding="utf-8")
@@ -303,7 +319,13 @@ def main() -> None:
     status = "failed"
     failure_reason = ""
     primary = ""
-    phase = "M4_PREFLIGHT" if args.preflight else "M4"
+    phase = (
+        "M4_PREFLIGHT"
+        if args.preflight
+        else "M4_RECOVERY"
+        if args.recovery_wide
+        else "M4"
+    )
     started = time.perf_counter()
     if torch.cuda.is_available():
         torch.cuda.reset_peak_memory_stats()

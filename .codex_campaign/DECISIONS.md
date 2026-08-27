@@ -89,3 +89,7 @@ Continue the remaining M4 matrix after the four Fulltone seed-0 runs each consum
 ## 2026-08-27 — D-M4-007 — Complete matrix enters autopsy
 
 Do not enter MATURATION after all 24 counted runs completed. Preliminary median test ESR favors A2 on both Fulltone (`0.0639` versus `0.2112`/`0.2158` for S3/S4) and Big Muff (`0.5969` versus `0.9670`/`0.9595`). The antialiased variant does not show a clear fidelity advantage over S3. Complete the required cost measurement and ordered autopsy before selecting a permitted pivot or declaring the campaign scientifically blocked.
+
+## 2026-08-27 — D-M4-008 — Equal-parameter recovery stop rule
+
+Run only S3 with 31 residual channels, seed 0, on the two M4 devices. Its 12,192 parameters are within 0.39% of A2 Full. Keep every other M4 setting fixed. Continue beyond this diagnostic only if it closes at least 50% of the seed-0 ESR gap between width-8 S3 and A2 on both devices; otherwise stop architecture expansion and select the negative-result/benchmark pivot.

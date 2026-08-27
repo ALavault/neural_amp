@@ -27,6 +27,18 @@ def test_m4_matrix_and_equal_sample_budget() -> None:
     assert {item["device"] for item in manifest["files"]} == set(config["devices"])
 
 
+def test_m4_recovery_matches_a2_parameter_budget() -> None:
+    recovery = yaml.safe_load((ROOT / "configs/training/m4_recovery.yaml").read_text())
+    model_config = yaml.safe_load(
+        (ROOT / "configs/training/m3_synthetic.yaml").read_text()
+    )["model"]
+    model_config["residual_channels"] = recovery["residual_channels"]
+    model = model_factory("S3", root=ROOT, model_config=model_config)
+    parameters = sum(parameter.numel() for parameter in model.parameters())
+    assert parameters == recovery["parameters"] == 12_192
+    assert abs(parameters - 12_145) / 12_145 < 0.005
+
+
 def test_declared_target_delay() -> None:
     target = np.arange(6, dtype=np.float32)
     assert np.array_equal(delay_target(target, 2), [0, 0, 0, 1, 2, 3])

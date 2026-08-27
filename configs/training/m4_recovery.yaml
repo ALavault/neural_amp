@@ -1,0 +1,26 @@
+schema_version: 1
+phase: M4_RECOVERY
+base_protocol: configs/training/m4_smoke.yaml
+model: S3
+residual_channels: 31
+parameters: 12192
+comparison_target_parameters: 12145
+seed: 0
+devices:
+  - fulltone_full_drive_2
+  - electro_harmonix_big_muff
+fixed_dimensions:
+  - data
+  - split
+  - loss
+  - context
+  - optimizer
+  - optimizer_steps
+  - checkpoint_policy
+stop_condition:
+  metric: test_esr
+  required_gap_closure_fraction: 0.5
+  required_on_both_devices: true
+notes:
+  - This is a discriminating recovery diagnostic, not a hyperparameter search.
+  - No S4 or additional seed is permitted unless this stop condition passes.

@@ -30,6 +30,9 @@ m4-benchmark:
 m4-summary:
 	uv run python scripts/summarize_m4.py
 
+m4-recovery:
+	uv run python scripts/run_m4_recovery.py
+
 smoke:
 	uv run python scripts/smoke_identity.py
 

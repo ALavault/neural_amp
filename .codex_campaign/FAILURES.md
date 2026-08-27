@@ -181,3 +181,7 @@ The corrected summary generator passed lint, then the formatter compacted one me
 ## 2026-08-27 — F-M4-018 — Fixed M4 smoke gate failed
 
 All 24 counted runs completed, but A2 Full has lower median test ESR on both devices. Fulltone medians are `0.0639` for A2 versus `0.2112`/`0.2158` for S3/S4; Big Muff medians are `0.5969` versus `0.9670`/`0.9595`. Neither non-inferiority nor physical antialiasing evidence is present. Resolution: keep M4 in recovery, preserve the negative results, complete the ordered autopsy, and authorize only the preregistered width-31 equal-parameter diagnostic before selecting a negative-result pivot.
+
+## 2026-08-27 — F-M4-019 — Recovery files required configured formatting
+
+The recovery implementation passed lint, after which formatting checks requested compact forms in the runner and parameter-budget test before tests executed. Resolution: apply the configured formatter and rerun focused validation before creating any recovery run.
