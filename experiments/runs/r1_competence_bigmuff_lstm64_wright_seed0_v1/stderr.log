@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "/fastdata/lavaulta/neural_amp/scripts/run_r1_competence.py", line 732, in _run_seed
+    metrics = _train_seed(spec, run_dir, config, data_config, manifest)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fastdata/lavaulta/neural_amp/scripts/run_r1_competence.py", line 529, in _train_seed
+    prediction = predict_streaming(
+                 ^^^^^^^^^^^^^^^^^^
+  File "/fastdata/lavaulta/neural_amp/src/fssr_nam/training/wright.py", line 111, in predict_streaming
+    output[start:stop] = model.stream(chunk).cpu().numpy()
+                         ^^^^^^^^^^^^^^^^^^^
+  File "/fastdata/lavaulta/neural_amp/src/fssr_nam/models/wright.py", line 110, in stream
+    output, (hidden, cell) = self._output(sequence, state)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fastdata/lavaulta/neural_amp/src/fssr_nam/models/wright.py", line 83, in _output
+    recurrent, next_state = self.lstm(sequence, state)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fastdata/lavaulta/neural_amp/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fastdata/lavaulta/neural_amp/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fastdata/lavaulta/neural_amp/.venv/lib/python3.12/site-packages/torch/nn/modules/rnn.py", line 1164, in forward
+    result = _VF.lstm(
+             ^^^^^^^^^
+RuntimeError: cuDNN error: CUDNN_STATUS_NOT_SUPPORTED. This error may appear if you passed in a non-contiguous input.

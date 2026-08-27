@@ -19,6 +19,7 @@
     ".codex_campaign/r1/FAILURES.md",
     "experiments/summaries/r1_competence_failure_audit.json",
     "experiments/runs/r1_competence_bigmuff_lstm64_wright_seed0_v1/status.json",
-    "reports/R1_FINAL_AUDIT.md"
+    "reports/R1_FINAL_AUDIT.md",
+    "reports/R1_VALIDATION_APPENDIX.md"
   ]
 }
