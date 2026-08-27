@@ -1,0 +1,56 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+stage: confirm
+tier: INTERNAL_DEV_and_INTERNAL_VALIDATION
+devices: [fulltone, bigmuff, blackstar, ua1176]
+families: [a2, lstm_cost_equivalent, nablafx_graybox, r1_ablation, r1_final]
+loss_mode: frozen_by_confirmatory_lock
+primary_seeds: [0, 1, 2]
+extension_seeds: [3, 4]
+extension_families: [a2, r1_final]
+expected_run_count: 76
+optimizer_steps: 5000
+checkpoint_steps: [200, 1000, 5000]
+phase_schedule: frozen_per_family_before_confirmation
+receptive_field: frozen_per_family_before_confirmation
+precision: float32
+checkpoint_policy: lowest_validation_esr_at_common_checkpoints
+equalization:
+  same_source_files: true
+  same_audio_samples_seen: true
+  same_optimizer_steps: true
+  same_precision: true
+  same_checkpoint_policy: true
+lstm_cost_blind_width_benchmark:
+  widths: [16, 32, 48, 64, 96]
+  selection_uses_audio_or_esr: false
+graybox_mapping:
+  fulltone: distortion
+  bigmuff: fuzz
+  blackstar: distortion
+  ua1176: compressor
+  nablafx_commit: 045db6e7d6087151c7e3a264844bd8c4eafc885c
+  configurations:
+    distortion: third_party/nablafx/cfg/model/gb/gb_dist/model_gb_dist-mlp-fir_peq.s+g.s+off.s+mlp+g.s+peq.s+fir.s+lp.s.yaml
+    fuzz: third_party/nablafx/cfg/model/gb/gb_fuzz/model_gb_fuzz-mlp-fir_peq.s+g.s+off.d+mlp+g.s+peq.s+fir.s+lp.s.yaml
+    compressor: third_party/nablafx/cfg/model/gb/gb_comp/model_gb_comp_peq.s+g.d+peq.s+g.s.yaml
+  data_policy: use_r1_source_disjoint_manifests_not_upstream_random_trainval_split
+statistics:
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260827
+  paired: true
+  hierarchical_units: [source, seed]
+  windows_as_independent_units: false
+promotion_gate:
+  H1:
+    median_esr_improvement_minimum: 0.05
+    confidence_interval_excludes_zero: true
+    devices_won_minimum: 3
+    mandatory_devices: [blackstar, ua1176]
+    cpp_cost_relative_a2: [0.95, 1.05]
+  H2:
+    esr_ratio_one_sided_upper_bound: 1.05
+    cpp_cpu_reduction_minimum: 0.25
+    cpp_block_size: 64
+    added_latency_samples_maximum: 0
+failure_verdict: NO-GO-R1

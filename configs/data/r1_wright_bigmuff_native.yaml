@@ -1,0 +1,43 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+name: r1_wright_bigmuff_native
+tier: INTERNAL_DEV
+sample_rate: 44100
+archive_path: datasets/raw/external/tone_twist_bigmuff/ElectroHarmonix-BigMuff.zip
+archive_sha256: 200bee0dc2887d331f6aef61df1f08d52a0067c938e8e435bb2493ad53c639fa
+source_repository: https://github.com/Alec-Wright/Automated-GuitarAmpModelling
+source_commit: e3146386b0fd0b562bc393231be3a5938cf9feac
+code_license: GPL-3.0-only
+dataset_source: https://zenodo.org/records/10891515
+dataset_license: CC-BY-NC-4.0
+normalization: none
+transformation: none
+reference_model:
+  path: third_party/Automated-GuitarAmpModelling/Results/muff-muff2/model_best.json
+  sha256: f57e12b19a8a5df8e827f9c8fde9026f05c943cef42540a86335c81df63b2946
+  result_directory: Results/muff-muff2
+splits:
+  train:
+    source_group: dafx19_official_train
+    input_source: third_party/Automated-GuitarAmpModelling/Data/train/muff-input.wav
+    target_source: third_party/Automated-GuitarAmpModelling/Data/train/muff-target.wav
+    input_path: datasets/raw/r1_wright_bigmuff/train/input.wav
+    target_path: datasets/raw/r1_wright_bigmuff/train/target.wav
+    input_sha256: 8277f7c0f3c42625621c8c5ba7da1572280397795755bb6ccd602442238388d0
+    target_sha256: 6d49f5cda56bc42ecf76d8a7be58c7cb8ad89e94a6eb7ca01528f0cdfc6df290
+  validation:
+    source_group: dafx19_official_validation
+    input_source: third_party/Automated-GuitarAmpModelling/Data/val/muff-input.wav
+    target_source: third_party/Automated-GuitarAmpModelling/Data/val/muff-target.wav
+    input_path: datasets/raw/r1_wright_bigmuff/validation/input.wav
+    target_path: datasets/raw/r1_wright_bigmuff/validation/target.wav
+    input_sha256: 2749a3afca80725efd088c0f4c0b39a89c4fffafad994379548294d1d9e0d223
+    target_sha256: cfbdaccf5b01de031c760ae094a2ec3145e60873230410baeec13ef5c583ea7c
+  test:
+    source_group: dafx19_official_test
+    input_source: third_party/Automated-GuitarAmpModelling/Data/test/muff-input.wav
+    target_source: third_party/Automated-GuitarAmpModelling/Data/test/muff-target.wav
+    input_path: datasets/raw/r1_wright_bigmuff/test/input.wav
+    target_path: datasets/raw/r1_wright_bigmuff/test/target.wav
+    input_sha256: c192e2464bc430b88fab9e9c230443db50a2276c443513eb31bd1677e2e57805
+    target_sha256: affe5cfa32db7763eaa53cd4ef073d23e8df42ff3eae9f892346e4ac6df802f2

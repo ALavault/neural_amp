@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "campaign": "R1",
+  "diagnostic_protocol_frozen": false,
+  "confirmatory_protocol_frozen": false,
+  "external_retest_authorized": false,
+  "external_results_accessed": false,
+  "internal_validation_outputs_locked": true,
+  "authorized_at": null,
+  "authorization_basis": null,
+  "updated_at": "2026-08-27T16:24:39+02:00"
+}

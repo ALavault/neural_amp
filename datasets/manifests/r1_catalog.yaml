@@ -1,0 +1,49 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+audit_date: 2026-08-27
+scope: prospective_overlay_without_modifying_m0_m6_catalog
+resources:
+  - name: ToneTwist AFx - UA 6176 1176LN Limiter
+    source: https://zenodo.org/records/10798151
+    doi: 10.5281/zenodo.10798151
+    version: "1.0"
+    license: CC-BY-NC-4.0
+    license_source: Zenodo record metadata
+    download_date: 2026-08-27
+    download_method: curl Zenodo API file content
+    local_archive: datasets/raw/external/tone_twist_ua1176/UA-6176VintageChannelStrip-1176LN-Limiter.zip
+    size_bytes: 273529279
+    published_checksum: md5:94b6ab8efad3afe2237b0a089ea137af
+    local_sha256: f51761cb3af34dd5856c88218ad972d6248eeb3066f3670832994b3a3cd688e2
+    archive_integrity: passed
+    sample_rate: 44100
+    bit_depth: PCM16
+    channels: 1
+    paired_input_output: true
+    setting_requested: A100_R100_I040_O070_R100
+    setting_directory_in_archive: A100_R100_I040_O070_RAll
+    r1_tier: INTERNAL_VALIDATION
+    allowed_usage: noncommercial research with attribution
+    known_limitations:
+      - Archive headers contradict the old pre-download 48 kHz float metadata.
+      - No independent delay correction is applied to the published pairs.
+  - name: ToneTwist AFx - Blackstar HT1 Overdrive
+    source: https://zenodo.org/records/10794425
+    version: "1.0"
+    license: CC-BY-NC-4.0
+    r1_tier: INTERNAL_VALIDATION
+    setting: G050_V100
+    note: R1 withholds this previously inventoried resource from diagnostics.
+  - name: ToneTwist AFx - Fulltone Full Drive 2
+    source: https://zenodo.org/records/10794615
+    version: "1.0"
+    license: CC-BY-NC-4.0
+    r1_tier: INTERNAL_DEV
+    setting: V100_T050_O050_B000
+  - name: ToneTwist AFx - Electro-Harmonix Big Muff
+    source: https://zenodo.org/records/10891515
+    version: "1.0"
+    license: CC-BY-NC-4.0
+    r1_tier: INTERNAL_DEV
+    setting: S050_V100
+external_report_only_locked: true

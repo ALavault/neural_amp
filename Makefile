@@ -1,4 +1,4 @@
-.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit m2-data m2-inspect m2-core-test m2-cpp-build m3-audit
+.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit m2-data m2-inspect m2-core-test m2-cpp-build m3-audit r1-data r1-preflight r1-competence
 
 bootstrap:
 	uv python install 3.12
@@ -72,3 +72,17 @@ m2-cpp-build:
 
 m3-audit:
 	uv run python scripts/summarize_m3.py
+
+r1-data:
+	uv run python scripts/prepare_r1_data.py
+	uv run python scripts/prepare_r1_data.py --audit-only
+	uv run python scripts/prepare_r1_wright_data.py
+
+r1-preflight: r1-data
+	uv run pytest tests/unit/test_wright_compatibility.py tests/unit/test_wright_training.py -q
+	uv run python scripts/validate_r1_wright.py
+	uv run python scripts/run_r1_competence.py --preflight
+	uv run python scripts/run_r1_preflight.py
+
+r1-competence:
+	uv run python scripts/run_r1_competence_gate.py

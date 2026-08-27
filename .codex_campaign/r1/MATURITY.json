@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "campaign_version": "FSSR-R1-v1",
+  "historical_verdict": "NO-GO",
+  "status": "setup",
+  "current_stage": "competence",
+  "gates": {
+    "competence": "not_started",
+    "factorial": "locked",
+    "horizon": "locked",
+    "cascade": "locked",
+    "confirmatory_lock": "locked",
+    "confirmation": "locked",
+    "audit": "locked"
+  },
+  "diagnostic_trajectories_used": 0,
+  "diagnostic_trajectories_maximum": 19,
+  "confirmatory_runs_used": 0,
+  "confirmatory_runs_maximum": 76,
+  "external_report_only_locked": true
+}

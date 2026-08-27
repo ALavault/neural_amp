@@ -1,0 +1,14 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+model: r1_cascade_rf2047
+core: H0_to_spline1_to_H1_to_spline2_to_H2
+residual:
+  convolution: causal_depthwise_separable
+  channels: 8
+  kernel_size: 3
+  layers: 10
+  dilations: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+  receptive_field: 2047
+slow_controller: existing_s3
+latency_samples: 0
+role: conditional_cascade_candidate

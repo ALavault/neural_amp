@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "source_commit": "e3146386b0fd0b562bc393231be3a5938cf9feac",
+  "reference_model_sha256": "f57e12b19a8a5df8e827f9c8fde9026f05c943cef42540a86335c81df63b2946",
+  "sample_rate": 44100,
+  "samples": 2646001,
+  "device": "cuda",
+  "reference_wright_loss": 0.13214156031608582,
+  "reference_test_esr": 0.07063715904951096,
+  "time_metrics": {
+    "esr": 0.07091750836363137,
+    "nmse": 0.07091750833648122,
+    "mae": 0.0048596669511852455,
+    "gain_error": -0.029656056967303446,
+    "dc_error": 0.0013761305848100768,
+    "correlation": 0.9651204708600014
+  },
+  "block_parity_prefix_samples": 262144,
+  "block_parity_max_abs": 1.4901161193847656e-07,
+  "finite_prediction": true
+}

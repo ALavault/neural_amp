@@ -1,0 +1,137 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+target_sample_rate: 48000
+output_directory: datasets/raw/internal_r1
+equal_total_seconds:
+  train: 120
+  validation: 30
+  test: 30
+archives:
+  dry_markers:
+    path: datasets/raw/external/tone_twist_dry_markers/DRY-with-markers.zip
+    sha256: e23935658160c7693544c7daf125366c8f141cf72728e5b5780709ec96dc29d3
+  fulltone:
+    path: datasets/raw/external/tone_twist_fulltone/Fulltone-FullDrive2.zip
+    sha256: 06c09fbca4ecaa4fd36b577c64afa7e385f2715ff99822d87910afdfcb8dfbac
+  bigmuff:
+    path: datasets/raw/external/tone_twist_bigmuff/ElectroHarmonix-BigMuff.zip
+    sha256: 200bee0dc2887d331f6aef61df1f08d52a0067c938e8e435bb2493ad53c639fa
+  blackstar:
+    path: datasets/raw/external/tone_twist_blackstar/Blackstar-HT1-ChOverdrive.zip
+    sha256: 78c35a60cb0309aa6c244f2763ff347a82228bbed090eebbdbd3d82bf9ffefdd
+  ua1176:
+    path: datasets/raw/external/tone_twist_ua1176/UA-6176VintageChannelStrip-1176LN-Limiter.zip
+    size_bytes: 273529279
+    published_md5: 94b6ab8efad3afe2237b0a089ea137af
+    sha256: f51761cb3af34dd5856c88218ad972d6248eeb3066f3670832994b3a3cd688e2
+devices:
+  fulltone:
+    r1_tier: INTERNAL_DEV
+    behavior: moderate_saturation
+    setting: V100_T050_O050_B000
+    source_rate: 48000
+    trim_seconds: 2
+    splits:
+      train:
+        - source_id: idmt-gtr2
+          maximum_seconds: 120
+          input_archive: dry_markers
+          input_member: DRY-with-markers/trainval/idmt-gtr2.input.wav
+          target_archive: fulltone
+          target_member: Fulltone-FullDrive2/trainval/V100_T050_O050_B000/V100_T050_O050_B000.idmt-gtr2.target.wav
+      validation:
+        - source_id: idmt-gtr4-sg
+          maximum_seconds: 30
+          input_archive: dry_markers
+          input_member: DRY-with-markers/trainval/idmt-gtr4-sg.input.wav
+          target_archive: fulltone
+          target_member: Fulltone-FullDrive2/trainval/V100_T050_O050_B000/V100_T050_O050_B000.idmt-gtr4-sg.target.wav
+      test:
+        - source_id: idmt-gtr4-ib
+          maximum_seconds: 30
+          input_archive: dry_markers
+          input_member: DRY-with-markers/test/idmt-gtr4-ib.input.wav
+          target_archive: fulltone
+          target_member: Fulltone-FullDrive2/test/V100_T050_O050_B000/V100_T050_O050_B000.idmt-gtr4-ib.target.wav
+  bigmuff:
+    r1_tier: INTERNAL_DEV
+    behavior: hard_clipping_fuzz
+    setting: S050_V100
+    source_rate: 44100
+    trim_seconds: 1
+    splits:
+      train:
+        - source_id: published-train
+          maximum_seconds: 120
+          input_archive: bigmuff
+          input_member: DRY/trainval/train.input.wav
+          target_archive: bigmuff
+          target_member: ElectroHarmonix-BigMuff/trainval/S050_V100/S050_V100.train.target.wav
+      validation:
+        - source_id: published-val
+          maximum_seconds: 30
+          input_archive: bigmuff
+          input_member: DRY/trainval/val.input.wav
+          target_archive: bigmuff
+          target_member: ElectroHarmonix-BigMuff/trainval/S050_V100/S050_V100.val.target.wav
+      test:
+        - source_id: published-test
+          maximum_seconds: 30
+          input_archive: bigmuff
+          input_member: DRY/test/test.input.wav
+          target_archive: bigmuff
+          target_member: ElectroHarmonix-BigMuff/test/S050_V100/S050_V100.test.target.wav
+  blackstar:
+    r1_tier: INTERNAL_VALIDATION
+    behavior: high_gain_distortion
+    setting: G050_V100
+    source_rate: 44100
+    trim_seconds: 1
+    splits:
+      train:
+        - source_id: published-train
+          maximum_seconds: 120
+          input_archive: blackstar
+          input_member: DRY/trainval/train.input.wav
+          target_archive: blackstar
+          target_member: Blackstar-HT1-ChOverdrive/trainval/G050_V100/G050_V100.train.target.wav
+      validation:
+        - source_id: published-val
+          maximum_seconds: 30
+          input_archive: blackstar
+          input_member: DRY/trainval/val.input.wav
+          target_archive: blackstar
+          target_member: Blackstar-HT1-ChOverdrive/trainval/G050_V100/G050_V100.val.target.wav
+      test:
+        - source_id: published-test
+          maximum_seconds: 30
+          input_archive: blackstar
+          input_member: DRY/test/test.input.wav
+          target_archive: blackstar
+          target_member: Blackstar-HT1-ChOverdrive/test/G050_V100/G050_V100.test.target.wav
+  ua1176:
+    r1_tier: INTERNAL_VALIDATION
+    behavior: slow_dynamic_compression_with_distortion
+    setting: A100_R100_I040_O070_R100
+    archive_setting_directory: A100_R100_I040_O070_RAll
+    source_rate: 44100
+    trim_seconds: 1
+    splits:
+      train:
+        - {source_id: bass1, maximum_seconds: 24, input_archive: ua1176, input_member: DRY/trainval/idmt-afx-bass1.input.wav, target_archive: ua1176, target_member: 1176LN-Limiter/trainval/A100_R100_I040_O070_RAll/A100_R100_I040_O070_R100.idmt-afx-bass1.target.wav}
+        - {source_id: bass3, maximum_seconds: 24, input_archive: ua1176, input_member: DRY/trainval/idmt-afx-bass3.input.wav, target_archive: ua1176, target_member: 1176LN-Limiter/trainval/A100_R100_I040_O070_RAll/A100_R100_I040_O070_R100.idmt-afx-bass3.target.wav}
+        - {source_id: bass4, maximum_seconds: 24, input_archive: ua1176, input_member: DRY/trainval/idmt-afx-bass4.input.wav, target_archive: ua1176, target_member: 1176LN-Limiter/trainval/A100_R100_I040_O070_RAll/A100_R100_I040_O070_R100.idmt-afx-bass4.target.wav}
+        - {source_id: gtr6, maximum_seconds: 24, input_archive: ua1176, input_member: DRY/trainval/idmt-afx-gtr6.input.wav, target_archive: ua1176, target_member: 1176LN-Limiter/trainval/A100_R100_I040_O070_RAll/A100_R100_I040_O070_R100.idmt-afx-gtr6.target.wav}
+        - {source_id: gtr8, maximum_seconds: 24, input_archive: ua1176, input_member: DRY/trainval/idmt-afx-gtr8.input.wav, target_archive: ua1176, target_member: 1176LN-Limiter/trainval/A100_R100_I040_O070_RAll/A100_R100_I040_O070_R100.idmt-afx-gtr8.target.wav}
+      validation:
+        - {source_id: bass5, maximum_seconds: 15, input_archive: ua1176, input_member: DRY/trainval/idmt-afx-bass5.input.wav, target_archive: ua1176, target_member: 1176LN-Limiter/trainval/A100_R100_I040_O070_RAll/A100_R100_I040_O070_R100.idmt-afx-bass5.target.wav}
+        - {source_id: gtr9, maximum_seconds: 15, input_archive: ua1176, input_member: DRY/trainval/idmt-afx-gtr9.input.wav, target_archive: ua1176, target_member: 1176LN-Limiter/trainval/A100_R100_I040_O070_RAll/A100_R100_I040_O070_R100.idmt-afx-gtr9.target.wav}
+      test:
+        - {source_id: bass2, maximum_seconds: 15, input_archive: ua1176, input_member: DRY/test/idmt-afx-bass2.input.wav, target_archive: ua1176, target_member: 1176LN-Limiter/test/A100_R100_I040_O070_RAll/A100_R100_I040_O070_R100.idmt-afx-bass2.target.wav}
+        - {source_id: gtr7, maximum_seconds: 15, input_archive: ua1176, input_member: DRY/test/idmt-afx-gtr7.input.wav, target_archive: ua1176, target_member: 1176LN-Limiter/test/A100_R100_I040_O070_RAll/A100_R100_I040_O070_R100.idmt-afx-gtr7.target.wav}
+excluded_from_primary_confirmation:
+  - device: marshall_jvm410h
+    reason: no_fixed_source_disjoint_splits_suitable_for_one_model_per_device
+external_report_only:
+  locked: true
+  resources: []

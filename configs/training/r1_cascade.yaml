@@ -1,0 +1,38 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+stage: cascade
+tier: SYNTHETIC_then_INTERNAL_DEV
+synthetic_system: two_clippers_with_interstage_filter
+synthetic_models: [mono, cascade]
+physical_devices: [bigmuff, fulltone]
+physical_models: [cascade]
+loss_mode: selected_by_factorial_gate
+seeds: [0]
+optimizer_steps: 5000
+checkpoint_steps: [200, 1000, 5000]
+phase_schedule:
+  - name: filters_and_gains
+    start_step: 1
+    end_step: 500
+    trainable: [filters, gains]
+  - name: core_and_splines
+    start_step: 501
+    end_step: 1500
+    trainable: [core]
+  - name: residual_on_frozen_core_error
+    start_step: 1501
+    end_step: 3500
+    trainable: [residual]
+  - name: joint_fine_tuning
+    start_step: 3501
+    end_step: 5000
+    trainable: [all]
+receptive_field: 2047
+cascade_topology: H0_to_spline1_to_H1_to_spline2_to_H2
+residual_control: reuse_promoted_rf2047
+promotion_gate:
+  synthetic_esr_reduction_minimum: 0.50
+  bigmuff_esr_improvement_minimum: 0.30
+  bigmuff_absolute_gain_error_ratio_maximum: 0.50
+  fulltone_esr_regression_maximum: 0.05
+failure_action: reject_cascade_only_and_retain_rf2047

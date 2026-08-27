@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "device": "cuda",
+  "loss": 6.25594155409966,
+  "optimizer_updates": 44,
+  "finite_prediction": true,
+  "samples": 32768
+}

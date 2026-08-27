@@ -1,0 +1,49 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+stage: horizon
+tier: INTERNAL_DEV
+devices: [fulltone, bigmuff]
+models: [rf31, rf2047]
+loss_mode: selected_by_factorial_gate
+seeds: [0]
+optimizer_steps: 5000
+checkpoint_steps: [200, 1000, 5000]
+phase_schedule:
+  - name: filters_and_gains
+    start_step: 1
+    end_step: 500
+    trainable: [filters, gains]
+  - name: core_and_spline
+    start_step: 501
+    end_step: 1500
+    trainable: [core]
+  - name: residual_on_frozen_core_error
+    start_step: 1501
+    end_step: 3500
+    trainable: [residual]
+  - name: joint_fine_tuning
+    start_step: 3501
+    end_step: 5000
+    trainable: [all]
+receptive_field:
+  rf31: 31
+  rf2047: 2047
+rf2047:
+  layers: 10
+  kernel_size: 3
+  dilations: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+  channels: 8
+  convolution: causal_depthwise_separable
+residual_penalty:
+  schedule: linear
+  start: 0.01
+  end: 0.001
+  start_step: 1
+  end_step: 5000
+checkpoint_policy: lowest_validation_esr
+promotion_gate:
+  fulltone_gap_closure_minimum: 0.50
+  bigmuff_gap_closure_minimum: 0.25
+  finite_gradients_required: true
+  residual_must_not_dominate: true
+  theoretical_cost_at_most_model: a2

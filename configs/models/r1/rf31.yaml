@@ -1,0 +1,13 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+model: r1_mono_rf31
+core: pre_fir_to_single_spline_to_post_fir
+residual:
+  convolution: causal_full
+  channels: 8
+  kernel_size: 3
+  dilations: [1, 2, 4, 8]
+  receptive_field: 31
+slow_controller: existing_s3
+latency_samples: 0
+role: direct_s3_predecessor_control

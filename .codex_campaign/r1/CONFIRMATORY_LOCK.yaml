@@ -1,0 +1,10 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+status: locked_pending_diagnostic_promotion
+reason: no_candidate_has_passed_h1_or_h2_internal_dev_prelock
+candidate: null
+ablation: null
+hypothesis: null
+protocol_sha256: null
+confirmation_runs_authorized: false
+external_report_only_locked: true

@@ -1,0 +1,50 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+stage: factorial
+tier: INTERNAL_DEV
+devices: [fulltone, bigmuff]
+models: [a2, s3]
+loss_modes: [m4, wright]
+loss_mode: factorial_condition
+seeds: [0]
+optimizer_steps: 5000
+checkpoint_steps: [200, 1000, 5000]
+phase_schedule:
+  - name: joint
+    start_step: 1
+    end_step: 5000
+    trainable: [all]
+receptive_field:
+  a2: 6347
+  s3: 31
+sample_rate: 48000
+context_samples: 6346
+output_samples: 8192
+batch_size: 2
+validation_samples: 240000
+evaluation_block_samples: 8192
+optimizer:
+  name: Adam
+  learning_rate: 0.004
+  weight_decay: 3.17e-7
+gradient_clip_norm: 1.0
+losses:
+  m4:
+    mse: 1.0
+    mrstft: 0.0005
+  wright:
+    preemphasis: [-0.85, 1.0]
+    esr_preemphasized_weight: 0.75
+    dc_weight: 0.25
+    epsilon: 0.00001
+regularization:
+  spline_curvature: 1.0e-5
+  normalized_residual_energy: 1.0e-3
+checkpoint_policy: lowest_validation_esr
+promotion_gate:
+  select_loss_by: lowest_median_s3_validation_esr
+  tie_relative_tolerance: 0.01
+  tie_winner: wright
+  bigmuff_gain_error_greater_than: -0.5
+  bigmuff_s3_esr_improvement_over_m4_minimum: 0.25
+  fulltone_s3_esr_regression_maximum: 0.05

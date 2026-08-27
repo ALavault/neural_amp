@@ -1,0 +1,25 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+status: draft_until_r1_preflight
+historical_baseline_commit: b38d16f
+maximum_trajectories: 19
+stage_caps:
+  competence: 3
+  factorial: 8
+  horizon: 4
+  cascade: 4
+protocol: configs/r1/protocol.yaml
+stage_configs:
+  - configs/training/r1_competence.yaml
+  - configs/training/r1_factorial.yaml
+  - configs/training/r1_horizon.yaml
+  - configs/training/r1_cascade.yaml
+data_config: configs/data/r1_physical.yaml
+model_configs:
+  - configs/models/r1/wright_lstm64.yaml
+  - configs/models/r1/rf31.yaml
+  - configs/models/r1/rf2047.yaml
+  - configs/models/r1/cascade_rf2047.yaml
+run_id_pattern: r1_<stage>_<device>_<model>_<loss>_seed<n>_v1
+external_report_only_locked: true
+forbidden_families: [tfilm, adaa, local_oversampling_x4, new_slow_controller]

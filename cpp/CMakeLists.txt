@@ -29,3 +29,31 @@ endfunction()
 
 add_nam_tool(nam_block_runner tests/nam_block_runner.cpp)
 add_nam_tool(nam_benchmark benchmarks/nam_benchmark.cpp)
+
+add_library(fssr_r1_native STATIC src/fssr_r1_native.cpp)
+target_include_directories(fssr_r1_native
+  PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+  PRIVATE "${NAM_CORE_ROOT}/Dependencies/nlohmann"
+)
+set_target_properties(fssr_r1_native PROPERTIES
+  CXX_STANDARD 17
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+)
+target_compile_options(fssr_r1_native PRIVATE "$<$<CONFIG:Release>:-O3>")
+
+add_executable(r1_block_runner tests/r1_block_runner.cpp)
+target_link_libraries(r1_block_runner PRIVATE fssr_r1_native)
+set_target_properties(r1_block_runner PROPERTIES
+  CXX_STANDARD 17
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+)
+
+add_executable(r1_benchmark benchmarks/r1_benchmark.cpp)
+target_link_libraries(r1_benchmark PRIVATE fssr_r1_native)
+set_target_properties(r1_benchmark PROPERTIES
+  CXX_STANDARD 17
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+)

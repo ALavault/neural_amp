@@ -1,0 +1,61 @@
+{
+  "campaign_version": "FSSR-R1-v1",
+  "dataset": "r1_physical",
+  "groups": {
+    "bigmuff": {
+      "test": [
+        "published-test"
+      ],
+      "train": [
+        "published-train"
+      ],
+      "validation": [
+        "published-val"
+      ]
+    },
+    "blackstar": {
+      "test": [
+        "published-test"
+      ],
+      "train": [
+        "published-train"
+      ],
+      "validation": [
+        "published-val"
+      ]
+    },
+    "fulltone": {
+      "test": [
+        "idmt-gtr4-ib"
+      ],
+      "train": [
+        "idmt-gtr2"
+      ],
+      "validation": [
+        "idmt-gtr4-sg"
+      ]
+    },
+    "ua1176": {
+      "test": [
+        "bass2",
+        "gtr7"
+      ],
+      "train": [
+        "bass1",
+        "bass3",
+        "bass4",
+        "gtr6",
+        "gtr8"
+      ],
+      "validation": [
+        "bass5",
+        "gtr9"
+      ]
+    }
+  },
+  "leakage_check": "passed",
+  "path_overlap": [],
+  "rule": "each source_id belongs to exactly one split and no window crosses a source",
+  "schema_version": 1,
+  "sealed_test_policy": "test audio unavailable to training and checkpoint selection"
+}

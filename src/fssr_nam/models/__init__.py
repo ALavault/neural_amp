@@ -6,6 +6,7 @@ from .residual import FastResidualTCN
 from .slow import SlowStateController
 from .spline import SmoothHermiteSpline
 from .structured import CausalFIR, S0Structured
+from .wright import WrightLSTM
 
 __all__ = [
     "CausalFIR",
@@ -18,4 +19,5 @@ __all__ = [
     "S4Antialiased",
     "SlowStateController",
     "SmoothHermiteSpline",
+    "WrightLSTM",
 ]

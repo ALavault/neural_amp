@@ -1,0 +1,51 @@
+schema_version: 1
+campaign_version: FSSR-R1-v1
+lineage: prospective_after_m0_m6_no_go
+historical_verdict: NO-GO
+possible_verdicts: [GO-A, GO-B, NO-GO-R1]
+external_report_only_locked: true
+diagnostic:
+  maximum_trajectories: 19
+  stages:
+    competence: 3
+    factorial: 8
+    horizon: 4
+    cascade: 4
+  candidate_rule: cascade_if_promoted_else_rf2047
+  confirmatory_ablation_rule: direct_predecessor
+  forbidden_families: [tfilm, adaa, local_oversampling_x4, new_slow_controller]
+confirmation:
+  maximum_runs: 76
+  devices: [fulltone, bigmuff, blackstar, ua1176]
+  families: [a2, lstm_cost_equivalent, nablafx_graybox, r1_ablation, r1_final]
+  primary_seeds: [0, 1, 2]
+  extension_seeds: [3, 4]
+  extension_families: [a2, r1_final]
+  optimizer_steps: 5000
+  precision: float32
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260827
+  bootstrap_units: [source, seed]
+  windows_are_independent_units: false
+  hypotheses:
+    H1:
+      median_esr_improvement_minimum: 0.05
+      confidence_level: 0.95
+      devices_won_minimum: 3
+      mandatory_devices: [blackstar, ua1176]
+      cpp_cost_relative_a2: [0.95, 1.05]
+    H2:
+      esr_ratio_upper_bound: 1.05
+      confidence_level_one_sided: 0.95
+      cpp_cpu_reduction_minimum: 0.25
+      block_size: 64
+      added_latency_samples_maximum: 0
+references:
+  wright_repository:
+    url: https://github.com/Alec-Wright/Automated-GuitarAmpModelling
+    commit: e3146386b0fd0b562bc393231be3a5938cf9feac
+    core_audio_ml_commit: bad9469f94a2fa63a50d70ff75f5eff2208ba03f
+  nablafx_repository:
+    url: https://github.com/mcomunita/nablafx
+    commit: 045db6e7d6087151c7e3a264844bd8c4eafc885c
+  steering_report: reports/SCIENTIFIC_STEERING.md
