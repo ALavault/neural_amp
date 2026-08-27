@@ -1,0 +1,19 @@
+schema_version: 1
+code: S0
+name: structured_core_only
+sample_rate: 48000
+pre_fir_taps: 17
+post_fir_taps: 17
+branches: 1
+spline:
+  type: cubic_hermite_c1
+  knots: 17
+  minimum: -2.0
+  maximum: 2.0
+  extrapolation: linear_endpoint_slope
+  monotonic: false
+  initialization: identity
+regularization:
+  spline_curvature: 1.0e-5
+latency_samples: 0
+causal: true

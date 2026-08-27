@@ -45,3 +45,7 @@ Before protocol freeze, set the C++ block/reset maximum-absolute tolerance to `5
 ## 2026-08-27 — D-M2-003 — M2 gate passed
 
 Advance to M3. The official packed A2 recipe converged for two seeds on the preregistered synthetic task, exports agree across Python and C++ paths, reset and block schedules pass, Core tests pass, and independent block-64 CPU loops agree within 1%. This establishes a toolchain and host-specific cost reference, not physical-device fidelity.
+
+## 2026-08-27 — D-M3-001 — S0 spline and FIR foundation
+
+Implement S0 with one 17-tap causal FIR before and after a 17-knot cubic Hermite spline. Share one learned slope at each knot to guarantee C1 continuity, use linear endpoint extrapolation, initialize exactly to identity, and expose analytic first derivatives and primitives for later ADAA work. Do not impose monotonicity; retain curvature regularization as an explicit loss term.

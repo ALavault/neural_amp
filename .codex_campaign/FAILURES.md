@@ -89,3 +89,7 @@ Run `m2_a2_cpu_seed0_v1` failed the preregistered `1e-7` C++ block-equivalence t
 ## 2026-08-27 — F-M2-012 — Enriched architecture inspector needed formatting
 
 The first M2 closure command stopped at `ruff format --check` after the inspector gained operation and state-buffer derivations. Resolution: apply the configured formatter and rerun lint, all tests, data audit, architecture regeneration, campaign status, and whitespace checks.
+
+## 2026-08-27 — F-M3-001 — S0 model exports were not import-sorted
+
+The first S0 static check rejected the new model package's relative import order before numerical tests ran. Resolution: apply Ruff's prescribed lexical order and rerun lint, formatting, and all focused spline/FIR tests.
