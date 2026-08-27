@@ -1,0 +1,26 @@
+schema_version: 1
+tier: SYNTHETIC
+sample_rate: 48000
+system: tanh
+system_parameters:
+  drive: 2.8
+  normalization: tanh(2.8)
+train:
+  seed: 200
+  seconds_per_excitation: 2.0
+  excitations:
+    - multisine
+    - colored_noise
+    - level_changes
+    - procedural_plucks
+validation:
+  seed: 1200
+  seconds_per_excitation: 1.0
+  excitations:
+    - two_tone
+    - logarithmic_sweep
+    - bursts
+    - procedural_plucks
+split_rule: complete_generated_source_file
+normalization: none
+format: mono_float32_wav

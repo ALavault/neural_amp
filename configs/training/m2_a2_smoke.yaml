@@ -1,0 +1,24 @@
+schema_version: 1
+model_config: third_party/neural-amp-modeler/nam/train/_resources/config_model_packed.json
+dataset_config: configs/data/m2_synthetic_tanh.yaml
+seeds: [0, 1]
+precision: 32-true
+accelerator: gpu
+devices: 1
+max_epochs: 8
+train_dataloader:
+  batch_size: 8
+  shuffle: true
+  drop_last: true
+  num_workers: 0
+  pin_memory: true
+validation_dataloader:
+  batch_size: 1
+  num_workers: 0
+  pin_memory: true
+segment_output_samples: 8192
+checkpoint_policy: official_packed_best_and_epoch
+selection_metric: validation_esr
+notes:
+  - Minimal official A2 reproduction on a deterministic synthetic tanh system.
+  - This run validates the toolchain; it is not evidence about physical devices.

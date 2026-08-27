@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "source": "third_party/neural-amp-modeler/nam/train/_resources/config_model_packed.json",
+  "source_sha256": "4000f7a428b88f2f83a876f817603e6b1017f5a473bacbc9a343a93b3ab42c3e",
+  "trainer_commit": "f26112906de06ec6b796ad6d1982e29eed83144e",
+  "core_commit": "1f42f88535884450104b8711d7595019afa0495b",
+  "packed_trainable_parameters": 22783,
+  "num_layers": 23,
+  "kernel_sizes": [
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    15,
+    15,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "dilations": [
+    1,
+    3,
+    7,
+    17,
+    41,
+    101,
+    239,
+    1,
+    3,
+    7,
+    17,
+    41,
+    101,
+    239,
+    1,
+    13,
+    1,
+    3,
+    7,
+    17,
+    41,
+    101,
+    239
+  ],
+  "activation": "LeakyReLU",
+  "gated": false,
+  "head": {
+    "out_channels": 1,
+    "kernel_size": 16,
+    "bias": true
+  },
+  "head_scale": 0.01,
+  "loss": {
+    "val_loss": "esr",
+    "mrstft_weight": 0.0005
+  },
+  "optimizer": {
+    "lr": 0.004,
+    "weight_decay": 3.17e-07
+  },
+  "lr_scheduler": {
+    "class": "ExponentialLR",
+    "kwargs": {
+      "gamma": 0.994
+    }
+  },
+  "submodels": [
+    {
+      "name": "channels_3",
+      "channels": 3,
+      "trainable_parameters": 1870,
+      "exported_weight_count": 1871,
+      "receptive_field_samples": 6347,
+      "receptive_field_ms_at_48khz": 132.22916666666666,
+      "export_architecture": "WaveNet"
+    },
+    {
+      "name": "channels_8",
+      "channels": 8,
+      "trainable_parameters": 12145,
+      "exported_weight_count": 12146,
+      "receptive_field_samples": 6347,
+      "receptive_field_ms_at_48khz": 132.22916666666666,
+      "export_architecture": "WaveNet"
+    }
+  ]
+}

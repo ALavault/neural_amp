@@ -41,3 +41,11 @@ The first configuration entry for the selected EGFxSet WAV mistyped the final po
 ## 2026-08-27 — F-M1-007 — Decimator implementation label was imprecise
 
 The M1 configuration initially called the reference decimator `polyphase_fir`, while the implementation directly convolves with the same linear-phase FIR, removes its known delay, and strides by two. These operations are mathematically equivalent for the stored output but the implementation is not organized as polyphase branches. Resolution: rename the configured method to `linear_phase_fir_then_stride` before the final M1 artifact generation.
+
+## 2026-08-27 — F-M2-001 — Core tests launched from the wrong directory
+
+The first invocation of `build/nam_core/tools/run_tests` aborted because the upstream test executable resolves `example_models/` relative to its working directory. Resolution: rerun the unchanged binary from `third_party/NeuralAmpModelerCore`; the complete upstream suite printed `Success!`. The root Make target now encodes the required working directory.
+
+## 2026-08-27 — F-M2-002 — Packed A2 inspector used an absent attribute
+
+The first architecture inspection assumed that `PackedWaveNet` exposed a `submodels` collection. The pinned v0.13.0 API instead exposes `num_submodels` and `extract_submodel(index)`. Resolution: use the public extraction method and rerun the inspection; no model or upstream source was modified.

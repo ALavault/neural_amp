@@ -1,4 +1,4 @@
-.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit
+.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit m2-data m2-inspect m2-core-test
 
 bootstrap:
 	uv python install 3.12
@@ -27,3 +27,14 @@ fetch-egfxset-clean:
 m1-audit:
 	uv run python scripts/validate_synthetic_corpus.py
 	uv run python scripts/validate_metrics.py
+
+m2-data:
+	uv run python scripts/generate_m2_dataset.py
+
+m2-inspect:
+	uv run python scripts/inspect_nam_a2.py
+
+m2-core-test:
+	cmake -S third_party/NeuralAmpModelerCore -B build/nam_core -DCMAKE_BUILD_TYPE=Release -DNAM_ENABLE_A2_FAST=ON
+	cmake --build build/nam_core --parallel 8
+	cd third_party/NeuralAmpModelerCore && ../../build/nam_core/tools/run_tests
