@@ -33,3 +33,15 @@ Assign EGFxSet permanently to `INTERNAL_DEV` before downloading any file. Use on
 ## 2026-08-27 — D-M1-003 — M1 gate passed
 
 Advance to M2 because the 41-test suite, data audit, synthetic audit, and all controlled metric checks pass from commit `a9af90d` with clean provenance. Preserve the seven M1 failure entries and the metric limitations in the M1 report. Do not treat the controlled x2 result as validation of H3.
+
+## 2026-08-27 — D-M2-001 — Warn-only determinism for official MRSTFT
+
+Use Lightning `deterministic="warn"` for A2 training because PyTorch 2.13 has no deterministic CUDA backward for the reflection pad used by the official MRSTFT loss. Keep all explicit seeds and deterministic cuDNN settings. Do not change or remove the official loss to obtain strict mode.
+
+## 2026-08-27 — D-M2-002 — Float32 block-equivalence tolerance
+
+Before protocol freeze, set the C++ block/reset maximum-absolute tolerance to `5e-7`. The original `1e-7` threshold was below one float32 ulp near unit amplitude and rejected block-order differences no larger than `3.5763e-7`. Preserve the failed v1 benchmark as evidence of the change.
+
+## 2026-08-27 — D-M2-003 — M2 gate passed
+
+Advance to M3. The official packed A2 recipe converged for two seeds on the preregistered synthetic task, exports agree across Python and C++ paths, reset and block schedules pass, Core tests pass, and independent block-64 CPU loops agree within 1%. This establishes a toolchain and host-specific cost reference, not physical-device fidelity.

@@ -2,12 +2,12 @@
 
 ## Current position
 
-M0 and M1 passed. Synthetic systems, controlled decimation, alignment, metric perturbations, figures, and the licensed EGFxSet DI diagnostic are validated. External evaluation remains locked. M2 is in progress.
+M0, M1, and M2 passed. The exact official A2 packed topology is documented, two minimal synthetic seeds converged, exports pass complete-file Python/C++ block and reset checks, and the host-specific Full/Lite CPU baselines are recorded. External evaluation remains locked. M3 is in progress.
 
 ## Resume action
 
-Inspect the exact pinned A2 packed configuration and official Core fast path, then define the minimal two-seed reproduction, export/parity checks, and CPU benchmark protocol. Do not modify either submodule.
+Implement S0 first: causal FIR pre/post filters plus a finite, continuously differentiable learnable spline initialized near identity. Add numerical tests before introducing the slow GRU or residual TCN. Do not modify either NAM submodule.
 
 ## Absolute blockers
 
-No absolute blocker for architecture inspection or synthetic A2 reproduction. Physical paired device archives are not yet downloaded or assigned (except EGFxSet INTERNAL_DEV), so final physical-device reproduction remains pending later license/data selection.
+No absolute blocker for M3 synthetic implementation. Physical paired device archives are not yet downloaded or assigned (except EGFxSet INTERNAL_DEV), so M4 physical-device training still depends on later license/content verification.

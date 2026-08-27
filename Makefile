@@ -1,4 +1,4 @@
-.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit m2-data m2-inspect m2-core-test
+.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit m2-data m2-inspect m2-core-test m2-cpp-build
 
 bootstrap:
 	uv python install 3.12
@@ -38,3 +38,7 @@ m2-core-test:
 	cmake -S third_party/NeuralAmpModelerCore -B build/nam_core -DCMAKE_BUILD_TYPE=Release -DNAM_ENABLE_A2_FAST=ON
 	cmake --build build/nam_core --parallel 8
 	cd third_party/NeuralAmpModelerCore && ../../build/nam_core/tools/run_tests
+
+m2-cpp-build:
+	cmake -S cpp -B build/fssr_cpp -DCMAKE_BUILD_TYPE=Release
+	cmake --build build/fssr_cpp --parallel 8

@@ -86,7 +86,15 @@
       "exported_weight_count": 1871,
       "receptive_field_samples": 6347,
       "receptive_field_ms_at_48khz": 132.22916666666666,
-      "export_architecture": "WaveNet"
+      "export_architecture": "WaveNet",
+      "linear_macs_per_sample": 1732,
+      "minimum_linear_flops_per_sample": 3464,
+      "fast_path_float_buffer_bytes_by_block": {
+        "1": 112940,
+        "16": 138176,
+        "64": 179456,
+        "128": 220672
+      }
     },
     {
       "name": "channels_8",
@@ -95,7 +103,15 @@
       "exported_weight_count": 12146,
       "receptive_field_samples": 6347,
       "receptive_field_ms_at_48khz": 132.22916666666666,
-      "export_architecture": "WaveNet"
+      "export_architecture": "WaveNet",
+      "linear_macs_per_sample": 11777,
+      "minimum_linear_flops_per_sample": 23554,
+      "fast_path_float_buffer_bytes_by_block": {
+        "1": 301160,
+        "16": 368256,
+        "64": 477696,
+        "128": 586752
+      }
     }
   ]
 }

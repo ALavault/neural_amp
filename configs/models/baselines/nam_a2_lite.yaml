@@ -10,4 +10,18 @@ core_version: v0.5.4
 packed_submodel: channels_3
 sample_rate: 48000
 precision: float32
-status: pinned_not_reproduced
+status: reproduced_synthetic_m2
+architecture:
+  channels: 3
+  layers: 23
+  receptive_field_samples: 6347
+  parameters: 1870
+reproduction:
+  status: reproduced_on_synthetic_tanh
+  successful_runs:
+    - m2_a2_tanh_seed0_v3
+    - m2_a2_tanh_seed1_v1
+  validation_esr: [0.9155008524781147, 0.8768149802233415]
+  cpu_run: m2_a2_cpu_seed0_v2
+  block_64_median_ns_per_sample: 424.6015625
+  block_64_p95_ns_per_sample: 539.73828125

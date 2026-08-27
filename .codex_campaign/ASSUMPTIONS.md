@@ -7,6 +7,8 @@
 - M0 identity generation is infrastructure validation, not evidence for H1–H3.
 - Exact dependency versions will be those resolved into `environment/requirements-lock.txt`, not whatever the host provides globally.
 - Synthetic and metadata work may proceed while physical audio is unavailable.
+- A2 Lite in this campaign maps to the official packed `channels_3` submodel, which the pinned Core benchmark labels A2 nano; A2 Full maps to `channels_8`/standard.
+- Initial and final host CPU benchmarks pin one logical core but retain the observed `schedutil` governor and enabled turbo state; all model comparisons must reuse this condition or explicitly declare a new protocol.
 
 ## Unresolved ambiguities
 
