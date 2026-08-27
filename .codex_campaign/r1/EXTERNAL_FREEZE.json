@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "campaign": "R1",
-  "diagnostic_protocol_frozen": false,
+  "diagnostic_protocol_frozen": true,
   "confirmatory_protocol_frozen": false,
   "external_retest_authorized": false,
   "external_results_accessed": false,

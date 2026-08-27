@@ -1,6 +1,6 @@
 schema_version: 1
 campaign_version: FSSR-R1-v1
-status: draft_until_r1_preflight
+status: frozen
 historical_baseline_commit: b38d16f
 maximum_trajectories: 19
 stage_caps:
@@ -10,16 +10,22 @@ stage_caps:
   cascade: 4
 protocol: configs/r1/protocol.yaml
 stage_configs:
-  - configs/training/r1_competence.yaml
-  - configs/training/r1_factorial.yaml
-  - configs/training/r1_horizon.yaml
-  - configs/training/r1_cascade.yaml
+- configs/training/r1_competence.yaml
+- configs/training/r1_factorial.yaml
+- configs/training/r1_horizon.yaml
+- configs/training/r1_cascade.yaml
 data_config: configs/data/r1_physical.yaml
 model_configs:
-  - configs/models/r1/wright_lstm64.yaml
-  - configs/models/r1/rf31.yaml
-  - configs/models/r1/rf2047.yaml
-  - configs/models/r1/cascade_rf2047.yaml
+- configs/models/r1/wright_lstm64.yaml
+- configs/models/r1/rf31.yaml
+- configs/models/r1/rf2047.yaml
+- configs/models/r1/cascade_rf2047.yaml
 run_id_pattern: r1_<stage>_<device>_<model>_<loss>_seed<n>_v1
 external_report_only_locked: true
-forbidden_families: [tfilm, adaa, local_oversampling_x4, new_slow_controller]
+forbidden_families:
+- tfilm
+- adaa
+- local_oversampling_x4
+- new_slow_controller
+implementation_commit: 07781c8a8cf0ddb9df3fa27dedaaad5fbb395bd8
+protocol_sha256: 5c85e6aadace532462340828eef7493b2ad177fa12a6aa0ae86845b6888d7ae0
