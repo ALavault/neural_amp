@@ -1,9 +1,9 @@
 # Campaign State
 
-- Updated: 2026-08-27T14:50:00+02:00
-- Maturity: M4 — principal smoke test
-- Status: in progress
-- Current task: execute the single authorized equal-parameter S3 recovery diagnostic on both M4 devices; stop broad expansion if it does not materially close the ESR gap.
+- Updated: 2026-08-27T14:59:07+02:00
+- Maturity: M6 — negative-result audit and publication dossier
+- Status: in progress under pivot P4
+- Current task: freeze the negative protocol record, generate the final audit, claims-to-evidence dossier, paper outline, final manifest, and redistribution-safe archive.
 - External results accessed: no
 - External retest authorized: false
 
@@ -31,6 +31,7 @@
 - Completed and audited the first four counted Fulltone seed-0 runs; A2 leads this single condition, while all model paths satisfy the operational run checks.
 - Completed all 24 counted M4 runs with no failed seed or missing metric. Preliminary medians favor A2 on both devices, so the M4 gate awaits cost audit and formal autopsy.
 - Generated `reports/M4_CORE.md`, the machine-readable aggregate, the ordered autopsy, and corrected Python streaming benchmark. The fixed M4 gate failed.
+- Completed the equal-parameter recovery; its stop rule failed on both devices. Selected pivot P4 and skipped the gated MATURATION phase.
 
 ## M0 gate
 
@@ -50,8 +51,11 @@ M3 passed on 2026-08-27. Evidence is summarized in `reports/M3_MODEL.md`.
 
 ## M4 gate remaining
 
-- Implement a cost-matched recurrent B2 baseline.
-- Validate one end-to-end physical run per model before launching the matrix.
-- Run B0, B2, S3, and S4 for seeds 0, 1, and 2 on both devices.
-- Measure fidelity, diagnostic spectra, residual energy, training time, and inference cost for every valid run.
-- Apply the preregistered quality, efficiency, or antialiasing smoke condition before entering MATURATION.
+M4 completed as a failed gate on 2026-08-27. All 24 runs and the bounded recovery are retained. MATURATION was not entered.
+
+## M6 remaining
+
+- Create a frozen negative-result protocol record without authorizing external access.
+- Complete `reports/FINAL_AUDIT.md` with a `NO-GO` classification.
+- Finalize paper claims, outline, evidence links, manifest, and archive.
+- Run full repository validation and verify the archive excludes raw/restricted data.

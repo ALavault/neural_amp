@@ -193,3 +193,7 @@ The first recovery-summary lint pass rejected two long formatted Markdown table 
 ## 2026-08-27 — F-M4-021 — Recovery summary required configured formatting
 
 The corrected recovery summary passed lint, then the formatter compacted one dictionary comprehension. Resolution: apply the configured formatter and rerun checks before aggregation.
+
+## 2026-08-27 — F-M4-022 — Equal-parameter recovery stop rule failed
+
+Width-31 S3 completed both authorized runs with 12,192 parameters and finite block-consistent outputs. It closes only `0.4%` of the seed-0 Fulltone ESR gap and `25.2%` of the Big Muff gap, below the fixed `50%` threshold required on both devices. Resolution: stop further model expansion, select pivot P4, skip the gated maturation matrix, and complete a transparent NO-GO audit and publication dossier.

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "required_gap_closure_fraction": 0.5,
+  "required_on_both_devices": true,
+  "devices": {
+    "fulltone_full_drive_2": {
+      "runs": {
+        "B0": "m4_fulltone_b0_seed0_v1",
+        "S3": "m4_fulltone_s3_seed0_v1",
+        "S3_W31": "m4_recovery_fulltone_s3w31_seed0_v1"
+      },
+      "test_esr": {
+        "B0": 0.06676983683428842,
+        "S3": 0.23186796345066604,
+        "S3_W31": 0.23116279299487155
+      },
+      "original_gap": 0.16509812661637763,
+      "gap_closure_fraction": 0.004271220214588056,
+      "passes_stop_rule": false,
+      "wide_residual_energy_ratio": 2.4148828861463504e-05
+    },
+    "electro_harmonix_big_muff": {
+      "runs": {
+        "B0": "m4_bigmuff_b0_seed0_v1",
+        "S3": "m4_bigmuff_s3_seed0_v1",
+        "S3_W31": "m4_recovery_bigmuff_s3w31_seed0_v1"
+      },
+      "test_esr": {
+        "B0": 0.548138314901611,
+        "S3": 0.9669655454152576,
+        "S3_W31": 0.8612673964837514
+      },
+      "original_gap": 0.41882723051364656,
+      "gap_closure_fraction": 0.2523669456780038,
+      "passes_stop_rule": false,
+      "wide_residual_energy_ratio": 0.17525500212400555
+    }
+  },
+  "passed": false,
+  "decision": "stop_and_select_p4_negative_result"
+}

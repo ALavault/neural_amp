@@ -93,3 +93,7 @@ Do not enter MATURATION after all 24 counted runs completed. Preliminary median 
 ## 2026-08-27 — D-M4-008 — Equal-parameter recovery stop rule
 
 Run only S3 with 31 residual channels, seed 0, on the two M4 devices. Its 12,192 parameters are within 0.39% of A2 Full. Keep every other M4 setting fixed. Continue beyond this diagnostic only if it closes at least 50% of the seed-0 ESR gap between width-8 S3 and A2 on both devices; otherwise stop architecture expansion and select the negative-result/benchmark pivot.
+
+## 2026-08-27 — D-M4-009 — Select pivot P4 and skip MATURATION
+
+The equal-parameter recovery closes only 0.4% of the Fulltone gap and 25.2% of the Big Muff gap, below the preregistered 50% requirement on both devices. Stop architecture and hyperparameter expansion. Select pivot P4: preserve the reproducible benchmark, synthetic mechanism ablations, physical negative result, and limitations. Skip MATURATION because its entry gate failed; proceed directly to the M6 audit and negative-result publication dossier without accessing external report-only outputs.

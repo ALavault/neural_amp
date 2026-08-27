@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
-  "current_level": "M4",
-  "status": "in_progress",
-  "highest_completed_level": "M3",
-  "updated_at": "2026-08-27T14:50:00+02:00",
+  "current_level": "M6",
+  "status": "p4_audit_in_progress",
+  "highest_completed_level": "M4",
+  "updated_at": "2026-08-27T14:59:07+02:00",
   "gates": {
     "M0": "completed",
     "M1": "completed",
     "M2": "completed",
     "M3": "completed",
-    "M4": "failed_recovery_in_progress",
-    "M5": "not_started",
-    "M6": "not_started"
+    "M4": "completed_no_go",
+    "M5": "skipped_m4_gate_failed",
+    "M6": "in_progress"
   }
 }
