@@ -9,3 +9,4 @@ m3_s0_tanh_seed0_v1,M3,S0,tanh,0,completed,esr=5.98802773e-05,experiments/runs/m
 m3_s3_tanh_seed0_v1,M3,S3,tanh,0,completed,esr=4.42838686e-05,experiments/runs/m3_s3_tanh_seed0_v1
 m3_s4_tanh_seed0_v1,M3,S4,tanh,0,completed,esr=6.70938334e-05,experiments/runs/m3_s4_tanh_seed0_v1
 m3_s0_slow_sag_seed0_v1,M3,S0,slow_sag,0,completed,esr=4.97488457e-05,experiments/runs/m3_s0_slow_sag_seed0_v1
+m3_s1_slow_sag_seed0_v1,M3,S1,slow_sag,0,completed,esr=4.07967418e-05,experiments/runs/m3_s1_slow_sag_seed0_v1
