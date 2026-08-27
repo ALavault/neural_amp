@@ -32,7 +32,7 @@ external_di_diagnostic:
   file_sha256: 7aa3c7a4ed1ebdbd647a9456c8c93422d972ba8d033a0b95e0fb36468a2da61a
   master_interpolation: scipy.signal.resample_poly up=4 window=[kaiser, 8.6]
 decimation:
-  method: polyphase_fir
+  method: linear_phase_fir_then_stride
   stages: [2, 2]
   taps_per_stage: 255
   cutoff_fraction_of_target_nyquist: 0.9

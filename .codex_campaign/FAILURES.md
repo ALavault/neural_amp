@@ -37,3 +37,7 @@ The first complete corpus command reported two Ruff line-length errors in manife
 ## 2026-08-27 — F-M1-006 — Selected DI checksum transcription error
 
 The first configuration entry for the selected EGFxSet WAV mistyped the final portion of its SHA-256. Direct `sha256sum` and the verified extraction script agreed on `7aa3c7a4ed1ebdbd647a9456c8c93422d972ba8d033a0b95e0fb36468a2da61a`. Resolution: correct the configuration before regenerating the M1 corpus manifest; the downloaded bytes were not changed.
+
+## 2026-08-27 — F-M1-007 — Decimator implementation label was imprecise
+
+The M1 configuration initially called the reference decimator `polyphase_fir`, while the implementation directly convolves with the same linear-phase FIR, removes its known delay, and strides by two. These operations are mathematically equivalent for the stored output but the implementation is not organized as polyphase branches. Resolution: rename the configured method to `linear_phase_fir_then_stride` before the final M1 artifact generation.
