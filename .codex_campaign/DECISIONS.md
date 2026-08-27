@@ -77,3 +77,7 @@ Give B0, B2, S3, and S4 the same 6,346-sample causal context, two 8,192-sample o
 ## 2026-08-27 — D-M4-004 — Step zero is an eligible checkpoint
 
 Include the initialized model as checkpoint step 0 in validation-ESR selection. This prevents a fixed training budget from forcing selection of a degraded update and applies identically to every family. The four v1 preflights remain wiring diagnostics produced by the superseded selection implementation; require v2 preflights before counted runs.
+
+## 2026-08-27 — D-M4-005 — Corrected preflight passed
+
+Permit counted M4 training after all four v2 paths completed with finite predictions and alternate-block differences no larger than `4.47e-8`. B0 and B2 selected trained steps; S3 and S4 correctly retained step 0 after their two diagnostic updates degraded validation ESR. Run the four Fulltone seed-0 conditions first, audit them, and only then continue the other 20 matrix cells.

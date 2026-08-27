@@ -2,11 +2,11 @@
 
 ## Current position
 
-M0 through M3 passed. Four v1 M4 preflights completed, but they exposed that step 0 was excluded from checkpoint selection. The v1 runs remain valid wiring diagnostics only; no counted M4 run has started. External evaluation remains locked.
+M0 through M3 passed. Four corrected v2 M4 preflights completed with finite outputs and block parity at or below `4.47e-8`; v1 remains preserved as evidence of the repaired selection defect. No counted M4 run has started. External evaluation remains locked.
 
 ## Resume action
 
-Save step 0 before optimization, update the preflight identifiers to v2, and rerun all four paths. Launch the counted matrix only after the corrected B0, B2, S3, and S4 preflights complete.
+Run the four Fulltone seed-0 counted conditions and audit validation selection, gradients, and output finiteness before launching the remaining 20 matrix cells.
 
 ## Absolute blockers
 

@@ -1,9 +1,9 @@
 # Campaign State
 
-- Updated: 2026-08-27T14:00:15+02:00
+- Updated: 2026-08-27T14:02:22+02:00
 - Maturity: M4 — principal smoke test
 - Status: in progress
-- Current task: correct the step-0 checkpoint omission exposed by the completed v1 preflights, then require a four-path v2 preflight before the 24-run matrix.
+- Current task: run and audit the four counted Fulltone seed-0 conditions, then resume the remaining 20 M4 matrix cells if training remains finite and selection behaves correctly.
 - External results accessed: no
 - External retest authorized: false
 
@@ -27,6 +27,7 @@
 - Prepared six bounded 48 kHz pairs without level normalization: source-disjoint Fulltone files and the published Big Muff train/validation/test files. All are finite and unclipped.
 - Implemented the 12,153-parameter B2 GRU and a common M4 training/inference path with official A2 overlap-block parity below `2e-6`.
 - Completed four immutable v1 physical preflights; all paths were finite and block-consistent, and the runs exposed a checkpoint-selection defect before any counted training.
+- Completed corrected v2 preflights for all four model paths; step-0 eligibility and block/reset behavior now pass.
 
 ## M0 gate
 

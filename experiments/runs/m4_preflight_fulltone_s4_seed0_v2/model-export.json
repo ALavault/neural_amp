@@ -1,0 +1,5 @@
+{
+  "model": "S4",
+  "latency_samples": 16,
+  "state_dict": "checkpoints/model-state.pt"
+}
