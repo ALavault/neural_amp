@@ -136,3 +136,15 @@ measures block size 64 and reports median and p95 timings as JSON.
 second pass after reset.  Its `fssr-r1-parity-v1` JSON report always includes
 `python_cpp_parity`, `passed`, `max_abs_error`, per-comparison errors, and the
 exact core/slow/residual/RF composition covered.
+
+## Cost-only LSTM width sweep
+
+`r1_benchmark --lstm-sweep SECONDS ITERATIONS` benchmarks the preregistered
+widths `16,32,48,64,96` with the same block-64 clock harness.  A single width is
+available through `--lstm-width WIDTH SECONDS ITERATIONS`.  The kernel is the
+one-layer Wright topology (four dense LSTM gates, linear head, direct input
+skip) with fixed deterministic non-trained weights.  Reports declare
+`blind:true`, `trained_weights:false`, and `selection_uses_audio_or_esr:false`;
+the probe is synthetic and no dataset or fidelity result is read.  These modes
+measure architecture cost only and do not make a Python/C++ fidelity claim for
+trained LSTM weights.

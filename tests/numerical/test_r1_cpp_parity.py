@@ -140,3 +140,23 @@ def test_native_benchmark_reports_block_64_median_and_p95(
     assert result["p95_block_ns"] >= result["median_block_ns"]
     assert result["latency_samples"] == 0
     assert result["state_size_bytes"] > 0
+
+
+def test_blind_lstm_cost_benchmark_uses_registered_width_without_training_data(
+    r1_cpp_tools: dict[str, Path],
+) -> None:
+    completed = subprocess.run(
+        [str(r1_cpp_tools["benchmark"]), "--lstm-width", "16", "1", "1"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    result = json.loads(completed.stdout)
+    assert result["format"] == "fssr-r1-lstm-cost-benchmark-v1"
+    assert result["blind"] is True
+    assert result["selection_uses_audio_or_esr"] is False
+    assert result["trained_weights"] is False
+    assert result["width"] == 16
+    assert result["block_size"] == 64
+    assert result["estimated_macs_per_sample"] == 1104
+    assert result["p95_block_ns"] >= result["median_block_ns"] > 0.0
