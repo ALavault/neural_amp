@@ -1,9 +1,9 @@
 # Campaign State
 
-- Updated: 2026-08-27T13:05:50+02:00
-- Maturity: M3 — FSSR-NAM implementation
+- Updated: 2026-08-27T13:33:03+02:00
+- Maturity: M4 — principal smoke test
 - Status: in progress
-- Current task: implement and numerically validate FSSR-NAM variants S0 through S4 in order, beginning with the structured causal FIR/spline core.
+- Current task: acquire and verify two license-compatible paired INTERNAL_DEV devices, freeze source-group splits, then execute the 24-run B0/B2/S3/S4 smoke matrix.
 - External results accessed: no
 - External retest authorized: false
 
@@ -22,6 +22,7 @@
 - Demonstrated a controlled synthetic parasite reduction from `-19.56 dB` to `-71.68 dB` under x2 processing, without promoting it to a hardware claim.
 - Inspected the exact official A2 packed topology, reproduced Lite and Full training on two seeds, and validated official exports.
 - Validated complete-file Python/C++ parity, regular and irregular block processing, exact reset behavior, and a pinned-core CPU reference.
+- Implemented S0 through S4 and passed the synthetic implementation gate with trained export/block checks, slow/residual ablations, and controlled local-x2 validation.
 
 ## M0 gate
 
@@ -35,10 +36,15 @@ M1 passed on 2026-08-27. Evidence is summarized in `reports/M1_METRICS.md`.
 
 M2 passed on 2026-08-27. Evidence is summarized in `reports/M2_BASELINES.md`.
 
-## M3 gate remaining
+## M3 gate
 
-- Implement S0 structured causal FIR and smooth learnable spline.
-- Add S1 causal slow state and S2 constrained fast residual, then compose S3.
-- Add and delay-validate S4 local x2 antialiasing.
-- Pass identity, tanh, slow-state, short-overfit, finite-gradient, causality, reset, block-parity, and export tests.
-- Verify that the residual does not carry all output energy and that estimated cost remains compatible with A2.
+M3 passed on 2026-08-27. Evidence is summarized in `reports/M3_MODEL.md`.
+
+## M4 gate remaining
+
+- Verify and irreversibly assign two paired device datasets to INTERNAL_DEV.
+- Build complete-source, non-overlapping train/validation/test splits.
+- Implement a cost-matched recurrent B2 baseline.
+- Run B0, B2, S3, and S4 for seeds 0, 1, and 2 on both devices.
+- Measure fidelity, diagnostic spectra, residual energy, training time, and inference cost for every valid run.
+- Apply the preregistered quality, efficiency, or antialiasing smoke condition before entering MATURATION.

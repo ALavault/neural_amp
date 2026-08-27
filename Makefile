@@ -1,4 +1,4 @@
-.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit m2-data m2-inspect m2-core-test m2-cpp-build
+.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit m2-data m2-inspect m2-core-test m2-cpp-build m3-audit
 
 bootstrap:
 	uv python install 3.12
@@ -42,3 +42,6 @@ m2-core-test:
 m2-cpp-build:
 	cmake -S cpp -B build/fssr_cpp -DCMAKE_BUILD_TYPE=Release
 	cmake --build build/fssr_cpp --parallel 8
+
+m3-audit:
+	uv run python scripts/summarize_m3.py

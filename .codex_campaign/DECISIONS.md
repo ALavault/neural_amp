@@ -57,3 +57,7 @@ Use a one-layer GRU with eight states updated after each completed 64-sample int
 ## 2026-08-27 — D-M3-003 — S4 causal local x2 filter
 
 Oversample only the nonlinear residual `phi(x)-x` by two using 33-tap Kaiser-windowed sinc interpolation and decimation filters. Add it to an exactly delayed linear path, align slow gain and fast-residual inputs to the same declared 16-sample causal latency, and never compensate by looking ahead. On the controlled 9 kHz M1 case this implementation must reduce known-reference parasite energy by at least 3 dB while keeping complex fundamental error below `1e-5`.
+
+## 2026-08-27 — D-M3-004 — M3 gate passed
+
+Advance to M4 because all ten aggregate implementation checks pass: S3 learns two synthetic systems, S1 and S2 improve their discriminating cases, the residual remains below 0.11% of output energy, trained exports preserve causal block behavior, S4's declared delay is aligned, and estimated linear MACs remain below A2 Full. Treat every quality and antialiasing result as synthetic-only until multi-device evidence exists.
