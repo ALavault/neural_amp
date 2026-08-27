@@ -149,3 +149,7 @@ The corrected run harness passed lint, after which the formatter requested five 
 ## 2026-08-27 — F-M4-010 — Initial model omitted from checkpoint selection
 
 All four v1 physical preflights completed with finite outputs and block parity at or below `4.47e-8`. They exposed that S3 and S4 initial validation ESRs (`0.1265` and `0.1263`) were lower than every two-step checkpoint, but the harness initialized the best score to infinity and could only select steps 1 or 2. Resolution before any counted M4 run: save and register step 0 as the initial candidate, preserve all v1 runs unchanged, and require a new four-path v2 preflight from the corrected commit.
+
+## 2026-08-27 — F-M4-011 — Matrix runner required configured formatting
+
+The resumable matrix runner passed lint, then its first format check requested a one-line run identifier expression. Resolution: apply the configured formatter and rerun static validation before starting the runner.

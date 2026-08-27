@@ -21,6 +21,9 @@ m4-data:
 m4-preflight:
 	uv run python scripts/run_m4_preflight.py
 
+m4-matrix:
+	uv run python scripts/run_m4_matrix.py
+
 smoke:
 	uv run python scripts/smoke_identity.py
 
