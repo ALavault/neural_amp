@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import json
 from pathlib import Path
 
 import pytest
@@ -42,6 +43,29 @@ def test_prototype_protocol_is_frozen_after_v3_terminal_closure() -> None:
         )
     )
     assert amendment["campaign_version"] == CAMPAIGN_VERSION
+
+
+def test_v1_1_terminal_lineage_matches_verdict_and_maturity() -> None:
+    lineages = json.loads(
+        (ROOT / ".codex_campaign/LINEAGES.json").read_text(encoding="utf-8")
+    )
+    maturity = json.loads(
+        (ROOT / ".codex_campaign/amp_sota_prototype_v1_1/MATURITY.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    verdict = json.loads(
+        (ROOT / ".codex_campaign/amp_sota_prototype_v1_1/VERDICT.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    entry = lineages["lineages"]["amp_sota_prototype_v1_1"]
+
+    assert lineages["active"] == "amp_sota_prototype_v1_1"
+    assert entry["administrative_status"] == "terminal_no_go_mechanism"
+    assert entry["historical_artifacts_immutable"] is True
+    assert maturity["status"] == "terminal_no_go"
+    assert maturity["verdict"] == verdict["verdict"] == "NO-GO-MECHANISM"
 
 
 @pytest.mark.parametrize(

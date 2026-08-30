@@ -34,9 +34,9 @@
       "scope": "prospective_public-data_sota_prototype"
     },
     "amp_sota_prototype_v1_1": {
-      "administrative_status": "active_protocol_frozen",
+      "administrative_status": "terminal_no_go_mechanism",
       "campaign_version": "AMP-SOTA-PROTOTYPE-v1.1",
-      "historical_artifacts_immutable": false,
+      "historical_artifacts_immutable": true,
       "parent": "amp_sota_prototype_v1",
       "path": ".codex_campaign/amp_sota_prototype_v1_1",
       "scope": "prospective_public-data_sota_prototype_with_frozen_observation_and_screen_contract"
