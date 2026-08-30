@@ -1,0 +1,114 @@
+{
+  "campaign_version": "AMP-SOTA-PROTOTYPE-v1.1",
+  "commercial_claim_supported": false,
+  "confirmation_audio_samples_read": 0,
+  "data_audit": {
+    "audio_files_read": 0,
+    "commercial_claim_supported": false,
+    "devices": [
+      {
+        "device": "fulltone",
+        "license": "CC-BY-NC-4.0",
+        "source_ids_by_split": {
+          "test": [
+            "idmt-gtr4-ib"
+          ],
+          "train": [
+            "idmt-gtr2"
+          ],
+          "validation": [
+            "idmt-gtr4-sg"
+          ]
+        }
+      },
+      {
+        "device": "bigmuff",
+        "license": "CC-BY-NC-4.0",
+        "source_ids_by_split": {
+          "test": [
+            "published-test"
+          ],
+          "train": [
+            "published-train"
+          ],
+          "validation": [
+            "published-val"
+          ]
+        }
+      },
+      {
+        "device": "blackstar",
+        "license": "CC-BY-NC-4.0",
+        "source_ids_by_split": {
+          "test": [
+            "published-test"
+          ],
+          "train": [
+            "published-train"
+          ],
+          "validation": [
+            "published-val"
+          ]
+        }
+      },
+      {
+        "device": "ua1176",
+        "license": "CC-BY-NC-4.0",
+        "source_ids_by_split": {
+          "test": [
+            "bass2",
+            "gtr7"
+          ],
+          "train": [
+            "bass1",
+            "bass3",
+            "bass4",
+            "gtr6",
+            "gtr8"
+          ],
+          "validation": [
+            "bass5",
+            "gtr9"
+          ]
+        }
+      }
+    ],
+    "format": "sota-public-data-metadata-audit-v1",
+    "passed": true,
+    "research_only": true
+  },
+  "data_audit_passed": true,
+  "failed_or_invalid_run_resumed": false,
+  "fm9_audio_samples_read": 0,
+  "gate": {
+    "checks": {
+      "confirmation_locked": true,
+      "data_audit_passed": true,
+      "fm9_locked": true,
+      "lint_passed": true,
+      "metadata_only": true,
+      "no_failed_run_resume": true,
+      "protocol_frozen": true,
+      "public_license_audit_passed": true,
+      "source_file_disjoint_splits_verified": true,
+      "tests_passed": true
+    },
+    "confirmation_audio_samples_read": 0,
+    "fm9_audio_samples_read": 0,
+    "format": "fssr-amp-sota-preflight-gate-v1",
+    "passed": true,
+    "physical_audio_samples_read": 0,
+    "valid": true
+  },
+  "lint_passed": true,
+  "parent_campaign": "AMP-QUALITY-ARCH-v3",
+  "parent_verdict": "INVALID",
+  "physical_audio_samples_read": 0,
+  "predecessor_campaign": "AMP-SOTA-PROTOTYPE-v1",
+  "predecessor_verdict": "SUPERSEDED-BEFORE-FIRST-SCIENTIFIC-RUN",
+  "protocol_frozen": true,
+  "public_license_audit_passed": true,
+  "source_file_disjoint_splits_verified": true,
+  "status": "passed",
+  "tests_passed": true
+}
