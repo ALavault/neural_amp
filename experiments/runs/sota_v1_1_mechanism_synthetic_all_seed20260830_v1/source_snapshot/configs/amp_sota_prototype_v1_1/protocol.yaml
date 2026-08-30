@@ -1,0 +1,166 @@
+schema_version: 1
+campaign_version: AMP-SOTA-PROTOTYPE-v1.1
+campaign_key: amp_sota_prototype_v1_1
+parent_campaign: AMP-SOTA-PROTOTYPE-v1
+base_protocol: configs/amp_sota_prototype_v1/protocol.yaml
+status: prospective_before_first_scientific_run
+thresholds_changed_from_v1: false
+exploratory_component_outputs_observed: true
+exploratory_outputs_allowed_for_selection: false
+
+observation:
+  unit: [device, seed, source_file]
+  windows_are_independent_observations: false
+  reset_at_source_file_boundary: true
+  post_training_gain_delay_dc_alignment_allowed: false
+  alignment: declared_model_latency_only
+  common_preroll_samples_after_alignment: 14400
+
+metrics:
+  esr: sum_squared_error_over_target_energy
+  mae: mean_absolute_error
+  mrstft:
+    fft_sizes: [256, 1024, 4096]
+    window: hann
+    hop_fraction: 0.25
+    epsilon: 0.0000001
+  log_mel:
+    sample_rate_hz: 48000
+    fft_size: 2048
+    hop_size: 512
+    centered: false
+    padded: false
+    window: hann_periodic
+    spectrum: power
+    bands: 128
+    scale: htk
+    minimum_hz: 20
+    maximum_hz: 24000
+    filter_normalization: unit_sum
+    logarithm: natural
+    epsilon: 0.0000000001
+    reduction: mean_absolute_difference
+
+bootstrap:
+  estimand: median_sources_and_seeds_per_device_then_median_fixed_devices
+  improvement: baseline_esr_minus_candidate_esr_over_baseline_esr
+  replicates: 10000
+  seed: 20260830
+  devices_fixed_strata: [blackstar, ua1176]
+  paired_seed_resampling: true
+  paired_source_resampling_within_seed: true
+  interval: linear_percentile_2_5_97_5
+  windows_resampled: false
+  point_minimum: 0.10
+  lower_95_strictly_greater_than: 0.0
+  each_device_improvement_strictly_positive: true
+
+confirmation_alias_proxy:
+  claim: model_generated_alias_proxy_not_hardware_alias_proof
+  dft_samples: 65536
+  frames: 6
+  k0_values: [1705, 8191, 12287]
+  amplitudes: [0.10, 0.25, 0.48]
+  reset_before_each_condition: true
+  metric: sato_smith_asr
+  harmonic_fidelity_guard: true
+  absolute_complex_floor: 0.00001
+  median_candidate_minus_baseline_db_maximum: 0.0
+  worst_condition_candidate_minus_baseline_db_maximum: 0.5
+  invalid_guard_result: INVALID
+
+mechanism_screen:
+  numeric_device: cpu_float64_one_thread
+  seed: 20260830
+  approximant:
+    target: tanh
+    interval: [-4.0, 4.0]
+    train_grid: chebyshev
+    train_samples: 8193
+    evaluation_grid: independent_uniform
+    evaluation_samples: 65537
+    equal_iteration_limit_and_stop_rule: true
+    optimizer: Adam
+    updates: 2000
+    learning_rate: 0.002
+    batch: full_grid
+    early_stopping: false
+    approximation_metric: esr
+    asr_metric: known_reference_alias_residual_attenuation_db
+    asr_probe_grid: confirmation_alias_proxy_grid
+    asr_reference: exact_tanh_on_same_base_rate_probe
+    denominator_gradient_nonzero_required: true
+    finite_input_output_required: true
+    tie_break: [asr_gain, cost_p95, lexical_identifier]
+  slow_control:
+    insertion: after_observer_projection_before_tfilm_modulation
+    frame_samples: 64
+    state_initialization: neutral_zero
+    target_available_after_completed_causal_frame: true
+    exponential_coefficient: 0.25
+    slope_limit_coefficient: 0.25
+    fixtures: [slow_sag, attack_release, blocking_distortion, level_transition]
+  resampler:
+    control: {kind: kaiser, taps: 65, beta: 8.6, latency_samples: 32}
+    candidate: {kind: true_two_phase_equiripple_halfband, taps: 49, latency_samples: 24}
+    passband_edge_hz_at_96k: 20000
+    stopband_edge_hz_at_96k: 30000
+    exact_identity_delay_required: true
+    cost_unavailable_before_native_measurement_action: no_cost_based_promotion
+
+native_cost:
+  implementation: cpp_float32_same_binary_baseline_and_candidate
+  compiler: GNU-15.2
+  flags: [-Ofast, LTO, IPO, same_ISA]
+  cpu_cores: 1
+  threads: 1
+  governor_recorded: true
+  allocations_inside_audio_loop: false
+  block_size: 128
+  repetitions: 30
+  schedule: interleaved_ab
+  minimum_audio_seconds_per_repetition: 1
+  rtf: compute_time_over_audio_duration
+
+training:
+  profile: max
+  model_family: slow_long_tcn_x2
+  candidate_matrix: control_plus_each_promoted_axis_plus_one_combination
+  seeds: [0, 1, 2]
+  loss: esr_plus_projection_gain
+  projection_gain_weight: 0.05
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0
+  gradient_clip_norm: 1.0
+  batch_size: 1
+  training_chunk_samples: 8192
+  common_preroll_samples: 14400
+  checkpoint_updates: [500, 1000, 2000, 5000, 10000, 15000]
+  selection_checkpoint: 15000
+  state_carry_between_contiguous_chunks: true
+  reset_at_source_file_boundary: true
+  failed_run_resume_allowed: false
+  maximum_rounds: 3
+  stop_after_consecutive_rounds_below_five_percent: 2
+  baseline_recipes:
+    nam_a2_full: pinned_upstream_v0_13_0_submodel_1
+    nam_a2_lite: pinned_upstream_v0_13_0_submodel_0
+    wright_lstm64: repository_frozen_r1_recipe
+    nablafx: strongest_development_variant_same_recipe_and_pairs
+
+stage_order:
+  - preflight
+  - mechanism_screen
+  - development
+  - candidate_lock
+  - native_parity_runtime
+  - confirmation
+
+boundaries:
+  development_devices: [fulltone, bigmuff]
+  confirmation_devices: [blackstar, ua1176]
+  fm9_outputs_allowed: false
+  human_feedback_allowed_for_selection: false
+  formal_rerun_allowed: false
+  remote_push_allowed: false

@@ -1,0 +1,197 @@
+{
+  "axes": {
+    "approximant": {
+      "candidates": [
+        {
+          "denominator_gradient_nonzero": true,
+          "finite_input_output": true,
+          "metrics": {
+            "approximation_error": 0.011140265216004535,
+            "asr_db": 62.681882352618025
+          },
+          "name": "quintic_hermite_c2"
+        },
+        {
+          "denominator_gradient_nonzero": true,
+          "finite_input_output": true,
+          "metrics": {
+            "approximation_error": 0.005043522518617199,
+            "asr_db": 62.329752717498835
+          },
+          "name": "safe_rational_4_3"
+        }
+      ],
+      "control": {
+        "denominator_gradient_nonzero": true,
+        "finite_input_output": true,
+        "metrics": {
+          "approximation_error": 0.010396253158822252,
+          "asr_db": 98.83961698430811
+        },
+        "name": "cubic_hermite_c1"
+      },
+      "cost_measurement_available": false,
+      "cost_unavailable_action": "no_cost_based_promotion",
+      "other_axes_at_control": true
+    },
+    "resampler": {
+      "candidates": [
+        {
+          "metrics": {
+            "stopband_attenuation_db": 45.92990684981405
+          },
+          "name": "equiripple_halfband_polyphase"
+        }
+      ],
+      "control": {
+        "metrics": {
+          "stopband_attenuation_db": 89.62380505280323
+        },
+        "name": "kaiser_windowed_sinc"
+      },
+      "cost_measurement_available": false,
+      "cost_unavailable_action": "no_cost_based_promotion",
+      "other_axes_at_control": true
+    },
+    "slow_control": {
+      "candidates": [
+        {
+          "causal": true,
+          "metrics": {
+            "dynamic_esr": 1.0816367815898968,
+            "lookahead_samples": 0,
+            "parasite_db": -24.607448929298847
+          },
+          "name": "causal_exponential_hold"
+        },
+        {
+          "causal": true,
+          "metrics": {
+            "dynamic_esr": 1.0814625499296338,
+            "lookahead_samples": 0,
+            "parasite_db": -24.468386221953505
+          },
+          "name": "causal_slope_limited_hold"
+        }
+      ],
+      "control": {
+        "causal": true,
+        "metrics": {
+          "dynamic_esr": 1.0817614340894806,
+          "lookahead_samples": 0,
+          "parasite_db": -24.392844406582128
+        },
+        "name": "causal_zero_order_hold"
+      },
+      "other_axes_at_control": true
+    }
+  },
+  "base_protocol_campaign": "AMP-SOTA-PROTOTYPE-v1",
+  "campaign_version": "AMP-SOTA-PROTOTYPE-v1.1",
+  "confirmation_outputs_accessed": false,
+  "evidence_tier": "SYNTHETIC",
+  "fm9_outputs_accessed": false,
+  "gate": {
+    "axis_results": {
+      "approximant": {
+        "candidate_results": {
+          "quintic_hermite_c2": {
+            "approximation_error_relative_regression": 0.07156540397930919,
+            "asr_improvement_db": -36.15773463169008,
+            "checks": {
+              "cost_route": false,
+              "quality_route": false
+            },
+            "cost_reduction": null,
+            "passed": false
+          },
+          "safe_rational_4_3": {
+            "approximation_error_relative_regression": -0.5148711327467752,
+            "asr_improvement_db": -36.509864266809274,
+            "checks": {
+              "cost_route": false,
+              "quality_route": false
+            },
+            "cost_reduction": null,
+            "passed": false
+          }
+        },
+        "cost_measurement_available": false,
+        "eligible_candidates": [],
+        "passed": false,
+        "promoted_candidate": null
+      },
+      "resampler": {
+        "candidate_results": {
+          "equiripple_halfband_polyphase": {
+            "checks": {
+              "cost": false,
+              "stopband": false
+            },
+            "cost_reduction": null,
+            "passed": false,
+            "stopband_regression_db": 43.69389820298918
+          }
+        },
+        "cost_measurement_available": false,
+        "eligible_candidates": [],
+        "passed": false,
+        "promoted_candidate": null
+      },
+      "slow_control": {
+        "candidate_results": {
+          "causal_exponential_hold": {
+            "checks": {
+              "causal": true,
+              "dynamic_esr": false,
+              "parasite": true,
+              "zero_lookahead": true
+            },
+            "dynamic_esr_relative_improvement": 0.00011523104416144278,
+            "lookahead_samples": 0,
+            "parasite_regression_db": -0.21460452271671926,
+            "passed": false
+          },
+          "causal_slope_limited_hold": {
+            "checks": {
+              "causal": true,
+              "dynamic_esr": false,
+              "parasite": true,
+              "zero_lookahead": true
+            },
+            "dynamic_esr_relative_improvement": 0.0002762939687329238,
+            "lookahead_samples": 0,
+            "parasite_regression_db": -0.07554181537137694,
+            "passed": false
+          }
+        },
+        "eligible_candidates": [],
+        "passed": false,
+        "promoted_candidate": null
+      }
+    },
+    "combined_run_count_maximum": 1,
+    "format": "fssr-amp-sota-mechanism-gate-v1",
+    "maximum_promotions_per_axis": 1,
+    "passed": false,
+    "physical_audio_samples_read": 0,
+    "promoted_components": {},
+    "valid": true
+  },
+  "physical_audio_samples_read": 0,
+  "provenance": {
+    "environment": {
+      "hypothesis": "6.165.10",
+      "numpy": "2.5.2",
+      "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.43",
+      "python": "3.12.13",
+      "scipy": "1.18.1",
+      "torch": "2.13.0"
+    },
+    "git_head": "ddb3c8ad29d8453971a9404ed3e8935e01a1536a",
+    "source_snapshot_files": 13,
+    "worktree_dirty": true
+  },
+  "run_id": "sota_v1_1_mechanism_synthetic_all_seed20260830_v1",
+  "seed": 20260830
+}

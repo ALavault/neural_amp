@@ -1,0 +1,8 @@
+{
+  "campaign_version": "AMP-SOTA-PROTOTYPE-v1.1",
+  "evidence_path": "experiments/summaries/amp_sota_prototype_v1_1/mechanism.json",
+  "physical_audio_samples_read": 0,
+  "promoted_components": {},
+  "valid_scientific_gate_result": true,
+  "verdict": "NO-GO-MECHANISM"
+}

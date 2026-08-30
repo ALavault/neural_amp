@@ -1,0 +1,21 @@
+{
+  "files": [
+    "configs/amp_sota_prototype_v1/protocol.yaml",
+    "configs/amp_sota_prototype_v1_1/protocol.yaml",
+    ".codex_campaign/amp_sota_prototype_v1/PROTOCOL_LOCK.yaml",
+    ".codex_campaign/amp_sota_prototype_v1_1/PROTOCOL_LOCK.yaml",
+    "src/fssr_nam/campaign/amp_sota_prototype_v1.py",
+    "src/fssr_nam/campaign/amp_sota_gates.py",
+    "src/fssr_nam/campaign/amp_sota_registry.py",
+    "src/fssr_nam/data/arch_fixtures.py",
+    "src/fssr_nam/metrics/quality_aliasing.py",
+    "src/fssr_nam/metrics/sota_screen.py",
+    "src/fssr_nam/models/approximants.py",
+    "src/fssr_nam/models/equiripple.py",
+    "scripts/run_sota_mechanism.py"
+  ],
+  "git_head": "ddb3c8ad29d8453971a9404ed3e8935e01a1536a",
+  "method": "exact-file-copy-v1",
+  "untracked_sources_captured_by_copy": true,
+  "worktree_dirty": true
+}
