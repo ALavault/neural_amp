@@ -34,3 +34,7 @@
   scientifique n'ayant existé, corriger seulement la fermeture du snapshot,
   committer le correctif, puis réinvoquer le préflight inchangé depuis un
   worktree propre.
+- `SOTA12-D-014` — Après fermeture du snapshot historique et validation de 340
+  tests, accepter la tentative 002 du préflight. Autoriser uniquement le
+  triplet `dynamic_primary`; les autres systèmes et toute donnée physique
+  restent fermés jusqu'à leur gate littérale.

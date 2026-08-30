@@ -42,7 +42,7 @@
       "scope": "prospective_public-data_sota_prototype_with_frozen_observation_and_screen_contract"
     },
     "amp_sota_prototype_v1_2": {
-      "administrative_status": "active_preflight_pending",
+      "administrative_status": "active_competence_dynamic_authorized",
       "campaign_version": "AMP-SOTA-PROTOTYPE-v1.2",
       "historical_artifacts_immutable": false,
       "parent": "amp_sota_prototype_v1_1",

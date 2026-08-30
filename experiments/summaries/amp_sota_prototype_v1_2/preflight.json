@@ -1,0 +1,123 @@
+{
+  "aa_backend": "full_island_x2",
+  "aa_backend_requalified": false,
+  "campaign_version": "AMP-SOTA-PROTOTYPE-v1.2",
+  "clean_execution_snapshot": true,
+  "confirmation_was_opened": false,
+  "cuda_device_name": "NVIDIA RTX PRO 4000 Blackwell",
+  "cuda_total_memory_bytes": 25149898752,
+  "data_audit": {
+    "audio_files_read": 0,
+    "commercial_claim_supported": false,
+    "devices": [
+      {
+        "device": "fulltone",
+        "license": "CC-BY-NC-4.0",
+        "source_ids_by_split": {
+          "test": [
+            "idmt-gtr4-ib"
+          ],
+          "train": [
+            "idmt-gtr2"
+          ],
+          "validation": [
+            "idmt-gtr4-sg"
+          ]
+        }
+      },
+      {
+        "device": "bigmuff",
+        "license": "CC-BY-NC-4.0",
+        "source_ids_by_split": {
+          "test": [
+            "published-test"
+          ],
+          "train": [
+            "published-train"
+          ],
+          "validation": [
+            "published-val"
+          ]
+        }
+      },
+      {
+        "device": "blackstar",
+        "license": "CC-BY-NC-4.0",
+        "source_ids_by_split": {
+          "test": [
+            "published-test"
+          ],
+          "train": [
+            "published-train"
+          ],
+          "validation": [
+            "published-val"
+          ]
+        }
+      },
+      {
+        "device": "ua1176",
+        "license": "CC-BY-NC-4.0",
+        "source_ids_by_split": {
+          "test": [
+            "bass2",
+            "gtr7"
+          ],
+          "train": [
+            "bass1",
+            "bass3",
+            "bass4",
+            "gtr6",
+            "gtr8"
+          ],
+          "validation": [
+            "bass5",
+            "gtr9"
+          ]
+        }
+      }
+    ],
+    "format": "sota-public-data-metadata-audit-v1",
+    "passed": true,
+    "research_only": true
+  },
+  "data_audit_passed": true,
+  "fm9_outputs_accessed": false,
+  "gate": {
+    "checks": {
+      "aa_dependency_only": true,
+      "budget": true,
+      "clean_execution_snapshot": true,
+      "confirmation_closed": true,
+      "cuda_device": true,
+      "data_audit": true,
+      "fm9_closed": true,
+      "lint": true,
+      "no_physical_audio": true,
+      "no_selection_eligible_synthetic_outputs": true,
+      "parent_terminal": true,
+      "protocol_frozen": true,
+      "test_fixtures_ineligible": true,
+      "tests": true
+    },
+    "passed": true
+  },
+  "goal_disk_gib_used": 0.0,
+  "goal_disk_method": "sum_of_existing_sota_v1_2_run_files",
+  "goal_gpu_hours_method": "no_v1_2_scientific_run_exists",
+  "goal_gpu_hours_used": 0.0,
+  "lint_passed": true,
+  "parent_campaign": "AMP-SOTA-PROTOTYPE-v1.1",
+  "parent_verdict": "NO-GO-MECHANISM",
+  "physical_audio_samples_read": 0,
+  "protocol_frozen": true,
+  "public_license_audit_passed": true,
+  "schema_version": 1,
+  "selection_eligible_synthetic_samples_generated": 0,
+  "source_file_disjoint_splits_verified": true,
+  "stage": "preflight",
+  "status": "passed",
+  "test_only_synthetic_fixtures_eligible_for_selection": false,
+  "test_only_synthetic_fixtures_may_have_been_generated": true,
+  "tests_passed": true
+}
