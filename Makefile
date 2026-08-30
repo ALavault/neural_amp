@@ -48,6 +48,12 @@ smoke:
 campaign-status:
 	uv run python scripts/campaign_status.py
 
+amp-sota-preflight:
+	uv run python scripts/run_sota_preflight.py
+
+amp-sota-mechanism:
+	uv run python scripts/run_sota_mechanism.py
+
 fetch-egfxset-clean:
 	uv run python scripts/fetch_egfxset_clean.py
 

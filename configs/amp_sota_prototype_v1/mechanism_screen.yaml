@@ -1,0 +1,52 @@
+schema_version: 1
+campaign_version: AMP-SOTA-PROTOTYPE-v1
+status: frozen_before_formal_mechanism_screen
+seed: 20260830
+evidence_tier: SYNTHETIC
+physical_audio_samples_read: 0
+
+approximant:
+  target_family: frozen_r2_memoryless_shapers
+  targets: [tanh_gain_1, tanh_gain_2_8, tanh_gain_4_2]
+  target_definition: tanh_gain_x_divided_by_tanh_gain
+  interval: [-2.0, 2.0]
+  knots: 17
+  fit_grid_samples: 16385
+  evaluation_grid_samples: 16384
+  evaluation_grid: half_step_offset_from_fit_grid
+  rational_optimizer: adam
+  rational_updates: 2000
+  rational_learning_rate: 0.002
+  asr_dft_samples: 4096
+  asr_frames: 3
+  asr_k0_values: [127, 509, 1021]
+  asr_amplitudes: [0.10, 0.25, 0.48]
+  asr_metric: median_known_reference_alias_residual_attenuation_db
+  approximation_metric: mean_squared_error_aggregated_over_targets
+  cost_metric: scalar_polynomial_operations_per_sample
+
+slow_control:
+  frames: 512
+  frame_size: 64
+  target_coefficient: 0.08
+  candidate_coefficient: 0.08
+  frame_distribution: seeded_uniform_minus_one_to_one
+  dynamic_esr_metric: error_energy_over_target_energy
+  parasite_metric: upper_quarter_fft_energy_over_total_db
+
+resampler:
+  taps: 49
+  transition_width: 0.10
+  response_bins: 65536
+  passband_edge_normalized: 0.45
+  stopband_edge_normalized: 0.55
+  stopband_metric: minimum_attenuation_db
+  cost_metric: nonzero_fir_multiplications_per_output_sample
+
+boundaries:
+  one_axis_at_a_time: true
+  maximum_promotions_per_axis: 1
+  combined_candidate_rendered_in_this_stage: false
+  formal_rerun_allowed: false
+  confirmation_outputs_accessed: false
+  fm9_outputs_accessed: false

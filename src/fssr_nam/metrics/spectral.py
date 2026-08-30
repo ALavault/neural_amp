@@ -7,6 +7,12 @@ from numpy.typing import ArrayLike, NDArray
 from scipy.signal import stft
 
 DEFAULT_FFT_SIZES = (256, 1_024, 4_096)
+LOG_MEL_SAMPLE_RATE = 48_000
+LOG_MEL_FFT_SIZE = 2_048
+LOG_MEL_HOP_SIZE = 512
+LOG_MEL_BANDS = 128
+LOG_MEL_MIN_HZ = 20.0
+LOG_MEL_MAX_HZ = 24_000.0
 
 
 def _pair(prediction: ArrayLike, target: ArrayLike) -> tuple[np.ndarray, np.ndarray]:
@@ -64,6 +70,59 @@ def multi_resolution_stft_error(
     return float(np.mean(per_resolution))
 
 
+def _mel_filterbank() -> NDArray[np.float64]:
+    def hz_to_mel(frequency: np.ndarray | float) -> np.ndarray:
+        return 2595.0 * np.log10(1.0 + np.asarray(frequency) / 700.0)
+
+    def mel_to_hz(mel: np.ndarray) -> np.ndarray:
+        return 700.0 * (10.0 ** (mel / 2595.0) - 1.0)
+
+    mel_edges = np.linspace(
+        hz_to_mel(LOG_MEL_MIN_HZ),
+        hz_to_mel(LOG_MEL_MAX_HZ),
+        LOG_MEL_BANDS + 2,
+    )
+    hz_edges = mel_to_hz(mel_edges)
+    frequencies = np.fft.rfftfreq(LOG_MEL_FFT_SIZE, 1.0 / LOG_MEL_SAMPLE_RATE)
+    filters = np.zeros((LOG_MEL_BANDS, frequencies.size), dtype=np.float64)
+    for band in range(LOG_MEL_BANDS):
+        left, center, right = hz_edges[band : band + 3]
+        filters[band] = np.maximum(
+            0.0,
+            np.minimum(
+                (frequencies - left) / (center - left),
+                (right - frequencies) / (right - center),
+            ),
+        )
+        filters[band] /= max(float(np.sum(filters[band])), np.finfo(float).eps)
+    return filters
+
+
+def log_mel_error(
+    prediction: ArrayLike, target: ArrayLike, *, epsilon: float = 1.0e-10
+) -> float:
+    """Mean absolute natural-log Mel-power error on the frozen 48 kHz grid."""
+    prediction_array, target_array = _pair(prediction, target)
+    if epsilon <= 0.0:
+        raise ValueError("log-Mel epsilon must be positive")
+
+    def transform(signal: np.ndarray) -> NDArray[np.float64]:
+        _, _, spectrum = stft(
+            signal,
+            fs=LOG_MEL_SAMPLE_RATE,
+            window="hann",
+            nperseg=LOG_MEL_FFT_SIZE,
+            noverlap=LOG_MEL_FFT_SIZE - LOG_MEL_HOP_SIZE,
+            nfft=LOG_MEL_FFT_SIZE,
+            boundary=None,
+            padded=False,
+        )
+        power = np.abs(spectrum) ** 2
+        return np.log(_mel_filterbank() @ power + epsilon)
+
+    return float(np.mean(np.abs(transform(prediction_array) - transform(target_array))))
+
+
 def magnitude_error(
     prediction: ArrayLike, target: ArrayLike, *, fft_size: int = 4_096
 ) -> float:
@@ -111,6 +170,7 @@ def phase_error(
 
 def spectral_metrics(prediction: ArrayLike, target: ArrayLike) -> dict[str, float]:
     return {
+        "log_mel": log_mel_error(prediction, target),
         "mrstft": multi_resolution_stft_error(prediction, target),
         "magnitude_error": magnitude_error(prediction, target),
         "log_spectral_distance_db": log_spectral_distance(prediction, target),

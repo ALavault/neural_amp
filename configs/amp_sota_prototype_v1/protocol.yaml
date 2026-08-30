@@ -1,0 +1,127 @@
+schema_version: 1
+campaign_version: AMP-SOTA-PROTOTYPE-v1
+campaign_key: amp_sota_prototype_v1
+parent_campaign: AMP-QUALITY-ARCH-v3
+status: prospective_before_first_scientific_run
+sample_rate_hz: 48000
+channels: 1
+precision: float32
+
+boundaries:
+  parent_runs_resumed: false
+  parent_results_used_for_hypotheses_only: true
+  physical_development_outputs_allowed: [fulltone, bigmuff]
+  physical_confirmation_outputs_locked: [blackstar, ua1176]
+  fm9_protocol_authoring_allowed: true
+  fm9_outputs_allowed: false
+  human_feedback_allowed_for_selection: false
+  external_report_only_locked: true
+
+data_roles:
+  development:
+    - fulltone
+    - bigmuff
+  confirmation:
+    - blackstar
+    - ua1176
+  source_config: configs/data/r1_physical.yaml
+  source_file_disjoint_splits_required: true
+  public_license_audit_required: true
+  noncommercial_data_claim_boundary: research_only
+
+baselines:
+  primary:
+    - nam_a2_full
+    - nam_a2_lite
+  secondary:
+    - wright_lstm64
+    - nablafx_tcn_tfilm
+    - nablafx_s4_tfilm
+  nam_trainer_version: v0.13.0
+  nam_core_version: v0.5.4
+  same_pairs_and_splits_required: true
+  secondary_variant_selected_on_development_only: true
+  strongest_development_baseline_used_for_confirmation: true
+
+mechanism_screen:
+  evidence_tier: SYNTHETIC
+  seed: 20260830
+  axes:
+    approximant:
+      control: cubic_hermite_c1
+      candidates:
+        - quintic_hermite_c2
+        - safe_rational_4_3
+      asr_improvement_db_minimum: 3.0
+      approximation_error_regression_maximum: 0.01
+      cost_reduction_minimum: 0.25
+      asr_noninferiority_db: 0.5
+    slow_control:
+      control: causal_zero_order_hold
+      candidates:
+        - causal_exponential_hold
+        - causal_slope_limited_hold
+      dynamic_esr_improvement_minimum: 0.05
+      parasite_regression_db_maximum: 0.5
+      lookahead_samples_maximum: 0
+    resampler:
+      control: kaiser_windowed_sinc
+      candidates:
+        - equiripple_halfband_polyphase
+      stopband_regression_db_maximum: 0.5
+      cost_reduction_minimum: 0.25
+  evaluate_one_axis_at_a_time: true
+  maximum_promotions_per_axis: 1
+  combine_promoted_components_once: true
+
+architecture_search:
+  anchor: slow_long_tcn_x2
+  maximum_rounds: 3
+  seeds: [0, 1, 2]
+  stop_after_consecutive_rounds_below_improvement: 2
+  round_median_esr_improvement_minimum: 0.05
+  result_dependent_retry_within_round_allowed: false
+  failed_or_invalid_run_resume_allowed: false
+  candidate_lock_required_before_confirmation: true
+
+confirmation:
+  seeds: [0, 1, 2, 3, 4]
+  devices: [blackstar, ua1176]
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260830
+  median_esr_improvement_minimum: 0.10
+  bootstrap_lower_95_bound_strictly_greater_than: 0.0
+  metric_relative_regression_maximum: 0.05
+  noninferiority_metrics: [mae, log_mel, mrstft]
+  aliasing_regression_allowed: false
+
+prototype:
+  interface: python_cli
+  commands: [train, evaluate, render, benchmark]
+  block_parity_max_absolute_error: 0.00002
+  latency_samples_maximum: 64
+  benchmark_block_size: 128
+  p95_realtime_factor_strictly_less_than: 1.0
+  finite_required: true
+  deterministic_reset_required: true
+
+fm9_protocol:
+  config: configs/data/fm9_capture_protocol.yaml
+  capture_execution_in_campaign_allowed: false
+  user_authorization_required_before_render_import: true
+  human_feedback_requested_only_after_objective_gate: true
+
+resource_budget:
+  gpu: NVIDIA_RTX_PRO_4000_Blackwell_24GB
+  campaign_gpu_hours_maximum: 324
+  campaign_disk_gib_maximum: 50
+
+closure:
+  append_only_gate_ledger_required: true
+  append_only_global_run_ledger_required: true
+  immutable_run_artifacts_required: true
+  make_data_audit_required: true
+  make_test_required: true
+  make_lint_required: true
+  local_scoped_commits_required: true
+  remote_push_allowed: false

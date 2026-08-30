@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 project(fssr_nam_tools LANGUAGES CXX)
 
+include(CTest)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -56,4 +58,45 @@ set_target_properties(r1_benchmark PROPERTIES
   CXX_STANDARD 17
   CXX_STANDARD_REQUIRED ON
   CXX_EXTENSIONS OFF
+)
+
+add_library(sota_prototype STATIC src/sota_prototype.cpp)
+target_include_directories(sota_prototype
+  PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+target_compile_options(sota_prototype PRIVATE
+  "$<$<CONFIG:Release>:-Ofast;-march=native>"
+)
+set_target_properties(sota_prototype PROPERTIES
+  CXX_STANDARD 20
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+  INTERPROCEDURAL_OPTIMIZATION TRUE
+)
+
+add_executable(sota_block_runner tests/sota_block_runner.cpp)
+target_link_libraries(sota_block_runner PRIVATE sota_prototype)
+target_compile_options(sota_block_runner PRIVATE
+  "$<$<CONFIG:Release>:-Ofast;-march=native>"
+)
+set_target_properties(sota_block_runner PROPERTIES
+  CXX_STANDARD 20
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+  INTERPROCEDURAL_OPTIMIZATION TRUE
+)
+
+add_executable(
+  sota_interleaved_benchmark
+  benchmarks/sota_interleaved_benchmark.cpp
+)
+target_link_libraries(sota_interleaved_benchmark PRIVATE sota_prototype)
+target_compile_options(sota_interleaved_benchmark PRIVATE
+  "$<$<CONFIG:Release>:-Ofast;-march=native>"
+)
+set_target_properties(sota_interleaved_benchmark PROPERTIES
+  CXX_STANDARD 20
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+  INTERPROCEDURAL_OPTIMIZATION TRUE
 )

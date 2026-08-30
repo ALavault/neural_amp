@@ -1,0 +1,89 @@
+{
+  "active": "amp_sota_prototype_v1_1",
+  "lineages": {
+    "amp_competence_arch_v2": {
+      "administrative_status": "terminal_no_go_competence",
+      "campaign_version": "AMP-COMPETENCE-ARCH-v2",
+      "historical_artifacts_immutable": true,
+      "parent": "amp_quality_arch_v1",
+      "path": ".codex_campaign/amp_competence_arch_v2",
+      "scope": "synthetic_control_competence_before_paired_architecture_comparison"
+    },
+    "amp_quality_arch_v1": {
+      "administrative_status": "terminal_no_go_mechanism",
+      "campaign_version": "AMP-QUALITY-ARCH-v1",
+      "historical_artifacts_immutable": true,
+      "parent": "quality_aa_v2",
+      "path": ".codex_campaign/amp_quality_arch_v1",
+      "scope": "architecture_agnostic_amplifier_quality_frontier_at_48khz_with_realtime_deployment"
+    },
+    "amp_quality_arch_v3": {
+      "administrative_status": "terminal_invalid_transport_failure",
+      "campaign_version": "AMP-QUALITY-ARCH-v3",
+      "historical_artifacts_immutable": true,
+      "parent": "amp_competence_arch_v2",
+      "path": ".codex_campaign/amp_quality_arch_v3",
+      "scope": "bounded_architecture_improvement_after_v2_representability_failure"
+    },
+    "amp_sota_prototype_v1": {
+      "administrative_status": "terminal_superseded_before_first_scientific_run",
+      "campaign_version": "AMP-SOTA-PROTOTYPE-v1",
+      "historical_artifacts_immutable": true,
+      "parent": "amp_quality_arch_v3",
+      "path": ".codex_campaign/amp_sota_prototype_v1",
+      "scope": "prospective_public-data_sota_prototype"
+    },
+    "amp_sota_prototype_v1_1": {
+      "administrative_status": "active_protocol_frozen",
+      "campaign_version": "AMP-SOTA-PROTOTYPE-v1.1",
+      "historical_artifacts_immutable": false,
+      "parent": "amp_sota_prototype_v1",
+      "path": ".codex_campaign/amp_sota_prototype_v1_1",
+      "scope": "prospective_public-data_sota_prototype_with_frozen_observation_and_screen_contract"
+    },
+    "quality_aa_v1": {
+      "administrative_status": "terminal_invalid_yaml_key_transport",
+      "campaign_version": "FSSR-QUALITY-AA-v1",
+      "historical_artifacts_immutable": true,
+      "parent": "r2_48k_v2",
+      "path": ".codex_campaign/quality_aa_v1",
+      "scope": "synthetic_aliasing_instrumentation_and_realtime_backend_selection"
+    },
+    "quality_aa_v2": {
+      "administrative_status": "terminal_go_synthetic_backend_x2",
+      "campaign_version": "FSSR-QUALITY-AA-v2",
+      "historical_artifacts_immutable": true,
+      "parent": "quality_aa_v1",
+      "path": ".codex_campaign/quality_aa_v2",
+      "scope": "v1_scientific_contract_with_yaml_key_transport_correction"
+    },
+    "r1": {
+      "administrative_status": "superseded_by_R2",
+      "historical_artifacts_immutable": true,
+      "path": ".codex_campaign/r1"
+    },
+    "r2": {
+      "administrative_status": "preserved_blocked_missing_physical_192khz_reference",
+      "campaign_version": "FSSR-R2-v1",
+      "historical_artifacts_immutable": true,
+      "path": ".codex_campaign/r2"
+    },
+    "r2_48k": {
+      "administrative_status": "terminal_invalid_mechanism_instrumentation",
+      "campaign_version": "FSSR-R2-48K-v1",
+      "historical_artifacts_immutable": true,
+      "parent": "r2",
+      "path": ".codex_campaign/r2_48k",
+      "scope": "physical_fidelity_and_efficiency_at_48khz_with_synthetic_aliasing_only"
+    },
+    "r2_48k_v2": {
+      "administrative_status": "terminal_invalid_mechanism_guard",
+      "campaign_version": "FSSR-R2-48K-v2",
+      "historical_artifacts_immutable": true,
+      "parent": "r2_48k",
+      "path": ".codex_campaign/r2_48k_v2",
+      "scope": "v1_scientific_contract_with_canonical_extended_real_json_evidence"
+    }
+  },
+  "schema_version": 1
+}

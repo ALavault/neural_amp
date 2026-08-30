@@ -1,0 +1,11 @@
+{
+  "campaign_version": "AMP-SOTA-PROTOTYPE-v1",
+  "current_stage": "superseded_before_first_scientific_run",
+  "exploration_rounds_completed": 0,
+  "physical_development_accessed": false,
+  "physical_confirmation_accessed": false,
+  "fm9_outputs_accessed": false,
+  "scientific_runs_launched": 0,
+  "status": "terminal_superseded",
+  "verdict": "SUPERSEDED-BEFORE-FIRST-SCIENTIFIC-RUN"
+}

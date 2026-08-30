@@ -1,0 +1,10 @@
+{
+  "campaign_version": "AMP-SOTA-PROTOTYPE-v1.1",
+  "current_stage": "protocol_frozen",
+  "fm9_outputs_accessed": false,
+  "physical_confirmation_accessed": false,
+  "physical_development_accessed": false,
+  "scientific_runs_launched": 0,
+  "status": "active",
+  "verdict": null
+}

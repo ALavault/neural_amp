@@ -1,0 +1,43 @@
+schema_version: 1
+protocol: FM9-ORACLE-v1
+status: protocol_only_no_capture_authorized
+sample_rate_hz: 48000
+channels: 1
+precision: float32
+capture_owner: user
+required_manifest_fields:
+  - fm9_firmware
+  - preset_identifier
+  - scene_identifier
+  - input_level_dbfs
+  - output_level_dbfs
+  - bypassed_cabinet
+  - dry_file
+  - wet_file
+  - source_group
+  - split
+splits:
+  train:
+    minimum_seconds: 120
+  development:
+    minimum_seconds: 30
+  test:
+    minimum_seconds: 30
+source_groups_disjoint: true
+fixed_preset_and_scene_per_model: true
+alignment:
+  marker_required: true
+  integer_and_fractional_delay_report_required: true
+  automatic_delay_correction_allowed: false
+signal_guards:
+  finite_required: true
+  clipped_sample_fraction_maximum: 0.0
+  dry_peak_dbfs_maximum: -1.0
+  wet_peak_dbfs_maximum: -1.0
+  dry_rms_dbfs_minimum: -40.0
+  wet_rms_dbfs_minimum: -40.0
+boundaries:
+  render_import_authorized: false
+  selection_use_authorized: false
+  human_feedback_use_authorized: false
+  user_authorization_required_to_change: true
