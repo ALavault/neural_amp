@@ -28,3 +28,9 @@
 - `SOTA12-D-012` — Compter les fixtures produites par les tests comme
   non décisionnelles; elles ne peuvent servir ni à l'entraînement ni à la
   sélection. Le préflight doit conserver zéro sortie synthétique éligible.
+- `SOTA12-D-013` — Enregistrer la première invocation du préflight comme
+  `INVALID` d'infrastructure : la collecte de `make test` a rencontré quatre
+  modules historiques absents du commit. Aucun gate, run ou résultat
+  scientifique n'ayant existé, corriger seulement la fermeture du snapshot,
+  committer le correctif, puis réinvoquer le préflight inchangé depuis un
+  worktree propre.

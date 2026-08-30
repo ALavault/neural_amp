@@ -1,0 +1,32 @@
+{
+  "campaign_version": "AMP-SOTA-PROTOTYPE-v1.2",
+  "attempt_status": "INVALID",
+  "scientific_validity": "invalid_infrastructure",
+  "campaign_verdict": null,
+  "gate_evaluated": false,
+  "failure_stage": "make_test_collection",
+  "execution_commit": "0d0f61403be7389b4e363b125212791ebc53411d",
+  "execution_worktree": "/fastdata/lavaulta/neural_amp-v12-exec.AI4ifa",
+  "runner_command": "UV_PROJECT_ENVIRONMENT=/fastdata/lavaulta/neural_amp/.venv PYTHONPATH=/fastdata/lavaulta/neural_amp-v12-exec.AI4ifa/src uv run --no-sync python scripts/run_sota_v12_preflight.py",
+  "data_audit_status": "passed",
+  "make_test_status": "failed",
+  "make_test_exit_code": 2,
+  "runner_exit_code": 1,
+  "pytest_items_reported": 310,
+  "collection_errors": 4,
+  "missing_modules": [
+    "fssr_nam.campaign.quality_aa_v1",
+    "fssr_nam.campaign.r2_48k",
+    "fssr_nam.campaign.r2",
+    "fssr_nam.metrics.quality_aliasing"
+  ],
+  "make_lint_status": "not_run",
+  "scientific_runs_launched": 0,
+  "selection_eligible_synthetic_samples_generated": 0,
+  "physical_audio_samples_read": 0,
+  "preflight_summary_written": false,
+  "gate_event_appended": false,
+  "run_ledger_event_appended": false,
+  "diagnostic_log_persisted": false,
+  "recorded_at": "2026-08-30T10:01:03+00:00"
+}
