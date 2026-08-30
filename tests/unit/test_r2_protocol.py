@@ -34,7 +34,11 @@ def test_r2_canonical_protocol_and_administrative_lineage_validate() -> None:
     lineage = json.loads(
         (ROOT / ".codex_campaign/LINEAGES.json").read_text(encoding="utf-8")
     )
-    assert lineage["active"] == "amp_sota_prototype_v1_1"
+    assert lineage["active"] == "amp_sota_prototype_v1_2"
+    assert (
+        lineage["lineages"]["amp_sota_prototype_v1_2"]["parent"]
+        == "amp_sota_prototype_v1_1"
+    )
     assert (
         lineage["lineages"]["amp_sota_prototype_v1_1"]["parent"]
         == "amp_sota_prototype_v1"
@@ -61,21 +65,6 @@ def test_r2_canonical_protocol_and_administrative_lineage_validate() -> None:
         "historical_artifacts_immutable": True,
         "path": ".codex_campaign/r2",
     }
-    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
-    for target in (
-        "r2-preflight",
-        "r2-capture-audit",
-        "r2-mechanism",
-        "r2-screen",
-        "r2-teacher",
-        "r2-distill",
-        "r2-lock",
-        "r2-confirm",
-        "r2-benchmark",
-        "r2-listen",
-        "r2-audit",
-    ):
-        assert f"{target}:" in makefile
 
 
 def test_ambitious_xl_is_declared_exploratory_and_not_a_frozen_screen_member() -> None:

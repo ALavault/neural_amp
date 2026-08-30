@@ -1,0 +1,29 @@
+schema_version: 1
+campaign_version: FSSR-R2-v1
+family: aa-fssr-xl
+role: exploratory_out_of_gamut_not_in_frozen_screen
+protocol_membership: none_until_versioned_amendment
+candidate_id: aa-fssr-xl
+core:
+  topology: H0_to_spline1_to_H1_to_spline2_to_H2
+  fir_taps: 65
+  spline_knots: 129
+residual:
+  receptive_field_samples_at_48khz: 2047
+  channels: 16
+slow_controller:
+  units: 16
+  cadence_samples_at_48khz: 64
+aa_modes:
+  primary: full_island_x2
+  challenger: adaa1
+  teacher: teacher_x4
+comparison_to_r1:
+  r1_cascade_fir_taps: 17
+  r1_cascade_spline_knots: 17
+  r1_residual_channels: 8
+  deliberately_larger: true
+scientific_status:
+  external_capture_required: true
+  counted_run: false
+  selection_eligible: false

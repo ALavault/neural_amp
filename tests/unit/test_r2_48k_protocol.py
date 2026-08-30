@@ -38,7 +38,11 @@ def test_r2_48k_is_preserved_ancestor_of_active_architecture_lineage() -> None:
     lineage = json.loads(
         (ROOT / ".codex_campaign/LINEAGES.json").read_text(encoding="utf-8")
     )
-    assert lineage["active"] == "amp_sota_prototype_v1_1"
+    assert lineage["active"] == "amp_sota_prototype_v1_2"
+    assert (
+        lineage["lineages"]["amp_sota_prototype_v1_2"]["parent"]
+        == "amp_sota_prototype_v1_1"
+    )
     assert (
         lineage["lineages"]["amp_sota_prototype_v1_1"]["parent"]
         == "amp_sota_prototype_v1"

@@ -178,6 +178,20 @@ def test_seed_execution_registers_failure_through_r1_executor(
     assert entries[0]["failure_reason"] == "RuntimeError: injected failure"
 
 
+def test_failure_environment_without_device_does_not_initialize_cuda(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def fail_cuda_query() -> None:
+        raise AssertionError("CUDA runtime must stay unopened without a device")
+
+    monkeypatch.setattr(runner.torch.cuda, "is_available", fail_cuda_query)
+    monkeypatch.setattr(runner.torch.backends.cudnn, "version", fail_cuda_query)
+    environment = runner._device_environment(None)
+    assert environment["torch_cudnn"] is None
+    assert environment["cuda_device_count"] == 0
+    assert environment["cudnn_deterministic"] is None
+
+
 def test_gate_registry_merge_is_idempotent_and_rejects_divergence(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

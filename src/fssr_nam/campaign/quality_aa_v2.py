@@ -156,6 +156,7 @@ def validate_repository_configs(root: Path) -> dict[str, Any]:
         "amp_quality_arch_v3",
         "amp_sota_prototype_v1",
         "amp_sota_prototype_v1_1",
+        "amp_sota_prototype_v1_2",
     }:
         raise QualityAAV2ConfigError(f"unexpected active descendant: {active!r}")
     _require_equal(lineages.get("active"), active, "lineage active")

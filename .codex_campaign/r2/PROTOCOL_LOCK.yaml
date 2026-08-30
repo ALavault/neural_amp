@@ -1,0 +1,8 @@
+schema_version: 1
+campaign_version: FSSR-R2-v1
+status: frozen_before_capture
+protocol_path: configs/r2/protocol.yaml
+frozen_at: 2026-08-27T00:00:00+02:00
+scientific_runs_launched: 0
+raw_captures_observed: false
+amendment_policy: any_scientific_change_requires_new_campaign_version

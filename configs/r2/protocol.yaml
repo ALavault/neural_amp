@@ -1,0 +1,265 @@
+schema_version: 1
+campaign_version: FSSR-R2-v1
+lineage: prospective_architecture_agnostic
+status: preregistered
+r1_administrative_status: superseded_by_R2
+r1_historical_runs_and_conclusions_immutable: true
+valid_terminal_verdicts: [GO-R2, NO-GO-R2, INVALID]
+external_report_only_locked: true
+base_sample_rate_hz: 48000
+precision: float32
+run_id_format: r2_<stage>_<device>_<family>_<aa>_seed<n>_v1
+
+decision:
+  confidence_level: 0.95
+  esr_relative_improvement_lower_bound_minimum: 0.15
+  asr_reduction_db_minimum: 10.0
+  devices_won_minimum: 3
+  mandatory_devices: [blackstar, ua1176]
+  cpp_block_size: 64
+  cpp_cpu_ratio_maximum: 1.25
+  added_latency_samples_maximum: 48
+  mushra_advantage_points_strictly_greater_than: 10.0
+  mushra_lower_bound_strictly_greater_than: 0.0
+  valid_failure_verdict: NO-GO-R2
+  instrumentation_failure_verdict: INVALID
+
+baseline:
+  family: a2
+  model_config: configs/models/baselines/nam_a2_full.yaml
+  packed_submodel: channels_8
+  losses: [m4, wright]
+  selection_unit: device
+  selection_metric: validation_esr
+  selection_rule: minimum
+  test_data_forbidden: true
+
+architectures:
+  aa_nam:
+    topology: pinned_a2_full
+    activation: hermite_c1
+    initialization:
+      function: CustomTanh
+      formula: tanh(x / alpha)
+      alpha: 1.8
+    primary_aa_mode: full_island_x2
+    challenger_aa_mode: adaa1
+  aa_fssr:
+    cascade_rule:
+      fixture: two_clippers
+      minimum_relative_esr_improvement: 0.50
+      promoted_core: cascade
+      fallback_core: mono
+    receptive_field_samples_at_48khz: 2047
+    residual_channels: 16
+    slow_gru_units: 16
+    slow_cadence_samples_at_48khz: 64
+    primary_aa_mode: full_island_x2
+    challenger_aa_mode: adaa1
+  full_island:
+    factors: [2, 4]
+    one_resampler_pair: true
+    causal_alignment: true
+    deployable_latency_samples: 16
+    scale_fir_horizons: true
+    scale_dilations: true
+    scale_slow_cadence: true
+  adaa1:
+    primitive: analytic_hermite
+    difference_limit_threshold: 0.0001
+    maximum_aligned_latency_samples: 48
+    reject_route_on_phase_alignment_failure: true
+
+data:
+  capture_config: configs/data/r2_capture.yaml
+  tiers:
+    development: INTERNAL_DEV
+    internal_validation: INTERNAL_VALIDATION
+    external: EXTERNAL_REPORT_ONLY
+  development_devices: [fulltone, bigmuff]
+  internal_validation_devices: [blackstar, ua1176]
+  final_devices: [fulltone, bigmuff, blackstar, ua1176]
+  tests_sealed_until_cpp_parity_and_benchmark: true
+  source_file_boundaries_preserved: true
+
+mechanism:
+  fixtures:
+    - tanh
+    - asymmetric_clipping
+    - two_clippers
+    - short_memory
+    - slow_sag
+    - rf2047_residual
+  rf2047_residual_energy_ratio_minimum: 0.10
+  modes: [off, full_island_x2, adaa1, teacher_x4]
+  same_weights_across_modes: true
+  reference_sample_rate_hz: 192000
+  spearman_rho_minimum: 0.90
+  median_asr_gain_db_minimum: 10.0
+  per_fixture_asr_gain_db_minimum: 6.0
+  fundamental_complex_error_maximum: 0.00001
+  x2_failure_action: stop_r2
+  adaa_failure_action: reject_adaa_only
+
+screening:
+  data_tier: INTERNAL_DEV
+  devices: [fulltone, bigmuff]
+  families: [aa-nam, aa-fssr]
+  baseline_family: a2
+  losses: [m4, wright]
+  losses_are_existing_unmodified: true
+  initial_seed: 0
+  initial_x2_trajectories: 8
+  baseline_trajectories: 4
+  adaa_challenger_trajectories: 4
+  non_promoted_loss_stop_updates: 5000
+  promoted_loss_final_updates: 15000
+  checkpoints: [200, 1000, 5000, 15000]
+  selection_data: validation
+  loss_promotion:
+    metric: median_validation_esr_at_5000_updates
+    aggregation: across_initial_x2_families_and_devices
+    rule: minimum
+    exact_tie_breaker: m4
+  loss_definitions:
+    m4:
+      source: configs/training/m4_smoke.yaml
+      weights:
+        mse: 1.0
+        mrstft: 0.0005
+        spline_curvature: 0.00001
+        normalized_residual_energy: 0.001
+    wright:
+      preemphasis: 0.85
+      esr_preemphasized_weight: 0.75
+      dc_weight: 0.25
+      epsilon: 0.00001
+  promotion:
+    esr_relative_improvement_minimum_each_device: 0.15
+    asr_gain_db_minimum_each_device: 10.0
+    tie_breaker: projected_cpu_lowest
+
+teacher_and_distillation:
+  teacher_aa_mode: teacher_x4
+  teacher_sample_rate_hz: 192000
+  seed: 0
+  devices: [fulltone, bigmuff]
+  teacher_must_pass_double_gate: true
+  teacher_failure_verdict: NO-GO-R2
+  distill_only_if_teacher_passes_and_deployable_fails: true
+  distillation_loss:
+    physical_loss_weight: 1.0
+    teacher_esr_preemphasis_weight: 0.25
+    teacher_target: downsampled_teacher
+
+confirmation:
+  development_additional_seeds: [1, 2, 3, 4]
+  internal_validation_seeds: [0, 1, 2, 3, 4]
+  families: [a2, candidate]
+  devices: [fulltone, bigmuff, blackstar, ua1176]
+  final_conditions: 40
+  no_tuning_on_internal_validation: true
+  freeze_before_internal_validation:
+    - architecture
+    - loss
+    - code
+    - data
+    - checkpoints
+    - metrics
+    - export
+  sealed_test_open_count_maximum: 1
+  bootstrap:
+    replicates: 10000
+    seed: 20260828
+    hierarchy: [seed, source]
+    windows_are_observations: false
+    probes_are_observations: false
+
+asr:
+  method: sato_smith
+  sample_rate_hz: 48000
+  dft_samples: 65536
+  fft_window: none
+  zero_padding: false
+  k0: [1705, 8191, 12287]
+  amplitudes: [0.10, 0.25, 0.48]
+  frames: 6
+  analyzed_frame: 6
+  periodicity_comparison_frames: [6, 5]
+  periodicity_error_db_maximum: -60.0
+  guards:
+    finite_output: true
+    nonconstant_output: true
+    gain_error_strictly_greater_than: -0.2
+    correlation_strictly_greater_than: 0.9
+    fundamental_level_delta_db_maximum: 0.5
+    harmonic_energy_delta_db_maximum: 0.5
+    complex_harmonic_error_regression_maximum: 0.05
+    ablation_reference: aa_off
+
+benchmark:
+  implementation: cpp
+  same_binary: true
+  abi: float32
+  compiler_optimization: -Ofast
+  lto_ipo: true
+  same_isa: true
+  block_sizes: [1, 16, 64, 128]
+  primary_block_size: 64
+  repetitions: 30
+  schedule: interleaved_ab
+  allocations_outside_timing: true
+  required_fields:
+    - median
+    - p95
+    - rtf
+    - parameters
+    - weight_bytes
+    - persistent_state_bytes
+    - scratch_bytes
+    - latency_samples
+  python_cpp_max_abs_error: 0.00002
+
+listening:
+  standard: ITU-R BS.1534-3
+  launch_requires: [esr_passed, asr_passed, cpu_passed]
+  recruited_participants: 24
+  retained_participants_minimum: 20
+  excerpts: 8
+  excerpts_per_device: 2
+  excerpt_duration_seconds: 10
+  conditions:
+    - hidden_hardware_reference
+    - candidate
+    - a2
+    - aa_off_ablation
+    - lowpass_anchor_3p5khz
+    - aliasing_anchor
+  double_blind: true
+  randomized_order: true
+  one_global_gain_per_trial: true
+  preregistered_exclusion_rule: configs/r2/mushra_exclusion.yaml
+  bootstrap:
+    replicates: 10000
+    seed: 20260829
+    hierarchy: [participant, excerpt]
+
+export:
+  format: fssr-r2-native-v1
+  families: [aa-nam, aa-fssr]
+  required_fields:
+    - family
+    - aa_mode
+    - internal_sample_rate
+    - dilation_scale
+    - latency_samples
+    - parameters
+    - weight_bytes
+    - persistent_state_bytes
+    - scratch_bytes
+
+references:
+  smooth_activations_asr: https://www.dafx.de/paper-archive/2025/DAFx25_paper_50.pdf
+  multirate_neural_resampling: https://research.aalto.fi/en/publications/resampling-filter-design-for-multirate-neural-audio-effect-proces/
+  stateful_adaa: https://www.dafx.de/paper-archive/2019/DAFx2019_paper_4.pdf
+  mushra: https://www.itu.int/rec/R-REC-BS.1534-3-201510-I/en

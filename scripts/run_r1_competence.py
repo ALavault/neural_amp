@@ -384,7 +384,10 @@ def _device_environment(device: torch.device | None) -> dict[str, object]:
         except importlib.metadata.PackageNotFoundError:
             packages[name] = None
     gpu = None
-    if device is not None and device.type == "cuda" and torch.cuda.is_available():
+    cuda_active = (
+        device is not None and device.type == "cuda" and torch.cuda.is_available()
+    )
+    if cuda_active:
         properties = torch.cuda.get_device_properties(device)
         gpu = {
             "index": device.index or 0,
@@ -398,15 +401,15 @@ def _device_environment(device: torch.device | None) -> dict[str, object]:
         "executable": sys.executable,
         "packages": packages,
         "torch_cuda_runtime": torch.version.cuda,
-        "torch_cudnn": torch.backends.cudnn.version(),
-        "cuda_device_count": torch.cuda.device_count()
-        if torch.cuda.is_available()
-        else 0,
+        "torch_cudnn": torch.backends.cudnn.version() if cuda_active else None,
+        "cuda_device_count": torch.cuda.device_count() if cuda_active else 0,
         "training_device": str(device) if device is not None else None,
         "gpu": gpu,
         "precision": "float32",
         "deterministic_algorithms": torch.are_deterministic_algorithms_enabled(),
-        "cudnn_deterministic": torch.backends.cudnn.deterministic,
+        "cudnn_deterministic": (
+            torch.backends.cudnn.deterministic if cuda_active else None
+        ),
         "tf32": False,
     }
 
