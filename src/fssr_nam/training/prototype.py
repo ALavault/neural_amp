@@ -26,7 +26,7 @@ from fssr_nam.models.prototype import (
     PROTOTYPE_SLOW_CONTROLS,
     build_sota_prototype_candidate,
 )
-from fssr_nam.training.arch_v3 import projection_gain_loss
+from fssr_nam.training.objectives import projection_gain_loss
 
 CHECKPOINT_FORMAT = "fssr-nam-sota-prototype-checkpoint-v1"
 CHECKPOINT_SCHEMA_VERSION = 1

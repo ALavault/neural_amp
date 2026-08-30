@@ -51,3 +51,18 @@ def append_run(path: Path, entry: Mapping[str, Any]) -> None:
     serialized = json.dumps(dict(entry), sort_keys=True, separators=(",", ":"))
     with path.open("a", encoding="utf-8") as ledger:
         ledger.write(serialized + "\n")
+
+
+def append_run_once_or_equal(path: Path, entry: Mapping[str, Any]) -> None:
+    """Append a run, accepting only an identical existing recovery entry."""
+    normalized = dict(entry)
+    matches = [
+        row for row in read_runs(path) if row.get("run_id") == entry.get("run_id")
+    ]
+    if matches:
+        if len(matches) == 1 and matches[0] == normalized:
+            return
+        raise ValueError(
+            f"run_id already exists with different evidence: {entry.get('run_id')}"
+        )
+    append_run(path, normalized)

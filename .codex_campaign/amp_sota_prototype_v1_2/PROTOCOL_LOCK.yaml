@@ -1,0 +1,268 @@
+schema_version: 1
+campaign_version: AMP-SOTA-PROTOTYPE-v1.2
+campaign_key: amp_sota_prototype_v1_2
+parent_campaign: AMP-SOTA-PROTOTYPE-v1.1
+base_protocol: configs/amp_sota_prototype_v1/protocol.yaml
+base_measurement_contract: configs/amp_sota_prototype_v1_1/protocol.yaml
+status: prospective_before_first_scientific_run
+thresholds_changed_from_v1: false
+
+scientific_question:
+  hypothesis: a_long_causal_tcn_plus_learned_slow_modulation_clears_full_model_competence_and_beats_the_same_graph_with_zero_slow_modulation
+  candidate: slow_long_tcn_x2
+  counterfactual_control: slow_long_tcn_x2_zero_modulation
+  isolated_difference: learned_slow_modulation
+  prior_outputs_used_for_hypotheses_only: true
+  prior_numeric_outputs_used_for_threshold_or_model_selection: false
+
+boundaries:
+  parent_protocols_and_artifacts_immutable: true
+  parent_runs_resumed_or_retuned: false
+  failed_or_invalid_v1_2_run_resume_allowed: false
+  result_dependent_retry_allowed: false
+  quality_aa_v2_backend_requalified: false
+  v1_1_approximants_or_equiripple_reused: false
+  synthetic_stage_physical_audio_allowed: false
+  physical_audio_samples_maximum_before_slow_value_pass: 0
+  preflight_selection_eligible_synthetic_outputs_allowed: false
+  test_only_synthetic_fixtures_may_be_generated: true
+  test_only_synthetic_fixtures_eligible_for_training_or_selection: false
+  scientific_execution_clean_worktree_required: true
+  confirmation_outputs_locked_until_candidate_and_native_lock: true
+  confirmation_may_open_once: true
+  fm9_outputs_allowed: false
+  human_feedback_allowed_for_selection: false
+  external_report_only_locked: true
+  remote_push_allowed: false
+
+stage_order:
+  - preflight
+  - competence_dynamic
+  - competence_two_clippers
+  - competence_static
+  - slow_value
+  - physical_development
+  - candidate_lock
+  - native_parity_runtime
+  - confirmation
+  - prototype_audit
+
+architecture:
+  candidate:
+    family: slow_long_tcn_x2
+    activation: tanh
+    resampler: kaiser_windowed_sinc
+    aa_backend: full_island_x2
+    slow_control: causal_zero_order_hold
+    profile: max
+    initial_residual_scale: 0.5
+    sample_rate_hz: 48000
+    channels: 1
+    precision: float32
+    fast_path_receptive_field_samples: 12283
+    total_memory: finite_fast_path_plus_recurrent_slow_state
+    latency_samples: 32
+  counterfactual_control:
+    family: slow_long_tcn_x2_zero_modulation
+    construction: same_candidate_graph_and_rng_initialization_order
+    branch_and_resampler_state_equal_at_initialization: true
+    observer_parameters_present_but_frozen: true
+    slow_modulation_forced_to_exact_zero: true
+    cost_claim_from_control_allowed: false
+
+synthetic_data:
+  evidence_tier: SYNTHETIC
+  generator: fssr_nam.data.sota_v12_fixtures.build_sota_v12_system_episodes
+  target_renderer: fssr_nam.data.arch_v3_fixtures.apply_arch_v3_system
+  ordered_systems: [dynamic_primary, two_clippers_primary, static_primary]
+  episode_samples: 72000
+  train_episodes: 8
+  internal_dev_episodes: 4
+  train_source_seed: 40360830
+  internal_dev_source_seed: 40361830
+  slow_value_eval_source_seed: 40362830
+  slow_value_eval_episodes: 4
+  source_seeds_disjoint_from_prior_lineages: true
+  normalization: none
+  source_file_analogue: one_synthetic_episode
+  episode_boundaries_preserved: true
+  validation_or_physical_outputs_accessed: false
+
+optimization:
+  seeds: [0, 1, 2]
+  loss: esr_plus_projection_gain
+  projection_gain_weight: 0.05
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0
+  gradient_clip_norm: 1.0
+  batch_size: 1
+  training_chunk_samples: 8192
+  state_carry_between_contiguous_chunks: true
+  reset_at_episode_boundary: true
+  common_preroll_samples_after_alignment: 14400
+  declared_latency_samples: 32
+  scored_start_samples: 14432
+  scored_samples_per_episode: 57568
+  snapshot_updates: [500, 1000, 2000, 5000, 10000, 15000]
+  evaluation_updates: [10000, 15000]
+  spectral_evaluation_updates: [15000]
+  selected_update: 15000
+  deterministic_algorithms_required: true
+  finite_output_loss_gradient_and_metrics_required: true
+
+sequential_competence:
+  family: slow_long_tcn_x2
+  system_order: [dynamic_primary, two_clippers_primary, static_primary]
+  complete_all_three_seeds_before_system_gate: true
+  next_system_requires_previous_system_pass: true
+  gain_error_strictly_greater_than: -0.2
+  correlation_strictly_greater_than: 0.9
+  guards_required_at_updates: [10000, 15000]
+  guards_required_for_every_seed: true
+  median_esr_15000_over_10000_maximum: 1.05
+  nonfinite_model_verdict: NO-GO-STABILITY-v1.2
+  guard_failure_verdict: NO-GO-COMPETENCE-v1.2
+  operational_or_provenance_failure_verdict: INVALID
+  systems_after_first_failed_gate_runs_allowed: 0
+
+slow_value:
+  requires_all_competence_systems_pass: true
+  control_family: slow_long_tcn_x2_zero_modulation
+  fresh_control_runs: true
+  systems: [dynamic_primary, two_clippers_primary, static_primary]
+  seeds: [0, 1, 2]
+  same_sources_updates_loss_optimizer_and_seeds: true
+  candidate_checkpoint_reevaluated_without_training: true
+  competence_internal_dev_reused_for_slow_value: false
+  evaluation_source_seed: 40362830
+  complete_candidate_seed_triplet_before_stability_decision: true
+  nonfinite_candidate_reevaluation_verdict: NO-GO-STABILITY-v1.2
+  observation_unit: [system, seed, episode]
+  paired_esr_improvement_median_minimum: 0.05
+  dynamic_median_improvement_strictly_greater_than: 0.0
+  two_clippers_median_improvement_strictly_greater_than: 0.0
+  static_median_regression_maximum: 0.05
+  noninferiority_metrics: [mae, log_mel, mrstft]
+  median_relative_regression_maximum: 0.05
+  complete_control_seed_triplet_before_stability_decision: true
+  nonfinite_control_verdict: NO-GO-CONTROL-STABILITY-v1.2
+  systems_after_first_control_stability_failure_runs_allowed: 0
+  bootstrap:
+    estimand: median_episodes_within_seed_then_median_seeds_within_fixed_system_then_median_systems
+    replicates: 10000
+    seed: 20260830
+    systems_fixed_strata: true
+    paired_seed_resampling: true
+    paired_episode_resampling_within_seed: true
+    crossed_seed_and_episode_draws_shared_across_systems: true
+    interval: linear_percentile_2_5_97_5
+    lower_95_bound_strictly_greater_than: 0.0
+  failure_verdict: NO-GO-SLOW-VALUE-v1.2
+  success_verdict: GO-SYNTHETIC-ANCHOR-v1.2
+  success_is_not_physical_or_commercial_superiority: true
+
+physical_development:
+  requires_slow_value_pass: true
+  devices: [fulltone, bigmuff]
+  evidence_tier: INTERNAL_DEV
+  source_config: configs/data/r1_physical.yaml
+  source_file_disjoint_splits_required: true
+  public_license_audit_required: true
+  candidate_seeds: [0, 1, 2]
+  baseline_seeds: [0, 1, 2]
+  same_pairs_splits_training_budget_and_metrics_required: true
+  baseline_families:
+    primary: [nam_a2_full, nam_a2_lite]
+    secondary: [wright_lstm64, nablafx_tcn_tfilm, nablafx_s4_tfilm]
+  nam_trainer_version: v0.13.0
+  nam_core_version: v0.5.4
+  strongest_baseline_selected_per_device_on_development_only: true
+  candidate_median_esr_improvement_minimum: 0.05
+  noninferiority_metrics: [mae, log_mel, mrstft]
+  median_relative_regression_maximum: 0.05
+  aliasing_regression_allowed: false
+  failed_development_action: close_lineage_without_confirmation
+
+candidate_lock:
+  architecture_optimizer_updates_seeds_metrics_and_exclusions_frozen: true
+  strongest_baseline_per_device_frozen: true
+  confirmation_code_frozen_and_tested: true
+  candidate_selected_without_confirmation_outputs: true
+
+native_parity_runtime:
+  implementation: cpp_float32_same_binary_baseline_and_candidate
+  block_parity_max_absolute_error: 0.00002
+  latency_samples_maximum: 64
+  benchmark_block_size: 128
+  interleaved_repetitions: 30
+  p95_realtime_factor_strictly_less_than: 1.0
+  allocations_inside_audio_loop: false
+  deterministic_reset_required: true
+  finite_required: true
+  gate_must_pass_before_confirmation: true
+
+confirmation:
+  may_execute_once: true
+  devices: [blackstar, ua1176]
+  evidence_tier: INTERNAL_VALIDATION
+  seeds: [0, 1, 2, 3, 4]
+  candidate_and_baselines_retrained_on_each_device_train_split: true
+  validation_used_only_by_frozen_training_recipe: true
+  test_source_files_are_observation_units: true
+  median_esr_improvement_minimum: 0.10
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260830
+  bootstrap_lower_95_bound_strictly_greater_than: 0.0
+  noninferiority_metrics: [mae, log_mel, mrstft]
+  metric_relative_regression_maximum: 0.05
+  aliasing_regression_allowed: false
+  post_training_gain_delay_or_dc_fit_allowed: false
+
+fm9_protocol:
+  config: configs/data/fm9_capture_protocol.yaml
+  authoring_allowed: true
+  capture_or_render_import_allowed: false
+  user_authorization_required_before_any_output_access: true
+  human_feedback_requested_only_after_objective_gate: true
+
+continual_improvement:
+  maximum_new_lineages_in_active_goal: 3
+  failure_cause_may_define_next_lineage_hypothesis: true
+  failed_lineage_results_may_requalify_its_protocol: false
+  next_declared_options:
+    competence_failure: long_only_or_optimized_recurrent_observer
+    slow_value_failure: long_only
+    alias_or_runtime_failure: analytic_ADAA_or_C_HB_IIR
+  approximation_only_activation_change_exhausted_by_v1_1: true
+
+resource_budget:
+  gpu: NVIDIA_RTX_PRO_4000_Blackwell_24GB
+  gpu_name: NVIDIA RTX PRO 4000 Blackwell
+  gpu_total_memory_bytes_minimum: 25000000000
+  candidate_trajectory_count_maximum: 9
+  control_trajectory_count_maximum: 9
+  candidate_reevaluation_count_maximum: 9
+  candidate_reevaluation_gpu_hours_per_run_maximum: 0.5
+  slow_value_paired_candidate_eval_plus_control_gpu_hours_maximum: 6
+  gpu_hours_per_trajectory_maximum: 6
+  per_trajectory_wall_clock_limit_enforced: true
+  budget_rechecked_before_each_trajectory: true
+  artifact_finalization_reserve_seconds: 300
+  v1_2_gpu_hours_maximum: 108
+  active_goal_gpu_hours_maximum: 324
+  v1_2_disk_gib_maximum: 20
+  run_disk_gib_maximum: 0.05
+  active_goal_disk_gib_maximum: 50
+
+closure:
+  append_only_gate_ledger_required: true
+  append_only_global_run_ledger_required: true
+  immutable_run_artifacts_required: true
+  exact_source_snapshot_required: true
+  technical_audit_required: true
+  scientific_audit_required: true
+  make_data_audit_required: true
+  make_test_required: true
+  make_lint_required: true
+  local_scoped_commits_required: true

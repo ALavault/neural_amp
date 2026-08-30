@@ -1,0 +1,11 @@
+{
+  "campaign_version": "AMP-SOTA-PROTOTYPE-v1.2",
+  "confirmation_opened": false,
+  "current_stage": "preflight_pending",
+  "fm9_outputs_accessed": false,
+  "selection_eligible_synthetic_samples_generated": 0,
+  "physical_audio_samples_read": 0,
+  "scientific_runs_launched": 0,
+  "status": "active",
+  "verdict": null
+}

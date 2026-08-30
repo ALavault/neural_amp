@@ -72,6 +72,8 @@ huggingface-hub==1.28.0
     # via
     #   tokenizers
     #   transformers
+hypothesis==6.167.0
+    # via fssr-nam (pyproject.toml)
 idna==3.19
     # via
     #   anyio
@@ -276,6 +278,8 @@ shellingham==1.5.4
     # via typer
 six==1.17.0
     # via python-dateutil
+sortedcontainers==2.4.0
+    # via hypothesis
 sounddevice==0.5.6
     # via neural-amp-modeler
 soundfile==0.14.0

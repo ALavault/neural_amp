@@ -1,5 +1,5 @@
 {
-  "active": "amp_sota_prototype_v1_1",
+  "active": "amp_sota_prototype_v1_2",
   "lineages": {
     "amp_competence_arch_v2": {
       "administrative_status": "terminal_no_go_competence",
@@ -40,6 +40,14 @@
       "parent": "amp_sota_prototype_v1",
       "path": ".codex_campaign/amp_sota_prototype_v1_1",
       "scope": "prospective_public-data_sota_prototype_with_frozen_observation_and_screen_contract"
+    },
+    "amp_sota_prototype_v1_2": {
+      "administrative_status": "active_preflight_pending",
+      "campaign_version": "AMP-SOTA-PROTOTYPE-v1.2",
+      "historical_artifacts_immutable": false,
+      "parent": "amp_sota_prototype_v1_1",
+      "path": ".codex_campaign/amp_sota_prototype_v1_2",
+      "scope": "prospective_full_model_competence_then_zero_slow_modulation_ablation"
     },
     "quality_aa_v1": {
       "administrative_status": "terminal_invalid_yaml_key_transport",

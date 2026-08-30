@@ -16,7 +16,6 @@ from .arch_v1 import (
     CausalFeatureDelay,
     CausalSelectiveObserver,
 )
-from .arch_v3 import LONG_BASE_DILATIONS
 from .equiripple import (
     PolyphaseHalfbandDecimator2x,
     PolyphaseHalfbandInterpolator2x,
@@ -40,6 +39,7 @@ PROTOTYPE_SLOW_CONTROLS = (
     "causal_exponential_hold",
     "causal_slope_limited_hold",
 )
+LONG_BASE_DILATIONS = (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024)
 
 _SLOW_CONTROL_ALIASES = {
     "zoh": "causal_zero_order_hold",
@@ -438,6 +438,7 @@ class SOTAPrototypeAmplifier(nn.Module):
             slow_control,
             update_samples=slow_update_samples,
         )
+        self.slow_modulation_enabled = True
         self.slow_control_name = self.slow_control.protocol_name
         self.branch = SlowLongTCNBranch(
             channels=channels,
@@ -474,6 +475,12 @@ class SOTAPrototypeAmplifier(nn.Module):
         """Reset all persistent causal state."""
         self.reset_state()
 
+    def set_slow_modulation_enabled(self, enabled: bool) -> None:
+        """Enable or disable the learned slow path without rebuilding the graph."""
+        if not isinstance(enabled, bool):
+            raise TypeError("slow-modulation flag must be boolean")
+        self.slow_modulation_enabled = enabled
+
     def detach_stream_state(self) -> None:
         """Cut persistent tensors at a truncated-BPTT boundary."""
         for module in self.modules():
@@ -497,17 +504,26 @@ class SOTAPrototypeAmplifier(nn.Module):
         batched, scalar = _batch(signal)
         if batched.shape[-1] < 1:
             raise ValueError("prototype input must contain samples")
-        features = (
-            self.feature_bus.stream(batched) if streaming else self.feature_bus(batched)
-        )
-        raw_modulation, auxiliary = (
-            self.observer.stream(features) if streaming else self.observer(features)
-        )
-        modulation = (
-            self.slow_control.stream(raw_modulation)
-            if streaming
-            else self.slow_control(raw_modulation)
-        )
+        if self.slow_modulation_enabled:
+            features = (
+                self.feature_bus.stream(batched)
+                if streaming
+                else self.feature_bus(batched)
+            )
+            raw_modulation, auxiliary = (
+                self.observer.stream(features) if streaming else self.observer(features)
+            )
+            modulation = (
+                self.slow_control.stream(raw_modulation)
+                if streaming
+                else self.slow_control(raw_modulation)
+            )
+        else:
+            features = batched.new_zeros((len(batched), 6, batched.shape[-1]))
+            auxiliary = batched.new_zeros((len(batched), 6, batched.shape[-1]))
+            modulation = batched.new_zeros(
+                (len(batched), 2 * self.channels, batched.shape[-1])
+            )
         audio = (
             self.island.stream_modulated(batched, modulation)
             if streaming

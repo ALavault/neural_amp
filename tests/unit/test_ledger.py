@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from fssr_nam.reporting.ledger import append_run, read_runs
+from fssr_nam.reporting.ledger import append_run, append_run_once_or_equal, read_runs
 
 
 def _entry(run_id: str = "m0_test") -> dict[str, object]:
@@ -40,3 +40,14 @@ def test_append_run_rejects_duplicate_identifier(tmp_path: Path) -> None:
 def test_append_run_requires_complete_provenance(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="missing required fields"):
         append_run(tmp_path / "runs.jsonl", {"run_id": "incomplete"})
+
+
+def test_append_run_once_accepts_only_identical_recovery(tmp_path: Path) -> None:
+    ledger = tmp_path / "runs.jsonl"
+    append_run_once_or_equal(ledger, _entry())
+    append_run_once_or_equal(ledger, _entry())
+    assert read_runs(ledger) == [_entry()]
+    changed = _entry()
+    changed["status"] = "failed"
+    with pytest.raises(ValueError, match="different evidence"):
+        append_run_once_or_equal(ledger, changed)

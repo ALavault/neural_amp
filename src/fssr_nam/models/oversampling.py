@@ -1,4 +1,4 @@
-"""Causal local x2 oversampling around the learnable nonlinear residual."""
+"""Causal resampling around learnable nonlinear branches."""
 
 from __future__ import annotations
 
@@ -10,15 +10,23 @@ from .spline import SmoothHermiteSpline
 from .structured import CausalDelay, _batch
 
 
-def design_lowpass(taps: int = 33, beta: float = 8.6) -> Tensor:
+def design_resampling_lowpass(factor: int, taps: int, beta: float = 8.6) -> Tensor:
+    """Design the frozen interpolation/decimation FIR for an integer factor."""
+    if factor not in {2, 4}:
+        raise ValueError("resampling factor must be two or four")
     if taps < 3 or taps % 2 == 0:
         raise ValueError("oversampling filter taps must be odd and at least three")
     index = torch.arange(taps, dtype=torch.float64) - (taps - 1) / 2
-    cutoff = 0.25
+    cutoff = 0.5 / factor
     impulse = 2.0 * cutoff * torch.sinc(2.0 * cutoff * index)
     window = torch.kaiser_window(taps, periodic=False, beta=beta, dtype=torch.float64)
     impulse = impulse * window
     return (impulse / impulse.sum()).to(torch.float32)
+
+
+def design_lowpass(taps: int = 33, beta: float = 8.6) -> Tensor:
+    """Backward-compatible x2 FIR design used by the historical S4 model."""
+    return design_resampling_lowpass(2, taps, beta)
 
 
 class FixedCausalFIR(nn.Module):

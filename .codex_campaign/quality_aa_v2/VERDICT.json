@@ -1,0 +1,14 @@
+{
+  "admissible_routes": [
+    "full_island_x2"
+  ],
+  "campaign_version": "FSSR-QUALITY-AA-v2",
+  "claim_boundary": "synthetic AA backend only",
+  "quality_db": {
+    "full_island_x2": -140.3084684728151
+  },
+  "quality_indifference_db": 0.5,
+  "selected_backend": "full_island_x2",
+  "tiebreaker": "lowest_block64_p95_ns_per_sample",
+  "verdict": "GO-QUALITY-AA-v2"
+}

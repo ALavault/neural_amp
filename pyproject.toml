@@ -27,6 +27,7 @@ ml = [
   "torchaudio>=2.7,<3",
 ]
 dev = [
+  "hypothesis>=6,<7",
   "pytest>=8,<10",
   "pytest-cov>=5,<8",
   "ruff>=0.12,<1",
