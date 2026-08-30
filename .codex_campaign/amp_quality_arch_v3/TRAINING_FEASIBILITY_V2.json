@@ -1,0 +1,346 @@
+{
+  "campaign_gpu_hours_maximum": 324.0,
+  "campaign_version": "AMP-QUALITY-ARCH-v3",
+  "checks": {
+    "all_families_finite": true,
+    "round_1_plus_worst_competence_within_campaign_budget": true
+  },
+  "committed_projected_gpu_hours": 66.42817914087792,
+  "cuda_device": "NVIDIA RTX PRO 4000 Blackwell",
+  "every_update_uses_exact_chunk_samples": true,
+  "implementation_revision": "exact_chunk_samples_v2",
+  "input_source": "deterministic_random_tensor_only",
+  "mean_full_chunks_per_scored_episode": 7.03125,
+  "measured_iterations": 12,
+  "physical_audio_samples_read": 0,
+  "results": {
+    "gainhead_micro_tcn_x2": {
+      "competence_projection": {
+        "checkpoints_per_trajectory": 6,
+        "evaluation_episode_events": 1080,
+        "evaluation_gpu_hours": 0.002710249519441277,
+        "preroll_events": 42675,
+        "preroll_gpu_hours": 0.04600380433354682,
+        "total_gpu_hours": 0.894668511422545,
+        "training_gpu_hours": 0.8459544575695569,
+        "trajectories": 15,
+        "updates_per_trajectory": 20000
+      },
+      "finite": true,
+      "measurements": [
+        {
+          "elapsed_seconds": 0.01016457995865494,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.010145706008188426,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.010085828020237386,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.010053717996925116,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.01015720097348094,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.009943285025656223,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.009807658032514155,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.010653132922016084,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.035422864952124655,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.023023775895126164,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.024475626996718347,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.009878468001261353,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_training_update": 0.010151453490834683,
+      "parameters": 6659,
+      "peak_cuda_memory_bytes": 191217664,
+      "round_1_projection": {
+        "checkpoints_per_trajectory": 6,
+        "evaluation_episode_events": 648,
+        "evaluation_gpu_hours": 0.001626149711664766,
+        "preroll_events": 19206,
+        "preroll_gpu_hours": 0.020704137458233164,
+        "total_gpu_hours": 0.40300979307619855,
+        "training_gpu_hours": 0.3806795059063006,
+        "trajectories": 9,
+        "updates_per_trajectory": 15000
+      },
+      "seconds_per_evaluation_episode": 0.009034165064804256,
+      "seconds_per_preroll_episode": 0.003880813019350171
+    },
+    "long_rf_tcn_x2": {
+      "competence_projection": {
+        "checkpoints_per_trajectory": 6,
+        "evaluation_episode_events": 1080,
+        "evaluation_gpu_hours": 0.004467021895106882,
+        "preroll_events": 42675,
+        "preroll_gpu_hours": 0.14010121913694698,
+        "total_gpu_hours": 2.50737549324355,
+        "training_gpu_hours": 2.3628072522114962,
+        "trajectories": 15,
+        "updates_per_trajectory": 20000
+      },
+      "finite": true,
+      "measurements": [
+        {
+          "elapsed_seconds": 0.021497922018170357,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.022343750926665962,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.022056704969145358,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.02310773206409067,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.030115923029370606,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.02869507996365428,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.02882518502883613,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.028502283967100084,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.026533254073001444,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.02875123603735119,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.028609897941350937,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.028205090085975826,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_training_update": 0.028353687026537955,
+      "parameters": 14531,
+      "peak_cuda_memory_bytes": 257146880,
+      "round_1_projection": {
+        "checkpoints_per_trajectory": 6,
+        "evaluation_episode_events": 648,
+        "evaluation_gpu_hours": 0.002680213137064129,
+        "preroll_events": 19206,
+        "preroll_gpu_hours": 0.06305293531913776,
+        "total_gpu_hours": 1.1289964119513751,
+        "training_gpu_hours": 1.0632632634951733,
+        "trajectories": 9,
+        "updates_per_trajectory": 15000
+      },
+      "seconds_per_evaluation_episode": 0.014890072983689606,
+      "seconds_per_preroll_episode": 0.011818732018582523
+    },
+    "slow_state_micro_tcn_x2": {
+      "competence_projection": {
+        "checkpoints_per_trajectory": 6,
+        "evaluation_episode_events": 1080,
+        "evaluation_gpu_hours": 0.5003586626728065,
+        "preroll_events": 42675,
+        "preroll_gpu_hours": 4.1257294529204955,
+        "total_gpu_hours": 44.70407007666945,
+        "training_gpu_hours": 40.07798196107615,
+        "trajectories": 15,
+        "updates_per_trajectory": 20000
+      },
+      "finite": true,
+      "measurements": [
+        {
+          "elapsed_seconds": 0.35774107405450195,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.4569465459790081,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.44736997107975185,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.3799429360078648,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.4791437400272116,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.5193003440508619,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.5601471660193056,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.5333681540796533,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.47218070190865546,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.5692590000107884,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.48272782703861594,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.5436079930514097,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_training_update": 0.4809357835329138,
+      "parameters": 8201,
+      "peak_cuda_memory_bytes": 260453376,
+      "round_1_projection": {
+        "checkpoints_per_trajectory": 6,
+        "evaluation_episode_events": 648,
+        "evaluation_gpu_hours": 0.3002151976036839,
+        "preroll_events": 19206,
+        "preroll_gpu_hours": 1.856795779092936,
+        "total_gpu_hours": 20.192102859180885,
+        "training_gpu_hours": 18.035091882484267,
+        "trajectories": 9,
+        "updates_per_trajectory": 15000
+      },
+      "seconds_per_evaluation_episode": 1.667862208909355,
+      "seconds_per_preroll_episode": 0.34804044594056904
+    }
+  },
+  "round_1_projected_gpu_hours": 21.72410906420846,
+  "schema_version": 1,
+  "scientific_run": false,
+  "sealed_outputs_accessed": {
+    "blackstar": false,
+    "ua1176": false
+  },
+  "stage": "training_feasibility_pre_round_1",
+  "status": "passed",
+  "supersedes_evidence": ".codex_campaign/amp_quality_arch_v3/TRAINING_FEASIBILITY.json",
+  "torch_version": "2.13.0+cu130",
+  "train_fixture_samples_read": 0,
+  "uncommitted_gpu_hours_for_optional_rounds": 257.5718208591221,
+  "validation_source_accessed": false,
+  "warmup_iterations": 3,
+  "worst_case_competence_projected_gpu_hours": 44.70407007666945
+}

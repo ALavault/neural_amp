@@ -61,7 +61,11 @@ def test_v1_1_terminal_lineage_matches_verdict_and_maturity() -> None:
     )
     entry = lineages["lineages"]["amp_sota_prototype_v1_1"]
 
-    assert lineages["active"] == "amp_sota_prototype_v1_1"
+    assert lineages["active"] == "amp_sota_prototype_v1_2"
+    assert (
+        lineages["lineages"]["amp_sota_prototype_v1_2"]["parent"]
+        == "amp_sota_prototype_v1_1"
+    )
     assert entry["administrative_status"] == "terminal_no_go_mechanism"
     assert entry["historical_artifacts_immutable"] is True
     assert maturity["status"] == "terminal_no_go"

@@ -44,8 +44,21 @@ def test_v3_repository_is_preserved_as_terminal_ancestor() -> None:
     )
     assert maturity["status"] == "terminal_invalid"
     assert maturity["verdict"] == "INVALID"
-    run_directories = list((ROOT / "experiments/runs").glob("arch_v3_*"))
-    assert len(run_directories) == maturity["scientific_runs_launched"]
+    run_ledger = [
+        json.loads(line)
+        for line in (ROOT / ".codex_campaign/RUN_LEDGER.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+        if line.strip()
+    ]
+    v3_runs = [
+        entry
+        for entry in run_ledger
+        if entry.get("phase") == "AMP-QUALITY-ARCH-v3-ROUND-1"
+    ]
+    assert len(v3_runs) == maturity["scientific_runs_launched"]
+    assert sum(entry["status"] == "completed" for entry in v3_runs) == 15
+    assert sum(entry["status"] == "failed" for entry in v3_runs) == 1
     parent_protocol = yaml.safe_load(
         (ROOT / "configs/amp_competence_arch_v2/protocol.yaml").read_text(
             encoding="utf-8"

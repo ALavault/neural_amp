@@ -1,0 +1,10 @@
+{
+  "blackstar_accessed": false,
+  "external_report_only_locked": true,
+  "fm9_capture_allowed": false,
+  "internal_dev_physical_allowed_before_native_gate": false,
+  "new_physical_capture_allowed": false,
+  "physical_192khz_dataset_assumed": false,
+  "physical_superiority_claim_allowed": false,
+  "ua1176_accessed": false
+}

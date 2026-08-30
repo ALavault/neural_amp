@@ -1,0 +1,196 @@
+schema_version: 1
+campaign_version: AMP-QUALITY-ARCH-v3
+campaign_key: amp_quality_arch_v3
+parent_campaign: AMP-COMPETENCE-ARCH-v2
+status: prospective_before_first_scientific_run
+sample_rate_hz: 48000
+channels: 1
+precision: float32
+run_id_format: arch_v3_<stage>_<system>__<family>_seed<n>_v1
+valid_terminal_verdicts:
+  - GO-ARCH-v3
+  - NO-GO-REPRESENTABILITY-v3
+  - NO-GO-COMPETENCE-v3
+  - NO-GO-RUNTIME-v3
+  - INVALID
+
+boundaries:
+  parent_runs_resumed: false
+  parent_runs_retuned: false
+  parent_results_used_for_hypotheses_only: true
+  parent_scientific_artifacts_immutable: true
+  physical_192khz_dataset_assumed: false
+  fm9_capture_allowed: false
+  new_physical_capture_allowed: false
+  blackstar_ua1176_holdouts_locked: true
+  external_report_only_locked: true
+  internal_dev_physical_allowed_before_native_gate: false
+  physical_superiority_claim_allowed: false
+
+stages:
+  ordered:
+    - preflight
+    - round_1
+    - round_2
+    - round_3
+    - competence
+    - lock
+    - native
+    - internal_dev
+    - audit
+  maximum_exploration_rounds: 3
+  stop_after_consecutive_rounds_below_improvement: 2
+  round_median_esr_improvement_minimum: 0.05
+  result_dependent_retry_within_round_allowed: false
+  failed_or_invalid_run_resume_allowed: false
+  next_round_requires_prospective_round_lock: true
+
+synthetic_data:
+  generator: fssr_nam.data.arch_v3_fixtures.build_arch_v3_episodes
+  primary_systems:
+    - static_primary
+    - dynamic_primary
+    - two_clippers_primary
+  diagnostic_systems:
+    - tanh_component
+    - asymmetric_component
+    - memory_component
+    - sag_component
+    - envelope_component
+    - blocking_component
+    - level_component
+  stress_systems:
+    - v2_dynamic_rail_stress
+  stress_systems_excluded_from_primary_competence: true
+  episode_samples: 72000
+  preroll_samples: 14400
+  scored_samples: 57600
+  minimum_episode_seconds: 1.2
+  train_episodes: 8
+  internal_dev_episodes: 4
+  validation_episodes: 4
+  normalization: none
+  train_source_seed: 30360828
+  internal_dev_source_seed: 30361828
+  validation_source_seed: 30362828
+  sources_disjoint: true
+  validation_locked_until_competence: true
+  v2_compatibility_generator: fssr_nam.data.arch_v2_fixtures.build_arch_v2_episodes
+  v2_compatibility_source_seed: 20361828
+  v2_compatibility_episodes: 4
+  v2_compatibility_samples: 8192
+
+representability_gate:
+  evidence_tier: train_only
+  required_residual_absolute_quantile: 0.999
+  residual_initialization_margin: 1.25
+  finite_residual_scale_ceiling_allowed: false
+  near_peak_relative_threshold: 0.95
+  near_peak_fraction_maximum: 0.50
+  primary_target_rms_minimum: 0.05
+  primary_target_rms_maximum: 0.80
+  history_collision_probe_samples: 128
+  history_collision_target_rms_minimum: 0.005
+  promotion_requires_memory_capable_family_for_dynamic: true
+  minimum_training_eligible_families: 3
+  invalid_instrumentation_verdict: INVALID
+  failure_verdict: NO-GO-REPRESENTABILITY-v3
+
+architectures:
+  initial_families:
+    - gainhead_micro_tcn_x2
+    - slow_state_micro_tcn_x2
+    - long_rf_tcn_x2
+  profile: max
+  gainhead_micro_tcn_x2:
+    slow_state: false
+    physical_receptive_field_samples: 2047
+    promotion_eligible_for_dynamic: false
+  slow_state_micro_tcn_x2:
+    slow_state: true
+    slow_state_units: 16
+    slow_update_samples: 64
+    physical_receptive_field_samples: 2047
+    promotion_eligible_for_dynamic: true
+  long_rf_tcn_x2:
+    slow_state: false
+    physical_receptive_field_samples: 12283
+    promotion_eligible_for_dynamic: true
+  dry_gain_initial: 1.0
+  residual_scale_parameterization: softplus_unbounded
+  residual_projection_identity_initialized: true
+  latency_samples: 32
+  aa_mode: full_island_x2
+
+round_1:
+  families:
+    - gainhead_micro_tcn_x2
+    - slow_state_micro_tcn_x2
+    - long_rf_tcn_x2
+  seeds: [0, 1, 2]
+  systems:
+    - static_primary
+    - dynamic_primary
+    - two_clippers_primary
+  checkpoint_updates: [500, 1000, 2000, 5000, 10000, 15000]
+  loss: esr_plus_projection_gain
+  projection_gain_weight: 0.05
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0
+  gradient_clip_norm: 1.0
+  batch_size: 1
+  training_chunk_samples: 8192
+  state_carry_between_contiguous_chunks: true
+  aggregate_training_metrics_over_all_episodes: true
+
+competence:
+  seeds: [0, 1, 2, 3, 4]
+  checkpoint_updates: [1000, 2000, 5000, 10000, 15000, 20000]
+  gain_error_strictly_greater_than: -0.2
+  correlation_strictly_greater_than: 0.9
+  guards_required_for_every_primary_system_and_seed: true
+  confirmation_at_immediately_following_checkpoint_required: true
+  plateau_per_trajectory_relative_esr_improvement_minimum: 0.0
+  plateau_per_trajectory_relative_esr_improvement_maximum: 0.05
+  v2_compatibility_dynamic_median_esr_improvement_minimum: 0.30
+  v2_compatibility_two_clippers_median_esr_improvement_minimum: 0.30
+  v2_compatibility_static_median_esr_regression_maximum: 0.05
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260828
+  bootstrap_lower_95_confidence_bound_strictly_greater_than: 0.0
+  failure_verdict: NO-GO-COMPETENCE-v3
+
+runtime_gate:
+  baseline: NAM_A2_Full
+  python_cpp_max_absolute_error: 0.00002
+  latency_samples_maximum: 48
+  block_64_cpu_ratio_maximum: 1.25
+  benchmark_blocks: [1, 16, 64, 128]
+  interleaved_repetitions: 30
+  report_median_and_p95: true
+  failure_verdict: NO-GO-RUNTIME-v3
+
+physical_internal_dev:
+  requires_competence_lock_and_native_gate: true
+  lawful_48khz_data_audit_required: true
+  baseline: NAM_A2_Full
+  baseline_losses: [M4, Wright]
+  baseline_selected_by_validation_per_device: true
+  missing_data_action: ask_user
+  sealed_holdouts_accessed: false
+  sota_claim_allowed: false
+
+resource_budget:
+  gpu: NVIDIA_RTX_PRO_4000_Blackwell_24GB
+  campaign_gpu_hours_maximum: 324
+  campaign_disk_gib_maximum: 50
+
+closure:
+  append_only_gate_ledger_required: true
+  append_only_global_run_ledger_required: true
+  immutable_run_artifacts_required: true
+  technical_audit_required: true
+  scientific_audit_required: true
+  make_test_required: true
+  make_lint_required: true

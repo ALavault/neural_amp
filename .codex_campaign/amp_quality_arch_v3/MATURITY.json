@@ -1,0 +1,9 @@
+{
+  "campaign_version": "AMP-QUALITY-ARCH-v3",
+  "current_stage": "round_1_invalid",
+  "exploration_rounds_completed": 0,
+  "physical_internal_dev_accessed": false,
+  "scientific_runs_launched": 16,
+  "status": "terminal_invalid",
+  "verdict": "INVALID"
+}
