@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import importlib.util
+import json
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -24,6 +26,9 @@ competence = _load_script(
 )
 slow_value = _load_script(
     "run_sota_v12_slow_value_test", "scripts/run_sota_v12_slow_value.py"
+)
+preflight = _load_script(
+    "run_sota_v12_preflight_test", "scripts/run_sota_v12_preflight.py"
 )
 
 
@@ -109,3 +114,61 @@ def test_v12_failed_provenance_has_explicit_ledger_marker() -> None:
         elapsed_seconds=0.0,
     )
     assert entry["commit"] == "PROVENANCE_CAPTURE_FAILED"
+
+
+def test_v12_preflight_records_infrastructure_failure_without_gate(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    campaign_dir = tmp_path / ".codex_campaign/amp_sota_prototype_v1_2"
+    campaign_dir.mkdir(parents=True)
+    first = campaign_dir / "PREFLIGHT_ATTEMPT_001_INVALID.json"
+    first.write_text("{}\n", encoding="utf-8")
+    maturity_path = campaign_dir / "MATURITY.json"
+    maturity_path.write_text(
+        json.dumps(
+            {
+                "campaign_version": "AMP-SOTA-PROTOTYPE-v1.2",
+                "current_stage": "preflight_pending",
+                "infrastructure_invalid_preflight_attempts": 1,
+                "scientific_runs_launched": 0,
+                "status": "active",
+                "verdict": None,
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(preflight, "ROOT", tmp_path)
+    monkeypatch.setattr(preflight, "CAMPAIGN_DIR", campaign_dir)
+    monkeypatch.setattr(
+        preflight,
+        "GATE_LEDGER",
+        campaign_dir / "GATE_LEDGER.jsonl",
+    )
+    monkeypatch.setattr(
+        preflight,
+        "SUMMARY",
+        tmp_path / "experiments/summaries/amp_sota_prototype_v1_2/preflight.json",
+    )
+    error = subprocess.CalledProcessError(2, ["make", "test"])
+    attempt = preflight._record_invalid_attempt(
+        error,
+        failure_stage="make_test",
+        validation_status={
+            "data_audit": "passed",
+            "test": "not_run",
+            "lint": "not_run",
+        },
+        execution_commit="deadbeef",
+    )
+    assert attempt.name == "PREFLIGHT_ATTEMPT_002_INVALID.json"
+    record = json.loads(attempt.read_text(encoding="utf-8"))
+    assert record["attempt_status"] == "INVALID"
+    assert record["gate_evaluated"] is False
+    assert record["failed_command"] == ["make", "test"]
+    assert record["failed_command_exit_code"] == 2
+    assert not preflight.GATE_LEDGER.exists()
+    assert not preflight.SUMMARY.exists()
+    maturity = json.loads(maturity_path.read_text(encoding="utf-8"))
+    assert maturity["infrastructure_invalid_preflight_attempts"] == 2
+    assert maturity["status"] == "active"
+    assert maturity["verdict"] is None
