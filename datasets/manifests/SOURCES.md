@@ -3,7 +3,11 @@
 Metadata was inspected on 2026-08-27. No audio archive was downloaded and no external model result was produced.
 
 - ToneTwist AFx repository and format: https://github.com/mcomunita/tonetwist-afx-dataset at `76ae7c875781bc7e2cec2df73b395d1a12d9cdbd`.
-- ToneTwist Zenodo records: `10794615`, `10794425`, `10891515`, `10798151`, `10892012`, and dry record `10901426`.
+- ToneTwist Zenodo records already inventoried: `10794615`, `10794425`,
+  `10891515`, `10798151`, and `10892012`. `AMP-QUALITY-TEACHER-v1` adds
+  Ampeg Optocomp `10465454`, Harley Benton Rodent `10796378`, Harley Benton
+  Fuzzy Logic `10796322`, and the shared analog dry-marker record `10455730`;
+  their confirmation archives remain undownloaded.
 - Marshall JVM410H original record: https://doi.org/10.5281/zenodo.7970723; associated code https://github.com/stepanmk/grey-box-amp at `86f5a4a62255d27260c397d6df9ca668943d0f79`.
 - NablAFx framework: https://github.com/mcomunita/nablafx at `045db6e7d6087151c7e3a264844bd8c4eafc885c`; its documented data interface targets ToneTwist AFx.
 - EGFxSet: https://doi.org/10.5281/zenodo.7044411.

@@ -1,0 +1,115 @@
+schema_version: 1
+campaign_version: AMP-QUALITY-TEACHER-v1
+catalog_repository: https://github.com/mcomunita/tonetwist-afx-dataset
+catalog_commit: 76ae7c875781bc7e2cec2df73b395d1a12d9cdbd
+license: CC-BY-NC-4.0
+allowed_usage: noncommercial_research_with_attribution
+target_sample_rate_hz: 48000
+channels: 1
+precision: float32
+read_waveforms_during_metadata_audit: false
+download_confirmation_archives_before_lock: false
+maximum_seconds_per_file: null
+independent_normalization_allowed: false
+post_training_gain_dc_or_delay_correction_allowed: false
+resampling:
+  method: scipy_signal_resample_poly
+  window: kaiser
+  beta: 8.6
+  dry_and_wet_processed_together: true
+  normalization: none
+  delay_correction: none
+  dc_correction: none
+dry_markers:
+  zenodo_record: 10455730
+  archive_name: DRY-with-markers.zip
+  size_bytes: 865850744
+  published_checksum: md5:bc1d1490f6c6cfe5643c0798eb5fb5a4
+devices:
+  fulltone:
+    display_name: Fulltone Full Drive 2
+    role: development
+    zenodo_record: 10794615
+    archive_name: Fulltone-FullDrive2.zip
+    size_bytes: 1646555282
+    published_checksum: md5:0bb9809efe4545071ea117f86adce529
+    source_rate_hz: 48000
+    source_layout: shared_dry_internal
+    setting: V100_T050_O050_B000
+  bigmuff:
+    display_name: Electro-Harmonix Big Muff
+    role: development
+    zenodo_record: 10891515
+    archive_name: ElectroHarmonix-BigMuff.zip
+    size_bytes: 49975728
+    published_checksum: md5:45bdd8ea776e1182b9db1d60f62b7930
+    source_rate_hz: 44100
+    source_layout: published_train_val_test
+    setting: S050_V100
+  ampeg:
+    display_name: Ampeg Optocomp
+    role: development
+    zenodo_record: 10465454
+    archive_name: Ampeg-OptoComp.zip
+    size_bytes: 1911870009
+    published_checksum: md5:024a79afaff34155ff99938863099c67
+    source_rate_hz: 48000
+    source_layout: shared_dry_internal
+    setting: C050_R050_O060
+  rodent:
+    display_name: Harley Benton Rodent
+    role: sealed_confirmation
+    zenodo_record: 10796378
+    archive_name: HarleyBenton-Rodent.zip
+    size_bytes: 2913794564
+    published_checksum: md5:7ab43d078cc195f7595c8b1e1fd09723
+    source_rate_hz: 48000
+    source_layout: shared_dry_internal
+    setting: V100_F050_D050_MNormal
+  fuzzy_logic:
+    display_name: Harley Benton Fuzzy Logic
+    role: sealed_confirmation
+    zenodo_record: 10796322
+    archive_name: HarleyBenton-FuzzyLogic.zip
+    size_bytes: 1272358120
+    published_checksum: md5:a702262de22616643a47df5d090c68e1
+    source_rate_hz: 48000
+    source_layout: shared_dry_internal
+    setting: V100_F050
+split_policy:
+  shared_dry_internal:
+    train: every_trainval_source_except_idmt-gtr4-sg
+    validation: idmt-gtr4-sg
+    test: upstream_test_directory_sealed
+  published_train_val_test:
+    train: published-train
+    validation: published-val
+    test: published-test_sealed
+  preserve_source_groups: true
+  cross_split_source_overlap_allowed: false
+test_access:
+  all_five_test_directories_open_together: true
+  development_tests_selection_eligible: false
+  confirmation_primary_devices: [rodent, fuzzy_logic]
+  required_passed_gates:
+    - candidate_lock
+    - comparator_lock
+    - recipes_lock
+    - confirmation_checkpoints_lock
+closed_resources:
+  devices: [blackstar, ua1176]
+  tiers: [EXTERNAL_REPORT_ONLY]
+  purpose: future_replication_only
+pair_audit:
+  checks:
+    - license
+    - published_checksum
+    - synchronization_markers
+    - equal_length_alignment
+    - finite_samples
+    - clipping
+    - dry_wet_correspondence
+  marker_search_samples: 48000
+  marker_minimum_absolute_amplitude: 0.05
+  marker_alignment_tolerance_samples: 1
+  clipping_absolute_threshold: 1.0

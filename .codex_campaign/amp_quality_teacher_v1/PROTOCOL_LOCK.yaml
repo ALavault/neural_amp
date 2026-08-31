@@ -1,0 +1,285 @@
+schema_version: 1
+campaign_version: AMP-QUALITY-TEACHER-v1
+campaign_key: amp_quality_teacher_v1
+parent_campaign: AMP-SOTA-PROTOTYPE-v1.2
+status: prospective_before_preflight_and_first_scientific_run
+supersedes_parent_before_parent_scientific_run: true
+sample_rate_hz: 48000
+channels: 1
+precision: float32
+run_id_format: quality_teacher_v1_<stage>_<device>_<family>_seed<n>_v1
+valid_terminal_verdicts: [GO-OBJECTIVE-SOTA, NO-GO-OBJECTIVE-SOTA, INVALID]
+
+scientific_question:
+  hypothesis: s4_conditioned_dense_wavenet_teacher_improves_objective_fidelity_over_the_strongest_globally_selected_open_comparator
+  primary_metric: esr
+  claim: best_objective_fidelity_on_the_frozen_public_benchmark
+  sota_definition: best_open_reproducible_comparator_retrained_locally
+  perceptual_superiority_claim_allowed: false
+  commercial_superiority_claim_allowed: false
+  proprietary_comparator_claim_allowed: false
+  result_scope_devices: [fulltone, bigmuff, ampeg, rodent, fuzzy_logic]
+
+boundaries:
+  cpu_runtime_gate_enabled: false
+  cpp_required: false
+  rtf_measured: false
+  runtime_memory_gate_enabled: false
+  compression_allowed: false
+  distillation_allowed: false
+  human_listening_used_for_selection: false
+  post_training_gain_dc_or_delay_fit_allowed: false
+  result_dependent_retry_allowed: false
+  result_dependent_variant_allowed: false
+  failed_or_incomplete_run_resume_allowed: false
+  external_report_only_locked: true
+  blackstar_and_ua1176_locked: true
+  teacher_streaming_contract_is_next_cpu_cycle_input: true
+
+stage_order:
+  - preflight
+  - data_audit
+  - ampeg_slow_value
+  - development
+  - candidate_lock
+  - comparator_lock
+  - recipes_lock
+  - confirmation_train
+  - confirmation_checkpoints_lock
+  - test_open
+  - objective_verdict
+  - audit
+
+data:
+  config: configs/data/amp_quality_teacher_v1.yaml
+  catalog_repository: https://github.com/mcomunita/tonetwist-afx-dataset
+  catalog_commit: 76ae7c875781bc7e2cec2df73b395d1a12d9cdbd
+  license: CC-BY-NC-4.0
+  development_devices: [fulltone, bigmuff, ampeg]
+  sealed_confirmation_devices: [rodent, fuzzy_logic]
+  closed_devices: [blackstar, ua1176]
+  external_report_only_locked: true
+  all_eligible_files_used: true
+  historical_120_second_limit_removed: true
+  validation_source_for_internal_archives: idmt-gtr4-sg
+  training_sources_for_internal_archives: every_other_trainval_source
+  bigmuff_published_split_preserved: true
+  source_group_boundaries_preserved: true
+  upstream_test_directories_sealed_before_locks: true
+  all_five_test_directories_opened_in_one_stage: true
+  development_tests_selection_eligible: false
+  target_sample_rate_hz: 48000
+  joint_polyphase_resampling: scipy_signal_resample_poly_kaiser_beta_8.6
+  independent_normalization: none
+  post_training_correction: none
+  required_audits:
+    - license
+    - published_checksum
+    - synchronization_markers
+    - alignment
+    - finite_samples
+    - clipping
+    - dry_wet_correspondence
+
+architecture:
+  candidate:
+    family: s4_tfilm_wavenet_x2_teacher
+    fir:
+      kind: causal_linear
+      taps: 257
+      initialization: least_squares_on_lower_dry_rms_quartile_train_passages
+      passage_samples: 48000
+    island:
+      kind: full_island_x2
+      resampler: kaiser_windowed_sinc
+      taps: 65
+      beta: 8.6
+    fast:
+      kind: dense_gated_wavenet
+      channels: 64
+      layers: 24
+      kernel_size: 3
+      dilations: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048]
+      receptive_field_samples_at_48khz: 8191
+    slow:
+      kind: diagonal_s4_observer
+      input: dry_48khz
+      blocks: 8
+      channels: 64
+      state_dim: 64
+      output: per_wavenet_layer_causal_film
+    composition: delayed_fir_plus_x2_residual
+    final_tanh: false
+    bounded_dry_gain: false
+    latency_samples: 32
+  control:
+    family: wavenet_x2_teacher_fast_only
+    graph_and_initialization_order_identical: true
+    s4_film_forced_to_exact_zero: true
+    observer_parameters_present: true
+    observer_parameters_frozen: true
+  interfaces: [forward, stream, reset_state, detach_stream_state]
+  diagnostics: [audio, fast, slow, fir]
+
+optimization:
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0
+  gradient_clip_norm: 1.0
+  chunk_samples: 48000
+  microchunks_per_update: 3
+  terminal_source_chunk_zero_padded_and_loss_masked: true
+  state_carried_between_contiguous_chunks: true
+  reset_at_source_boundary: true
+  detach_after_each_microchunk: true
+  loss:
+    l1_weight: 10.0
+    mrstft_weight: 1.0
+    preemphasized_esr_weight: 1.0
+    preemphasis: 0.95
+    projection_gain_weight: 0.05
+  curriculum:
+    - {name: fast_fir, updates: 2500, trainable: [fast, fir]}
+    - {name: s4_film, updates: 2500, trainable: [slow]}
+    - {name: joint, updates: 2500, trainable: [fast, fir, slow]}
+  fast_control_s4_phase_updates_parameters: false
+  checkpoint_interval_updates: 500
+  checkpoint_updates: [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500]
+  checkpoint_selection: minimum_validation_total_loss_only
+  seeds_development: [0]
+  seeds_confirmation: [0, 1, 2]
+
+slow_value_gate:
+  device: ampeg
+  seed: 0
+  candidate: s4_tfilm_wavenet_x2_teacher
+  control: wavenet_x2_teacher_fast_only
+  esr_median_relative_improvement_minimum: 0.05
+  l1_plus_mrstft_improvement_strictly_greater_than: 0.0
+  secondary_metrics: [mae, log_mel, envelope_transient]
+  secondary_relative_regression_maximum: 0.05
+  failure_promotes: wavenet_x2_teacher_fast_only
+  success_promotes: s4_tfilm_wavenet_x2_teacher
+  retry_allowed: false
+
+comparators:
+  families:
+    - nablafx_s4_tfilm_large
+    - nam_a2_full
+    - wavenet_dense_16x18
+  all_open_and_retrained_locally: true
+  definitions:
+    nablafx_s4_tfilm_large:
+      blocks: 8
+      channels: 16
+      state_dim: 32
+      variant: large
+    nam_a2_full:
+      trainer_version: v0.13.0
+      core_version: v0.5.4
+      submodel_index: 1
+    wavenet_dense_16x18:
+      channels: 16
+      layers: 18
+      kernel_size: 3
+      dilations: [1, 2, 4, 8, 16, 32, 64, 128, 256, 1, 2, 4, 8, 16, 32, 64, 128, 256]
+      activation: tanh
+      gated: false
+      parameters: 21913
+  global_selection:
+    devices: [fulltone, bigmuff, ampeg]
+    seed: 0
+    primary: equal_device_weighted_median_esr
+    relative_tie_threshold_strictly_less_than: 0.01
+    tie_breaker: equal_device_weighted_median_l1_plus_mrstft
+    final_deterministic_order: [nablafx_s4_tfilm_large, nam_a2_full, wavenet_dense_16x18]
+    per_device_comparator_selection_allowed: false
+
+confirmation:
+  devices: [rodent, fuzzy_logic]
+  seeds: [0, 1, 2]
+  candidate_and_global_comparator_retrained: true
+  test_open_requires_candidate_comparator_recipes_and_checkpoints_locked: true
+  all_tests_opened_once: true
+  no_threshold_change_after_open: true
+
+trajectory_matrix:
+  ampeg_slow_value_trajectories: 2
+  additional_development_candidate_trajectories: 2
+  development_comparator_trajectories: 9
+  confirmation_trajectories: 12
+  maximum_trajectories: 25
+  gpu_hours_per_trajectory_maximum: 12
+  scientific_gpu_hours_maximum: 300
+  preflight_and_evaluation_gpu_hours_reserved: 24
+  residual_budget_variant_or_retry_allowed: false
+
+statistics:
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260831
+  interval: paired_percentile_2.5_97.5
+  resampling_order_within_device: [files, seeds]
+  devices_equal_weight: true
+  observation_unit: device_file_seed
+
+objective_verdict:
+  go: GO-OBJECTIVE-SOTA
+  no_go: NO-GO-OBJECTIVE-SOTA
+  invalid: INVALID
+  aggregate_esr_relative_improvement_minimum: 0.10
+  aggregate_esr_bootstrap_lower_95_strictly_greater_than: 0.0
+  per_confirmation_device_esr_median_improvement_strictly_greater_than: 0.0
+  aggregate_l1_plus_mrstft_improvement_strictly_greater_than: 0.0
+  aggregate_l1_plus_mrstft_bootstrap_lower_95_strictly_greater_than: 0.0
+  secondary_metrics: [mae, log_mel, envelope_transient]
+  secondary_relative_regression_maximum: 0.05
+  correlation_strictly_greater_than: 0.9
+  gain_error_strictly_greater_than: -0.2
+  leakage_missing_provenance_or_incomplete_execution: INVALID
+  no_perceptual_claim_without_controlled_listening: true
+
+run_artifacts:
+  global_ledger: .codex_campaign/RUN_LEDGER.jsonl
+  immutable_run_directories: true
+  required:
+    - resolved_config.yaml
+    - split.json
+    - seed.json
+    - command.json
+    - source_snapshot/manifest.json
+    - environment.json
+    - checkpoints/index.json
+    - metrics/per_file.json
+    - predictions/manifest.json
+    - history.json
+    - status.json
+  failures_registered: true
+
+source_pins:
+  tonetwist:
+    url: https://github.com/mcomunita/tonetwist-afx-dataset
+    commit: 76ae7c875781bc7e2cec2df73b395d1a12d9cdbd
+  nablafx:
+    path: third_party/nablafx
+    commit: 045db6e7d6087151c7e3a264844bd8c4eafc885c
+  nam_trainer:
+    path: third_party/neural-amp-modeler
+    commit: f26112906de06ec6b796ad6d1982e29eed83144e
+  nam_core:
+    path: third_party/NeuralAmpModelerCore
+    commit: 1f42f88535884450104b8711d7595019afa0495b
+  dense_wavenet:
+    url: https://github.com/ryos17/wavenet-imp
+    commit: bee6f1fabf5aa2806a1e66d51837694a6ad0fa80
+  auraloss:
+    path: third_party/auraloss
+    commit: 1576b0cd6e927abc002b23cf3bfc455b660f663c
+
+closure:
+  append_only_gate_ledger_required: true
+  append_only_global_run_ledger_required: true
+  preserve_negative_and_invalid_runs: true
+  make_data_audit_required: true
+  make_test_required: true
+  make_lint_required: true
+  remote_push_allowed: false

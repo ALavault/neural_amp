@@ -38,3 +38,7 @@
   tests, accepter la tentative 002 du préflight. Autoriser uniquement le
   triplet `dynamic_primary`; les autres systèmes et toute donnée physique
   restent fermés jusqu'à leur gate littérale.
+- `SOTA12-D-015` — Superséder prospectivement la lignée par
+  `AMP-QUALITY-TEACHER-v1` avant `dynamic_primary`. Préserver le préflight passé,
+  les protocoles, le ledger et le constat de zéro run scientifique; ne pas
+  requalifier la tentative d'infrastructure invalide en verdict de campagne.

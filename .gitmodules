@@ -10,3 +10,6 @@
 [submodule "third_party/nablafx"]
 	path = third_party/nablafx
 	url = https://github.com/mcomunita/nablafx.git
+[submodule "third_party/auraloss"]
+	path = third_party/auraloss
+	url = https://github.com/csteinmetz1/auraloss.git

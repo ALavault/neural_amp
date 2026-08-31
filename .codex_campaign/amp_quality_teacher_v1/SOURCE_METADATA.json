@@ -1,0 +1,47 @@
+{
+  "campaign_version": "AMP-QUALITY-TEACHER-v1",
+  "license": "CC-BY-NC-4.0",
+  "new_ampeg_and_confirmation_archives_downloaded": false,
+  "records": {
+    "ampeg": {
+      "archive_name": "Ampeg-OptoComp.zip",
+      "published_checksum": "md5:024a79afaff34155ff99938863099c67",
+      "size_bytes": 1911870009,
+      "url": "https://zenodo.org/records/10465454"
+    },
+    "dry_markers": {
+      "archive_name": "DRY-with-markers.zip",
+      "published_checksum": "md5:bc1d1490f6c6cfe5643c0798eb5fb5a4",
+      "size_bytes": 865850744,
+      "url": "https://zenodo.org/records/10455730"
+    },
+    "bigmuff": {
+      "archive_name": "ElectroHarmonix-BigMuff.zip",
+      "published_checksum": "md5:45bdd8ea776e1182b9db1d60f62b7930",
+      "size_bytes": 49975728,
+      "url": "https://zenodo.org/records/10891515"
+    },
+    "fulltone": {
+      "archive_name": "Fulltone-FullDrive2.zip",
+      "published_checksum": "md5:0bb9809efe4545071ea117f86adce529",
+      "size_bytes": 1646555282,
+      "url": "https://zenodo.org/records/10794615"
+    },
+    "fuzzy_logic": {
+      "archive_name": "HarleyBenton-FuzzyLogic.zip",
+      "published_checksum": "md5:a702262de22616643a47df5d090c68e1",
+      "size_bytes": 1272358120,
+      "url": "https://zenodo.org/records/10796322"
+    },
+    "rodent": {
+      "archive_name": "HarleyBenton-Rodent.zip",
+      "published_checksum": "md5:7ab43d078cc195f7595c8b1e1fd09723",
+      "size_bytes": 2913794564,
+      "url": "https://zenodo.org/records/10796378"
+    }
+  },
+  "tonetwist_catalog_commit": "76ae7c875781bc7e2cec2df73b395d1a12d9cdbd",
+  "tonetwist_catalog_url": "https://github.com/mcomunita/tonetwist-afx-dataset",
+  "verified_on": "2026-08-31",
+  "waveform_samples_read_by_campaign": false
+}

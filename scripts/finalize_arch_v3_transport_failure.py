@@ -8,7 +8,6 @@ from datetime import datetime
 from pathlib import Path
 
 from fssr_nam.campaign.amp_arch_v3_registry import append_gate_event, gate_decisions
-
 from fssr_nam.campaign.amp_quality_arch_v3 import CAMPAIGN_VERSION
 from fssr_nam.campaign.quality_aa_provenance import (
     replace_json,

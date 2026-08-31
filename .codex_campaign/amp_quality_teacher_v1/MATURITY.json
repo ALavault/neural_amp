@@ -1,0 +1,11 @@
+{
+  "campaign_version": "AMP-QUALITY-TEACHER-v1",
+  "confirmation_archives_downloaded": false,
+  "current_stage": "preflight",
+  "gates_evaluated": 0,
+  "scientific_runs_launched": 0,
+  "status": "prospective_before_preflight",
+  "test_opened": false,
+  "test_waveform_samples_read": 0,
+  "verdict": null
+}
