@@ -132,6 +132,18 @@ gate.
     )
 
 
+def _next_invalid_attempt_number() -> int:
+    numbers = []
+    for path in CAMPAIGN_DIR.glob("PREFLIGHT_ATTEMPT_*_INVALID.json"):
+        parts = path.stem.split("_")
+        if len(parts) != 4 or not parts[2].isdigit():
+            raise RuntimeError(f"malformed preflight attempt record: {path.name}")
+        numbers.append(int(parts[2]))
+    if len(numbers) != len(set(numbers)):
+        raise RuntimeError("duplicate preflight attempt numbers")
+    return max(numbers, default=0) + 1
+
+
 def _record_invalid(
     error: BaseException,
     *,
@@ -139,7 +151,8 @@ def _record_invalid(
     failure_stage: str,
     validation_status: dict[str, str],
 ) -> None:
-    path = CAMPAIGN_DIR / "PREFLIGHT_ATTEMPT_001_INVALID.json"
+    attempt_number = _next_invalid_attempt_number()
+    path = CAMPAIGN_DIR / f"PREFLIGHT_ATTEMPT_{attempt_number:03d}_INVALID.json"
     record = {
         "attempt_status": "INVALID",
         "campaign_version": CAMPAIGN_VERSION,

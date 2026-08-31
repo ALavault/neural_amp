@@ -43,3 +43,15 @@ def test_preflight_model_contract_is_exact() -> None:
         "candidate_latency_samples": 32,
         "dense_wavenet_parameters": 21_913,
     }
+
+
+def test_invalid_attempt_numbers_are_append_only(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(RUNNER, "CAMPAIGN_DIR", tmp_path)
+    assert RUNNER._next_invalid_attempt_number() == 1
+    (tmp_path / "PREFLIGHT_ATTEMPT_001_INVALID.json").write_text("{}\n")
+    assert RUNNER._next_invalid_attempt_number() == 2
+    (tmp_path / "PREFLIGHT_ATTEMPT_bad_INVALID.json").write_text("{}\n")
+    with pytest.raises(RuntimeError, match="malformed"):
+        RUNNER._next_invalid_attempt_number()
