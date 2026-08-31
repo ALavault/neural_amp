@@ -1,0 +1,27 @@
+{
+  "campaign_version": "AMP-QUALITY-TEACHER-v1",
+  "clean_execution_snapshot": true,
+  "cuda_device_name": "NVIDIA RTX PRO 4000 Blackwell",
+  "cuda_total_memory_bytes": 25149898752,
+  "data_catalog_commit": "76ae7c875781bc7e2cec2df73b395d1a12d9cdbd",
+  "execution_commit": "04e1479fcc2a4781749937249dd0a80f48af6f44",
+  "external_report_only_accessed": false,
+  "model_contract": {
+    "candidate_control_state_dict_equal": true,
+    "candidate_latency_samples": 32,
+    "candidate_receptive_field_samples": 8191,
+    "dense_wavenet_parameters": 21913
+  },
+  "physical_audio_samples_read": 0,
+  "protocol_frozen": true,
+  "scientific_runs_launched": 0,
+  "stage": "preflight",
+  "status": "passed",
+  "test_access_fail_closed": true,
+  "test_waveform_samples_read": 0,
+  "validation_status": {
+    "data_audit": "passed",
+    "lint": "passed",
+    "test": "passed"
+  }
+}

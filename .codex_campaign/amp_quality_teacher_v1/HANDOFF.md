@@ -1,7 +1,6 @@
 # Handoff
 
-Les tentatives de préflight 001 et 002 sont invalides pour infrastructure. La
-seconde a révélé un test d'état canonique obsolète après l'enregistrement de la
-première. Corriger uniquement cet invariant et réexécuter le préflight
-inchangé. Ne télécharger ni lire Rodent/Fuzzy Logic, ni matérialiser un chemin
-`test`.
+Le préflight a passé depuis un snapshot propre. Exécuter `data_audit` sur les
+seules données de développement, sans télécharger Rodent/Fuzzy Logic ni
+matérialiser un chemin `test`. Aucun run scientifique n'est autorisé avant ce
+gate.

@@ -1,11 +1,11 @@
 {
   "campaign_version": "AMP-QUALITY-TEACHER-v1",
   "confirmation_archives_downloaded": false,
-  "current_stage": "preflight",
-  "gates_evaluated": 0,
+  "current_stage": "data_audit",
+  "gates_evaluated": 1,
   "infrastructure_invalid_preflight_attempts": 2,
   "scientific_runs_launched": 0,
-  "status": "prospective_after_invalid_preflight_infrastructure",
+  "status": "active_preflight_passed",
   "test_opened": false,
   "test_waveform_samples_read": 0,
   "verdict": null
