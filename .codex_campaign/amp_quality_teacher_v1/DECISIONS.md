@@ -20,3 +20,7 @@
 - `AQT-D-008` — Geler les réglages centraux publiés : Ampeg `C5/R5/O6`,
   Rodent `V10/F5/D5/Normal` et Fuzzy Logic `V10/F5`; conserver les réglages
   Fulltone et Big Muff déjà audités.
+- `AQT-D-009` — Corriger prospectivement le basename opérationnel Ampeg en
+  `C050_R050_L060`; le contrôle publié reste compression 5, release 5, output
+  level 6. Cette correction précède toute lecture waveform et ne change ni
+  appareil, ni réglage scientifique, ni split, ni seuil.

@@ -117,6 +117,9 @@ def validate_data_contract(contract: Mapping[str, Any]) -> None:
         {
             "zenodo_record": 10455730,
             "archive_name": "DRY-with-markers.zip",
+            "local_archive": (
+                "datasets/raw/external/tone_twist_dry_markers/DRY-with-markers.zip"
+            ),
             "size_bytes": 865850744,
             "published_checksum": "md5:bc1d1490f6c6cfe5643c0798eb5fb5a4",
         },
@@ -127,62 +130,74 @@ def validate_data_contract(contract: Mapping[str, Any]) -> None:
             "development",
             10794615,
             "Fulltone-FullDrive2.zip",
+            "datasets/raw/external/tone_twist_fulltone/Fulltone-FullDrive2.zip",
             1646555282,
             "md5:0bb9809efe4545071ea117f86adce529",
             48_000,
             "shared_dry_internal",
+            "V100_T050_O050_B000",
             "V100_T050_O050_B000",
         ),
         "bigmuff": (
             "development",
             10891515,
             "ElectroHarmonix-BigMuff.zip",
+            ("datasets/raw/external/tone_twist_bigmuff/ElectroHarmonix-BigMuff.zip"),
             49975728,
             "md5:45bdd8ea776e1182b9db1d60f62b7930",
             44_100,
             "published_train_val_test",
+            "S050_V100",
             "S050_V100",
         ),
         "ampeg": (
             "development",
             10465454,
             "Ampeg-OptoComp.zip",
+            "datasets/raw/external/tone_twist_ampeg/Ampeg-OptoComp.zip",
             1911870009,
             "md5:024a79afaff34155ff99938863099c67",
             48_000,
             "shared_dry_internal",
             "C050_R050_O060",
+            "C050_R050_L060",
         ),
         "rodent": (
             "sealed_confirmation",
             10796378,
             "HarleyBenton-Rodent.zip",
+            None,
             2913794564,
             "md5:7ab43d078cc195f7595c8b1e1fd09723",
             48_000,
             "shared_dry_internal",
             "V100_F050_D050_MNormal",
+            None,
         ),
         "fuzzy_logic": (
             "sealed_confirmation",
             10796322,
             "HarleyBenton-FuzzyLogic.zip",
+            None,
             1272358120,
             "md5:a702262de22616643a47df5d090c68e1",
             48_000,
             "shared_dry_internal",
             "V100_F050",
+            None,
         ),
     }
     fields = (
         "role",
         "zenodo_record",
         "archive_name",
+        "local_archive",
         "size_bytes",
         "published_checksum",
         "source_rate_hz",
         "source_layout",
         "setting",
+        "archive_setting",
     )
     for device, expected in expected_records.items():
         declaration = devices.get(device)
@@ -207,6 +222,11 @@ def validate_data_contract(contract: Mapping[str, Any]) -> None:
         "resampling",
     )
     split = contract.get("split_policy", {})
+    _require_equal(
+        split.get("expected_internal_trainval_sources"),
+        ["idmt-gtr2", "idmt-gtr4-sg", "nam", "prvt-gtr", "yt-bass"],
+        "internal trainval sources",
+    )
     _require_equal(
         split.get("shared_dry_internal"),
         {

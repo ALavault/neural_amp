@@ -23,6 +23,7 @@ resampling:
 dry_markers:
   zenodo_record: 10455730
   archive_name: DRY-with-markers.zip
+  local_archive: datasets/raw/external/tone_twist_dry_markers/DRY-with-markers.zip
   size_bytes: 865850744
   published_checksum: md5:bc1d1490f6c6cfe5643c0798eb5fb5a4
 devices:
@@ -31,52 +32,68 @@ devices:
     role: development
     zenodo_record: 10794615
     archive_name: Fulltone-FullDrive2.zip
+    local_archive: datasets/raw/external/tone_twist_fulltone/Fulltone-FullDrive2.zip
     size_bytes: 1646555282
     published_checksum: md5:0bb9809efe4545071ea117f86adce529
     source_rate_hz: 48000
     source_layout: shared_dry_internal
     setting: V100_T050_O050_B000
+    archive_setting: V100_T050_O050_B000
   bigmuff:
     display_name: Electro-Harmonix Big Muff
     role: development
     zenodo_record: 10891515
     archive_name: ElectroHarmonix-BigMuff.zip
+    local_archive: datasets/raw/external/tone_twist_bigmuff/ElectroHarmonix-BigMuff.zip
     size_bytes: 49975728
     published_checksum: md5:45bdd8ea776e1182b9db1d60f62b7930
     source_rate_hz: 44100
     source_layout: published_train_val_test
     setting: S050_V100
+    archive_setting: S050_V100
   ampeg:
     display_name: Ampeg Optocomp
     role: development
     zenodo_record: 10465454
     archive_name: Ampeg-OptoComp.zip
+    local_archive: datasets/raw/external/tone_twist_ampeg/Ampeg-OptoComp.zip
     size_bytes: 1911870009
     published_checksum: md5:024a79afaff34155ff99938863099c67
     source_rate_hz: 48000
     source_layout: shared_dry_internal
     setting: C050_R050_O060
+    archive_setting: C050_R050_L060
   rodent:
     display_name: Harley Benton Rodent
     role: sealed_confirmation
     zenodo_record: 10796378
     archive_name: HarleyBenton-Rodent.zip
+    local_archive: null
     size_bytes: 2913794564
     published_checksum: md5:7ab43d078cc195f7595c8b1e1fd09723
     source_rate_hz: 48000
     source_layout: shared_dry_internal
     setting: V100_F050_D050_MNormal
+    archive_setting: null
   fuzzy_logic:
     display_name: Harley Benton Fuzzy Logic
     role: sealed_confirmation
     zenodo_record: 10796322
     archive_name: HarleyBenton-FuzzyLogic.zip
+    local_archive: null
     size_bytes: 1272358120
     published_checksum: md5:a702262de22616643a47df5d090c68e1
     source_rate_hz: 48000
     source_layout: shared_dry_internal
     setting: V100_F050
+    archive_setting: null
 split_policy:
+  expected_internal_trainval_sources:
+    - idmt-gtr2
+    - idmt-gtr4-sg
+    - nam
+    - prvt-gtr
+    - yt-bass
   shared_dry_internal:
     train: every_trainval_source_except_idmt-gtr4-sg
     validation: idmt-gtr4-sg
