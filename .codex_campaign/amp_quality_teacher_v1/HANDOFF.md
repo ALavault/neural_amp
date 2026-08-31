@@ -1,6 +1,6 @@
 # Handoff
 
-Exécuter d'abord le préflight logiciel et l'audit de métadonnées. Ne télécharger
-ni lire Rodent/Fuzzy Logic, ni matérialiser un chemin `test`. Après passage des
-gates, respecter exactement la matrice de 25 trajectoires; toute fuite,
-provenance manquante ou exécution incomplète donne `INVALID`.
+La tentative de préflight 001 est invalide pour infrastructure : lint du
+snapshot propre, après passage de l'audit catalogue et de 424 tests. Corriger
+uniquement ce groupement d'imports et réexécuter le préflight inchangé. Ne
+télécharger ni lire Rodent/Fuzzy Logic, ni matérialiser un chemin `test`.

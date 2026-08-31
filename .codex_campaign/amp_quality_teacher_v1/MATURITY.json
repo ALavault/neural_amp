@@ -3,8 +3,9 @@
   "confirmation_archives_downloaded": false,
   "current_stage": "preflight",
   "gates_evaluated": 0,
+  "infrastructure_invalid_preflight_attempts": 1,
   "scientific_runs_launched": 0,
-  "status": "prospective_before_preflight",
+  "status": "prospective_after_invalid_preflight_infrastructure",
   "test_opened": false,
   "test_waveform_samples_read": 0,
   "verdict": null
