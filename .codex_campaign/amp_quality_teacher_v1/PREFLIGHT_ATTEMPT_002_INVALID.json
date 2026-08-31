@@ -1,0 +1,20 @@
+{
+  "attempt_status": "INVALID",
+  "campaign_verdict": null,
+  "campaign_version": "AMP-QUALITY-TEACHER-v1",
+  "exception_message": "Command '['make', 'test']' returned non-zero exit status 2.",
+  "exception_type": "CalledProcessError",
+  "execution_commit": "0f6cffacad69d2b18586d58354a7cae513e94bda",
+  "execution_worktree": "/fastdata/lavaulta/neural_amp-quality-teacher-preflight",
+  "failure_stage": "make_test",
+  "gate_evaluated": false,
+  "physical_audio_samples_read": 0,
+  "recorded_at": "2026-08-31T03:25:34+02:00",
+  "scientific_runs_launched": 0,
+  "test_waveform_samples_read": 0,
+  "validation_status": {
+    "data_audit": "passed",
+    "lint": "not_run",
+    "test": "not_run"
+  }
+}
