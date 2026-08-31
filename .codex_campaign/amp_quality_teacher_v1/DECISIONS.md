@@ -24,3 +24,6 @@
   `C050_R050_L060`; le contrôle publié reste compression 5, release 5, output
   level 6. Cette correction précède toute lecture waveform et ne change ni
   appareil, ni réglage scientifique, ni split, ni seuil.
+- `AQT-D-010` — Fermer la lignée `INVALID` au gate données : le couple Big Muff
+  publié ne satisfait pas le contrôle marqueur universel gelé. Ne pas assouplir
+  ce contrôle après observation, ne pas entraîner et ne pas ouvrir les tests.

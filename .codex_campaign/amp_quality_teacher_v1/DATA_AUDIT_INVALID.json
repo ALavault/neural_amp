@@ -1,0 +1,11 @@
+{
+  "campaign_version": "AMP-QUALITY-TEACHER-v1",
+  "error_message": "synchronization marker is missing",
+  "error_type": "QualityTeacherDataError",
+  "execution_commit": "8e6ac9502613cb4732543cf95cb8f7babd8c33ba",
+  "physical_audio_samples_read_before_failure": null,
+  "scientific_runs_launched": 0,
+  "stage": "data_audit",
+  "status": "invalid",
+  "test_waveform_samples_read": 0
+}

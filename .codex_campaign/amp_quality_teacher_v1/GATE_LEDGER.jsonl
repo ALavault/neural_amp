@@ -1,2 +1,3 @@
 
 {"campaign_version":"AMP-QUALITY-TEACHER-v1","evidence_path":".codex_campaign/amp_quality_teacher_v1/PREFLIGHT.json","stage":"preflight","status":"passed"}
+{"campaign_version":"AMP-QUALITY-TEACHER-v1","evidence_path":".codex_campaign/amp_quality_teacher_v1/DATA_AUDIT_INVALID.json","stage":"data_audit","status":"invalid"}

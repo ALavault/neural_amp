@@ -1,6 +1,7 @@
 # Handoff
 
-Le préflight a passé depuis un snapshot propre. Exécuter `data_audit` sur les
-seules données de développement, sans télécharger Rodent/Fuzzy Logic ni
-matérialiser un chemin `test`. Aucun run scientifique n'est autorisé avant ce
-gate.
+La lignée est terminale `INVALID` au gate `data_audit` : le couple Big Muff
+publié n'a pas les marqueurs exigés par le contrat gelé. Ne lancer aucun
+entraînement et ne réutiliser aucune sortie partielle. Rodent/Fuzzy Logic et les
+membres `test` restent fermés. Une nouvelle version prospective, avec politique
+de marqueurs définie par layout avant lecture, exige une décision utilisateur.

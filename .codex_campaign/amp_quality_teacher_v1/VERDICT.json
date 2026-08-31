@@ -1,5 +1,9 @@
 {
   "campaign_version": "AMP-QUALITY-TEACHER-v1",
-  "status": "pending",
-  "verdict": null
+  "evidence_path": ".codex_campaign/amp_quality_teacher_v1/DATA_AUDIT_INVALID.json",
+  "reason": "frozen synchronization markers absent from Big Muff published-train pair",
+  "scientific_runs_launched": 0,
+  "status": "terminal",
+  "test_waveform_samples_read": 0,
+  "verdict": "INVALID"
 }

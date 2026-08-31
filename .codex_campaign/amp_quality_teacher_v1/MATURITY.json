@@ -1,12 +1,13 @@
 {
   "campaign_version": "AMP-QUALITY-TEACHER-v1",
   "confirmation_archives_downloaded": false,
-  "current_stage": "data_audit",
-  "gates_evaluated": 1,
+  "current_stage": "terminal_data_audit_invalid",
+  "development_waveform_samples_read": "unknown_due_failure_before_counter_finalization",
+  "gates_evaluated": 2,
   "infrastructure_invalid_preflight_attempts": 2,
   "scientific_runs_launched": 0,
-  "status": "active_preflight_passed",
+  "status": "terminal_invalid",
   "test_opened": false,
   "test_waveform_samples_read": 0,
-  "verdict": null
+  "verdict": "INVALID"
 }
