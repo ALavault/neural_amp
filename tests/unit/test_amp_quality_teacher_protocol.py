@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from collections import Counter
 from pathlib import Path
 
@@ -57,9 +58,19 @@ def test_quality_teacher_pointer_lock_and_superseded_parent_are_canonical() -> N
     teacher_state = (
         ROOT / ".codex_campaign/amp_quality_teacher_v1/STATE.md"
     ).read_text(encoding="utf-8")
-    assert "Statut : prospective, préflight non exécuté" in teacher_state
+    assert (
+        "Statut : prospective, préflight" in teacher_state
+        or "Statut : active, préflight passé" in teacher_state
+    )
     assert "Runs scientifiques : 0" in teacher_state
     assert "Waveforms de test lus : 0" in teacher_state
+    maturity = json.loads(
+        (ROOT / ".codex_campaign/amp_quality_teacher_v1/MATURITY.json").read_text()
+    )
+    assert maturity["scientific_runs_launched"] == 0
+    assert maturity["test_waveform_samples_read"] == 0
+    assert maturity["current_stage"] in {"preflight", "data_audit"}
+    assert maturity["gates_evaluated"] in {0, 1}
 
 
 def test_quality_teacher_trajectory_matrix_is_exactly_25_and_300_gpu_hours() -> None:

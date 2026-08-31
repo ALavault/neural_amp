@@ -170,6 +170,15 @@ def _record_invalid(
         "validation_status": validation_status,
     }
     write_new_json(path, record)
+    maturity_path = CAMPAIGN_DIR / "MATURITY.json"
+    maturity = json.loads(maturity_path.read_text(encoding="utf-8"))
+    maturity.update(
+        {
+            "infrastructure_invalid_preflight_attempts": attempt_number,
+            "status": "prospective_after_invalid_preflight_infrastructure",
+        }
+    )
+    replace_json(maturity_path, maturity)
 
 
 def main() -> int:
@@ -250,6 +259,13 @@ def main() -> int:
         print(json.dumps(evidence, allow_nan=False, indent=2, sort_keys=True))
         return 0
     except BaseException as error:
+        validation_key = {
+            "make_data_audit": "data_audit",
+            "make_test": "test",
+            "make_lint": "lint",
+        }.get(failure_stage)
+        if validation_key is not None and validation_status[validation_key] != "passed":
+            validation_status[validation_key] = "failed"
         _record_invalid(
             error,
             execution_commit=execution_commit,
