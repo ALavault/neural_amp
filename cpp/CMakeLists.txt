@@ -12,6 +12,10 @@ file(GLOB NAM_SOURCES_TOP "${NAM_CORE_ROOT}/NAM/*.cpp" "${NAM_CORE_ROOT}/NAM/*.c
 file(GLOB NAM_SOURCES_SUB "${NAM_CORE_ROOT}/NAM/*/*.cpp")
 set(NAM_SOURCES ${NAM_SOURCES_TOP} ${NAM_SOURCES_SUB})
 
+# -Ofast implies -ffast-math, which breaks NaN propagation and IEEE parity.
+# The product lane builds with -O3 so its parity and NaN guarantees hold.
+option(NAM_TOOLS_FAST_MATH "Build the NAM tools with -Ofast" ON)
+
 function(add_nam_tool target source)
   add_executable(${target} ${source} ${NAM_SOURCES})
   target_compile_definitions(${target} PRIVATE NAM_ENABLE_A2_FAST)
@@ -20,9 +24,11 @@ function(add_nam_tool target source)
     "${NAM_CORE_ROOT}/Dependencies/eigen"
     "${NAM_CORE_ROOT}/Dependencies/nlohmann"
   )
-  target_compile_options(${target} PRIVATE
-    "$<$<CONFIG:Release>:-Ofast>"
-  )
+  if(NAM_TOOLS_FAST_MATH)
+    target_compile_options(${target} PRIVATE "$<$<CONFIG:Release>:-Ofast>")
+  else()
+    target_compile_options(${target} PRIVATE "$<$<CONFIG:Release>:-O3>")
+  endif()
   set_target_properties(${target} PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
   if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     target_link_libraries(${target} PRIVATE stdc++fs)
