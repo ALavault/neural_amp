@@ -1,0 +1,381 @@
+schema_version: 1
+campaign_version: AMP-QUALITY-ARCH-v1
+campaign_key: amp_quality_arch_v1
+parent_campaign: FSSR-QUALITY-AA-v2
+status: frozen_before_first_scientific_run
+sample_rate_hz: 48000
+channels: 1
+precision: float32
+run_id_format: arch_v1_<stage>_<device>_<family>_<loss>_seed<n>_v1
+valid_terminal_verdicts: [GO-ARCH, NO-GO-ARCH, INVALID]
+
+claim_boundary:
+  sota_scope: strongest_open_reproducible_comparator_in_frozen_snapshot
+  physical_aliasing_claim_allowed: false
+  proprietary_global_sota_claim_allowed: false
+  external_report_only_locked: true
+  physical_192khz_dataset_assumed: false
+  fm9_capture_allowed: false
+
+data:
+  manifest: datasets/manifests/r1_physical.json
+  split_manifest: datasets/splits/r1_physical.json
+  sample_rate_hz: 48000
+  normalization: none
+  internal_dev_devices: [fulltone, bigmuff]
+  prospective_devices: [blackstar, ua1176]
+  historical_test_exposure_disclosed: [fulltone, bigmuff]
+  sealed_test_outputs: [blackstar, ua1176]
+  sealed_openings_maximum: 1
+  source_boundaries_preserved: true
+
+source_pins:
+  nam_trainer:
+    path: third_party/neural-amp-modeler
+    commit: f26112906de06ec6b796ad6d1982e29eed83144e
+  nam_core:
+    path: third_party/NeuralAmpModelerCore
+    commit: 1f42f88535884450104b8711d7595019afa0495b
+  wright:
+    path: third_party/Automated-GuitarAmpModelling
+    commit: e3146386b0fd0b562bc393231be3a5938cf9feac
+  nablafx:
+    path: third_party/nablafx
+    commit: 045db6e7d6087151c7e3a264844bd8c4eafc885c
+  auraloss:
+    path: third_party/auraloss
+    url: https://github.com/csteinmetz1/auraloss.git
+    tag: v0.4.0
+    commit: 1576b0cd6e927abc002b23cf3bfc455b660f663c
+  selective_s6:
+    path: third_party/optical-selective-ssm
+    url: https://github.com/RiccardoVib/Optical-DRC-with-Selective-SSMs.git
+    commit: bd787ecc60024cf364efd4cef07f692af05277e6
+    local_implementation_required: false
+    audited_rejected_before_freeze: true
+
+comparators:
+  maximum_families: 4
+  families:
+    - nam_a2_full
+    - wright_lstm64
+    - nablafx_tcn_tfilm
+    - nablafx_s4_tfilm
+  technical_rejections_before_freeze:
+    selective_s6_glu: pinned_primary_source_is_not_executable_or_reproducible
+  variant_selection_tier: INTERNAL_DEV_validation_only
+  variants:
+    nam_a2_full: [official]
+    wright_lstm64: [official]
+    nablafx_tcn_tfilm: [small, large]
+    nablafx_s4_tfilm: [small, large]
+  nablafx_variant_selection: pooled_fulltone_bigmuff_validation_never_per_device
+  nablafx_model_trajectory_count_at_1000_updates: 16
+  nablafx_top_level_run_id_count: 8
+  nablafx_variant_artifacts_are_ledgered_subtrajectories: true
+  conservative_causal_latency_samples:
+    nam_a2_full: {official: 0}
+    wright_lstm64: {official: 0}
+    nablafx_tcn_tfilm: {small: 635, large: 1270}
+    nablafx_s4_tfilm: {small: 508, large: 1016}
+  comparator_latency_is_aligned_in_training_and_evaluation: true
+  deployable_runtime_gate_applies_to_comparators: false
+  best_comparator_rule: minimum_minimax_normalized_validation_esr
+  per_device_test_selection_forbidden: true
+
+candidates:
+  maximum_families: 12
+  frozen_families:
+    - selective_s6_x2
+    - micro_tcn_x2
+    - phys_s6_tcn_x2
+    - phys_det_tcn_x2
+    - rf2047_tfilm_x2
+    - cascade_rf2047_tfilm_x2
+  primary_conceptual_candidate: phys_s6_tcn_x2
+  primary_candidate_has_no_selection_privilege: true
+  deployable_backend_default: full_island_x2
+  deployable_width_profiles:
+    slim: {channels: 12, observer_state_dim: 32}
+    balanced: {channels: 16, observer_state_dim: 48}
+    full: {channels: 24, observer_state_dim: 64}
+    max: {channels: 32, observer_state_dim: 96}
+  deployable_profile_selection: largest_profile_passing_blind_native_skeleton_gate
+  deployable_profile_selection_uses_audio: false
+  deployable_profile_selection_evidence: .codex_campaign/amp_quality_arch_v1/NATIVE_SKELETON.json
+  selected_deployable_profiles:
+    selective_s6_x2: max
+    micro_tcn_x2: max
+    phys_s6_tcn_x2: max
+    phys_det_tcn_x2: max
+    rf2047_tfilm_x2: max
+    cascade_rf2047_tfilm_x2: max
+  training_feasibility_evidence: .codex_campaign/amp_quality_arch_v1/TRAINING_FEASIBILITY.json
+  training_eligible_families:
+    - micro_tcn_x2
+    - phys_s6_tcn_x2
+    - phys_det_tcn_x2
+    - rf2047_tfilm_x2
+    - cascade_rf2047_tfilm_x2
+  technical_rejections_before_freeze:
+    selective_s6_x2: projected_training_time_exceeds_per_trajectory_cap
+  result_dependent_replacement_family_allowed: false
+  observer_outside_x2_island: true
+  observer_cadence_samples: 64
+  modulation: per_block_causal_tfilm
+  fast_receptive_field_samples: 2047
+  teacher_eligible: [micro_tcn_x2, phys_s6_tcn_x2]
+  teacher_maximum_finalists: 3
+  deployable_finalists_maximum: 1
+
+physical_state_bus:
+  inference_inputs: [dry_audio, dry_fast_envelope, dry_slow_envelope, dry_dc_bias, dry_low_band_energy, dry_high_band_energy, dry_crest]
+  auxiliary_targets: [wet_fast_envelope, wet_slow_envelope, wet_dc_bias, wet_low_band_energy, wet_high_band_energy, wet_crest]
+  wet_descriptors_as_inference_inputs: false
+  auxiliary_weight_candidates: [0.01, 0.05, 0.10]
+  auxiliary_weight_selection_tier: SYNTHETIC_mechanism_only
+  auxiliary_weight_tiebreaker: lowest_weight
+
+anti_aliasing:
+  inherited_parent_verdict: GO-QUALITY-AA-v2
+  default_route: full_island_x2
+  default_latency_samples: 32
+  alternative_route_allowed: true
+  alternative_must_repass_parent_gates: true
+  asr_gain_db_minimum: 10.0
+  guard_gain_error_minimum: -0.2
+  guard_correlation_minimum: 0.9
+  harmonic_complex_regression_maximum: 0.05
+
+losses:
+  allowed:
+    m4:
+      provenance: configs/training/m4_smoke.yaml
+    wright:
+      preemphasis: 0.85
+      esr_weight: 0.75
+      dc_weight: 0.25
+      epsilon: 0.00001
+    nablafx:
+      l1_weight: 0.5
+      mrstft_weight: 0.5
+  per_family_allowed_pairs:
+    nam_a2_full: [m4, wright]
+    wright_lstm64: [wright, nablafx]
+    nablafx_tcn_tfilm: [nablafx, wright]
+    nablafx_s4_tfilm: [nablafx, wright]
+    micro_tcn_x2: [nablafx, wright]
+    phys_s6_tcn_x2: [nablafx, wright]
+    phys_det_tcn_x2: [nablafx, wright]
+    rf2047_tfilm_x2: [nablafx, wright]
+    cascade_rf2047_tfilm_x2: [nablafx, wright]
+  selection_checkpoint_updates: 1000
+  selection_rule: lowest_minimax_normalized_validation_esr_with_anti_collapse_guards
+  nonselected_loss_stop_updates: 1000
+  selected_loss_stop_updates: 5000
+  qualification_top_level_run_id_count_maximum: 36
+  qualification_model_subtrajectory_count_maximum: 44
+  actual_top_level_count_formula: 4_times_4_comparators_plus_mechanism_eligible_candidates
+  mechanism_rejected_candidates_are_not_trained: true
+
+physical_training:
+  evidence: .codex_campaign/amp_quality_arch_v1/PHYSICAL_TRAINING_FEASIBILITY.json
+  output_samples_per_update: 8192
+  batch_size: 1
+  context_samples:
+    nam_a2_full: {official: 6346}
+    wright_lstm64: {official: 49152}
+    nablafx_tcn_tfilm: {small: 133967, large: 119366}
+    nablafx_s4_tfilm: {small: 135808, large: 135808}
+    candidates: 49152
+  context_rationale:
+    nablafx_tcn_tfilm: receptive_field_minus_one_plus_conservative_tfilm_latency
+    nablafx_s4_tfilm: pinned_144000_sample_training_segment_minus_output
+    stateful_other: at_least_four_times_longest_240ms_fixture_time_constant
+  optimizer_by_family:
+    nam_a2_full: {name: Adam, learning_rate: 0.004, weight_decay: 0.000000317}
+    wright_lstm64: {name: Adam, learning_rate: 0.005, weight_decay: 0.0001}
+    nablafx_tcn_tfilm: {name: Adam, learning_rate: 0.005, weight_decay: 0.0}
+    nablafx_s4_tfilm: {name: Adam, learning_rate: 0.01, weight_decay: 0.0}
+    candidates: {name: AdamW, learning_rate: 0.001, weight_decay: 0.0}
+  gradient_clip_norm: 1.0
+  random_window_seed: 20260828
+  validation_samples: 240000
+  validation_source_order_fixed: true
+  validation_checkpoint_selection_only: true
+  comparator_latency_target_alignment: explicit_zero_padded_delay_before_tail_crop
+  finite_output_loss_and_gradients_required: true
+  maximum_median_seconds_per_update: 4.0
+  maximum_projected_hours_per_5000_update_trajectory: 6.0
+  feasibility_warmup_iterations: 1
+  feasibility_measured_iterations: 2
+  physical_audio_samples_read_by_feasibility: 0
+
+stages:
+  ordered: [preflight, mechanism, loss_qualify, screen, teacher, distill, robustness, lock, native, confirm_train, confirm_test, listen, audit]
+  common_checkpoints: [200, 1000, 5000, 15000]
+  screen_seed: 0
+  screen_devices: [fulltone, bigmuff]
+  screen_continue_updates: 5000
+  teacher_updates: 15000
+  distill_updates: 15000
+  final_updates: 15000
+  final_seeds: [0, 1, 2, 3, 4]
+  final_devices: [fulltone, bigmuff, blackstar, ua1176]
+  final_condition_count: 40
+  result_dependent_retry_allowed: false
+
+mechanism_gate:
+  fixtures: [tanh, asymmetric_clip, two_clippers, rf2047_memory, slow_sag, attack_release, blocking_distortion, level_transition]
+  required_numerical_tests: [finite, shape, causality, reset, irregular_blocks, gradients, full_chunk_stream_parity]
+  stream_parity_max_abs: 0.000002
+  physical_bus_dynamic_improvement_minimum: 0.10
+  physical_bus_static_regression_maximum: 0.05
+  cascade_two_clipper_improvement_minimum: 0.50
+  native_skeleton_required_before_physical_training: true
+  native_skeleton_block64_p95_rtf_maximum: 0.80
+  native_skeleton_repetitions: 30
+  all_deployable_width_profiles_benchmarked: true
+  failure_scope: prune_failed_candidate_family_without_replacement
+  minimum_training_eligible_candidates_after_gate: 2
+  anti_collapse_gain_error_minimum: -0.2
+  anti_collapse_correlation_minimum: 0.9
+
+mechanism_training:
+  profile: max
+  seed: 20260828
+  episode_samples: 8192
+  train_episodes: 16
+  validation_episodes: 4
+  loss_tail_samples: 2048
+  updates_per_trajectory: 500
+  batch_size: 1
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0
+  gradient_clip_norm: 1.0
+  audio_loss: esr
+  trajectory_count: 10
+  source_seed_train: 20260828
+  source_seed_validation: 20261828
+  systems:
+    static_composite:
+      components: [tanh, asymmetric_clip]
+      families: [micro_tcn_x2, phys_det_tcn_x2, phys_s6_tcn_x2]
+    dynamic_composite:
+      components: [rf2047_memory, slow_sag, attack_release, blocking_distortion, level_transition]
+      families: [micro_tcn_x2, phys_det_tcn_x2, phys_s6_tcn_x2]
+    two_clippers:
+      components: [two_clippers]
+      families: [rf2047_tfilm_x2, cascade_rf2047_tfilm_x2]
+  phys_s6_auxiliary_weight_candidates: [0.01, 0.05, 0.10]
+  phys_s6_auxiliary_weight_selection: lowest_dynamic_validation_esr_then_lowest_weight
+  phys_s6_static_uses_selected_auxiliary_weight: true
+  no_other_hyperparameter_selection: true
+
+native_skeleton_baseline:
+  family: nam_a2_full
+  model_path: experiments/runs/m2_a2_tanh_seed0_v3/model_full.nam
+  parameters: 12145
+  weight_bytes: 48580
+  host_cpu: Intel_Xeon_E5-2630_v3
+  required_isa: [avx2, fma]
+  compiler: GNU_15.2.0
+  build_type: Release
+  compiler_flags: [-Ofast, -march=native, LTO_IPO]
+
+training_feasibility_gate:
+  input_source: deterministic_synthetic_probe
+  physical_audio_samples_read: 0
+  selected_profile: max
+  segment_samples: 2048
+  batch_size: 1
+  warmup_iterations: 1
+  measured_iterations: 2
+  projected_updates: 5000
+  maximum_median_seconds_per_update: 4.0
+  maximum_projected_hours_per_trajectory: 6.0
+  finite_output_and_gradients_required: true
+  rejection_before_protocol_freeze_allowed: true
+  result_dependent_replacement_family_allowed: false
+
+screen_selection:
+  score: geometric_mean_candidate_to_best_comparator_validation_esr_ratio
+  per_device_anti_collapse_required: true
+  gain_error_minimum: -0.2
+  correlation_minimum: 0.9
+  teacher_finalists_maximum: 3
+  tiebreaker: lowest_projected_cpp_block64_p95_rtf
+  diversity_override_allowed: false
+
+teacher_gate:
+  esr_improvement_each_internal_dev_device_minimum: 0.15
+  asr_gain_db_each_internal_dev_device_minimum: 10.0
+  failure_verdict: NO-GO-ARCH
+  distill_only_if_teacher_passes_and_student_fails: true
+  distillation_teacher_esr_weight: 0.25
+
+resource_budget:
+  gpu: NVIDIA_RTX_PRO_4000_Blackwell_24GB
+  training_run_directories_maximum: 88
+  gpu_hours_total_maximum: 240
+  gpu_hours_per_trajectory_maximum: 6
+  campaign_disk_gib_maximum: 500
+  budget_from_failed_branch_reallocation_allowed: false
+
+freeze:
+  architecture_loss_training_code_data_checkpoints_metrics_export_before_prospective_tests: true
+  blackstar_ua_architecture_tuning_allowed: false
+  blackstar_ua_fixed_schedule_training_allowed_after_lock: true
+  validation_checkpoint_selection_after_lock: false
+  sealed_test_open_after_python_cpp_parity_and_benchmark_only: true
+  source_snapshot_required_for_every_run: true
+
+statistics:
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260828
+  paired: true
+  hierarchical_units: [seed, source]
+  windows_as_independent_units: false
+  primary_metric: relative_esr_improvement
+  confidence_level: 0.95
+
+runtime_gate:
+  cpp_precision: float32
+  compiler_flags: [-Ofast, LTO, native_ISA]
+  blocks: [1, 16, 64, 128]
+  primary_block: 64
+  interleaved_ab_repetitions: 30
+  p95_rtf_maximum: 0.80
+  added_latency_samples_maximum: 48
+  python_cpp_max_abs_error: 0.00002
+  audio_loop_allocations_maximum: 0
+  report: [median, p95, rtf, parameters, weights_bytes, persistent_state_bytes, scratch_bytes, latency_samples]
+
+listening_gate:
+  launch_only_after_objective_and_runtime_gates: true
+  standard: ITU-R_BS.1534-3
+  recruited_participants: 24
+  retained_participants_minimum: 20
+  sealed_excerpts: 8
+  excerpt_seconds: 10
+  excerpts_per_device: 2
+  conditions: [hidden_hardware_reference, candidate, best_comparator, aa_off_ablation, lowpass_3k5_anchor, alias_anchor]
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260829
+  hierarchical_units: [participant, excerpt]
+  mean_advantage_points_strictly_greater_than: 10.0
+  lower_confidence_bound_strictly_greater_than: 0.0
+
+final_gate:
+  esr_relative_improvement_lower_95_bound_minimum: 0.15
+  devices_won_minimum: 3
+  mandatory_device_wins: [blackstar, ua1176]
+  asr_gain_db_minimum: 10.0
+  all_runtime_gates_required: true
+  all_listening_gates_required: true
+  make_test_required: true
+  make_lint_required: true
+  instrumentation_failure_verdict: INVALID
+  valid_scientific_failure_verdict: NO-GO-ARCH
+  simultaneous_success_verdict: GO-ARCH

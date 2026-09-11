@@ -1,0 +1,16 @@
+\contentsline {section}{\numberline {1}R\'{e}sum\'{e}}{2}{section.1}%
+\contentsline {section}{\numberline {2}P\'{e}rim\`{e}tre et m\'{e}thode}{2}{section.2}%
+\contentsline {section}{\numberline {3}Ce que la litt\'{e}rature permet de conclure}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Architecture et dispositif doivent \^{e}tre distingu\'{e}s}{3}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}La m\'{e}moire conserv\'{e}e et le gradient appris ne sont pas la m\^{e}me chose}{3}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Des dynamiques compactes m\'{e}ritent un vrai contr\^{o}le}{3}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Les scores et les oreilles r\'{e}pondent \`{a} des questions diff\'{e}rentes}{3}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Antialiasing et co\^{u}t sont des axes s\'{e}par\'{e}s}{4}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Id\'{e}ation : 15 candidats conserv\'{e}s}{4}{section.4}%
+\contentsline {section}{\numberline {5}Trois pistes \`{a} approfondir}{5}{section.5}%
+\contentsline {subsection}{\numberline {5.1}I01 - Identifier la m\'{e}moire manquante avant d'ajouter des param\`{e}tres}{5}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}I02 - Une m\'{e}moire lente compacte plut\^{o}t qu'une seconde grosse voie audio}{5}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}I03 - Apprendre l'\'{e}tat initial avec des entr\'{e}es accessibles}{5}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Pilote de deux semaines propos\'{e}}{5}{section.6}%
+\contentsline {section}{\numberline {7}Ce que cette recherche ne permet pas d'affirmer}{6}{section.7}%
+\contentsline {section}{\numberline {8}Livrables et limites de cette note}{6}{section.8}%

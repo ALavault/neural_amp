@@ -1,0 +1,11 @@
+{
+  "campaign_version": "FSSR-QUALITY-AA-v1",
+  "candidate_route_outputs_observed": false,
+  "failure_reason": "TypeError: PyYAML decoded the unquoted protocol key 'off' as boolean false; strict JSON sorting rejected mixed boolean/string mapping keys",
+  "failure_stage": "post_measurement_evidence_registration",
+  "physical_audio_samples_read": 0,
+  "reference_outputs_observed": true,
+  "rerun_authorized": false,
+  "run_id": "quality_aa_v1_preflight_synthetic_all_seed0_v1",
+  "status": "INVALID"
+}

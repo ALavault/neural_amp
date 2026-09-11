@@ -1,0 +1,19 @@
+schema_version: 1
+campaign_version: FSSR-R2-v1
+family: aa-nam
+base_topology: configs/models/baselines/nam_a2_full.yaml
+packed_submodel: channels_8
+activation:
+  kind: hermite_c1
+  knots: 33
+  range: [-4.0, 4.0]
+  initialization: {function: CustomTanh, alpha: 1.8}
+aa_modes:
+  primary: full_island_x2
+  challenger: adaa1
+internal_rates_hz:
+  full_island_x2: 96000
+  adaa1: 48000
+latency_samples:
+  full_island_x2: 16
+  adaa1: 1

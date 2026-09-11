@@ -1,0 +1,1051 @@
+{
+  "adaa_alignment": {
+    "alignment_passed": false,
+    "eligible": false,
+    "fitted_delay_samples": 0.5000000000008727,
+    "maximum_global_alignment_residual_samples": 0.5000000007177704,
+    "model": "single_causal_global_fractional_delay",
+    "native_compensation_parity": false,
+    "route_action": "excluded_without_route_poisoning",
+    "rows": [
+      {
+        "delay_samples": 0.4999999999998763,
+        "fixture": "tanh",
+        "k0": 1705
+      },
+      {
+        "delay_samples": 0.5000000000007163,
+        "fixture": "tanh",
+        "k0": 8191
+      },
+      {
+        "delay_samples": 0.5000000000032221,
+        "fixture": "tanh",
+        "k0": 12287
+      },
+      {
+        "delay_samples": 0.5000000000002949,
+        "fixture": "asymmetric_clipping",
+        "k0": 1705
+      },
+      {
+        "delay_samples": 0.5000000000010292,
+        "fixture": "asymmetric_clipping",
+        "k0": 8191
+      },
+      {
+        "delay_samples": 0.5000000000002215,
+        "fixture": "asymmetric_clipping",
+        "k0": 12287
+      },
+      {
+        "delay_samples": 1.0000000007186431,
+        "fixture": "two_clippers",
+        "k0": 1705
+      },
+      {
+        "delay_samples": 0.9999999998398391,
+        "fixture": "two_clippers",
+        "k0": 8191
+      },
+      {
+        "delay_samples": 1.000000000041914,
+        "fixture": "two_clippers",
+        "k0": 12287
+      },
+      {
+        "delay_samples": 0.5000955879129667,
+        "fixture": "short_memory",
+        "k0": 1705
+      },
+      {
+        "delay_samples": 0.49962490158195605,
+        "fixture": "short_memory",
+        "k0": 8191
+      },
+      {
+        "delay_samples": 0.5014836290056366,
+        "fixture": "short_memory",
+        "k0": 12287
+      },
+      {
+        "delay_samples": 0.49999966854250766,
+        "fixture": "slow_sag",
+        "k0": 1705
+      },
+      {
+        "delay_samples": 0.4999997779856939,
+        "fixture": "slow_sag",
+        "k0": 8191
+      },
+      {
+        "delay_samples": 0.4999998890223443,
+        "fixture": "slow_sag",
+        "k0": 12287
+      },
+      {
+        "delay_samples": 0.49986156095204826,
+        "fixture": "rf2047_residual",
+        "k0": 1705
+      },
+      {
+        "delay_samples": 0.5008735306366144,
+        "fixture": "rf2047_residual",
+        "k0": 8191
+      },
+      {
+        "delay_samples": 0.5029898990849546,
+        "fixture": "rf2047_residual",
+        "k0": 12287
+      }
+    ]
+  },
+  "campaign_version": "FSSR-QUALITY-AA-v2",
+  "candidate_route_outputs_observed": false,
+  "external_report_only_accessed": false,
+  "filters": {
+    "full_island_x2": {
+      "checks": {
+        "identity_delay": true,
+        "irregular_blocks": true,
+        "passband": true,
+        "stopband": true,
+        "taps": true
+      },
+      "factor": 2,
+      "filter_taps": 65,
+      "identity_max_abs_error": 0.0,
+      "irregular_block_max_abs_error": 0.0,
+      "latency_samples": 32,
+      "passband_20khz_db": -0.0014523242134600878,
+      "passed": true,
+      "route": "full_island_x2",
+      "stopband_30khz_db": -90.0912094116211
+    },
+    "teacher_x4": {
+      "checks": {
+        "identity_delay": true,
+        "irregular_blocks": true,
+        "passband": true,
+        "stopband": true,
+        "taps": true
+      },
+      "factor": 4,
+      "filter_taps": 129,
+      "identity_max_abs_error": 0.0,
+      "irregular_block_max_abs_error": 0.0,
+      "latency_samples": 32,
+      "passband_20khz_db": -0.001419702428393066,
+      "passed": true,
+      "route": "teacher_x4",
+      "stopband_30khz_db": -89.23062133789062
+    }
+  },
+  "floor_calibration": {
+    "candidate_outputs_observed": false,
+    "conditions": [
+      {
+        "amplitude": 0.1,
+        "asr_db_raw": -152.31126027597603,
+        "k0": 1705
+      },
+      {
+        "amplitude": 0.25,
+        "asr_db_raw": -153.74712541695283,
+        "k0": 1705
+      },
+      {
+        "amplitude": 0.48,
+        "asr_db_raw": -153.44222868938766,
+        "k0": 1705
+      },
+      {
+        "amplitude": 0.1,
+        "asr_db_raw": -152.30851738427847,
+        "k0": 8191
+      },
+      {
+        "amplitude": 0.25,
+        "asr_db_raw": -153.74549165316927,
+        "k0": 8191
+      },
+      {
+        "amplitude": 0.48,
+        "asr_db_raw": -153.4401821731593,
+        "k0": 8191
+      },
+      {
+        "amplitude": 0.1,
+        "asr_db_raw": -152.3084684728151,
+        "k0": 12287
+      },
+      {
+        "amplitude": 0.25,
+        "asr_db_raw": -153.7450974770945,
+        "k0": 12287
+      },
+      {
+        "amplitude": 0.48,
+        "asr_db_raw": -153.43989978454894,
+        "k0": 12287
+      }
+    ],
+    "locked_floor_db": -140.3084684728151,
+    "margin_db": 12.0,
+    "maximum_allowed_floor_db": -120.0,
+    "method": "float32-identity-grid-plus-fixed-margin-v1",
+    "passed": true,
+    "worst_identity_asr_db": -152.3084684728151
+  },
+  "gate": {
+    "adaa_status": "excluded_unalignable",
+    "campaign_continue": true,
+    "checks": {
+      "candidate_outputs_unobserved": true,
+      "filter_response_and_delay": true,
+      "identity_floor": true,
+      "physical_audio_absent": true,
+      "reference_x8_x16_convergence": true
+    },
+    "format": "fssr-quality-aa-preflight-gate-v1",
+    "locked_floor_db": -140.3084684728151,
+    "passed": true,
+    "valid": true
+  },
+  "physical_audio_samples_read": 0,
+  "provenance": {
+    "environment": {
+      "hypothesis": "6.165.10",
+      "numpy": "2.5.2",
+      "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.43",
+      "python": "3.12.13",
+      "scipy": "1.18.1",
+      "torch": "2.13.0"
+    },
+    "git_head": "40d1b7d4f7c6fe34c55b61dfdd6b333e33033401",
+    "source_snapshot_files": 23,
+    "worktree_dirty": true
+  },
+  "reference_convergence": {
+    "all_conditions_passed": true,
+    "conditions": 54,
+    "kind": "direct_synthetic_x8_x16",
+    "maximum_dc_complex_error": 3.1086716879865436e-19,
+    "maximum_harmonic_complex_error": 4.235155597833627e-13,
+    "minimum_correlation": 0.9999999550842827,
+    "rows": [
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999997,
+        "dc_complex_error": 8.873404698266794e-24,
+        "fixture": "tanh",
+        "harmonic_complex_error": 6.221092403694195e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/tanh_k1705_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999996,
+        "dc_complex_error": 8.00751511254153e-25,
+        "fixture": "tanh",
+        "harmonic_complex_error": 1.1539972352930209e-17,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/tanh_k1705_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 1.0000000000000007,
+        "dc_complex_error": 2.181696255582242e-25,
+        "fixture": "tanh",
+        "harmonic_complex_error": 6.413799304132615e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/tanh_k1705_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999997,
+        "dc_complex_error": 5.951432006264052e-24,
+        "fixture": "tanh",
+        "harmonic_complex_error": 5.2003654311036176e-20,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/tanh_k8191_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 1.0000000000000002,
+        "dc_complex_error": 2.7018509494243574e-24,
+        "fixture": "tanh",
+        "harmonic_complex_error": 4.136740873433505e-21,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/tanh_k8191_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 1.0000000000000002,
+        "dc_complex_error": 2.6704513321070304e-23,
+        "fixture": "tanh",
+        "harmonic_complex_error": 1.915617939167232e-20,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/tanh_k8191_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999998,
+        "dc_complex_error": 3.3163351640672323e-23,
+        "fixture": "tanh",
+        "harmonic_complex_error": 2.0854650085483074e-19,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/tanh_k12287_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999997,
+        "dc_complex_error": 1.5187784220924964e-23,
+        "fixture": "tanh",
+        "harmonic_complex_error": 1.203498601726834e-19,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/tanh_k12287_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999999,
+        "dc_complex_error": 5.241339795110104e-24,
+        "fixture": "tanh",
+        "harmonic_complex_error": 1.5446275572117526e-20,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/tanh_k12287_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999354283,
+        "dc_complex_error": 3.1086716879865436e-19,
+        "fixture": "asymmetric_clipping",
+        "harmonic_complex_error": 7.731960167035514e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/asymmetric_clipping_k1705_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999167959,
+        "dc_complex_error": 7.852592232960043e-20,
+        "fixture": "asymmetric_clipping",
+        "harmonic_complex_error": 6.368708818392529e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/asymmetric_clipping_k1705_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999998636008,
+        "dc_complex_error": 9.769901704939446e-22,
+        "fixture": "asymmetric_clipping",
+        "harmonic_complex_error": 6.050916719899172e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/asymmetric_clipping_k1705_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999936549705,
+        "dc_complex_error": 5.424062295579153e-20,
+        "fixture": "asymmetric_clipping",
+        "harmonic_complex_error": 1.094374644967908e-19,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/asymmetric_clipping_k8191_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999918030865,
+        "dc_complex_error": 5.561112143896725e-21,
+        "fixture": "asymmetric_clipping",
+        "harmonic_complex_error": 8.701096246826552e-20,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/asymmetric_clipping_k8191_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999864564476,
+        "dc_complex_error": 1.6994480274786702e-19,
+        "fixture": "asymmetric_clipping",
+        "harmonic_complex_error": 2.2152865930927405e-19,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/asymmetric_clipping_k8191_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999795020408,
+        "dc_complex_error": 3.8027269144577095e-20,
+        "fixture": "asymmetric_clipping",
+        "harmonic_complex_error": 5.293449877318443e-20,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/asymmetric_clipping_k12287_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999733767638,
+        "dc_complex_error": 1.5838632971503418e-22,
+        "fixture": "asymmetric_clipping",
+        "harmonic_complex_error": 7.692337965502996e-20,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/asymmetric_clipping_k12287_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999550842827,
+        "dc_complex_error": 3.700623106595706e-20,
+        "fixture": "asymmetric_clipping",
+        "harmonic_complex_error": 8.084990729940284e-20,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/asymmetric_clipping_k12287_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999787808,
+        "dc_complex_error": 2.229696129988159e-21,
+        "fixture": "two_clippers",
+        "harmonic_complex_error": 6.2816435673459e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/two_clippers_k1705_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999441073,
+        "dc_complex_error": 4.616695623909094e-20,
+        "fixture": "two_clippers",
+        "harmonic_complex_error": 5.906380899025839e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/two_clippers_k1705_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999998501556,
+        "dc_complex_error": 6.844318628278744e-22,
+        "fixture": "two_clippers",
+        "harmonic_complex_error": 6.144131944225354e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/two_clippers_k1705_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999975650673,
+        "dc_complex_error": 2.9670261669926575e-20,
+        "fixture": "two_clippers",
+        "harmonic_complex_error": 1.9993162191033306e-19,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/two_clippers_k8191_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999962221149,
+        "dc_complex_error": 2.12769159391657e-21,
+        "fixture": "two_clippers",
+        "harmonic_complex_error": 4.4297802167707116e-20,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/two_clippers_k8191_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999935781055,
+        "dc_complex_error": 1.2414520757708102e-19,
+        "fixture": "two_clippers",
+        "harmonic_complex_error": 1.9597819732067295e-19,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/two_clippers_k8191_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999879419195,
+        "dc_complex_error": 3.978277662545152e-21,
+        "fixture": "two_clippers",
+        "harmonic_complex_error": 7.632445481636568e-21,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/two_clippers_k12287_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999861753047,
+        "dc_complex_error": 6.531341747000866e-20,
+        "fixture": "two_clippers",
+        "harmonic_complex_error": 1.9073047961040536e-19,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/two_clippers_k12287_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999801597448,
+        "dc_complex_error": 6.44011905146709e-20,
+        "fixture": "two_clippers",
+        "harmonic_complex_error": 4.958666688300915e-20,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/two_clippers_k12287_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999998,
+        "dc_complex_error": 1.6605870794985587e-26,
+        "fixture": "short_memory",
+        "harmonic_complex_error": 5.73760670941967e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/short_memory_k1705_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999998,
+        "dc_complex_error": 0.0,
+        "fixture": "short_memory",
+        "harmonic_complex_error": 4.528313833896763e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/short_memory_k1705_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 1.0,
+        "dc_complex_error": 3.0329180647623857e-24,
+        "fixture": "short_memory",
+        "harmonic_complex_error": 5.730078816433355e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/short_memory_k1705_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 1.0000000000000007,
+        "dc_complex_error": 4.6631173684339614e-24,
+        "fixture": "short_memory",
+        "harmonic_complex_error": 6.901253239623479e-20,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/short_memory_k8191_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999992,
+        "dc_complex_error": 1.665069089703323e-24,
+        "fixture": "short_memory",
+        "harmonic_complex_error": 6.835545020582684e-20,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/short_memory_k8191_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999998,
+        "dc_complex_error": 6.405997675832044e-24,
+        "fixture": "short_memory",
+        "harmonic_complex_error": 8.383889142933926e-20,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/short_memory_k8191_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999999,
+        "dc_complex_error": 8.214692382438243e-24,
+        "fixture": "short_memory",
+        "harmonic_complex_error": 7.88911165074414e-21,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/short_memory_k12287_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 1.0,
+        "dc_complex_error": 8.924033316727134e-23,
+        "fixture": "short_memory",
+        "harmonic_complex_error": 5.605243506953969e-20,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/short_memory_k12287_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 1.0,
+        "dc_complex_error": 2.587118247893343e-23,
+        "fixture": "short_memory",
+        "harmonic_complex_error": 1.7610862514949314e-20,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/short_memory_k12287_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999976,
+        "dc_complex_error": 1.4445061991334391e-24,
+        "fixture": "slow_sag",
+        "harmonic_complex_error": 3.1726113108508657e-13,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/slow_sag_k1705_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999678,
+        "dc_complex_error": 6.83620129783737e-25,
+        "fixture": "slow_sag",
+        "harmonic_complex_error": 2.0634935436162353e-13,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/slow_sag_k1705_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999998144,
+        "dc_complex_error": 7.939589514588315e-26,
+        "fixture": "slow_sag",
+        "harmonic_complex_error": 4.235155597833627e-13,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/slow_sag_k1705_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999978,
+        "dc_complex_error": 1.19369089917488e-24,
+        "fixture": "slow_sag",
+        "harmonic_complex_error": 3.203887072419891e-13,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/slow_sag_k8191_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999681,
+        "dc_complex_error": 1.2072502244534932e-25,
+        "fixture": "slow_sag",
+        "harmonic_complex_error": 2.0743397956883314e-13,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/slow_sag_k8191_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999998233,
+        "dc_complex_error": 1.0930999978837805e-23,
+        "fixture": "slow_sag",
+        "harmonic_complex_error": 4.053887486907848e-13,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/slow_sag_k8191_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999998,
+        "dc_complex_error": 3.5705276748207256e-25,
+        "fixture": "slow_sag",
+        "harmonic_complex_error": 3.177128534260283e-13,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/slow_sag_k12287_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999994,
+        "dc_complex_error": 2.6561707656110995e-23,
+        "fixture": "slow_sag",
+        "harmonic_complex_error": 1.39292262091474e-13,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/slow_sag_k12287_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.999999999999999,
+        "dc_complex_error": 6.204225420141794e-24,
+        "fixture": "slow_sag",
+        "harmonic_complex_error": 3.6221045520957384e-14,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/slow_sag_k12287_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999997,
+        "dc_complex_error": 2.211927820905266e-25,
+        "fixture": "rf2047_residual",
+        "harmonic_complex_error": 7.333596359023207e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/rf2047_residual_k1705_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999992,
+        "dc_complex_error": 3.939327345908518e-24,
+        "fixture": "rf2047_residual",
+        "harmonic_complex_error": 7.465070852122573e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/rf2047_residual_k1705_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999996,
+        "dc_complex_error": 4.111467145002918e-24,
+        "fixture": "rf2047_residual",
+        "harmonic_complex_error": 4.80042493110781e-18,
+        "k0": 1705,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/rf2047_residual_k1705_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 1.0,
+        "dc_complex_error": 9.843609746256675e-24,
+        "fixture": "rf2047_residual",
+        "harmonic_complex_error": 5.477132652083402e-20,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/rf2047_residual_k8191_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999997,
+        "dc_complex_error": 1.8421748137749114e-23,
+        "fixture": "rf2047_residual",
+        "harmonic_complex_error": 1.309111214820968e-19,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/rf2047_residual_k8191_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999997,
+        "dc_complex_error": 6.0196270507567e-24,
+        "fixture": "rf2047_residual",
+        "harmonic_complex_error": 4.810538831523607e-20,
+        "k0": 8191,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/rf2047_residual_k8191_a0p48_x16.npy"
+      },
+      {
+        "amplitude": 0.1,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 1.0,
+        "dc_complex_error": 1.0110843906818135e-23,
+        "fixture": "rf2047_residual",
+        "harmonic_complex_error": 2.8526876507578667e-20,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/rf2047_residual_k12287_a0p1_x16.npy"
+      },
+      {
+        "amplitude": 0.25,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999997,
+        "dc_complex_error": 4.960681629710263e-24,
+        "fixture": "rf2047_residual",
+        "harmonic_complex_error": 1.5618815348938323e-20,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/rf2047_residual_k12287_a0p25_x16.npy"
+      },
+      {
+        "amplitude": 0.48,
+        "checks": {
+          "correlation": true,
+          "dc_complex_error": true,
+          "harmonic_complex_error": true
+        },
+        "correlation": 0.9999999999999998,
+        "dc_complex_error": 2.487246326384507e-23,
+        "fixture": "rf2047_residual",
+        "harmonic_complex_error": 5.702074144495506e-20,
+        "k0": 12287,
+        "passed": true,
+        "selected_x16_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/references/rf2047_residual_k12287_a0p48_x16.npy"
+      }
+    ],
+    "selected_factor": 16
+  },
+  "schema_version": 1
+}

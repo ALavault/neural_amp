@@ -1,0 +1,507 @@
+{
+  "campaign_protocol": {
+    "architectures": {
+      "aa_fssr": {
+        "core": "fixture_selected_mono_or_cascade",
+        "receptive_field_samples_at_48khz": 2047,
+        "residual_channels": 16,
+        "slow_cadence_samples_at_48khz": 64,
+        "slow_gru_units": 16,
+        "two_clippers_cascade_improvement_minimum": 0.5
+      },
+      "aa_fssr_xl": {
+        "admission": "versioned_admission_from_r2_v1_exploration",
+        "core": "cascade",
+        "fir_taps": 65,
+        "receptive_field_samples_at_48khz": 2047,
+        "residual_channels": 16,
+        "slow_cadence_samples_at_48khz": 64,
+        "slow_gru_units": 16,
+        "spline_knots": 129
+      },
+      "aa_modes": {
+        "challenger": "adaa1",
+        "primary": "full_island_x2",
+        "teacher": "teacher_x4"
+      },
+      "aa_nam": {
+        "activation": "hermite_c1",
+        "initialization": {
+          "alpha": 1.8,
+          "function": "CustomTanh"
+        },
+        "topology": "pinned_a2_full"
+      },
+      "adaa1": {
+        "difference_limit_threshold": 0.0001,
+        "maximum_aligned_latency_samples": 48,
+        "primitive": "analytic_hermite",
+        "reject_route_on_phase_alignment_failure": true
+      },
+      "capacity_policy": "no_apriori_size_cap_final_native_cost_gate_controls_deployment",
+      "full_island": {
+        "causal_alignment": true,
+        "deployable_latency_samples": 16,
+        "factors": [
+          2,
+          4
+        ],
+        "one_resampler_pair": true,
+        "preserve_physical_horizons": true
+      },
+      "selection_eligible_families": [
+        "aa-nam",
+        "aa-fssr",
+        "aa-fssr-xl"
+      ]
+    },
+    "base_sample_rate_hz": 48000,
+    "baseline": {
+      "family": "a2",
+      "losses": [
+        "m4",
+        "wright"
+      ],
+      "model_config": "configs/models/baselines/nam_a2_full.yaml",
+      "packed_submodel": "channels_8",
+      "selection_metric": "validation_esr",
+      "selection_rule": "minimum",
+      "selection_unit": "device",
+      "test_data_forbidden": true
+    },
+    "benchmark": {
+      "abi": "float32",
+      "allocations_outside_timing": true,
+      "block_sizes": [
+        1,
+        16,
+        64,
+        128
+      ],
+      "compiler_optimization": "-Ofast",
+      "implementation": "cpp",
+      "lto_ipo": true,
+      "primary_block_size": 64,
+      "python_cpp_max_abs_error": 2e-05,
+      "repetitions": 30,
+      "required_fields": [
+        "median",
+        "p95",
+        "rtf",
+        "parameters",
+        "weight_bytes",
+        "persistent_state_bytes",
+        "scratch_bytes",
+        "latency_samples"
+      ],
+      "same_binary": true,
+      "same_isa": true,
+      "schedule": "interleaved_ab"
+    },
+    "campaign_version": "FSSR-R2-48K-v1",
+    "claim_scope": {
+      "comparator": "pinned_nam_a2_full",
+      "derived_192khz_hardware_reference_allowed": false,
+      "global_state_of_the_art_claim_allowed": false,
+      "physical_hardware_aliasing_claim_allowed": false,
+      "physical_reference_sample_rate_hz": 48000,
+      "primary": "physical_fidelity_efficiency_and_listening_at_48khz",
+      "prohibited_proxy_devices": [
+        "fractal_fm9"
+      ],
+      "proxy_hardware_allowed": false,
+      "synthetic_aliasing_mechanism_claim_allowed": true,
+      "synthetic_reference_sample_rate_hz": 192000
+    },
+    "confirmation": {
+      "bootstrap": {
+        "development_devices_excluded_from_primary_interval": true,
+        "hierarchy": [
+          "seed",
+          "source"
+        ],
+        "inference_limit": "available_training_seeds_and_archived_sources_only",
+        "primary_devices": [
+          "blackstar",
+          "ua1176"
+        ],
+        "probes_are_observations": false,
+        "replicates": 10000,
+        "seed": 20260828,
+        "windows_are_observations": false
+      },
+      "development_additional_seeds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "devices": [
+        "fulltone",
+        "bigmuff",
+        "blackstar",
+        "ua1176"
+      ],
+      "evaluation_conditions": 40,
+      "families": [
+        "a2",
+        "candidate"
+      ],
+      "freeze_before_internal_validation": [
+        "architecture",
+        "loss",
+        "code",
+        "data",
+        "checkpoints",
+        "metrics",
+        "export"
+      ],
+      "historical_development_conditions": 20,
+      "internal_validation_seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "no_tuning_on_internal_validation": true,
+      "prospective_conditions": 20
+    },
+    "data": {
+      "config": "configs/data/r2_48k_archive.yaml",
+      "development_devices": [
+        "fulltone",
+        "bigmuff"
+      ],
+      "development_outputs_previously_observed": true,
+      "final_report_devices": [
+        "fulltone",
+        "bigmuff",
+        "blackstar",
+        "ua1176"
+      ],
+      "internal_validation_devices": [
+        "blackstar",
+        "ua1176"
+      ],
+      "internal_validation_test_open_count_maximum": 1,
+      "internal_validation_tests_sealed_until_cpp_parity_and_benchmark": true,
+      "internal_validation_train_and_validation_locked_until_confirmatory_lock": true,
+      "limitations": [
+        "fulltone_and_bigmuff_are_historical_development_not_fresh_holdouts",
+        "bigmuff_has_file_level_not_performance_level_split_provenance",
+        "primary_source_uncertainty_is_limited_by_one_blackstar_and_two_ua_test_sources"
+      ],
+      "new_capture_required": false,
+      "no_independent_normalization": true,
+      "primary_test_devices": [
+        "blackstar",
+        "ua1176"
+      ],
+      "source_file_boundaries_preserved": true,
+      "source_manifest": "datasets/manifests/r1_physical.json"
+    },
+    "decision": {
+      "added_latency_samples_maximum": 48,
+      "confidence_level": 0.95,
+      "cpp_block_size": 64,
+      "cpp_cpu_ratio_maximum": 1.25,
+      "devices_won_minimum": 3,
+      "heldout_esr_relative_improvement_lower_bound_minimum": 0.15,
+      "instrumentation_failure_verdict": "INVALID",
+      "mandatory_devices": [
+        "blackstar",
+        "ua1176"
+      ],
+      "physical_asr_is_a_decision_metric": false,
+      "primary_devices": [
+        "blackstar",
+        "ua1176"
+      ],
+      "primary_mushra_advantage_points_strictly_greater_than": 10.0,
+      "primary_mushra_lower_bound_strictly_greater_than": 0.0,
+      "synthetic_mechanism_x2_must_pass": true,
+      "valid_failure_verdict": "NO-GO-R2-48K"
+    },
+    "export": {
+      "families": [
+        "aa-nam",
+        "aa-fssr",
+        "aa-fssr-xl"
+      ],
+      "format_reused_without_scientific_semantic_change": true,
+      "implementation_format": "fssr-r2-native-v1",
+      "required_fields": [
+        "family",
+        "aa_mode",
+        "internal_sample_rate",
+        "dilation_scale",
+        "latency_samples",
+        "parameters",
+        "weight_bytes",
+        "persistent_state_bytes",
+        "scratch_bytes"
+      ]
+    },
+    "external_report_only_locked": true,
+    "listening": {
+      "bootstrap": {
+        "hierarchy": [
+          "participant",
+          "primary_excerpt"
+        ],
+        "replicates": 10000,
+        "seed": 20260829
+      },
+      "conditions": [
+        "hidden_hardware_reference",
+        "candidate",
+        "a2",
+        "aa_off_ablation",
+        "lowpass_anchor_3p5khz",
+        "aliasing_anchor"
+      ],
+      "development_secondary_devices": [
+        "fulltone",
+        "bigmuff"
+      ],
+      "development_secondary_excerpts": 4,
+      "double_blind": true,
+      "excerpt_duration_seconds": 10,
+      "excerpts_per_device": 2,
+      "excerpts_total": 8,
+      "launch_requires": [
+        "heldout_esr_passed",
+        "synthetic_mechanism_passed",
+        "cpu_passed"
+      ],
+      "one_global_gain_per_trial": true,
+      "preregistered_exclusion_rule": "configs/r2_48k/mushra_exclusion.yaml",
+      "primary_devices": [
+        "blackstar",
+        "ua1176"
+      ],
+      "primary_excerpts": 4,
+      "randomized_order": true,
+      "recruited_participants": 24,
+      "retained_participants_minimum": 20,
+      "standard": "ITU-R BS.1534-3"
+    },
+    "mechanism": {
+      "adaa_failure_action": "reject_adaa_only",
+      "evidence_tier": "SYNTHETIC",
+      "fixtures": [
+        "tanh",
+        "asymmetric_clipping",
+        "two_clippers",
+        "short_memory",
+        "slow_sag",
+        "rf2047_residual"
+      ],
+      "fundamental_complex_error_maximum": 1e-05,
+      "median_asr_gain_db_minimum": 10.0,
+      "modes": [
+        false,
+        "full_island_x2",
+        "adaa1",
+        "teacher_x4"
+      ],
+      "per_fixture_asr_gain_db_minimum": 6.0,
+      "reference_kind": "synthetic_192khz",
+      "reference_sample_rate_hz": 192000,
+      "rf2047_residual_energy_ratio_minimum": 0.1,
+      "same_weights_across_modes": true,
+      "spearman_rho_minimum": 0.9,
+      "supports_hardware_aliasing_claim": false,
+      "x2_failure_action": "stop_r2_48k"
+    },
+    "parent_campaign": "FSSR-R2-v1",
+    "physical_asr": {
+      "final_decision_allowed": false,
+      "reason": "no_physical_reference_above_48khz",
+      "selection_allowed": false,
+      "status": "diagnostic_only"
+    },
+    "precision": "float32",
+    "references": {
+      "multirate_neural_resampling": "https://research.aalto.fi/en/publications/resampling-filter-design-for-multirate-neural-audio-effect-proces/",
+      "mushra": "https://www.itu.int/rec/R-REC-BS.1534-3-201510-I/en",
+      "smooth_activations_asr": "https://www.dafx.de/paper-archive/2025/DAFx25_paper_50.pdf",
+      "stateful_adaa": "https://www.dafx.de/paper-archive/2019/DAFx2019_paper_4.pdf"
+    },
+    "run_id_format": "r2_48k_<stage>_<device>_<family>_<aa>_seed<n>_v1",
+    "schema_version": 1,
+    "screening": {
+      "adaa_challenger_trajectories_maximum": 6,
+      "baseline_family": "a2",
+      "baseline_trajectories": 4,
+      "checkpoints": [
+        200,
+        1000,
+        5000,
+        15000
+      ],
+      "data_tier": "INTERNAL_DEV",
+      "devices": [
+        "fulltone",
+        "bigmuff"
+      ],
+      "families": [
+        "aa-nam",
+        "aa-fssr",
+        "aa-fssr-xl"
+      ],
+      "initial_seed": 0,
+      "initial_x2_trajectories": 12,
+      "loss_promotion": {
+        "aggregation": "across_initial_x2_families_and_devices",
+        "exact_tie_breaker": "m4",
+        "metric": "median_validation_esr_at_5000_updates",
+        "rule": "minimum"
+      },
+      "losses": [
+        "m4",
+        "wright"
+      ],
+      "losses_are_existing_unmodified": true,
+      "non_promoted_loss_stop_updates": 5000,
+      "physical_asr_selection_forbidden": true,
+      "promoted_loss_final_updates": 15000,
+      "promotion": {
+        "deployable_esr_relative_improvement_minimum_each_device": 0.15,
+        "ranking": "highest_median_esr_improvement_then_lowest_projected_cpu",
+        "selected_topology_continues_to_teacher_even_if_deployable_gate_fails": true
+      },
+      "selection_data": "validation",
+      "selection_metrics": [
+        "esr"
+      ]
+    },
+    "status": "prospective_transfer_with_historical_development",
+    "synthetic_asr": {
+      "amplitudes": [
+        0.1,
+        0.25,
+        0.48
+      ],
+      "analyzed_frame": 6,
+      "dft_samples": 65536,
+      "fft_window": "none",
+      "frames": 6,
+      "guards": {
+        "ablation_reference": "aa_off",
+        "complex_harmonic_error_regression_maximum": 0.05,
+        "correlation_strictly_greater_than": 0.9,
+        "finite_output": true,
+        "fundamental_level_delta_db_maximum": 0.5,
+        "gain_error_strictly_greater_than": -0.2,
+        "harmonic_energy_delta_db_maximum": 0.5,
+        "nonconstant_output": true
+      },
+      "k0": [
+        1705,
+        8191,
+        12287
+      ],
+      "method": "sato_smith",
+      "periodicity_comparison_frames": [
+        6,
+        5
+      ],
+      "periodicity_error_db_maximum": -60.0,
+      "sample_rate_hz": 48000,
+      "zero_padding": false
+    },
+    "teacher_and_distillation": {
+      "devices": [
+        "fulltone",
+        "bigmuff"
+      ],
+      "distill_only_if_teacher_passes_and_deployable_fidelity_fails": true,
+      "distillation_loss": {
+        "physical_loss_weight": 1.0,
+        "teacher_esr_preemphasis_weight": 0.25,
+        "teacher_target": "downsampled_teacher"
+      },
+      "physical_target_sample_rate_hz": 48000,
+      "seed": 0,
+      "teacher_aa_mode": "teacher_x4",
+      "teacher_esr_improvement_minimum_each_device": 0.15,
+      "teacher_failure_verdict": "NO-GO-R2-48K",
+      "teacher_internal_sample_rate_hz": 192000,
+      "teacher_role": "model_side_regularizer_not_hardware_reference"
+    },
+    "valid_terminal_verdicts": [
+      "GO-R2-48K",
+      "NO-GO-R2-48K",
+      "INVALID"
+    ]
+  },
+  "mechanism_implementation_lock": {
+    "aggregation": {
+      "anti_silence_guard": "all_conditions_must_pass",
+      "asr_db": "median_over_exact_3x3_grid",
+      "fundamental_complex_error": "maximum_over_exact_3x3_grid",
+      "reference_192khz_asr_db": "median_known_reference_parasite_over_exact_3x3_grid"
+    },
+    "campaign_version": "FSSR-R2-48K-v1",
+    "claim_boundary": "synthetic_mechanism_only_no_physical_hardware_aliasing_claim",
+    "criteria_changed": false,
+    "decision_results_examined_before_freeze": false,
+    "fixtures": {
+      "coefficient_grid_rate_hz": 48000,
+      "internal_rate_rule": "zero_insert_delays_and_fir_taps_to_preserve_physical_horizons",
+      "randomness": "none",
+      "source": "src/fssr_nam/data/r2_fixtures.py"
+    },
+    "frozen_at": "2026-08-28T00:00:00+02:00",
+    "measurement": {
+      "amplitudes": [
+        0.1,
+        0.25,
+        0.48
+      ],
+      "analyzed_frame": 6,
+      "dft_samples": 65536,
+      "frames_delivered_to_metric": 6,
+      "k0": [
+        1705,
+        8191,
+        12287
+      ],
+      "reference_tail_frames_for_offline_fir_boundary_only": 1,
+      "sample_rate_hz": 48000
+    },
+    "reference": {
+      "downsampling": "two_frozen_offline_factor_two_fir_stages",
+      "excitation": "generated_directly_at_192khz",
+      "fixture_processing_rate_hz": 192000,
+      "hardware_audio_used": false,
+      "kind": "synthetic_192khz",
+      "upsampled_hardware_used": false
+    },
+    "routes": {
+      "adaa1": {
+        "declared_alignment_samples": 1,
+        "initialization": "previous_sample_zero",
+        "order": 1,
+        "primitive": "analytic_fixture_primitive",
+        "threshold": 0.0001
+      },
+      "false": "direct_48khz_fixture",
+      "full_island_x2": {
+        "factor": 2,
+        "latency_samples": 16,
+        "resampler": "frozen_full_rate_island_single_causal_pair"
+      },
+      "teacher_x4": {
+        "factor": 4,
+        "latency_samples": 16,
+        "resampler": "frozen_full_rate_island_single_causal_pair"
+      }
+    },
+    "schema_version": 1,
+    "scope": "executable_binding_of_existing_mechanism_protocol",
+    "status": "frozen_before_first_mechanism_measurement"
+  }
+}

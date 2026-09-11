@@ -1,0 +1,10 @@
+schema_version: 1
+campaign_version: AMP-QUALITY-ARCH-v1
+family: wright_lstm64
+variant: official
+source: third_party/Automated-GuitarAmpModelling/dist_model_recnet.py
+topology: one_layer_lstm64_linear_head_direct_skip
+parameters: 17217
+sample_rate_hz: 48000
+latency_samples: 0
+variant_selection: fixed_before_internal_dev

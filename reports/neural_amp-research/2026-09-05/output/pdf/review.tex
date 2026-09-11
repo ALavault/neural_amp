@@ -1,0 +1,316 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=22mm]{geometry}
+\usepackage{longtable}
+\usepackage[colorlinks=true,urlcolor=blue,citecolor=blue,linkcolor=blue]{hyperref}
+\renewcommand{\contentsname}{Sommaire}
+\renewcommand{\refname}{Références}
+\setlength{\emergencystretch}{4em}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+\begin{document}
+\begin{center}\Large Au-dela du score moyen\\
+\large Emulation d'amplificateurs : revue et pistes de recherche\\
+\normalsize 5 septembre 2026 -- Note exploratoire\end{center}
+\tableofcontents
+\newpage
+
+
+\section{R\'{e}sum\'{e}}
+
+La piste prioritaire est de relier les erreurs \`{a} la m\'{e}moire r\'{e}ellement n\'{e}cessaire au dispositif,
+puis de choisir une repr\'{e}sentation et un entra\^{i}nement adapt\'{e}s \`{a} cette m\'{e}moire.
+Un observer plus gros n'est pas, \`{a} lui seul, une hypoth\`{e}se scientifique suffisante.
+
+Cette revue exploratoire retient 33 r\'{e}f\'{e}rences distinctes. Elle articule trois r\'{e}sultats attendus
+pour une prochaine \'{e}tude : un diagnostic des erreurs temporelles, une comparaison des mod\`{e}les sur
+les m\^{e}mes coordonn\'{e}es et historiques, et un essai born\'{e} d'une voie lente compacte.
+Aucun r\'{e}sultat du job en cours n'a \'{e}t\'{e} consult\'{e} pour cette recherche et aucun entra\^{i}nement additionnel
+n'a \'{e}t\'{e} lanc\'{e}. Les pistes propos\'{e}es ne modifient pas la campagne gel\'{e}e.
+
+\section{P\'{e}rim\`{e}tre et m\'{e}thode}
+
+Question : quelles limites de repr\'{e}sentation, d'apprentissage et de mesure emp\^{e}chent une \'{e}mulation
+dry/wet causale de reproduire fid\`{e}lement un dispositif analogique, et quelles exp\'{e}riences peu
+co\^{u}teuses permettent de d\'{e}partager ces explications ?
+
+P\'{e}riode recherch\'{e}e : 2016 au 5 septembre 2026. Inclusion : travaux originaux sur \'{e}mulation
+d'effets, filtres diff\'{e}rentiables, \'{e}valuation et donn\'{e}es; travaux adjacents sur \'{e}tats et gradients
+lorsqu'un m\'{e}canisme transf\'{e}rable est explicite. Les travaux de synth\`{e}se audio g\'{e}n\'{e}rale sont
+class\'{e}s comme preuves indirectes. Pr\'{e}publications et communications courtes sont admises mais
+ne sont pas assimil\'{e}es \`{a} des r\'{e}plications ind\'{e}pendantes.
+
+Sources : arXiv, archive DAFx, PMLR; compl\'{e}ment ISMIR, Frontiers et d\'{e}p\^{o}ts institutionnels.
+DBLP sert au contr\^{o}le bibliographique. Le CLI paper-search est absent; recherche web cibl\'{e}e
+utilis\'{e}e en remplacement. Il ne s'agit pas d'une interrogation exhaustive des API de trois bases.
+Les requ\^{e}tes et exclusions sont conserv\'{e}es dans sources/search\_log.md.
+
+Les titres/r\'{e}sum\'{e}s des 33 notices retenues ont \'{e}t\'{e} examin\'{e}s; des extraits du texte int\'{e}gral de
+six travaux centraux ont compl\'{e}t\'{e} la lecture. Aucun accord inter-\'{e}valuateurs, score de citations
+ou \'{e}valuation formelle de risque de biais n'est revendiqu\'{e}. Les int\'{e}r\^{e}ts financiers et financements
+n'ont pas \'{e}t\'{e} extraits syst\'{e}matiquement. On privil\'{e}gie la pertinence et la qualit\'{e} du protocole
+audio plut\^{o}t que la notori\'{e}t\'{e} des auteurs.
+
+La d\'{e}duplication fusionne notamment la pr\'{e}publication 2502.14405 et son article Frontiers.
+Wright 2019 et Wright 2020 restent deux publications, mais leurs preuves ne sont pas ind\'{e}pendantes.
+Les deux publications Comunit\`{a} 2025 ont des fonctions distinctes : framework et comparaison.
+
+Le corpus satisfait la cible de 30-50 r\'{e}f\'{e}rences du skill. La recherche reste une revue exploratoire,
+pas une revue syst\'{e}matique PRISMA compl\`{e}te : le nombre brut de r\'{e}sultats du moteur web n'est pas
+un export exhaustif et n'est pas invent\'{e}.
+
+Flux de s\'{e}lection document\'{e} :
+\par\noindent\textbullet\ R\'{e}sultats bruts multi-requ\^{e}tes : nombre non normalis\'{e}.
+\par\noindent\textbullet\ Notices primaires retenues et d\'{e}dupliqu\'{e}es : 33.
+\par\noindent\textbullet\ Lecture : notices/r\'{e}sum\'{e}s pour le corpus; extraits de texte int\'{e}gral pour six r\'{e}f\'{e}rences.
+\par\noindent\textbullet\ M\'{e}ta-analyse : aucune; jeux de donn\'{e}es, r\'{e}glages et m\'{e}triques h\'{e}t\'{e}rog\`{e}nes.
+
+Les DOI pr\'{e}sents sont contr\^{o}l\'{e}s s\'{e}par\'{e}ment par le v\'{e}rificateur du skill. Un DOI qui r\'{e}sout ne
+prouve ni la qualit\'{e} de l'\'{e}tude ni la reproductibilit\'{e} d'un score. Pour les r\'{e}f\'{e}rences sans DOI
+renseign\'{e}, la notice primaire li\'{e}e est l'identifiant bibliographique.
+
+V\'{e}rification effectu\'{e}e : quatre DOI r\'{e}solvent; trois m\'{e}tadonn\'{e}es CrossRef r\'{e}cup\'{e}r\'{e}es.
+Pour KLANN, le DOI r\'{e}sout mais CrossRef n'a pas fourni de m\'{e}tadonn\'{e}es au v\'{e}rificateur;
+titre, auteurs, ann\'{e}e et DOI sont corrobor\'{e}s par la notice institutionnelle Aalto.
+Les 29 autres r\'{e}f\'{e}rences sont reli\'{e}es \`{a} leurs notices primaires; aucun DOI absent n'est invent\'{e}.
+
+\section{Ce que la litt\'{e}rature permet de conclure}
+
+\subsection{Architecture et dispositif doivent \^{e}tre distingu\'{e}s}
+
+Les r\'{e}sultats publi\'{e}s ne d\'{e}signent pas un vainqueur universel. La comparaison multi-effets de
+Comunit\`{a} et collaborateurs favorise les SSM et le conditionnement temporel dans son cadre,
+alors que la comparaison de Simionato et Fasciani d\'{e}crit des avantages diff\'{e}rents selon
+distorsion, \'{e}galisation et compression. Les \'{e}tudes ne partagent pas toutes les m\^{e}mes donn\'{e}es,
+budgets ou crit\`{e}res : leur divergence n'est pas une contradiction exp\'{e}rimentale d\'{e}montr\'{e}e.
+\cite{comunita2025,simionato2024a}
+
+Des r\'{e}currences modestes sont des baselines cr\'{e}dibles pour l'amplification. Les travaux Wright
+montrent leur int\'{e}r\^{e}t face \`{a} des convolutions plus lourdes; ils ne garantissent pas une
+g\'{e}n\'{e}ralisation \`{a} toutes les m\'{e}moires ou tous les r\'{e}glages. Le r\'{e}sultat historique obtenu sur
+r\'{e}f\'{e}rence SPICE par Damsk\"{a}gg doit \^{e}tre distingu\'{e} d'un r\'{e}sultat sur mat\'{e}riel captur\'{e}.
+\cite{wright2019,wright2020,damskagg2018}
+
+Cons\'{e}quence pour le projet : comparer la capacit\'{e} utile \`{a} budget contr\^{o}l\'{e}, avec mod\`{e}les
+correctement initialis\'{e}s et m\^{e}mes sources, plut\^{o}t que d\'{e}duire la qualit\'{e} du nombre de param\`{e}tres.
+NablAFx est une base d'impl\'{e}mentation et d'analyse \`{a} examiner; son existence ne valide pas
+automatiquement un adaptateur local. \cite{nablafx2025}
+
+\subsection{La m\'{e}moire conserv\'{e}e et le gradient appris ne sont pas la m\^{e}me chose}
+
+Dans notre configuration connue, 12000 / 48000 = 0,25 seconde de TBPTT. Un \'{e}tat peut transporter
+une information au-del\`{a} de cette dur\'{e}e, tandis que le gradient est coup\'{e} \`{a} la fronti\`{e}re.
+Cela ne prouve pas un \'{e}chec; cela expose une hypoth\`{e}se d'optimisation non test\'{e}e.
+
+Tallec et Ollivier d\'{e}crivent le biais de la troncature et une correction pond\'{e}r\'{e}e.
+Aicher et collaborateurs adaptent l'horizon sous des hypoth\`{e}ses de d\'{e}croissance du gradient.
+Leurs r\'{e}sultats sur t\^{a}ches synth\'{e}tiques ou de langage ne d\'{e}montrent pas directement un gain
+sur amplificateurs. \cite{tallec2017,aicher2020}
+
+Les \'{e}tudes sur compresseurs optiques rendent cette question concr\`{e}te : les historiques et
+les combinaisons attaque rapide / release lente restent difficiles dans leur \'{e}valuation.
+S4, S4D, LRU et Mamba fournissent des m\'{e}canismes de m\'{e}moire, pas un substitut \`{a} la v\'{e}rification
+de l'horizon effectivement appris. \cite{simionato2024b,gu2021,gu2022,orvieto2023,gu2023}
+
+\subsection{Des dynamiques compactes m\'{e}ritent un vrai contr\^{o}le}
+
+KLANN utilise une repr\'{e}sentation non lin\'{e}aire et des filtres lin\'{e}aires dans l'espace latent.
+Les IIR diff\'{e}rentiables, filtres all-pole et tone stacks state-space montrent d'autres fa\c{c}ons
+de factoriser la dynamique. Leur int\'{e}r\^{e}t ici est d'offrir des contr\^{o}les compacts et interpr\'{e}tables,
+pas de garantir une sup\'{e}riorit\'{e} du gray-box. \cite{huhtala2024,kuznetsov2020,yu2024,sinjanakhom2024}
+
+L'analogie avec l'identification de syst\`{e}mes est particuli\`{e}rement utile : les encodeurs d'\'{e}tat
+initial permettent d'apprendre sur sections ind\'{e}pendantes. Mais la m\'{e}thode Beintema utilise
+un historique d'entr\'{e}es ET de sorties. Une adaptation black-box d\'{e}ployable ne peut pas r\'{e}clamer
+le wet r\'{e}el \`{a} l'inf\'{e}rence : encodeur dry-only, pr\'{e}chauffage causal ou observateur autonome
+doivent \^{e}tre explicitement s\'{e}par\'{e}s du contr\^{o}le oracle. \cite{beintema2021}
+
+DDSP, les ODE neuronales et le contr\^{o}le latent d'un phaser alimentent cette factorisation.
+Les \'{e}tats de circuit accessibles en simulation et les solveurs continus changent toutefois
+les conditions d'identification. \cite{engel2020,parker2019,wilczek2022,carson2023}
+
+\subsection{Les scores et les oreilles r\'{e}pondent \`{a} des questions diff\'{e}rentes}
+
+La loss perceptuelle de Wright et l'\'{e}tude de Cassidy s\'{e}parent pr\'{e}cision, r\'{e}alisme et pr\'{e}f\'{e}rence.
+Un meilleur ESR ne d\'{e}montre donc pas une pr\'{e}f\'{e}rence en \'{e}coute. Les courbes de r\'{e}sidu sont
+utiles pour localiser une erreur, mais un fichier presque silencieux peut afficher un ESR \'{e}lev\'{e}
+pour une tr\`{e}s faible erreur absolue. \cite{wrightloss2020,cassidy2023}
+
+Pour le failure mining, rapporter conjointement ESR, MAE, niveau cible, r\'{e}sidu spectral,
+transitoires et position temporelle. Conserver les exemples difficiles sans les transformer
+en donn\'{e}es de s\'{e}lection de la campagne confirmatoire. EGFxSet enrichit les observations sur
+mat\'{e}riel r\'{e}el, mais ses notes isol\'{e}es ne remplacent pas des phrases musicales et histoires
+longues. \cite{pedroza2022}
+
+La r\'{e}p\'{e}tabilit\'{e} mat\'{e}rielle reste une inconnue locale : sans r\'{e}p\'{e}titions de captures identiques,
+on ne peut pas attribuer tout r\'{e}sidu \`{a} la mod\'{e}lisation. Une nouvelle capture ne doit jamais
+\^{e}tre simul\'{e}e en modifiant le dry tout en conservant artificiellement le m\^{e}me wet.
+
+\subsection{Antialiasing et co\^{u}t sont des axes s\'{e}par\'{e}s}
+
+Le lissage des activations et l'ADAA r\'{e}current donnent des pistes pour r\'{e}duire les images
+repli\'{e}es; leur effet sur la tonalit\'{e} doit aussi \^{e}tre mesur\'{e}. Adapter une fr\'{e}quence d'\'{e}chantillonnage
+change la dynamique d'un RNN si sa r\'{e}currence n'est pas adapt\'{e}e. \cite{sato2025,mikkonen2025,carson2024}
+
+Les grandes dilatations TCN peuvent offrir du contexte \`{a} moindre co\^{u}t. TFiLM combine modulation
+r\'{e}currente et convolution; SaShiMi exploite plusieurs \'{e}chelles pour la g\'{e}n\'{e}ration audio.
+Ces id\'{e}es motivent une voie lente basse cadence, mais ne prouvent pas qu'elle pr\'{e}servera les
+transitoires d'un effet conditionn\'{e} par son entr\'{e}e. \cite{steinmetz2021,birnbaum2019,goel2022}
+
+WaveNet est \`{a} l'origine un mod\`{e}le de g\'{e}n\'{e}ration autor\'{e}gressive, distinct de notre r\'{e}gression
+dry/wet. La pr\'{e}publication iOS de 2026 concerne surtout pruning et ex\'{e}cution sparse :
+un gain de d\'{e}ploiement ne vaut pas un nouveau record de fid\'{e}lit\'{e}. \cite{oord2016,sato2026}
+
+\section{Id\'{e}ation : 15 candidats conserv\'{e}s}
+
+Les moteurs cr\'{e}atifs utilis\'{e}s sont la reformulation du probl\`{e}me, l'analogie avec l'identification
+de syst\`{e}mes et l'analyse des contradictions m\'{e}moire/gradient/co\^{u}t. Le classement ci-dessous
+est un jugement de recherche, non une mesure empirique.
+
+\begin{longtable}{p{0.06\linewidth}p{0.23\linewidth}p{0.44\linewidth}p{0.15\linewidth}}
+ID & Proposition & M\'{e}canisme et test discriminant & D\'{e}cision \\ \hline
+I01 & Carte d'horizon m\'{e}moire utile & M\^{e}me suffixe, historique contr\^{o}l\'{e}; mesurer d\'{e}pendance du r\'{e}sidu au contexte & Priorit\'{e} 1 \\ \hline
+I02 & Observer lent basse cadence & \'{E}tats compacts au rythme du contr\^{o}le, voie audio rapide inchang\'{e}e & Priorit\'{e} 2 \\ \hline
+I03 & \'{E}tat initial dry-only appris & Estimer l'\'{e}tat depuis le pass\'{e} dry; comparer au pr\'{e}chauffage causal & Priorit\'{e} 3 \\ \hline
+I04 & Gradient long seulement pour la voie lente & D\'{e}tacher le fast plus souvent que les \'{e}tats lents & Pilote conditionnel \\ \hline
+I05 & KLANN minimal comme contr\^{o}le & Lift + biquads + projection contre gros observer & \`{A} inclure dans I02 \\ \hline
+I06 & Cartographie des constantes de temps & Pr\'{e}dire \'{e}checs attaque/release depuis dynamique estim\'{e}e & \`{A} inclure dans I01 \\ \hline
+I07 & Borne de r\'{e}p\'{e}tabilit\'{e} du r\'{e}el & Captures r\'{e}p\'{e}t\'{e}es du m\^{e}me probe \`{a} r\'{e}glage fixe & Priorit\'{e} m\'{e}trologique \\ \hline
+I08 & Acquisition informative par d\'{e}saccord & Capturer surtout o\`{u} deux mod\`{e}les fig\'{e}s divergent & Futur, demande nouvelles captures \\ \hline
+I09 & Loss sensible aux transitoires & Pond\'{e}ration pr\'{e}enregistr\'{e}e des attaques, contr\^{o}le ESR global & Apr\`{e}s diagnostic I01 \\ \hline
+I10 & R\'{e}sidu s\'{e}par\'{e} harmonique/bruit & Mod\`{e}le d\'{e}terministe plus estimation du plancher al\'{e}atoire & Attendre r\'{e}p\'{e}tabilit\'{e} I07 \\ \hline
+I11 & Transfert de fr\'{e}quence coh\'{e}rent & Garder les constantes de temps physiques lors du resampling & Hors cycle qualit\'{e} actuel \\ \hline
+I12 & Activations antialias\'{e}es & R\'{e}duire ASR sans confondre baisse ESR et baisse aliasing & Futur protocole s\'{e}par\'{e} \\ \hline
+I13 & Expert l\'{e}ger par r\'{e}gime & Routage causal selon niveau/historique, sans contr\^{o}le futur & Complexit\'{e} non justifi\'{e}e encore \\ \hline
+I14 & Recherche d'architecture plus grosse & Ajouter couches/\'{e}tats sans m\'{e}canisme de d\'{e}faut identifi\'{e} & Rejet\'{e}e pour l'instant \\ \hline
+I15 & Pruning/distillation mobile & Convertir fid\'{e}lit\'{e} acquise en co\^{u}t de d\'{e}ploiement & Hors scope actuel \\ \hline
+\end{longtable}
+
+\section{Trois pistes \`{a} approfondir}
+
+\subsection{I01 - Identifier la m\'{e}moire manquante avant d'ajouter des param\`{e}tres}
+
+Pitch : les mod\`{e}les peuvent bien reproduire le timbre moyen tout en \'{e}chouant sur une
+attaque d\'{e}pendante de ce qui pr\'{e}c\'{e}dait. Nous proposons d'estimer l'horizon utile du contexte
+et du gradient afin de localiser si l'erreur vient de l'\'{e}tat, de son apprentissage ou de la loss.
+
+Trois exp\'{e}riences propos\'{e}es :
+1. Contr\^{o}le synth\'{e}tique \`{a} m\'{e}moire connue, avec m\^{e}me d\'{e}bit, loss et architecture; varier
+   l'horizon de gradient et mesurer l'erreur apr\`{e}s transitions.
+2. Sur validation autoris\'{e}e, comparer le mod\`{e}le fig\'{e} avec historique continu et \'{e}tats r\'{e}initialis\'{e}s
+   \`{a} diff\'{e}rentes distances du passage scor\'{e}. Le wet reste celui de la capture originale.
+3. Apr\`{e}s pr\'{e}enregistrement distinct, comparer deux horizons d'entra\^{i}nement sur m\^{e}mes sources,
+   seeds et budgets. S\'{e}parer le gain sur transitoires du gain global.
+
+Invalidateur : aucune sensibilit\'{e} reproductible \`{a} l'historique au-del\`{a} de 250 ms, ou aucun gain
+de l'horizon plus long \`{a} budget comparable. Objection forte : on mesure seulement un artefact de
+reset. R\'{e}ponse : un contr\^{o}le \`{a} m\'{e}moire connue et une fen\^{e}tre de scoring apr\`{e}s pr\'{e}chauffage
+doivent d\'{e}partager cette explication. Originalit\'{e} non \'{e}tablie; diagnostic d'abord.
+
+\subsection{I02 - Une m\'{e}moire lente compacte plut\^{o}t qu'une seconde grosse voie audio}
+
+Pitch : une grande partie de la dynamique pourrait \^{e}tre pilot\'{e}e par quelques \'{e}tats de contr\^{o}le
+lents, alors que les harmoniques exigent un traitement rapide. Un petit observateur causal
+multicadence modulerait la voie rapide, avec un contr\^{o}le KLANN/IIR de m\^{e}me budget.
+
+Trois exp\'{e}riences propos\'{e}es :
+1. Observer simple constitu\'{e} d'enveloppes attaque/release apprenables; v\'{e}rifier son pouvoir
+   explicatif avant toute architecture s\'{e}lective.
+2. Comparer cadence audio et cadence de contr\^{o}le r\'{e}duite avec filtre causal et d\'{e}lai explicite.
+3. Comparer IIR latent compact, S4D et mod\`{e}le actuel sur les r\'{e}gimes identifi\'{e}s par I01.
+
+Invalidateur : gain absent face aux enveloppes simples, ou erreurs transitoires dues \`{a} la cadence
+r\'{e}duite. Objection : gray-box et TFiLM existent d\'{e}j\`{a}. R\'{e}ponse : la contribution doit \^{e}tre la
+d\'{e}monstration d'une d\'{e}composition valide par r\'{e}gime et son co\^{u}t, pas le nom de l'architecture.
+
+\subsection{I03 - Apprendre l'\'{e}tat initial avec des entr\'{e}es accessibles}
+
+Pitch : des segments courts facilitent l'optimisation mais r\'{e}initialisent souvent le syst\`{e}me
+dans un \'{e}tat irr\'{e}aliste. Un encodeur causal du pass\'{e} dry fournirait un \'{e}tat initial coh\'{e}rent
+sans exiger la sortie du dispositif pendant l'inf\'{e}rence.
+
+Trois exp\'{e}riences propos\'{e}es :
+1. \'{E}tat nul contre pr\'{e}chauffage dry explicite, \`{a} contexte r\'{e}ellement identique.
+2. Encodeur dry-only contre oracle entr\'{e}e/sortie strictement marqu\'{e} non d\'{e}ployable.
+3. V\'{e}rifier que l'am\'{e}lioration persiste en streaming complet et apr\`{e}s changement de niveau.
+
+Invalidateur : le gain dispara\^{i}t lorsque le pr\'{e}chauffage de r\'{e}f\'{e}rence est \'{e}quitable, ou l'encodeur
+n\'{e}cessite du wet futur. Objection : \'{e}tats latents non identifiables. R\'{e}ponse : juger la simulation
+hors fen\^{e}tre et la robustesse, sans pr\'{e}tendre retrouver les variables physiques exactes.
+
+\section{Pilote de deux semaines propos\'{e}}
+
+Aucun pilote n'est lanc\'{e} dans ce document.
+
+\par\noindent\textbullet\ Jours 1-2 : tableau des conditions d'\'{e}valuation, r\'{e}f\'{e}rences ex\'{e}cutables, tailles et origines
+  des contextes, d\'{e}lais et supports de scoring. Fixer les crit\`{e}res avant nouveaux scores.
+\par\noindent\textbullet\ Jours 3-5 : I01 sur un syst\`{e}me synth\'{e}tique connu puis sur validation autoris\'{e}e; conserver
+  \'{e}galement les r\'{e}sultats n\'{e}gatifs et les r\'{e}sidus en faible \'{e}nergie.
+\par\noindent\textbullet\ Jours 6-9 : un seul contr\^{o}le compact I02, avec deux seeds au minimum pour un signal exploratoire;
+  plafond propos\'{e} de 12 GPU-h au total, distinct de la campagne actuelle.
+\par\noindent\textbullet\ Jours 10-12 : comparaison du gain par r\'{e}gime et du co\^{u}t complet, pas uniquement temps d'update.
+\par\noindent\textbullet\ Jours 13-14 : d\'{e}cision continuer/abandonner; protocole confirmatoire s\'{e}par\'{e} si justifi\'{e}.
+
+Crit\`{e}res candidats \`{a} pr\'{e}enregistrer : am\'{e}lioration ESR d'au moins 10 \% dans le r\'{e}gime vis\'{e},
+pas de r\'{e}gression globale sup\'{e}rieure \`{a} 5 \%, stabilit\'{e} num\'{e}rique et parit\'{e} streaming.
+Ces nombres sont des propositions de pilotage, pas des seuils ajout\'{e}s au benchmark en cours.
+
+\section{Ce que cette recherche ne permet pas d'affirmer}
+
+Aucune sup\'{e}riorit\'{e} SOTA du projet, aucune causalit\'{e} entre nos \'{e}checs logiciels et une famille
+d'architectures, aucune garantie qu'une nouvelle loss am\'{e}liorera l'\'{e}coute.
+
+Le mat\'{e}riel du corpus inclut amplis, p\'{e}dales et compresseurs : g\'{e}n\'{e}raliser un r\'{e}sultat Ampeg
+\`{a} Rodent/Fuzzy Logic sans confirmation serait injustifi\'{e}. Un avantage du teacher sur un
+contr\^{o}le ablat\'{e} n'est pas une victoire contre le meilleur comparateur ouvert.
+
+Un m\^{e}me nombre d'updates n'est pas un budget de calcul \'{e}gal. Des coordonn\'{e}es de scoring
+identiques n'impliquent pas des historiques identiques. Enfin, les clocks murales, la validation
+et l'admission GPU doivent \^{e}tre trac\'{e}es pour rendre un avantage de co\^{u}t interpr\'{e}table.
+
+\section{Livrables et limites de cette note}
+
+\par\noindent\textbullet\ sources/corpus.json : 33 notices, r\^{o}le, limites et niveau de lecture.
+\par\noindent\textbullet\ sources/search\_log.md : requ\^{e}tes, exclusions et limites de recherche.
+\par\noindent\textbullet\ review.bib : r\'{e}f\'{e}rences utilisables avec citeproc.
+\par\noindent\textbullet\ sources/citations\_to\_verify.md : DOI renseign\'{e}s \`{a} contr\^{o}ler automatiquement.
+\par\noindent\textbullet\ PDF : rendu de secours avec pdfLaTeX install\'{e}; pandoc/xelatex absents et installation syst\`{e}me
+  sans mot de passe indisponible. Les citations du PDF restent li\'{e}es \`{a} la bibliographie.
+\par\noindent\textbullet\ La v\'{e}rification automatis\'{e}e des DOI et le rendu sont s\'{e}par\'{e}s de la r\'{e}daction scientifique.
+
+\begin{thebibliography}{99}
+\bibitem{comunita2025}Marco Comunit\`{a} and Christian J. Steinmetz and Joshua D. Reiss. Differentiable black-box and gray-box modeling of nonlinear audio effects. 2025. \href{https://doi.org/10.3389/frsip.2025.1580395}{Source primaire}.
+\bibitem{nablafx2025}Marco Comunit\`{a} and Christian J. Steinmetz and Joshua D. Reiss. NablAFx: A Framework for Differentiable Black-box and Gray-box Modeling of Audio Effects. 2025. \href{https://arxiv.org/abs/2502.11668}{Source primaire}.
+\bibitem{wright2019}Alec Wright and Eero-Pekka Damsk\"{a}gg and Vesa V\"{a}lim\"{a}ki. Real-Time Black-Box Modelling With Recurrent Neural Networks. 2019. \href{https://dafx.de/paper-archive/details/tieFMcaohHBxl_2yPyIGFA}{Source primaire}.
+\bibitem{wright2020}Alec Wright and Eero-Pekka Damsk\"{a}gg and Lauri Juvela and Vesa V\"{a}lim\"{a}ki. Real-Time Guitar Amplifier Emulation with Deep Learning. 2020. \href{https://doi.org/10.3390/app10030766}{Source primaire}.
+\bibitem{wrightloss2020}Alec Wright and Vesa V\"{a}lim\"{a}ki. Perceptual Loss Function for Neural Modelling of Audio Systems. 2020. \href{https://doi.org/10.1109/ICASSP40776.2020.9052944}{Source primaire}.
+\bibitem{huhtala2024}Ville Huhtala and Lauri Juvela and Sebastian J. Schlecht. KLANN: Linearising Long-Term Dynamics in Nonlinear Audio Effects Using Koopman Networks. 2024. \href{https://doi.org/10.1109/LSP.2024.3389465}{Source primaire}.
+\bibitem{steinmetz2021}Christian J. Steinmetz and Joshua D. Reiss. Efficient neural networks for real-time modeling of analog dynamic range compression. 2021. \href{https://arxiv.org/abs/2102.06200}{Source primaire}.
+\bibitem{damskagg2018}Eero-Pekka Damsk\"{a}gg and Lauri Juvela and Etienne Thuillier and Vesa V\"{a}lim\"{a}ki. Deep Learning for Tube Amplifier Emulation. 2018. \href{https://arxiv.org/abs/1811.00334}{Source primaire}.
+\bibitem{parker2019}Julian D. Parker and Fabi\'{a}n Esqueda and Andr\'{e} Bergner. Modelling of nonlinear state-space systems using a deep neural network. 2019. \href{https://www.dafx.de/paper-archive/details/6gVMKb8twul1KJmeOvE3ng}{Source primaire}.
+\bibitem{kuznetsov2020}Boris Kuznetsov and Julian Parker and Fabian Esqueda. Differentiable IIR Filters for Machine Learning Applications. 2020. \href{https://www.dafx.de/paper-archive/details/rA_6fTdLky8YDvH03jdufw}{Source primaire}.
+\bibitem{engel2020}Jesse Engel and Lamtharn Hantrakul and Chenjie Gu and Adam Roberts. DDSP: Differentiable Digital Signal Processing. 2020. \href{https://arxiv.org/abs/2001.04643}{Source primaire}.
+\bibitem{wilczek2022}Jan Wilczek and Alec Wright and Vesa V\"{a}lim\"{a}ki and Emanu\"{e}l A. P. Habets. Virtual Analog Modeling of Distortion Circuits Using Neural Ordinary Differential Equations. 2022. \href{https://dafx.de/paper-archive/2022/papers/DAFx20in22_paper_12.pdf}{Source primaire}.
+\bibitem{yu2024}Chin-Yun Yu and Christopher Mitcheltree and Alistair Carson and Stefan Bilbao and Joshua D. Reiss and Gy\"{o}rgy Fazekas. Differentiable All-pole Filters for Time-varying Audio Systems. 2024. \href{https://arxiv.org/abs/2404.07970}{Source primaire}.
+\bibitem{simionato2024a}Riccardo Simionato and Stefano Fasciani. Comparative Study of State-based Neural Networks for Virtual Analog Audio Effects Modeling. 2024. \href{https://arxiv.org/abs/2405.04124}{Source primaire}.
+\bibitem{simionato2024b}Riccardo Simionato and Stefano Fasciani. Modeling Time-Variant Responses of Optical Compressors with Selective State Space Models. 2024. \href{https://arxiv.org/abs/2408.12549}{Source primaire}.
+\bibitem{sato2025}Ryota Sato and Julius O. Smith III. Aliasing Reduction in Neural Amp Modeling by Smoothing Activations. 2025. \href{https://arxiv.org/abs/2505.04082}{Source primaire}.
+\bibitem{mikkonen2025}Otto Mikkonen and Kurt James Werner. Antiderivative Antialiasing for Recurrent Neural Networks. 2025. \href{https://dafx.de/paper-archive/details/ZjW5x1v0V0iVtRp_jt4bzA}{Source primaire}.
+\bibitem{sinjanakhom2024}Tantep Sinjanakhom and Eero-Pekka Damsk\"{a}gg and Stylianos Mimilakis and Athanasios Gotsopoulos and Vesa V\"{a}lim\"{a}ki. Guitar Tone Stack Modeling with a Neural State-Space Filter. 2024. \href{https://www.dafx.de/paper-archive/details/kXGS4_Txi3XlNEZL9ycAZg}{Source primaire}.
+\bibitem{cassidy2023}Will Cassidy and Enzo De Sena. Perceptual Evaluation and Genre-specific Training of Deep Neural Network Models of a High-gain Guitar Amplifier. 2023. \href{https://www.dafx.de/paper-archive/2023/DAFx23_paper_40.pdf}{Source primaire}.
+\bibitem{pedroza2022}Hegel Emmanuel Pedroza and Gerardo Meza and Iran R. Roman. EGFxSet: Electric Guitar Tones Processed Through Real Effects of Distortion, Modulation, Delay and Reverb. 2022. \href{https://ismir2022program.ismir.net/lbd_367.html}{Source primaire}.
+\bibitem{goel2022}Karan Goel and Albert Gu and Chris Donahue and Christopher R\'{e}. It's Raw! Audio Generation with State-Space Models. 2022. \href{https://arxiv.org/abs/2202.09729}{Source primaire}.
+\bibitem{gu2021}Albert Gu and Karan Goel and Christopher R\'{e}. Efficiently Modeling Long Sequences with Structured State Spaces. 2021. \href{https://arxiv.org/abs/2111.00396}{Source primaire}.
+\bibitem{gu2022}Albert Gu and Ankit Gupta and Karan Goel and Christopher R\'{e}. On the Parameterization and Initialization of Diagonal State Space Models. 2022. \href{https://arxiv.org/abs/2206.11893}{Source primaire}.
+\bibitem{gu2023}Albert Gu and Tri Dao. Mamba: Linear-Time Sequence Modeling with Selective State Spaces. 2023. \href{https://arxiv.org/abs/2312.00752}{Source primaire}.
+\bibitem{orvieto2023}Antonio Orvieto and Samuel L. Smith and Albert Gu and Anushan Fernando and Caglar Gulcehre and Razvan Pascanu and Soham De. Resurrecting Recurrent Neural Networks for Long Sequences. 2023. \href{https://arxiv.org/abs/2303.06349}{Source primaire}.
+\bibitem{tallec2017}Corentin Tallec and Yann Ollivier. Unbiasing Truncated Backpropagation Through Time. 2017. \href{https://arxiv.org/abs/1705.08209}{Source primaire}.
+\bibitem{aicher2020}Christopher Aicher and Nicholas J. Foti and Emily B. Fox. Adaptively Truncating Backpropagation Through Time to Control Gradient Bias. 2020. \href{https://proceedings.mlr.press/v115/aicher20a.html}{Source primaire}.
+\bibitem{beintema2021}Gerben Beintema and Roland Toth and Maarten Schoukens. Nonlinear state-space identification using deep encoder networks. 2021. \href{https://proceedings.mlr.press/v144/beintema21a.html}{Source primaire}.
+\bibitem{birnbaum2019}Sawyer Birnbaum and Volodymyr Kuleshov and Zayd Enam and Pang Wei Koh and Stefano Ermon. Temporal FiLM: Capturing Long-Range Sequence Dependencies with Feature-Wise Modulations. 2019. \href{https://arxiv.org/abs/1909.06628}{Source primaire}.
+\bibitem{carson2024}Alistair Carson and Alec Wright and Jatin Chowdhury and Vesa V\"{a}lim\"{a}ki and Stefan Bilbao. Sample Rate Independent Recurrent Neural Networks for Audio Effects Processing. 2024. \href{https://www.dafx.de/paper-archive/2024/papers/DAFx24_paper_68.pdf}{Source primaire}.
+\bibitem{oord2016}Aaron van den Oord and Sander Dieleman and Heiga Zen and Karen Simonyan and Oriol Vinyals and Alex Graves and Nal Kalchbrenner and Andrew Senior and Koray Kavukcuoglu. WaveNet: A Generative Model for Raw Audio. 2016. \href{https://arxiv.org/abs/1609.03499}{Source primaire}.
+\bibitem{carson2023}Alistair Carson and Cassia Valentini-Botinhao and Simon King and Stefan Bilbao. Differentiable Grey-box Modelling of Phaser Effects using Frame-based Spectral Processing. 2023. \href{https://arxiv.org/abs/2306.01332}{Source primaire}.
+\bibitem{sato2026}Ryota Sato and Eli Silverstein. WaveNet-Style Guitar Amplifier Model Pruning for Real-Time iOS Deployment. 2026. \href{https://arxiv.org/abs/2607.10086}{Source primaire}.
+\end{thebibliography}\end{document}

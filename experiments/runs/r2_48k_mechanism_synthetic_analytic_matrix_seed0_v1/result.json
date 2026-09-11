@@ -1,0 +1,57 @@
+{
+  "campaign_version": "FSSR-R2-48K-v1",
+  "claim_boundary": "Qualifies only the synthetic AA mechanism; it cannot establish hardware alias reduction or a global state-of-the-art claim.",
+  "evidence_tier": "SYNTHETIC",
+  "fixtures": [
+    "tanh",
+    "asymmetric_clipping",
+    "two_clippers",
+    "short_memory",
+    "slow_sag",
+    "rf2047_residual"
+  ],
+  "git_commit": "40d1b7d4f7c6fe34c55b61dfdd6b333e33033401",
+  "implementation_lock_path": ".codex_campaign/r2_48k/MECHANISM_IMPLEMENTATION_LOCK.yaml",
+  "modes": [
+    "off",
+    "full_island_x2",
+    "adaa1",
+    "teacher_x4"
+  ],
+  "physical_audio_samples_read": 0,
+  "physical_hardware_reference_used": false,
+  "reference_generated_directly_at_hz": 192000,
+  "reference_kind": "synthetic_192khz",
+  "rows": [
+    {
+      "aggregation": {
+        "asr": "median_exact_3x3_grid",
+        "fundamental_complex_error": "maximum_exact_3x3_grid",
+        "guard": "all_exact_3x3_conditions"
+      },
+      "asr_db": -55.79870552365806,
+      "conditions": [
+        {
+          "amplitude": 0.1,
+          "asr_db": -148.96587529614231,
+          "frequency_hz": 1248.779296875,
+          "fundamental_complex_error": 2.6641846444856115e-11,
+          "guard": {
+            "checks": {
+              "complex_harmonic_error": true,
+              "correlation": true,
+              "fundamental_level": true,
+              "gain_error": true,
+              "harmonic_energy": true
+            },
+            "passed": true,
+            "values": {
+              "complex_harmonic_error_ratio": 1.0,
+              "correlation": 0.9999999999999998,
+              "fundamental_delta_db": 0.0,
+              "gain_error": 0.0,
+              "harmonic_energy_delta_db": 0.0
+            }
+          },
+          "k0": 1705,
+          "periodicity_error_db": 

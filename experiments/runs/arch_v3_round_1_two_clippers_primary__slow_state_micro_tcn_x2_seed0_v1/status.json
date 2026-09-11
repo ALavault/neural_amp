@@ -1,0 +1,6 @@
+{
+  "failure_reason": "Codex Process Jobs reported the critical round-one worker terminal as failed: Tracked process ended without reporting a terminal status. The worker stopped during this trajectory after 15 earlier trajectories completed; protocol forbids resume or retry.",
+  "finished_at": "2026-08-30T08:27:16+02:00",
+  "started_at": "2026-08-29T22:32:20+02:00",
+  "status": "failed"
+}

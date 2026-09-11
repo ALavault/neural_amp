@@ -1,0 +1,27 @@
+schema_version: 1
+campaign_version: FSSR-QUALITY-AA-v2
+campaign_key: quality_aa_v2
+parent_campaign: FSSR-QUALITY-AA-v1
+base_protocol_path: configs/quality_aa_v1/protocol.yaml
+amendment_scope: yaml_key_typing_and_strict_mapping_validation_only
+scientific_thresholds_changed: false
+fixtures_routes_probes_changed: false
+parent_numeric_evidence_reused: false
+run_id_format: quality_aa_v2_<stage>_synthetic_<route>_seed0_v1
+valid_terminal_verdicts: [GO-QUALITY-AA-v2, NO-GO-QUALITY-AA-v2, INVALID]
+transport:
+  mapping_keys_must_be_strings: true
+  ambiguous_yaml_scalar_keys_must_be_quoted: true
+  normalized_base_key:
+    source_yaml_token: off
+    source_decoded_value: false
+    normalized_string: "off"
+  strict_json_sort_keys: true
+  retry_policy: single_v2_run_per_stage_no_result_dependent_retry
+claim_boundary:
+  physical_hardware_aliasing_claim_allowed: false
+  amplifier_architecture_claim_allowed: false
+  global_state_of_the_art_claim_allowed: false
+  physical_audio_allowed: false
+  fm9_proxy_allowed: false
+  external_report_only_locked: true

@@ -1,0 +1,14 @@
+schema_version: 1
+campaign_version: FSSR-R2-48K-v1
+teacher:
+  aa_mode: teacher_x4
+  internal_sample_rate_hz: 192000
+  physical_target_sample_rate_hz: 48000
+  role: model_side_regularizer_not_hardware_reference
+  devices: [fulltone, bigmuff]
+  seeds: [0]
+distillation:
+  condition: teacher_passes_and_deployable_fidelity_fails
+  physical_loss_weight: 1.0
+  teacher_esr_preemphasis_weight: 0.25
+  teacher_target: downsampled_teacher

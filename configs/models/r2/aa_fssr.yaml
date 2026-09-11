@@ -1,0 +1,19 @@
+schema_version: 1
+campaign_version: FSSR-R2-v1
+family: aa-fssr
+core_selection:
+  fixture: two_clippers
+  cascade_minimum_relative_esr_improvement: 0.50
+  fallback: mono
+receptive_field_samples_at_48khz: 2047
+residual_channels: 16
+slow_gru_units: 16
+slow_cadence_samples_at_48khz: 64
+activation:
+  kind: hermite_c1
+  knots: 33
+  range: [-4.0, 4.0]
+aa_modes:
+  primary: full_island_x2
+  challenger: adaa1
+  teacher: teacher_x4

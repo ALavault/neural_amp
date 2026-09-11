@@ -1,0 +1,33 @@
+schema_version: 1
+campaign_version: FSSR-R2-v1
+data_tier: INTERNAL_DEV
+devices: [fulltone, bigmuff]
+families: [aa-nam, aa-fssr]
+baseline: a2
+aa_primary: full_island_x2
+aa_challenger: adaa1
+losses: [m4, wright]
+seeds: [0]
+checkpoints: [200, 1000, 5000, 15000]
+loss_stop_updates: 5000
+promoted_loss_updates: 15000
+selection_split: validation
+trajectory_counts: {x2: 8, baseline: 4, adaa: 4}
+loss_promotion:
+  metric: median_validation_esr_at_5000_updates
+  aggregation: across_initial_x2_families_and_devices
+  rule: minimum
+  exact_tie_breaker: m4
+loss_definitions:
+  m4:
+    source: configs/training/m4_smoke.yaml
+    weights:
+      mse: 1.0
+      mrstft: 0.0005
+      spline_curvature: 0.00001
+      normalized_residual_energy: 0.001
+  wright:
+    preemphasis: 0.85
+    esr_preemphasized_weight: 0.75
+    dc_weight: 0.25
+    epsilon: 0.00001

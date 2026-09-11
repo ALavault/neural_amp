@@ -1,0 +1,197 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=22mm]{geometry}
+\usepackage{longtable}
+\usepackage[colorlinks=true,urlcolor=blue,citecolor=blue,linkcolor=blue]{hyperref}
+\renewcommand{\contentsname}{Sommaire}
+\renewcommand{\refname}{Références}
+\setlength{\emergencystretch}{4em}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+\begin{document}
+\begin{center}\Large Deep Research : m\'{e}moire, validit\'{e} et failure mining\\
+\large Emulation d'amplificateurs : recherche et audit de validite\\
+\normalsize 5 septembre 2026 -- Note exploratoire\end{center}
+\tableofcontents
+\newpage
+
+
+\section{R\'{e}sultat ex\'{e}cutif}
+
+La meilleure prochaine exp\'{e}rience n'est pas « un observer plus gros ». Elle doit
+d'abord rendre la comparaison sym\'{e}trique, puis mesurer o\`{u} une m\'{e}moire lente aide
+r\'{e}ellement. L'audit du code a trouv\'{e} deux facteurs capables de fausser la s\'{e}lection :
+le teacher conservait son \'{e}tat \`{a} travers des chunks de 48 000 \'{e}chantillons, tandis
+que les comparateurs \'{e}taient remis implicitement \`{a} z\'{e}ro tous les 12 000; sa
+validation \'{e}tait pond\'{e}r\'{e}e par \'{e}chantillons, celle des comparateurs par nombre de
+segments. Des coordonn\'{e}es de sortie identiques ne corrigent pas cette diff\'{e}rence
+d'historique.
+
+La recommandation est donc un benchmark prospectif \`{a} contexte commun : reset de
+toutes les familles chaque seconde, pr\'{e}roll identique de 14 400 \'{e}chantillons,
+scoring du suffixe seulement et agr\'{e}gation pond\'{e}r\'{e}e par \'{e}chantillons. Cette
+restriction r\'{e}duit la port\'{e}e de la revendication : un r\'{e}sultat positif signifie
+« meilleur comparateur ouvert r\'{e}entra\^{i}n\'{e} localement sous le contexte commun
+gel\'{e} », pas reproduction exacte de toutes les recettes publi\'{e}es ni sup\'{e}riorit\'{e}
+perceptuelle universelle.
+
+Parmi les quinze pistes g\'{e}n\'{e}r\'{e}es dans la revue exploratoire, trois sont prioritaires
+apr\`{e}s un verdict v9 valide : mesurer l'horizon de m\'{e}moire utile, remplacer
+l'observer lourd par un observer compact \`{a} cadence lente, puis tester un encodeur
+d'\'{e}tat initial dry-only. Elles sont falsifiables et peuvent \^{e}tre \'{e}valu\'{e}es sur les
+splits train/validation sans ouvrir les tests.
+
+\section{Question, m\'{e}thode et limites}
+
+Question : quelles limites de repr\'{e}sentation, d'apprentissage et de mesure
+emp\^{e}chent une \'{e}mulation dry/wet causale de reproduire un dispositif analogique,
+et quelles exp\'{e}riences born\'{e}es s\'{e}parent ces m\'{e}canismes ?
+
+La recherche couvre 2016-2026 et conserve 33 sources primaires ou notices
+institutionnelles. Les recherches ont cibl\'{e} arXiv, DAFx, PMLR, DBLP, ISMIR,
+Frontiers et les d\'{e}p\^{o}ts universitaires. Le journal complet des requ\^{e}tes et des
+exclusions est dans sources/search\_log.md; le corpus d\'{e}dupliqu\'{e} est dans
+sources/corpus.json. Le CLI acad\'{e}mique pr\'{e}vu n'\'{e}tait pas disponible, donc une
+recherche web cibl\'{e}e a servi de repli. Cette m\'{e}thode est une revue exploratoire,
+pas une revue syst\'{e}matique PRISMA : il n'y a ni export exhaustif des r\'{e}sultats
+bruts, ni double screening, ni m\'{e}ta-analyse.
+
+Les quatre DOI d\'{e}clar\'{e}s ont \'{e}t\'{e} test\'{e}s. Trois ont fourni leurs m\'{e}tadonn\'{e}es
+Crossref; le DOI KLANN r\'{e}sout mais ses m\'{e}tadonn\'{e}es ont \'{e}t\'{e} corrobor\'{e}es par la
+notice Aalto. Aucun DOI absent n'a \'{e}t\'{e} invent\'{e}. Le registre
+sources/claim\_ledger.md relie chaque conclusion op\'{e}rationnelle \`{a} ses sources et
+indique si la preuve est directe, transf\'{e}r\'{e}e ou issue de l'audit local.
+
+\section{Synth\`{e}se des preuves}
+
+\subsection{Aucun vainqueur architectural universel}
+
+La comparaison multi-effets de Comunit\`{a} et collaborateurs montre l'int\'{e}r\^{e}t des
+mod\`{e}les state-space et du conditionnement temporel dans son propre cadre, alors
+que l'\'{e}tude comparative de Simionato et Fasciani rapporte des avantages qui
+d\'{e}pendent de la classe d'effet. Ces r\'{e}sultats n'ont ni les m\^{e}mes donn\'{e}es, ni les
+m\^{e}mes budgets, ni exactement les m\^{e}mes recettes. Ils soutiennent une s\'{e}lection
+par dispositif et protocole gel\'{e}, pas un classement universel.
+(\href{https://www.frontiersin.org/journals/signal-processing/articles/10.3389/frsip.2025.1580395/full}{Comunit\`{a} et al., 2025},
+\href{https://arxiv.org/abs/2405.04124}{Simionato et Fasciani, 2024})
+
+Les RNN modestes restent des baselines fortes pour l'amplification, comme le
+montrent les travaux de Wright, mais ces r\'{e}sultats ne garantissent pas la capture
+de toutes les dynamiques lentes. Les r\'{e}sultats historiques sur r\'{e}f\'{e}rences SPICE
+ne sont pas interchangeables avec des captures de mat\'{e}riel r\'{e}el.
+(\href{https://dafx.de/paper-archive/details/tieFMcaohHBxl_2yPyIGFA}{Wright et al., 2019},
+\href{https://aaltodoc.aalto.fi/items/dc06100e-514d-41b4-b6b4-272912e872b7}{Wright et V\"{a}lim\"{a}ki, 2020},
+\href{https://arxiv.org/abs/1811.00334}{Damsk\"{a}gg et al., 2018})
+
+\subsection{\'{E}tat transport\'{e} et gradient appris sont deux questions diff\'{e}rentes}
+
+Avec une TBPTT de 12 000 \'{e}chantillons \`{a} 48 kHz, le gradient direct couvre 0,25 s.
+Un mod\`{e}le peut transporter un \'{e}tat au-del\`{a}, mais cela ne prouve pas que cet \'{e}tat
+a re\c{c}u un signal d'apprentissage ad\'{e}quat. Les travaux sur la TBPTT non biais\'{e}e et
+adaptative \'{e}tablissent le m\'{e}canisme g\'{e}n\'{e}ral; leur transfert \`{a} l'\'{e}mulation audio
+reste une hypoth\`{e}se \`{a} tester.
+(\href{https://arxiv.org/abs/1705.08209}{Tallec et Ollivier, 2017},
+\href{https://proceedings.mlr.press/v115/aicher20a.html}{Aicher et al., 2020})
+
+S4, S4D, LRU et Mamba fournissent diff\'{e}rentes param\'{e}trisations de m\'{e}moire longue,
+mais aucune ne d\'{e}termine \`{a} elle seule l'horizon utile d'une p\'{e}dale ou d'un ampli.
+Les difficult\'{e}s rapport\'{e}es sur les compresseurs optiques rendent plausible une
+analyse conditionn\'{e}e par les r\'{e}gimes attaque/release.
+(\href{https://arxiv.org/abs/2111.00396}{Gu et al., 2021},
+\href{https://arxiv.org/abs/2206.11893}{Gu et al., 2022},
+\href{https://arxiv.org/abs/2303.06349}{Orvieto et al., 2023},
+\href{https://arxiv.org/abs/2408.12549}{Simionato et Fasciani, 2024})
+
+\subsection{La m\'{e}trique moyenne cache les limites g\'{e}n\'{e}ratives}
+
+ESR et MAE r\'{e}sument l'erreur mais ne localisent pas sa cause. Une campagne de
+failure mining descriptive doit conserver les fen\^{e}tres dans les coordonn\'{e}es
+source et les relier \`{a} des facteurs calcul\'{e}s uniquement sur le dry : niveau,
+crest factor, centro\"{i}de spectral et transientness. Le r\'{e}sidu wet peut ensuite
+servir de variable r\'{e}ponse, sans s\'{e}lectionner une nouvelle architecture sur ces
+r\'{e}sultats. Les pertes perceptuelles et multi-r\'{e}solution publi\'{e}es justifient une
+lecture multi-m\'{e}trique, pas le remplacement post hoc de la m\'{e}trique primaire.
+(\href{https://dihana.cps.unizar.es/proceedings/ICASSP/2020/pdfs/0000251.pdf}{Wright et al., 2020},
+\href{https://www.dafx.de/paper-archive/2023/DAFx23_paper_40.pdf}{Cassidy et al., 2023})
+
+Une seconde limite possible est l'aliasing. Les travaux r\'{e}cents proposent le
+lissage d'activations et l'antid\'{e}riv\'{e}e pour certains mod\`{e}les neuronaux. Cela
+justifie un diagnostic spectral conditionnel, mais pas l'ajout d'un nouveau
+traitement \`{a} la campagne v9 : ce serait une variante scientifique distincte.
+(\href{https://arxiv.org/abs/2505.04082}{Sato et al., 2025},
+\href{https://dafx.de/paper-archive/details/ZjW5x1v0V0iVtRp_jt4bzA}{Mikkonen et al., 2025})
+
+\section{Failure mining pr\'{e}enregistrable}
+
+L'unit\'{e} descriptive propos\'{e}e est une fen\^{e}tre source fixe sur validation, jamais
+un extrait choisi apr\`{e}s inspection des tests. Pour chaque fen\^{e}tre : calculer ESR
+local, MAE, erreur MR-STFT et erreur d'enveloppe; calculer sur le dry niveau RMS,
+crest factor, centro\"{i}de spectral et transientness. Produire des quantiles et des
+courbes de calibration par dispositif. Les comparaisons candidat-comparateur
+doivent \^{e}tre appari\'{e}es sur la m\^{e}me fen\^{e}tre.
+
+Quatre signatures d\'{e}partagent des m\'{e}canismes :
+
+1. Erreur croissante avec l'horizon depuis un reset, mais pas avec le niveau :
+   m\'{e}moire ou initialisation d'\'{e}tat.
+2. Erreur concentr\'{e}e sur fortes transitoires et hautes fr\'{e}quences : branche rapide,
+   resampling ou aliasing.
+3. Erreur d\'{e}pendante du niveau avec gain\_error n\'{e}gatif : saturation ou calibration
+   d'amplitude insuffisante.
+4. Erreur de release apr\`{e}s transitoire : dynamique lente mal apprise malgr\'{e} un
+   score moyen acceptable.
+
+Ce mining reste descriptif et in\'{e}ligible \`{a} la s\'{e}lection v9. Une hypoth\`{e}se nouvelle
+issue de ces graphiques exige une lign\'{e}e prospective s\'{e}par\'{e}e.
+
+\section{Id\'{e}es de recherche class\'{e}es}
+
+\subsection{I01 - Mesurer l'horizon de m\'{e}moire utile}
+
+Injecter, sur train/validation, des resets contr\^{o}l\'{e}s \`{a} plusieurs distances avant
+la zone scor\'{e}e (0,25; 0,5; 1; 2; 4 s) et tracer la r\'{e}cup\'{e}ration de l'erreur par
+dispositif. Pr\'{e}diction : si la voie lente apporte r\'{e}ellement une information
+utile, son avantage augmente avec l'historique disponible puis atteint un
+plateau. Falsification : courbe plate ou avantage limit\'{e} aux premi\`{e}res dizaines
+de millisecondes. Co\^{u}t : \'{e}valuation seulement sur checkpoints gel\'{e}s.
+
+\subsection{I02 - Observer compact \`{a} cadence lente}
+
+Remplacer l'observer S4 64×64 par une petite r\'{e}currence ou un filtre d'\'{e}tat op\'{e}r\'{e}
+\`{a} cadence d\'{e}cim\'{e}e, puis interpoler ses param\`{e}tres FiLM. L'analogie vient des
+mod\`{e}les hybrides et filtres diff\'{e}rentiables : r\'{e}server la capacit\'{e} \`{a} la dynamique
+lente et laisser la WaveNet mod\'{e}liser la non-lin\'{e}arit\'{e} rapide.
+(\href{https://www.dafx.de/paper-archive/details/rA_6fTdLky8YDvH03jdufw}{Kuznetsov et al., 2020},
+\href{https://arxiv.org/abs/2404.07970}{Yu et al., 2024},
+\href{https://arxiv.org/abs/2001.04643}{Engel et al., 2020})
+
+\subsection{I03 - Encodeur d'\'{e}tat initial dry-only}
+
+Apprendre un encodeur causal sur un pr\'{e}fixe dry pour initialiser l'\'{e}tat du mod\`{e}le
+avant la fen\^{e}tre scor\'{e}e. Les deep encoder networks fournissent une motivation en
+identification non lin\'{e}aire, mais l'efficacit\'{e} sur amplificateurs doit \^{e}tre
+d\'{e}montr\'{e}e. Pr\'{e}diction : r\'{e}duction de l'erreur juste apr\`{e}s reset sans d\'{e}grader le
+r\'{e}gime stationnaire. Falsification : aucune r\'{e}duction appari\'{e}e, ou d\'{e}pendance \`{a}
+des cibles wet indisponibles \`{a} l'inf\'{e}rence.
+(\href{https://proceedings.mlr.press/v144/beintema21a.html}{Beintema et al., 2021})
+
+\section{D\'{e}cision pour la campagne}
+
+Avant tout nouveau run : qualifier le contrat de contexte commun sur entr\'{e}es
+synth\'{e}tiques, v\'{e}rifier gradients finis et m\'{e}moire sur les trois comparateurs,
+puis geler le snapshot. Ensuite seulement, ex\'{e}cuter la matrice de d\'{e}veloppement
+et le failure mining validation. La confirmation Rodent/Fuzzy Logic et ses tests
+restent scell\'{e}s jusqu'aux locks candidat, comparateur, recettes et checkpoints.
+
+Cette recommandation ne promet pas un GO. Elle vise un verdict interpr\'{e}table,
+y compris si le r\'{e}sultat final est NO-GO-OBJECTIVE-SOTA.
+
+\section{Artefacts associ\'{e}s}
+
+\par\noindent\textbullet\ Revue d\'{e}taill\'{e}e et bibliographie : review.md, review.bib.
+\par\noindent\textbullet\ Corpus d\'{e}dupliqu\'{e} : sources/corpus.json, sources/corpus.md.
+\par\noindent\textbullet\ Journal de recherche : sources/search\_log.md.
+\par\noindent\textbullet\ Registre des conclusions : sources/claim\_ledger.md.
+\par\noindent\textbullet\ PDF de la revue d\'{e}taill\'{e}e : output/pdf/review.pdf.
+\end{document}

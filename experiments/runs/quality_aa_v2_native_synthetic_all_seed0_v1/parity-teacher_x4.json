@@ -1,0 +1,46 @@
+{
+  "aa_mode": "teacher_x4",
+  "atol": 2e-05,
+  "comparisons": {
+    "python_vs_cpp_irregular": {
+      "max_abs_error": 2.384185791015625e-07,
+      "passed": true
+    },
+    "python_vs_cpp_regular": {
+      "max_abs_error": 2.384185791015625e-07,
+      "passed": true
+    },
+    "regular_vs_irregular": {
+      "max_abs_error": 0.0,
+      "passed": true
+    },
+    "reset_repeat": {
+      "max_abs_error": 0.0,
+      "passed": true
+    }
+  },
+  "dilation_scale": 4,
+  "format": "fssr-r2-parity-v1",
+  "internal_sample_rate": 192000,
+  "irregular_blocks": [
+    1,
+    7,
+    3,
+    31,
+    5,
+    64
+  ],
+  "latency_samples": 32,
+  "max_abs_error": 2.384185791015625e-07,
+  "passed": true,
+  "python_cpp_parity": true,
+  "regular_block": 64,
+  "reset_verified": true,
+  "sample_count": 257,
+  "sizes": {
+    "parameters": 4817,
+    "persistent_state_bytes": 525908,
+    "scratch_bytes": 1344,
+    "weight_bytes": 20564
+  }
+}

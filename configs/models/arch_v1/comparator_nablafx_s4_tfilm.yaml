@@ -1,0 +1,26 @@
+schema_version: 1
+campaign_version: AMP-QUALITY-ARCH-v1
+family: nablafx_s4_tfilm
+source_commit: 045db6e7d6087151c7e3a264844bd8c4eafc885c
+local_adapter: src/fssr_nam/models/sota_comparators.py
+source_parity_test: tests/numerical/test_sota_comparators.py
+sample_rate_hz: 48000
+variants:
+  small:
+    source: third_party/nablafx/cfg/model/s4/model_bb_s4-tf-b4-s4-c16.yaml
+    blocks: 4
+    state_dim: 4
+    channels: 16
+    parameters: 27953
+    conservative_causal_latency_samples: 508
+  large:
+    source: third_party/nablafx/cfg/model/s4/model_bb_s4-tf-b8-s32-c16.yaml
+    blocks: 8
+    state_dim: 32
+    channels: 16
+    parameters: 70193
+    conservative_causal_latency_samples: 1016
+tfilm_block_samples: 128
+variant_selection: pooled_fulltone_bigmuff_validation_only
+runtime_gate_eligible: false
+runtime_ineligibility: causal_latency_exceeds_48_samples

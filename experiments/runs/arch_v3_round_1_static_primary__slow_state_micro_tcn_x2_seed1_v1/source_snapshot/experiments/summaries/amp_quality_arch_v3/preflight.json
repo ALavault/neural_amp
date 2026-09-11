@@ -1,0 +1,148 @@
+{
+  "campaign_version": "AMP-QUALITY-ARCH-v3",
+  "evidence_tier": "train_only",
+  "external_report_only_locked": true,
+  "gate": {
+    "checks": {
+      "dynamic_has_memory_capable_family": true,
+      "primary_ranges": true,
+      "stress_isolated": true,
+      "training_eligible_family_count": true,
+      "unbounded_residual_parameterization": true
+    },
+    "memory_capable_families": [
+      "slow_state_micro_tcn_x2",
+      "long_rf_tcn_x2"
+    ],
+    "memory_rows": [
+      {
+        "family": "gainhead_micro_tcn_x2",
+        "finite_rf_collision_detected": true,
+        "memory_capable": false,
+        "physical_receptive_field_samples": 2047,
+        "stateful": false,
+        "target_collision_rms": 0.04252075059043856
+      },
+      {
+        "family": "slow_state_micro_tcn_x2",
+        "finite_rf_collision_detected": true,
+        "memory_capable": true,
+        "physical_receptive_field_samples": 2047,
+        "stateful": true,
+        "target_collision_rms": 0.04252075059043856
+      },
+      {
+        "family": "long_rf_tcn_x2",
+        "finite_rf_collision_detected": false,
+        "memory_capable": true,
+        "physical_receptive_field_samples": 12283,
+        "stateful": false,
+        "target_collision_rms": 0.001718601108353189
+      }
+    ],
+    "passed": true,
+    "primary_checks": {
+      "dynamic_primary": {
+        "not_rail_collapsed": true,
+        "positive_residual_initialization": true,
+        "target_rms": true
+      },
+      "static_primary": {
+        "not_rail_collapsed": true,
+        "positive_residual_initialization": true,
+        "target_rms": true
+      },
+      "two_clippers_primary": {
+        "not_rail_collapsed": true,
+        "positive_residual_initialization": true,
+        "target_rms": true
+      }
+    },
+    "range_rows": [
+      {
+        "near_peak_fraction": 0.004431423611111111,
+        "primary": true,
+        "recommended_initial_residual_scale": 0.5370053723827004,
+        "required_residual_absolute_quantile": 0.42960429790616034,
+        "system": "static_primary",
+        "target_absolute_peak": 0.9966834187507629,
+        "target_rms": 0.4304113225197006,
+        "tier": "train_only"
+      },
+      {
+        "near_peak_fraction": 0.0007638888888888889,
+        "primary": true,
+        "recommended_initial_residual_scale": 0.4156145527213812,
+        "required_residual_absolute_quantile": 0.332491642177105,
+        "system": "dynamic_primary",
+        "target_absolute_peak": 0.972378134727478,
+        "target_rms": 0.34899134726823516,
+        "tier": "train_only"
+      },
+      {
+        "near_peak_fraction": 0.04313802083333333,
+        "primary": true,
+        "recommended_initial_residual_scale": 1.5331988602131608,
+        "required_residual_absolute_quantile": 1.2265590881705286,
+        "system": "two_clippers_primary",
+        "target_absolute_peak": 0.9925547242164612,
+        "target_rms": 0.5965256826881569,
+        "tier": "train_only"
+      },
+      {
+        "near_peak_fraction": 0.8475347222222223,
+        "primary": false,
+        "recommended_initial_residual_scale": 1.1810797048732637,
+        "required_residual_absolute_quantile": 0.944863763898611,
+        "system": "v2_dynamic_rail_stress",
+        "target_absolute_peak": 0.7799873948097229,
+        "target_rms": 0.7467130007165712,
+        "tier": "train_only"
+      }
+    ],
+    "training_eligible_families": [
+      "gainhead_micro_tcn_x2",
+      "slow_state_micro_tcn_x2",
+      "long_rf_tcn_x2"
+    ]
+  },
+  "initial_residual_scale": 1.5331988602131608,
+  "models": [
+    {
+      "family": "gainhead_micro_tcn_x2",
+      "initial_residual_scale": 1.5331989526748657,
+      "latency_samples": 32,
+      "parameters": 6659,
+      "physical_receptive_field_samples": 2047,
+      "slow_state": false
+    },
+    {
+      "family": "slow_state_micro_tcn_x2",
+      "initial_residual_scale": 1.5331989526748657,
+      "latency_samples": 32,
+      "parameters": 8201,
+      "physical_receptive_field_samples": 2047,
+      "slow_state": true
+    },
+    {
+      "family": "long_rf_tcn_x2",
+      "initial_residual_scale": 1.5331989526748657,
+      "latency_samples": 32,
+      "parameters": 14531,
+      "physical_receptive_field_samples": 12283,
+      "slow_state": false
+    }
+  ],
+  "physical_audio_samples_read": 0,
+  "protocol_lock_written_before_train_analysis": true,
+  "schema_version": 1,
+  "scientific_runs_launched": 0,
+  "sealed_outputs_accessed": {
+    "blackstar": false,
+    "ua1176": false
+  },
+  "stage": "preflight",
+  "status": "passed",
+  "train_source_seed": 30360828,
+  "validation_source_accessed": false
+}

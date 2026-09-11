@@ -1,0 +1,17 @@
+schema_version: 1
+campaign_version: FSSR-R2-48K-v1
+data_tier: INTERNAL_DEV
+devices: [fulltone, bigmuff]
+families: [aa-nam, aa-fssr, aa-fssr-xl]
+baseline: a2
+aa_primary: full_island_x2
+aa_challenger: adaa1
+losses: [m4, wright]
+seeds: [0]
+checkpoints: [200, 1000, 5000, 15000]
+loss_stop_updates: 5000
+promoted_loss_updates: 15000
+selection_split: validation
+selection_metrics: [esr]
+physical_asr_selection_forbidden: true
+trajectory_counts: {x2: 12, baseline: 4, adaa_maximum: 6}

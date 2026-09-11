@@ -1,0 +1,17 @@
+schema_version: 1
+campaign_version: FSSR-QUALITY-AA-v1
+campaign_key: quality_aa_v1
+parent_campaign: FSSR-R2-48K-v2
+protocol_path: configs/quality_aa_v1/protocol.yaml
+status: frozen_before_first_scientific_run
+frozen_at: 2026-08-28T10:22:32+02:00
+scientific_runs_launched: 0
+parent_artifacts_immutable: true
+development_outputs_previously_observed: true
+new_candidate_outputs_observed: false
+physical_192khz_dataset_available: false
+physical_audio_allowed: false
+fm9_proxy_allowed: false
+external_report_only_locked: true
+source_snapshot_required_for_every_run: true
+amendment_policy: any_scientific_change_requires_new_campaign_version

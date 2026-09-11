@@ -1,0 +1,18 @@
+{
+  "total_dois": 1,
+  "verified": [
+    "10.3390/app10030766"
+  ],
+  "failed": [],
+  "metadata": {
+    "10.3390/app10030766": {
+      "title": "Real-Time Guitar Amplifier Emulation with Deep Learning",
+      "authors": "Wright, A., Damsk\u00e4gg, E., Juvela, L., et al.",
+      "year": "2020",
+      "journal": "Applied Sciences",
+      "volume": "10",
+      "pages": "766",
+      "doi": "10.3390/app10030766"
+    }
+  }
+}

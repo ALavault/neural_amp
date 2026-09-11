@@ -1,0 +1,205 @@
+"""Causal resampling around learnable nonlinear branches."""
+
+from __future__ import annotations
+
+import torch
+import torch.nn.functional as functional
+from torch import Tensor, nn
+
+from .spline import SmoothHermiteSpline
+from .structured import CausalDelay, _batch
+
+
+def design_resampling_lowpass(factor: int, taps: int, beta: float = 8.6) -> Tensor:
+    """Design the frozen interpolation/decimation FIR for an integer factor."""
+    if factor not in {2, 4}:
+        raise ValueError("resampling factor must be two or four")
+    if taps < 3 or taps % 2 == 0:
+        raise ValueError("oversampling filter taps must be odd and at least three")
+    index = torch.arange(taps, dtype=torch.float64) - (taps - 1) / 2
+    cutoff = 0.5 / factor
+    impulse = 2.0 * cutoff * torch.sinc(2.0 * cutoff * index)
+    window = torch.kaiser_window(taps, periodic=False, beta=beta, dtype=torch.float64)
+    impulse = impulse * window
+    return (impulse / impulse.sum()).to(torch.float32)
+
+
+def design_lowpass(taps: int = 33, beta: float = 8.6) -> Tensor:
+    """Backward-compatible x2 FIR design used by the historical S4 model."""
+    return design_resampling_lowpass(2, taps, beta)
+
+
+class FixedCausalFIR(nn.Module):
+    def __init__(self, coefficients: Tensor):
+        super().__init__()
+        if coefficients.ndim != 1 or len(coefficients) < 1:
+            raise ValueError("coefficients must be one-dimensional and non-empty")
+        self.register_buffer("coefficients", coefficients)
+        self._state: Tensor | None = None
+
+    @property
+    def history(self) -> int:
+        return len(self.coefficients) - 1
+
+    def reset_state(self) -> None:
+        self._state = None
+
+    def forward(self, signal: Tensor) -> Tensor:
+        return functional.conv1d(
+            functional.pad(signal[:, None], (self.history, 0)),
+            self.coefficients[None, None],
+        )[:, 0]
+
+    def stream(self, signal: Tensor) -> Tensor:
+        if self._state is None:
+            self._state = signal.new_zeros((len(signal), self.history))
+        if self._state.shape[0] != signal.shape[0]:
+            raise ValueError("stream batch size changed without reset")
+        joined = torch.cat((self._state, signal), dim=-1)
+        output = functional.conv1d(joined[:, None], self.coefficients[None, None])[:, 0]
+        self._state = joined[..., -self.history :] if self.history else joined[..., :0]
+        return output
+
+
+class LocalOversampledSpline2x(nn.Module):
+    """Oversample only phi(x)-x and add it to a causally delayed linear path."""
+
+    factor = 2
+
+    def __init__(self, num_knots: int = 17, filter_taps: int = 33):
+        super().__init__()
+        lowpass = design_lowpass(filter_taps)
+        self.upsample_filter = FixedCausalFIR(2.0 * lowpass)
+        self.downsample_filter = FixedCausalFIR(lowpass)
+        self.spline = SmoothHermiteSpline(num_knots)
+        self.latency_samples = (filter_taps - 1) // 2
+        self.linear_delay = CausalDelay(self.latency_samples)
+
+    def reset_state(self) -> None:
+        self.upsample_filter.reset_state()
+        self.downsample_filter.reset_state()
+        self.linear_delay.reset_state()
+
+    @staticmethod
+    def _zero_insert(signal: Tensor) -> Tensor:
+        high_rate = signal.new_zeros((len(signal), 2 * signal.shape[-1]))
+        high_rate[:, ::2] = signal
+        return high_rate
+
+    def _run(self, signal: Tensor, *, streaming: bool) -> Tensor:
+        batched, scalar = _batch(signal)
+        high_rate = self._zero_insert(batched)
+        upsampled = (
+            self.upsample_filter.stream(high_rate)
+            if streaming
+            else self.upsample_filter(high_rate)
+        )
+        nonlinear_residual = self.spline(upsampled) - upsampled
+        filtered_residual = (
+            self.downsample_filter.stream(nonlinear_residual)
+            if streaming
+            else self.downsample_filter(nonlinear_residual)
+        )
+        residual = filtered_residual[:, ::2]
+        linear = (
+            self.linear_delay.stream(batched)
+            if streaming
+            else self.linear_delay(batched)
+        )
+        output = linear + residual
+        return output[0] if scalar else output
+
+    def forward(self, signal: Tensor) -> Tensor:
+        return self._run(signal, streaming=False)
+
+    def stream(self, signal: Tensor) -> Tensor:
+        return self._run(signal, streaming=True)
+
+    def curvature_penalty(self) -> Tensor:
+        return self.spline.curvature_penalty()
+
+
+class FullRateIsland(nn.Module):
+    """Run a complete nonlinear residual branch at x2 or x4 sample rate.
+
+    A single interpolation/decimation pair surrounds the branch.  Subtracting
+    the interpolated linear path before decimation and adding a base-rate delay
+    makes an identity branch an exact integer delay, while the whole nonlinear
+    residual remains inside the high-rate island.
+    """
+
+    def __init__(
+        self,
+        branch: nn.Module,
+        *,
+        factor: int,
+        latency_samples: int = 16,
+        beta: float = 8.6,
+    ) -> None:
+        super().__init__()
+        if factor not in {2, 4}:
+            raise ValueError("full-rate island factor must be two or four")
+        if latency_samples < 1:
+            raise ValueError("latency_samples must be positive")
+        filter_taps = factor * latency_samples + 1
+        lowpass = design_resampling_lowpass(factor, filter_taps, beta)
+        self.branch = branch
+        self.factor = factor
+        self.filter_taps = filter_taps
+        self.latency_samples = latency_samples
+        self.upsample_filter = FixedCausalFIR(float(factor) * lowpass)
+        self.downsample_filter = FixedCausalFIR(lowpass)
+        self.linear_delay = CausalDelay(latency_samples)
+
+    def reset_state(self) -> None:
+        self.upsample_filter.reset_state()
+        self.downsample_filter.reset_state()
+        self.linear_delay.reset_state()
+        reset = getattr(self.branch, "reset_state", None)
+        if reset is not None:
+            reset()
+
+    def _zero_insert(self, signal: Tensor) -> Tensor:
+        high_rate = signal.new_zeros((len(signal), self.factor * signal.shape[-1]))
+        high_rate[:, :: self.factor] = signal
+        return high_rate
+
+    def _branch_output(self, signal: Tensor, *, streaming: bool) -> Tensor:
+        if streaming:
+            process = getattr(self.branch, "stream", None)
+            if process is None:
+                raise TypeError("full-rate branch must implement stream()")
+            return process(signal)
+        return self.branch(signal)
+
+    def _run(self, signal: Tensor, *, streaming: bool) -> Tensor:
+        batched, scalar = _batch(signal)
+        high_rate = self._zero_insert(batched)
+        interpolated = (
+            self.upsample_filter.stream(high_rate)
+            if streaming
+            else self.upsample_filter(high_rate)
+        )
+        branch_output = self._branch_output(interpolated, streaming=streaming)
+        if branch_output.shape != interpolated.shape:
+            raise ValueError("full-rate branch must preserve the signal shape")
+        nonlinear_residual = branch_output - interpolated
+        filtered = (
+            self.downsample_filter.stream(nonlinear_residual)
+            if streaming
+            else self.downsample_filter(nonlinear_residual)
+        )
+        residual = filtered[:, :: self.factor]
+        linear = (
+            self.linear_delay.stream(batched)
+            if streaming
+            else self.linear_delay(batched)
+        )
+        output = linear + residual
+        return output[0] if scalar else output
+
+    def forward(self, signal: Tensor) -> Tensor:
+        return self._run(signal, streaming=False)
+
+    def stream(self, signal: Tensor) -> Tensor:
+        return self._run(signal, streaming=True)

@@ -1,0 +1,143 @@
+schema_version: 1
+campaign_version: FSSR-QUALITY-AA-v1
+campaign_key: quality_aa_v1
+parent_campaign: FSSR-R2-48K-v2
+question: >-
+  Which synthetic anti-aliasing backend is admissible on the quality-cost
+  frontier for a future real-time neural amplifier?
+scope:
+  evidence_tier: SYNTHETIC
+  amplifier_architecture_claim_allowed: false
+  physical_hardware_aliasing_claim_allowed: false
+  global_state_of_the_art_claim_allowed: false
+  physical_audio_allowed: false
+  physical_192khz_dataset_required: false
+  fm9_proxy_allowed: false
+  external_report_only_locked: true
+immutability:
+  parent_runs_immutable: true
+  retry_policy: single_run_per_stage_no_result_dependent_retry
+  protocol_change_policy: new_campaign_version
+  source_provenance: exact_source_snapshot_plus_git_state
+run_id_format: quality_aa_v1_<stage>_synthetic_<route>_seed0_v1
+stages: [preflight, mechanism, native, audit]
+fixtures:
+  - tanh
+  - asymmetric_clipping
+  - two_clippers
+  - short_memory
+  - slow_sag
+  - rf2047_residual
+probe:
+  sample_rate_hz: 48000
+  dft_samples: 65536
+  k0: [1705, 8191, 12287]
+  amplitudes: [0.10, 0.25, 0.48]
+  frames: 6
+  analyzed_frame: 6
+  window: none
+  zero_padding: false
+  maximum_periodicity_error_db: -60.0
+metric:
+  method: dc-separated-explicit-bin-asr-v1
+  harmonic_bins: positive_integer_multiples_of_k0_below_or_at_nyquist
+  dc_bin: measured_separately_and_excluded_from_asr
+  alias_energy: explicit_sum_of_all_bins_excluding_dc_and_harmonics
+  internal_domain: linear_energy_ratio
+  floor_calibration:
+    input: float32_identity_probe_grid
+    margin_above_maximum_identity_asr_db: 12.0
+    maximum_allowed_floor_db: -120.0
+    lock_before_mechanism: true
+  censored_gain_semantics: lower_bound_at_locked_floor
+reference:
+  kind: directly_generated_synthetic_x8_x16
+  factors: [8, 16]
+  selected_factor: 16
+  decimation:
+    design: kaiser_windowed_sinc
+    group_delay_base_samples: 64
+    kaiser_beta: 12.0
+    boundary_policy: discard_one_complete_frame_at_each_edge
+  convergence:
+    maximum_harmonic_complex_error: 1.0e-5
+    maximum_dc_complex_error: 1.0e-5
+    minimum_correlation: 0.999
+    require_every_condition: true
+routes:
+  off:
+    factor: 1
+    latency_samples: 0
+    role: ablation
+  full_island_x2:
+    factor: 2
+    latency_samples: 32
+    filter_taps: 65
+    kaiser_beta: 8.6
+  teacher_x4:
+    factor: 4
+    latency_samples: 32
+    filter_taps: 129
+    kaiser_beta: 8.6
+  adaa1:
+    factor: 1
+    role: eligibility_only_before_measurement
+    expected_first_order_delay_samples: 0.5
+    alignment_model: single_causal_global_fractional_delay
+    maximum_global_alignment_residual_samples: 0.01
+    require_native_compensation_parity: true
+    maximum_allowed_latency_samples: 48
+    exclude_without_poisoning_other_routes_if_unalignable: true
+filter_gate:
+  passband_edge_hz: 20000
+  maximum_passband_attenuation_db: 0.01
+  stopband_start_hz: 30000
+  minimum_stopband_attenuation_db: 80.0
+  identity_delay_tolerance: 0.0
+fidelity_gate:
+  minimum_gain_error: -0.2
+  minimum_correlation: 0.9
+  maximum_fundamental_level_error_db: 0.5
+  maximum_harmonic_level_error_db: 0.5
+  absolute_complex_error_floor: 1.0e-5
+  maximum_complex_error_regression_ratio: 1.05
+  maximum_fundamental_complex_error: 1.0e-5
+  maximum_dc_complex_error: 1.0e-5
+mechanism_gate:
+  minimum_route_spearman_rho: 0.90
+  minimum_median_asr_gain_db: 10.0
+  minimum_fixture_median_asr_gain_db: 6.0
+  minimum_rf2047_residual_energy_ratio: 0.10
+  require_every_uncensored_fixture: true
+  route_decisions_independent: true
+native_gate:
+  precision: float32
+  maximum_python_cpp_error: 2.0e-5
+  require_regular_irregular_reset_parity: true
+  maximum_latency_samples: 48
+benchmark:
+  binary: common_a2_candidate
+  compiler_optimization: -Ofast
+  lto_ipo: true
+  same_isa: true
+  block_sizes: [1, 16, 64, 128]
+  primary_block_size: 64
+  repetitions: 30
+  schedule: interleaved_ab
+  allocations_outside_timing: true
+  maximum_block64_p95_rtf: 0.80
+  a2_model: experiments/runs/m2_a2_tanh_seed0_v3/model_full.nam
+  a2_parameters: 12145
+  a2_weight_bytes: 48580
+  a2_persistent_state_bytes: 203256
+  a2_scratch_bytes: 192
+selection:
+  require_mechanism_native_and_runtime_pass: true
+  primary: lowest_median_known_reference_alias_residual_db
+  quality_indifference_db: 0.5
+  tiebreaker: lowest_block64_p95_ns_per_sample
+  valid_verdicts: [GO-QUALITY-AA-v1, NO-GO-QUALITY-AA-v1, INVALID]
+stop_conditions:
+  - no_x8_x16_converged_reference
+  - no_candidate_route_alignment_within_48_samples
+  - instrumentation_or_provenance_failure

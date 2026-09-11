@@ -1,0 +1,251 @@
+{
+  "campaign_version": "AMP-QUALITY-ARCH-v1",
+  "candidate_skeletons": {
+    "cascade_rf2047_tfilm_x2": {
+      "path": "configs/models/arch_v1/cascade_rf2047_tfilm_x2.yaml",
+      "profiles": {
+        "balanced": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 7018
+        },
+        "full": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 12986
+        },
+        "max": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 22218
+        },
+        "slim": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 4290
+        }
+      }
+    },
+    "micro_tcn_x2": {
+      "path": "configs/models/arch_v1/micro_tcn_x2.yaml",
+      "profiles": {
+        "balanced": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 2050
+        },
+        "full": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 4034
+        },
+        "max": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 6658
+        },
+        "slim": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 1298
+        }
+      }
+    },
+    "phys_det_tcn_x2": {
+      "path": "configs/models/arch_v1/phys_det_tcn_x2.yaml",
+      "profiles": {
+        "balanced": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 2274
+        },
+        "full": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 4370
+        },
+        "max": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 7106
+        },
+        "slim": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 1466
+        }
+      }
+    },
+    "phys_s6_tcn_x2": {
+      "path": "configs/models/arch_v1/phys_s6_tcn_x2.yaml",
+      "profiles": {
+        "balanced": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 4968
+        },
+        "full": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 8952
+        },
+        "max": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 15560
+        },
+        "slim": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 2992
+        }
+      }
+    },
+    "rf2047_tfilm_x2": {
+      "path": "configs/models/arch_v1/rf2047_tfilm_x2.yaml",
+      "profiles": {
+        "balanced": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 4968
+        },
+        "full": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 8952
+        },
+        "max": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 15560
+        },
+        "slim": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 2992
+        }
+      }
+    },
+    "selective_s6_x2": {
+      "path": "configs/models/arch_v1/selective_s6_x2.yaml",
+      "profiles": {
+        "balanced": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 642
+        },
+        "full": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 962
+        },
+        "max": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 1282
+        },
+        "slim": {
+          "aa_mode": "full_island_x2",
+          "latency_samples": 32,
+          "parameters": 482
+        }
+      }
+    }
+  },
+  "comparators": {
+    "nablafx_s4_tfilm": {
+      "path": "configs/models/arch_v1/comparator_nablafx_s4_tfilm.yaml",
+      "variants": {
+        "large": {
+          "latency_samples": 1016,
+          "parameters": 70193
+        },
+        "small": {
+          "latency_samples": 508,
+          "parameters": 27953
+        }
+      }
+    },
+    "nablafx_tcn_tfilm": {
+      "path": "configs/models/arch_v1/comparator_nablafx_tcn_tfilm.yaml",
+      "variants": {
+        "large": {
+          "latency_samples": 1270,
+          "parameters": 75937
+        },
+        "small": {
+          "latency_samples": 635,
+          "parameters": 45697
+        }
+      }
+    },
+    "nam_a2_full": {
+      "path": "configs/models/arch_v1/comparator_nam_a2_full.yaml",
+      "variants": {
+        "official": {
+          "latency_samples": 0,
+          "parameters": 12145
+        }
+      }
+    },
+    "wright_lstm64": {
+      "path": "configs/models/arch_v1/comparator_wright_lstm64.yaml",
+      "variants": {
+        "official": {
+          "latency_samples": 0,
+          "parameters": 17217
+        }
+      }
+    }
+  },
+  "data": {
+    "audio_samples_read": 0,
+    "device_split_file_counts": {
+      "bigmuff": {
+        "test": 1,
+        "train": 1,
+        "validation": 1
+      },
+      "blackstar": {
+        "test": 1,
+        "train": 1,
+        "validation": 1
+      },
+      "fulltone": {
+        "test": 1,
+        "train": 1,
+        "validation": 1
+      },
+      "ua1176": {
+        "test": 2,
+        "train": 5,
+        "validation": 2
+      }
+    },
+    "manifest": "datasets/manifests/r1_physical.json",
+    "split_manifest": "datasets/splits/r1_physical.json"
+  },
+  "external_report_only_locked": true,
+  "hardware": {
+    "cuda_device": "NVIDIA RTX PRO 4000 Blackwell",
+    "cuda_total_memory_bytes": 25149898752
+  },
+  "loss_qualification_trajectories": 36,
+  "protocol_status": "frozen_before_first_scientific_run",
+  "schema_version": 1,
+  "scientific_runs_launched_before_preflight": 0,
+  "sealed_outputs_accessed": {
+    "blackstar": false,
+    "ua1176": false
+  },
+  "source_pins": {
+    "auraloss": "1576b0cd6e927abc002b23cf3bfc455b660f663c",
+    "nablafx": "045db6e7d6087151c7e3a264844bd8c4eafc885c",
+    "nam_core": "1f42f88535884450104b8711d7595019afa0495b",
+    "nam_trainer": "f26112906de06ec6b796ad6d1982e29eed83144e",
+    "selective_s6": "bd787ecc60024cf364efd4cef07f692af05277e6",
+    "wright": "e3146386b0fd0b562bc393231be3a5938cf9feac"
+  },
+  "stage": "preflight",
+  "status": "passed"
+}

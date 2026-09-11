@@ -1,0 +1,57 @@
+schema_version: 1
+campaign_version: AMP-QUALITY-ARCH-v3
+stage: round_1
+status: prospective_before_first_round_1_run
+evidence_tier: INTERNAL_DEV
+prerequisites:
+  representability_gate_status: passed
+  training_feasibility_status: passed
+  protocol_lock_required: true
+  validation_source_accessed: false
+  physical_audio_samples_read: 0
+matrix:
+  families:
+    - gainhead_micro_tcn_x2
+    - slow_state_micro_tcn_x2
+    - long_rf_tcn_x2
+  systems:
+    - static_primary
+    - dynamic_primary
+    - two_clippers_primary
+  seeds: [0, 1, 2]
+  trajectories: 27
+optimization:
+  profile: max
+  checkpoint_updates: [500, 1000, 2000, 5000, 10000, 15000]
+  loss: esr_plus_projection_gain
+  projection_gain_weight: 0.05
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0
+  gradient_clip_norm: 1.0
+  batch_size: 1
+  training_chunk_samples: 8192
+  state_carry_between_contiguous_chunks: true
+  aggregate_training_metrics_over_all_episodes: true
+selection:
+  evidence_split: INTERNAL_DEV
+  guard_checkpoints: [10000, 15000]
+  gain_error_strictly_greater_than: -0.2
+  correlation_strictly_greater_than: 0.9
+  guards_required_for_every_system_and_seed_at_both_checkpoints: true
+  compare_only_guard_eligible_families: true
+  dynamic_promotion_eligibility_required: true
+  score: median_paired_condition_normalized_esr_at_15000
+  lower_score_is_better: true
+  tie_relative_tolerance: 0.01
+  tie_breaker: lowest_parameter_count_then_family_id
+  first_round_previous_improvement: null
+  first_round_counts_toward_consecutive_no_improvement_stop: false
+boundaries:
+  result_dependent_retry_within_round_allowed: false
+  failed_or_invalid_run_resume_allowed: false
+  validation_source_accessed: false
+  physical_audio_samples_read: 0
+  blackstar_accessed: false
+  ua1176_accessed: false
+  external_report_only_locked: true

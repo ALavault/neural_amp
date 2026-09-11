@@ -1,0 +1,19 @@
+{
+  "campaign_version": "AMP-COMPETENCE-ARCH-v2",
+  "candidate_family_count": 4,
+  "candidate_runs_authorized": false,
+  "competence_trajectory_count": 9,
+  "external_report_only_locked": true,
+  "physical_audio_samples_read": 0,
+  "schema_version": 1,
+  "sealed_outputs_accessed": {
+    "blackstar": false,
+    "ua1176": false
+  },
+  "stage": "preflight",
+  "status": "passed",
+  "v1_runs_resumed": 0,
+  "v1_runs_retuned": 0,
+  "v1_terminal_verdict": "NO-GO-ARCH",
+  "v2_scientific_runs_present": 0
+}

@@ -1,0 +1,13 @@
+schema_version: 1
+campaign_version: FSSR-R2-48K-v1
+status: frozen_before_recruitment
+retention_rule:
+  score_based_exclusion_allowed: false
+  checks_completed_before_score_unblinding: true
+  exclude_if_any:
+    - incomplete_required_trial
+    - failed_preregistered_hearing_screen
+    - failed_preregistered_training_session
+minimum_retained_participants: 20
+recruited_participants: 24
+primary_analysis_devices: [blackstar, ua1176]

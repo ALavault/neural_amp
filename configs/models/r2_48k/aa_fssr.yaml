@@ -1,0 +1,6 @@
+schema_version: 1
+campaign_version: FSSR-R2-48K-v1
+family: aa-fssr
+implementation_config: configs/models/r2/aa_fssr.yaml
+selection_eligible: true
+aa_modes: [full_island_x2, adaa1, teacher_x4]

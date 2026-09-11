@@ -1,0 +1,115 @@
+{
+  "family": "rf2047_tfilm_x2",
+  "finished_at": "2026-08-28T13:56:25+02:00",
+  "physical_audio_samples_read": 0,
+  "provenance": {
+    "environment": {
+      "hypothesis": "6.165.10",
+      "numpy": "2.5.2",
+      "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.43",
+      "python": "3.12.13",
+      "scipy": "1.18.1",
+      "torch": "2.13.0"
+    },
+    "git_head": "40d1b7d4f7c6fe34c55b61dfdd6b333e33033401",
+    "source_snapshot_files": 37,
+    "worktree_dirty": true
+  },
+  "run_id": "arch_v1_mechanism_synthetic_rf2047_tfilm_x2_none_seed0_v1",
+  "started_at": "2026-08-28T13:53:10+02:00",
+  "status": "completed",
+  "trajectories": [
+    {
+      "auxiliary_weight": 0.0,
+      "family": "rf2047_tfilm_x2",
+      "history": [
+        {
+          "audio_esr": 0.8431704044342041,
+          "auxiliary_mse": 0.5322676301002502,
+          "gradient_norm": 0.01921844482421875,
+          "total": 0.8431704044342041,
+          "update": 1
+        },
+        {
+          "audio_esr": 0.8429279923439026,
+          "auxiliary_mse": 0.5751222372055054,
+          "gradient_norm": 0.15512026846408844,
+          "total": 0.8429279923439026,
+          "update": 50
+        },
+        {
+          "audio_esr": 0.6964184045791626,
+          "auxiliary_mse": 0.5584100484848022,
+          "gradient_norm": 0.10740256309509277,
+          "total": 0.6964184045791626,
+          "update": 100
+        },
+        {
+          "audio_esr": 0.720440149307251,
+          "auxiliary_mse": 0.5691672563552856,
+          "gradient_norm": 0.12757427990436554,
+          "total": 0.720440149307251,
+          "update": 150
+        },
+        {
+          "audio_esr": 0.7127383947372437,
+          "auxiliary_mse": 0.5662996172904968,
+          "gradient_norm": 0.13195733726024628,
+          "total": 0.7127383947372437,
+          "update": 200
+        },
+        {
+          "audio_esr": 0.6828538775444031,
+          "auxiliary_mse": 0.5557210445404053,
+          "gradient_norm": 0.13246947526931763,
+          "total": 0.6828538775444031,
+          "update": 250
+        },
+        {
+          "audio_esr": 0.6585896015167236,
+          "auxiliary_mse": 0.5523383021354675,
+          "gradient_norm": 0.14414803683757782,
+          "total": 0.6585896015167236,
+          "update": 300
+        },
+        {
+          "audio_esr": 0.6464242339134216,
+          "auxiliary_mse": 0.6173869967460632,
+          "gradient_norm": 0.1478276550769806,
+          "total": 0.6464242339134216,
+          "update": 350
+        },
+        {
+          "audio_esr": 0.6400207877159119,
+          "auxiliary_mse": 0.5744091272354126,
+          "gradient_norm": 0.1607261747121811,
+          "total": 0.6400207877159119,
+          "update": 400
+        },
+        {
+          "audio_esr": 0.6528759598731995,
+          "auxiliary_mse": 0.5905748605728149,
+          "gradient_norm": 0.17344672977924347,
+          "total": 0.6528759598731995,
+          "update": 450
+        },
+        {
+          "audio_esr": 0.6243765950202942,
+          "auxiliary_mse": 0.5615607500076294,
+          "gradient_norm": 0.15007078647613525,
+          "total": 0.6243765950202942,
+          "update": 500
+        }
+      ],
+      "system": "two_clippers",
+      "updates": 500,
+      "validation": {
+        "correlation": 0.6394883600488782,
+        "esr": 0.6432878529378279,
+        "gain_error": -0.737449392326549,
+        "prediction_rms": 0.25383371114730835,
+        "target_rms": 0.6185749769210815
+      }
+    }
+  ]
+}

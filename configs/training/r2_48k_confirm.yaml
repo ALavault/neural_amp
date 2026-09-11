@@ -1,0 +1,20 @@
+schema_version: 1
+campaign_version: FSSR-R2-48K-v1
+development:
+  devices: [fulltone, bigmuff]
+  evidence_role: historical_development
+  added_seeds: [1, 2, 3, 4]
+internal_validation:
+  devices: [blackstar, ua1176]
+  evidence_role: prospective_primary
+  seeds: [0, 1, 2, 3, 4]
+  tuning_allowed: false
+families: [a2, candidate]
+evaluation_condition_count: 40
+prospective_condition_count: 20
+internal_validation_test_open_count_maximum: 1
+bootstrap:
+  replicates: 10000
+  seed: 20260828
+  hierarchy: [seed, source]
+  primary_devices: [blackstar, ua1176]

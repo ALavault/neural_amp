@@ -1,0 +1,83 @@
+{
+  "abi": "float32",
+  "allocations_outside_timing": true,
+  "checksum": 12.000215551815927,
+  "compiler_optimization": "-Ofast",
+  "format": "fssr-r2-interleaved-benchmark-v1",
+  "lto_ipo": true,
+  "models": {
+    "a2": {
+      "blocks": {
+        "1": {
+          "median_ns_per_sample": 3516.0,
+          "p95_ns_per_sample": 4304.0,
+          "rtf": 0.168768,
+          "timed_blocks": 1440000
+        },
+        "128": {
+          "median_ns_per_sample": 2795.3203125,
+          "p95_ns_per_sample": 3443.600390625,
+          "rtf": 0.134175375,
+          "timed_blocks": 11250
+        },
+        "16": {
+          "median_ns_per_sample": 3783.875,
+          "p95_ns_per_sample": 5004.00625,
+          "rtf": 0.181626,
+          "timed_blocks": 90000
+        },
+        "64": {
+          "median_ns_per_sample": 2913.3125,
+          "p95_ns_per_sample": 3577.2414062499997,
+          "rtf": 0.139839,
+          "timed_blocks": 22500
+        }
+      },
+      "latency_samples": 0,
+      "parameters": 12145,
+      "persistent_state_bytes": 203256,
+      "scratch_bytes": 192,
+      "weight_bytes": 48580
+    },
+    "candidate": {
+      "blocks": {
+        "1": {
+          "median_ns_per_sample": 41687.0,
+          "p95_ns_per_sample": 50297.0,
+          "rtf": 2.000976,
+          "timed_blocks": 1440000
+        },
+        "128": {
+          "median_ns_per_sample": 36192.8984375,
+          "p95_ns_per_sample": 41646.080078125,
+          "rtf": 1.737259125,
+          "timed_blocks": 11250
+        },
+        "16": {
+          "median_ns_per_sample": 39039.5,
+          "p95_ns_per_sample": 43998.515625,
+          "rtf": 1.873896,
+          "timed_blocks": 90000
+        },
+        "64": {
+          "median_ns_per_sample": 37078.953125,
+          "p95_ns_per_sample": 42017.698437499996,
+          "rtf": 1.77978975,
+          "timed_blocks": 22500
+        }
+      },
+      "latency_samples": 32,
+      "native_state_allocation_bytes": 525972,
+      "parameters": 4817,
+      "persistent_state_bytes": 525908,
+      "scratch_bytes": 1344,
+      "weight_bytes": 20564
+    }
+  },
+  "python_cpp_max_abs_error": 2.384185791015625e-07,
+  "repetitions": 30,
+  "same_binary": true,
+  "same_isa": true,
+  "schedule": "interleaved_ab",
+  "scientific_eligible": true
+}

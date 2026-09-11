@@ -1,0 +1,83 @@
+{
+  "abi": "float32",
+  "allocations_outside_timing": true,
+  "checksum": 12.00011061038822,
+  "compiler_optimization": "-Ofast",
+  "format": "fssr-r2-interleaved-benchmark-v1",
+  "lto_ipo": true,
+  "models": {
+    "a2": {
+      "blocks": {
+        "1": {
+          "median_ns_per_sample": 3236.0,
+          "p95_ns_per_sample": 5134.0,
+          "rtf": 0.155328,
+          "timed_blocks": 1440000
+        },
+        "128": {
+          "median_ns_per_sample": 3135.08203125,
+          "p95_ns_per_sample": 3591.044531249999,
+          "rtf": 0.1504839375,
+          "timed_blocks": 11250
+        },
+        "16": {
+          "median_ns_per_sample": 4073.0625,
+          "p95_ns_per_sample": 6176.834375000001,
+          "rtf": 0.19550700000000001,
+          "timed_blocks": 90000
+        },
+        "64": {
+          "median_ns_per_sample": 3180.3046875,
+          "p95_ns_per_sample": 3626.0812499999997,
+          "rtf": 0.15265462500000002,
+          "timed_blocks": 22500
+        }
+      },
+      "latency_samples": 0,
+      "parameters": 12145,
+      "persistent_state_bytes": 203256,
+      "scratch_bytes": 192,
+      "weight_bytes": 48580
+    },
+    "candidate": {
+      "blocks": {
+        "1": {
+          "median_ns_per_sample": 14753.0,
+          "p95_ns_per_sample": 22439.0,
+          "rtf": 0.708144,
+          "timed_blocks": 1440000
+        },
+        "128": {
+          "median_ns_per_sample": 16068.1953125,
+          "p95_ns_per_sample": 17395.271874999995,
+          "rtf": 0.771273375,
+          "timed_blocks": 11250
+        },
+        "16": {
+          "median_ns_per_sample": 16023.4375,
+          "p95_ns_per_sample": 19894.128125000003,
+          "rtf": 0.7691250000000001,
+          "timed_blocks": 90000
+        },
+        "64": {
+          "median_ns_per_sample": 15210.3984375,
+          "p95_ns_per_sample": 16495.03828125,
+          "rtf": 0.7300991250000001,
+          "timed_blocks": 22500
+        }
+      },
+      "latency_samples": 32,
+      "native_state_allocation_bytes": 263188,
+      "parameters": 4721,
+      "persistent_state_bytes": 263124,
+      "scratch_bytes": 1344,
+      "weight_bytes": 19668
+    }
+  },
+  "python_cpp_max_abs_error": 1.7881393432617188e-07,
+  "repetitions": 30,
+  "same_binary": true,
+  "same_isa": true,
+  "schedule": "interleaved_ab",
+  "scientific_eligible": true
+}

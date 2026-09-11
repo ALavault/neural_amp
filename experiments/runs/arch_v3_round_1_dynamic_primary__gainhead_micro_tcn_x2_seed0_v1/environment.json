@@ -1,0 +1,8 @@
+{
+  "hypothesis": "6.165.10",
+  "numpy": "2.5.2",
+  "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.43",
+  "python": "3.12.13",
+  "scipy": "1.18.1",
+  "torch": "2.13.0"
+}

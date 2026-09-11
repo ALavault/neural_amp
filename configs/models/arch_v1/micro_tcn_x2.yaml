@@ -1,0 +1,27 @@
+schema_version: 1
+campaign_version: AMP-QUALITY-ARCH-v1
+family: micro_tcn_x2
+aa_mode: full_island_x2
+conditioning: none
+deployable:
+  training_eligible: true
+  profile_selection: largest_profile_passing_blind_native_skeleton_gate
+  selected_profile: max
+  selection_evidence: .codex_campaign/amp_quality_arch_v1/NATIVE_SKELETON.json
+  profiles:
+    slim: {channels: 12}
+    balanced: {channels: 16}
+    full: {channels: 24}
+    max: {channels: 32}
+  kernel_size: 7
+  base_dilations: [1, 4, 16, 64, 256]
+  dilation_scale: 2
+  physical_receptive_field_samples: 2047
+teacher:
+  eligible: true
+  channels: 48
+runtime:
+  sample_rate_hz: 48000
+  internal_sample_rate_hz: 96000
+  latency_samples: 32
+  precision: float32

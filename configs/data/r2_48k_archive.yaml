@@ -1,0 +1,43 @@
+schema_version: 1
+campaign_version: FSSR-R2-48K-v1
+source_manifest: datasets/manifests/r1_physical.json
+source_manifest_campaign_version: FSSR-R1-v1
+target_sample_rate_hz: 48000
+physical_reference_sample_rate_hz: 48000
+metadata_audit_reads_waveform_samples: false
+new_capture_required: false
+additional_resampling_allowed: false
+independent_normalization_allowed: false
+proxy_hardware_allowed: false
+prohibited_devices: [fractal_fm9]
+roles:
+  fulltone:
+    tier: INTERNAL_DEV
+    evidence_role: historical_development
+    splits: [train, validation, test]
+    test_is_prospectively_sealed: false
+  bigmuff:
+    tier: INTERNAL_DEV
+    evidence_role: historical_development
+    splits: [train, validation, test]
+    test_is_prospectively_sealed: false
+  blackstar:
+    tier: INTERNAL_VALIDATION
+    evidence_role: prospective_primary
+    splits: [train, validation, test]
+    test_is_prospectively_sealed: true
+  ua1176:
+    tier: INTERNAL_VALIDATION
+    evidence_role: prospective_primary
+    splits: [train, validation, test]
+    test_is_prospectively_sealed: true
+expected_seconds_per_device:
+  train: 120
+  validation: 30
+  test: 30
+known_limitations:
+  - Fulltone and Big Muff outputs and test metrics were used by earlier development.
+  - Big Muff split labels do not establish independent performances or sessions.
+  - Blackstar has one test source and UA1176 has two test sources.
+  - A 48 kHz hardware target cannot reveal hardware content above 24 kHz.
+  - Big Muff, Blackstar, and UA1176 source pairs were jointly resampled from 44.1 kHz by the frozen R1 preparation chain.

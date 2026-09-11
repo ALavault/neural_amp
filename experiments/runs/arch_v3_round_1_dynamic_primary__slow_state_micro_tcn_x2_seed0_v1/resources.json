@@ -1,0 +1,5 @@
+{
+  "cuda_device": "NVIDIA RTX PRO 4000 Blackwell",
+  "elapsed_seconds": 5599.94195055298,
+  "peak_cuda_memory_bytes": 281850880
+}

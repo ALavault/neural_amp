@@ -1,0 +1,10 @@
+schema_version: 1
+campaign_version: AMP-QUALITY-ARCH-v1
+family: nam_a2_full
+variant: official
+source: third_party/neural-amp-modeler/nam/train/_resources/config_model_packed.json
+topology: wavenet_a2_full
+parameters: 12145
+sample_rate_hz: 48000
+latency_samples: 0
+variant_selection: fixed_before_internal_dev

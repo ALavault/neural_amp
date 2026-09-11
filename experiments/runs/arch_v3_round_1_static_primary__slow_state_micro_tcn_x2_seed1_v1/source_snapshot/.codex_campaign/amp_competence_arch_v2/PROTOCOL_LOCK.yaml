@@ -1,0 +1,117 @@
+schema_version: 1
+campaign_version: AMP-COMPETENCE-ARCH-v2
+campaign_key: amp_competence_arch_v2
+parent_campaign: AMP-QUALITY-ARCH-v1
+status: prospective_before_first_scientific_run
+sample_rate_hz: 48000
+channels: 1
+precision: float32
+run_id_format: arch_v2_<stage>_<system>_<family>_seed<n>_v1
+valid_terminal_verdicts: [GO-ARCH-v2, NO-GO-COMPETENCE-v2, NO-GO-ARCH-v2, INVALID]
+
+boundaries:
+  v1_runs_resumed: false
+  v1_runs_retuned: false
+  v1_results_used_for_v2_selection: false
+  physical_audio_allowed: false
+  physical_audio_samples_maximum: 0
+  blackstar_ua1176_holdouts_locked: true
+  external_report_only_locked: true
+  physical_192khz_dataset_assumed: false
+  fm9_capture_allowed: false
+
+stages:
+  ordered: [preflight, competence, comparison, audit]
+  comparison_requires_competence_pass: true
+  result_dependent_retry_allowed: false
+  failed_or_invalid_run_resume_allowed: false
+
+synthetic_data:
+  generator: fssr_nam.data.arch_v2_fixtures.build_arch_v2_episodes
+  systems: [static_composite, dynamic_composite, two_clippers]
+  episode_samples: 8192
+  train_episodes: 16
+  validation_episodes: 4
+  normalization: none
+  competence_train_source_seed: 20360828
+  competence_validation_source_seed: 20361828
+  comparison_train_source_seed: 20460828
+  comparison_validation_source_seed: 20461828
+  competence_and_comparison_sources_disjoint: true
+  v1_sources_reused: false
+
+optimization:
+  profile: max
+  loss: esr
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0
+  gradient_clip_norm: 1.0
+  batch_size: 1
+  loss_tail_samples: 2048
+  example_order: cyclic_increasing_episode_index
+  finite_output_loss_and_gradients_required: true
+
+competence:
+  control_family: micro_tcn_x2
+  seeds: [0, 1, 2]
+  checkpoint_updates: [500, 1000, 2000, 5000, 10000, 15000]
+  trajectory_count: 9
+  gain_error_strictly_greater_than: -0.2
+  correlation_strictly_greater_than: 0.9
+  guards_required_for_every_system_and_seed: true
+  confirmation_at_immediately_following_checkpoint_required: true
+  plateau_median_relative_esr_improvement_minimum: 0.0
+  plateau_median_relative_esr_improvement_maximum: 0.05
+  selected_budget_rule: smallest_guarded_checkpoint_with_guarded_next_checkpoint_and_plateau
+  unconfirmed_final_checkpoint_cannot_be_selected: true
+  failure_verdict: NO-GO-COMPETENCE-v2
+  comparison_runs_allowed_on_failure: 0
+
+comparison:
+  control_family: micro_tcn_x2
+  candidate_families:
+    - phys_s6_tcn_x2
+    - phys_det_tcn_x2
+    - rf2047_tfilm_x2
+    - cascade_rf2047_tfilm_x2
+  maximum_candidate_families: 5
+  candidates_may_not_be_replaced_after_results: true
+  auxiliary_weight_by_family:
+    micro_tcn_x2: 0.0
+    phys_s6_tcn_x2: 0.01
+    phys_det_tcn_x2: 0.0
+    rf2047_tfilm_x2: 0.0
+    cascade_rf2047_tfilm_x2: 0.0
+  seeds: [0, 1, 2]
+  budget_source: competence_selected_budget
+  all_families_use_same_examples_updates_loss_optimizer_and_seeds: true
+  gain_error_strictly_greater_than: -0.2
+  correlation_strictly_greater_than: 0.9
+  guards_required_for_every_system_and_seed: true
+  paired_median_relative_esr_improvement_minimum: 0.10
+  per_system_median_relative_esr_regression_maximum: 0.05
+  bootstrap_replicates: 10000
+  bootstrap_seed: 20260828
+  bootstrap_hierarchical_units: [system, seed]
+  lower_95_confidence_bound_strictly_greater_than: 0.0
+  promotion_rule: highest_observed_paired_median_improvement_then_family_name
+  failure_verdict: NO-GO-ARCH-v2
+  success_verdict: GO-ARCH-v2
+
+resource_budget:
+  gpu: NVIDIA_RTX_PRO_4000_Blackwell_24GB
+  competence_run_directories_maximum: 9
+  comparison_run_directories_maximum: 45
+  gpu_hours_per_trajectory_maximum: 6
+  campaign_gpu_hours_maximum: 324
+  campaign_disk_gib_maximum: 50
+
+closure:
+  technical_audit_required: true
+  scientific_audit_required: true
+  append_only_gate_ledger_required: true
+  append_only_global_run_ledger_required: true
+  immutable_run_artifacts_required: true
+  make_test_required: true
+  make_lint_required: true

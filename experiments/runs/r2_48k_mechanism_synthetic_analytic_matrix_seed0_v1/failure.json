@@ -1,0 +1,6 @@
+{
+  "campaign_version": "FSSR-R2-48K-v1",
+  "failure_reason": "ValueError: Out of range float values are not JSON compliant: -inf",
+  "run_id": "r2_48k_mechanism_synthetic_analytic_matrix_seed0_v1",
+  "status": "INVALID"
+}

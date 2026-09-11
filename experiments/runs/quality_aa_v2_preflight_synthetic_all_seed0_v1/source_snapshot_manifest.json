@@ -1,0 +1,31 @@
+{
+  "files": [
+    "configs/quality_aa_v1/protocol.yaml",
+    ".codex_campaign/quality_aa_v1/PROTOCOL_LOCK.yaml",
+    "configs/quality_aa_v2/protocol.yaml",
+    ".codex_campaign/quality_aa_v2/PROTOCOL_LOCK.yaml",
+    "src/fssr_nam/campaign/quality_aa_v1.py",
+    "src/fssr_nam/campaign/quality_aa_v2.py",
+    "src/fssr_nam/campaign/quality_aa_gates.py",
+    "src/fssr_nam/campaign/quality_aa_v2_gates.py",
+    "src/fssr_nam/campaign/quality_aa_registry.py",
+    "src/fssr_nam/campaign/quality_aa_v2_registry.py",
+    "src/fssr_nam/campaign/quality_aa_provenance.py",
+    "src/fssr_nam/data/r2_fixtures.py",
+    "src/fssr_nam/metrics/quality_aliasing.py",
+    "src/fssr_nam/metrics/quality_aa_mechanism.py",
+    "src/fssr_nam/models/oversampling.py",
+    "src/fssr_nam/models/r2.py",
+    "src/fssr_nam/inference/r2_native.py",
+    "src/fssr_nam/inference/r2_parity.py",
+    "cpp/src/fssr_r1_native.cpp",
+    "cpp/include/fssr_r1_native.hpp",
+    "cpp/benchmarks/r2_interleaved_benchmark.cpp",
+    "cpp/CMakeLists.txt",
+    "scripts/run_quality_aa_preflight.py"
+  ],
+  "git_head": "40d1b7d4f7c6fe34c55b61dfdd6b333e33033401",
+  "method": "exact-file-copy-v1",
+  "untracked_sources_captured_by_copy": true,
+  "worktree_dirty": true
+}

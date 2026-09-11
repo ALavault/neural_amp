@@ -1,0 +1,92 @@
+{
+  "auxiliary_weight": 0.0,
+  "family": "phys_det_tcn_x2",
+  "history": [
+    {
+      "audio_esr": 0.7094549536705017,
+      "auxiliary_mse": 0.4359626770019531,
+      "gradient_norm": 0.03993791341781616,
+      "total": 0.7094549536705017,
+      "update": 1
+    },
+    {
+      "audio_esr": 0.7225354313850403,
+      "auxiliary_mse": 0.4808447062969208,
+      "gradient_norm": 0.10699348896741867,
+      "total": 0.7225354313850403,
+      "update": 50
+    },
+    {
+      "audio_esr": 0.5586691498756409,
+      "auxiliary_mse": 0.4126046597957611,
+      "gradient_norm": 0.080434150993824,
+      "total": 0.5586691498756409,
+      "update": 100
+    },
+    {
+      "audio_esr": 0.589126706123352,
+      "auxiliary_mse": 0.4486694931983948,
+      "gradient_norm": 0.1115693673491478,
+      "total": 0.589126706123352,
+      "update": 150
+    },
+    {
+      "audio_esr": 0.5846105217933655,
+      "auxiliary_mse": 0.4658757150173187,
+      "gradient_norm": 0.09694571048021317,
+      "total": 0.5846105217933655,
+      "update": 200
+    },
+    {
+      "audio_esr": 0.5690684914588928,
+      "auxiliary_mse": 0.5084812641143799,
+      "gradient_norm": 0.09802199900150299,
+      "total": 0.5690684914588928,
+      "update": 250
+    },
+    {
+      "audio_esr": 0.5440883040428162,
+      "auxiliary_mse": 0.4810011386871338,
+      "gradient_norm": 0.09346529096364975,
+      "total": 0.5440883040428162,
+      "update": 300
+    },
+    {
+      "audio_esr": 0.5631780028343201,
+      "auxiliary_mse": 0.44772452116012573,
+      "gradient_norm": 0.11705229431390762,
+      "total": 0.5631780028343201,
+      "update": 350
+    },
+    {
+      "audio_esr": 0.5877828598022461,
+      "auxiliary_mse": 0.502268373966217,
+      "gradient_norm": 0.11686871945858002,
+      "total": 0.5877828598022461,
+      "update": 400
+    },
+    {
+      "audio_esr": 0.6189362406730652,
+      "auxiliary_mse": 0.4808447062969208,
+      "gradient_norm": 0.12001311779022217,
+      "total": 0.6189362406730652,
+      "update": 450
+    },
+    {
+      "audio_esr": 0.5039013624191284,
+      "auxiliary_mse": 0.4126046597957611,
+      "gradient_norm": 0.1272348165512085,
+      "total": 0.5039013624191284,
+      "update": 500
+    }
+  ],
+  "system": "dynamic_composite",
+  "updates": 500,
+  "validation": {
+    "correlation": 0.8021550782436979,
+    "esr": 0.530026681124456,
+    "gain_error": -0.6907373252513423,
+    "prediction_rms": 0.2897128462791443,
+    "target_rms": 0.751672089099884
+  }
+}

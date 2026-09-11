@@ -1,0 +1,30 @@
+schema_version: 1
+campaign_version: AMP-QUALITY-ARCH-v1
+family: nablafx_tcn_tfilm
+source_commit: 045db6e7d6087151c7e3a264844bd8c4eafc885c
+local_adapter: src/fssr_nam/models/sota_comparators.py
+source_parity_test: tests/numerical/test_sota_comparators.py
+sample_rate_hz: 48000
+variants:
+  small:
+    source: third_party/nablafx/cfg/model/tcn/model_bb_tcn-tf-2500-s-16.yaml
+    blocks: 5
+    kernel_size: 13
+    dilation_growth: 10
+    channels: 16
+    receptive_field_samples: 133333
+    parameters: 45697
+    conservative_causal_latency_samples: 635
+  large:
+    source: third_party/nablafx/cfg/model/tcn/model_bb_tcn-tf-2500-l-16.yaml
+    blocks: 10
+    kernel_size: 5
+    dilation_growth: 3
+    channels: 16
+    receptive_field_samples: 118097
+    parameters: 75937
+    conservative_causal_latency_samples: 1270
+tfilm_block_samples: 128
+variant_selection: pooled_fulltone_bigmuff_validation_only
+runtime_gate_eligible: false
+runtime_ineligibility: causal_latency_exceeds_48_samples

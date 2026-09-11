@@ -1,0 +1,30 @@
+schema_version: 1
+campaign_version: AMP-QUALITY-ARCH-v1
+family: cascade_rf2047_tfilm_x2
+aa_mode: full_island_x2
+conditioning: latent_selective_state_per_block
+topology: nonlinear_stage_1_to_filter_to_nonlinear_stage_2
+synthetic_gate_required: two_clippers_improvement_at_least_50_percent
+deployable:
+  training_eligible: true
+  profile_selection: largest_profile_passing_blind_native_skeleton_gate
+  selected_profile: max
+  selection_evidence: .codex_campaign/amp_quality_arch_v1/NATIVE_SKELETON.json
+  profiles:
+    slim: {channels_per_stage: 12, latent_state_dim: 32}
+    balanced: {channels_per_stage: 16, latent_state_dim: 48}
+    full: {channels_per_stage: 24, latent_state_dim: 64}
+    max: {channels_per_stage: 32, latent_state_dim: 96}
+  latent_cadence_samples: 64
+  kernel_size: 7
+  base_dilations_per_stage: [1, 4, 16, 64, 256]
+  dilation_scale: 2
+  physical_receptive_field_samples_per_stage: 2047
+teacher:
+  eligible: false
+runtime:
+  latent_state_outside_x2: true
+  sample_rate_hz: 48000
+  internal_sample_rate_hz: 96000
+  latency_samples: 32
+  precision: float32

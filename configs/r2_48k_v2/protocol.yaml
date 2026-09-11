@@ -1,0 +1,33 @@
+schema_version: 1
+campaign_version: FSSR-R2-48K-v2
+parent_campaign: FSSR-R2-48K-v1
+base_protocol_path: configs/r2_48k/protocol.yaml
+amendment_scope: evidence_serialization_only
+scientific_thresholds_changed: false
+fixtures_modes_probes_changed: false
+run_id_format: r2_48k_v2_<stage>_<device>_<family>_<aa>_seed<n>_v1
+valid_terminal_verdicts: [GO-R2-48K-v2, NO-GO-R2-48K-v2, INVALID]
+mechanism_evidence_encoding:
+  format: fssr-extended-real-json-v1
+  strict_standard_json: true
+  finite_decision_aggregates_required: true
+  diagnostics:
+    negative_infinity: {type: extended-real-v1, value: -inf}
+    positive_infinity: {type: extended-real-v1, value: +inf}
+    nan_action: invalidate_before_gate
+  exact_zero_ratio:
+    linear_value: 0.0
+    db_representation: tagged_negative_infinity
+    threshold_semantics: less_than_every_finite_db_value
+  serialization_order:
+    - build_complete_in_memory_evidence
+    - encode_extended_reals
+    - strict_json_serialize_in_memory
+    - strict_json_parse_and_schema_validate
+    - create_immutable_evidence_file
+  retry_policy: single_v2_mechanism_run_no_result_dependent_retry
+claim_boundary:
+  physical_hardware_aliasing_claim_allowed: false
+  global_state_of_the_art_claim_allowed: false
+  fm9_proxy_allowed: false
+  physical_192khz_reference_allowed: false

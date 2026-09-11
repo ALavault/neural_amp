@@ -1,0 +1,41 @@
+schema_version: 1
+campaign_version: FSSR-R2-v1
+manifest_path: datasets/manifests/r2_capture.json
+raw_audio_committed: false
+capture:
+  sample_rate_hz: 192000
+  bit_depth: 24
+  synchronous: true
+  channels: [dry, hardware, loopback]
+  independent_normalization: false
+  development_devices:
+    fulltone:
+      settings_source: configs/data/r1_physical.yaml
+      train: {sources: 5, duration_seconds: 60}
+      validation: {sources: 2, duration_seconds: 30}
+      test: {sources: 2, duration_seconds: 30, sealed: true}
+    bigmuff:
+      settings_source: configs/data/r1_physical.yaml
+      train: {sources: 5, duration_seconds: 60}
+      validation: {sources: 2, duration_seconds: 30}
+      test: {sources: 2, duration_seconds: 30, sealed: true}
+  performance_overlap_between_splits_allowed: false
+derivation:
+  rates_hz: [96000, 48000]
+  chain: frozen_causal_fir
+  filter_id: r2-causal-kaiser65-beta8p6-v1
+  filter_taps: 65
+  kaiser_beta: 8.6
+  decimation_phase: 0
+  stages: {derived_96000: [2], derived_48000: [2, 2]}
+  verification_max_abs_error: 0.000002
+  same_gain_as_192khz: true
+  independent_normalization: false
+instrumentation:
+  repetitions: 3
+  probes: [coherent_sine_bank, two_tone]
+internal_validation:
+  devices: [blackstar, ua1176]
+  source: configs/data/r1_physical.yaml
+  test_splits_sealed: true
+external_report_only_locked: true

@@ -1,0 +1,6 @@
+{
+  "failure_reason": "TypeError: PyYAML decoded the unquoted protocol key 'off' as boolean false; strict JSON sorting rejected mixed boolean/string mapping keys",
+  "finished_at": "2026-08-28T10:41:22+02:00",
+  "started_at": "2026-08-28T10:37:06+02:00",
+  "status": "failed"
+}

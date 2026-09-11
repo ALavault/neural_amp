@@ -1,0 +1,3264 @@
+{
+  "scope": "synthetic_diagnostic_only",
+  "seed": 20260907,
+  "cases": [
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 709
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 719
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 706
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 709
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 710
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 690
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 710
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 710
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 689
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 700
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 704
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 710
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 700
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 699
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 702
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 702
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 707
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 704
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 710
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 698
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 711
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 701
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 696
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 713
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 710
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 699
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 700
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 707
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 707
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 699
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 701
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 706
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 702
+    },
+    {
+      "width": 1.0,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 710
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 713
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 687
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 711
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 712
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 699
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 707
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 729
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 718
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 693
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 708
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 702
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 710
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 714
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 694
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 699
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 705
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 711
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 714
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 712
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 710
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 702
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 700
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 707
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 697
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 703
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 699
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 712
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 704
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 718
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 693
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 706
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 706
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 702
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 695
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 708
+    },
+    {
+      "width": 1.0,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 695
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 701
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 707
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 709
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 700
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 722
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 700
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 709
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 699
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 693
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 713
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 707
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 704
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 702
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 708
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 696
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 697
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 708
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 712
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 706
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 700
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 706
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 713
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 696
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 694
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 708
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 711
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 699
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 718
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 701
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 713
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 709
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 708
+    },
+    {
+      "width": 0.7,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 704
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 674
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 720
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 703
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 717
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 727
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 708
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 707
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 708
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 697
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 699
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 682
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 686
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 714
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 708
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 706
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 699
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 725
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 706
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 711
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 699
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 712
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 714
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 704
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 700
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 700
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 690
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 722
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 691
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 689
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 719
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 704
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 710
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 697
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 696
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 0.7,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 708
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.0,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 701
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 715
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 706
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 709
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 713
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 701
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 695
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 709
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 698
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 708
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 710
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 707
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 694
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 698
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 715
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 700
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 697
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 715
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 702
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 719
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 708
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 712
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": -12,
+      "error": 0,
+      "peak_error": 706
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 706
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 695
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 694
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": 0,
+      "error": 0,
+      "peak_error": 692
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 712
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": 1,
+      "error": 0,
+      "peak_error": 702
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 700
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": 5,
+      "error": 0,
+      "peak_error": 715
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 713
+    },
+    {
+      "width": 1.5,
+      "noise": 0.001,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": 12,
+      "error": 0,
+      "peak_error": 710
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 686
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 715
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 714
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 695
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 702
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 683
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 719
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 688
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 704
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 681
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 719
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 0.5,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 702
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 695
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 709
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 702
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": -5,
+      "error": 0,
+      "peak_error": 705
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 704
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 700
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 703
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 707
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 696
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 688
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 709
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": 1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 718
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 706
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 702
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 694
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": -5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 704
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 711
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 0,
+      "estimated": null,
+      "error": null,
+      "peak_error": 698
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 700
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 1,
+      "estimated": null,
+      "error": null,
+      "peak_error": 711
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 712
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 5,
+      "estimated": null,
+      "error": null,
+      "peak_error": 690
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 0.8,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 690
+    },
+    {
+      "width": 1.5,
+      "noise": 0.003,
+      "gain": -1.0,
+      "late": 1.2,
+      "true_delay": 12,
+      "estimated": null,
+      "error": null,
+      "peak_error": 715
+    }
+  ],
+  "summary": {
+    "stable_early_shape": {
+      "cases": 108,
+      "accepted": 85,
+      "within_one_sample": 85,
+      "maximum_accepted_error": 0
+    },
+    "changed_early_shape": {
+      "cases": 216,
+      "accepted": 164,
+      "within_one_sample": 164,
+      "maximum_accepted_error": 0
+    }
+  },
+  "shared_absolute_delay_samples": 15,
+  "measured_relative_delay_with_shared_offset": 0,
+  "absolute_alignment_certified": false,
+  "physical_audio_read": false
+}

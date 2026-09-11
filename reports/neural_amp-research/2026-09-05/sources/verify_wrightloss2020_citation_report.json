@@ -1,0 +1,18 @@
+{
+  "total_dois": 1,
+  "verified": [
+    "10.1109/ICASSP40776.2020.9052944"
+  ],
+  "failed": [],
+  "metadata": {
+    "10.1109/ICASSP40776.2020.9052944": {
+      "title": "Perceptual loss function for neural modeling of audio systems",
+      "authors": "Wright, A., Valimaki, V.",
+      "year": "2020",
+      "journal": "ICASSP 2020 - 2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)",
+      "volume": "",
+      "pages": "251-255",
+      "doi": "10.1109/ICASSP40776.2020.9052944"
+    }
+  }
+}

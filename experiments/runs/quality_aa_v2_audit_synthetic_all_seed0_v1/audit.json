@@ -1,0 +1,188 @@
+{
+  "campaign_version": "FSSR-QUALITY-AA-v2",
+  "decision": {
+    "admissible_routes": [
+      "full_island_x2"
+    ],
+    "campaign_version": "FSSR-QUALITY-AA-v2",
+    "claim_boundary": "synthetic AA backend only",
+    "quality_db": {
+      "full_island_x2": -140.3084684728151
+    },
+    "quality_indifference_db": 0.5,
+    "selected_backend": "full_island_x2",
+    "tiebreaker": "lowest_block64_p95_ns_per_sample",
+    "verdict": "GO-QUALITY-AA-v2"
+  },
+  "external_report_only_accessed": false,
+  "mechanism_gate": {
+    "campaign_continue": true,
+    "format": "fssr-quality-aa-mechanism-gate-v1",
+    "passed": true,
+    "passing_routes": [
+      "full_island_x2",
+      "teacher_x4"
+    ],
+    "route_decisions_independent": true,
+    "routes": {
+      "full_island_x2": {
+        "checks": {
+          "every_fixture_gain": true,
+          "guards": true,
+          "latency": true,
+          "median_gain": true,
+          "rf2047_residual": true,
+          "spearman": true
+        },
+        "fixture_median_asr_gain_db": {
+          "asymmetric_clipping": 14.44630173766248,
+          "rf2047_residual": 44.50977105834859,
+          "short_memory": 39.25862680825899,
+          "slow_sag": 47.633822022223534,
+          "tanh": 46.72293073259195,
+          "two_clippers": 14.035613790398735
+        },
+        "median_asr_gain_db": 39.247129038248,
+        "median_known_reference_alias_residual_db": -140.3084684728151,
+        "passed": true,
+        "spearman_rho": 0.9993959528843249,
+        "uncensored_conditions": 43
+      },
+      "teacher_x4": {
+        "checks": {
+          "every_fixture_gain": true,
+          "guards": true,
+          "latency": true,
+          "median_gain": true,
+          "rf2047_residual": true,
+          "spearman": true
+        },
+        "fixture_median_asr_gain_db": {
+          "asymmetric_clipping": 27.311760954616986,
+          "rf2047_residual": 44.55119890408133,
+          "short_memory": 39.362272694246464,
+          "slow_sag": 47.6496489109219,
+          "tanh": 46.76376388067681,
+          "two_clippers": 25.676679598547857
+        },
+        "median_asr_gain_db": 39.25846827070499,
+        "median_known_reference_alias_residual_db": -140.3084684728151,
+        "passed": true,
+        "spearman_rho": 0.9975838115372999,
+        "uncensored_conditions": 43
+      }
+    },
+    "terminal_if_stopped": null,
+    "valid": true
+  },
+  "native_gate": {
+    "format": "fssr-quality-aa-native-gate-v1",
+    "passed": true,
+    "passing_routes": [
+      "full_island_x2"
+    ],
+    "routes": {
+      "full_island_x2": {
+        "block64_p95_ns_per_sample": 16495.03828125,
+        "block64_p95_rtf": 0.7917618375000001,
+        "checks": {
+          "allocations": true,
+          "block64_realtime": true,
+          "compiler": true,
+          "latency": true,
+          "python_cpp_parity": true,
+          "reset": true,
+          "same_binary": true,
+          "scientific_repetitions": true
+        },
+        "latency_samples": 32,
+        "passed": true,
+        "sizes": {
+          "native_state_allocation_bytes": 263188,
+          "parameters": 4721,
+          "persistent_state_bytes": 263124,
+          "scratch_bytes": 1344,
+          "weight_bytes": 19668
+        }
+      },
+      "teacher_x4": {
+        "block64_p95_ns_per_sample": 42017.698437499996,
+        "block64_p95_rtf": 2.016849525,
+        "checks": {
+          "allocations": true,
+          "block64_realtime": false,
+          "compiler": true,
+          "latency": true,
+          "python_cpp_parity": true,
+          "reset": true,
+          "same_binary": true,
+          "scientific_repetitions": true
+        },
+        "latency_samples": 32,
+        "passed": false,
+        "sizes": {
+          "native_state_allocation_bytes": 525972,
+          "parameters": 4817,
+          "persistent_state_bytes": 525908,
+          "scratch_bytes": 1344,
+          "weight_bytes": 20564
+        }
+      }
+    },
+    "valid": true
+  },
+  "physical_audio_samples_read": 0,
+  "preflight_gate": {
+    "adaa_status": "excluded_unalignable",
+    "campaign_continue": true,
+    "checks": {
+      "candidate_outputs_unobserved": true,
+      "filter_response_and_delay": true,
+      "identity_floor": true,
+      "physical_audio_absent": true,
+      "reference_x8_x16_convergence": true
+    },
+    "format": "fssr-quality-aa-preflight-gate-v1",
+    "locked_floor_db": -140.3084684728151,
+    "passed": true,
+    "valid": true
+  },
+  "provenance": {
+    "environment": {
+      "hypothesis": "6.165.10",
+      "numpy": "2.5.2",
+      "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.43",
+      "python": "3.12.13",
+      "scipy": "1.18.1",
+      "torch": "2.13.0"
+    },
+    "git_head": "40d1b7d4f7c6fe34c55b61dfdd6b333e33033401",
+    "source_snapshot_files": 26,
+    "worktree_dirty": true
+  },
+  "requirements": {
+    "adaa_independent": true,
+    "block64_realtime": true,
+    "claim_boundary": true,
+    "dc_separated_metric": true,
+    "external_report_only_locked": true,
+    "latency_within_48": true,
+    "mechanism_route_available": true,
+    "native_route_available": true,
+    "physical_audio_absent": true,
+    "preflight_valid": true,
+    "provenance_all_runs": true,
+    "python_cpp_parity": true,
+    "reference_converged": true,
+    "selected_backend": true,
+    "v1_preserved_invalid": true
+  },
+  "run_id": "quality_aa_v2_audit_synthetic_all_seed0_v1",
+  "run_provenance": {
+    "mechanism": true,
+    "native": true,
+    "preflight": true
+  },
+  "schema_version": 1,
+  "status": "supported"
+}

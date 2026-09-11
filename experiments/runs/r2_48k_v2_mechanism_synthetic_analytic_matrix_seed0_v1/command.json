@@ -1,0 +1,9 @@
+{
+  "argv": [
+    "uv",
+    "run",
+    "python",
+    "scripts/run_r2_48k_v2_mechanism.py"
+  ],
+  "cwd": "/fastdata/lavaulta/neural_amp"
+}
