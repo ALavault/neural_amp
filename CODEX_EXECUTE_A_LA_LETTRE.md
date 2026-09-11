@@ -14,6 +14,14 @@ Le mandat détaillé fourni le 27 août 2026 gouverne cette campagne. Ce fichier
 - Données séparées par fichier source et, si possible, interprète, instrument, session et réglage ; jamais par fenêtres voisines aléatoires.
 - Phases strictes : `CORE → MATURATION → EXPLORATION → RESERVE`.
 
+## Périmètre
+
+Ce protocole gouverne la voie scientifique, c’est-à-dire `.codex_campaign/` et
+tout run inscrit dans `RUN_LEDGER.jsonl`. Il ne s’applique pas à la voie produit
+(`demo/`, `src/fssr_nam/product/`, `scripts/product_*.py`), ouverte par
+`D-PRODUCT-001`, qui ne formule aucune revendication scientifique et ne peut pas
+lire les sorties scellées Blackstar, UA 1176 ou `EXTERNAL_REPORT_ONLY`.
+
 ## Contrôle scientifique
 
 Chaque affirmation doit pointer vers un artefact. Les runs, y compris les échecs, sont immuables et inscrits dans `.codex_campaign/RUN_LEDGER.jsonl`. Aucune seed défavorable ne peut être retirée sans règle préenregistrée. Les coûts théoriques complètent mais ne remplacent jamais les mesures CPU.
