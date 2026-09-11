@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -27,8 +28,8 @@ RUNS = {
 }
 
 
-def build_benchmark() -> Path:
-    """Build nam_benchmark without fast-math so IEEE behaviour is preserved."""
+def build_tools() -> tuple[Path, Path]:
+    """Build the NAM tools without fast-math so IEEE behaviour is preserved."""
     subprocess.run(
         [
             "cmake",
@@ -49,16 +50,52 @@ def build_benchmark() -> Path:
             str(BUILD_DIR),
             "--target",
             "nam_benchmark",
+            "nam_block_runner",
             "--parallel",
             "8",
         ],
         check=True,
         capture_output=True,
     )
-    return BUILD_DIR / "nam_benchmark"
+    return BUILD_DIR / "nam_benchmark", BUILD_DIR / "nam_block_runner"
 
 
-def fidelity(model_path: Path, test_pair: tuple[Path, Path]) -> dict[str, float]:
+def run_native(runner: Path, model_path: Path, signal: np.ndarray, blocks: str):
+    """Render one signal through the native engine and return (output, reset copy)."""
+    with tempfile.TemporaryDirectory(dir=BUILD_DIR) as work:
+        base = Path(work)
+        signal.astype(np.float32).tofile(base / "in.f32")
+        subprocess.run(
+            [
+                str(runner),
+                str(model_path),
+                str(base / "in.f32"),
+                str(base / "out.f32"),
+                blocks,
+                str(base / "reset.f32"),
+            ],
+            check=True,
+            capture_output=True,
+        )
+        return (
+            np.fromfile(base / "out.f32", dtype=np.float32),
+            np.fromfile(base / "reset.f32", dtype=np.float32),
+        )
+
+
+def parity(runner: Path, model_path: Path, prediction: np.ndarray, x: np.ndarray):
+    """Compare the Python prediction with the native engine, block-wise."""
+    regular, reset = run_native(runner, model_path, x, "64")
+    irregular, _ = run_native(runner, model_path, x, "64,17,256,1,93")
+    return {
+        "python_vs_native_block64": float(np.max(np.abs(prediction - regular))),
+        "native_regular_vs_irregular": float(np.max(np.abs(regular - irregular))),
+        "reset_exact": bool(np.array_equal(regular, reset)),
+    }
+
+
+def fidelity(model_path: Path, test_pair: tuple[Path, Path]):
+    """Score the model on the test pair and return the metrics with the signals."""
     model = init_from_nam(json.loads(model_path.read_text(encoding="utf-8"))).eval()
     x, _ = sf.read(test_pair[0], dtype="float32")
     target, _ = sf.read(test_pair[1], dtype="float32")
@@ -66,7 +103,11 @@ def fidelity(model_path: Path, test_pair: tuple[Path, Path]) -> dict[str, float]
         prediction = model(torch.from_numpy(x), pad_start=True).cpu().numpy()
     if not np.all(np.isfinite(prediction)):
         raise RuntimeError(f"non-finite prediction from {model_path}")
-    return {**time_metrics(prediction, target), **spectral_metrics(prediction, target)}
+    metrics = {
+        **time_metrics(prediction, target),
+        **spectral_metrics(prediction, target),
+    }
+    return metrics, prediction, x
 
 
 def cost(benchmark: Path, model_path: Path) -> list[dict[str, float]]:
@@ -82,9 +123,8 @@ def cost(benchmark: Path, model_path: Path) -> list[dict[str, float]]:
     return rows
 
 
-def robustness(model_path: Path) -> dict[str, object]:
-    """Check finite output and exact reset on degenerate inputs."""
-    model = init_from_nam(json.loads(model_path.read_text(encoding="utf-8"))).eval()
+def robustness(runner: Path, model_path: Path) -> dict[str, object]:
+    """Probe the native engine with degenerate inputs, as it ships in the plugin."""
     probes = {
         "silence": np.zeros(48_000, dtype=np.float32),
         "dc": np.full(48_000, 0.5, dtype=np.float32),
@@ -92,8 +132,7 @@ def robustness(model_path: Path) -> dict[str, object]:
     }
     results = {}
     for name, signal in probes.items():
-        with torch.inference_mode():
-            out = model(torch.from_numpy(signal), pad_start=True).cpu().numpy()
+        out, _ = run_native(runner, model_path, signal, "64,17,256,1,93")
         results[name] = {
             "finite": bool(np.all(np.isfinite(out))),
             "peak": float(np.max(np.abs(out))),
@@ -102,7 +141,7 @@ def robustness(model_path: Path) -> dict[str, object]:
 
 
 def main() -> None:
-    benchmark = build_benchmark()
+    benchmark, runner = build_tools()
     report: dict[str, dict] = {}
     for device, run_id in RUNS.items():
         run_dir = ROOT / "demo/runs" / run_id
@@ -110,17 +149,17 @@ def main() -> None:
             print(f"missing run {run_id}", file=sys.stderr)
             continue
         pairs = device_pairs(MANIFEST, device, root=ROOT)
-        report[device] = {
-            "run_id": run_id,
-            "variants": {
-                label: {
-                    "fidelity": fidelity(run_dir / f"model_{label}.nam", pairs["test"]),
-                    "cost": cost(benchmark, run_dir / f"model_{label}.nam"),
-                    "robustness": robustness(run_dir / f"model_{label}.nam"),
-                }
-                for label in ("lite", "full")
-            },
-        }
+        variants = {}
+        for label in ("lite", "full"):
+            model_path = run_dir / f"model_{label}.nam"
+            metrics, prediction, x = fidelity(model_path, pairs["test"])
+            variants[label] = {
+                "fidelity": metrics,
+                "parity": parity(runner, model_path, prediction, x),
+                "cost": cost(benchmark, model_path),
+                "robustness": robustness(runner, model_path),
+            }
+        report[device] = {"run_id": run_id, "variants": variants}
 
     out = ROOT / "demo/report.json"
     out.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
@@ -159,8 +198,13 @@ def main() -> None:
         "",
         "## Coût CPU natif (NeuralAmpModelerCore, Release -O3 sans fast-math)",
         "",
-        "| Modèle | Bloc | ns/échantillon médian | p95 | facteur temps réel p95 |",
-        "| --- | ---: | ---: | ---: | ---: |",
+        "Le facteur temps réel p95 indique combien de fois plus vite que le temps",
+        "réel le modèle calcule (plus grand = mieux) ; la charge CPU est son inverse",
+        "sur un cœur. Référence historique en `-Ofast` : 2 862 ns/échantillon pour",
+        "A2 Full au bloc 64.",
+        "",
+        "| Modèle | Bloc | ns/éch. médian | p95 | x temps réel p95 | charge CPU p95 |",
+        "| --- | ---: | ---: | ---: | ---: | ---: |",
     ]
     for device, entry in report.items():
         for label, variant in entry["variants"].items():
@@ -169,11 +213,27 @@ def main() -> None:
                     f"| {device} A2 {label} | {row['block_size']} | "
                     f"{row['median_ns_per_sample']:.1f} | "
                     f"{row['p95_ns_per_sample']:.1f} | "
-                    f"{row['p95_realtime_factor']:.2f}x |"
+                    f"{row['p95_realtime_factor']:.2f}x | "
+                    f"{100.0 / row['p95_realtime_factor']:.1f} % |"
                 )
     lines += [
         "",
-        "## Robustesse",
+        "## Parité moteur (Python d'entraînement vs moteur natif C++)",
+        "",
+        "| Modèle | Python vs natif (bloc 64) | blocs réguliers vs irréguliers"
+        " | reset exact |",
+        "| --- | ---: | ---: | --- |",
+    ]
+    for device, entry in report.items():
+        for label, variant in entry["variants"].items():
+            p = variant["parity"]
+            lines.append(
+                f"| {device} A2 {label} | {p['python_vs_native_block64']:.2e} | "
+                f"{p['native_regular_vs_irregular']:.2e} | {p['reset_exact']} |"
+            )
+    lines += [
+        "",
+        "## Robustesse (moteur natif, blocs irréguliers)",
         "",
         "| Modèle | sonde | fini | crête |",
         "| --- | --- | --- | ---: |",

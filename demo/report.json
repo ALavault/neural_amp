@@ -16,64 +16,69 @@
           "log_spectral_distance_db": 1.5245979188834944,
           "phase_error_radians": 0.07120002223352455
         },
+        "parity": {
+          "python_vs_native_block64": 1.7881393432617188e-07,
+          "native_regular_vs_irregular": 0.0,
+          "reset_exact": true
+        },
         "cost": [
           {
             "block_size": 32,
             "iterations": 5,
             "timed_blocks": 15000,
-            "mean_block_ns": 26078.707,
-            "median_block_ns": 28869,
-            "p95_block_ns": 31170.05,
-            "median_ns_per_sample": 902.15625,
-            "p95_ns_per_sample": 974.0640625,
-            "median_realtime_factor": 23.0928215964,
-            "p95_realtime_factor": 21.3880525269
+            "mean_block_ns": 28379.7777333,
+            "median_block_ns": 28674,
+            "p95_block_ns": 32440.1,
+            "median_ns_per_sample": 896.0625,
+            "p95_ns_per_sample": 1013.753125,
+            "median_realtime_factor": 23.2498663133,
+            "p95_realtime_factor": 20.5506970283
           },
           {
             "block_size": 64,
             "iterations": 5,
             "timed_blocks": 7500,
-            "mean_block_ns": 51558.1009333,
-            "median_block_ns": 53099,
-            "p95_block_ns": 60308.1,
-            "median_ns_per_sample": 829.671875,
-            "p95_ns_per_sample": 942.3140625,
-            "median_realtime_factor": 25.1103285059,
-            "p95_realtime_factor": 22.1086940781
+            "mean_block_ns": 54897.0448,
+            "median_block_ns": 53295,
+            "p95_block_ns": 61263.15,
+            "median_ns_per_sample": 832.734375,
+            "p95_ns_per_sample": 957.23671875,
+            "median_realtime_factor": 25.0179816743,
+            "p95_realtime_factor": 21.764034878
           },
           {
             "block_size": 128,
             "iterations": 5,
             "timed_blocks": 3750,
-            "mean_block_ns": 101711.865067,
-            "median_block_ns": 104579,
-            "p95_block_ns": 113528.8,
-            "median_ns_per_sample": 817.0234375,
-            "p95_ns_per_sample": 886.94375,
-            "median_realtime_factor": 25.4990645031,
-            "p95_realtime_factor": 23.4889003202
+            "mean_block_ns": 113397.862667,
+            "median_block_ns": 104904,
+            "p95_block_ns": 122906.65,
+            "median_ns_per_sample": 819.5625,
+            "p95_ns_per_sample": 960.208203125,
+            "median_realtime_factor": 25.4200666006,
+            "p95_realtime_factor": 21.6966833501
           },
           {
             "block_size": 256,
             "iterations": 5,
             "timed_blocks": 1875,
-            "mean_block_ns": 196088.6736,
-            "median_block_ns": 207901,
-            "p95_block_ns": 229797.5,
-            "median_ns_per_sample": 812.11328125,
-            "p95_ns_per_sample": 897.646484375,
-            "median_realtime_factor": 25.6532355945,
-            "p95_realtime_factor": 23.2088396668
+            "mean_block_ns": 231374.573867,
+            "median_block_ns": 203993,
+            "p95_block_ns": 254914.4,
+            "median_ns_per_sample": 796.84765625,
+            "p95_ns_per_sample": 995.759375,
+            "median_realtime_factor": 26.1446879713,
+            "p95_realtime_factor": 20.9220559267
           }
         ],
         "robustness": {
           "silence": {
             "finite": true,
-            "peak": 0.0005421778769232333
+            "peak": 0.0005421876558102667
           },
           "dc": {
             "finite": true,
-            "peak": 0.38672396540641785
+            "peak": 0.38672393560409546
           },
           "hot": {
             "finite": true,
@@ -95,60 +100,65 @@
           "log_spectral_distance_db": 0.9342159651638857,
           "phase_error_radians": 0.04870865990031466
         },
+        "parity": {
+          "python_vs_native_block64": 2.2351741790771484e-07,
+          "native_regular_vs_irregular": 0.0,
+          "reset_exact": true
+        },
         "cost": [
           {
             "block_size": 32,
             "iterations": 5,
             "timed_blocks": 15000,
-            "mean_block_ns": 154671.755467,
-            "median_block_ns": 168546,
-            "p95_block_ns": 179564.05,
-            "median_ns_per_sample": 5267.0625,
-            "p95_ns_per_sample": 5611.3765625,
-            "median_realtime_factor": 3.95539892176,
-            "p95_realtime_factor": 3.7126956463
+            "mean_block_ns": 157926.229933,
+            "median_block_ns": 168651,
+            "p95_block_ns": 179195.1,
+            "median_ns_per_sample": 5270.34375,
+            "p95_ns_per_sample": 5599.846875,
+            "median_realtime_factor": 3.95293633994,
+            "p95_realtime_factor": 3.72033982328
           },
           {
             "block_size": 64,
             "iterations": 5,
             "timed_blocks": 7500,
-            "mean_block_ns": 290426.224133,
-            "median_block_ns": 309021,
-            "p95_block_ns": 331846.45,
-            "median_ns_per_sample": 4828.453125,
-            "p95_ns_per_sample": 5185.10078125,
-            "median_realtime_factor": 4.31470137412,
-            "p95_realtime_factor": 4.01792254621
+            "mean_block_ns": 295218.513467,
+            "median_block_ns": 310540.5,
+            "p95_block_ns": 337680.05,
+            "median_ns_per_sample": 4852.1953125,
+            "p95_ns_per_sample": 5276.25078125,
+            "median_realtime_factor": 4.29358918831,
+            "p95_realtime_factor": 3.94851082655
           },
           {
             "block_size": 128,
             "iterations": 5,
             "timed_blocks": 3750,
-            "mean_block_ns": 545318.1632,
-            "median_block_ns": 563087,
-            "p95_block_ns": 600368.05,
-            "median_ns_per_sample": 4399.1171875,
-            "p95_ns_per_sample": 4690.37539063,
-            "median_realtime_factor": 4.73579867173,
-            "p95_realtime_factor": 4.44171981948
+            "mean_block_ns": 605997.340267,
+            "median_block_ns": 568758.5,
+            "p95_block_ns": 602081.45,
+            "median_ns_per_sample": 4443.42578125,
+            "p95_ns_per_sample": 4703.76132812,
+            "median_realtime_factor": 4.68857461764,
+            "p95_realtime_factor": 4.42907959823
           },
           {
             "block_size": 256,
             "iterations": 5,
             "timed_blocks": 1875,
-            "mean_block_ns": 1107110.05173,
-            "median_block_ns": 1088286,
-            "p95_block_ns": 1127747.4,
-            "median_ns_per_sample": 4251.1171875,
-            "p95_ns_per_sample": 4405.26328125,
-            "median_realtime_factor": 4.90067255605,
-            "p95_realtime_factor": 4.72919142472
+            "mean_block_ns": 1210172.0048,
+            "median_block_ns": 1089211,
+            "p95_block_ns": 4075386.9,
+            "median_ns_per_sample": 4254.73046875,
+            "p95_ns_per_sample": 15919.4800781,
+            "median_realtime_factor": 4.89651071586,
+            "p95_realtime_factor": 1.30866920472
           }
         ],
         "robustness": {
           "silence": {
             "finite": true,
-            "peak": 0.00011783256923081353
+            "peak": 0.00011782810179283842
           },
           "dc": {
             "finite": true,
@@ -156,7 +166,7 @@
           },
           "hot": {
             "finite": true,
-            "peak": 2.264631509780884
+            "peak": 2.2646312713623047
           }
         }
       }
@@ -179,68 +189,73 @@
           "log_spectral_distance_db": 4.803592918839478,
           "phase_error_radians": 0.6129516244113614
         },
+        "parity": {
+          "python_vs_native_block64": 1.6838312149047852e-06,
+          "native_regular_vs_irregular": 0.0,
+          "reset_exact": true
+        },
         "cost": [
           {
             "block_size": 32,
             "iterations": 5,
             "timed_blocks": 15000,
-            "mean_block_ns": 28026.4,
-            "median_block_ns": 29013,
-            "p95_block_ns": 31091.05,
-            "median_ns_per_sample": 906.65625,
-            "p95_ns_per_sample": 971.5953125,
-            "median_realtime_factor": 22.9782051724,
-            "p95_realtime_factor": 21.4423979462
+            "mean_block_ns": 30420.2218667,
+            "median_block_ns": 28581,
+            "p95_block_ns": 34522.05,
+            "median_ns_per_sample": 893.15625,
+            "p95_ns_per_sample": 1078.8140625,
+            "median_realtime_factor": 23.3255192844,
+            "p95_realtime_factor": 19.3113290395
           },
           {
             "block_size": 64,
             "iterations": 5,
             "timed_blocks": 7500,
-            "mean_block_ns": 75051.9218667,
-            "median_block_ns": 53486.5,
-            "p95_block_ns": 61267.6,
-            "median_ns_per_sample": 835.7265625,
-            "p95_ns_per_sample": 957.30625,
-            "median_realtime_factor": 24.9284087262,
-            "p95_realtime_factor": 21.7624541084
+            "mean_block_ns": 63596.2326667,
+            "median_block_ns": 55049,
+            "p95_block_ns": 68191.15,
+            "median_ns_per_sample": 860.140625,
+            "p95_ns_per_sample": 1065.48671875,
+            "median_realtime_factor": 24.2208456708,
+            "p95_realtime_factor": 19.5528794181
           },
           {
             "block_size": 128,
             "iterations": 5,
             "timed_blocks": 3750,
-            "mean_block_ns": 133361.2464,
-            "median_block_ns": 104328,
-            "p95_block_ns": 125439.95,
-            "median_ns_per_sample": 815.0625,
-            "p95_ns_per_sample": 979.999609375,
-            "median_realtime_factor": 25.5604120338,
-            "p95_realtime_factor": 21.2585118749
+            "mean_block_ns": 126441.4912,
+            "median_block_ns": 104173,
+            "p95_block_ns": 132804.3,
+            "median_ns_per_sample": 813.8515625,
+            "p95_ns_per_sample": 1037.53359375,
+            "median_realtime_factor": 25.5984436146,
+            "p95_realtime_factor": 20.0796711151
           },
           {
             "block_size": 256,
             "iterations": 5,
             "timed_blocks": 1875,
-            "mean_block_ns": 188919.639467,
-            "median_block_ns": 205379,
-            "p95_block_ns": 227546.2,
-            "median_ns_per_sample": 802.26171875,
-            "p95_ns_per_sample": 888.85234375,
-            "median_realtime_factor": 25.9682505676,
-            "p95_realtime_factor": 23.4384636321
+            "mean_block_ns": 228401.251733,
+            "median_block_ns": 202970,
+            "p95_block_ns": 256221.2,
+            "median_ns_per_sample": 792.8515625,
+            "p95_ns_per_sample": 1000.8640625,
+            "median_realtime_factor": 26.2764612176,
+            "p95_realtime_factor": 20.8153475721
           }
         ],
         "robustness": {
           "silence": {
             "finite": true,
-            "peak": 0.0009788679890334606
+            "peak": 0.000978875090368092
           },
           "dc": {
             "finite": true,
-            "peak": 0.28653115034103394
+            "peak": 0.28652986884117126
           },
           "hot": {
             "finite": true,
-            "peak": 0.4343298375606537
+            "peak": 0.434328556060791
           }
         }
       },
@@ -258,60 +273,65 @@
           "log_spectral_distance_db": 4.521555079819604,
           "phase_error_radians": 0.47921161035292126
         },
+        "parity": {
+          "python_vs_native_block64": 2.3320899344980717e-06,
+          "native_regular_vs_irregular": 0.0,
+          "reset_exact": true
+        },
         "cost": [
           {
             "block_size": 32,
             "iterations": 5,
             "timed_blocks": 15000,
-            "mean_block_ns": 161047.215,
-            "median_block_ns": 169397,
-            "p95_block_ns": 184649.2,
-            "median_ns_per_sample": 5293.65625,
-            "p95_ns_per_sample": 5770.2875,
-            "median_realtime_factor": 3.9355281774,
-            "p95_realtime_factor": 3.61044979706
+            "mean_block_ns": 163948.719867,
+            "median_block_ns": 168883,
+            "p95_block_ns": 183243.5,
+            "median_ns_per_sample": 5277.59375,
+            "p95_ns_per_sample": 5726.359375,
+            "median_realtime_factor": 3.94750606436,
+            "p95_realtime_factor": 3.63814632806
           },
           {
             "block_size": 64,
             "iterations": 5,
             "timed_blocks": 7500,
-            "mean_block_ns": 291993.182,
-            "median_block_ns": 308755,
-            "p95_block_ns": 328466.1,
-            "median_ns_per_sample": 4824.296875,
-            "p95_ns_per_sample": 5132.2828125,
-            "median_realtime_factor": 4.31841859511,
-            "p95_realtime_factor": 4.05927227599
+            "mean_block_ns": 304401.870533,
+            "median_block_ns": 310624.5,
+            "p95_block_ns": 335661.9,
+            "median_ns_per_sample": 4853.5078125,
+            "p95_ns_per_sample": 5244.7171875,
+            "median_realtime_factor": 4.29242810317,
+            "p95_realtime_factor": 3.97225104587
           },
           {
             "block_size": 128,
             "iterations": 5,
             "timed_blocks": 3750,
-            "mean_block_ns": 528123.964,
-            "median_block_ns": 566052,
-            "p95_block_ns": 590081.55,
-            "median_ns_per_sample": 4422.28125,
-            "p95_ns_per_sample": 4610.01210938,
-            "median_realtime_factor": 4.7109923941,
-            "p95_realtime_factor": 4.51914937294
+            "mean_block_ns": 535814.8008,
+            "median_block_ns": 565249,
+            "p95_block_ns": 591126.75,
+            "median_ns_per_sample": 4416.0078125,
+            "p95_ns_per_sample": 4618.17773438,
+            "median_realtime_factor": 4.71768489049,
+            "p95_realtime_factor": 4.51115884481
           },
           {
             "block_size": 256,
             "iterations": 5,
             "timed_blocks": 1875,
-            "mean_block_ns": 1148677.07093,
-            "median_block_ns": 1086065,
-            "p95_block_ns": 1233966.7,
-            "median_ns_per_sample": 4242.44140625,
-            "p95_ns_per_sample": 4820.18242187,
-            "median_realtime_factor": 4.91069441823,
-            "p95_realtime_factor": 4.32210474832
+            "mean_block_ns": 1161269.46773,
+            "median_block_ns": 1087842,
+            "p95_block_ns": 1245037.6,
+            "median_ns_per_sample": 4249.3828125,
+            "p95_ns_per_sample": 4863.428125,
+            "median_realtime_factor": 4.90267275333,
+            "p95_realtime_factor": 4.28367250381
           }
         ],
         "robustness": {
           "silence": {
             "finite": true,
-            "peak": 0.0002656737924553454
+            "peak": 0.000265689188381657
           },
           "dc": {
             "finite": true,
@@ -319,7 +339,7 @@
           },
           "hot": {
             "finite": true,
-            "peak": 0.13529564440250397
+            "peak": 0.13529568910598755
           }
         }
       }

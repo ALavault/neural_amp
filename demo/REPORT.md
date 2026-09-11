@@ -26,26 +26,40 @@ mesures historiques de la voie scientifique compilées en `-Ofast`.
 
 ## Coût CPU natif (NeuralAmpModelerCore, Release -O3 sans fast-math)
 
-| Modèle | Bloc | ns/échantillon médian | p95 | facteur temps réel p95 |
-| --- | ---: | ---: | ---: | ---: |
-| fulltone_full_drive_2 A2 lite | 32 | 902.2 | 974.1 | 21.39x |
-| fulltone_full_drive_2 A2 lite | 64 | 829.7 | 942.3 | 22.11x |
-| fulltone_full_drive_2 A2 lite | 128 | 817.0 | 886.9 | 23.49x |
-| fulltone_full_drive_2 A2 lite | 256 | 812.1 | 897.6 | 23.21x |
-| fulltone_full_drive_2 A2 full | 32 | 5267.1 | 5611.4 | 3.71x |
-| fulltone_full_drive_2 A2 full | 64 | 4828.5 | 5185.1 | 4.02x |
-| fulltone_full_drive_2 A2 full | 128 | 4399.1 | 4690.4 | 4.44x |
-| fulltone_full_drive_2 A2 full | 256 | 4251.1 | 4405.3 | 4.73x |
-| electro_harmonix_big_muff A2 lite | 32 | 906.7 | 971.6 | 21.44x |
-| electro_harmonix_big_muff A2 lite | 64 | 835.7 | 957.3 | 21.76x |
-| electro_harmonix_big_muff A2 lite | 128 | 815.1 | 980.0 | 21.26x |
-| electro_harmonix_big_muff A2 lite | 256 | 802.3 | 888.9 | 23.44x |
-| electro_harmonix_big_muff A2 full | 32 | 5293.7 | 5770.3 | 3.61x |
-| electro_harmonix_big_muff A2 full | 64 | 4824.3 | 5132.3 | 4.06x |
-| electro_harmonix_big_muff A2 full | 128 | 4422.3 | 4610.0 | 4.52x |
-| electro_harmonix_big_muff A2 full | 256 | 4242.4 | 4820.2 | 4.32x |
+Le facteur temps réel p95 indique combien de fois plus vite que le temps
+réel le modèle calcule (plus grand = mieux) ; la charge CPU est son inverse
+sur un cœur. Référence historique en `-Ofast` : 2 862 ns/échantillon pour
+A2 Full au bloc 64.
 
-## Robustesse
+| Modèle | Bloc | ns/éch. médian | p95 | x temps réel p95 | charge CPU p95 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| fulltone_full_drive_2 A2 lite | 32 | 896.1 | 1013.8 | 20.55x | 4.9 % |
+| fulltone_full_drive_2 A2 lite | 64 | 832.7 | 957.2 | 21.76x | 4.6 % |
+| fulltone_full_drive_2 A2 lite | 128 | 819.6 | 960.2 | 21.70x | 4.6 % |
+| fulltone_full_drive_2 A2 lite | 256 | 796.8 | 995.8 | 20.92x | 4.8 % |
+| fulltone_full_drive_2 A2 full | 32 | 5270.3 | 5599.8 | 3.72x | 26.9 % |
+| fulltone_full_drive_2 A2 full | 64 | 4852.2 | 5276.3 | 3.95x | 25.3 % |
+| fulltone_full_drive_2 A2 full | 128 | 4443.4 | 4703.8 | 4.43x | 22.6 % |
+| fulltone_full_drive_2 A2 full | 256 | 4254.7 | 15919.5 | 1.31x | 76.4 % |
+| electro_harmonix_big_muff A2 lite | 32 | 893.2 | 1078.8 | 19.31x | 5.2 % |
+| electro_harmonix_big_muff A2 lite | 64 | 860.1 | 1065.5 | 19.55x | 5.1 % |
+| electro_harmonix_big_muff A2 lite | 128 | 813.9 | 1037.5 | 20.08x | 5.0 % |
+| electro_harmonix_big_muff A2 lite | 256 | 792.9 | 1000.9 | 20.82x | 4.8 % |
+| electro_harmonix_big_muff A2 full | 32 | 5277.6 | 5726.4 | 3.64x | 27.5 % |
+| electro_harmonix_big_muff A2 full | 64 | 4853.5 | 5244.7 | 3.97x | 25.2 % |
+| electro_harmonix_big_muff A2 full | 128 | 4416.0 | 4618.2 | 4.51x | 22.2 % |
+| electro_harmonix_big_muff A2 full | 256 | 4249.4 | 4863.4 | 4.28x | 23.3 % |
+
+## Parité moteur (Python d'entraînement vs moteur natif C++)
+
+| Modèle | Python vs natif (bloc 64) | blocs réguliers vs irréguliers | reset exact |
+| --- | ---: | ---: | --- |
+| fulltone_full_drive_2 A2 lite | 1.79e-07 | 0.00e+00 | True |
+| fulltone_full_drive_2 A2 full | 2.24e-07 | 0.00e+00 | True |
+| electro_harmonix_big_muff A2 lite | 1.68e-06 | 0.00e+00 | True |
+| electro_harmonix_big_muff A2 full | 2.33e-06 | 0.00e+00 | True |
+
+## Robustesse (moteur natif, blocs irréguliers)
 
 | Modèle | sonde | fini | crête |
 | --- | --- | --- | ---: |
