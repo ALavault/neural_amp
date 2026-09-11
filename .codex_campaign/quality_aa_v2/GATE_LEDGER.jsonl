@@ -1,0 +1,4 @@
+{"campaign_version":"FSSR-QUALITY-AA-v2","evidence_path":"experiments/summaries/quality_aa_v2/preflight.json","stage":"preflight","status":"passed"}
+{"campaign_version":"FSSR-QUALITY-AA-v2","evidence_path":"experiments/summaries/quality_aa_v2/mechanism.json","stage":"mechanism","status":"passed"}
+{"campaign_version":"FSSR-QUALITY-AA-v2","evidence_path":"experiments/summaries/quality_aa_v2/native.json","stage":"native","status":"passed"}
+{"campaign_version":"FSSR-QUALITY-AA-v2","evidence_path":"experiments/summaries/quality_aa_v2/audit.json","stage":"audit","status":"passed"}

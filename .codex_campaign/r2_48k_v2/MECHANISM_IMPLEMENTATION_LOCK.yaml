@@ -1,0 +1,22 @@
+schema_version: 1
+campaign_version: FSSR-R2-48K-v2
+parent_implementation_lock: .codex_campaign/r2_48k/MECHANISM_IMPLEMENTATION_LOCK.yaml
+status: frozen_before_first_v2_mechanism_measurement
+frozen_at: 2026-08-28T09:00:00+02:00
+parent_numeric_results_used_for_selection: false
+parent_failure_mode_used_to_define_transport_fix: true
+criteria_changed: false
+fixtures_modes_probes_changed: false
+renderer_changed: false
+metric_formula_changed: false
+gate_thresholds_changed: false
+evidence_transport:
+  format: fssr-extended-real-json-v1
+  implementation: src/fssr_nam/reporting/json_evidence.py
+  exact_zero_db: tagged_negative_infinity
+  positive_infinity: tagged_positive_infinity
+  nan_action: invalidate_before_gate
+  aggregate_decision_fields_must_be_finite: true
+  serialize_and_parse_in_memory_before_immutable_file_create: true
+retry_policy: one_v2_mechanism_run_no_result_dependent_retry
+claim_boundary: synthetic_mechanism_only_no_physical_hardware_aliasing_or_global_sota_claim

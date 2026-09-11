@@ -1,0 +1,438 @@
+{
+  "campaign_version": "AMP-QUALITY-ARCH-v1",
+  "cuda_device": "NVIDIA RTX PRO 4000 Blackwell",
+  "gate": {
+    "batch_size": 1,
+    "comparator_latency_target_alignment": "explicit_zero_padded_delay_before_tail_crop",
+    "context_rationale": {
+      "nablafx_s4_tfilm": "pinned_144000_sample_training_segment_minus_output",
+      "nablafx_tcn_tfilm": "receptive_field_minus_one_plus_conservative_tfilm_latency",
+      "stateful_other": "at_least_four_times_longest_240ms_fixture_time_constant"
+    },
+    "context_samples": {
+      "candidates": 49152,
+      "nablafx_s4_tfilm": {
+        "large": 135808,
+        "small": 135808
+      },
+      "nablafx_tcn_tfilm": {
+        "large": 119366,
+        "small": 133967
+      },
+      "nam_a2_full": {
+        "official": 6346
+      },
+      "wright_lstm64": {
+        "official": 49152
+      }
+    },
+    "evidence": ".codex_campaign/amp_quality_arch_v1/PHYSICAL_TRAINING_FEASIBILITY.json",
+    "feasibility_measured_iterations": 2,
+    "feasibility_warmup_iterations": 1,
+    "finite_output_loss_and_gradients_required": true,
+    "gradient_clip_norm": 1.0,
+    "maximum_median_seconds_per_update": 4.0,
+    "maximum_projected_hours_per_5000_update_trajectory": 6.0,
+    "optimizer_by_family": {
+      "candidates": {
+        "learning_rate": 0.001,
+        "name": "AdamW",
+        "weight_decay": 0.0
+      },
+      "nablafx_s4_tfilm": {
+        "learning_rate": 0.01,
+        "name": "Adam",
+        "weight_decay": 0.0
+      },
+      "nablafx_tcn_tfilm": {
+        "learning_rate": 0.005,
+        "name": "Adam",
+        "weight_decay": 0.0
+      },
+      "nam_a2_full": {
+        "learning_rate": 0.004,
+        "name": "Adam",
+        "weight_decay": 3.17e-07
+      },
+      "wright_lstm64": {
+        "learning_rate": 0.005,
+        "name": "Adam",
+        "weight_decay": 0.0001
+      }
+    },
+    "output_samples_per_update": 8192,
+    "physical_audio_samples_read_by_feasibility": 0,
+    "random_window_seed": 20260828,
+    "validation_checkpoint_selection_only": true,
+    "validation_samples": 240000,
+    "validation_source_order_fixed": true
+  },
+  "input_source": "deterministic_synthetic_probe",
+  "loss_cost_probe": "exact_nablafx_0.5_l1_plus_0.5_mrstft",
+  "physical_audio_samples_read": 0,
+  "results": {
+    "cascade_rf2047_tfilm_x2:max": {
+      "checks": {
+        "finite_output_loss_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_5000_updates": true
+      },
+      "family": "cascade_rf2047_tfilm_x2",
+      "measurements": [
+        {
+          "elapsed_seconds": 3.3283784920349717,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 3.2924572859192267,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 3.310417888977099,
+      "output_samples": 8192,
+      "parameters": 22218,
+      "passed": true,
+      "peak_cuda_memory_bytes": 1226425344,
+      "projected_5000_update_hours": 4.597802623579304,
+      "segment_samples": 57344,
+      "variant": "max"
+    },
+    "micro_tcn_x2:max": {
+      "checks": {
+        "finite_output_loss_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_5000_updates": true
+      },
+      "family": "micro_tcn_x2",
+      "measurements": [
+        {
+          "elapsed_seconds": 0.5123645670246333,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.5225589099572971,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.5174617384909652,
+      "output_samples": 8192,
+      "parameters": 6658,
+      "passed": true,
+      "peak_cuda_memory_bytes": 486320640,
+      "projected_5000_update_hours": 0.7186968590152295,
+      "segment_samples": 57344,
+      "variant": "max"
+    },
+    "nablafx_s4_tfilm:large": {
+      "checks": {
+        "finite_output_loss_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_5000_updates": true
+      },
+      "family": "nablafx_s4_tfilm",
+      "measurements": [
+        {
+          "elapsed_seconds": 0.30847575201187283,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.3162235519848764,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.3123496519983746,
+      "output_samples": 8192,
+      "parameters": 70193,
+      "passed": true,
+      "peak_cuda_memory_bytes": 7387634176,
+      "projected_5000_update_hours": 0.43381896110885365,
+      "segment_samples": 144000,
+      "variant": "large"
+    },
+    "nablafx_s4_tfilm:small": {
+      "checks": {
+        "finite_output_loss_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_5000_updates": true
+      },
+      "family": "nablafx_s4_tfilm",
+      "measurements": [
+        {
+          "elapsed_seconds": 0.07277995604090393,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.05584318796172738,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.06431157200131565,
+      "output_samples": 8192,
+      "parameters": 27953,
+      "passed": true,
+      "peak_cuda_memory_bytes": 968665088,
+      "projected_5000_update_hours": 0.08932162777960508,
+      "segment_samples": 144000,
+      "variant": "small"
+    },
+    "nablafx_tcn_tfilm:large": {
+      "checks": {
+        "finite_output_loss_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_5000_updates": true
+      },
+      "family": "nablafx_tcn_tfilm",
+      "measurements": [
+        {
+          "elapsed_seconds": 0.07369067298714072,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.05895987001713365,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.06632527150213718,
+      "output_samples": 8192,
+      "parameters": 75937,
+      "passed": true,
+      "peak_cuda_memory_bytes": 557377536,
+      "projected_5000_update_hours": 0.0921184326418572,
+      "segment_samples": 127558,
+      "variant": "large"
+    },
+    "nablafx_tcn_tfilm:small": {
+      "checks": {
+        "finite_output_loss_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_5000_updates": true
+      },
+      "family": "nablafx_tcn_tfilm",
+      "measurements": [
+        {
+          "elapsed_seconds": 0.048501386074349284,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.038018533028662205,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.043259959551505744,
+      "output_samples": 8192,
+      "parameters": 45697,
+      "passed": true,
+      "peak_cuda_memory_bytes": 356831232,
+      "projected_5000_update_hours": 0.06008327715486909,
+      "segment_samples": 142159,
+      "variant": "small"
+    },
+    "nam_a2_full:official": {
+      "checks": {
+        "finite_output_loss_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_5000_updates": true
+      },
+      "family": "nam_a2_full",
+      "measurements": [
+        {
+          "elapsed_seconds": 0.04423831298481673,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.05644673097413033,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.05034252197947353,
+      "output_samples": 8192,
+      "parameters": 12145,
+      "passed": true,
+      "peak_cuda_memory_bytes": 31184896,
+      "projected_5000_update_hours": 0.06992016941593546,
+      "segment_samples": 14538,
+      "variant": "official"
+    },
+    "phys_det_tcn_x2:max": {
+      "checks": {
+        "finite_output_loss_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_5000_updates": true
+      },
+      "family": "phys_det_tcn_x2",
+      "measurements": [
+        {
+          "elapsed_seconds": 1.388883385923691,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 1.7105581539217383,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 1.5497207699227147,
+      "output_samples": 8192,
+      "parameters": 7106,
+      "passed": true,
+      "peak_cuda_memory_bytes": 690467328,
+      "projected_5000_update_hours": 2.1523899582259927,
+      "segment_samples": 57344,
+      "variant": "max"
+    },
+    "phys_s6_tcn_x2:max": {
+      "checks": {
+        "finite_output_loss_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_5000_updates": true
+      },
+      "family": "phys_s6_tcn_x2",
+      "measurements": [
+        {
+          "elapsed_seconds": 3.2238529140595347,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 3.2316271379822865,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 3.2277400260209106,
+      "output_samples": 8192,
+      "parameters": 15560,
+      "passed": true,
+      "peak_cuda_memory_bytes": 696467456,
+      "projected_5000_update_hours": 4.482972258362376,
+      "segment_samples": 57344,
+      "variant": "max"
+    },
+    "rf2047_tfilm_x2:max": {
+      "checks": {
+        "finite_output_loss_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_5000_updates": true
+      },
+      "family": "rf2047_tfilm_x2",
+      "measurements": [
+        {
+          "elapsed_seconds": 3.237950093112886,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 3.3003268449101597,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 3.269138469011523,
+      "output_samples": 8192,
+      "parameters": 15560,
+      "passed": true,
+      "peak_cuda_memory_bytes": 696467456,
+      "projected_5000_update_hours": 4.540470095849337,
+      "segment_samples": 57344,
+      "variant": "max"
+    },
+    "wright_lstm64:official": {
+      "checks": {
+        "finite_output_loss_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_5000_updates": true
+      },
+      "family": "wright_lstm64",
+      "measurements": [
+        {
+          "elapsed_seconds": 0.11585015105083585,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.12909637298434973,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.12247326201759279,
+      "output_samples": 8192,
+      "parameters": 17217,
+      "passed": true,
+      "peak_cuda_memory_bytes": 487940608,
+      "projected_5000_update_hours": 0.1701017528022122,
+      "segment_samples": 57344,
+      "variant": "official"
+    }
+  },
+  "schema_version": 1,
+  "scientific_run": false,
+  "sealed_outputs_accessed": {
+    "blackstar": false,
+    "ua1176": false
+  },
+  "selection_uses_audio_or_esr": false,
+  "stage": "physical_training_feasibility_preflight",
+  "status": "passed",
+  "torch_version": "2.13.0+cu130",
+  "workload_count": 11
+}

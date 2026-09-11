@@ -1,0 +1,129 @@
+{
+  "adversarial_findings": [
+    {
+      "finding": "the frozen comparison assigns phys_s6_tcn_x2 the auxiliary weight 0.01 selected by the parent v1 mechanism campaign while declaring that v1 results were not used for v2 selection",
+      "id": "ARCH2-AF-001",
+      "impact_on_competence_verdict": "none_control_auxiliary_weight_is_zero",
+      "required_disposition": "do_not_reuse_comparison_contract",
+      "severity": "critical_for_unrun_comparison"
+    },
+    {
+      "finding": "phys_s6_tcn_x2 and rf2047_tfilm_x2 instantiate the same observer conditioned topology, but only phys_s6_tcn_x2 receives auxiliary state supervision, contradicting the same-loss comparison claim",
+      "id": "ARCH2-AF-002",
+      "impact_on_competence_verdict": "none_no_candidate_was_launched",
+      "required_disposition": "separate_architecture_from_supervision_ablation",
+      "severity": "critical_for_unrun_comparison"
+    }
+  ],
+  "campaign_version": "AMP-COMPETENCE-ARCH-v2",
+  "comparison_run_count": 0,
+  "comparison_status": null,
+  "competence_gate_recomputed_exactly": true,
+  "competence_run_count": 9,
+  "competence_status": "failed",
+  "external_report_only_locked": true,
+  "finished_at": "2026-08-29T10:52:21+02:00",
+  "gate_events": [
+    {
+      "campaign_version": "AMP-COMPETENCE-ARCH-v2",
+      "evidence_path": "experiments/summaries/amp_competence_arch_v2/preflight.json",
+      "stage": "preflight",
+      "status": "passed"
+    },
+    {
+      "campaign_version": "AMP-COMPETENCE-ARCH-v2",
+      "evidence_path": "experiments/summaries/amp_competence_arch_v2/competence.json",
+      "stage": "competence",
+      "status": "failed"
+    }
+  ],
+  "global_run_ledger_entries": 9,
+  "known_limits": [
+    "run snapshots establish within-campaign byte identity but not an external historical baseline",
+    "CUDA deterministic mode and exact accelerator identity were not enforced by the training code",
+    "the run-exception path does not make INVALID as fail-closed as the scientific gates",
+    "the valid verdict is limited to three synthetic systems and three optimization seeds"
+  ],
+  "make_lint": {
+    "command": [
+      "make",
+      "lint"
+    ],
+    "output_tail": [
+      "make[1]: Entering directory '/fastdata/lavaulta/neural_amp'",
+      "uv run ruff check src tests scripts",
+      "All checks passed!",
+      "uv run ruff format --check src tests scripts",
+      "231 files already formatted",
+      "make[1]: Leaving directory '/fastdata/lavaulta/neural_amp'"
+    ],
+    "passed": true,
+    "returncode": 0
+  },
+  "make_test": {
+    "command": [
+      "make",
+      "test"
+    ],
+    "output_tail": [
+      "tests/unit/test_r2_48k_registry.py ..                                    [ 82%]",
+      "tests/unit/test_r2_48k_stage.py .                                        [ 82%]",
+      "tests/unit/test_r2_48k_statistics.py ...                                 [ 83%]",
+      "tests/unit/test_r2_48k_v2.py .....                                       [ 84%]",
+      "tests/unit/test_r2_capture.py .....                                      [ 85%]",
+      "tests/unit/test_r2_gates.py ........                                     [ 87%]",
+      "tests/unit/test_r2_protocol.py ...........                               [ 89%]",
+      "tests/unit/test_r2_registry.py ..                                        [ 90%]",
+      "tests/unit/test_r2_statistics.py ......                                  [ 91%]",
+      "tests/unit/test_r2_training.py ....                                      [ 92%]",
+      "tests/unit/test_recurrent_baseline.py ...                                [ 93%]",
+      "tests/unit/test_structured_model.py ......                               [ 94%]",
+      "tests/unit/test_synthetic.py ...                                         [ 95%]",
+      "tests/unit/test_systems.py .........                                     [ 97%]",
+      "tests/unit/test_time_metrics.py ..                                       [ 97%]",
+      "tests/unit/test_wright_compatibility.py ....                             [ 98%]",
+      "tests/unit/test_wright_training.py .....                                 [100%]",
+      "",
+      "======================= 439 passed in 193.43s (0:03:13) ========================",
+      "make[1]: Leaving directory '/fastdata/lavaulta/neural_amp'"
+    ],
+    "passed": true,
+    "returncode": 0
+  },
+  "physical_audio_samples_read": 0,
+  "post_run_audit_hardening": {
+    "all_checkpoints_loaded_and_finite": true,
+    "decision_bearing_code_changed": false,
+    "exact_run_ids_and_ledger_checked": true,
+    "protocol_or_lock_changed": false,
+    "scientific_results_changed": false,
+    "source_snapshots_compared_byte_for_byte": true
+  },
+  "preflight_passed": true,
+  "promoted_candidate": null,
+  "schema_version": 1,
+  "sealed_outputs_accessed": {
+    "blackstar": false,
+    "ua1176": false
+  },
+  "selected_budget_updates": null,
+  "status": "passed",
+  "terminal_evidence": {
+    "command": [
+      "uv",
+      "run",
+      "pytest",
+      "tests/unit/test_amp_arch_v2_terminal_evidence.py",
+      "-q"
+    ],
+    "output_tail": [
+      "....                                                                     [100%]",
+      "4 passed in 2.94s"
+    ],
+    "passed": true,
+    "returncode": 0
+  },
+  "v1_runs_resumed": 0,
+  "v1_runs_retuned": 0,
+  "verdict": "NO-GO-COMPETENCE-v2"
+}

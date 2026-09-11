@@ -1,0 +1,7 @@
+{
+  "campaign_version": "AMP-COMPETENCE-ARCH-v2",
+  "evidence_path": "experiments/summaries/amp_competence_arch_v2/competence.json",
+  "terminal_stage": "competence",
+  "valid_scientific_gate_result": true,
+  "verdict": "NO-GO-COMPETENCE-v2"
+}

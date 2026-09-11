@@ -1,0 +1,10 @@
+{
+  "campaign_version": "FSSR-R2-48K-v1",
+  "evidence_path": "experiments/runs/r2_48k_mechanism_synthetic_analytic_matrix_seed0_v1/failure.json",
+  "physical_audio_samples_read": 0,
+  "reason": "ValueError: Out of range float values are not JSON compliant: -inf",
+  "terminal_stage": "mechanism",
+  "valid_scientific_gate_result": false,
+  "verdict": "INVALID",
+  "x2_gate_evaluated": false
+}

@@ -1,0 +1,3 @@
+{"campaign_version":"FSSR-R2-48K-v2","evidence_path":".codex_campaign/r2_48k_v2/PREFLIGHT.json","stage":"preflight","status":"passed"}
+{"campaign_version":"FSSR-R2-48K-v2","evidence_path":".codex_campaign/r2_48k_v2/DATA_AUDIT.json","stage":"data","status":"passed"}
+{"campaign_version":"FSSR-R2-48K-v2","evidence_path":"experiments/summaries/r2_48k_v2/mechanism_invalid.json","stage":"mechanism_x2","status":"invalid"}

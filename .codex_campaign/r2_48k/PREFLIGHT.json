@@ -1,0 +1,106 @@
+{
+  "campaign_version": "FSSR-R2-48K-v1",
+  "external_report_only_locked": true,
+  "fm9_proxy_used": false,
+  "format": "fssr-r2-48k-preflight-v1",
+  "internal_validation_test_opened": false,
+  "make_targets": [
+    "r2-48k-preflight",
+    "r2-48k-data-audit",
+    "r2-48k-mechanism",
+    "r2-48k-screen",
+    "r2-48k-teacher",
+    "r2-48k-distill",
+    "r2-48k-lock",
+    "r2-48k-confirm",
+    "r2-48k-benchmark",
+    "r2-48k-listen",
+    "r2-48k-audit"
+  ],
+  "model_checks": {
+    "aa-fssr": {
+      "adaa1": {
+        "finite": true,
+        "internal_sample_rate": 48000,
+        "latency_samples": 1,
+        "parameters": 4588
+      },
+      "full_island_x2": {
+        "finite": true,
+        "internal_sample_rate": 96000,
+        "latency_samples": 16,
+        "parameters": 4620
+      },
+      "off": {
+        "finite": true,
+        "internal_sample_rate": 48000,
+        "latency_samples": 0,
+        "parameters": 4588
+      },
+      "teacher_x4": {
+        "finite": true,
+        "internal_sample_rate": 192000,
+        "latency_samples": 16,
+        "parameters": 4684
+      }
+    },
+    "aa-fssr-xl": {
+      "adaa1": {
+        "finite": true,
+        "internal_sample_rate": 48000,
+        "latency_samples": 1,
+        "parameters": 5201
+      },
+      "full_island_x2": {
+        "finite": true,
+        "internal_sample_rate": 96000,
+        "latency_samples": 16,
+        "parameters": 5393
+      },
+      "off": {
+        "finite": true,
+        "internal_sample_rate": 48000,
+        "latency_samples": 0,
+        "parameters": 5201
+      },
+      "teacher_x4": {
+        "finite": true,
+        "internal_sample_rate": 192000,
+        "latency_samples": 16,
+        "parameters": 5777
+      }
+    },
+    "aa-nam": {
+      "adaa1": {
+        "finite": true,
+        "internal_sample_rate": 48000,
+        "latency_samples": 1,
+        "parameters": 13663
+      },
+      "full_island_x2": {
+        "finite": true,
+        "internal_sample_rate": 96000,
+        "latency_samples": 16,
+        "parameters": 13783
+      },
+      "off": {
+        "finite": true,
+        "internal_sample_rate": 48000,
+        "latency_samples": 0,
+        "parameters": 13663
+      },
+      "teacher_x4": {
+        "finite": true,
+        "internal_sample_rate": 192000,
+        "latency_samples": 16,
+        "parameters": 14023
+      }
+    }
+  },
+  "parent_campaign_version": "FSSR-R2-v1",
+  "physical_192khz_reference_available": false,
+  "physical_waveform_samples_read": false,
+  "r2_v1_preserved": true,
+  "scientific_runs_launched": 0,
+  "status": "passed"
+}

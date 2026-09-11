@@ -1,0 +1,21 @@
+{
+  "campaign_version": "FSSR-R2-48K-v2",
+  "current_stage": "terminal",
+  "gates": {
+    "audit": "locked",
+    "benchmark": "locked",
+    "confirm": "locked",
+    "data": "passed",
+    "distill": "conditional_locked",
+    "listen": "locked",
+    "lock": "locked",
+    "mechanism": "invalid",
+    "preflight": "passed",
+    "screen": "locked",
+    "teacher": "locked"
+  },
+  "schema_version": 1,
+  "scientific_runs_launched": 1,
+  "status": "terminal_invalid",
+  "verdict": "INVALID"
+}

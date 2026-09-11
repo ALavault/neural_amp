@@ -1,0 +1,10 @@
+{
+  "campaign_version": "FSSR-R2-v1",
+  "external_report_only_locked": true,
+  "external_retest_authorized": false,
+  "external_results_accessed": false,
+  "internal_validation_outputs_locked": true,
+  "internal_tests_opened": false,
+  "internal_tests_open_count": 0,
+  "schema_version": 1
+}

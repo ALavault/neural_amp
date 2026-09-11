@@ -1,0 +1,23 @@
+{
+  "adaa_status": "excluded_unalignable",
+  "campaign_version": "FSSR-QUALITY-AA-v2",
+  "candidate_route_outputs_observed": false,
+  "filter_profiles": {
+    "full_island_x2": {
+      "factor": 2,
+      "filter_taps": 65,
+      "latency_samples": 32
+    },
+    "teacher_x4": {
+      "factor": 4,
+      "filter_taps": 129,
+      "latency_samples": 32
+    }
+  },
+  "locked_at": "2026-08-28T10:51:04+02:00",
+  "locked_floor_db": -140.3084684728151,
+  "preflight_evidence_path": "experiments/runs/quality_aa_v2_preflight_synthetic_all_seed0_v1/preflight.json",
+  "reference_convergence_passed": true,
+  "schema_version": 1,
+  "status": "locked_before_candidate_mechanism_render"
+}

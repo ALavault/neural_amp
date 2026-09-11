@@ -1,0 +1,9 @@
+{
+  "campaign_version": "FSSR-QUALITY-AA-v1",
+  "external_retest_authorized": false,
+  "external_report_only_locked": true,
+  "external_results_accessed": false,
+  "internal_validation_outputs_locked": true,
+  "internal_validation_tests_locked": true,
+  "physical_audio_samples_read": 0
+}

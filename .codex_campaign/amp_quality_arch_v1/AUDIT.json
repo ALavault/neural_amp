@@ -1,0 +1,33 @@
+{
+  "campaign_version": "AMP-QUALITY-ARCH-v1",
+  "verdict": "NO-GO-ARCH",
+  "terminal_stage": "mechanism",
+  "valid_scientific_gate_result": true,
+  "mechanism_trajectories_expected": 10,
+  "mechanism_trajectories_observed": 10,
+  "mechanism_candidate_families_expected": 5,
+  "mechanism_candidate_families_eligible": 0,
+  "physical_audio_samples_read_by_mechanism": 0,
+  "blackstar_test_output_accessed": false,
+  "ua1176_test_output_accessed": false,
+  "external_report_only_locked": true,
+  "global_run_ledger_entries": 5,
+  "make_test": {
+    "status": "passed",
+    "tests": 417,
+    "elapsed_seconds": 206.49
+  },
+  "make_lint": {
+    "status": "passed",
+    "ruff_check": "passed",
+    "formatted_files_checked": 217
+  },
+  "evidence": {
+    "preflight": "experiments/summaries/amp_quality_arch_v1/preflight.json",
+    "mechanism": "experiments/summaries/amp_quality_arch_v1/mechanism.json",
+    "scientific_technical_audit": ".codex_campaign/amp_quality_arch_v1/MECHANISM_AUDIT.md",
+    "verdict": ".codex_campaign/amp_quality_arch_v1/VERDICT.json",
+    "gate_ledger": ".codex_campaign/amp_quality_arch_v1/GATE_LEDGER.jsonl",
+    "run_ledger": ".codex_campaign/RUN_LEDGER.jsonl"
+  }
+}

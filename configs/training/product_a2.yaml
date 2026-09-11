@@ -1,0 +1,24 @@
+schema_version: 1
+# Voie produit (D-PRODUCT-001) : entraînement A2 pour la démo plugin.
+# Ce fichier n'est pas un protocole gelé ; il peut être itéré librement.
+model_config: third_party/neural-amp-modeler/nam/train/_resources/config_model_packed.json
+manifest: datasets/manifests/m4_internal.json
+devices:
+  - fulltone_full_drive_2
+  - electro_harmonix_big_muff
+precision: 32-true
+deterministic_mode: warn_only
+accelerator: gpu
+devices_count: 1
+max_epochs: 100
+segment_output_samples: 8192
+train_dataloader:
+  batch_size: 16
+  shuffle: true
+  drop_last: true
+  num_workers: 0
+  pin_memory: true
+validation_dataloader:
+  batch_size: 1
+  num_workers: 0
+  pin_memory: true

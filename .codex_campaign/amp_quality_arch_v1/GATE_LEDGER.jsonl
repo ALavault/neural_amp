@@ -1,0 +1,2 @@
+{"campaign_version":"AMP-QUALITY-ARCH-v1","evidence_path":"experiments/summaries/amp_quality_arch_v1/preflight.json","stage":"preflight","status":"passed"}
+{"campaign_version":"AMP-QUALITY-ARCH-v1","evidence_path":"experiments/summaries/amp_quality_arch_v1/mechanism.json","stage":"mechanism","status":"failed"}

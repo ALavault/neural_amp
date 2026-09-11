@@ -1,0 +1,15 @@
+{
+  "campaign_version": "AMP-QUALITY-ARCH-v1",
+  "current_stage": "terminal",
+  "mechanism_eligible_candidates": [],
+  "mechanism_rejected_candidates": [
+    "micro_tcn_x2",
+    "phys_s6_tcn_x2",
+    "phys_det_tcn_x2",
+    "rf2047_tfilm_x2",
+    "cascade_rf2047_tfilm_x2"
+  ],
+  "scientific_runs_launched": 5,
+  "status": "terminal_no_go",
+  "verdict": "NO-GO-ARCH"
+}

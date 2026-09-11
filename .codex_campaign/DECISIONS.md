@@ -97,3 +97,18 @@ Run only S3 with 31 residual channels, seed 0, on the two M4 devices. Its 12,192
 ## 2026-08-27 — D-M4-009 — Select pivot P4 and skip MATURATION
 
 The equal-parameter recovery closes only 0.4% of the Fulltone gap and 25.2% of the Big Muff gap, below the preregistered 50% requirement on both devices. Stop architecture and hyperparameter expansion. Select pivot P4: preserve the reproducible benchmark, synthetic mechanism ablations, physical negative result, and limitations. Skip MATURATION because its entry gate failed; proceed directly to the M6 audit and negative-result publication dossier without accessing external report-only outputs.
+
+## 2026-09-12 — D-PRODUCT-001 — Séparer une voie produit de la voie scientifique
+
+Ouvrir une voie produit d'ingénierie (`demo/`, `src/fssr_nam/product/`,
+`scripts/product_*.py`) pour construire un prototype démontrable auprès
+d'éditeurs de plugins, à partir de NAM A2 et du moteur natif déjà validé. Cette
+voie autorise l'itération et la correction sur place ; elle ne produit aucune
+revendication scientifique et ses chiffres sont étiquetés « mesure produit, dev
+set ». Les lignées `.codex_campaign/` restent gelées et aucune nouvelle lignée
+n'est ouverte pendant le sprint démo.
+
+Les données de la voie produit sont limitées à Fulltone Full Drive 2, Big Muff
+et aux captures réalisées par le projet. Blackstar HT1, UA 1176 et
+`EXTERNAL_REPORT_ONLY` restent scellés : la voie produit n'a pas le droit de
+lire leurs sorties, afin de préserver la confirmation scientifique future.

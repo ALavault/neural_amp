@@ -1,0 +1,77 @@
+{
+  "additional_resampling_performed": false,
+  "campaign_version": "FSSR-R2-48K-v2",
+  "development_evidence_role": "historical_development",
+  "development_tests_previously_observed": true,
+  "devices": [
+    "bigmuff",
+    "blackstar",
+    "fulltone",
+    "ua1176"
+  ],
+  "durations_seconds": {
+    "bigmuff": {
+      "test": 30.0,
+      "train": 120.0,
+      "validation": 30.0
+    },
+    "blackstar": {
+      "test": 30.0,
+      "train": 120.0,
+      "validation": 30.0
+    },
+    "fulltone": {
+      "test": 30.0,
+      "train": 120.0,
+      "validation": 30.0
+    },
+    "ua1176": {
+      "test": 30.0,
+      "train": 120.0,
+      "validation": 30.0
+    }
+  },
+  "external_report_only_locked": true,
+  "file_pairs": 18,
+  "fm9_proxy_used": false,
+  "format": "fssr-r2-48k-v2-data-audit-v1",
+  "internal_validation_test_waveforms_opened": false,
+  "metadata_only": true,
+  "parent_metadata_reused": true,
+  "parent_numeric_mechanism_evidence_reused": false,
+  "parent_waveform_data_read": false,
+  "physical_192khz_reference_available": false,
+  "primary_evidence_role": "prospective_internal_validation",
+  "sample_rate_hz": 48000,
+  "source_evidence_path": ".codex_campaign/r2_48k/DATA_AUDIT.json",
+  "source_manifest": "datasets/manifests/r1_physical.json",
+  "source_sample_rates_hz": [
+    44100,
+    48000
+  ],
+  "split_counts": {
+    "bigmuff": {
+      "test": 1,
+      "train": 1,
+      "validation": 1
+    },
+    "blackstar": {
+      "test": 1,
+      "train": 1,
+      "validation": 1
+    },
+    "fulltone": {
+      "test": 1,
+      "train": 1,
+      "validation": 1
+    },
+    "ua1176": {
+      "test": 2,
+      "train": 5,
+      "validation": 2
+    }
+  },
+  "status": "passed",
+  "v2_waveform_samples_read": false,
+  "waveform_samples_read": false
+}

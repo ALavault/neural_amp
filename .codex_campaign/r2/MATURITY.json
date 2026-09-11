@@ -1,0 +1,19 @@
+{
+  "campaign_version": "FSSR-R2-v1",
+  "current_stage": "capture",
+  "gates": {
+    "audit": "locked",
+    "benchmark": "locked",
+    "capture": "pending_external_instrumentation",
+    "confirm": "locked",
+    "distill": "conditional_locked",
+    "listen": "locked",
+    "lock": "locked",
+    "mechanism": "locked",
+    "preflight": "passed",
+    "screen": "locked",
+    "teacher": "locked"
+  },
+  "schema_version": 1,
+  "status": "pending_external_capture_no_scientific_run"
+}

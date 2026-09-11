@@ -1,0 +1,73 @@
+{
+  "campaign_version": "FSSR-R2-v1",
+  "capture_samples_read": false,
+  "external_report_only_locked": true,
+  "format": "fssr-r2-preflight-v1",
+  "make_targets": [
+    "r2-preflight",
+    "r2-capture-audit",
+    "r2-mechanism",
+    "r2-screen",
+    "r2-teacher",
+    "r2-distill",
+    "r2-lock",
+    "r2-confirm",
+    "r2-benchmark",
+    "r2-listen",
+    "r2-audit"
+  ],
+  "model_checks": {
+    "aa-fssr": {
+      "adaa1": {
+        "finite": true,
+        "internal_sample_rate": 48000,
+        "latency_samples": 1
+      },
+      "full_island_x2": {
+        "finite": true,
+        "internal_sample_rate": 96000,
+        "latency_samples": 16
+      },
+      "off": {
+        "finite": true,
+        "internal_sample_rate": 48000,
+        "latency_samples": 0
+      },
+      "teacher_x4": {
+        "finite": true,
+        "internal_sample_rate": 192000,
+        "latency_samples": 16
+      }
+    },
+    "aa-nam": {
+      "adaa1": {
+        "activation_count": 23,
+        "finite": true,
+        "internal_sample_rate": 48000,
+        "latency_samples": 1
+      },
+      "full_island_x2": {
+        "activation_count": 23,
+        "finite": true,
+        "internal_sample_rate": 96000,
+        "latency_samples": 16
+      },
+      "off": {
+        "activation_count": 23,
+        "finite": true,
+        "internal_sample_rate": 48000,
+        "latency_samples": 0
+      },
+      "teacher_x4": {
+        "activation_count": 23,
+        "finite": true,
+        "internal_sample_rate": 192000,
+        "latency_samples": 16
+      }
+    }
+  },
+  "r1_historical_artifacts_modified": false,
+  "scientific_runs_launched": 0,
+  "sealed_test_opened": false,
+  "status": "passed"
+}

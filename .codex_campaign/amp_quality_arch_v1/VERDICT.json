@@ -1,0 +1,7 @@
+{
+  "campaign_version": "AMP-QUALITY-ARCH-v1",
+  "evidence_path": "experiments/summaries/amp_quality_arch_v1/mechanism.json",
+  "terminal_stage": "mechanism",
+  "valid_scientific_gate_result": true,
+  "verdict": "NO-GO-ARCH"
+}

@@ -1,0 +1,4 @@
+
+{"campaign_version":"FSSR-R2-48K-v1","evidence_path":".codex_campaign/r2_48k/PREFLIGHT.json","stage":"preflight","status":"passed"}
+{"campaign_version":"FSSR-R2-48K-v1","evidence_path":".codex_campaign/r2_48k/DATA_AUDIT.json","stage":"data","status":"passed"}
+{"campaign_version":"FSSR-R2-48K-v1","evidence_path":"experiments/runs/r2_48k_mechanism_synthetic_analytic_matrix_seed0_v1/failure.json","stage":"mechanism_instrumentation","status":"invalid"}

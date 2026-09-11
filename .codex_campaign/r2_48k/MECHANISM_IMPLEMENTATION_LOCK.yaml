@@ -1,0 +1,49 @@
+schema_version: 1
+campaign_version: FSSR-R2-48K-v1
+status: frozen_before_first_mechanism_measurement
+frozen_at: 2026-08-28T00:00:00+02:00
+decision_results_examined_before_freeze: false
+scope: executable_binding_of_existing_mechanism_protocol
+criteria_changed: false
+fixtures:
+  source: src/fssr_nam/data/r2_fixtures.py
+  coefficient_grid_rate_hz: 48000
+  internal_rate_rule: zero_insert_delays_and_fir_taps_to_preserve_physical_horizons
+  randomness: none
+routes:
+  off: direct_48khz_fixture
+  full_island_x2:
+    factor: 2
+    resampler: frozen_full_rate_island_single_causal_pair
+    latency_samples: 16
+  adaa1:
+    order: 1
+    threshold: 0.0001
+    primitive: analytic_fixture_primitive
+    initialization: previous_sample_zero
+    declared_alignment_samples: 1
+  teacher_x4:
+    factor: 4
+    resampler: frozen_full_rate_island_single_causal_pair
+    latency_samples: 16
+reference:
+  kind: synthetic_192khz
+  excitation: generated_directly_at_192khz
+  fixture_processing_rate_hz: 192000
+  downsampling: two_frozen_offline_factor_two_fir_stages
+  hardware_audio_used: false
+  upsampled_hardware_used: false
+measurement:
+  sample_rate_hz: 48000
+  dft_samples: 65536
+  k0: [1705, 8191, 12287]
+  amplitudes: [0.10, 0.25, 0.48]
+  frames_delivered_to_metric: 6
+  analyzed_frame: 6
+  reference_tail_frames_for_offline_fir_boundary_only: 1
+aggregation:
+  asr_db: median_over_exact_3x3_grid
+  reference_192khz_asr_db: median_known_reference_parasite_over_exact_3x3_grid
+  fundamental_complex_error: maximum_over_exact_3x3_grid
+  anti_silence_guard: all_conditions_must_pass
+claim_boundary: synthetic_mechanism_only_no_physical_hardware_aliasing_claim

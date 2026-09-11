@@ -1,0 +1,211 @@
+{
+  "campaign_version": "AMP-QUALITY-ARCH-v1",
+  "cuda_device": "NVIDIA RTX PRO 4000 Blackwell",
+  "gate": {
+    "batch_size": 1,
+    "finite_output_and_gradients_required": true,
+    "input_source": "deterministic_synthetic_probe",
+    "maximum_median_seconds_per_update": 4.0,
+    "maximum_projected_hours_per_trajectory": 6.0,
+    "measured_iterations": 2,
+    "physical_audio_samples_read": 0,
+    "projected_updates": 5000,
+    "rejection_before_protocol_freeze_allowed": true,
+    "result_dependent_replacement_family_allowed": false,
+    "segment_samples": 2048,
+    "selected_profile": "max",
+    "warmup_iterations": 1
+  },
+  "input_source": "deterministic_synthetic_probe",
+  "passed_families": [
+    "micro_tcn_x2",
+    "phys_s6_tcn_x2",
+    "phys_det_tcn_x2",
+    "rf2047_tfilm_x2",
+    "cascade_rf2047_tfilm_x2"
+  ],
+  "physical_audio_samples_read": 0,
+  "rejected_families": [
+    "selective_s6_x2"
+  ],
+  "results": {
+    "cascade_rf2047_tfilm_x2": {
+      "checks": {
+        "finite_output_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_trajectory": true
+      },
+      "measurements": [
+        {
+          "elapsed_seconds": 0.16858308494556695,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.16769440297503024,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.1681387439602986,
+      "parameters": 22218,
+      "passed": true,
+      "peak_cuda_memory_bytes": 109625856,
+      "projected_5000_update_hours": 0.2335260332781925
+    },
+    "micro_tcn_x2": {
+      "checks": {
+        "finite_output_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_trajectory": true
+      },
+      "measurements": [
+        {
+          "elapsed_seconds": 0.028547327034175396,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.030414971988648176,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.029481149511411786,
+      "parameters": 6658,
+      "passed": true,
+      "peak_cuda_memory_bytes": 82618368,
+      "projected_5000_update_hours": 0.040946040988071926
+    },
+    "phys_det_tcn_x2": {
+      "checks": {
+        "finite_output_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_trajectory": true
+      },
+      "measurements": [
+        {
+          "elapsed_seconds": 0.07368960289750248,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.0739993070019409,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.0738444549497217,
+      "parameters": 7106,
+      "passed": true,
+      "peak_cuda_memory_bytes": 89911296,
+      "projected_5000_update_hours": 0.10256174298572457
+    },
+    "phys_s6_tcn_x2": {
+      "checks": {
+        "finite_output_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_trajectory": true
+      },
+      "measurements": [
+        {
+          "elapsed_seconds": 0.16016606194898486,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.1704274829244241,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.1652967724367045,
+      "parameters": 15560,
+      "passed": true,
+      "peak_cuda_memory_bytes": 90160640,
+      "projected_5000_update_hours": 0.22957885060653402
+    },
+    "rf2047_tfilm_x2": {
+      "checks": {
+        "finite_output_and_gradients": true,
+        "median_seconds_per_update": true,
+        "projected_hours_per_trajectory": true
+      },
+      "measurements": [
+        {
+          "elapsed_seconds": 0.1579600190743804,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 0.1568664350779727,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 0.15741322707617655,
+      "parameters": 15560,
+      "passed": true,
+      "peak_cuda_memory_bytes": 90160640,
+      "projected_5000_update_hours": 0.2186294820502452
+    },
+    "selective_s6_x2": {
+      "checks": {
+        "finite_output_and_gradients": true,
+        "median_seconds_per_update": false,
+        "projected_hours_per_trajectory": false
+      },
+      "measurements": [
+        {
+          "elapsed_seconds": 13.648454280919395,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        },
+        {
+          "elapsed_seconds": 15.37759852106683,
+          "finite_input_gradient": true,
+          "finite_loss": true,
+          "finite_output": true,
+          "finite_parameter_gradients": true
+        }
+      ],
+      "median_seconds_per_update": 14.513026400993112,
+      "parameters": 1282,
+      "passed": false,
+      "peak_cuda_memory_bytes": 100778496,
+      "projected_5000_update_hours": 20.156981112490435
+    }
+  },
+  "schema_version": 1,
+  "scientific_run": false,
+  "sealed_outputs_accessed": {
+    "blackstar": false,
+    "ua1176": false
+  },
+  "selection_uses_audio_or_esr": false,
+  "stage": "training_feasibility_preflight",
+  "status": "passed_with_rejections",
+  "torch_version": "2.13.0+cu130"
+}

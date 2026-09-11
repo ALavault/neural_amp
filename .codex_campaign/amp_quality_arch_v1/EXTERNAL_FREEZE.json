@@ -1,0 +1,11 @@
+{
+  "campaign_version": "AMP-QUALITY-ARCH-v1",
+  "external_retest_authorized": false,
+  "external_report_only_locked": true,
+  "external_results_accessed": false,
+  "internal_validation_outputs_locked": true,
+  "internal_validation_tests_locked": true,
+  "blackstar_test_output_accessed": false,
+  "ua1176_test_output_accessed": false,
+  "fulltone_bigmuff_historical_test_exposure_disclosed": true
+}

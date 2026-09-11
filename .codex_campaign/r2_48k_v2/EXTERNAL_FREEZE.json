@@ -1,0 +1,13 @@
+{
+  "campaign_version": "FSSR-R2-48K-v2",
+  "development_tests_previously_observed": true,
+  "external_report_only_locked": true,
+  "external_results_accessed": false,
+  "external_retest_authorized": false,
+  "internal_validation_outputs_locked": true,
+  "internal_validation_tests_locked": true,
+  "internal_validation_test_open_count": 0,
+  "internal_validation_tests_opened": false,
+  "internal_validation_train_validation_locked": true,
+  "schema_version": 1
+}

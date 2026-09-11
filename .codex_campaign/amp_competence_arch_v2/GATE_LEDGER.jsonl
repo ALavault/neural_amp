@@ -1,0 +1,3 @@
+{"campaign_version":"AMP-COMPETENCE-ARCH-v2","evidence_path":"experiments/summaries/amp_competence_arch_v2/preflight.json","stage":"preflight","status":"passed"}
+{"campaign_version":"AMP-COMPETENCE-ARCH-v2","evidence_path":"experiments/summaries/amp_competence_arch_v2/competence.json","stage":"competence","status":"failed"}
+{"campaign_version":"AMP-COMPETENCE-ARCH-v2","evidence_path":".codex_campaign/amp_competence_arch_v2/AUDIT.json","stage":"audit","status":"passed"}
