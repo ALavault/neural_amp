@@ -548,6 +548,7 @@ def _residual_state(model: nn.Module) -> dict[str, Tensor] | None:
     }
 
 
+# Codex: Sourcery low-code-quality (9%); refactor with behavior/protocol tests.
 def run_training(
     *,
     model: nn.Module,

@@ -25,6 +25,7 @@ def frame_audio(signal: np.ndarray, frame_samples: int) -> Tensor:
     return torch.from_numpy(trimmed.reshape(frame_count, frame_samples))
 
 
+# Codex: Sourcery low-code-quality (24%); refactor with behavior/protocol tests.
 def train_epoch(
     model: WrightLSTM,
     input_frames: Tensor,

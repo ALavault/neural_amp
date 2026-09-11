@@ -297,6 +297,7 @@ def _validate_step_schedule(config: Mapping[str, Any], label: str) -> None:
         raise R1ConfigError(f"{label}.phase_schedule must end at step 5000")
 
 
+# Codex: Sourcery low-code-quality (20%); refactor with behavior/protocol tests.
 def validate_stage_config(
     config: Mapping[str, Any], expected_stage: str | None = None
 ) -> None:

@@ -1,4 +1,4 @@
-.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit m2-data m2-inspect m2-core-test m2-cpp-build m3-audit r1-data r1-preflight r1-competence
+.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit m2-data m2-inspect m2-core-test m2-cpp-build m3-audit r1-data r1-preflight r1-competence r2-preflight r2-capture-audit r2-mechanism r2-screen r2-teacher r2-distill r2-lock r2-confirm r2-benchmark r2-listen r2-audit r2-48k-preflight r2-48k-data-audit r2-48k-mechanism r2-48k-screen r2-48k-teacher r2-48k-distill r2-48k-lock r2-48k-confirm r2-48k-benchmark r2-48k-listen r2-48k-audit r2-48k-v2-preflight r2-48k-v2-data-audit r2-48k-v2-mechanism quality-aa-preflight quality-aa-mechanism quality-aa-native quality-aa-audit arch-preflight arch-native-skeleton arch-training-feasibility arch-mechanism arch-v2-preflight arch-v2-competence arch-v2-compare arch-v2-audit arch-v3-preflight arch-v3-training-feasibility arch-v3-round-1
 
 bootstrap:
 	uv python install 3.12
@@ -92,3 +92,147 @@ r1-preflight: r1-data
 
 r1-competence:
 	uv run python scripts/run_r1_competence_gate.py
+
+r2-preflight:
+	uv run pytest tests/unit/test_r2_*.py tests/numerical/test_r2_aa_nam.py tests/numerical/test_r2_antialias.py tests/numerical/test_r2_asr.py tests/numerical/test_r2_fixtures.py tests/numerical/test_r2_native.py tests/numerical/test_r2_resampling.py -q
+	uv run python scripts/run_r2_preflight.py
+
+r2-capture-audit:
+	uv run python scripts/audit_r2_capture.py
+
+r2-mechanism:
+	uv run python scripts/run_r2_stage.py mechanism
+
+r2-screen:
+	uv run python scripts/run_r2_stage.py screen
+
+r2-teacher:
+	uv run python scripts/run_r2_stage.py teacher
+
+r2-distill:
+	uv run python scripts/run_r2_stage.py distill
+
+r2-lock:
+	uv run python scripts/run_r2_stage.py lock
+
+r2-confirm:
+	uv run python scripts/run_r2_stage.py confirm
+
+r2-benchmark:
+	cmake -S cpp -B build/fssr_cpp -DCMAKE_BUILD_TYPE=Release
+	cmake --build build/fssr_cpp --target r2_block_runner r2_benchmark --parallel 8
+	uv run python scripts/run_r2_stage.py benchmark
+
+r2-listen:
+	uv run python scripts/run_r2_stage.py listen
+
+r2-audit:
+	uv run python scripts/run_r2_stage.py audit
+
+r2-48k-preflight:
+	uv run pytest tests/unit/test_r2_48k_*.py tests/numerical/test_r2_mechanism.py -q
+	uv run python scripts/run_r2_48k_preflight.py
+
+r2-48k-data-audit:
+	uv run python scripts/audit_r2_48k_data.py
+
+r2-48k-mechanism:
+	uv run python scripts/run_r2_48k_mechanism.py
+	uv run python scripts/run_r2_48k_stage.py mechanism
+
+r2-48k-screen:
+	uv run python scripts/run_r2_48k_stage.py screen
+
+r2-48k-teacher:
+	uv run python scripts/run_r2_48k_stage.py teacher
+
+r2-48k-distill:
+	uv run python scripts/run_r2_48k_stage.py distill
+
+r2-48k-lock:
+	uv run python scripts/run_r2_48k_stage.py lock
+
+r2-48k-confirm:
+	uv run python scripts/run_r2_48k_stage.py confirm
+
+r2-48k-benchmark:
+	cmake -S cpp -B build/fssr_cpp -DCMAKE_BUILD_TYPE=Release
+	cmake --build build/fssr_cpp --target r2_block_runner r2_benchmark --parallel 8
+	uv run python scripts/run_r2_48k_stage.py benchmark
+
+r2-48k-listen:
+	uv run python scripts/run_r2_48k_stage.py listen
+
+r2-48k-audit:
+	uv run python scripts/run_r2_48k_stage.py audit
+
+r2-48k-v2-preflight:
+	uv run pytest tests/unit/test_json_evidence.py tests/unit/test_r2_48k_v2.py tests/numerical/test_r2_mechanism.py -q
+	uv run python scripts/run_r2_48k_v2_preflight.py
+
+r2-48k-v2-data-audit:
+	uv run python scripts/audit_r2_48k_v2_data.py
+
+r2-48k-v2-mechanism:
+	uv run python scripts/run_r2_48k_v2_mechanism.py
+	uv run python scripts/run_r2_48k_v2_stage.py mechanism
+
+quality-aa-preflight:
+	uv run pytest tests/unit/test_quality_aa_protocol.py tests/numerical/test_quality_aliasing.py tests/numerical/test_quality_aa_mechanism.py -q
+	uv run python scripts/run_quality_aa_preflight.py
+
+quality-aa-mechanism:
+	uv run pytest tests/unit/test_quality_aa_gates.py tests/numerical/test_quality_aliasing.py tests/numerical/test_quality_aa_mechanism.py -q
+	uv run python scripts/run_quality_aa_mechanism.py
+
+quality-aa-native:
+	uv run pytest tests/numerical/test_r2_native.py tests/numerical/test_r2_cpp_parity.py -q
+	uv run python scripts/run_quality_aa_native.py
+
+quality-aa-audit:
+	uv run pytest tests/unit/test_quality_aa_protocol.py tests/unit/test_quality_aa_gates.py tests/numerical/test_quality_aliasing.py tests/numerical/test_quality_aa_mechanism.py tests/numerical/test_r2_native.py tests/numerical/test_r2_cpp_parity.py -q
+	uv run python scripts/run_quality_aa_audit.py
+
+arch-preflight:
+	uv run pytest tests/unit/test_amp_quality_arch_protocol.py tests/unit/test_nablafx_loss.py tests/numerical/test_amp_quality_arch_models.py tests/numerical/test_sota_comparators.py -q
+	uv run python scripts/run_arch_preflight.py
+
+arch-native-skeleton:
+	uv run pytest tests/numerical/test_amp_arch_native_skeleton.py -q
+	uv run python scripts/run_arch_native_skeleton.py
+
+arch-training-feasibility:
+	uv run pytest tests/unit/test_nablafx_loss.py tests/numerical/test_sota_comparators.py -q
+	uv run python scripts/run_arch_physical_training_feasibility.py
+
+arch-mechanism:
+	uv run pytest tests/unit/test_amp_arch_gates.py tests/unit/test_amp_arch_registry.py tests/unit/test_amp_arch_training.py tests/numerical/test_amp_arch_fixtures.py tests/numerical/test_amp_quality_arch_models.py -q
+	uv run python scripts/run_arch_mechanism.py
+
+arch-v2-preflight:
+	uv run pytest tests/unit/test_amp_competence_arch_v2_protocol.py tests/unit/test_amp_arch_v2_gates.py tests/unit/test_amp_arch_v2_training.py tests/numerical/test_amp_arch_v2_fixtures.py -q
+	uv run python scripts/run_arch_v2_preflight.py
+
+arch-v2-competence:
+	uv run pytest tests/unit/test_amp_competence_arch_v2_protocol.py tests/unit/test_amp_arch_v2_gates.py tests/unit/test_amp_arch_v2_training.py tests/numerical/test_amp_arch_v2_fixtures.py -q
+	uv run python scripts/run_arch_v2_competence.py
+
+arch-v2-compare:
+	uv run pytest tests/unit/test_amp_competence_arch_v2_protocol.py tests/unit/test_amp_arch_v2_gates.py tests/unit/test_amp_arch_v2_training.py tests/numerical/test_amp_arch_v2_fixtures.py -q
+	uv run python scripts/run_arch_v2_compare.py
+
+arch-v2-audit:
+	uv run pytest tests/unit/test_amp_competence_arch_v2_protocol.py tests/unit/test_amp_arch_v2_gates.py tests/unit/test_amp_arch_v2_training.py tests/unit/test_amp_arch_v2_terminal_evidence.py tests/numerical/test_amp_arch_v2_fixtures.py -q
+	uv run python scripts/run_arch_v2_audit.py
+
+arch-v3-preflight:
+	uv run pytest tests/unit/test_amp_quality_arch_v3_protocol.py tests/unit/test_amp_arch_v3_gates.py tests/numerical/test_amp_arch_v3_fixtures.py tests/numerical/test_amp_quality_arch_v3_models.py -q
+	uv run python scripts/run_arch_v3_preflight.py
+
+arch-v3-training-feasibility:
+	uv run pytest tests/unit/test_amp_arch_v3_training.py tests/numerical/test_amp_quality_arch_v3_models.py -q
+	uv run python scripts/run_arch_v3_training_feasibility.py
+
+arch-v3-round-1:
+	uv run pytest tests/unit/test_amp_quality_arch_v3_protocol.py tests/unit/test_amp_arch_v3_gates.py tests/unit/test_amp_arch_v3_training.py tests/numerical/test_amp_arch_v3_fixtures.py tests/numerical/test_amp_quality_arch_v3_models.py -q
+	uv run python scripts/run_arch_v3_round_1.py

@@ -117,3 +117,89 @@ class LocalOversampledSpline2x(nn.Module):
 
     def curvature_penalty(self) -> Tensor:
         return self.spline.curvature_penalty()
+
+
+class FullRateIsland(nn.Module):
+    """Run a complete nonlinear residual branch at x2 or x4 sample rate.
+
+    A single interpolation/decimation pair surrounds the branch.  Subtracting
+    the interpolated linear path before decimation and adding a base-rate delay
+    makes an identity branch an exact integer delay, while the whole nonlinear
+    residual remains inside the high-rate island.
+    """
+
+    def __init__(
+        self,
+        branch: nn.Module,
+        *,
+        factor: int,
+        latency_samples: int = 16,
+        beta: float = 8.6,
+    ) -> None:
+        super().__init__()
+        if factor not in {2, 4}:
+            raise ValueError("full-rate island factor must be two or four")
+        if latency_samples < 1:
+            raise ValueError("latency_samples must be positive")
+        filter_taps = factor * latency_samples + 1
+        lowpass = design_resampling_lowpass(factor, filter_taps, beta)
+        self.branch = branch
+        self.factor = factor
+        self.filter_taps = filter_taps
+        self.latency_samples = latency_samples
+        self.upsample_filter = FixedCausalFIR(float(factor) * lowpass)
+        self.downsample_filter = FixedCausalFIR(lowpass)
+        self.linear_delay = CausalDelay(latency_samples)
+
+    def reset_state(self) -> None:
+        self.upsample_filter.reset_state()
+        self.downsample_filter.reset_state()
+        self.linear_delay.reset_state()
+        reset = getattr(self.branch, "reset_state", None)
+        if reset is not None:
+            reset()
+
+    def _zero_insert(self, signal: Tensor) -> Tensor:
+        high_rate = signal.new_zeros((len(signal), self.factor * signal.shape[-1]))
+        high_rate[:, :: self.factor] = signal
+        return high_rate
+
+    def _branch_output(self, signal: Tensor, *, streaming: bool) -> Tensor:
+        if streaming:
+            process = getattr(self.branch, "stream", None)
+            if process is None:
+                raise TypeError("full-rate branch must implement stream()")
+            return process(signal)
+        return self.branch(signal)
+
+    def _run(self, signal: Tensor, *, streaming: bool) -> Tensor:
+        batched, scalar = _batch(signal)
+        high_rate = self._zero_insert(batched)
+        interpolated = (
+            self.upsample_filter.stream(high_rate)
+            if streaming
+            else self.upsample_filter(high_rate)
+        )
+        branch_output = self._branch_output(interpolated, streaming=streaming)
+        if branch_output.shape != interpolated.shape:
+            raise ValueError("full-rate branch must preserve the signal shape")
+        nonlinear_residual = branch_output - interpolated
+        filtered = (
+            self.downsample_filter.stream(nonlinear_residual)
+            if streaming
+            else self.downsample_filter(nonlinear_residual)
+        )
+        residual = filtered[:, :: self.factor]
+        linear = (
+            self.linear_delay.stream(batched)
+            if streaming
+            else self.linear_delay(batched)
+        )
+        output = linear + residual
+        return output[0] if scalar else output
+
+    def forward(self, signal: Tensor) -> Tensor:
+        return self._run(signal, streaming=False)
+
+    def stream(self, signal: Tensor) -> Tensor:
+        return self._run(signal, streaming=True)

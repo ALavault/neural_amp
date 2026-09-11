@@ -32,6 +32,7 @@ def _summary(signal: np.ndarray) -> dict[str, Any]:
     }
 
 
+# Codex: Sourcery low-code-quality (20%); refactor with behavior/protocol tests.
 def build_corpus_manifest(
     config: Mapping[str, Any], *, external_di_48k: np.ndarray | None = None
 ) -> dict[str, Any]:

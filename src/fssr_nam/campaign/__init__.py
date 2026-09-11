@@ -25,6 +25,11 @@ from fssr_nam.campaign.r1 import (
     validate_repository_configs,
     validate_stage_config,
 )
+from fssr_nam.campaign.r2 import (
+    R2AuthorizationError,
+    R2CampaignError,
+    R2ConfigError,
+)
 
 __all__ = [
     "CAMPAIGN_VERSION",
@@ -35,6 +40,9 @@ __all__ = [
     "R1ConfigError",
     "R1Executor",
     "R1RunReuseError",
+    "R2AuthorizationError",
+    "R2CampaignError",
+    "R2ConfigError",
     "RunSpec",
     "active_gate_registry_path",
     "competence_run_spec",

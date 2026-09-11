@@ -61,6 +61,7 @@ def test_quality_teacher_pointer_lock_and_superseded_parent_are_canonical() -> N
     assert (
         "Statut : prospective, préflight" in teacher_state
         or "Statut : active, préflight passé" in teacher_state
+        or "Statut : terminal `INVALID` au gate `data_audit`" in teacher_state
     )
     assert "Runs scientifiques : 0" in teacher_state
     assert "Waveforms de test lus : 0" in teacher_state
@@ -69,8 +70,12 @@ def test_quality_teacher_pointer_lock_and_superseded_parent_are_canonical() -> N
     )
     assert maturity["scientific_runs_launched"] == 0
     assert maturity["test_waveform_samples_read"] == 0
-    assert maturity["current_stage"] in {"preflight", "data_audit"}
-    assert maturity["gates_evaluated"] in {0, 1}
+    assert maturity["current_stage"] in {
+        "preflight",
+        "data_audit",
+        "terminal_data_audit_invalid",
+    }
+    assert maturity["gates_evaluated"] in {0, 1, 2}
 
 
 def test_quality_teacher_trajectory_matrix_is_exactly_25_and_300_gpu_hours() -> None:

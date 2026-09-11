@@ -136,6 +136,7 @@ def _checkpoint_index(row: Mapping[str, Any], label: str) -> dict[int, dict[str,
     return indexed
 
 
+# Codex: Sourcery low-code-quality (13%); refactor with behavior/protocol tests.
 def evaluate_competence_system_gate(
     trajectories: Sequence[Mapping[str, Any]],
     *,

@@ -127,10 +127,25 @@ def _indexed_scalar(
     return default
 
 
+def _spline_module(shaper: Any) -> Any:
+    """Unwrap R2 Hermite/ADAA adapters while preserving the R1 interface."""
+    if _member(shaper, "knots") is not None:
+        return shaper
+    nested = _member(shaper, "spline")
+    if nested is not None:
+        return nested
+    activation = _member(shaper, "activation")
+    nested = _member(activation, "spline")
+    if nested is not None:
+        return nested
+    raise TypeError("native export requires an analytic Hermite spline")
+
+
 def _shaper_payload(core: Any, shaper: Any, index: int) -> dict[str, Any]:
-    knots = _array(_required_member(shaper, "knots"), f"shaper[{index}].knots")
-    values = _array(_required_member(shaper, "values"), f"shaper[{index}].values")
-    slopes = _array(_required_member(shaper, "slopes"), f"shaper[{index}].slopes")
+    spline = _spline_module(shaper)
+    knots = _array(_required_member(spline, "knots"), f"shaper[{index}].knots")
+    values = _array(_required_member(spline, "values"), f"shaper[{index}].values")
+    slopes = _array(_required_member(spline, "slopes"), f"shaper[{index}].slopes")
     for name, array in (("knots", knots), ("values", values), ("slopes", slopes)):
         if array.ndim != 1:
             raise ValueError(f"shaper[{index}].{name} must be one-dimensional")
@@ -253,16 +268,18 @@ def _layer_payload(layer: Any, index: int) -> tuple[dict[str, Any], int, str, in
     )
 
 
-def _extract_residual(model: Any) -> dict[str, Any] | None:
+def _extract_residual(
+    model: Any, *, allowed_channels: tuple[int, ...] = (8,)
+) -> dict[str, Any] | None:
     residual = _member(model, "residual")
     if residual is None:
         return None
     projection = _required_member(residual, "input_projection")
     input_weight, input_bias = _projection_payload(projection)
     channels = len(input_weight)
-    if channels != 8 or any(len(row) != 2 for row in input_weight):
+    if channels not in allowed_channels or any(len(row) != 2 for row in input_weight):
         raise ValueError(
-            "R1 native residual requires 8 channels and two input features"
+            "native residual channel count is unsupported or input features differ"
         )
     layer_payloads: list[dict[str, Any]] = []
     dilations: list[int] = []

@@ -138,6 +138,37 @@ private:
   std::size_t write_index_ = 0;
 };
 
+class CausalDelay
+{
+public:
+  explicit CausalDelay(std::size_t samples) : history_(samples, 0.0f) {}
+
+  void reset() noexcept
+  {
+    std::fill(history_.begin(), history_.end(), 0.0f);
+    write_index_ = 0;
+  }
+
+  float process(float input) noexcept
+  {
+    if (history_.empty())
+      return input;
+    const float output = history_[write_index_];
+    history_[write_index_] = input;
+    write_index_ = (write_index_ + 1) % history_.size();
+    return output;
+  }
+
+  [[nodiscard]] std::size_t state_size_bytes() const noexcept
+  {
+    return history_.size() * sizeof(float) + sizeof(write_index_);
+  }
+
+private:
+  std::vector<float> history_;
+  std::size_t write_index_ = 0;
+};
+
 class HermiteSpline
 {
 public:
@@ -146,7 +177,11 @@ public:
       values_(float_vector(payload.at("values"), "spline values")),
       slopes_(float_vector(payload.at("slopes"), "spline slopes")),
       drive_(finite_float(payload.at("drive"), "spline drive")),
-      offset_(finite_float(payload.at("offset"), "spline offset"))
+      offset_(finite_float(payload.at("offset"), "spline offset")),
+      adaa1_(payload.value("adaa1", false)),
+      threshold_(adaa1_
+                   ? finite_float(payload.at("difference_limit_threshold"), "ADAA threshold")
+                   : 1.0e-4f)
   {
     if (knots_.size() < 4 || values_.size() != knots_.size() || slopes_.size() != knots_.size())
       throw std::runtime_error("spline arrays have incompatible dimensions");
@@ -162,14 +197,44 @@ public:
       if (std::abs(knots_[index] - expected) > tolerance)
         throw std::runtime_error("spline knots must use the registered uniform grid");
     }
+    if (adaa1_ && threshold_ != 1.0e-4f)
+      throw std::runtime_error("ADAA threshold must equal 1e-4");
+    cumulative_.assign(knots_.size(), 0.0f);
+    for (std::size_t index = 0; index + 1 < knots_.size(); ++index)
+    {
+      const float integral = spacing_
+                             * (0.5f * values_[index] + 0.5f * values_[index + 1]
+                                + spacing_ * (slopes_[index] - slopes_[index + 1]) / 12.0f);
+      cumulative_[index + 1] = cumulative_[index] + integral;
+    }
   }
+
+  void reset() noexcept { previous_ = 0.0f; }
 
   float process(
     float input,
     float drive_factor = 1.0f,
-    float offset_delta = 0.0f) const noexcept
+    float offset_delta = 0.0f) noexcept
   {
     const float value = drive_ * drive_factor * input + offset_ + offset_delta;
+    if (!adaa1_)
+      return plain(value);
+    const float difference = value - previous_;
+    const float output = std::abs(difference) < threshold_
+                           ? plain(0.5f * (value + previous_))
+                           : (primitive(value) - primitive(previous_)) / difference;
+    previous_ = value;
+    return output;
+  }
+
+  [[nodiscard]] std::size_t state_size_bytes() const noexcept
+  {
+    return adaa1_ ? sizeof(previous_) : 0;
+  }
+
+private:
+  float plain(float value) const noexcept
+  {
     if (value < knots_.front())
       return values_.front() + slopes_.front() * (value - knots_.front());
     if (value > knots_.back())
@@ -188,13 +253,47 @@ public:
            + h01 * values_[index + 1] + h11 * spacing_ * slopes_[index + 1];
   }
 
-private:
+  float primitive(float value) const noexcept
+  {
+    if (value < knots_.front())
+    {
+      const float distance = value - knots_.front();
+      return values_.front() * distance + 0.5f * slopes_.front() * distance * distance;
+    }
+    if (value > knots_.back())
+    {
+      const float distance = value - knots_.back();
+      return cumulative_.back() + values_.back() * distance
+             + 0.5f * slopes_.back() * distance * distance;
+    }
+    const float coordinate = (value - knots_.front()) / spacing_;
+    const auto raw_index = static_cast<std::size_t>(std::max(0.0f, std::floor(coordinate)));
+    const auto index = std::min(raw_index, knots_.size() - 2);
+    const float local = coordinate - static_cast<float>(index);
+    const float local2 = local * local;
+    const float local3 = local2 * local;
+    const float local4 = local2 * local2;
+    const float integral = spacing_
+                           * ((0.5f * local4 - local3 + local) * values_[index]
+                              + (0.25f * local4 - (2.0f / 3.0f) * local3
+                                 + 0.5f * local2)
+                                  * spacing_ * slopes_[index]
+                              + (-0.5f * local4 + local3) * values_[index + 1]
+                              + (0.25f * local4 - (1.0f / 3.0f) * local3)
+                                  * spacing_ * slopes_[index + 1]);
+    return cumulative_[index] + integral;
+  }
+
   std::vector<float> knots_;
   std::vector<float> values_;
   std::vector<float> slopes_;
+  std::vector<float> cumulative_;
   float drive_;
   float offset_;
   float spacing_ = 0.0f;
+  bool adaa1_ = false;
+  float threshold_ = 1.0e-4f;
+  float previous_ = 0.0f;
 };
 
 class SlowController
@@ -440,7 +539,7 @@ private:
 class Residual
 {
 public:
-  explicit Residual(const json& payload)
+  explicit Residual(const json& payload, bool r2)
     : channels_(static_cast<std::size_t>(positive_int(payload.at("channels"), "residual channels"))),
       kernel_size_(
         static_cast<std::size_t>(positive_int(payload.at("kernel_size"), "residual kernel size"))),
@@ -461,23 +560,41 @@ public:
     if (!separable && !full)
       throw std::runtime_error("unsupported residual operator");
     require_equal(payload, "input_features", json::array({"input", "core"}));
-    if (channels_ != 8 || kernel_size_ != 3)
-      throw std::runtime_error("R1 residual requires eight channels and kernel size three");
+    const std::size_t required_channels = r2 ? 16 : 8;
+    if (channels_ != required_channels || kernel_size_ != 3)
+      throw std::runtime_error("residual channel count or kernel size is unsupported");
     if (negative_slope_ < 0.0f || scale_ < 0.0f || scale_ > 1.0f)
       throw std::runtime_error("residual activation parameters are out of range");
     if (input_bias_.size() != channels_ || output_weight_.size() != channels_)
       throw std::runtime_error("residual projection has an invalid dimension");
     const int receptive_field = positive_int(payload.at("receptive_field"), "receptive field");
-    const std::vector<int> expected = receptive_field == 31
-                                        ? std::vector<int>{1, 2, 4, 8}
-                                        : receptive_field == 2047
-                                            ? std::vector<int>{1, 2, 4, 8, 16, 32, 64, 128, 256, 512}
-                                            : std::vector<int>{};
+    std::vector<int> expected;
+    if (r2)
+    {
+      if (!payload.at("dilations").is_array() || payload.at("dilations").empty())
+        throw std::runtime_error("R2 residual dilation schedule is missing");
+      const int scale = positive_int(payload.at("dilations")[0], "R2 dilation scale");
+      if (scale != 1 && scale != 2 && scale != 4)
+        throw std::runtime_error("R2 dilation scale is unsupported");
+      constexpr int base[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512};
+      for (const int dilation : base)
+        expected.push_back(scale * dilation);
+      if (receptive_field != 1 + 2 * 1023 * scale)
+        throw std::runtime_error("R2 residual receptive field is inconsistent");
+    }
+    else
+    {
+      expected = receptive_field == 31
+                   ? std::vector<int>{1, 2, 4, 8}
+                   : receptive_field == 2047
+                       ? std::vector<int>{1, 2, 4, 8, 16, 32, 64, 128, 256, 512}
+                       : std::vector<int>{};
+    }
     if (expected.empty() || !payload.at("dilations").is_array()
         || payload.at("dilations").size() != expected.size()
         || payload.at("layers").size() != expected.size())
       throw std::runtime_error("unsupported residual receptive field");
-    if (full && receptive_field != 31)
+    if (full && (r2 || receptive_field != 31))
       throw std::runtime_error("the registered full-convolution ablation is RF31 only");
     for (std::size_t index = 0; index < expected.size(); ++index)
     {
@@ -537,6 +654,188 @@ private:
   std::vector<ResidualLayer> layers_;
   std::vector<float> hidden_;
 };
+
+class AANAMLayer
+{
+public:
+  explicit AANAMLayer(const json& payload)
+    : kernel_size_(static_cast<std::size_t>(positive_int(payload.at("kernel_size"), "AA-NAM kernel"))),
+      dilation_(static_cast<std::size_t>(positive_int(payload.at("dilation"), "AA-NAM dilation"))),
+      conv_weight_(float_matrix(payload.at("conv_weight"), 8, 8 * kernel_size_, "AA-NAM convolution")),
+      conv_bias_(float_vector(payload.at("conv_bias"), "AA-NAM convolution bias")),
+      condition_weight_(float_vector(payload.at("condition_weight"), "AA-NAM condition weight")),
+      residual_weight_(float_matrix(payload.at("residual_weight"), 8, 8, "AA-NAM residual weight")),
+      residual_bias_(float_vector(payload.at("residual_bias"), "AA-NAM residual bias")),
+      history_(8 * (kernel_size_ - 1) * dilation_, 0.0f)
+  {
+    if (conv_bias_.size() != 8 || condition_weight_.size() != 8
+        || residual_bias_.size() != 8)
+      throw std::runtime_error("AA-NAM layer vectors must contain eight channels");
+    activations_.reserve(8);
+    for (std::size_t channel = 0; channel < 8; ++channel)
+      activations_.emplace_back(payload.at("activation"));
+  }
+
+  void reset() noexcept
+  {
+    std::fill(history_.begin(), history_.end(), 0.0f);
+    write_index_ = 0;
+    for (auto& activation : activations_)
+      activation.reset();
+  }
+
+  void process(float condition, std::array<float, 8>& hidden, std::array<float, 8>& head) noexcept
+  {
+    std::array<float, 8> activated{};
+    const auto history_samples = (kernel_size_ - 1) * dilation_;
+    for (std::size_t output = 0; output < 8; ++output)
+    {
+      float sum = conv_bias_[output] + condition_weight_[output] * condition;
+      for (std::size_t tap = 0; tap < kernel_size_; ++tap)
+      {
+        const auto lag = (kernel_size_ - 1 - tap) * dilation_;
+        for (std::size_t input = 0; input < 8; ++input)
+        {
+          const float source = lag == 0
+                                 ? hidden[input]
+                                 : history_[((write_index_ + history_samples - lag)
+                                             % history_samples)
+                                              * 8
+                                            + input];
+          sum += conv_weight_[output][input * kernel_size_ + tap] * source;
+        }
+      }
+      activated[output] = activations_[output].process(sum);
+    }
+    if (history_samples != 0)
+    {
+      for (std::size_t channel = 0; channel < 8; ++channel)
+        history_[write_index_ * 8 + channel] = hidden[channel];
+      write_index_ = (write_index_ + 1) % history_samples;
+    }
+    std::array<float, 8> update{};
+    for (std::size_t output = 0; output < 8; ++output)
+    {
+      update[output] = residual_bias_[output];
+      for (std::size_t input = 0; input < 8; ++input)
+        update[output] += residual_weight_[output][input] * activated[input];
+    }
+    for (std::size_t channel = 0; channel < 8; ++channel)
+    {
+      hidden[channel] += update[channel];
+      head[channel] += activated[channel];
+    }
+  }
+
+  [[nodiscard]] std::size_t state_size_bytes() const noexcept
+  {
+    std::size_t result = history_.size() * sizeof(float) + sizeof(write_index_);
+    for (const auto& activation : activations_)
+      result += activation.state_size_bytes();
+    return result;
+  }
+
+private:
+  std::size_t kernel_size_;
+  std::size_t dilation_;
+  std::vector<std::vector<float>> conv_weight_;
+  std::vector<float> conv_bias_;
+  std::vector<float> condition_weight_;
+  std::vector<std::vector<float>> residual_weight_;
+  std::vector<float> residual_bias_;
+  std::vector<HermiteSpline> activations_;
+  std::vector<float> history_;
+  std::size_t write_index_ = 0;
+};
+
+class AANAMWaveNet
+{
+public:
+  AANAMWaveNet(const json& payload, bool adaa1)
+    : input_projection_(float_matrix(payload.at("input_projection"), 8, 1, "AA-NAM input projection")),
+      head_scale_(finite_float(payload.at("head_scale"), "AA-NAM head scale")),
+      receptive_field_(static_cast<std::size_t>(positive_int(payload.at("receptive_field"), "AA-NAM receptive field")))
+  {
+    require_equal(payload, "kind", "pinned-a2-full-hermite-v1");
+    require_equal(payload, "channels", 8);
+    require_equal(payload, "layer_count", 23);
+    if (!payload.at("layers").is_array() || payload.at("layers").size() != 23)
+      throw std::runtime_error("AA-NAM requires 23 layers");
+    layers_.reserve(23);
+    for (const auto& layer : payload.at("layers"))
+      layers_.emplace_back(layer);
+    const auto& head = payload.at("head");
+    head_kernel_ = static_cast<std::size_t>(positive_int(head.at("kernel_size"), "AA-NAM head kernel"));
+    head_weight_ = float_matrix(head.at("weight"), 8, head_kernel_, "AA-NAM head weight");
+    head_bias_ = finite_float(head.at("bias"), "AA-NAM head bias");
+    head_history_.assign(8 * (head_kernel_ - 1), 0.0f);
+    warmup_samples_ = receptive_field_ - 1 + (adaa1 ? 23 : 0);
+    reset();
+  }
+
+  void reset() noexcept
+  {
+    for (auto& layer : layers_)
+      layer.reset();
+    std::fill(head_history_.begin(), head_history_.end(), 0.0f);
+    head_write_index_ = 0;
+    for (std::size_t sample = 0; sample < warmup_samples_; ++sample)
+      process_unwarmed(0.0f);
+  }
+
+  float process(float input) noexcept { return process_unwarmed(input); }
+
+  [[nodiscard]] std::size_t state_size_bytes() const noexcept
+  {
+    std::size_t result = head_history_.size() * sizeof(float) + sizeof(head_write_index_);
+    for (const auto& layer : layers_)
+      result += layer.state_size_bytes();
+    return result;
+  }
+
+private:
+  float process_unwarmed(float input) noexcept
+  {
+    std::array<float, 8> hidden{};
+    std::array<float, 8> head{};
+    for (std::size_t channel = 0; channel < 8; ++channel)
+      hidden[channel] = input_projection_[channel][0] * input;
+    for (auto& layer : layers_)
+      layer.process(input, hidden, head);
+    float output = head_bias_;
+    const auto history_samples = head_kernel_ - 1;
+    for (std::size_t channel = 0; channel < 8; ++channel)
+      for (std::size_t tap = 0; tap < head_kernel_; ++tap)
+      {
+        const auto lag = head_kernel_ - 1 - tap;
+        const float source = lag == 0
+                               ? head[channel]
+                               : head_history_[((head_write_index_ + history_samples - lag)
+                                                % history_samples)
+                                                 * 8
+                                               + channel];
+        output += head_weight_[channel][tap] * source;
+      }
+    if (history_samples != 0)
+    {
+      for (std::size_t channel = 0; channel < 8; ++channel)
+        head_history_[head_write_index_ * 8 + channel] = head[channel];
+      head_write_index_ = (head_write_index_ + 1) % history_samples;
+    }
+    return head_scale_ * output;
+  }
+
+  std::vector<std::vector<float>> input_projection_;
+  std::vector<AANAMLayer> layers_;
+  float head_scale_;
+  std::size_t receptive_field_;
+  std::size_t warmup_samples_ = 0;
+  std::size_t head_kernel_ = 0;
+  std::vector<std::vector<float>> head_weight_;
+  float head_bias_ = 0.0f;
+  std::vector<float> head_history_;
+  std::size_t head_write_index_ = 0;
+};
 } // namespace
 
 struct Model::Impl
@@ -550,12 +849,54 @@ struct Model::Impl
     stream >> document;
     if (!document.is_object())
       throw std::runtime_error("R1 model root must be a JSON object");
-    require_equal(document, "format", "fssr-r1-native-v1");
+    const auto format = document.at("format").get<std::string>();
+    is_quality_aa = format == "fssr-quality-aa-native-v1";
+    is_r2 = format == "fssr-r2-native-v1" || is_quality_aa;
+    if (!is_r2 && format != "fssr-r1-native-v1")
+      throw std::runtime_error("native model format is unsupported");
     require_equal(document, "version", 1);
-    require_equal(document, "campaign_version", "FSSR-R1");
+    require_equal(
+      document,
+      "campaign_version",
+      is_quality_aa ? "FSSR-QUALITY-AA-v2" : is_r2 ? "FSSR-R2-v1" : "FSSR-R1");
     require_equal(document, "precision", "float32");
-    require_equal(document, "latency_samples", 0);
     sample_rate_hz = positive_int(document.at("sample_rate_hz"), "sample rate");
+    latency_samples = document.at("latency_samples").get<int>();
+    if (latency_samples < 0)
+      throw std::runtime_error("latency_samples must be non-negative");
+    if (is_r2)
+    {
+      factor = positive_int(document.at("dilation_scale"), "dilation scale");
+      if (factor != 1 && factor != 2 && factor != 4)
+        throw std::runtime_error("R2 dilation scale is unsupported");
+      if (positive_int(document.at("internal_sample_rate"), "internal sample rate")
+          != sample_rate_hz * factor)
+        throw std::runtime_error("R2 internal sample rate is inconsistent");
+      const auto aa_mode = document.at("aa_mode").get<std::string>();
+      const int expected_factor = aa_mode == "full_island_x2" ? 2
+                                  : aa_mode == "teacher_x4"   ? 4
+                                  : aa_mode == "off" || aa_mode == "adaa1" ? 1
+                                                                               : 0;
+      const int expected_latency = aa_mode == "adaa1" ? 1 : 0;
+      const bool valid_latency = factor > 1
+                                   ? latency_samples >= 1 && latency_samples <= 48
+                                       && (is_quality_aa || latency_samples == 16)
+                                   : latency_samples == expected_latency;
+      if (factor != expected_factor || !valid_latency)
+        throw std::runtime_error("R2 AA mode, factor, and latency are inconsistent");
+      const auto family = document.at("family").get<std::string>();
+      is_aa_nam = family == "aa-nam";
+      if (!is_aa_nam && family != "aa-fssr")
+        throw std::runtime_error("R2 family is unsupported");
+      if (is_aa_nam)
+        aanam = std::make_unique<AANAMWaveNet>(document.at("wavenet"), aa_mode == "adaa1");
+    }
+    else if (latency_samples != 0)
+    {
+      throw std::runtime_error("R1 latency must be zero");
+    }
+    if (!is_aa_nam)
+    {
     const auto& core = document.at("core");
     const auto kind = core.at("kind").get<std::string>();
     const std::size_t shaper_count = kind == "mono" ? 1 : kind == "cascade" ? 2 : 0;
@@ -581,21 +922,55 @@ struct Model::Impl
       throw std::runtime_error("slow_controller must be none or an object");
     }
     if (!document.at("residual").is_null())
-      residual = std::make_unique<Residual>(document.at("residual"));
+      residual = std::make_unique<Residual>(document.at("residual"), is_r2);
+    }
+    if (is_r2 && factor > 1)
+    {
+      const auto& resampling = document.at("resampling");
+      if (!resampling.is_object()
+          || positive_int(resampling.at("factor"), "resampling factor") != factor
+          || positive_int(resampling.at("linear_delay_samples"), "linear delay")
+               != latency_samples)
+        throw std::runtime_error("R2 resampling declaration is invalid");
+      upsample = std::make_unique<CausalFir>(
+        json{{"coefficients", resampling.at("upsample_coefficients")}});
+      downsample = std::make_unique<CausalFir>(
+        json{{"coefficients", resampling.at("downsample_coefficients")}});
+      linear_delay =
+        std::make_unique<CausalDelay>(static_cast<std::size_t>(latency_samples));
+    }
+    else if (is_r2 && !document.at("resampling").is_null())
+    {
+      throw std::runtime_error("base-rate R2 model cannot include resampling");
+    }
+    if (is_r2 && factor == 1 && latency_samples > 0)
+      linear_delay = std::make_unique<CausalDelay>(static_cast<std::size_t>(latency_samples));
   }
 
   void reset() noexcept
   {
     for (auto& filter : filters)
       filter.reset();
+    for (auto& shaper : shapers)
+      shaper.reset();
     if (slow)
       slow->reset();
     if (residual)
       residual->reset();
+    if (upsample)
+      upsample->reset();
+    if (downsample)
+      downsample->reset();
+    if (linear_delay)
+      linear_delay->reset();
+    if (aanam)
+      aanam->reset();
   }
 
-  float process(float input) noexcept
+  float process_internal(float input) noexcept
   {
+    if (aanam)
+      return aanam->process(input);
     const std::array<float, 3> modulation = slow
                                               ? slow->modulation()
                                               : std::array<float, 3>{1.0f, 0.0f, 1.0f};
@@ -611,24 +986,63 @@ struct Model::Impl
     return residual ? core + residual->process(input, core) : core;
   }
 
+  float process(float input) noexcept
+  {
+    if (factor == 1)
+    {
+      const float internal = process_internal(input);
+      return linear_delay ? linear_delay->process(internal) : internal;
+    }
+    float selected = 0.0f;
+    for (int phase = 0; phase < factor; ++phase)
+    {
+      const float inserted = phase == 0 ? input : 0.0f;
+      const float interpolated = upsample->process(inserted);
+      const float branch = process_internal(interpolated);
+      const float filtered = downsample->process(branch - interpolated);
+      if (phase == 0)
+        selected = filtered;
+    }
+    return linear_delay->process(input) + selected;
+  }
+
   [[nodiscard]] std::size_t state_size_bytes() const noexcept
   {
     std::size_t result = 0;
     for (const auto& filter : filters)
       result += filter.state_size_bytes();
+    for (const auto& shaper : shapers)
+      result += shaper.state_size_bytes();
     if (slow)
       result += slow->state_size_bytes();
     if (residual)
       result += residual->state_size_bytes();
+    if (upsample)
+      result += upsample->state_size_bytes();
+    if (downsample)
+      result += downsample->state_size_bytes();
+    if (linear_delay)
+      result += linear_delay->state_size_bytes();
+    if (aanam)
+      result += aanam->state_size_bytes();
     return result;
   }
 
+  bool is_r2 = false;
+  bool is_quality_aa = false;
+  bool is_aa_nam = false;
+  int factor = 1;
   int sample_rate_hz = 0;
+  int latency_samples = 0;
   float output_gain = 1.0f;
   std::vector<CausalFir> filters;
   std::vector<HermiteSpline> shapers;
   std::unique_ptr<SlowController> slow;
   std::unique_ptr<Residual> residual;
+  std::unique_ptr<CausalFir> upsample;
+  std::unique_ptr<CausalFir> downsample;
+  std::unique_ptr<CausalDelay> linear_delay;
+  std::unique_ptr<AANAMWaveNet> aanam;
 };
 
 Model::Model(const std::filesystem::path& model_path) : impl_(std::make_unique<Impl>(model_path)) {}
@@ -654,7 +1068,7 @@ int Model::sample_rate_hz() const noexcept
 
 int Model::latency_samples() const noexcept
 {
-  return 0;
+  return impl_->latency_samples;
 }
 
 std::size_t Model::state_size_bytes() const noexcept
