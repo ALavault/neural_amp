@@ -31,3 +31,6 @@ experiments/worktrees/
 
 # Product-lane runs (checkpoints, exported models, logs) stay local.
 demo/runs/
+
+# JUCE build artefacts of the demo plugin.
+build/demo_plugin/

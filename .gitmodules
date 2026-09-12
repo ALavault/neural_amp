@@ -13,3 +13,6 @@
 [submodule "third_party/auraloss"]
 	path = third_party/auraloss
 	url = https://github.com/csteinmetz1/auraloss.git
+[submodule "third_party/JUCE"]
+	path = third_party/JUCE
+	url = https://github.com/juce-framework/JUCE
