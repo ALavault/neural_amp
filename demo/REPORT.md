@@ -43,22 +43,22 @@ dédiée quand elles existeront.
 
 | Modèle | Bloc | ns/éch. médian | p95 | x temps réel p95 | charge CPU p95 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| fulltone_full_drive_2 A2 lite | 32 | 893.6 | 905.8 | 23.00x | 4.3 % |
-| fulltone_full_drive_2 A2 lite | 64 | 836.6 | 947.2 | 22.00x | 4.5 % |
-| fulltone_full_drive_2 A2 lite | 128 | 813.7 | 898.3 | 23.19x | 4.3 % |
-| fulltone_full_drive_2 A2 lite | 256 | 817.1 | 933.1 | 22.33x | 4.5 % |
-| fulltone_full_drive_2 A2 full | 32 | 5288.2 | 5722.3 | 3.64x | 27.5 % |
-| fulltone_full_drive_2 A2 full | 64 | 4849.9 | 5313.6 | 3.92x | 25.5 % |
-| fulltone_full_drive_2 A2 full | 128 | 4512.1 | 5037.3 | 4.14x | 24.2 % |
-| fulltone_full_drive_2 A2 full | 256 | 4256.3 | 4531.3 | 4.60x | 21.8 % |
-| electro_harmonix_big_muff A2 lite | 32 | 896.3 | 1080.0 | 19.29x | 5.2 % |
-| electro_harmonix_big_muff A2 lite | 64 | 834.7 | 1009.5 | 20.64x | 4.8 % |
-| electro_harmonix_big_muff A2 lite | 128 | 815.4 | 979.8 | 21.26x | 4.7 % |
-| electro_harmonix_big_muff A2 lite | 256 | 793.2 | 983.9 | 21.17x | 4.7 % |
-| electro_harmonix_big_muff A2 full | 32 | 5291.9 | 5995.3 | 3.47x | 28.8 % |
-| electro_harmonix_big_muff A2 full | 64 | 4839.1 | 5250.1 | 3.97x | 25.2 % |
-| electro_harmonix_big_muff A2 full | 128 | 4424.2 | 4630.2 | 4.50x | 22.2 % |
-| electro_harmonix_big_muff A2 full | 256 | 4252.4 | 4841.7 | 4.30x | 23.2 % |
+| fulltone_full_drive_2 A2 lite | 32 | 1215.9 | 1344.5 | 15.49x | 6.5 % |
+| fulltone_full_drive_2 A2 lite | 64 | 1051.4 | 1173.4 | 17.75x | 5.6 % |
+| fulltone_full_drive_2 A2 lite | 128 | 816.4 | 901.2 | 23.12x | 4.3 % |
+| fulltone_full_drive_2 A2 lite | 256 | 809.4 | 862.8 | 24.15x | 4.1 % |
+| fulltone_full_drive_2 A2 full | 32 | 5295.1 | 6895.1 | 3.02x | 33.1 % |
+| fulltone_full_drive_2 A2 full | 64 | 4908.9 | 51826.9 | 0.40x | 248.8 % |
+| fulltone_full_drive_2 A2 full | 128 | 4465.3 | 6027.1 | 3.46x | 28.9 % |
+| fulltone_full_drive_2 A2 full | 256 | 4243.4 | 15954.3 | 1.31x | 76.6 % |
+| electro_harmonix_big_muff A2 lite | 32 | 906.2 | 1238.2 | 16.83x | 5.9 % |
+| electro_harmonix_big_muff A2 lite | 64 | 844.9 | 1180.9 | 17.64x | 5.7 % |
+| electro_harmonix_big_muff A2 lite | 128 | 1084.6 | 1189.6 | 17.51x | 5.7 % |
+| electro_harmonix_big_muff A2 lite | 256 | 792.4 | 1005.5 | 20.72x | 4.8 % |
+| electro_harmonix_big_muff A2 full | 32 | 5300.3 | 6414.4 | 3.25x | 30.8 % |
+| electro_harmonix_big_muff A2 full | 64 | 4919.9 | 7020.5 | 2.97x | 33.7 % |
+| electro_harmonix_big_muff A2 full | 128 | 4443.4 | 6027.3 | 3.46x | 28.9 % |
+| electro_harmonix_big_muff A2 full | 256 | 4294.5 | 16072.3 | 1.30x | 77.1 % |
 
 ## Parité moteur (Python d'entraînement vs moteur natif C++)
 
@@ -89,3 +89,44 @@ les conversions float/double et le flush des dénormaux.
 | electro_harmonix_big_muff A2 full | silence | True | 0.0002657 |
 | electro_harmonix_big_muff A2 full | dc | True | 0.1374 |
 | electro_harmonix_big_muff A2 full | hot | True | 0.1353 |
+
+## Aliasing (sondes sinus cohérentes, grille R2 gelée)
+
+Sondes à bin exact : N = 65 536, 6 trames, la dernière analysée, sans
+fenêtre ni bourrage. L'alias est l'énergie hors bins harmoniques sous
+Nyquist, rapportée à l'énergie harmonique. Rendu par le moteur natif au
+bloc 64 (65 536 / 64 : les bords de bloc tombent sur les trames).
+
+Plancher de mesure (la sonde float32 elle-même) : -154.8 dB.
+Au-delà, c'est le modèle, pas l'arithmétique. Contexte d'amplitude : le
+DI de test a un RMS de 0,07 à 0,11, donc 0,48 correspond à un jeu fort.
+La périodicité inter-trames est exacte sur les 36 sondes (erreur -inf dB) :
+le WaveNet est déterministe et son champ réceptif (6 347) tient dans une
+trame, donc les trames successives sont bit à bit identiques.
+
+**Ce que le chiffre mesure vraiment.** L'énergie hors bins harmoniques ne
+contient pas que du repliement : elle contient toute erreur non harmonique
+du modèle. À 9 kHz, seules deux harmoniques tiennent sous Nyquist, donc la
+mesure y est surtout un plancher de bruit du modèle rapporté à une énergie
+harmonique très réduite. À lire comme une borne supérieure du repliement,
+pas comme une mesure isolée.
+
+Les colonnes principales retirent la composante continue. La métrique gelée
+compte le bin 0 comme alias, et A2 apprend un décalage continu : sur le
+Fulltone il domine tout le reste (jusqu'à 30 dB d'écart, colonne « gelé »).
+C'est un constat sur les modèles, pas un défaut de la métrique.
+
+| Modèle | Fréquence | 0,10 | 0,25 | 0,48 | gelé à 0,48 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| fulltone_full_drive_2 A2 lite | 1249 Hz | -54.0 dB | -52.2 dB | -49.8 dB | -26.1 dB |
+| fulltone_full_drive_2 A2 lite | 5999 Hz | -19.6 dB | -20.3 dB | -23.4 dB | -4.3 dB |
+| fulltone_full_drive_2 A2 lite | 8999 Hz | -12.0 dB | -13.8 dB | -16.8 dB | -1.5 dB |
+| fulltone_full_drive_2 A2 full | 1249 Hz | -57.5 dB | -53.5 dB | -50.6 dB | -20.0 dB |
+| fulltone_full_drive_2 A2 full | 5999 Hz | -21.4 dB | -22.4 dB | -24.0 dB | 5.1 dB |
+| fulltone_full_drive_2 A2 full | 8999 Hz | -9.7 dB | -12.0 dB | -13.8 dB | 5.7 dB |
+| electro_harmonix_big_muff A2 lite | 1249 Hz | -23.2 dB | -19.7 dB | -18.8 dB | -16.4 dB |
+| electro_harmonix_big_muff A2 lite | 5999 Hz | -19.0 dB | -18.2 dB | -22.1 dB | -14.7 dB |
+| electro_harmonix_big_muff A2 lite | 8999 Hz | -9.8 dB | -12.8 dB | -12.1 dB | -5.6 dB |
+| electro_harmonix_big_muff A2 full | 1249 Hz | -34.5 dB | -31.8 dB | -33.2 dB | -32.6 dB |
+| electro_harmonix_big_muff A2 full | 5999 Hz | -23.5 dB | -21.6 dB | -21.4 dB | -21.3 dB |
+| electro_harmonix_big_muff A2 full | 8999 Hz | -17.1 dB | -15.6 dB | -14.7 dB | -14.6 dB |

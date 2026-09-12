@@ -14,6 +14,13 @@ import soundfile as sf
 import torch
 from nam.models import init_from_nam
 
+from fssr_nam.metrics.r2_aliasing import (
+    AMPLITUDES,
+    DFT_SAMPLES,
+    K0_VALUES,
+    coherent_sine_probe,
+    sato_smith_asr,
+)
 from fssr_nam.metrics.spectral import spectral_metrics
 from fssr_nam.metrics.time import time_metrics
 from fssr_nam.product.data import device_pairs
@@ -140,6 +147,36 @@ def robustness(runner: Path, model_path: Path) -> dict[str, object]:
     return results
 
 
+def aliasing(runner: Path, model_path: Path) -> dict[str, dict[str, float]]:
+    """Measure alias-to-signal with the frozen R2 coherent-sine probes.
+
+    The frozen metric counts bin 0 as alias energy, and A2 learns a DC term, so
+    the same frame is also measured after removing its mean.
+    """
+    results: dict[str, dict[str, float]] = {}
+    for k0 in K0_VALUES:
+        for amplitude in AMPLITUDES:
+            probe = coherent_sine_probe(k0, amplitude)
+            out, _ = run_native(runner, model_path, probe, "64")
+            frozen = sato_smith_asr(out, k0=k0)
+            centred = sato_smith_asr(out - out[-DFT_SAMPLES:].mean(), k0=k0)
+            results[f"k{k0}_a{amplitude}"] = {
+                "k0": k0,
+                "frequency_hz": k0 * 48_000 / DFT_SAMPLES,
+                "amplitude": amplitude,
+                "asr_db": frozen["asr_db"],
+                "asr_db_no_dc": centred["asr_db"],
+                "periodicity_error_db": frozen["periodicity_error_db"],
+            }
+    return results
+
+
+def measurement_floor() -> float:
+    """ASR of the float32 probe itself: everything above this is model behaviour."""
+    probe = coherent_sine_probe(K0_VALUES[1], AMPLITUDES[1])
+    return sato_smith_asr(probe, k0=K0_VALUES[1])["asr_db"]
+
+
 def main() -> None:
     benchmark, runner = build_tools()
     report: dict[str, dict] = {}
@@ -158,6 +195,7 @@ def main() -> None:
                 "parity": parity(runner, model_path, prediction, x),
                 "cost": cost(benchmark, model_path),
                 "robustness": robustness(runner, model_path),
+                "aliasing": aliasing(runner, model_path),
             }
         report[device] = {"run_id": run_id, "variants": variants}
 
@@ -258,6 +296,47 @@ def main() -> None:
                 lines.append(
                     f"| {device} A2 {label} | {probe} | {result['finite']} | "
                     f"{result['peak']:.4g} |"
+                )
+    floor = measurement_floor()
+    lines += [
+        "",
+        "## Aliasing (sondes sinus cohérentes, grille R2 gelée)",
+        "",
+        "Sondes à bin exact : N = 65 536, 6 trames, la dernière analysée, sans",
+        "fenêtre ni bourrage. L'alias est l'énergie hors bins harmoniques sous",
+        "Nyquist, rapportée à l'énergie harmonique. Rendu par le moteur natif au",
+        "bloc 64 (65 536 / 64 : les bords de bloc tombent sur les trames).",
+        "",
+        f"Plancher de mesure (la sonde float32 elle-même) : {floor:.1f} dB.",
+        "Au-delà, c'est le modèle, pas l'arithmétique. Contexte d'amplitude : le",
+        "DI de test a un RMS de 0,07 à 0,11, donc 0,48 correspond à un jeu fort.",
+        "La périodicité inter-trames est exacte sur les 36 sondes (erreur -inf dB) :",
+        "le WaveNet est déterministe et son champ réceptif (6 347) tient dans une",
+        "trame, donc les trames successives sont bit à bit identiques.",
+        "",
+        "**Ce que le chiffre mesure vraiment.** L'énergie hors bins harmoniques ne",
+        "contient pas que du repliement : elle contient toute erreur non harmonique",
+        "du modèle. À 9 kHz, seules deux harmoniques tiennent sous Nyquist, donc la",
+        "mesure y est surtout un plancher de bruit du modèle rapporté à une énergie",
+        "harmonique très réduite. À lire comme une borne supérieure du repliement,",
+        "pas comme une mesure isolée.",
+        "",
+        "Les colonnes principales retirent la composante continue. La métrique gelée",
+        "compte le bin 0 comme alias, et A2 apprend un décalage continu : sur le",
+        "Fulltone il domine tout le reste (jusqu'à 30 dB d'écart, colonne « gelé »).",
+        "C'est un constat sur les modèles, pas un défaut de la métrique.",
+        "",
+        "| Modèle | Fréquence | 0,10 | 0,25 | 0,48 | gelé à 0,48 |",
+        "| --- | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    for device, entry in report.items():
+        for label, variant in entry["variants"].items():
+            for k0 in K0_VALUES:
+                probes = [variant["aliasing"][f"k{k0}_a{a}"] for a in AMPLITUDES]
+                lines.append(
+                    f"| {device} A2 {label} | {probes[0]['frequency_hz']:.0f} Hz | "
+                    + " | ".join(f"{p['asr_db_no_dc']:.1f} dB" for p in probes)
+                    + f" | {probes[-1]['asr_db']:.1f} dB |"
                 )
     (ROOT / "demo/REPORT.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"wrote {out} and demo/REPORT.md")

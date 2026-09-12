@@ -26,49 +26,49 @@
             "block_size": 32,
             "iterations": 5,
             "timed_blocks": 15000,
-            "mean_block_ns": 29165.0934667,
-            "median_block_ns": 28595,
-            "p95_block_ns": 28985,
-            "median_ns_per_sample": 893.59375,
-            "p95_ns_per_sample": 905.78125,
-            "median_realtime_factor": 23.3140992015,
-            "p95_realtime_factor": 23.000402507
+            "mean_block_ns": 38740.9361333,
+            "median_block_ns": 38909,
+            "p95_block_ns": 43025.4,
+            "median_ns_per_sample": 1215.90625,
+            "p95_ns_per_sample": 1344.54375,
+            "median_realtime_factor": 17.133996419,
+            "p95_realtime_factor": 15.494723272
           },
           {
             "block_size": 64,
             "iterations": 5,
             "timed_blocks": 7500,
-            "mean_block_ns": 53854.8446667,
-            "median_block_ns": 53541,
-            "p95_block_ns": 60619.35,
-            "median_ns_per_sample": 836.578125,
-            "p95_ns_per_sample": 947.17734375,
-            "median_realtime_factor": 24.9030338121,
-            "p95_realtime_factor": 21.9951770076
+            "mean_block_ns": 68708.5124,
+            "median_block_ns": 67289,
+            "p95_block_ns": 75099.15,
+            "median_ns_per_sample": 1051.390625,
+            "p95_ns_per_sample": 1173.42421875,
+            "median_realtime_factor": 19.8150267255,
+            "p95_realtime_factor": 17.7543065845
           },
           {
             "block_size": 128,
             "iterations": 5,
             "timed_blocks": 3750,
-            "mean_block_ns": 90784.9904,
-            "median_block_ns": 104147.5,
-            "p95_block_ns": 114984.35,
-            "median_ns_per_sample": 813.65234375,
-            "p95_ns_per_sample": 898.315234375,
-            "median_realtime_factor": 25.6047112669,
-            "p95_realtime_factor": 23.1915618662
+            "mean_block_ns": 107244.565867,
+            "median_block_ns": 104502.5,
+            "p95_block_ns": 115351.65,
+            "median_ns_per_sample": 816.42578125,
+            "p95_ns_per_sample": 901.184765625,
+            "median_realtime_factor": 25.5177308358,
+            "p95_realtime_factor": 23.1177158425
           },
           {
             "block_size": 256,
             "iterations": 5,
             "timed_blocks": 1875,
-            "mean_block_ns": 243797.821333,
-            "median_block_ns": 209170,
-            "p95_block_ns": 238885.2,
-            "median_ns_per_sample": 817.0703125,
-            "p95_ns_per_sample": 933.1453125,
-            "median_realtime_factor": 25.4976016318,
-            "p95_realtime_factor": 22.3259261492
+            "mean_block_ns": 194936.24,
+            "median_block_ns": 207216,
+            "p95_block_ns": 220871,
+            "median_ns_per_sample": 809.4375,
+            "p95_ns_per_sample": 862.77734375,
+            "median_realtime_factor": 25.7380382467,
+            "p95_realtime_factor": 24.146824768
           }
         ],
         "robustness": {
@@ -83,6 +83,80 @@
           "hot": {
             "finite": true,
             "peak": 2.088040351867676
+          }
+        },
+        "aliasing": {
+          "k1705_a0.1": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.1,
+            "asr_db": -31.651885289941454,
+            "asr_db_no_dc": -53.9996110148055,
+            "periodicity_error_db": -Infinity
+          },
+          "k1705_a0.25": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.25,
+            "asr_db": -26.16110663668138,
+            "asr_db_no_dc": -52.210793321360825,
+            "periodicity_error_db": -Infinity
+          },
+          "k1705_a0.48": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.48,
+            "asr_db": -26.08182725274967,
+            "asr_db_no_dc": -49.77637431461764,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.1": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.1,
+            "asr_db": -12.26152975199087,
+            "asr_db_no_dc": -19.59658817576114,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.25": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.25,
+            "asr_db": -20.034663375575153,
+            "asr_db_no_dc": -20.347032146342073,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.48": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.48,
+            "asr_db": -4.309889605134966,
+            "asr_db_no_dc": -23.367594630876226,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.1": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.1,
+            "asr_db": 3.0482138261402913,
+            "asr_db_no_dc": -12.046425889758758,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.25": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.25,
+            "asr_db": 3.257713345579357,
+            "asr_db_no_dc": -13.778672780735814,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.48": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.48,
+            "asr_db": -1.4882733605652687,
+            "asr_db_no_dc": -16.75134180017269,
+            "periodicity_error_db": -Infinity
           }
         }
       },
@@ -110,49 +184,49 @@
             "block_size": 32,
             "iterations": 5,
             "timed_blocks": 15000,
-            "mean_block_ns": 160233.443267,
-            "median_block_ns": 169222,
-            "p95_block_ns": 183114.35,
-            "median_ns_per_sample": 5288.1875,
-            "p95_ns_per_sample": 5722.3234375,
-            "median_realtime_factor": 3.9395980822,
-            "p95_realtime_factor": 3.64071230172
+            "mean_block_ns": 206844.091533,
+            "median_block_ns": 169443,
+            "p95_block_ns": 220643.1,
+            "median_ns_per_sample": 5295.09375,
+            "p95_ns_per_sample": 6895.096875,
+            "median_realtime_factor": 3.93445976917,
+            "p95_realtime_factor": 3.02147072202
           },
           {
             "block_size": 64,
             "iterations": 5,
             "timed_blocks": 7500,
-            "mean_block_ns": 332367.619867,
-            "median_block_ns": 310394,
-            "p95_block_ns": 340072.2,
-            "median_ns_per_sample": 4849.90625,
-            "p95_ns_per_sample": 5313.628125,
-            "median_realtime_factor": 4.29561567986,
-            "p95_realtime_factor": 3.92073604762
+            "mean_block_ns": 514708.472133,
+            "median_block_ns": 314169,
+            "p95_block_ns": 3316921.3,
+            "median_ns_per_sample": 4908.890625,
+            "p95_ns_per_sample": 51826.8953125,
+            "median_realtime_factor": 4.24400030981,
+            "p95_realtime_factor": 0.401979188754
           },
           {
             "block_size": 128,
             "iterations": 5,
             "timed_blocks": 3750,
-            "mean_block_ns": 621072.1968,
-            "median_block_ns": 577552,
-            "p95_block_ns": 644773.85,
-            "median_ns_per_sample": 4512.125,
-            "p95_ns_per_sample": 5037.29570312,
-            "median_realtime_factor": 4.61718887073,
-            "p95_realtime_factor": 4.13581702587
+            "mean_block_ns": 629945.511467,
+            "median_block_ns": 571563,
+            "p95_block_ns": 771471.25,
+            "median_ns_per_sample": 4465.3359375,
+            "p95_ns_per_sample": 6027.11914062,
+            "median_realtime_factor": 4.66556909154,
+            "p95_realtime_factor": 3.45659889032
           },
           {
             "block_size": 256,
             "iterations": 5,
             "timed_blocks": 1875,
-            "mean_block_ns": 1094513.96747,
-            "median_block_ns": 1089624,
-            "p95_block_ns": 1160013.1,
-            "median_ns_per_sample": 4256.34375,
-            "p95_ns_per_sample": 4531.30117188,
-            "median_realtime_factor": 4.89465479223,
-            "p95_realtime_factor": 4.5976492277
+            "mean_block_ns": 1327355.0112,
+            "median_block_ns": 1086310,
+            "p95_block_ns": 4084298,
+            "median_ns_per_sample": 4243.3984375,
+            "p95_ns_per_sample": 15954.2890625,
+            "median_realtime_factor": 4.90958688895,
+            "p95_realtime_factor": 1.30581395709
           }
         ],
         "robustness": {
@@ -167,6 +241,80 @@
           "hot": {
             "finite": true,
             "peak": 2.2646312713623047
+          }
+        },
+        "aliasing": {
+          "k1705_a0.1": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.1,
+            "asr_db": -28.206848618404567,
+            "asr_db_no_dc": -57.467978803084335,
+            "periodicity_error_db": -Infinity
+          },
+          "k1705_a0.25": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.25,
+            "asr_db": -21.349716092028007,
+            "asr_db_no_dc": -53.49286180977466,
+            "periodicity_error_db": -Infinity
+          },
+          "k1705_a0.48": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.48,
+            "asr_db": -20.023231562399097,
+            "asr_db_no_dc": -50.61096824440006,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.1": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.1,
+            "asr_db": -0.04514953181041134,
+            "asr_db_no_dc": -21.44354881645102,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.25": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.25,
+            "asr_db": 3.0188022607797094,
+            "asr_db_no_dc": -22.381878055329093,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.48": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.48,
+            "asr_db": 5.0926975837750295,
+            "asr_db_no_dc": -23.97331744052059,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.1": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.1,
+            "asr_db": 0.6469432940254365,
+            "asr_db_no_dc": -9.727334948735932,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.25": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.25,
+            "asr_db": 2.451049844115164,
+            "asr_db_no_dc": -11.968343071751434,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.48": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.48,
+            "asr_db": 5.6911414347021765,
+            "asr_db_no_dc": -13.763442722303783,
+            "periodicity_error_db": -Infinity
           }
         }
       }
@@ -199,49 +347,49 @@
             "block_size": 32,
             "iterations": 5,
             "timed_blocks": 15000,
-            "mean_block_ns": 30294.961,
-            "median_block_ns": 28681,
-            "p95_block_ns": 34560.4,
-            "median_ns_per_sample": 896.28125,
-            "p95_ns_per_sample": 1080.0125,
-            "median_realtime_factor": 23.2441918576,
-            "p95_realtime_factor": 19.2899001941
+            "mean_block_ns": 59944.9452,
+            "median_block_ns": 28998,
+            "p95_block_ns": 39621.05,
+            "median_ns_per_sample": 906.1875,
+            "p95_ns_per_sample": 1238.1578125,
+            "median_realtime_factor": 22.9900912707,
+            "p95_realtime_factor": 16.8260726726
           },
           {
             "block_size": 64,
             "iterations": 5,
             "timed_blocks": 7500,
-            "mean_block_ns": 58747.5864,
-            "median_block_ns": 53418,
-            "p95_block_ns": 64606.15,
-            "median_ns_per_sample": 834.65625,
-            "p95_ns_per_sample": 1009.47109375,
-            "median_realtime_factor": 24.960375404,
-            "p95_realtime_factor": 20.6378701305
+            "mean_block_ns": 91392.674,
+            "median_block_ns": 54072,
+            "p95_block_ns": 75577.75,
+            "median_ns_per_sample": 844.875,
+            "p95_ns_per_sample": 1180.90234375,
+            "median_realtime_factor": 24.6584800513,
+            "p95_realtime_factor": 17.6418765223
           },
           {
             "block_size": 128,
             "iterations": 5,
             "timed_blocks": 3750,
-            "mean_block_ns": 126087.701867,
-            "median_block_ns": 104370.5,
-            "p95_block_ns": 125417.75,
-            "median_ns_per_sample": 815.39453125,
-            "p95_ns_per_sample": 979.826171875,
-            "median_realtime_factor": 25.5500037527,
-            "p95_realtime_factor": 21.2622748109
+            "mean_block_ns": 134840.794133,
+            "median_block_ns": 138834.5,
+            "p95_block_ns": 152264.35,
+            "median_ns_per_sample": 1084.64453125,
+            "p95_ns_per_sample": 1189.56523437,
+            "median_realtime_factor": 19.2075216655,
+            "p95_realtime_factor": 17.5134013094
           },
           {
             "block_size": 256,
             "iterations": 5,
             "timed_blocks": 1875,
-            "mean_block_ns": 214948.053333,
-            "median_block_ns": 203064,
-            "p95_block_ns": 251882.7,
-            "median_ns_per_sample": 793.21875,
-            "p95_ns_per_sample": 983.916796875,
-            "median_realtime_factor": 26.264297627,
-            "p95_realtime_factor": 21.1738770997
+            "mean_block_ns": 215966.109333,
+            "median_block_ns": 202862,
+            "p95_block_ns": 257401.3,
+            "median_ns_per_sample": 792.4296875,
+            "p95_ns_per_sample": 1005.47382812,
+            "median_realtime_factor": 26.2904503226,
+            "p95_realtime_factor": 20.719916074
           }
         ],
         "robustness": {
@@ -256,6 +404,80 @@
           "hot": {
             "finite": true,
             "peak": 0.434328556060791
+          }
+        },
+        "aliasing": {
+          "k1705_a0.1": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.1,
+            "asr_db": -22.157841305069578,
+            "asr_db_no_dc": -23.21183861517404,
+            "periodicity_error_db": -Infinity
+          },
+          "k1705_a0.25": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.25,
+            "asr_db": -18.17027411512362,
+            "asr_db_no_dc": -19.71257231062137,
+            "periodicity_error_db": -Infinity
+          },
+          "k1705_a0.48": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.48,
+            "asr_db": -16.414731346472177,
+            "asr_db_no_dc": -18.845188095654816,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.1": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.1,
+            "asr_db": -7.006893734459837,
+            "asr_db_no_dc": -18.95489383939364,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.25": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.25,
+            "asr_db": -7.900484172108927,
+            "asr_db_no_dc": -18.159637542531563,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.48": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.48,
+            "asr_db": -14.664294366950264,
+            "asr_db_no_dc": -22.083205928097634,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.1": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.1,
+            "asr_db": -7.464608328260085,
+            "asr_db_no_dc": -9.768048955215479,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.25": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.25,
+            "asr_db": -8.401362070394802,
+            "asr_db_no_dc": -12.844611187893989,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.48": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.48,
+            "asr_db": -5.570218889384498,
+            "asr_db_no_dc": -12.118221529775932,
+            "periodicity_error_db": -Infinity
           }
         }
       },
@@ -283,49 +505,49 @@
             "block_size": 32,
             "iterations": 5,
             "timed_blocks": 15000,
-            "mean_block_ns": 169791.978867,
-            "median_block_ns": 169341,
-            "p95_block_ns": 191848.45,
-            "median_ns_per_sample": 5291.90625,
-            "p95_ns_per_sample": 5995.2640625,
-            "median_realtime_factor": 3.93682963173,
-            "p95_realtime_factor": 3.4749650918
+            "mean_block_ns": 206118.164667,
+            "median_block_ns": 169610.5,
+            "p95_block_ns": 205259.25,
+            "median_ns_per_sample": 5300.328125,
+            "p95_ns_per_sample": 6414.3515625,
+            "median_realtime_factor": 3.93057426673,
+            "p95_realtime_factor": 3.24792508336
           },
           {
             "block_size": 64,
             "iterations": 5,
             "timed_blocks": 7500,
-            "mean_block_ns": 326146.638933,
-            "median_block_ns": 309701.5,
-            "p95_block_ns": 336008.35,
-            "median_ns_per_sample": 4839.0859375,
-            "p95_ns_per_sample": 5250.13046875,
-            "median_realtime_factor": 4.30522077979,
-            "p95_realtime_factor": 3.96815535487
+            "mean_block_ns": 454766.050133,
+            "median_block_ns": 314874.5,
+            "p95_block_ns": 449315.15,
+            "median_ns_per_sample": 4919.9140625,
+            "p95_ns_per_sample": 7020.54921875,
+            "median_realtime_factor": 4.23449130791,
+            "p95_realtime_factor": 2.96747913649
           },
           {
             "block_size": 128,
             "iterations": 5,
             "timed_blocks": 3750,
-            "mean_block_ns": 544136.7328,
-            "median_block_ns": 566296,
-            "p95_block_ns": 592668.2,
-            "median_ns_per_sample": 4424.1875,
-            "p95_ns_per_sample": 4630.2203125,
-            "median_realtime_factor": 4.70896256846,
-            "p95_realtime_factor": 4.49942592949
+            "mean_block_ns": 614076.340267,
+            "median_block_ns": 568759,
+            "p95_block_ns": 771494.85,
+            "median_ns_per_sample": 4443.4296875,
+            "p95_ns_per_sample": 6027.30351562,
+            "median_realtime_factor": 4.68857049588,
+            "p95_realtime_factor": 3.45649315309
           },
           {
             "block_size": 256,
             "iterations": 5,
             "timed_blocks": 1875,
-            "mean_block_ns": 1119739.2448,
-            "median_block_ns": 1088618,
-            "p95_block_ns": 1239472.3,
-            "median_ns_per_sample": 4252.4140625,
-            "p95_ns_per_sample": 4841.68867188,
-            "median_realtime_factor": 4.89917797917,
-            "p95_realtime_factor": 4.30290643311
+            "mean_block_ns": 1439071.40107,
+            "median_block_ns": 1099382,
+            "p95_block_ns": 4114499.8,
+            "median_ns_per_sample": 4294.4609375,
+            "p95_ns_per_sample": 16072.2648437,
+            "median_realtime_factor": 4.85121034666,
+            "p95_realtime_factor": 1.29622884739
           }
         ],
         "robustness": {
@@ -340,6 +562,80 @@
           "hot": {
             "finite": true,
             "peak": 0.13529568910598755
+          }
+        },
+        "aliasing": {
+          "k1705_a0.1": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.1,
+            "asr_db": -34.29289535324176,
+            "asr_db_no_dc": -34.49813642297664,
+            "periodicity_error_db": -Infinity
+          },
+          "k1705_a0.25": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.25,
+            "asr_db": -31.547445574133416,
+            "asr_db_no_dc": -31.75511539165956,
+            "periodicity_error_db": -Infinity
+          },
+          "k1705_a0.48": {
+            "k0": 1705,
+            "frequency_hz": 1248.779296875,
+            "amplitude": 0.48,
+            "asr_db": -32.629709838518735,
+            "asr_db_no_dc": -33.164536554810404,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.1": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.1,
+            "asr_db": -23.489153911721385,
+            "asr_db_no_dc": -23.519092201596994,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.25": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.25,
+            "asr_db": -21.603140159052927,
+            "asr_db_no_dc": -21.622262564562014,
+            "periodicity_error_db": -Infinity
+          },
+          "k8191_a0.48": {
+            "k0": 8191,
+            "frequency_hz": 5999.267578125,
+            "amplitude": 0.48,
+            "asr_db": -21.316167082047286,
+            "asr_db_no_dc": -21.354365002363526,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.1": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.1,
+            "asr_db": -17.058495360036133,
+            "asr_db_no_dc": -17.129404519853075,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.25": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.25,
+            "asr_db": -15.471461811335931,
+            "asr_db_no_dc": -15.593234902991862,
+            "periodicity_error_db": -Infinity
+          },
+          "k12287_a0.48": {
+            "k0": 12287,
+            "frequency_hz": 8999.267578125,
+            "amplitude": 0.48,
+            "asr_db": -14.555375669341093,
+            "asr_db_no_dc": -14.725486711644107,
+            "periodicity_error_db": -Infinity
           }
         }
       }
