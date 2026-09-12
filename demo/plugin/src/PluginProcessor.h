@@ -42,6 +42,8 @@ public:
   juce::AudioProcessorValueTreeState parameters;
   juce::String modelName;
   juce::String referenceName;
+  /// Non-empty when the host rate differs from the model's: NAM core does not resample.
+  juce::String sampleRateWarning() const;
   std::atomic<bool> referenceLoaded{false};
 
 private:
@@ -51,6 +53,7 @@ private:
   std::vector<double> inputScratch, outputScratch;
   juce::AudioBuffer<float> referenceDry, referenceWet;
   std::atomic<int> referencePosition{0};
+  std::atomic<double> modelSampleRate{0.0};
   double currentSampleRate{48000.0};
   int currentBlockSize{512};
 };

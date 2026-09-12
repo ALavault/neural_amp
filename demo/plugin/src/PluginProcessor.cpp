@@ -68,6 +68,7 @@ juce::String FssrAmpProcessor::loadModel(const juce::File& file)
     return "modele illisible";
   if (loaded->NumInputChannels() != 1 || loaded->NumOutputChannels() != 1)
     return "seuls les modeles mono sont supportes";
+  modelSampleRate.store(loaded->GetExpectedSampleRate());
   loaded->Reset(currentSampleRate, currentBlockSize);
   {
     const juce::SpinLock::ScopedLockType lock(modelLock);
@@ -75,6 +76,15 @@ juce::String FssrAmpProcessor::loadModel(const juce::File& file)
   }
   modelName = file.getFileNameWithoutExtension();
   return {};
+}
+
+juce::String FssrAmpProcessor::sampleRateWarning() const
+{
+  const double expected = modelSampleRate.load();
+  if (expected <= 0.0 || std::abs(expected - currentSampleRate) < 1.0)
+    return {};
+  return "ATTENTION hote a " + juce::String(currentSampleRate, 0) + " Hz, modele attendu a "
+         + juce::String(expected, 0) + " Hz";
 }
 
 juce::String FssrAmpProcessor::loadReference(const juce::File& dryFile, const juce::File& wetFile)

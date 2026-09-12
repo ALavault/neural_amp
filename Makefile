@@ -1,4 +1,4 @@
-.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit m2-data m2-inspect m2-core-test m2-cpp-build m3-audit r1-data r1-preflight r1-competence r2-preflight r2-capture-audit r2-mechanism r2-screen r2-teacher r2-distill r2-lock r2-confirm r2-benchmark r2-listen r2-audit r2-48k-preflight r2-48k-data-audit r2-48k-mechanism r2-48k-screen r2-48k-teacher r2-48k-distill r2-48k-lock r2-48k-confirm r2-48k-benchmark r2-48k-listen r2-48k-audit r2-48k-v2-preflight r2-48k-v2-data-audit r2-48k-v2-mechanism quality-aa-preflight quality-aa-mechanism quality-aa-native quality-aa-audit arch-preflight arch-native-skeleton arch-training-feasibility arch-mechanism arch-v2-preflight arch-v2-competence arch-v2-compare arch-v2-audit arch-v3-preflight arch-v3-training-feasibility arch-v3-round-1
+.PHONY: bootstrap test lint data-audit smoke campaign-status fetch-egfxset-clean m1-audit m2-data m2-inspect m2-core-test m2-cpp-build m3-audit r1-data r1-preflight r1-competence r2-preflight r2-capture-audit r2-mechanism r2-screen r2-teacher r2-distill r2-lock r2-confirm r2-benchmark r2-listen r2-audit r2-48k-preflight r2-48k-data-audit r2-48k-mechanism r2-48k-screen r2-48k-teacher r2-48k-distill r2-48k-lock r2-48k-confirm r2-48k-benchmark r2-48k-listen r2-48k-audit r2-48k-v2-preflight r2-48k-v2-data-audit r2-48k-v2-mechanism quality-aa-preflight quality-aa-mechanism quality-aa-native quality-aa-audit arch-preflight arch-native-skeleton arch-training-feasibility arch-mechanism arch-v2-preflight arch-v2-competence arch-v2-compare arch-v2-audit arch-v3-preflight arch-v3-training-feasibility arch-v3-round-1 demo demo-plugin demo-report
 
 bootstrap:
 	uv python install 3.12
@@ -236,3 +236,14 @@ arch-v3-training-feasibility:
 arch-v3-round-1:
 	uv run pytest tests/unit/test_amp_quality_arch_v3_protocol.py tests/unit/test_amp_arch_v3_gates.py tests/unit/test_amp_arch_v3_training.py tests/numerical/test_amp_arch_v3_fixtures.py tests/numerical/test_amp_quality_arch_v3_models.py -q
 	uv run python scripts/run_arch_v3_round_1.py
+
+demo-plugin:
+	cmake -S demo/plugin -B build/demo_plugin -DCMAKE_BUILD_TYPE=Release
+	cmake --build build/demo_plugin --parallel 8
+
+demo-report:
+	uv run python scripts/product_plugin_parity.py
+	uv run python scripts/product_report.py
+
+# Rebuild the demo from the trained runs: plugin, parity check, fact sheet.
+demo: demo-plugin demo-report

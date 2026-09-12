@@ -37,8 +37,17 @@ void FssrAmpEditor::chooseModel()
                          if (file == juce::File{})
                            return;
                          const auto error = processor.loadModel(file);
-                         status.setText(error.isEmpty() ? "Modele : " + processor.modelName
-                                                        : error,
+                         if (!error.isEmpty())
+                         {
+                           status.setText(error, juce::dontSendNotification);
+                           return;
+                         }
+                         const auto warning = processor.sampleRateWarning();
+                         status.setColour(juce::Label::textColourId,
+                                          warning.isEmpty() ? juce::Colours::white
+                                                            : juce::Colours::red);
+                         status.setText(warning.isEmpty() ? "Modele : " + processor.modelName
+                                                          : warning,
                                         juce::dontSendNotification);
                        });
 }
@@ -58,7 +67,13 @@ void FssrAmpEditor::chooseReference()
                                           juce::dontSendNotification);
                            return;
                          }
-                         const auto error = processor.loadReference(files[0], files[1]);
+                         // A multi-select dialog returns files unordered: the DI is the
+                         // one whose name says so, otherwise the first by name.
+                         auto dry = files[0], wet = files[1];
+                         if (wet.getFileName().containsIgnoreCase("input")
+                             || dry.getFileName().containsIgnoreCase("target"))
+                           std::swap(dry, wet);
+                         const auto error = processor.loadReference(dry, wet);
                          status.setText(error.isEmpty()
                                           ? "Reference : " + processor.referenceName
                                           : error,

@@ -182,7 +182,12 @@ def main() -> None:
         "propagation des NaN et la parité IEEE ; il est donc plus élevé que les",
         "mesures historiques de la voie scientifique compilées en `-Ofast`.",
         "",
-        "## Fidélité (jeu de test scellé par appareil)",
+        "## Fidélité (jeu de test de développement, par appareil)",
+        "",
+        "Ce jeu de test n'est pas scellé : le budget d'époques a été choisi après",
+        "l'avoir lu. Sur le Big Muff, l'ESR de validation (0,109) est 1,7 fois",
+        "meilleur que celui de test (0,188) ; le fichier de test est un autre jeu",
+        "de guitare, plus dense, donc plus difficile.",
         "",
         "| Appareil | Modèle | ESR | MAE | corrélation | MR-STFT | log-mel |",
         "| --- | --- | ---: | ---: | ---: | ---: | ---: |",
@@ -232,6 +237,10 @@ def main() -> None:
                 f"{p['native_regular_vs_irregular']:.2e} | {p['reset_exact']} |"
             )
     lines += [
+        "",
+        "Le rendu hors ligne du plugin JUCE (`scripts/product_plugin_parity.py`)",
+        "est bit à bit identique au runner natif sur les quatre modèles, malgré",
+        "les conversions float/double et le flush des dénormaux.",
         "",
         "## Robustesse (moteur natif, blocs irréguliers)",
         "",
