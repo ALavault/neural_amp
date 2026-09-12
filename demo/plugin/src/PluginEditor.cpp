@@ -25,6 +25,23 @@ FssrAmpEditor::FssrAmpEditor(FssrAmpProcessor& owner)
   sourceAttachment = std::make_unique<ComboAttachment>(state, "source", source);
 
   setSize(520, 260);
+  startTimerHz(2);
+}
+
+void FssrAmpEditor::showStatus(const juce::String& text, bool isWarning)
+{
+  status.setColour(juce::Label::textColourId,
+                   isWarning ? juce::Colours::red : juce::Colours::white);
+  status.setText(text, juce::dontSendNotification);
+}
+
+void FssrAmpEditor::timerCallback()
+{
+  const auto warning = processor.sampleRateWarning();
+  if (!warning.isEmpty())
+    showStatus(warning, true);
+  else if (processor.modelName.isNotEmpty() && status.getText().startsWith("ATTENTION"))
+    showStatus("Modele : " + processor.modelName, false);
 }
 
 void FssrAmpEditor::chooseModel()
@@ -43,12 +60,9 @@ void FssrAmpEditor::chooseModel()
                            return;
                          }
                          const auto warning = processor.sampleRateWarning();
-                         status.setColour(juce::Label::textColourId,
-                                          warning.isEmpty() ? juce::Colours::white
-                                                            : juce::Colours::red);
-                         status.setText(warning.isEmpty() ? "Modele : " + processor.modelName
-                                                          : warning,
-                                        juce::dontSendNotification);
+                         showStatus(warning.isEmpty() ? "Modele : " + processor.modelName
+                                                      : warning,
+                                    !warning.isEmpty());
                        });
 }
 

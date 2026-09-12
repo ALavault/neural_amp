@@ -16,7 +16,7 @@ import soundfile as sf
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 
-from product_report import MANIFEST, ROOT, RUNS, run_native
+from product_report import MANIFEST, ROOT, RUNS, build_tools, run_native
 
 from fssr_nam.product.data import device_pairs
 
@@ -27,10 +27,10 @@ RENDER = (
     / "build/demo_plugin/FssrAmpOfflineRender_artefacts/Release"
     / "FssrAmpOfflineRender"
 )
-RUNNER = ROOT / "build/product_cpp/nam_block_runner"
 
 
 def main() -> int:
+    _, runner = build_tools()
     work = pathlib.Path(__file__).parent.parent / "build/demo_plugin/parity"
     work.mkdir(parents=True, exist_ok=True)
     worst = 0.0
@@ -41,6 +41,8 @@ def main() -> int:
         (work / "in.f32").write_bytes(signal.astype(np.float32).tobytes())
         for label in ("lite", "full"):
             model = ROOT / "demo/runs" / run_id / f"model_{label}.nam"
+            # 2 channels: the renderer also asserts both outputs are identical,
+            # which is what the standalone needs to feed both speakers.
             subprocess.run(
                 [
                     str(RENDER),
@@ -48,11 +50,12 @@ def main() -> int:
                     str(work / "in.f32"),
                     str(work / "out.f32"),
                     "64",
+                    "2",
                 ],
                 check=True,
             )
             plugin = np.fromfile(work / "out.f32", dtype=np.float32)
-            native, _ = run_native(RUNNER, model, signal, "64")
+            native, _ = run_native(runner, model, signal, "64")
             count = min(len(plugin), len(native))
             difference = float(np.max(np.abs(plugin[:count] - native[:count])))
             worst = max(worst, difference)

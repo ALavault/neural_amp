@@ -4,12 +4,14 @@
 
 #include "PluginProcessor.h"
 
-class FssrAmpEditor : public juce::AudioProcessorEditor
+class FssrAmpEditor : public juce::AudioProcessorEditor, private juce::Timer
 {
 public:
   explicit FssrAmpEditor(FssrAmpProcessor&);
   void paint(juce::Graphics&) override;
   void resized() override;
+  /// The host can change its sample rate after the model was loaded.
+  void timerCallback() override;
 
 private:
   using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
@@ -18,6 +20,7 @@ private:
 
   void chooseModel();
   void chooseReference();
+  void showStatus(const juce::String& text, bool isWarning);
 
   FssrAmpProcessor& processor;
   juce::TextButton modelButton{"Charger un modele .nam"};

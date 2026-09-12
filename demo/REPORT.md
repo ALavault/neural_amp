@@ -19,8 +19,10 @@ mesures historiques de la voie scientifique compilées en `-Ofast`.
 
 Ce jeu de test n'est pas scellé : le budget d'époques a été choisi après
 l'avoir lu. Sur le Big Muff, l'ESR de validation (0,109) est 1,7 fois
-meilleur que celui de test (0,188) ; le fichier de test est un autre jeu
-de guitare, plus dense, donc plus difficile.
+meilleur que celui de test (0,188). Le DI de test est mesurablement plus
+exigeant que celui de validation : RMS 0,110 contre 0,0708 (+3,8 dB, donc
+un écrêtage plus profond), facteur de crête 5,00 contre 7,78 (jeu plus
+soutenu) et flux spectral 43 % plus élevé.
 
 | Appareil | Modèle | ESR | MAE | corrélation | MR-STFT | log-mel |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
@@ -34,26 +36,29 @@ de guitare, plus dense, donc plus difficile.
 Le facteur temps réel p95 indique combien de fois plus vite que le temps
 réel le modèle calcule (plus grand = mieux) ; la charge CPU est son inverse
 sur un cœur. Référence historique en `-Ofast` : 2 862 ns/échantillon pour
-A2 Full au bloc 64.
+A2 Full au bloc 64. Le médian est la mesure fiable ici : le p95 capte
+toute autre charge de la machine au moment du banc, et cette machine est
+partagée avec des entraînements. À lire avec les mesures sur machine
+dédiée quand elles existeront.
 
 | Modèle | Bloc | ns/éch. médian | p95 | x temps réel p95 | charge CPU p95 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| fulltone_full_drive_2 A2 lite | 32 | 893.8 | 981.8 | 21.22x | 4.7 % |
-| fulltone_full_drive_2 A2 lite | 64 | 831.8 | 938.2 | 22.21x | 4.5 % |
-| fulltone_full_drive_2 A2 lite | 128 | 802.4 | 898.7 | 23.18x | 4.3 % |
-| fulltone_full_drive_2 A2 lite | 256 | 823.4 | 944.9 | 22.05x | 4.5 % |
-| fulltone_full_drive_2 A2 full | 32 | 5292.0 | 5976.5 | 3.49x | 28.7 % |
-| fulltone_full_drive_2 A2 full | 64 | 4957.0 | 6992.7 | 2.98x | 33.6 % |
-| fulltone_full_drive_2 A2 full | 128 | 4490.2 | 12237.4 | 1.70x | 58.7 % |
-| fulltone_full_drive_2 A2 full | 256 | 4981.8 | 27653.9 | 0.75x | 132.7 % |
-| electro_harmonix_big_muff A2 lite | 32 | 1228.6 | 1349.8 | 15.43x | 6.5 % |
-| electro_harmonix_big_muff A2 lite | 64 | 1052.5 | 1166.4 | 17.86x | 5.6 % |
-| electro_harmonix_big_muff A2 lite | 128 | 912.1 | 1148.2 | 18.14x | 5.5 % |
-| electro_harmonix_big_muff A2 lite | 256 | 861.9 | 1365.8 | 15.25x | 6.6 % |
-| electro_harmonix_big_muff A2 full | 32 | 7233.3 | 7825.4 | 2.66x | 37.6 % |
-| electro_harmonix_big_muff A2 full | 64 | 4903.4 | 6822.4 | 3.05x | 32.7 % |
-| electro_harmonix_big_muff A2 full | 128 | 4424.3 | 4654.4 | 4.48x | 22.3 % |
-| electro_harmonix_big_muff A2 full | 256 | 4200.9 | 4311.1 | 4.83x | 20.7 % |
+| fulltone_full_drive_2 A2 lite | 32 | 893.6 | 905.8 | 23.00x | 4.3 % |
+| fulltone_full_drive_2 A2 lite | 64 | 836.6 | 947.2 | 22.00x | 4.5 % |
+| fulltone_full_drive_2 A2 lite | 128 | 813.7 | 898.3 | 23.19x | 4.3 % |
+| fulltone_full_drive_2 A2 lite | 256 | 817.1 | 933.1 | 22.33x | 4.5 % |
+| fulltone_full_drive_2 A2 full | 32 | 5288.2 | 5722.3 | 3.64x | 27.5 % |
+| fulltone_full_drive_2 A2 full | 64 | 4849.9 | 5313.6 | 3.92x | 25.5 % |
+| fulltone_full_drive_2 A2 full | 128 | 4512.1 | 5037.3 | 4.14x | 24.2 % |
+| fulltone_full_drive_2 A2 full | 256 | 4256.3 | 4531.3 | 4.60x | 21.8 % |
+| electro_harmonix_big_muff A2 lite | 32 | 896.3 | 1080.0 | 19.29x | 5.2 % |
+| electro_harmonix_big_muff A2 lite | 64 | 834.7 | 1009.5 | 20.64x | 4.8 % |
+| electro_harmonix_big_muff A2 lite | 128 | 815.4 | 979.8 | 21.26x | 4.7 % |
+| electro_harmonix_big_muff A2 lite | 256 | 793.2 | 983.9 | 21.17x | 4.7 % |
+| electro_harmonix_big_muff A2 full | 32 | 5291.9 | 5995.3 | 3.47x | 28.8 % |
+| electro_harmonix_big_muff A2 full | 64 | 4839.1 | 5250.1 | 3.97x | 25.2 % |
+| electro_harmonix_big_muff A2 full | 128 | 4424.2 | 4630.2 | 4.50x | 22.2 % |
+| electro_harmonix_big_muff A2 full | 256 | 4252.4 | 4841.7 | 4.30x | 23.2 % |
 
 ## Parité moteur (Python d'entraînement vs moteur natif C++)
 

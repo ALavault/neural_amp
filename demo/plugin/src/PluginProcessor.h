@@ -47,6 +47,9 @@ public:
   std::atomic<bool> referenceLoaded{false};
 
 private:
+  /// The model is mono: channel 0 is processed, then copied to the others.
+  void processMono(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&);
+
   /// Audio-thread state, swapped in from the message thread under a spin lock.
   juce::SpinLock modelLock;
   std::unique_ptr<nam::DSP> model;
@@ -54,6 +57,6 @@ private:
   juce::AudioBuffer<float> referenceDry, referenceWet;
   std::atomic<int> referencePosition{0};
   std::atomic<double> modelSampleRate{0.0};
-  double currentSampleRate{48000.0};
+  std::atomic<double> currentSampleRate{48000.0};
   int currentBlockSize{512};
 };

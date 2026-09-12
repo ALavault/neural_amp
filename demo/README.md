@@ -24,7 +24,9 @@ pour `electro_harmonix_big_muff`).
    l'appareil (l'entrée DI et la capture cible ; l'ordre de sélection n'importe pas).
 4. Basculer le sélecteur **A : modèle** / **B : réel**. Les deux flux sont
    alignés à l'échantillon près, donc la bascule est une comparaison directe.
-5. `model_lite.nam` montre le compromis coût/fidélité (voir `REPORT.md`).
+5. Entrée guitare : le modèle est mono et lit le canal 1 de l'interface ; sa
+   sortie est dupliquée sur les deux canaux.
+6. `model_lite.nam` montre le compromis coût/fidélité (voir `REPORT.md`).
 
 Le Big Muff est présenté comme le cas difficile : chiffres et repères de
 littérature dans `REPORT.md`.

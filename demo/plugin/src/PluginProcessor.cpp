@@ -3,6 +3,7 @@
 #include "PluginEditor.h"
 
 #include <algorithm>
+#include <cmath>
 #include <filesystem>
 
 #include "NAM/get_dsp.h"
@@ -37,7 +38,7 @@ FssrAmpProcessor::FssrAmpProcessor()
 
 void FssrAmpProcessor::prepareToPlay(double sampleRate, int maximumBlockSize)
 {
-  currentSampleRate = sampleRate;
+  currentSampleRate.store(sampleRate);
   currentBlockSize = maximumBlockSize;
   inputScratch.assign(static_cast<std::size_t>(maximumBlockSize), 0.0);
   outputScratch.assign(static_cast<std::size_t>(maximumBlockSize), 0.0);
@@ -49,8 +50,13 @@ void FssrAmpProcessor::prepareToPlay(double sampleRate, int maximumBlockSize)
 
 bool FssrAmpProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
-  return layouts.getMainInputChannelSet() == juce::AudioChannelSet::mono()
-         && layouts.getMainOutputChannelSet() == juce::AudioChannelSet::mono();
+  // The model is mono; stereo is accepted so the standalone fills both speakers
+  // (JUCE zeroes any device channel a mono processor does not write).
+  const auto accepted = [](const juce::AudioChannelSet& set) {
+    return set == juce::AudioChannelSet::mono() || set == juce::AudioChannelSet::stereo();
+  };
+  return accepted(layouts.getMainInputChannelSet())
+         && accepted(layouts.getMainOutputChannelSet());
 }
 
 juce::String FssrAmpProcessor::loadModel(const juce::File& file)
@@ -69,7 +75,7 @@ juce::String FssrAmpProcessor::loadModel(const juce::File& file)
   if (loaded->NumInputChannels() != 1 || loaded->NumOutputChannels() != 1)
     return "seuls les modeles mono sont supportes";
   modelSampleRate.store(loaded->GetExpectedSampleRate());
-  loaded->Reset(currentSampleRate, currentBlockSize);
+  loaded->Reset(currentSampleRate.load(), currentBlockSize);
   {
     const juce::SpinLock::ScopedLockType lock(modelLock);
     model = std::move(loaded);
@@ -81,9 +87,9 @@ juce::String FssrAmpProcessor::loadModel(const juce::File& file)
 juce::String FssrAmpProcessor::sampleRateWarning() const
 {
   const double expected = modelSampleRate.load();
-  if (expected <= 0.0 || std::abs(expected - currentSampleRate) < 1.0)
+  if (expected <= 0.0 || std::abs(expected - currentSampleRate.load()) < 1.0)
     return {};
-  return "ATTENTION hote a " + juce::String(currentSampleRate, 0) + " Hz, modele attendu a "
+  return "ATTENTION hote a " + juce::String(currentSampleRate.load(), 0) + " Hz, modele attendu a "
          + juce::String(expected, 0) + " Hz";
 }
 
@@ -114,7 +120,15 @@ juce::String FssrAmpProcessor::loadReference(const juce::File& dryFile, const ju
   return {};
 }
 
-void FssrAmpProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
+void FssrAmpProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midi)
+{
+  processMono(buffer, midi);
+  const int samples = buffer.getNumSamples();
+  for (int channel = 1; channel < buffer.getNumChannels(); ++channel)
+    buffer.copyFrom(channel, 0, buffer, 0, 0, samples);
+}
+
+void FssrAmpProcessor::processMono(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
   juce::ScopedNoDenormals noDenormals;
   const int samples = buffer.getNumSamples();
