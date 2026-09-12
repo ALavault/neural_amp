@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<title>Écoute aveugle A/B/X</title>
+<style>
+ body { font: 15px/1.5 system-ui, sans-serif; max-width: 46rem; margin: 2rem auto;
+        padding: 0 1rem; }
+ h1 { font-size: 1.4rem; }
+ .excerpt { border: 1px solid #ccc; border-radius: 6px; padding: 1rem;
+            margin: 1rem 0; }
+ button { font: inherit; padding: .4rem .9rem; margin-right: .4rem; }
+ .play { min-width: 3rem; }
+ .on { background: #222; color: #fff; }
+ .score { font-variant-numeric: tabular-nums; }
+ .meta { color: #555; font-size: .9rem; }
+ textarea { width: 100%; height: 8rem; font: 12px monospace; }
+</style>
+<h1>Écoute aveugle A/B/X : appareil réel contre modèle</h1>
+<p>Trois extraits par appareil, pris à des positions fixes du fichier de test
+(1-9 s, 10,5-18,5 s, 20-28 s) : aucune sélection sur le résultat. A et B sont
+tirés au sort à chaque chargement, X est tiré à chaque essai. Le modèle est
+rendu par le moteur natif du plugin, et corrigé d'un seul gain par appareil
+pour qu'une différence de niveau ne donne pas la réponse.</p>
+<p class="meta">L'ESR affiché est celui de l'extrait, mesuré sur les fichiers tels
+qu'ils sont joués, donc après correction de gain : il ne coïncide pas avec
+l'ESR global de <code>REPORT.md</code>, qui porte sur les 30 s non corrigées.</p>
+<p class="meta">Le tirage est dans cette page : elle sert à écouter honnêtement,
+pas à résister à quelqu'un qui ouvre les outils de développement. Au casque,
+au moins 10 essais par extrait.</p>
+<div id="excerpts"></div>
+<h2>Résultats</h2>
+<textarea id="results" readonly></textarea>
+
+<script>
+const EXCERPTS = [{"device": "fulltone_full_drive_2", "index": 1, "window": "1-9 s", "real": "audio/fulltone_full_drive_2_1_real.wav", "model": "audio/fulltone_full_drive_2_1_model.wav", "esr": 0.0009394111904091515, "gain_correction_db": 0.0036460790482361286}, {"device": "fulltone_full_drive_2", "index": 2, "window": "10.5-18.5 s", "real": "audio/fulltone_full_drive_2_2_real.wav", "model": "audio/fulltone_full_drive_2_2_model.wav", "esr": 0.001462934895998686, "gain_correction_db": 0.0036460790482361286}, {"device": "fulltone_full_drive_2", "index": 3, "window": "20-28 s", "real": "audio/fulltone_full_drive_2_3_real.wav", "model": "audio/fulltone_full_drive_2_3_model.wav", "esr": 0.0006608973519666437, "gain_correction_db": 0.0036460790482361286}, {"device": "electro_harmonix_big_muff", "index": 1, "window": "1-9 s", "real": "audio/electro_harmonix_big_muff_1_real.wav", "model": "audio/electro_harmonix_big_muff_1_model.wav", "esr": 0.27398520850672964, "gain_correction_db": 0.8524425882142888}, {"device": "electro_harmonix_big_muff", "index": 2, "window": "10.5-18.5 s", "real": "audio/electro_harmonix_big_muff_2_real.wav", "model": "audio/electro_harmonix_big_muff_2_model.wav", "esr": 0.28269363821884685, "gain_correction_db": 0.8524425882142888}, {"device": "electro_harmonix_big_muff", "index": 3, "window": "20-28 s", "real": "audio/electro_harmonix_big_muff_3_real.wav", "model": "audio/electro_harmonix_big_muff_3_model.wav", "esr": 0.14401289904130646, "gain_correction_db": 0.8524425882142888}];
+
+function randomBit() {
+  const buffer = new Uint32Array(1);
+  crypto.getRandomValues(buffer);
+  return buffer[0] % 2;
+}
+
+// One-sided binomial tail: probability of at least `correct` out of `trials`
+// by guessing.
+function pValue(correct, trials) {
+  let logFactorial = [0];
+  for (let i = 1; i <= trials; i++) logFactorial[i] = logFactorial[i - 1] + Math.log(i);
+  let total = 0;
+  for (let k = correct; k <= trials; k++) {
+    total += Math.exp(logFactorial[trials] - logFactorial[k] - logFactorial[trials - k]
+                      - trials * Math.log(2));
+  }
+  return total;
+}
+
+const state = JSON.parse(localStorage.getItem('abx') || '{}');
+const container = document.getElementById('excerpts');
+const results = document.getElementById('results');
+
+function save() {
+  localStorage.setItem('abx', JSON.stringify(state));
+  results.value = JSON.stringify(EXCERPTS.map(e => {
+    const key = e.device + '_' + e.index;
+    const s = state[key] || { trials: 0, correct: 0 };
+    return { extrait: key, fenetre: e.window, essais: s.trials, justes: s.correct,
+             p: s.trials ? Number(pValue(s.correct, s.trials).toFixed(4)) : null,
+             esr: Number(e.esr.toFixed(5)) };
+  }), null, 1);
+}
+
+for (const excerpt of EXCERPTS) {
+  const key = excerpt.device + '_' + excerpt.index;
+  if (!state[key]) state[key] = { trials: 0, correct: 0 };
+  // A/B assignment is redrawn each time the page loads.
+  const aIsReal = randomBit() === 0;
+  const sources = {
+    A: aIsReal ? excerpt.real : excerpt.model,
+    B: aIsReal ? excerpt.model : excerpt.real,
+  };
+  let xIsA = randomBit() === 0;
+
+  const node = document.createElement('div');
+  node.className = 'excerpt';
+  node.innerHTML = `<b>${excerpt.device}</b> — extrait ${excerpt.index}
+    (${excerpt.window}) <span class="meta">ESR ${excerpt.esr.toFixed(5)}</span><br>
+    <button class="play" data-k="A">A</button>
+    <button class="play" data-k="B">B</button>
+    <button class="play" data-k="X">X</button>
+    <button data-guess="A">X = A</button>
+    <button data-guess="B">X = B</button>
+    <span class="score"></span>
+    <button data-reveal="1" hidden>Révéler</button>`;
+  container.appendChild(node);
+
+  const audio = { A: new Audio(sources.A), B: new Audio(sources.B), X: new Audio() };
+  audio.X.src = xIsA ? sources.A : sources.B;
+  const score = node.querySelector('.score');
+  const reveal = node.querySelector('[data-reveal]');
+
+  function refresh() {
+    const s = state[key];
+    score.textContent = ` ${s.correct}/${s.trials}`
+      + (s.trials ? ` (p = ${pValue(s.correct, s.trials).toFixed(3)})` : '');
+    reveal.hidden = s.trials < 10;
+    save();
+  }
+
+  node.querySelectorAll('.play').forEach(button => {
+    button.onclick = () => {
+      // Keep the playhead when switching, so the comparison is instantaneous.
+      let position = 0;
+      for (const player of Object.values(audio)) {
+        if (!player.paused) { position = player.currentTime; player.pause(); }
+      }
+      node.querySelectorAll('.play').forEach(other => other.classList.remove('on'));
+      button.classList.add('on');
+      const player = audio[button.dataset.k];
+      player.currentTime = position;
+      player.play();
+    };
+  });
+
+  node.querySelectorAll('[data-guess]').forEach(button => {
+    button.onclick = () => {
+      const s = state[key];
+      s.trials += 1;
+      if ((button.dataset.guess === 'A') === xIsA) s.correct += 1;
+      xIsA = randomBit() === 0;
+      audio.X.src = xIsA ? sources.A : sources.B;
+      refresh();
+    };
+  });
+
+  reveal.onclick = () => {
+    reveal.textContent = `A = ${aIsReal ? 'réel' : 'modèle'}, `
+      + `B = ${aIsReal ? 'modèle' : 'réel'}`;
+    reveal.disabled = true;
+  };
+
+  refresh();
+}
+</script>
+</html>

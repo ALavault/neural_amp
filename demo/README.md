@@ -30,3 +30,11 @@ pour `electro_harmonix_big_muff`).
 
 Le Big Muff est présenté comme le cas difficile : chiffres et repères de
 littérature dans `REPORT.md`.
+
+## Écoute aveugle A/B/X
+
+`make demo` génère aussi `demo/listening/index.html` (ouvrir avec `file://`).
+Trois extraits par appareil, pris à des positions fixes, réel contre modèle :
+A et B sont tirés au sort à chaque chargement, X à chaque essai, et la page
+affiche le score et la p-valeur binomiale. Les extraits audio restent locaux
+(sources CC-BY-NC) et ne sont pas versionnés.

@@ -43,22 +43,22 @@ dédiée quand elles existeront.
 
 | Modèle | Bloc | ns/éch. médian | p95 | x temps réel p95 | charge CPU p95 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| fulltone_full_drive_2 A2 lite | 32 | 1215.9 | 1344.5 | 15.49x | 6.5 % |
-| fulltone_full_drive_2 A2 lite | 64 | 1051.4 | 1173.4 | 17.75x | 5.6 % |
-| fulltone_full_drive_2 A2 lite | 128 | 816.4 | 901.2 | 23.12x | 4.3 % |
-| fulltone_full_drive_2 A2 lite | 256 | 809.4 | 862.8 | 24.15x | 4.1 % |
-| fulltone_full_drive_2 A2 full | 32 | 5295.1 | 6895.1 | 3.02x | 33.1 % |
-| fulltone_full_drive_2 A2 full | 64 | 4908.9 | 51826.9 | 0.40x | 248.8 % |
-| fulltone_full_drive_2 A2 full | 128 | 4465.3 | 6027.1 | 3.46x | 28.9 % |
-| fulltone_full_drive_2 A2 full | 256 | 4243.4 | 15954.3 | 1.31x | 76.6 % |
-| electro_harmonix_big_muff A2 lite | 32 | 906.2 | 1238.2 | 16.83x | 5.9 % |
-| electro_harmonix_big_muff A2 lite | 64 | 844.9 | 1180.9 | 17.64x | 5.7 % |
-| electro_harmonix_big_muff A2 lite | 128 | 1084.6 | 1189.6 | 17.51x | 5.7 % |
-| electro_harmonix_big_muff A2 lite | 256 | 792.4 | 1005.5 | 20.72x | 4.8 % |
-| electro_harmonix_big_muff A2 full | 32 | 5300.3 | 6414.4 | 3.25x | 30.8 % |
-| electro_harmonix_big_muff A2 full | 64 | 4919.9 | 7020.5 | 2.97x | 33.7 % |
-| electro_harmonix_big_muff A2 full | 128 | 4443.4 | 6027.3 | 3.46x | 28.9 % |
-| electro_harmonix_big_muff A2 full | 256 | 4294.5 | 16072.3 | 1.30x | 77.1 % |
+| fulltone_full_drive_2 A2 lite | 32 | 901.1 | 909.3 | 22.91x | 4.4 % |
+| fulltone_full_drive_2 A2 lite | 64 | 847.1 | 945.9 | 22.02x | 4.5 % |
+| fulltone_full_drive_2 A2 lite | 128 | 809.7 | 877.0 | 23.75x | 4.2 % |
+| fulltone_full_drive_2 A2 lite | 256 | 807.1 | 896.1 | 23.25x | 4.3 % |
+| fulltone_full_drive_2 A2 full | 32 | 5272.3 | 5606.5 | 3.72x | 26.9 % |
+| fulltone_full_drive_2 A2 full | 64 | 4843.0 | 5108.6 | 4.08x | 24.5 % |
+| fulltone_full_drive_2 A2 full | 128 | 4424.1 | 6114.2 | 3.41x | 29.3 % |
+| fulltone_full_drive_2 A2 full | 256 | 4245.5 | 5732.1 | 3.63x | 27.5 % |
+| electro_harmonix_big_muff A2 lite | 32 | 893.9 | 909.3 | 22.91x | 4.4 % |
+| electro_harmonix_big_muff A2 lite | 64 | 837.9 | 934.5 | 22.29x | 4.5 % |
+| electro_harmonix_big_muff A2 lite | 128 | 813.9 | 879.3 | 23.69x | 4.2 % |
+| electro_harmonix_big_muff A2 lite | 256 | 804.5 | 874.4 | 23.83x | 4.2 % |
+| electro_harmonix_big_muff A2 full | 32 | 5271.5 | 5627.3 | 3.70x | 27.0 % |
+| electro_harmonix_big_muff A2 full | 64 | 4845.3 | 5205.9 | 4.00x | 25.0 % |
+| electro_harmonix_big_muff A2 full | 128 | 4422.7 | 4625.1 | 4.50x | 22.2 % |
+| electro_harmonix_big_muff A2 full | 256 | 4195.6 | 4313.9 | 4.83x | 20.7 % |
 
 ## Parité moteur (Python d'entraînement vs moteur natif C++)
 
