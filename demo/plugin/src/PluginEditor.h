@@ -26,6 +26,8 @@ private:
   juce::TextButton modelButton{"Charger un modele .nam"};
   juce::TextButton referenceButton{"Charger DI + capture reelle"};
   juce::Label status;
+  juce::Label inputLabel{{}, "Entree"};
+  juce::Label outputLabel{{}, "Sortie"};
   juce::Slider input{juce::Slider::LinearHorizontal, juce::Slider::TextBoxRight};
   juce::Slider output{juce::Slider::LinearHorizontal, juce::Slider::TextBoxRight};
   juce::ToggleButton bypass{"Bypass"};

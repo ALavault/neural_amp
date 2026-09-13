@@ -41,7 +41,7 @@ def figures(report: dict, runs: list[dict]) -> dict:
             rows.append(
                 {
                     "device": DEVICE_LABELS[device],
-                    "variant": f"A2 {label.capitalize()}",
+                    "variant": f"NAM A2 {label.capitalize()}",
                     "esr": variant["fidelity"]["esr"],
                     "correlation": variant["fidelity"]["correlation"],
                     "mrstft": variant["fidelity"]["mrstft"],
@@ -129,8 +129,8 @@ def metrics_table(rows: list[dict]) -> str:
 
 def build(data: dict) -> str:
     rows = data["rows"]
-    full = {row["device"]: row for row in rows if row["variant"] == "A2 Full"}
-    lite = {row["device"]: row for row in rows if row["variant"] == "A2 Lite"}
+    full = {row["device"]: row for row in rows if row["variant"].endswith("Full")}
+    lite = {row["device"]: row for row in rows if row["variant"].endswith("Lite")}
     fulltone = full["Fulltone Full-Drive 2"]
     muff = full["Electro-Harmonix Big Muff"]
     worst_parity = max(row["parity"] for row in rows)
@@ -145,12 +145,21 @@ def build(data: dict) -> str:
             bascule instantanément entre le modèle et l’enregistrement réel aligné à
             l’échantillon près, et tourne à <strong>{load_full:.0f}&nbsp;%</strong> d’un
             cœur à 48&nbsp;kHz.</p>
-            <p>Le moteur est celui de NAM. Ce qui nous distingue n’est pas
-            l’architecture : c’est la mesure. Fidélité, coût, parité, repliement,
-            robustesse et chaîne de capture, tous chiffrés, reproductibles par une
-            commande, et publiés avec leurs limites.</p>
+            <div class="disclosure"><h3>Ce qui n’est pas de nous</h3>
+            <p><strong>A2 est l’architecture de Neural Amp Modeler</strong>, pas la
+            nôtre : deux WaveNet empaquetés (Lite et Full, champ réceptif de 6 347
+            échantillons), entraînés par le trainer officiel NAM, exportés au format
+            <code>.nam</code> officiel et exécutés par
+            <code>NeuralAmpModelerCore</code>. Nous n’avons rien inventé côté modèle et
+            nous ne prétendons pas battre NAM.</p>
+            <p>Ce qui est de nous&nbsp;: les poids entraînés sur ces appareils, le
+            plugin, la chaîne de mesure et la chaîne de capture.</p></div>
+            <p>La valeur est donc dans la mesure. Fidélité, coût, parité, repliement,
+            robustesse et capture&nbsp;: tous chiffrés, reproductibles par une commande,
+            et publiés avec leurs limites.</p>
             <div class="pills"><span class="pill">VST3 + standalone</span>
             <span class="pill">Linux, JUCE 8.0.15</span>
+            <span class="pill">Moteur NAM A2</span>
             <span class="pill">2 appareils mesurés</span></div>""",
         ),
         slide(
@@ -192,7 +201,7 @@ def build(data: dict) -> str:
             <div><h3>Sur ce même appareil</h3><ul class="bare">
             <li><span class="n">0,1076</span> — S4-TFiLM <em>large</em></li>
             <li><span class="n">0,59 à 0,70</span> — gray-box à une non-linéarité</li>
-            <li><span class="n">{muff["esr"]:.4f}</span> — A2 Full, ici</li>
+            <li><span class="n">{muff["esr"]:.4f}</span> — NAM A2 Full, ici</li>
             </ul></div>
             <div><h3>Ce que nous avons vérifié</h3><ul class="ticks">
             <li>Alignement prédiction/cible&nbsp;: décalage de pic nul</li>
@@ -207,7 +216,7 @@ def build(data: dict) -> str:
             "Un cœur, 48 kHz, bloc 64",
             f'<div class="chart">{cost_chart(rows)}</div>'
             f"""<p class="note">Médiane de {fulltone["ns"]:.0f}&nbsp;ns/échantillon
-            pour A2 Full, {lite["Fulltone Full-Drive 2"]["ns"]:.0f}&nbsp;ns pour A2
+            pour NAM A2 Full, {lite["Fulltone Full-Drive 2"]["ns"]:.0f}&nbsp;ns pour A2
             Lite. La charge affichée est calculée sur le p95, donc pessimiste. Machine
             partagée&nbsp;: la médiane est le chiffre fiable, une mesure sur machine
             dédiée reste à faire.</p>""",
@@ -236,7 +245,7 @@ def build(data: dict) -> str:
             "Repliement",
             "La mesure que personne ne publie sur ces modèles",
             f"""<p class="lead">Sondes sinus à bin exact, N&nbsp;=&nbsp;65&nbsp;536,
-            rendues par le moteur natif. À 9&nbsp;kHz et fort niveau, A2 Full produit
+            rendues par le moteur natif. À 9&nbsp;kHz et fort niveau, NAM A2 Full produit
             {muff["alias"]:.1f}&nbsp;dB d’énergie non harmonique sur le Big Muff,
             {fulltone["alias"]:.1f}&nbsp;dB sur le Fulltone.</p>
             <div class="cols">
@@ -473,6 +482,9 @@ ol.steps li::marker { font-family: var(--mono); color: var(--accent); }
 code { font-family: var(--mono); font-size: .88em; background: var(--accent-soft);
        padding: .05em .3em; border-radius: 2px; }
 .n, span.n { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.disclosure { border-left: 3px solid var(--warn); padding: .1rem 0 .1rem .9rem;
+              display: grid; gap: .5rem; }
+.disclosure h3 { color: var(--warn); }
 .pills { display: flex; flex-wrap: wrap; gap: .4rem; }
 .pill {
   font-family: var(--mono);

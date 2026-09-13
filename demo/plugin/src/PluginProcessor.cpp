@@ -13,11 +13,17 @@ namespace
 juce::AudioProcessorValueTreeState::ParameterLayout makeLayout()
 {
   using juce::NormalisableRange;
+  // The slider readout comes from the parameter, not from the slider: an
+  // attachment installs this conversion over any per-slider formatting.
+  const auto decibels = juce::AudioParameterFloatAttributes{}.withStringFromValueFunction(
+    [](float value, int) { return juce::String(value, 1) + " dB"; });
   std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
   parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-    juce::ParameterID{"input_db", 1}, "Input", NormalisableRange<float>{-24.0f, 24.0f}, 0.0f));
+    juce::ParameterID{"input_db", 1}, "Input", NormalisableRange<float>{-24.0f, 24.0f},
+    0.0f, decibels));
   parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-    juce::ParameterID{"output_db", 1}, "Output", NormalisableRange<float>{-24.0f, 24.0f}, 0.0f));
+    juce::ParameterID{"output_db", 1}, "Output", NormalisableRange<float>{-24.0f, 24.0f},
+    0.0f, decibels));
   parameters.push_back(std::make_unique<juce::AudioParameterBool>(
     juce::ParameterID{"bypass", 1}, "Bypass", false));
   // 0 = plugin input, 1 = reference DI through the model, 2 = reference capture.

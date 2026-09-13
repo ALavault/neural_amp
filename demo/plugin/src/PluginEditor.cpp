@@ -13,6 +13,8 @@ FssrAmpEditor::FssrAmpEditor(FssrAmpProcessor& owner)
   addAndMakeVisible(source);
 
   source.addItemList({"Entree", "A: modele", "B: reel"}, 1);
+  addAndMakeVisible(inputLabel);
+  addAndMakeVisible(outputLabel);
   status.setJustificationType(juce::Justification::centredLeft);
   status.setText("Aucun modele charge", juce::dontSendNotification);
   modelButton.onClick = [this] { chooseModel(); };
@@ -24,7 +26,8 @@ FssrAmpEditor::FssrAmpEditor(FssrAmpProcessor& owner)
   bypassAttachment = std::make_unique<ButtonAttachment>(state, "bypass", bypass);
   sourceAttachment = std::make_unique<ComboAttachment>(state, "source", source);
 
-  setSize(520, 260);
+
+  setSize(560, 340);
   startTimerHz(2);
 }
 
@@ -116,7 +119,16 @@ void FssrAmpEditor::resized()
   area.removeFromTop(6);
   source.setBounds(area.removeFromTop(28));
   area.removeFromTop(10);
-  input.setBounds(area.removeFromTop(30));
-  output.setBounds(area.removeFromTop(30));
+  const std::pair<juce::Label*, juce::Slider*> rows[] = {
+    {&inputLabel, &input},
+    {&outputLabel, &output},
+  };
+  for (const auto& [label, slider] : rows)
+  {
+    auto row = area.removeFromTop(30);
+    label->setBounds(row.removeFromLeft(64));
+    slider->setBounds(row);
+    area.removeFromTop(6);
+  }
   bypass.setBounds(area.removeFromTop(30));
 }
