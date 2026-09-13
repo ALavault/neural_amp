@@ -94,18 +94,25 @@ def evaluate_test(run_dir: Path, test_pair: tuple[Path, Path]) -> dict[str, dict
     return metrics
 
 
-def main() -> None:
-    args = parse_args()
-    config = yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
-    pairs = device_pairs(ROOT / config["manifest"], args.device, root=ROOT)
-    max_epochs = args.max_epochs or int(config["max_epochs"])
-    run_id = args.run_id or f"product_a2_{args.device}_seed{args.seed}"
+def run_training(
+    pairs: dict,
+    *,
+    run_id: str,
+    device: str,
+    seed: int,
+    max_epochs: int,
+    config: dict | None = None,
+    progress_bar: bool = True,
+) -> dict:
+    """Train one A2 model on prepared pairs and append the run to demo/RUNS.jsonl."""
+    config = config or yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
     run_dir = ROOT / "demo/runs" / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
 
-    torch.manual_seed(args.seed)
-    np.random.seed(args.seed)
+    torch.manual_seed(seed)
+    np.random.seed(seed)
     data, model, learning = build_configs(config, pairs, max_epochs)
+    learning["trainer"]["enable_progress_bar"] = progress_bar
     started = time.perf_counter()
     full.main(data, model, learning, run_dir, no_show=True, make_plots=False)
     metrics = evaluate_test(run_dir, pairs["test"])
@@ -123,8 +130,8 @@ def main() -> None:
             capture_output=True,
             text=True,
         ).stdout.strip(),
-        "device": args.device,
-        "seed": args.seed,
+        "device": device,
+        "seed": seed,
         "max_epochs": max_epochs,
         "minutes": round((time.perf_counter() - started) / 60.0, 2),
         "test_esr": {label: value["esr"] for label, value in metrics.items()},
@@ -133,6 +140,20 @@ def main() -> None:
     RUNS_LOG.parent.mkdir(parents=True, exist_ok=True)
     with RUNS_LOG.open("a", encoding="utf-8") as stream:
         stream.write(json.dumps(record) + "\n")
+    return record
+
+
+def main() -> None:
+    args = parse_args()
+    config = yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
+    record = run_training(
+        device_pairs(ROOT / config["manifest"], args.device, root=ROOT),
+        run_id=args.run_id or f"product_a2_{args.device}_seed{args.seed}",
+        device=args.device,
+        seed=args.seed,
+        max_epochs=args.max_epochs or int(config["max_epochs"]),
+        config=config,
+    )
     print(json.dumps(record, indent=2))
 
 

@@ -38,3 +38,23 @@ Trois extraits par appareil, pris à des positions fixes, réel contre modèle :
 A et B sont tirés au sort à chaque chargement, X à chaque essai, et la page
 affiche le score et la p-valeur binomiale. Les extraits audio restent locaux
 (sources CC-BY-NC) et ne sont pas versionnés.
+
+## Chaîne de capture
+
+`make demo-capture-selftest` prouve la chaîne de bout en bout sans interface
+audio : un modèle `.nam` déjà entraîné joue l'appareil inconnu, une latence et
+un gain sont tirés au hasard à chaque exécution, et le contrôle qualité doit
+reconstituer un jeu d'entraînement à partir de la seule capture.
+
+Sur du vrai matériel, la séquence est la même :
+
+```
+uv run python scripts/product_capture_selftest.py   # génère demo/capture/reamp_reference.wav
+# jouer ce fichier dans l'appareil, enregistrer le retour
+uv run python scripts/product_capture_qc.py demo/capture/reamp_reference.wav capture.wav sortie/
+uv run python scripts/product_train.py --device <appareil>
+```
+
+Le QC ne reçoit que le signal envoyé et la capture reçue : il retrouve la
+latence à l'échantillon près depuis les blips de calibration, rapporte le
+niveau du programme en dBFS, et refuse une prise écrêtée ou silencieuse.

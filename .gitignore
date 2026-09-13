@@ -26,6 +26,8 @@ artifacts/*.tar.zst.verification.json
 # Listening examples derived from noncommercial source audio remain local.
 experiments/audio_examples/**/*.wav
 demo/listening/audio/
+demo/capture/*.wav
+demo/capture/dataset/
 
 # Dedicated Git worktrees are managed separately from the main checkout.
 experiments/worktrees/
