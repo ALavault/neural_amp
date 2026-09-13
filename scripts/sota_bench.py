@@ -207,6 +207,10 @@ def train_baseline(name: str, pairs: dict, max_steps: int, seed: int) -> dict:
             )
     if best["state"] is not None:
         model.load_state_dict(best["state"])
+        # Four hours of training must survive the process that produced it.
+        weights = ROOT / "demo/runs" / f"sota_{name.replace(' ', '_')}"
+        weights.mkdir(parents=True, exist_ok=True)
+        torch.save(best["state"], weights / "state.pt")
     minutes = (time.perf_counter() - started) / 60.0
     return {
         "model": name,
