@@ -1,0 +1,30 @@
+{
+  "source_input": "datasets/raw/internal_m4/electro_harmonix_big_muff/train_input.wav",
+  "source_target": "datasets/raw/internal_m4/electro_harmonix_big_muff/train_target.wav",
+  "source_input_sha256": "dce322582d50d11f5608ad5a3a5a38f82faba78a780c2d1f3096b9705b958331",
+  "source_target_sha256": "985ac8a0116332dcba2b64698efbfa59826a692e43593c1ae17ba8203df00cfc",
+  "sample_rate": 48000,
+  "splits": {
+    "train": {
+      "start_s": 0,
+      "stop_s": 80,
+      "samples": 3840000,
+      "input_sha256": "161cd0b60bf2fc6c200e5e4654b72aa6051dab996ccfb6e3f0a84b5b39db20cd",
+      "target_sha256": "ed494e1ce2b4e4b30f1daca7e9e37cc82612956dcfacd67048f210096c383069"
+    },
+    "validation": {
+      "start_s": 80,
+      "stop_s": 100,
+      "samples": 960000,
+      "input_sha256": "9bcc2319b247860b64cbc9e56b414ae1c0a6ab09086ae51a2a2851e8d18d50de",
+      "target_sha256": "5d40af72e7ce032b5da3174148c25c7aa91fffb4d72498b0f12503a085503e5d"
+    },
+    "test": {
+      "start_s": 100,
+      "stop_s": 120,
+      "samples": 960000,
+      "input_sha256": "cd812f4bd82a34bf0858d13dee6886f8ceea813322b23784819e4b9d30e9b511",
+      "target_sha256": "8a40aba91dba75fe53e976379bb89f8160f70111e4110a6cc87f8af614953cba"
+    }
+  }
+}
