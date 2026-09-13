@@ -1,0 +1,320 @@
+<title>Fidélité mesurée</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root {
+  --ground: #eceef1;
+  --surface: #f6f7f9;
+  --edge: #cfd5dd;
+  --ink: #171c24;
+  --muted: #5a6472;
+  --accent: #0f6e8c;
+  --accent-soft: #cfe3ea;
+  --warn: #9a5218;
+  --good: #2f6b4f;
+  --display: "Archivo", "Helvetica Neue", sans-serif;
+  --body: "Source Serif 4", Georgia, serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0e1218;
+    --surface: #161c25;
+    --edge: #2b3542;
+    --ink: #e6eaf0;
+    --muted: #93a0b1;
+    --accent: #4fb8d8;
+    --accent-soft: #1d3d4a;
+    --warn: #d8974f;
+    --good: #6fbf96;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0e1218;
+  --surface: #161c25;
+  --edge: #2b3542;
+  --ink: #e6eaf0;
+  --muted: #93a0b1;
+  --accent: #4fb8d8;
+  --accent-soft: #1d3d4a;
+  --warn: #d8974f;
+  --good: #6fbf96;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 0;
+}
+.wrap {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding-block: 2.5rem 4rem;
+  padding-inline: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: .75rem;
+}
+.masthead h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.35rem, 3.6vw, 1.9rem);
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+.masthead p { color: var(--muted); font-size: .95rem; margin: 0; }
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  font-family: var(--mono);
+  font-size: .72rem;
+}
+nav a {
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid var(--edge);
+  border-radius: 2px;
+  padding: .15rem .45rem;
+}
+nav a:hover, nav a:focus-visible { color: var(--accent); border-color: var(--accent); }
+.slide {
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  border-top: 3px solid var(--accent);
+  padding: clamp(1.25rem, 3.5vw, 2.25rem);
+  scroll-margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.slide-head { display: flex; align-items: center; gap: .7rem; }
+.num {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.eyebrow {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: .74rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.slide h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.3rem, 3.2vw, 1.85rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+.slide h3 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: .78rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 .5rem;
+}
+.slide p { margin: 0; max-width: 62ch; }
+.lead { font-size: 1.1rem; }
+.note { color: var(--muted); font-size: .9rem; }
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+@media (max-width: 640px) { .cols { grid-template-columns: 1fr; } }
+ol.steps, ul.ticks, ul.bare { margin: 0; padding-left: 1.1rem; display: grid; gap: .35rem; }
+ul.ticks, ul.bare { list-style: none; padding-left: 0; }
+ul.ticks li { padding-left: 1.35rem; position: relative; }
+ul.ticks li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--good);
+  font-family: var(--mono);
+}
+ul.bare li { border-bottom: 1px solid var(--edge); padding-bottom: .35rem; }
+ul.bare.warn li::before { content: "· "; color: var(--warn); }
+ol.steps li::marker { font-family: var(--mono); color: var(--accent); }
+code { font-family: var(--mono); font-size: .88em; background: var(--accent-soft);
+       padding: .05em .3em; border-radius: 2px; }
+.n, span.n { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.pills { display: flex; flex-wrap: wrap; gap: .4rem; }
+.pill {
+  font-family: var(--mono);
+  font-size: .72rem;
+  border: 1px solid var(--edge);
+  border-radius: 999px;
+  padding: .2rem .6rem;
+  color: var(--muted);
+}
+.scroller { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; min-width: 34rem; }
+th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--edge); }
+th {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: .72rem;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+td.n { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+@media (max-width: 640px) { .stats { grid-template-columns: 1fr; } }
+.stat { display: flex; flex-direction: column; gap: .2rem; border-left: 2px solid var(--accent);
+        padding-left: .8rem; }
+.stat .v { font-family: var(--mono); font-size: 1.45rem; font-weight: 600; }
+.stat .k { color: var(--muted); font-size: .87rem; }
+.chart { overflow-x: auto; }
+.chart svg { width: 100%; min-width: 32rem; height: auto; }
+.grid { stroke: var(--edge); stroke-width: 1; }
+.tick, .bar-label, .bar-value { font-family: var(--mono); fill: var(--muted); font-size: 13px; }
+.bar-value { fill: var(--ink); font-weight: 600; }
+.bar-full { fill: var(--accent); }
+.bar-lite { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1; }
+footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--edge);
+         padding-top: 1rem; }
+a:focus-visible, nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+<div class="wrap">
+  <header class="masthead">
+    <div>
+      <h1>Fidélité mesurée&nbsp;: d’un appareil au plugin</h1>
+      <p>Dossier de démonstration pour éditeurs de plugins</p>
+    </div>
+    <nav aria-label="Slides"><a href="#s1"><span>01</span></a><a href="#s2"><span>02</span></a><a href="#s3"><span>03</span></a><a href="#s4"><span>04</span></a><a href="#s5"><span>05</span></a><a href="#s6"><span>06</span></a><a href="#s7"><span>07</span></a><a href="#s8"><span>08</span></a><a href="#s9"><span>09</span></a><a href="#s10"><span>10</span></a></nav>
+  </header>
+  <section class="slide" id="s1"><div class="slide-head"><span class="num">01</span><span class="eyebrow">Ce que nous montrons</span></div><h2>D’un appareil analogique à un plugin temps réel, avec les chiffres</h2><p class="lead">Un VST3 mono qui charge un modèle <code>.nam</code>,
+            bascule instantanément entre le modèle et l’enregistrement réel aligné à
+            l’échantillon près, et tourne à <strong>25&nbsp;%</strong> d’un
+            cœur à 48&nbsp;kHz.</p>
+            <p>Le moteur est celui de NAM. Ce qui nous distingue n’est pas
+            l’architecture : c’est la mesure. Fidélité, coût, parité, repliement,
+            robustesse et chaîne de capture, tous chiffrés, reproductibles par une
+            commande, et publiés avec leurs limites.</p>
+            <div class="pills"><span class="pill">VST3 + standalone</span>
+            <span class="pill">Linux, JUCE 8.0.15</span>
+            <span class="pill">2 appareils mesurés</span></div></section><section class="slide" id="s2"><div class="slide-head"><span class="num">02</span><span class="eyebrow">Le produit</span></div><h2>Le plugin existe et se démontre en trois clics</h2><div class="cols">
+            <div><h3>Dans la démo</h3><ol class="steps">
+            <li>Charger un <code>.nam</code></li>
+            <li>Charger le DI et la capture réelle de l’appareil</li>
+            <li>Basculer <em>A&nbsp;: modèle</em> / <em>B&nbsp;: réel</em></li>
+            </ol></div>
+            <div><h3>Ce que ça garantit</h3><ul class="ticks">
+            <li>Les deux flux sont alignés à l’échantillon</li>
+            <li>Aucune allocation dans le callback audio</li>
+            <li>Tailles de bloc variables, reset exact</li>
+            <li>Avertissement si l’hôte n’est pas au taux du modèle</li>
+            </ul></div></div></section><section class="slide" id="s3"><div class="slide-head"><span class="num">03</span><span class="eyebrow">Fidélité</span></div><h2>Deux appareils, deux régimes, aucun chiffre choisi après coup</h2><div class="scroller"><table><thead><tr><th>Appareil</th><th>Modèle</th><th>ESR</th><th>Corrélation</th><th>MR-STFT</th></tr></thead><tbody><tr><td>Fulltone Full-Drive 2</td><td>A2 Full</td><td class='n'>0.00102</td><td class='n'>0.9995</td><td class='n'>0.410</td></tr><tr><td>Fulltone Full-Drive 2</td><td>A2 Lite</td><td class='n'>0.00298</td><td class='n'>0.9986</td><td class='n'>0.499</td></tr><tr><td>Electro-Harmonix Big Muff</td><td>A2 Full</td><td class='n'>0.18825</td><td class='n'>0.9060</td><td class='n'>0.668</td></tr><tr><td>Electro-Harmonix Big Muff</td><td>A2 Lite</td><td class='n'>0.29406</td><td class='n'>0.8514</td><td class='n'>0.755</td></tr></tbody></table></div><p class="note">Jeu de test de développement, 30&nbsp;s par
+            appareil. Le budget d’époques a été choisi après lecture de ce jeu&nbsp;:
+            il n’est pas scellé, et le dire fait partie de la mesure.
+            Entraînement&nbsp;: 10 à
+            44&nbsp;min sur un GPU.</p></section><section class="slide" id="s4"><div class="slide-head"><span class="num">04</span><span class="eyebrow">Le cas difficile</span></div><h2>Le Big Muff, présenté avec ses repères plutôt que caché</h2><p class="lead">ESR 0.1882 contre
+            0.00102 sur le Fulltone. Deux étages d’écrêtage en cascade,
+            c’est le cas dur de la littérature — et nous le montrons quand même.</p>
+            <div class="cols">
+            <div><h3>Sur ce même appareil</h3><ul class="bare">
+            <li><span class="n">0,1076</span> — S4-TFiLM <em>large</em></li>
+            <li><span class="n">0,59 à 0,70</span> — gray-box à une non-linéarité</li>
+            <li><span class="n">0.1882</span> — A2 Full, ici</li>
+            </ul></div>
+            <div><h3>Ce que nous avons vérifié</h3><ul class="ticks">
+            <li>Alignement prédiction/cible&nbsp;: décalage de pic nul</li>
+            <li>400 époques au lieu de 100&nbsp;: 10&nbsp;%
+            d’ESR gagnés</li>
+            <li>Le plateau vient du modèle, pas du budget</li>
+            </ul></div></div></section><section class="slide" id="s5"><div class="slide-head"><span class="num">05</span><span class="eyebrow">Coût</span></div><h2>Un cœur, 48 kHz, bloc 64</h2><div class="chart"><svg viewBox="0 0 666 246" role="img" aria-label="Charge CPU par modèle au bloc 64"><line x1="188.0" y1="18" x2="188.0" y2="214" class="grid" /><text x="188.0" y="12" class="tick" text-anchor="middle">0 %</text><line x1="328.0" y1="18" x2="328.0" y2="214" class="grid" /><text x="328.0" y="12" class="tick" text-anchor="middle">10 %</text><line x1="468.0" y1="18" x2="468.0" y2="214" class="grid" /><text x="468.0" y="12" class="tick" text-anchor="middle">20 %</text><line x1="608.0" y1="18" x2="608.0" y2="214" class="grid" /><text x="608.0" y="12" class="tick" text-anchor="middle">30 %</text><text x="176" y="53.1" class="bar-label" text-anchor="end">Fulltone · A2 Lite</text><rect x="188" y="30" width="61.6" height="34" rx="2" class="bar-lite" /><text x="259.6" y="53.1" class="bar-value">4.4 %</text><text x="176" y="103.1" class="bar-label" text-anchor="end">Electro-Harmonix · A2 Lite</text><rect x="188" y="80" width="63.0" height="34" rx="2" class="bar-lite" /><text x="261.0" y="103.1" class="bar-value">4.5 %</text><text x="176" y="153.1" class="bar-label" text-anchor="end">Electro-Harmonix · A2 Full</text><rect x="188" y="130" width="349.4" height="34" rx="2" class="bar-full" /><text x="547.4" y="153.1" class="bar-value">25.0 %</text><text x="176" y="203.1" class="bar-label" text-anchor="end">Fulltone · A2 Full</text><rect x="188" y="180" width="349.9" height="34" rx="2" class="bar-full" /><text x="547.9" y="203.1" class="bar-value">25.0 %</text></svg></div><p class="note">Médiane de 4847&nbsp;ns/échantillon
+            pour A2 Full, 834&nbsp;ns pour A2
+            Lite. La charge affichée est calculée sur le p95, donc pessimiste. Machine
+            partagée&nbsp;: la médiane est le chiffre fiable, une mesure sur machine
+            dédiée reste à faire.</p></section><section class="slide" id="s6"><div class="slide-head"><span class="num">06</span><span class="eyebrow">Parité</span></div><h2>Ce qui est entraîné est exactement ce qui est joué</h2><div class="stats">
+            <div class="stat"><span class="v">2.3e-06</span>
+            <span class="k">Python d’entraînement contre moteur natif, pire cas</span></div>
+            <div class="stat"><span class="v">0,00</span>
+            <span class="k">Blocs réguliers contre blocs irréguliers</span></div>
+            <div class="stat"><span class="v">0,00</span>
+            <span class="k">Rendu du plugin contre moteur natif, bit à bit</span></div>
+            </div>
+            <p>Le rendu hors ligne du plugin passe par les mêmes conversions
+            float/double, le même flush des dénormaux et le même étage de gain que le
+            callback temps réel. Il est identique au runner natif sur les quatre
+            modèles. Le reset est exact, et la compilation évite
+            <code>-ffast-math</code> pour que la propagation des NaN et l’égalité IEEE
+            tiennent.</p></section><section class="slide" id="s7"><div class="slide-head"><span class="num">07</span><span class="eyebrow">Repliement</span></div><h2>La mesure que personne ne publie sur ces modèles</h2><p class="lead">Sondes sinus à bin exact, N&nbsp;=&nbsp;65&nbsp;536,
+            rendues par le moteur natif. À 9&nbsp;kHz et fort niveau, A2 Full produit
+            -14.7&nbsp;dB d’énergie non harmonique sur le Big Muff,
+            -13.8&nbsp;dB sur le Fulltone.</p>
+            <div class="cols">
+            <div><h3>Ce que le chiffre est</h3><p>Une borne supérieure du repliement&nbsp;:
+            l’énergie hors bins harmoniques contient aussi toute erreur non harmonique
+            du modèle. À 9&nbsp;kHz, seules deux harmoniques tiennent sous Nyquist.</p></div>
+            <div><h3>Ce qu’il révèle</h3><p>A2 apprend une composante continue qui
+            domine la métrique gelée jusqu’à 30&nbsp;dB. C’est un constat sur les
+            modèles entraînés, pas un artefact de mesure — et il change la façon dont
+            on coupe les extraits.</p></div></div>
+            <p class="note">Plancher de mesure&nbsp;: −154,8&nbsp;dB.</p></section><section class="slide" id="s8"><div class="slide-head"><span class="num">08</span><span class="eyebrow">Capture</span></div><h2>Votre appareil, votre plugin, en une passe de reamp</h2><div class="cols">
+            <div><h3>La chaîne</h3><ol class="steps">
+            <li>Signal de reamp avec blips de calibration</li>
+            <li>Une passe dans l’appareil, un enregistrement</li>
+            <li>Alignement et contrôle qualité automatiques</li>
+            <li>Entraînement, export <code>.nam</code>, plugin</li>
+            </ol></div>
+            <div><h3>Prouvé de bout en bout</h3><ul class="ticks">
+            <li>Latence retrouvée à <strong>0 échantillon</strong>, tirage aléatoire
+            à chaque exécution</li>
+            <li>Niveau retrouvé à <strong>0,0000&nbsp;dB</strong></li>
+            <li>Modèle réentraîné&nbsp;: ESR
+            <strong>0.00052</strong> en
+            11&nbsp;min</li>
+            <li>Prise écrêtée ou silencieuse refusée</li>
+            </ul></div></div>
+            <p class="note">Validé contre un appareil fictif déterministe. Aucune
+            capture matérielle réelle n’a encore été faite.</p></section><section class="slide" id="s9"><div class="slide-head"><span class="num">09</span><span class="eyebrow">Écoute</span></div><h2>Une comparaison aveugle, pas une démonstration guidée</h2><p class="lead">Trois extraits par appareil, pris à des positions
+            fixes du fichier de test&nbsp;: aucune sélection sur le résultat.</p>
+            <div class="cols">
+            <div><h3>Protocole</h3><ul class="bare">
+            <li>A/B tiré au sort au chargement, X à chaque essai</li>
+            <li>Niveau égalisé par un seul scalaire par appareil</li>
+            <li>Fondus identiques des deux côtés</li>
+            <li>Score et p-valeur binomiale affichés</li>
+            </ul></div>
+            <div><h3>Pourquoi ça compte</h3><p>Un A/B piloté par le vendeur ne prouve
+            rien. Celui-ci peut échouer devant vous, et le protocole est écrit sur la
+            page que vous utilisez.</p></div></div></section><section class="slide" id="s10"><div class="slide-head"><span class="num">10</span><span class="eyebrow">Limites et suite</span></div><h2>Ce qui n’est pas prouvé, dit avant que vous le demandiez</h2><div class="cols">
+            <div><h3>Pas encore fait</h3><ul class="bare warn">
+            <li>Aucun chargement en DAW&nbsp;: pas d’hôte installé sur la machine
+            de mesure</li>
+            <li>Aucune capture matérielle réelle</li>
+            <li>Deux appareils seulement, sources CC-BY-NC</li>
+            <li>Coût mesuré sur station partagée, pas sur portable grand public</li>
+            </ul></div>
+            <div><h3>Ce que nous proposons</h3><ul class="ticks">
+            <li>Capturer un de vos appareils et vous rendre le plugin</li>
+            <li>Reproduire la fiche technique sur votre matériel cible</li>
+            <li>Discuter des régimes durs&nbsp;: fuzz, écrêtage en cascade</li>
+            </ul></div></div></section>
+  <footer>
+    Chaque chiffre de ce dossier est lu dans <code>demo/report.json</code> et
+    <code>demo/RUNS.jsonl</code>, produits par <code>make demo</code>. Sources audio&nbsp;:
+    ToneTwist AFx, licence CC-BY-NC&nbsp;— usage de démonstration de recherche, sans
+    distribution des modèles.
+  </footer>
+</div>

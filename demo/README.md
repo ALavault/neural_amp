@@ -58,3 +58,10 @@ uv run python scripts/product_train.py --device <appareil>
 Le QC ne reçoit que le signal envoyé et la capture reçue : il retrouve la
 latence à l'échantillon près depuis les blips de calibration, rapporte le
 niveau du programme en dBFS, et refuse une prise écrêtée ou silencieuse.
+
+## Dossier de démonstration
+
+`make demo` génère aussi `demo/deck/index.html` : dix volets pour un éditeur de
+plugins. Chaque chiffre est lu dans `demo/report.json` et `demo/RUNS.jsonl`, donc
+une nouvelle mesure met le dossier à jour et aucun chiffre ne peut dériver de sa
+source.

@@ -245,6 +245,7 @@ demo-report:
 	uv run python scripts/product_plugin_parity.py
 	uv run python scripts/product_report.py
 	uv run python scripts/product_listening.py
+	uv run python scripts/product_deck.py
 
 # Rebuild the demo from the trained runs: plugin, parity check, fact sheet.
 demo-capture-selftest:
