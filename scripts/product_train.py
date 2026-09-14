@@ -31,6 +31,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--max-epochs", type=int)
     parser.add_argument("--run-id")
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="continue from the last Lightning checkpoint if one exists",
+    )
     return parser.parse_args()
 
 
@@ -94,6 +99,34 @@ def evaluate_test(run_dir: Path, test_pair: tuple[Path, Path]) -> dict[str, dict
     return metrics
 
 
+def _find_last_checkpoint(run_dir: Path) -> Path | None:
+    """Find the most recent Lightning checkpoint to resume from.
+
+    The NAM trainer saves checkpoint_last_NNNN_SSSS.ckpt and per-epoch
+    checkpoint_epoch_NNNN.ckpt files. We prefer checkpoint_last if it
+    exists (it includes the optimizer state), otherwise the highest-epoch
+    checkpoint_epoch.
+    """
+    ckpt_dir = run_dir / "lightning_logs"
+    if not ckpt_dir.exists():
+        return None
+    # Find the latest version directory
+    versions = sorted(ckpt_dir.glob("version_*"), key=lambda p: p.name)
+    if not versions:
+        return None
+    checkpoints = list((versions[-1] / "checkpoints").glob("*.ckpt"))
+    if not checkpoints:
+        return None
+    # Prefer checkpoint_last, then highest epoch
+    last = [c for c in checkpoints if "checkpoint_last" in c.name]
+    if last:
+        return max(last, key=lambda p: p.stat().st_mtime)
+    epoch = [c for c in checkpoints if "checkpoint_epoch" in c.name]
+    if epoch:
+        return max(epoch, key=lambda p: p.stat().st_mtime)
+    return max(checkpoints, key=lambda p: p.stat().st_mtime)
+
+
 def run_training(
     pairs: dict,
     *,
@@ -103,8 +136,14 @@ def run_training(
     max_epochs: int,
     config: dict | None = None,
     progress_bar: bool = True,
+    resume: bool = False,
 ) -> dict:
-    """Train one A2 model on prepared pairs and append the run to demo/RUNS.jsonl."""
+    """Train one A2 model on prepared pairs and append the run to demo/RUNS.jsonl.
+
+    With resume=True, continues from the last Lightning checkpoint if one
+    exists in the run directory. This makes long runs survive OOM kills on
+    shared machines.
+    """
     config = config or yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
     run_dir = ROOT / "demo/runs" / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -113,6 +152,13 @@ def run_training(
     np.random.seed(seed)
     data, model, learning = build_configs(config, pairs, max_epochs)
     learning["trainer"]["enable_progress_bar"] = progress_bar
+
+    if resume:
+        ckpt = _find_last_checkpoint(run_dir)
+        if ckpt is not None:
+            learning.setdefault("trainer_fit_kwargs", {})["ckpt_path"] = str(ckpt)
+            print(f"  resuming from {ckpt.name}", flush=True)
+
     started = time.perf_counter()
     full.main(data, model, learning, run_dir, no_show=True, make_plots=False)
     metrics = evaluate_test(run_dir, pairs["test"])
@@ -153,6 +199,7 @@ def main() -> None:
         seed=args.seed,
         max_epochs=args.max_epochs or int(config["max_epochs"]),
         config=config,
+        resume=args.resume,
     )
     print(json.dumps(record, indent=2))
 
