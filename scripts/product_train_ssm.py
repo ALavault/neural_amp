@@ -101,6 +101,17 @@ def main() -> None:
         help="activation: gated (tanh*sigmoid) or sine (x+sin(wx))",
     )
     parser.add_argument(
+        "--output-act",
+        choices=["tanh", "softsign", "none"],
+        default="tanh",
+        help="final activation: tanh (bounded), softsign, or none",
+    )
+    parser.add_argument(
+        "--cosine-lr",
+        action="store_true",
+        help="use cosine annealing instead of ReduceLROnPlateau",
+    )
+    parser.add_argument(
         "--data-dir",
         type=str,
         default=None,
@@ -122,6 +133,7 @@ def main() -> None:
         channels=args.channels,
         state_dim=args.state_dim,
         act_type=args.act_type,
+        output_act=args.output_act,
         circuit_tau_s=circuit_tau,
     ).to(device)
     params = model.param_count()
@@ -133,6 +145,10 @@ def main() -> None:
         extras.append(f"deriv={args.deriv_weight}")
     if args.act_type != "gated":
         extras.append(f"act={args.act_type}")
+    if args.output_act != "tanh":
+        extras.append(f"out={args.output_act}")
+    if args.cosine_lr:
+        extras.append("cosine")
     if extras:
         tag += " (" + ", ".join(extras) + ")"
     print(f"{tag}: {params:,} params", flush=True)
@@ -148,7 +164,12 @@ def main() -> None:
     l1 = torch.nn.L1Loss()
     mrstft = auraloss.freq.MultiResolutionSTFTLoss().to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr)
-    sched = torch.optim.lr_scheduler.ReduceLROnPlateau(opt, factor=0.5, patience=20)
+    if args.cosine_lr:
+        sched = torch.optim.lr_scheduler.CosineAnnealingLR(
+            opt, T_max=args.max_steps, eta_min=args.lr * 0.01
+        )
+    else:
+        sched = torch.optim.lr_scheduler.ReduceLROnPlateau(opt, factor=0.5, patience=20)
 
     best_esr = float("inf")
     best_state = None
@@ -187,6 +208,8 @@ def main() -> None:
             loss.backward()
             torch.nn.utils.clip_grad_value_(model.parameters(), 10.0)
             opt.step()
+            if args.cosine_lr:
+                sched.step()
             step += 1
             if step >= args.max_steps:
                 break
@@ -205,7 +228,8 @@ def main() -> None:
                 )
         if epoch % 50 == 0 or step >= args.max_steps:
             esr = time_metrics(render(model, vx, device), vt)["esr"]
-            sched.step(esr)
+            if not args.cosine_lr:
+                sched.step(esr)
             if esr < best_esr:
                 best_esr = esr
                 best_state = {

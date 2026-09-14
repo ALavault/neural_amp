@@ -202,6 +202,9 @@ class SSMWaveNet(nn.Module):
     Args:
         act_type: "gated" (tanh * sigmoid, the WaveNet default) or "sine"
             (x + sin(w*x), learnable asymmetric distortion).
+        output_act: "tanh" (bounded, safe but compresses amplifying devices),
+            "softsign" (bounded, gentler saturation), or "none" (unbounded,
+            lets the model reproduce gain > 1 but needs a lower lr).
         circuit_tau_s: known RC time constants of the device, in seconds.
             When given, the SSM poles are initialised on these constants
             instead of uniform random.
@@ -215,6 +218,7 @@ class SSMWaveNet(nn.Module):
         input_channels: int = 1,
         output_channels: int = 1,
         act_type: str = "gated",
+        output_act: str = "tanh",
         circuit_tau_s: Sequence[float] | None = None,
     ) -> None:
         super().__init__()
@@ -230,12 +234,21 @@ class SSMWaveNet(nn.Module):
                 for _ in range(num_blocks)
             ]
         )
+        final_act: nn.Module
+        if output_act == "tanh":
+            final_act = nn.Tanh()
+        elif output_act == "softsign":
+            final_act = nn.Softsign()
+        elif output_act == "none":
+            final_act = nn.Identity()
+        else:
+            raise ValueError(f"unknown output_act: {output_act}")
         self.output_net = nn.Sequential(
             nn.ReLU(),
             nn.Conv1d(channels, channels, 1),
             nn.ReLU(),
             nn.Conv1d(channels, output_channels, 1),
-            nn.Tanh(),
+            final_act,
         )
 
     def forward(self, x: Tensor) -> Tensor:
