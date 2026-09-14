@@ -1,0 +1,24 @@
+{
+  "source_input": "datasets/raw/internal_m4/fulltone_full_drive_2/train_input.wav",
+  "source_target": "datasets/raw/internal_m4/fulltone_full_drive_2/train_target.wav",
+  "splits": {
+    "train": {
+      "start_s": 0,
+      "stop_s": 80,
+      "rms": 0.09295,
+      "peak": 0.5006
+    },
+    "validation": {
+      "start_s": 80,
+      "stop_s": 100,
+      "rms": 0.08295,
+      "peak": 0.4998
+    },
+    "test": {
+      "start_s": 100,
+      "stop_s": 120,
+      "rms": 0.08701,
+      "peak": 0.5001
+    }
+  }
+}

@@ -3,6 +3,11 @@
 
 Same training loop as the S4-TFiLM control (L1 + MRSTFT, AdamW, ReduceLROnPlateau,
 gradient clipping at 10), same segments and batch size. Checkpoints every 500 steps.
+
+Improvements over baseline:
+  --circuit-init: initialise SSM poles on known RC time constants
+  --deriv-weight: add ||d(pred)/dt - d(target)/dt||^2 to the loss
+  --act-type sine: replace tanh*sigmoid gate with x + sin(w*x)
 """
 
 from __future__ import annotations
@@ -24,7 +29,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import auraloss  # noqa: E402
 
 from fssr_nam.metrics.time import time_metrics  # noqa: E402
-from fssr_nam.models.ssm_wavenet import SSMWaveNet  # noqa: E402
+from fssr_nam.models.ssm_wavenet import BIG_MUFF_TAU_S, SSMWaveNet  # noqa: E402
 
 OUT = ROOT / "demo/resplit"
 SR = 48_000
@@ -61,6 +66,13 @@ def render(model: torch.nn.Module, x: np.ndarray, device: torch.device) -> np.nd
         return np.concatenate(chunks)[: len(x)]
 
 
+def derivative_loss(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+    """MSE on the first difference: forces the model to track transients."""
+    dp = pred[:, :, 1:] - pred[:, :, :-1]
+    dt = target[:, :, 1:] - target[:, :, :-1]
+    return torch.nn.functional.mse_loss(dp, dt)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--num-blocks", type=int, default=8)
@@ -71,31 +83,67 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--run-id", type=str, default=None)
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--circuit-init",
+        action="store_true",
+        help="init SSM poles on the Big Muff RC constants",
+    )
+    parser.add_argument(
+        "--deriv-weight",
+        type=float,
+        default=0.0,
+        help="weight of the derivative loss term",
+    )
+    parser.add_argument(
+        "--act-type",
+        choices=["gated", "sine"],
+        default="gated",
+        help="activation: gated (tanh*sigmoid) or sine (x+sin(wx))",
+    )
+    parser.add_argument(
+        "--data-dir",
+        type=str,
+        default=None,
+        help="override the data directory (default: demo/resplit)",
+    )
     args = parser.parse_args()
 
+    data_dir = Path(args.data_dir) if args.data_dir else OUT
     run_id = args.run_id or (
         f"ssm_wavenet_b{args.num_blocks}_c{args.channels}_s{args.state_dim}"
     )
     save_dir = ROOT / "demo/runs" / run_id
     save_dir.mkdir(parents=True, exist_ok=True)
 
+    circuit_tau = list(BIG_MUFF_TAU_S) if args.circuit_init else None
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = SSMWaveNet(
         num_blocks=args.num_blocks,
         channels=args.channels,
         state_dim=args.state_dim,
+        act_type=args.act_type,
+        circuit_tau_s=circuit_tau,
     ).to(device)
     params = model.param_count()
-    print(
-        f"SSM-WaveNet b{args.num_blocks} c{args.channels} s{args.state_dim}: "
-        f"{params:,} params",
-        flush=True,
-    )
+    tag = f"SSM-WaveNet b{args.num_blocks} c{args.channels} s{args.state_dim}"
+    extras = []
+    if args.circuit_init:
+        extras.append("circuit-init")
+    if args.deriv_weight > 0:
+        extras.append(f"deriv={args.deriv_weight}")
+    if args.act_type != "gated":
+        extras.append(f"act={args.act_type}")
+    if extras:
+        tag += " (" + ", ".join(extras) + ")"
+    print(f"{tag}: {params:,} params", flush=True)
 
-    tx, ty = segments(read(OUT / "train_input.wav"), read(OUT / "train_target.wav"))
+    tx, ty = segments(
+        read(data_dir / "train_input.wav"),
+        read(data_dir / "train_target.wav"),
+    )
     tx, ty = tx.to(device), ty.to(device)
-    vx = read(OUT / "validation_input.wav")
-    vt = read(OUT / "validation_target.wav")
+    vx = read(data_dir / "validation_input.wav")
+    vt = read(data_dir / "validation_target.wav")
 
     l1 = torch.nn.L1Loss()
     mrstft = auraloss.freq.MultiResolutionSTFTLoss().to(device)
@@ -117,7 +165,10 @@ def main() -> None:
         best_state = ckpt["best_state"]
         start_step = ckpt["step"]
         epoch = ckpt["epoch"]
-        print(f"  resumed from step {start_step}, best {best_esr:.5f}", flush=True)
+        print(
+            f"  resumed from step {start_step}, best {best_esr:.5f}",
+            flush=True,
+        )
 
     started = time.perf_counter()
     step = start_step
@@ -130,6 +181,8 @@ def main() -> None:
             model.reset_states()
             pred = model(tx[idx])
             loss = 0.5 * l1(pred, ty[idx]) + 0.5 * mrstft(pred, ty[idx])
+            if args.deriv_weight > 0:
+                loss = loss + args.deriv_weight * derivative_loss(pred, ty[idx])
             opt.zero_grad(set_to_none=True)
             loss.backward()
             torch.nn.utils.clip_grad_value_(model.parameters(), 10.0)
@@ -169,16 +222,21 @@ def main() -> None:
 
     minutes = (time.perf_counter() - started) / 60.0
     results = {
-        "model": f"SSM-WaveNet b{args.num_blocks} c{args.channels} s{args.state_dim}",
+        "model": tag,
         "run_id": run_id,
         "parameters": params,
         "epochs": epoch,
         "steps": step,
         "minutes": round(minutes, 2),
+        "config": {
+            "circuit_init": args.circuit_init,
+            "deriv_weight": args.deriv_weight,
+            "act_type": args.act_type,
+        },
     }
     for split in ("train", "validation", "test"):
-        x = read(OUT / f"{split}_input.wav")
-        t = read(OUT / f"{split}_target.wav")
+        x = read(data_dir / f"{split}_input.wav")
+        t = read(data_dir / f"{split}_target.wav")
         results[f"{split}_esr"] = time_metrics(render(model, x, device), t)["esr"]
 
     runs_log = ROOT / "demo/RUNS.jsonl"

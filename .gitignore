@@ -28,6 +28,7 @@ experiments/audio_examples/**/*.wav
 demo/listening/audio/
 demo/capture/*.wav
 demo/resplit/*.wav
+demo/resplit_fulltone/*.wav
 demo/capture/dataset/
 
 # Dedicated Git worktrees are managed separately from the main checkout.
