@@ -1,0 +1,59 @@
+{
+  "run_id": "ssmzoh_guard_seed43",
+  "timestamp": "2026-09-15T21:18:48+02:00",
+  "commit": "fc5dd2b9eb27a6687fe04012eef006025c6af706",
+  "nablafx_commit": "045db6e7d6087151c7e3a264844bd8c4eafc885c",
+  "benchmark": "ToneTwist Big Muff S050_V100, nablafx protocol",
+  "model": "ssm-wavenet",
+  "parameters": 11329,
+  "seed": 43,
+  "lr": 0.01,
+  "loss_weights": {
+    "l1": 1.0,
+    "mrstft": 0.1
+  },
+  "gradient_clip_val": 1.0,
+  "honor_optim": true,
+  "polarity_guard": true,
+  "polarity_flips": [],
+  "ssm": {
+    "num_blocks": 8,
+    "channels": 16,
+    "state_dim": 4,
+    "output_act": "tanh",
+    "discretization": "zoh"
+  },
+  "resumed": false,
+  "global_step": 4823,
+  "stopped_epoch": 688,
+  "best_val_loss": 0.03505903109908104,
+  "best_checkpoint": "epoch=657-step=4600.ckpt",
+  "minutes_this_session": 77.32,
+  "peak_gpu_gib": 17.17,
+  "test_last": {
+    "loss/test/tot": 0.05655534937977791,
+    "loss/test/l1": 0.003269961103796959,
+    "loss/test/mrstft": 0.0532853901386261,
+    "loss_scaled/test/tot": 0.5361239314079285,
+    "loss_scaled/test/l1": 0.003269961103796959,
+    "loss_scaled/test/mrstft": 0.532853901386261,
+    "metric/test/l1": 0.003269961103796959,
+    "metric/test/mse": 0.0002023958513746038,
+    "metric/test/esr": 0.1276865452528,
+    "metric/test/mape": 4.16151762008667,
+    "metric/test/mrstft": 0.532853901386261
+  },
+  "test_best": {
+    "loss/test/tot": 0.055294621735811234,
+    "loss/test/l1": 0.003251375863328576,
+    "loss/test/mrstft": 0.05204324796795845,
+    "loss_scaled/test/tot": 0.5236838459968567,
+    "loss_scaled/test/l1": 0.003251375863328576,
+    "loss_scaled/test/mrstft": 0.5204324722290039,
+    "metric/test/l1": 0.003251375863328576,
+    "metric/test/mse": 0.00020284771744627506,
+    "metric/test/esr": 0.1280120462179184,
+    "metric/test/mape": 3.3726561069488525,
+    "metric/test/mrstft": 0.5204324722290039
+  }
+}

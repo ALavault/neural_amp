@@ -239,6 +239,11 @@ def main() -> None:
     def esr(group: list[dict]) -> str:
         return mean_std([r["test_last"][ESR] for r in group], 3)
 
+    def extreme(group: list[dict], pick) -> str:
+        return (
+            f"{pick(r['test_last'][ESR] for r in group):.3f}" if group else r"\pending"
+        )
+
     def peak(group: list[dict]) -> str:
         return f"{max(r['peak_gpu_gib'] for r in group):.1f}" if group else r"\pending"
 
@@ -294,6 +299,10 @@ def main() -> None:
         "RerunSFourTFLlossGap": loss_gap,
         "ChangesSFourTFLesrMeanStd": esr(changes),
         "ChangesSFourTFLn": str(len(changes)),
+        "SSMesrMin": extreme(ssm, min),
+        "SSMesrMax": extreme(ssm, max),
+        "ChangesSFourTFLesrMin": extreme(changes, min),
+        "ChangesSFourTFLesrMax": extreme(changes, max),
         "ChangesSFourTFLmrstftMeanStd": mean_std(
             [r["test_last"][MRSTFT] for r in changes], 3
         ),

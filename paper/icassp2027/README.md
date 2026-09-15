@@ -91,6 +91,13 @@ attribute to the silence the test file opens with: the log-magnitude term
 magnifies small numerical differences there. The paper reports the GPU values
 from the bench's own test loop.
 
+Validation ESR in the training logs is a mean over 12 segments, and it can be
+uninformative. Seed 43's random split put a near-silent segment (target RMS
+0.0002) into validation, so its validation ESR reads 1 to 26 while its
+validation MSE matches seed 42's. Learning-rate halving and early stopping use
+the validation loss, and the polarity guard uses the inner product, so neither
+depends on ESR.
+
 ## Paper
 
 ```bash
