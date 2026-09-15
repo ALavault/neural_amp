@@ -35,17 +35,25 @@ SAMPLE_RATE = 48_000
 
 
 class DiagonalSSMLayer(nn.Module):
-    """One diagonal SSM: complex state, real I/O, FFT convolution in training."""
+    """One diagonal SSM: complex state, real I/O, FFT convolution in training.
+
+    discretization="free" learns the input vector b (the first version).
+    "zoh" fixes it by zero-order hold, b = (a - 1) / lambda, as S4D and
+    nablafx's DSSM do, which bounds every mode's DC gain by |c / lambda|
+    whatever dt; c then starts at unit scale.
+    """
 
     def __init__(
         self,
         channels: int,
         state_dim: int,
         circuit_tau_s: Sequence[float] | None = None,
+        discretization: str = "free",
     ) -> None:
         super().__init__()
         self.channels = channels
         self.state_dim = state_dim
+        self.discretization = discretization
         # S4D parametrization: Re(A) < 0 always, discretized by a learnable dt.
         self.log_A_real = nn.Parameter(torch.full((channels, state_dim), math.log(0.5)))
         self.A_imag = nn.Parameter(
@@ -60,8 +68,18 @@ class DiagonalSSMLayer(nn.Module):
         else:
             dt_init = torch.empty(channels).uniform_(math.log(1e-3), math.log(1e-1))
         self.log_dt = nn.Parameter(dt_init)
-        self.B = nn.Parameter(0.02 * torch.randn(channels, state_dim, 2))
-        self.C = nn.Parameter(0.02 * torch.randn(channels, state_dim, 2))
+        # nablafx's DSSM marks the same parameters as exempt from weight decay;
+        # an optimizer only honours this if it reads _optim.
+        for parameter in (self.log_A_real, self.A_imag, self.log_dt):
+            parameter._optim = {"weight_decay": 0.0}
+        if discretization == "free":
+            self.B = nn.Parameter(0.02 * torch.randn(channels, state_dim, 2))
+            self.C = nn.Parameter(0.02 * torch.randn(channels, state_dim, 2))
+        elif discretization == "zoh":
+            c = torch.randn(channels, state_dim, dtype=torch.cfloat)
+            self.C = nn.Parameter(torch.view_as_real(c).clone())
+        else:
+            raise ValueError(f"unknown discretization: {discretization}")
         self.D = nn.Parameter(torch.ones(channels))
         self._h: Tensor | None = None
 
@@ -82,11 +100,18 @@ class DiagonalSSMLayer(nn.Module):
             log_dt[i] = math.log(dt_values[i % len(dt_values)])
         return log_dt
 
+    def _lambda(self) -> Tensor:
+        return torch.complex(-torch.exp(self.log_A_real), self.A_imag)
+
     def _a(self) -> Tensor:
         """Discrete-time poles, |a| < 1 guaranteed by Re(A) < 0."""
-        a_continuous = torch.complex(-torch.exp(self.log_A_real), self.A_imag)
         dt = torch.exp(self.log_dt).unsqueeze(-1)
-        return torch.exp(a_continuous * dt)
+        return torch.exp(self._lambda() * dt)
+
+    def _b(self, a: Tensor) -> Tensor:
+        if self.discretization == "zoh":
+            return (a - 1) / self._lambda()
+        return self._complex(self.B)
 
     def _complex(self, param: Tensor) -> Tensor:
         return torch.complex(param[..., 0], param[..., 1])
@@ -94,7 +119,7 @@ class DiagonalSSMLayer(nn.Module):
     def _kernel(self, length: int) -> Tensor:
         """Build the causal convolution kernel via geometric series."""
         a = self._a()
-        b = self._complex(self.B)
+        b = self._b(a)
         c = self._complex(self.C)
         powers = torch.arange(length, device=a.device).float()
         a_powers = a.unsqueeze(-1) ** powers.unsqueeze(0).unsqueeze(0)
@@ -119,7 +144,7 @@ class DiagonalSSMLayer(nn.Module):
     def step(self, x: Tensor) -> Tensor:
         """Single-sample inference: x is (batch, channels)."""
         a = self._a()
-        b = self._complex(self.B)
+        b = self._b(a)
         c = self._complex(self.C)
         x_complex = x.to(torch.complex64)
         if self._h is None:
@@ -166,9 +191,15 @@ class GatedSSMBlock(nn.Module):
         state_dim: int,
         act_type: str = "gated",
         circuit_tau_s: Sequence[float] | None = None,
+        discretization: str = "free",
     ) -> None:
         super().__init__()
-        self.ssm = DiagonalSSMLayer(channels, state_dim, circuit_tau_s=circuit_tau_s)
+        self.ssm = DiagonalSSMLayer(
+            channels,
+            state_dim,
+            circuit_tau_s=circuit_tau_s,
+            discretization=discretization,
+        )
         self.act_type = act_type
         if act_type == "sine":
             self.pre_act = nn.Conv1d(channels, channels, 1)
@@ -209,6 +240,8 @@ class SSMWaveNet(nn.Module):
         circuit_tau_s: known RC time constants of the device, in seconds.
             When given, the SSM poles are initialised on these constants
             instead of uniform random.
+        discretization: "free" (learned input vector) or "zoh" (S4D
+            zero-order hold); see DiagonalSSMLayer.
     """
 
     def __init__(
@@ -221,6 +254,7 @@ class SSMWaveNet(nn.Module):
         act_type: str = "gated",
         output_act: str = "tanh",
         circuit_tau_s: Sequence[float] | None = None,
+        discretization: str = "free",
     ) -> None:
         super().__init__()
         self.input_conv = nn.Conv1d(input_channels, channels, 1)
@@ -231,6 +265,7 @@ class SSMWaveNet(nn.Module):
                     state_dim,
                     act_type=act_type,
                     circuit_tau_s=circuit_tau_s,
+                    discretization=discretization,
                 )
                 for _ in range(num_blocks)
             ]

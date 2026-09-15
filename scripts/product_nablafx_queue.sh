@@ -1,9 +1,12 @@
 #!/bin/bash
 # ToneTwist Big Muff benchmark in the nablafx framework, one run at a time
 # (each run peaks at 16-17 GiB on the 24 GiB GPU). A run whose result file
-# exists is skipped, so the queue can be restarted after a kill. Seeds of the
-# re-run baseline and of SSM-WaveNet alternate, so the comparison stays
-# balanced whenever the queue is cut.
+# exists is skipped, so the queue can be restarted after a kill.
+#
+# Second round, after SSM-WaveNet v1 underfit (train loss 0.43 vs 0.31 for
+# S4-TF-L-16) and its learned poles lost all memory beyond 20 ms under weight
+# decay: both models without weight decay on state-space parameters, SSM-WaveNet
+# with S4D zero-order-hold discretization, then with 32 states per channel.
 set -u
 export TMPDIR=/fastdata/lavaulta/tmp
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
@@ -27,11 +30,14 @@ while pgrep -f "scripts/product_nablafx_benc[h].py" > /dev/null; do
   sleep 30
 done
 
-run s4tfl16_seed42 --model s4-tf-l-16 --seed 42
-run ssmwavenet_seed42 --model ssm-wavenet --seed 42
-run s4tfl16_seed43 --model s4-tf-l-16 --seed 43
-run ssmwavenet_seed43 --model ssm-wavenet --seed 43
-run s4l16_seed42 --model s4-l-16 --seed 42
-run ssmwavenet_seed44 --model ssm-wavenet --seed 44
-run s4tfl16_seed44 --model s4-tf-l-16 --seed 44
+echo "=== smoke N=32 memory check: start $(date '+%a %H:%M')"
+uv run python scripts/product_nablafx_bench.py --run-id smoke_ssmzoh32 --no-record \
+  --model ssm-wavenet --discretization zoh --honor-optim --state-dim 32 --max-steps 30 2>&1 \
+  | grep -E "peak_gpu_gib|out of memory|Error"
+rm -rf demo/runs/nablafx_smoke_ssmzoh32
+echo "=== smoke N=32 memory check: end $(date '+%a %H:%M')"
+
+run ssmzoh_seed42 --model ssm-wavenet --discretization zoh --honor-optim --seed 42
+run s4tfl16nowd_seed42 --model s4-tf-l-16 --honor-optim --seed 42
+run ssmzoh32_seed42 --model ssm-wavenet --discretization zoh --honor-optim --state-dim 32 --seed 42
 echo "=== queue finished $(date '+%a %H:%M')"

@@ -103,11 +103,25 @@ torchaudio.load = _load
 
 
 class System(BlackBoxSystem):
-    """BaseSystem.configure_optimizers minus verbose=True, which torch 2.13 removed."""
+    """BaseSystem.configure_optimizers minus verbose=True, which torch 2.13 removed.
+
+    With honor_optim, parameters that declare an _optim dict (nablafx's DSSM and
+    our SSM layers mark log_dt, log_A_real and A_imag with weight_decay 0) get
+    their own AdamW group with those settings; the released code ignores _optim.
+    """
+
+    honor_optim = False
 
     def configure_optimizers(self):
+        groups: dict[tuple, list] = {}
+        for parameter in self.model.parameters():
+            hints = getattr(parameter, "_optim", {}) if self.honor_optim else {}
+            groups.setdefault(tuple(sorted(hints.items())), []).append(parameter)
         optimizer = torch.optim.AdamW(
-            self.model.parameters(), lr=self.lr, betas=(0.9, 0.999), eps=1e-8
+            [{"params": params, **dict(hints)} for hints, params in groups.items()],
+            lr=self.lr,
+            betas=(0.9, 0.999),
+            eps=1e-8,
         )
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer, mode="min", factor=0.5, patience=20
@@ -146,6 +160,12 @@ def parse_args() -> argparse.Namespace:
         "--output-act", default="tanh", choices=["tanh", "softsign", "none"]
     )
     parser.add_argument("--clip-value", type=float, default=1.0)
+    parser.add_argument("--discretization", default="free", choices=["free", "zoh"])
+    parser.add_argument(
+        "--honor-optim",
+        action="store_true",
+        help="apply the _optim hints (no weight decay on state-space parameters)",
+    )
     parser.add_argument("--resume", action="store_true")
     parser.add_argument(
         "--no-record", action="store_true", help="smoke test: do not write results"
@@ -160,6 +180,7 @@ def build_processor(args: argparse.Namespace) -> torch.nn.Module:
             channels=args.channels,
             state_dim=args.state_dim,
             output_act=args.output_act,
+            discretization=args.discretization,
         )
     return S4(
         num_inputs=1,
@@ -256,6 +277,7 @@ def main() -> None:
         log_media_every_n_steps=3000,
         use_callbacks=True,
     )
+    system.honor_optim = args.honor_optim
 
     run_dir = RUNS_DIR / f"nablafx_{args.run_id}"
     last = run_dir / "checkpoints/last.ckpt"
@@ -334,12 +356,14 @@ def main() -> None:
         "lr": lr,
         "loss_weights": {"l1": l1_weight, "mrstft": mrstft_weight},
         "gradient_clip_val": args.clip_value,
+        "honor_optim": args.honor_optim,
         "ssm": (
             {
                 "num_blocks": args.num_blocks,
                 "channels": args.channels,
                 "state_dim": args.state_dim,
                 "output_act": args.output_act,
+                "discretization": args.discretization,
             }
             if args.model == "ssm-wavenet"
             else None
