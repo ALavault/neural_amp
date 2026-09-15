@@ -4,11 +4,12 @@
 Everything except the processor is nablafx's own code and settings (commit
 045db6e): the data module (44.1 -> 48 kHz resampling, 3 s segments, train and
 val files pooled then split 90/10), AdamW, ReduceLROnPlateau per epoch, early
-stopping (patience 50), value clipping at 10, 15k-step cap, the checkpoint
-callback, and the test loop (5 s segments, metrics averaged over segments).
-Trainer settings mirror cfg/trainer/trainer_bb.yaml and scripts/main.py. The
-published numbers use last.ckpt, so that is the primary result; best.ckpt is
-recorded too.
+stopping (patience 50), 15k-step cap, the checkpoint callback, and the test loop
+(5 s segments, metrics averaged over segments). Trainer settings mirror
+cfg/trainer/trainer_bb.yaml and scripts/main.py, except gradient clipping: Table 5
+of Comunità et al. (Frontiers 2025) gives value clipping at 1 for S4, the released
+YAML sets 10, and the default here follows the paper. The released test script
+loads last.ckpt, so that is the primary result; best.ckpt is recorded too.
 
 Extra packages, installed with `uv pip install` and not in uv.lock:
 lightning==2.6.1, jsonargparse[signatures]==4.52.0, natsort==8.4.0, wandb==0.30.0,
@@ -144,6 +145,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-act", default="tanh", choices=["tanh", "softsign", "none"]
     )
+    parser.add_argument("--clip-value", type=float, default=1.0)
     parser.add_argument("--resume", action="store_true")
     parser.add_argument(
         "--no-record", action="store_true", help="smoke test: do not write results"
@@ -278,7 +280,7 @@ def main() -> None:
         enable_progress_bar=False,
         deterministic=None,
         benchmark=True,
-        gradient_clip_val=10.0,
+        gradient_clip_val=args.clip_value,
         gradient_clip_algorithm="value",
         max_steps=args.max_steps,
         logger=CSVLogger(save_dir=run_dir, name="", version="logs"),
@@ -331,6 +333,7 @@ def main() -> None:
         "seed": args.seed,
         "lr": lr,
         "loss_weights": {"l1": l1_weight, "mrstft": mrstft_weight},
+        "gradient_clip_val": args.clip_value,
         "ssm": (
             {
                 "num_blocks": args.num_blocks,
