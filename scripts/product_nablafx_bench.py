@@ -9,6 +9,10 @@ callback, and the test loop (5 s segments, metrics averaged over segments).
 Trainer settings mirror cfg/trainer/trainer_bb.yaml and scripts/main.py. The
 published numbers use last.ckpt, so that is the primary result; best.ckpt is
 recorded too.
+
+Extra packages, installed with `uv pip install` and not in uv.lock:
+lightning==2.6.1, jsonargparse[signatures]==4.52.0, natsort==8.4.0, wandb==0.30.0,
+torchvision==0.28.0 (https://download.pytorch.org/whl/cu130).
 """
 
 from __future__ import annotations

@@ -13,9 +13,9 @@
 
 \title{State-space WaveNets for compact black-box modelling of distortion effects}
 
-% TODO(authors): names, affiliations, ORCiD for every author (mandatory in 2027).
-\name{Author Names\thanks{Funding acknowledgement if any.}}
-\address{Affiliation}
+% ORCiD 0009-0001-9266-786X (entered in the submission system).
+\name{Antoine Lavault}
+\address{LISTIC, Universit\'e Savoie Mont Blanc, France}
 
 \begin{document}
 \ninept
@@ -78,7 +78,8 @@ and which runs as a causal per-sample recurrence (Sec.~\ref{sec:model});
 (ii)~an evaluation that changes only the model inside NablAFx, with a re-run of
 the best published model and several seeds per model (Sec.~\ref{sec:setup});
 (iii)~% TODO(results): the supported finding.
-results on the Big Muff (Sec.~\ref{sec:results}).
+results on the Big Muff (Sec.~\ref{sec:results}). Code, configurations and run
+records are available at \url{https://github.com/ALavault/neural_amp}.
 
 \section{SSM-WaveNet}
 \label{sec:model}
@@ -210,8 +211,11 @@ This study uses publicly available recordings released under CC BY-NC 4.0 and
 involves no human or animal subjects; no ethical approval was required.
 
 \section{Acknowledgments}
-% TODO(authors): IEEE requires disclosing AI-generated content here, see
+% TODO(author): confirm this disclosure, required by IEEE:
 % https://open.ieee.org/author-guidelines-for-artificial-intelligence-ai-generated-text/
+The author used Claude Opus 5 (Anthropic) to write the experiment and analysis
+code, run the experiments and draft all sections of this paper. The author
+reviewed and edited the text and checked the results against the run records.
 
 \bibliographystyle{IEEEbib}
 \bibliography{refs}
