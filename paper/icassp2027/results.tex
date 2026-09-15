@@ -12,18 +12,18 @@
 \newcommand{\RerunSFourTFLesrMeanStd}{0.137}
 \newcommand{\RerunSFourTFLn}{1}
 \newcommand{\RerunSFourTFLlossGap}{10\,\%}
-\newcommand{\ChangesSFourTFLesrMeanStd}{0.112\,{\scriptsize$\pm$\,0.033}}
-\newcommand{\ChangesSFourTFLn}{2}
+\newcommand{\ChangesSFourTFLesrMeanStd}{0.127\,{\scriptsize$\pm$\,0.035}}
+\newcommand{\ChangesSFourTFLn}{3}
 \newcommand{\SSMesrMin}{0.036}
 \newcommand{\SSMesrMax}{0.128}
 \newcommand{\ChangesSFourTFLesrMin}{0.089}
-\newcommand{\ChangesSFourTFLesrMax}{0.135}
-\newcommand{\ChangesSFourTFLmrstftMeanStd}{0.511\,{\scriptsize$\pm$\,0.035}}
+\newcommand{\ChangesSFourTFLesrMax}{0.157}
+\newcommand{\ChangesSFourTFLmrstftMeanStd}{0.523\,{\scriptsize$\pm$\,0.032}}
 \newcommand{\VoneSSMesr}{0.236}
 \newcommand{\SSMpeakGiB}{17.2}
 \newcommand{\SFourTFLpeakGiB}{16.3}
-\newcommand{\GuardFlips}{9}
-\newcommand{\GuardRuns}{5}
+\newcommand{\GuardFlips}{10}
+\newcommand{\GuardRuns}{6}
 \newcommand{\GuardLastFlipEpoch}{11}
 \newcommand{\InvertedStep}{5{,}100}
 \newcommand{\InvertedEsr}{3.95}
@@ -56,7 +56,7 @@ S4-TF-L-16 & 70.2k & 3.1 & 0.505 & 0.108 \\
 S4-TF-L-16 ($n=1$) & 70.2k & 3.6 & 0.555 & 0.137 \\
 \midrule
 \multicolumn{5}{@{}l}{\emph{Both training changes (Sec.~\ref{sec:setup})}} \\
-S4-TF-L-16 ($n=2$) & 70.2k & 3.3\,{\scriptsize$\pm$\,0.6} & 0.511\,{\scriptsize$\pm$\,0.035} & 0.112\,{\scriptsize$\pm$\,0.033} \\
+S4-TF-L-16 ($n=3$) & 70.2k & 3.3\,{\scriptsize$\pm$\,0.5} & 0.523\,{\scriptsize$\pm$\,0.032} & 0.127\,{\scriptsize$\pm$\,0.035} \\
 SSM-WaveNet ($n=3$) & 11.3k & 2.7\,{\scriptsize$\pm$\,0.6} & 0.466\,{\scriptsize$\pm$\,0.072} & 0.082\,{\scriptsize$\pm$\,0.046} \\
 \midrule
 \multicolumn{5}{@{}l}{\emph{Ablation: learned $b$, released training}} \\
@@ -64,9 +64,10 @@ SSM-WaveNet ($n=1$) & 12.4k & 4.6 & 0.604 & 0.236 \\
 \bottomrule
 \end{tabular}
 \end{table}}
-\newcommand{\ChangesReduction}{18\,\%}
-\newcommand{\SSMRatio}{1.4}
+\newcommand{\ChangesReduction}{35\,\%}
+\newcommand{\ChangesPairedSeeds}{1}
+\newcommand{\SSMRatio}{1.5}
 \newcommand{\ParamRatio}{6.2}
-\newcommand{\SSMLowerSeeds}{2}
-\newcommand{\PairedSeeds}{2}
+\newcommand{\SSMLowerSeeds}{3}
+\newcommand{\PairedSeeds}{3}
 \newcommand{\PubOffScale}{LSTM-32 (3.59), TCN-2500-S-16 (3.39), GCN-TF-2500-L-16 (3.61)}

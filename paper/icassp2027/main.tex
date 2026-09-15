@@ -247,15 +247,18 @@ and budget, and show the published values for context.
 
 With both training changes, S4-TF-L-16 reaches a test ESR of
 \ChangesSFourTFLesrMeanStd{} ($n=\ChangesSFourTFLn$), \ChangesReduction{} below
-its re-run with the released training (published: \PubSFourTFLesr), so part of
-the difference between models trained with and without the changes comes from
-training alone. SSM-WaveNet, trained the same way, reaches \SSMesrMeanStd{}
-($n=\SSMn$), \SSMRatio{} times lower than S4-TF-L-16 on average and lower on
-\SSMLowerSeeds{} of \PairedSeeds{} paired seeds, with \ParamRatio{} times fewer
-parameters, no TFiLM and no look-ahead; its MR-STFT loss is
+its re-run with the released training on the seeds trained both ways
+($n=\ChangesPairedSeeds$; published: \PubSFourTFLesr): part of any difference comes from
+training alone, not from the model. SSM-WaveNet, trained the same way, reaches
+\SSMesrMeanStd{} ($n=\SSMn$), \SSMRatio{} times lower than S4-TF-L-16 on average
+and lower on \SSMLowerSeeds{} of \PairedSeeds{} paired seeds, with \ParamRatio{}
+times fewer parameters, no TFiLM and no look-ahead; its MR-STFT loss is
 \SSMmrstftMeanStd{}, against \ChangesSFourTFLmrstftMeanStd{} for S4-TF-L-16.
 With a learned $b$ and the released training, the same network reaches only
-\VoneSSMesr. Over the \GuardRuns{} guarded runs, the polarity guard fired
+\VoneSSMesr. Seeds matter more than one might expect on this benchmark: test ESR
+spans \SSMesrMin{}--\SSMesrMax{} for SSM-WaveNet and
+\ChangesSFourTFLesrMin{}--\ChangesSFourTFLesrMax{} for S4-TF-L-16, so a single
+run tells little. Over the \GuardRuns{} guarded runs, the polarity guard fired
 \GuardFlips{} times, never after epoch \GuardLastFlipEpoch.
 
 \section{Discussion and limitations}
@@ -272,7 +275,8 @@ alone has this symmetry, so training with one should check the sign of the
 output on validation data.
 
 \textbf{Limitations.} We evaluate a single device, while the published study
-covers 16, with $n=\SSMn$ seeds per model. The training changes and zero-order hold were
+covers 16, with $n=\SSMn$ seeds per model, and the seed-to-seed spread is of the
+same order as the difference between the two architectures. The training changes and zero-order hold were
 chosen after a first SSM-WaveNet had underperformed on the test set; re-running
 S4-TF-L-16 with the same changes controls for the changes, not for that choice.
 Training evaluates each SSM kernel over the whole segment, which dominates
@@ -284,12 +288,12 @@ real-time implementation.
 \section{Conclusion}
 \label{sec:conclusion}
 
-On the Big Muff, SSM-WaveNet reaches a test ESR \SSMRatio{} times lower than
-S4-TF-L-16, the most accurate published model, trained the same way, with
-\ParamRatio{} times fewer parameters, without TFiLM and without look-ahead. The
-two training changes also improve S4-TF-L-16 itself. Whether both results carry
-over to the other devices of ToneTwist AFx and to a compiled real-time
-implementation remains to be tested. The multi-resolution STFT loss used to
+On the Big Muff, SSM-WaveNet reaches a test ESR \SSMRatio{} times lower on
+average than S4-TF-L-16, the most accurate published model, trained the same way
+and lower on each of the \PairedSeeds{} seeds, with \ParamRatio{} times fewer
+parameters, without TFiLM and without look-ahead. Whether this carries over to
+the other devices of ToneTwist AFx and to a compiled real-time implementation
+remains to be tested. The multi-resolution STFT loss used to
 train and rank black-box effect models cannot see the sign of the output;
 checking that sign on validation data costs nothing and should be part of such
 benchmarks.

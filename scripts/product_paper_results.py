@@ -256,18 +256,31 @@ def main() -> None:
     def mean_esr(group: list[dict]) -> float:
         return statistics.fmean(r["test_last"][ESR] for r in group)
 
+    def pair(left: list[dict], right: list[dict]) -> tuple[list[dict], list[dict]]:
+        """The runs of both groups whose seed appears in the other, seed by seed."""
+        seeds = {r["seed"] for r in left} & {r["seed"] for r in right}
+        key = lambda r: r["seed"]  # noqa: E731
+        return (
+            sorted((r for r in left if r["seed"] in seeds), key=key),
+            sorted((r for r in right if r["seed"] in seeds), key=key),
+        )
+
     comparisons = {}
     if ssm and changes and rerun:
-        by_seed = {r["seed"]: r["test_last"][ESR] for r in changes}
-        paired = [r for r in ssm if r["seed"] in by_seed]
-        lower = sum(r["test_last"][ESR] < by_seed[r["seed"]] for r in paired)
-        reduction = 1 - mean_esr(changes) / mean_esr(rerun)
+        ours, theirs = pair(ssm, changes)
+        lower = sum(
+            a["test_last"][ESR] < b["test_last"][ESR]
+            for a, b in zip(ours, theirs, strict=True)
+        )
+        after, before = pair(changes, rerun)
+        reduction = 1 - mean_esr(after) / mean_esr(before)
         comparisons = {
             "ChangesReduction": f"{100 * reduction:.0f}\\,\\%",
-            "SSMRatio": f"{mean_esr(changes) / mean_esr(ssm):.1f}",
+            "ChangesPairedSeeds": str(len(after)),
+            "SSMRatio": f"{mean_esr(theirs) / mean_esr(ours):.1f}",
             "ParamRatio": f"{changes[0]['parameters'] / parameters['ssm']:.1f}",
             "SSMLowerSeeds": str(lower),
-            "PairedSeeds": str(len(paired)),
+            "PairedSeeds": str(len(ours)),
         }
 
     guarded = ssm + changes
@@ -325,6 +338,7 @@ def main() -> None:
     }
     for name in (
         "ChangesReduction",
+        "ChangesPairedSeeds",
         "SSMRatio",
         "ParamRatio",
         "SSMLowerSeeds",
