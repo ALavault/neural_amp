@@ -1,5 +1,7 @@
 # Comparaison sur les splits propres (même prise, Big Muff)
 
+> **Erratum (15 septembre 2026).** Le resplit découpe train, val et test dans la même prise : c'est une mesure de capacité intra-prise, pas le benchmark ToneTwist, dont le test est un autre contenu par conception. La source de 120 s est elle-même une troncature du fichier d'entraînement publié (340 s). Ces chiffres ne sont pas comparables aux résultats publiés.
+
 ## Pourquoi ce banc
 
 Le diagnostic de données a montré que les trois fichiers originaux ne venaient

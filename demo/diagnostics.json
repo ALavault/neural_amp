@@ -1,0 +1,92 @@
+{
+  "diagnostic_1": {
+    "bands": [
+      {
+        "band": "20-200",
+        "a2_share": 0.009555382654070854,
+        "a2_band_esr": 0.0072268093936145306,
+        "ssm_share": 0.009226169437170029,
+        "ssm_band_esr": 0.002269303658977151,
+        "gain": 3.1845933729608884
+      },
+      {
+        "band": "200-1000",
+        "a2_share": 0.16296999156475067,
+        "a2_band_esr": 0.029593396931886673,
+        "ssm_share": 0.13499344885349274,
+        "ssm_band_esr": 0.007972096092998981,
+        "gain": 3.712122456461019
+      },
+      {
+        "band": "1000-4000",
+        "a2_share": 0.5472995042800903,
+        "a2_band_esr": 0.0791119858622551,
+        "ssm_share": 0.5038301944732666,
+        "ssm_band_esr": 0.023685036227107048,
+        "gain": 3.340167399520927
+      },
+      {
+        "band": "4000-12000",
+        "a2_share": 0.23091310262680054,
+        "a2_band_esr": 0.14396634697914124,
+        "ssm_share": 0.305614173412323,
+        "ssm_band_esr": 0.06196672469377518,
+        "gain": 2.3232847579178775
+      },
+      {
+        "band": "12000-24000",
+        "a2_share": 0.04423316568136215,
+        "a2_band_esr": 0.4499710202217102,
+        "ssm_share": 0.044981349259614944,
+        "ssm_band_esr": 0.14881326258182526,
+        "gain": 3.0237292860526646
+      }
+    ]
+  },
+  "diagnostic_2": {
+    "lr": 0.01,
+    "seeds": {
+      "0": {
+        "run_id": "ssm_wavenet_b8_c16_s4",
+        "test_esr": 0.026901774192975413,
+        "status": "converged"
+      },
+      "1": {
+        "run_id": "ssm_bigmuff_resplit_seed1",
+        "test_esr": 0.02242623517143817,
+        "status": "converged"
+      },
+      "2": {
+        "run_id": "ssm_bigmuff_resplit_seed2",
+        "test_esr": 1.4946990643458384,
+        "status": "diverged"
+      }
+    },
+    "mean": 0.5146756912367506,
+    "std": 0.6929835815719682,
+    "converged": 2,
+    "converged_mean": 0.02466400468220679,
+    "seed2_lr0005_test_esr": 0.024518826874049323
+  },
+  "diagnostic_3": {
+    "data": "published Big Muff files truncated to 120/30/30 s",
+    "ssm_attempts": [
+      {
+        "lr": 0.01,
+        "status": "diverged",
+        "steps": null,
+        "test_esr": 1.9450649346039992,
+        "best_validation_esr": null
+      },
+      {
+        "lr": 0.005,
+        "status": "killed",
+        "steps": 4800,
+        "test_esr": null,
+        "best_validation_esr": 1.47276
+      }
+    ],
+    "a2_test_esr": 0.18825,
+    "s4_test_esr": 0.18655
+  }
+}

@@ -35,7 +35,7 @@ OUT = ROOT / "demo/resplit"
 SR = 48_000
 SEG = 144_000
 BATCH = 16
-CKPT_EVERY = 500
+CKPT_EVERY = 100
 
 
 def read(path: Path) -> np.ndarray:
@@ -257,6 +257,7 @@ def main() -> None:
             "deriv_weight": args.deriv_weight,
             "act_type": args.act_type,
         },
+        "args": vars(args),
     }
     for split in ("train", "validation", "test"):
         x = read(data_dir / f"{split}_input.wav")

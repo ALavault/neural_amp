@@ -27,8 +27,9 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 
-# Big Muff principal RC time constants in seconds, from the schematic.
-# Coupling caps, tone stack, and bias recovery.
+# Time constants in seconds for --circuit-init. Order-of-magnitude guesses for
+# coupling, tone-stack and bias-recovery RC products; NOT checked against a
+# Big Muff schematic.
 BIG_MUFF_TAU_S = (0.001, 0.0047, 0.010, 0.047)
 SAMPLE_RATE = 48_000
 

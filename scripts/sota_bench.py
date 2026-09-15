@@ -346,6 +346,17 @@ def markdown(rows: list[dict], fingerprints: list[dict], run: dict, steps: int) 
     lines = [
         "# Où en sommes-nous face à l'état de l'art",
         "",
+        "> **Erratum (15 septembre 2026).** Ce banc ne suit pas le protocole "
+        "publié. (1) Les fichiers sont ceux de ToneTwist, mais tronqués à 120/30/30"
+        " s par `configs/data/m4_internal.yaml` (publiés : 340/51/60 s) : les "
+        "modèles ont vu 35 % des données d'entraînement. (2) Le test publié est "
+        "connu : le fichier `test` complet, évalué dans nablafx par tranches de 5 s"
+        " (ESR moyen par tranche, sur `last.ckpt`). (3) Notre boucle diffère de "
+        "celle de nablafx (validation et scheduler toutes les 50 époques, pas "
+        "d'early stopping, validation sur un fichier séparé). Ces chiffres ne sont "
+        "donc pas comparables à 0,1076. Le banc conforme est "
+        "`scripts/product_nablafx_bench.py` (résultats dans `demo/nablafx_bench/`).",
+        "",
         f"Appareil : `{DEVICE}`. Tous les modèles sont entraînés et évalués sur les",
         "mêmes six fichiers, avec la même implémentation de métrique",
         "(`fssr_nam.metrics.time.time_metrics`). Aucun chiffre de la littérature",

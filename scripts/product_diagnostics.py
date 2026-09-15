@@ -2,10 +2,13 @@
 """Assemble the three SSM-WaveNet diagnostics into a report.
 
 1. Residual analysis by frequency band (SSM-WaveNet 30k vs A2 Full)
-2. Seed robustness: three seeds on the Big Muff resplit
-3. Generalisation: SSM-WaveNet on the original (inconsistent) splits
+2. Seed robustness: three seeds at the same configuration (lr 0.01) on the
+   Big Muff resplit, diverged runs included
+3. SSM-WaveNet on the M4 splits of the published files (truncated to
+   120/30/30 s), every attempt listed
 
-Reads from demo/runs/ and writes demo/DIAGNOSTICS.md + demo/diagnostics.json.
+Reads from demo/runs/ and demo/RUNS.jsonl, writes demo/DIAGNOSTICS.md and
+demo/diagnostics.json.
 """
 
 from __future__ import annotations
@@ -30,16 +33,7 @@ SR = 48_000
 SEG = 144_000
 BANDS = [(20, 200), (200, 1_000), (1_000, 4_000), (4_000, 12_000), (12_000, 24_000)]
 
-# A2 Full residual analysis from the earlier measurement (on resplit test)
-A2_BANDS = {
-    "20-200": {"share": 0.004, "band_esr": 0.00941},
-    "200-1000": {"share": 0.082, "band_esr": 0.04182},
-    "1000-4000": {"share": 0.474, "band_esr": 0.13048},
-    "4000-12000": {"share": 0.390, "band_esr": 0.26467},
-    "12000-24000": {"share": 0.048, "band_esr": 0.54332},
-}
-
-# Known results on original splits from the SOTA bench
+# Test ESR on the same truncated M4 splits, from demo/sota_comparison.json
 A2_ORIGINAL_TEST_ESR = 0.18825
 S4_ORIGINAL_TEST_ESR = 0.18655
 
@@ -114,46 +108,57 @@ def diagnostic_1(resplit_dir: Path) -> dict:
     return {"bands": comparison}
 
 
+def runs(run_id: str) -> list[dict]:
+    lines = (ROOT / "demo/RUNS.jsonl").read_text(encoding="utf-8").splitlines()
+    return [r for r in map(json.loads, lines) if r.get("run_id") == run_id]
+
+
 def diagnostic_2() -> dict:
-    """Seed robustness: three seeds on the Big Muff resplit."""
+    """Seed robustness: seeds 0, 1 and 2 at lr 0.01 and 15k steps."""
+    run_ids = {
+        0: "ssm_wavenet_b8_c16_s4",
+        1: "ssm_bigmuff_resplit_seed1",
+        2: "ssm_bigmuff_resplit_seed2",
+    }
     seeds = {}
-    for seed in (0, 1, 2):
-        if seed == 0:
-            run_id = "ssm_wavenet_b8_c16_s4"
-        else:
-            run_id = f"ssm_bigmuff_resplit_seed{seed}"
-        runs_log = ROOT / "demo/RUNS.jsonl"
-        for line in runs_log.read_text(encoding="utf-8").splitlines():
-            record = json.loads(line)
-            if record.get("run_id") == run_id:
-                seeds[seed] = record["test_esr"]
-                break
-        else:
-            raise RuntimeError(f"run {run_id} not found in RUNS.jsonl")
-    values = list(seeds.values())
+    for seed, run_id in run_ids.items():
+        (record,) = [r for r in runs(run_id) if r.get("lr", 0.01) == 0.01]
+        if record["steps"] != 15_000:
+            raise RuntimeError(f"{run_id} has {record['steps']} steps")
+        seeds[seed] = {
+            "run_id": run_id,
+            "test_esr": record["test_esr"],
+            "status": record.get("status", "converged"),
+        }
+    values = [s["test_esr"] for s in seeds.values()]
+    converged = [s["test_esr"] for s in seeds.values() if s["status"] == "converged"]
+    (rerun,) = [r for r in runs("ssm_bigmuff_resplit_seed2") if r.get("lr") == 0.005]
     return {
+        "lr": 0.01,
         "seeds": seeds,
         "mean": float(np.mean(values)),
         "std": float(np.std(values)),
+        "converged": len(converged),
+        "converged_mean": float(np.mean(converged)),
+        "seed2_lr0005_test_esr": rerun["test_esr"],
     }
 
 
 def diagnostic_3() -> dict:
-    """SSM-WaveNet on original (inconsistent) splits."""
-    run_id = "ssm_bigmuff_original_splits"
-    runs_log = ROOT / "demo/RUNS.jsonl"
-    ssm_esr = None
-    for line in runs_log.read_text(encoding="utf-8").splitlines():
-        record = json.loads(line)
-        if record.get("run_id") == run_id:
-            ssm_esr = record["test_esr"]
-            ssm_val = record.get("validation_esr")
-            break
-    if ssm_esr is None:
-        raise RuntimeError(f"run {run_id} not found in RUNS.jsonl")
+    """SSM-WaveNet on the truncated M4 splits: every attempt."""
+    attempts = [
+        {
+            "lr": r["lr"],
+            "status": r["status"],
+            "steps": r.get("steps"),
+            "test_esr": r.get("test_esr"),
+            "best_validation_esr": r.get("best_validation_esr"),
+        }
+        for r in runs("ssm_bigmuff_original_splits")
+    ]
     return {
-        "ssm_test_esr": ssm_esr,
-        "ssm_val_esr": ssm_val,
+        "data": "published Big Muff files truncated to 120/30/30 s",
+        "ssm_attempts": attempts,
         "a2_test_esr": A2_ORIGINAL_TEST_ESR,
         "s4_test_esr": S4_ORIGINAL_TEST_ESR,
     }
@@ -181,46 +186,42 @@ def verdicts(d1: dict, d2: dict, d3: dict) -> list[str]:
             f"pour A2. La structure du residu est differente."
         )
 
-    # Verdict 2: does 5x hold?
-    mean = d2["mean"]
-    std = d2["std"]
-    # The 5x is vs A2 Full on resplit (0.1051)
-    a2_resplit = 0.1051
-    ratio = a2_resplit / mean
-    low = a2_resplit / (mean + std)
-    high = a2_resplit / (mean - std) if mean > std else float("inf")
-    if low >= 3.0:
+    # Verdict 2: does 5x hold? Resplit A2 Full test ESR from RESPLIT_COMPARISON.md.
+    mean, std = d2["mean"], d2["std"]
+    a2_resplit = 0.10513
+    if d2["converged"] == 3 and a2_resplit / (mean + std) >= 3.0:
         lines.append(
-            f"**Robustesse :** ESR test moyen {mean:.5f} +/- {std:.5f} "
-            f"sur 3 graines, soit {ratio:.1f}x mieux qu'A2 Full "
-            f"({low:.1f}x a {high:.1f}x a +-1 ecart-type). "
-            f"Le gain de ~{ratio:.0f}x tient."
+            f"**Robustesse :** ESR test moyen {mean:.5f} +/- {std:.5f} sur 3 graines "
+            f"a lr 0,01, soit {a2_resplit / mean:.1f}x mieux qu'A2 Full. Le gain tient."
         )
     else:
         lines.append(
-            f"**Robustesse :** ESR test moyen {mean:.5f} +/- {std:.5f} "
-            f"sur 3 graines, soit {ratio:.1f}x mieux qu'A2 Full "
-            f"({low:.1f}x a +-1 ecart-type). "
-            f"Le gain de 5x ne tient pas a une barre d'erreur pres."
+            f"**Robustesse :** a lr 0,01, {d2['converged']} graines sur 3 convergent "
+            f"(ESR test moyen des convergees {d2['converged_mean']:.5f}) ; la graine 2 "
+            f"diverge (ESR test {d2['seeds'][2]['test_esr']:.4f}). Sur les 3 graines, "
+            f"ESR moyen {mean:.4f} +/- {std:.4f}. Le 5x ne tient pas : le modele "
+            f"n'est pas stable a ce lr. Relancee a lr 0,005, la graine 2 atteint "
+            f"{d2['seed2_lr0005_test_esr']:.5f}, mais ce n'est plus la meme "
+            "configuration."
         )
 
-    # Verdict 3: does memory help on inconsistent splits?
-    ssm = d3["ssm_test_esr"]
-    a2 = d3["a2_test_esr"]
-    s4 = d3["s4_test_esr"]
-    if ssm < a2 * 0.9:
+    # Verdict 3: all attempts on the truncated M4 splits.
+    a2, s4 = d3["a2_test_esr"], d3["s4_test_esr"]
+    tested = [a["test_esr"] for a in d3["ssm_attempts"] if a["test_esr"] is not None]
+    if tested and min(tested) < a2 * 0.9:
         lines.append(
-            f"**Generalisation :** SSM-WaveNet atteint {ssm:.5f} sur les "
-            f"splits originaux, contre {a2:.5f} (A2) et {s4:.5f} "
-            f"(S4-TFiLM). La memoire longue aide au changement de prise "
-            f"({a2 / ssm:.1f}x mieux qu'A2)."
+            f"**Splits M4 :** SSM-WaveNet atteint {min(tested):.5f} contre "
+            f"{a2:.5f} (A2) "
+            f"et {s4:.5f} (S4-TFiLM)."
         )
     else:
         lines.append(
-            f"**Generalisation :** SSM-WaveNet atteint {ssm:.5f} sur les "
-            f"splits originaux, contre {a2:.5f} (A2) et {s4:.5f} "
-            f"(S4-TFiLM). La memoire longue n'aide pas au changement de "
-            f"prise : le plafond est dans les donnees, pas le modele."
+            f"**Splits M4 :** aucune des {len(d3['ssm_attempts'])} tentatives de "
+            f"SSM-WaveNet ne converge (voir tableau), contre {a2:.5f} (A2) et "
+            f"{s4:.5f} (S4-TFiLM) sur les memes fichiers. Le 5x ne tient pas hors de "
+            f"la prise d'entrainement dans cette boucle. Ces fichiers sont tronques a "
+            f"120/30/30 s : la comparaison au protocole publie est dans "
+            f"`demo/nablafx_bench/`."
         )
     return lines
 
@@ -254,24 +255,40 @@ def markdown(d1: dict, d2: dict, d3: dict, verdict_lines: list[str]) -> str:
 
     lines += [
         "",
-        "## 2. Robustesse inter-graines (Big Muff resplit, 15k pas)",
+        "## 2. Robustesse inter-graines (Big Muff resplit, lr 0,01, 15k pas)",
         "",
-        "| Graine | ESR test |",
-        "| ---: | ---: |",
+        "| Graine | Run | Statut | ESR test |",
+        "| ---: | --- | --- | ---: |",
     ]
-    for seed, esr in sorted(d2["seeds"].items()):
-        lines.append(f"| {seed} | {esr:.5f} |")
-    lines.append(f"| **moyenne** | **{d2['mean']:.5f} +/- {d2['std']:.5f}** |")
-
+    for seed, row in sorted(d2["seeds"].items()):
+        lines.append(
+            f"| {seed} | `{row['run_id']}` | {row['status']} | {row['test_esr']:.5f} |"
+        )
+    lines.append(f"| **moyenne** | | | **{d2['mean']:.5f} +/- {d2['std']:.5f}** |")
     lines += [
         "",
-        "## 3. Splits originaux (prises differentes)",
+        f"Hors configuration : graine 2 relancee a lr 0,005, ESR test "
+        f"{d2['seed2_lr0005_test_esr']:.5f}.",
         "",
-        "| Modele | ESR val | ESR test |",
-        "| --- | ---: | ---: |",
-        f"| SSM-WaveNet | {d3['ssm_val_esr']:.5f} | {d3['ssm_test_esr']:.5f} |",
-        f"| S4-TFiLM large | — | {d3['s4_test_esr']:.5f} |",
-        f"| NAM A2 Full | — | {d3['a2_test_esr']:.5f} |",
+        "## 3. Splits M4 (fichiers publies tronques a 120/30/30 s)",
+        "",
+        "| Modele | lr | Statut | Pas | ESR test | Meilleure ESR val |",
+        "| --- | ---: | --- | ---: | ---: | ---: |",
+    ]
+    for a in d3["ssm_attempts"]:
+        steps = "?" if a["steps"] is None else str(a["steps"])
+        test = "non teste" if a["test_esr"] is None else f"{a['test_esr']:.5f}"
+        val = (
+            "?"
+            if a["best_validation_esr"] is None
+            else f"{a['best_validation_esr']:.5f}"
+        )
+        lines.append(
+            f"| SSM-WaveNet | {a['lr']} | {a['status']} | {steps} | {test} | {val} |"
+        )
+    lines += [
+        f"| S4-TFiLM large | 0.01 | converged | 15000 | {d3['s4_test_esr']:.5f} | |",
+        f"| NAM A2 Full | | converged | | {d3['a2_test_esr']:.5f} | |",
     ]
     return "\n".join(lines) + "\n"
 
@@ -291,13 +308,14 @@ def main() -> int:
 
     print("\n[2/3] Robustesse inter-graines")
     d2 = diagnostic_2()
-    for seed, esr in sorted(d2["seeds"].items()):
-        print(f"  seed {seed}: {esr:.5f}")
+    for seed, row in sorted(d2["seeds"].items()):
+        print(f"  seed {seed}: {row['test_esr']:.5f} ({row['status']})")
     print(f"  moyenne: {d2['mean']:.5f} +/- {d2['std']:.5f}")
 
-    print("\n[3/3] Splits originaux")
+    print("\n[3/3] Splits M4 tronques")
     d3 = diagnostic_3()
-    print(f"  SSM-WaveNet: val {d3['ssm_val_esr']:.5f} test {d3['ssm_test_esr']:.5f}")
+    for a in d3["ssm_attempts"]:
+        print(f"  SSM-WaveNet lr {a['lr']}: {a['status']}, test {a['test_esr']}")
     print(f"  A2 Full:     test {d3['a2_test_esr']:.5f}")
     print(f"  S4-TFiLM:    test {d3['s4_test_esr']:.5f}")
 

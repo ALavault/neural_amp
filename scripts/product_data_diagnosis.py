@@ -281,6 +281,13 @@ def markdown(report: dict) -> str:
     lines = [
         "# Diagnostic de données : le plafond est-il dans la donnée ou le modèle ?",
         "",
+        "> **Erratum (15 septembre 2026).** Les fichiers analysés sont les fichiers"
+        " publiés tronqués (120/30/30 s au lieu de 340/51/60 s). Le test ToneTwist "
+        "a volontairement un contenu différent du train/val. Qu'il soit plus dur à "
+        "surapprendre est compatible avec un matériau plus difficile et ne prouve "
+        "pas que la cible est incohérente. La décision « recapturer avant toute "
+        "ambition SOTA » reposait sur cette lecture et ne tient plus.",
+        "",
         f"Appareil `{DEVICE}`, **fichier de test uniquement**. Les conclusions",
         "portent sur ce découpage, pas sur « le jeu de données ».",
         "",
