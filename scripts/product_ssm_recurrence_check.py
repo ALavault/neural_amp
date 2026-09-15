@@ -26,7 +26,7 @@ INPUT = (
 OUT = ROOT / "paper/icassp2027/data/recurrence_check.json"
 
 
-def load(checkpoint: Path) -> SSMWaveNet:
+def load(checkpoint: Path, state_dim: int, discretization: str) -> SSMWaveNet:
     state = torch.load(checkpoint, map_location="cpu", weights_only=False)
     prefix = "model.processor."
     state = {
@@ -34,7 +34,9 @@ def load(checkpoint: Path) -> SSMWaveNet:
         for k, v in state["state_dict"].items()
         if k.startswith(prefix)
     }
-    model = SSMWaveNet(num_blocks=8, channels=16, state_dim=4)
+    model = SSMWaveNet(
+        num_blocks=8, channels=16, state_dim=state_dim, discretization=discretization
+    )
     model.load_state_dict(state)
     return model.double().eval()
 
@@ -61,9 +63,11 @@ def main() -> None:
     parser.add_argument("checkpoint", type=Path)
     parser.add_argument("--start", type=int, default=44_100)
     parser.add_argument("--samples", type=int, default=4_410)
+    parser.add_argument("--state-dim", type=int, default=4)
+    parser.add_argument("--discretization", default="free", choices=["free", "zoh"])
     args = parser.parse_args()
 
-    model = load(args.checkpoint)
+    model = load(args.checkpoint, args.state_dim, args.discretization)
     audio, rate = sf.read(INPUT, dtype="float64", start=args.start, frames=args.samples)
     x = torch.from_numpy(audio).reshape(1, 1, -1)
     with torch.inference_mode():
@@ -71,6 +75,8 @@ def main() -> None:
     deviation = (parallel - recurrent(model, x)).abs().max().item()
     record = {
         "checkpoint": str(args.checkpoint.relative_to(ROOT)),
+        "state_dim": args.state_dim,
+        "discretization": args.discretization,
         "input": str(INPUT.relative_to(ROOT)),
         "sample_rate": rate,
         "start": args.start,
