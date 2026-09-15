@@ -37,4 +37,14 @@ for seed in 42 43 44; do
   run "ssmzoh_guard_seed${seed}" --model ssm-wavenet --discretization zoh --honor-optim --seed "${seed}"
   run "s4tfl16_nowd_guard_seed${seed}" --model s4-tf-l-16 --honor-optim --seed "${seed}"
 done
+
+# Round 4, so that the comparisons with the released training also have three
+# seeds: the S4 baseline as the released code trains it, then the SSM-WaveNet
+# ablation (learned b, weight decay on state-space parameters, no guard).
+for seed in 42 43 44; do
+  run "s4tfl16_seed${seed}" --model s4-tf-l-16 --no-polarity-guard --seed "${seed}"
+done
+for seed in 42 43 44; do
+  run "ssmwavenet_seed${seed}" --model ssm-wavenet --no-polarity-guard --seed "${seed}"
+done
 echo "=== queue finished $(date '+%a %H:%M')"

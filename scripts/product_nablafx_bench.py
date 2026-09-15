@@ -11,8 +11,9 @@ of Comunità et al. (Frontiers 2025) gives value clipping at 1 for S4, the relea
 YAML sets 10, and the default here follows the paper. The released test script
 loads last.ckpt, so that is the primary result; best.ckpt is recorded too.
 
-One addition to training, for every model: PolarityGuard flips the output sign
-whenever the validation output anticorrelates with the target (see its docstring).
+One addition to training, for every model unless --no-polarity-guard: PolarityGuard
+flips the output sign whenever the validation output anticorrelates with the target
+(see its docstring).
 
 Extra packages, installed with `uv pip install` and not in uv.lock:
 lightning==2.6.1, jsonargparse[signatures]==4.52.0, natsort==8.4.0, wandb==0.30.0,
@@ -225,6 +226,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="apply the _optim hints (no weight decay on state-space parameters)",
     )
+    parser.add_argument(
+        "--no-polarity-guard",
+        action="store_true",
+        help="train exactly as the released code does, without PolarityGuard",
+    )
     parser.add_argument("--resume", action="store_true")
     parser.add_argument(
         "--no-record", action="store_true", help="smoke test: do not write results"
@@ -378,7 +384,7 @@ def main() -> None:
             ModelSummary(max_depth=2),
             LearningRateMonitor(),
             early_stopping,
-            polarity_guard,
+            *([] if args.no_polarity_guard else [polarity_guard]),
         ],
     )
     print(
@@ -423,7 +429,7 @@ def main() -> None:
         "loss_weights": {"l1": l1_weight, "mrstft": mrstft_weight},
         "gradient_clip_val": args.clip_value,
         "honor_optim": args.honor_optim,
-        "polarity_guard": True,
+        "polarity_guard": not args.no_polarity_guard,
         "polarity_flips": polarity_guard.flips,
         "ssm": (
             {
