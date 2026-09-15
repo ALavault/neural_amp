@@ -64,10 +64,15 @@ def main() -> None:
     with torch.no_grad():
         layer.weight.neg_()
         layer.bias.neg_()
+    # An output y_hat = -y has L1 = 2 E|y|, whatever the model.
+    data = bench.data_module("test")
+    data.setup("test")
+    targets = torch.stack([target for _, target in data.test_dataset])
     record = {
         "run_id": args.run_id,
         "checkpoint": str(path.relative_to(ROOT)),
         "global_step": checkpoint["global_step"],
+        "test_target_mean_abs": float(targets.abs().mean()),
         "test_as_is": as_is,
         "test_negated": test(system),
     }

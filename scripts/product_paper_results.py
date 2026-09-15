@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """Build the paper's result macros, table and figure from recorded runs.
 
-Inputs: paper/icassp2027/data/published_bigmuff.json (appendix tables of
-Comunità et al.) and demo/nablafx_bench/*.json (scripts/product_nablafx_bench.py).
+Inputs, all under version control: paper/icassp2027/data/published_bigmuff.json
+(appendix tables of Comunità et al.), demo/nablafx_bench/*.json
+(scripts/product_nablafx_bench.py), paper/icassp2027/data/polarity_ssmzoh_seed42.json
+(scripts/product_polarity_check.py) and recurrence_check.json
+(scripts/product_ssm_recurrence_check.py).
 Outputs: paper/icassp2027/results.tex and paper/icassp2027/fig_pareto.pdf.
-Groups without runs print as [pending], so the draft always compiles.
+Variants without runs print as [pending], so the draft always compiles.
 """
 
 from __future__ import annotations
@@ -25,13 +28,28 @@ PAPER = ROOT / "paper/icassp2027"
 PUBLISHED = json.loads(
     (PAPER / "data/published_bigmuff.json").read_text(encoding="utf-8")
 )
+INVERTED = json.loads(
+    (PAPER / "data/polarity_ssmzoh_seed42.json").read_text(encoding="utf-8")
+)
+RECURRENCE = PAPER / "data/recurrence_check.json"
 RUNS = ROOT / "demo/nablafx_bench"
 
-ESR, L1, MRSTFT = "metric/test/esr", "loss_scaled/test/l1", "loss_scaled/test/mrstft"
-GROUPS = [
-    ("s4-l-16", "S4-L-16"),
-    ("s4-tf-l-16", "S4-TF-L-16"),
-    ("ssm-wavenet", "SSM-WaveNet"),
+ESR, L1, MRSTFT = "metric/test/esr", "metric/test/l1", "metric/test/mrstft"
+# (model, discretization, states per channel, no weight decay on state-space
+# parameters, polarity guard) -> variant. Any other configuration raises.
+VARIANT_OF = {
+    ("s4-tf-l-16", None, None, False, False): "s4-released",
+    ("s4-tf-l-16", None, None, True, True): "s4-changes",
+    ("ssm-wavenet", "zoh", 4, True, True): "ssm",
+    ("ssm-wavenet", "free", 4, False, False): "ssm-v1",
+}
+SECTIONS = [
+    ("Re-run, released training", [("s4-released", "S4-TF-L-16")]),
+    (
+        "Both training changes (Sec.~\\ref{sec:setup})",
+        [("s4-changes", "S4-TF-L-16"), ("ssm", "SSM-WaveNet")],
+    ),
+    ("Ablation: learned $b$, released training", [("ssm-v1", "SSM-WaveNet")]),
 ]
 PUBLISHED_S4 = ["S4-S-16", "S4-L-16", "S4-TF-S-16", "S4-TF-L-16"]
 
@@ -44,11 +62,23 @@ def params_label(count: int) -> str:
     return f"{count / 1e3:.1f}k"
 
 
+def variant(record: dict) -> str:
+    ssm = record["ssm"] or {}
+    key = (
+        record["model"],
+        ssm.get("discretization", "free") if ssm else None,
+        ssm.get("state_dim"),
+        bool(record.get("honor_optim")),
+        bool(record.get("polarity_guard")),
+    )
+    return VARIANT_OF[key]
+
+
 def load_runs() -> dict[str, list[dict]]:
-    runs: dict[str, list[dict]] = {key: [] for key, _ in GROUPS}
+    runs: dict[str, list[dict]] = {key: [] for key in VARIANT_OF.values()}
     for path in sorted(RUNS.glob("*.json")):
         record = json.loads(path.read_text(encoding="utf-8"))
-        runs[record["model"]].append(record)
+        runs[variant(record)].append(record)
     return runs
 
 
@@ -76,12 +106,23 @@ def best_per_family() -> list[str]:
     return [best[family] for family in ("LSTM", "TCN", "GCN")] + PUBLISHED_S4
 
 
+def published_outliers() -> list[str]:
+    """Neural models with test ESR above 1, which an inverted output produces."""
+    return [
+        name
+        for name, model in sorted(
+            PUBLISHED["models"].items(), key=lambda item: item[1]["test"]["esr"]
+        )
+        if model["test"]["esr"] > 1 and not name.startswith("GB")
+    ]
+
+
 def table(runs: dict[str, list[dict]]) -> str:
     rows = [
         r"\begin{table}[t]",
-        r"\caption{Test results on the Big Muff under the NablAFx protocol. Losses are"
-        r" unweighted. Re-runs and SSM-WaveNet: mean $\pm$ standard deviation over"
-        r" $n$ seeds.}",
+        r"\caption{Test results on the Big Muff under the NablAFx protocol, last"
+        r" checkpoint. Losses are unweighted. Our runs: mean $\pm$ standard deviation"
+        r" over $n$ seeds.}",
         r"\label{tab:results}",
         r"\centering\footnotesize\setlength{\tabcolsep}{3.5pt}",
         r"\begin{tabular}{@{}lrlll@{}}",
@@ -94,25 +135,20 @@ def table(runs: dict[str, list[dict]]) -> str:
         test = PUBLISHED["models"][name]["test"]
         rows.append(
             f"{name} & {PUBLISHED['models'][name]['params']} & {test['l1'] * 1e3:.1f}"
-            f" & {test['mrstft']:.4f} & {test['esr']:.4f} \\\\"
+            f" & {test['mrstft']:.3f} & {test['esr']:.3f} \\\\"
         )
-    for key, label in GROUPS:
-        group = runs[key]
-        if key == "s4-l-16":
-            rows += [
-                r"\midrule",
-                r"\multicolumn{5}{@{}l}{\emph{Re-run with the same code as ours}} \\",
-            ]
-        if key == "ssm-wavenet":
-            rows += [r"\midrule", r"\multicolumn{5}{@{}l}{\emph{Proposed}} \\"]
-        params = params_label(group[0]["parameters"]) if group else r"\pending"
-        tests = [record["test_last"] for record in group]
-        rows.append(
-            f"{label} ($n={len(group)}$) & {params}"
-            f" & {mean_std([t[L1] * 1e3 for t in tests], 1)}"
-            f" & {mean_std([t[MRSTFT] for t in tests], 4)}"
-            f" & {mean_std([t[ESR] for t in tests], 4)} \\\\"
-        )
+    for title, members in SECTIONS:
+        rows += [r"\midrule", f"\\multicolumn{{5}}{{@{{}}l}}{{\\emph{{{title}}}}} \\\\"]
+        for key, label in members:
+            group = runs[key]
+            params = params_label(group[0]["parameters"]) if group else r"\pending"
+            tests = [record["test_last"] for record in group]
+            rows.append(
+                f"{label} ($n={len(group)}$) & {params}"
+                f" & {mean_std([t[L1] * 1e3 for t in tests], 1)}"
+                f" & {mean_std([t[MRSTFT] for t in tests], 3)}"
+                f" & {mean_std([t[ESR] for t in tests], 3)} \\\\"
+            )
     rows += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
     return "\n".join(rows)
 
@@ -124,7 +160,12 @@ S4_LABEL_OFFSETS = {
     "S4-TF-S-16": (4, 1),
     "S4-TF-L-16": (4, -7),
 }
-ESR_AXIS = (0.08, 1.0)
+ESR_AXIS = (0.03, 1.0)
+STYLES = {
+    "s4-released": ("D", "tab:blue", "S4-TF-L-16 re-run, released training"),
+    "s4-changes": ("s", "tab:cyan", "S4-TF-L-16 re-run, both changes"),
+    "ssm": ("*", "tab:red", "SSM-WaveNet, both changes"),
+}
 
 
 def figure(runs: dict[str, list[dict]]) -> list[str]:
@@ -151,18 +192,12 @@ def figure(runs: dict[str, list[dict]]) -> list[str]:
                 fontsize=6,
                 color="0.35",
             )
-    styles = {
-        "s4-l-16": ("s", "tab:blue"),
-        "s4-tf-l-16": ("D", "tab:blue"),
-        "ssm-wavenet": ("*", "tab:red"),
-    }
-    for key, label in GROUPS:
+    for key, (marker, color, label) in STYLES.items():
         group = runs[key]
         if not group:
             continue
         esr = [record["test_last"][ESR] for record in group]
         mean = statistics.fmean(esr)
-        marker, color = styles[key]
         ax.errorbar(
             group[0]["parameters"],
             mean,
@@ -172,9 +207,7 @@ def figure(runs: dict[str, list[dict]]) -> list[str]:
             markersize=6 if marker == "*" else 4,
             capsize=2,
             zorder=3,
-            label=f"{label} (ours, n={len(group)})"
-            if key == "ssm-wavenet"
-            else f"{label} re-run (n={len(group)})",
+            label=f"{label} (n={len(group)})",
         )
     ax.set_xscale("log")
     ax.set_yscale("log")
@@ -191,10 +224,17 @@ def figure(runs: dict[str, list[dict]]) -> list[str]:
 def main() -> None:
     runs = load_runs()
     s4tfl = PUBLISHED["models"]["S4-TF-L-16"]
-    ssm, rerun = runs["ssm-wavenet"], runs["s4-tf-l-16"]
-    ssm_parameters = SSMWaveNet(num_blocks=8, channels=16, state_dim=4).param_count()
-    if any(record["parameters"] != ssm_parameters for record in ssm):
-        raise RuntimeError("SSM-WaveNet runs do not all use the paper configuration")
+    ssm, rerun, changes = runs["ssm"], runs["s4-released"], runs["s4-changes"]
+    parameters = {
+        key: SSMWaveNet(8, 16, 4, discretization=discretization).param_count()
+        for key, discretization in (("ssm", "zoh"), ("ssm-v1", "free"))
+    }
+    for key, count in parameters.items():
+        if any(record["parameters"] != count for record in runs[key]):
+            raise RuntimeError(f"{key} runs do not all have {count} parameters")
+
+    def esr(group: list[dict]) -> str:
+        return mean_std([r["test_last"][ESR] for r in group], 3)
 
     def peak(group: list[dict]) -> str:
         return f"{max(r['peak_gpu_gib'] for r in group):.1f}" if group else r"\pending"
@@ -205,19 +245,48 @@ def main() -> None:
         excess = statistics.fmean(rerun_losses) / s4tfl["test"]["tot"] - 1
         loss_gap = f"{100 * excess:.0f}\\,\\%"
 
+    guarded = ssm + changes
+    flips = [epoch for r in guarded for epoch in r["polarity_flips"]]
+    outliers = published_outliers()
+    outlier_l1 = [PUBLISHED["models"][name]["test"]["l1"] for name in outliers]
+    recurrence = r"\pending"
+    if RECURRENCE.exists():
+        check = json.loads(RECURRENCE.read_text(encoding="utf-8"))
+        if check["discretization"] == "zoh" and "guard" in check["checkpoint"]:
+            mantissa, exponent = f"{check['max_abs_deviation']:.0e}".split("e")
+            recurrence = f"{mantissa}\\times10^{{{int(exponent)}}}"
+
     macros = {
         "pending": r"\textbf{[pending]}",
-        "PubSFourTFLesr": f"{s4tfl['test']['esr']:.4f}",
+        "PubSFourTFLesr": f"{s4tfl['test']['esr']:.3f}",
         "PubSFourTFLparams": s4tfl["params"],
-        "SSMparams": params_label(ssm_parameters),
-        "SSMparamsExact": f"{ssm_parameters:,}".replace(",", "{,}"),
+        "SSMparams": params_label(parameters["ssm"]),
+        "SSMparamsExact": f"{parameters['ssm']:,}".replace(",", "{,}"),
+        "VoneSSMparamsExact": f"{parameters['ssm-v1']:,}".replace(",", "{,}"),
         "SSMn": str(len(ssm)),
-        "SSMesrMeanStd": mean_std([r["test_last"][ESR] for r in ssm], 4),
-        "RerunSFourTFLesrMeanStd": mean_std([r["test_last"][ESR] for r in rerun], 4),
+        "SSMesrMeanStd": esr(ssm),
+        "SSMmrstftMeanStd": mean_std([r["test_last"][MRSTFT] for r in ssm], 3),
+        "RerunSFourTFLesrMeanStd": esr(rerun),
         "RerunSFourTFLn": str(len(rerun)),
         "RerunSFourTFLlossGap": loss_gap,
+        "ChangesSFourTFLesrMeanStd": esr(changes),
+        "ChangesSFourTFLn": str(len(changes)),
+        "VoneSSMesr": esr(runs["ssm-v1"]),
         "SSMpeakGiB": peak(ssm),
-        "SFourTFLpeakGiB": peak(rerun),
+        "SFourTFLpeakGiB": peak(rerun + changes),
+        "GuardFlips": str(len(flips)),
+        "GuardRuns": str(len(guarded)),
+        "GuardLastFlipEpoch": str(max(flips)) if flips else r"\pending",
+        "InvertedStep": f"{INVERTED['global_step']:,}".replace(",", "{,}"),
+        "InvertedEsr": f"{INVERTED['test_as_is'][ESR]:.2f}",
+        "InvertedLone": f"{INVERTED['test_as_is'][L1]:.4f}",
+        "InvertedNegatedEsr": f"{INVERTED['test_negated'][ESR]:.3f}",
+        "InvertedNegatedLone": f"{INVERTED['test_negated'][L1]:.4f}",
+        "InvertedMrstft": f"{INVERTED['test_as_is'][MRSTFT]:.3f}",
+        "TwiceMeanAbsTarget": f"{2 * INVERTED['test_target_mean_abs']:.4f}",
+        "PubOutliers": ", ".join(outliers[:-1]) + " and " + outliers[-1],
+        "PubOutlierLoneRange": f"{min(outlier_l1):.4f}--{max(outlier_l1):.4f}",
+        "RecurrenceDeviation": recurrence,
         "ResultsTable": table(runs),
     }
     macros["PubOffScale"] = ", ".join(figure(runs))

@@ -3,8 +3,8 @@
 
 Training applies each diagonal SSM as an FFT convolution over the segment;
 streaming inference runs DiagonalSSMLayer.step sample by sample. The two must
-give the same output. Runs on CPU in float64 except for step's complex state,
-which the layer keeps in single precision, and writes the maximum deviation to
+give the same output. Runs on CPU in float64, except that step casts each layer
+input to single-precision complex, and writes the maximum deviation to
 paper/icassp2027/data/recurrence_check.json.
 """
 

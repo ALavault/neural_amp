@@ -2,6 +2,7 @@
   "run_id": "ssmzoh_seed42",
   "checkpoint": "demo/runs/nablafx_ssmzoh_seed42/checkpoints/last.ckpt",
   "global_step": 5100,
+  "test_target_mean_abs": 0.01494487002491951,
   "test_as_is": {
     "loss/test/tot": 0.06819678097963333,
     "loss/test/l1": 0.028622889891266823,

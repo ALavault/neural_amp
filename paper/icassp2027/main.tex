@@ -28,14 +28,19 @@ chain state-space layers, which reach the best published accuracy on the
 ToneTwist AFx benchmark when combined with temporal feature-wise modulation
 (TFiLM). We propose SSM-WaveNet, a WaveNet whose dilated convolutions are
 replaced by diagonal state-space layers, keeping its gated activations and skip
-aggregation. Each layer is a bank of learnable IIR filters that is stable by
-construction, trained as a segment-long FFT convolution and run as a strictly
-causal per-sample recurrence. We train and test it inside the benchmark's public
-framework, leaving its data splits, optimiser, stopping rule and metrics
-unchanged. On the Electro-Harmonix Big Muff, a \SSMparams-parameter SSM-WaveNet
-reaches a test error-to-signal ratio of \SSMesrMeanStd{} over \SSMn{} seeds,
-against \PubSFourTFLesr{} published and \RerunSFourTFLesrMeanStd{} re-run for
-the best \PubSFourTFLparams-parameter S4-TFiLM model.
+aggregation. Each layer is a bank of IIR filters that is stable by construction,
+trained as a segment-long FFT convolution and run as a causal per-sample
+recurrence. We train it inside the benchmark's public framework with two changes
+to training, also applied to a re-run of the best published model: state-space
+parameters are exempted from weight decay, as the framework's layers request,
+and the output is negated whenever it anticorrelates with the validation target.
+The second change is needed because the spectral term of the loss cannot see the
+output's sign: one of our runs converged to an inverted output, and three
+published models have the test errors of one. On the Electro-Harmonix Big Muff,
+a \SSMparams-parameter SSM-WaveNet reaches a test error-to-signal ratio of
+\SSMesrMeanStd{} over \SSMn{} seeds, against \ChangesSFourTFLesrMeanStd{} for
+the \PubSFourTFLparams-parameter S4-TFiLM model trained the same way and
+\PubSFourTFLesr{} published.
 % TODO(results): one sentence stating the supported conclusion.
 \end{abstract}
 
@@ -81,11 +86,14 @@ against the best published models under their own protocol. Our
 contributions are:
 (i)~SSM-WaveNet, a gated network whose layers are banks of stable IIR filters
 and which runs as a causal per-sample recurrence (Sec.~\ref{sec:model});
-(ii)~an evaluation that changes only the model inside NablAFx, with a re-run of
-the best published model and several seeds per model (Sec.~\ref{sec:setup});
-(iii)~% TODO(results): the supported finding.
-results on the Big Muff (Sec.~\ref{sec:results}). Code, configurations and run
-records are available at \url{https://github.com/ALavault/neural_amp}.
+(ii)~evidence that the L1 plus multi-resolution STFT loss of the benchmark
+admits inverted solutions, reached by one of our runs and, judging from their
+test errors, by three published models, and a polarity guard that prevents them
+(Secs.~\ref{sec:setup} and~\ref{sec:discussion});
+(iii)~a comparison inside NablAFx in which the best published model is re-run
+both with the released training and with our training changes, with several
+seeds per model (Sec.~\ref{sec:results}). Code, configurations and run records
+are available at \url{https://github.com/ALavault/neural_amp}.
 
 \section{SSM-WaveNet}
 \label{sec:model}
@@ -98,14 +106,17 @@ states $s_{c,n}$ updated as
 s_{c,n}[t] &= p_{c,n}\, s_{c,n}[t-1] + b_{c,n}\, u_c[t], \label{eq:state}\\
 v_c[t] &= 2\,\mathrm{Re}\Big(\textstyle\sum_{n=1}^{N} c_{c,n}\, s_{c,n}[t]\Big) + d_c\, u_c[t], \label{eq:out}
 \end{align}
-with learned $b_{c,n}, c_{c,n} \in \C$ and $d_c \in \R$. The poles are
+with learned $c_{c,n} \in \C$ and $d_c \in \R$. The poles are
 $p_{c,n} = \exp(\lambda_{c,n}\Delta_c)$ with $\lambda_{c,n} = -e^{\alpha_{c,n}}
 + i\,\omega_{c,n}$ and $\Delta_c = e^{\delta_c}$, so that $|p_{c,n}| < 1$ for any
 value of $\alpha$, $\omega$ and $\delta$: every layer is stable by construction.
-As in S4D-Lin~\cite{gu2022s4d} and the DSSM layer of NablAFx, we initialise
-$\alpha_{c,n} = \log 0.5$, $\omega_{c,n} = \pi (n-1)$ and $\log\Delta_c$
-uniformly in $[\log 10^{-3}, \log 10^{-1}]$; the real and imaginary parts of
-$b$ and $c$ are drawn from $\mathcal{N}(0, 0.02^2)$ and $d_c = 1$. Unrolling
+The input weights follow from zero-order hold, $b_{c,n} = (p_{c,n} -
+1)/\lambda_{c,n}$, which gives each mode the DC gain $-c_{c,n}/\lambda_{c,n}$
+whatever the step $\Delta_c$. As in S4D-Lin~\cite{gu2022s4d} and the DSSM layer
+of NablAFx, we initialise $\alpha_{c,n} = \log 0.5$, $\omega_{c,n} = \pi (n-1)$,
+$\log\Delta_c$ uniformly in $[\log 10^{-3}, \log 10^{-1}]$ and $c_{c,n}$ from a
+standard complex normal distribution; the layer is that DSSM layer except for
+$d_c = 1$ at initialisation. Unrolling
 (\ref{eq:state})--(\ref{eq:out}) gives $v_c = k_c * u_c + d_c u_c$ with the
 impulse response
 \begin{equation}
@@ -116,7 +127,10 @@ so each channel is a real IIR filter with $N$ conjugate pole pairs. During
 training we evaluate $k_c$ over the whole segment and apply it with an FFT
 convolution, so the memory is not truncated within a segment. At inference we
 run (\ref{eq:state})--(\ref{eq:out}) sample by sample, at a cost of $O(N)$
-operations per channel and without look-ahead.
+operations per channel and without look-ahead. On 0.1\,s of test audio, the
+recurrence reproduces the output of the FFT form of a trained network to within
+$\RecurrenceDeviation$, computing in float64 except for a single-precision copy
+of each layer input.
 
 \subsection{Gated blocks}
 
@@ -133,11 +147,13 @@ mapped to the output sample by $\hat{y} = \tanh\big(W_2\,\phi(W_1\,
 convolutions. The network therefore alternates stable linear filter banks with
 memoryless gated nonlinearities and channel mixing, a learned and deep relative
 of the block-oriented (Wiener--Hammerstein) models used for distortion
-circuits, as are the LRU networks of~\cite{esqueda2025lru}. With $K$ blocks it has $K(4C^2 + 6CN + 6C) + C^2 + 4C + 1$ parameters
-and each output sample costs $O(K(C^2 + CN))$ operations. We use $K=8$, $C=16$
-and $N=4$: \SSMparamsExact{} parameters and about $1.3\times10^4$
-multiplications per sample. Since $b$ and $c$ enter (\ref{eq:kernel}) only
-through their product, 1{,}024 of the parameters are redundant.
+circuits, as are the LRU networks of~\cite{esqueda2025lru}. With $K$ blocks it
+has $K(4C^2 + 4CN + 6C) + C^2 + 4C + 1$ parameters, and each output sample costs
+$K(4C^2 + 3CN + 2C) + C^2 + 2C$ multiplications, counting a complex product as
+one. We use $K=8$, $C=16$ and $N=4$: \SSMparamsExact{} parameters and 10{,}272
+multiplications per sample. A first version learned $b$ instead of fixing it by
+zero-order hold, with $b$ and $c$ initialised at a scale of 0.02
+(\VoneSSMparamsExact{} parameters); we report it as an ablation.
 
 The S4 blocks of NablAFx instead chain a linear map, a DSSM layer, a tanh, TFiLM
 and a residual depthwise convolution. In that implementation, TFiLM computes the
@@ -170,17 +186,41 @@ paper). As in the framework's released test script, test metrics are computed
 on the last checkpoint, on each 5\,s segment with states reset, and averaged.
 SSM-WaveNet uses the loss weights of the published S4-TF-L-16 (1 for L1, 0.1
 for MR-STFT) and no hyperparameter search, whereas each published model is the
-best of four loss weightings. Our only changes to the framework read WAV files
+best of four loss weightings. Our changes to the framework's code read WAV files
 with \texttt{soundfile} instead of a torchaudio loader removed in recent
 versions, drop a logging flag removed from PyTorch, and log to CSV files
 instead of Weights \& Biases. Seeds 42 (the
 framework default), 43 and 44 change the initialisation, the
 training/validation partition and the batch order; the test files are fixed.
 
+\textbf{Training changes.} The DSSM layers of NablAFx, following the S4
+reference code, mark $\alpha$, $\omega$ and $\delta$ as exempt from weight
+decay, but the released training code puts all parameters in one AdamW group
+with the default decay of 0.01. Decay pulls these log-parameters towards zero,
+that is towards $\Delta_c = 1$ and $\mathrm{Re}\,\lambda_{c,n} = -1$, which
+shortens the memory of every layer; we honour the exemption. Second, the
+MR-STFT term is invariant to the sign of the output and, even at a weight of
+0.1, stays 4 to 20 times larger than the L1 term on validation in our correctly
+signed runs, so gradient descent can fit the spectrum with an inverted waveform.
+SSM-WaveNet trained with the exemption alone did: after
+\InvertedStep{} steps its test ESR was \InvertedEsr, and \InvertedNegatedEsr{}
+with the output negated, and we stopped it. A polarity guard now computes, after
+each validation epoch, the inner product of output and target over the
+validation set; when it is negative, the guard negates the weight and bias of
+the layer before the output tanh, which negates the output exactly, and their
+Adam first moments. This uses one bit of validation information per epoch, less
+than learning-rate scheduling and early stopping already use. We adopted the
+exemption and zero-order hold after our first SSM-WaveNet run
+(Table~\ref{tab:results}, ablation) had underperformed on the test set, choosing
+them from its training and validation losses and its learned poles, and the
+guard after the inversion, which validation had shown; the stopped run was
+tested only to confirm it. Apart from the ablation and the
+re-run labelled as released training, every run below uses both changes.
+
 \textbf{Baselines.} We report the published Big Muff results of the best LSTM,
-TCN and GCN models and of all four S4 variants~\cite{comunita2025frontiers}, and
-re-run S4-TF-L-16 and S4-L-16 with the same code as our model. S4-L-16 is
-S4-TF-L-16 without TFiLM and is the closest baseline to SSM-WaveNet.
+TCN and GCN models and of all four S4 variants~\cite{comunita2025frontiers}. We
+re-run S4-TF-L-16, the best of them, with the same code as our model, once with
+the released training and on each seed with our training changes.
 
 \section{Results}
 \label{sec:results}
@@ -197,31 +237,54 @@ S4-TF-L-16 without TFiLM and is the closest baseline to SSM-WaveNet.
   \label{fig:pareto}
 \end{figure}
 
-Our re-runs of S4-TF-L-16 reach a test ESR of \RerunSFourTFLesrMeanStd{}
-($n=\RerunSFourTFLn$), against \PubSFourTFLesr{} published, and an unweighted
-test loss \RerunSFourTFLlossGap{} above the published one. The published value is
-the best of four loss weightings, whereas each re-run trains the selected
-weighting once with the released framework. We therefore compare SSM-WaveNet
-with the re-runs, which share its code, data pipeline and budget, and show the
-published values for context.
+Our re-run of S4-TF-L-16 with the released training reaches a test ESR of
+\RerunSFourTFLesrMeanStd{} ($n=\RerunSFourTFLn$), against \PubSFourTFLesr{}
+published, and an unweighted test loss \RerunSFourTFLlossGap{} above the
+published one. The published value is the best of four loss weightings, whereas
+the re-run trains the selected weighting once with the released framework. We
+therefore compare SSM-WaveNet with re-runs, which share its code, data pipeline
+and budget, and show the published values for context.
 
-% TODO(results): write from Table 1 and Fig. 1 once the runs are complete.
+With both training changes, S4-TF-L-16 reaches a test ESR of
+\ChangesSFourTFLesrMeanStd{} ($n=\ChangesSFourTFLn$) and SSM-WaveNet
+\SSMesrMeanStd{} ($n=\SSMn$), with an MR-STFT loss of \SSMmrstftMeanStd.
+% TODO(results): interpret once the seeds are in; compare with the published
+% S4-L-16 (no TFiLM) and with the ablation (\VoneSSMesr, learned b, released
+% training).
+Over the \GuardRuns{} guarded runs, the polarity guard fired \GuardFlips{}
+times, never after epoch \GuardLastFlipEpoch.
 
 \section{Discussion and limitations}
 \label{sec:discussion}
 
-% TODO(results): keep only what the runs support.
-We evaluate a single device, while the published study covers 16. Training
-evaluates each SSM kernel over the whole segment, which dominates memory: a
-batch of sixteen 3\,s segments peaks at \SSMpeakGiB\,GiB on the GPU, against
-\SFourTFLpeakGiB\,GiB for S4-TF-L-16. The per-sample cost given in
+\textbf{Inverted outputs.} An output $\hat{y} = -y$ has an L1 loss of
+$2\,\mathrm{E}|y|$ whatever the model, \TwiceMeanAbsTarget{} on the test set; our
+stopped run had \InvertedLone{} (\InvertedNegatedLone{} negated) and an MR-STFT
+loss of \InvertedMrstft, below that of every published model. The three
+published neural models with a test ESR above 1, \PubOutliers, have L1 losses of
+\PubOutlierLoneRange{} and MR-STFT losses within the range of the other models,
+which is consistent with inverted but otherwise fitted outputs; we cannot
+confirm it without their checkpoints. Any loss that compares magnitude spectra
+alone has this symmetry, so training with one should check the sign of the
+output on validation data.
+
+\textbf{Limitations.} We evaluate a single device, while the published study
+covers 16, and \SSMn{} seeds. The training changes and zero-order hold were
+chosen after a first SSM-WaveNet had underperformed on the test set; re-running
+S4-TF-L-16 with the same changes controls for the changes, not for that choice.
+Training evaluates each SSM kernel over the whole segment, which dominates
+memory: a batch of sixteen 3\,s segments peaks at \SSMpeakGiB\,GiB on the GPU,
+against \SFourTFLpeakGiB\,GiB for S4-TF-L-16. The per-sample cost given in
 Sec.~\ref{sec:model} is analytical; we have not yet measured a compiled
 real-time implementation.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-% TODO(results)
+% TODO(results): state the supported finding on SSM-WaveNet.
+The multi-resolution STFT loss used to train and rank black-box effect models
+cannot see the sign of the output. Checking that sign on validation data costs
+nothing, and should be part of such benchmarks.
 
 \section{Compliance with ethical standards}
 This study uses publicly available recordings released under CC BY-NC 4.0 and
