@@ -1,0 +1,11 @@
+{
+  "checkpoint": "demo/runs/nablafx_ssmzoh_guard_seed42/checkpoints/last.ckpt",
+  "state_dim": 4,
+  "discretization": "zoh",
+  "input": "datasets/raw/external/tone_twist_bigmuff/extracted/DRY/test/test.input.wav",
+  "sample_rate": 44100,
+  "start": 264600,
+  "samples": 4410,
+  "max_abs_deviation": 2.691182832831318e-08,
+  "output_rms": 0.050689920424432724
+}

@@ -85,6 +85,12 @@ uv run python scripts/product_ssm_recurrence_check.py \
   "$PWD/demo/runs/nablafx_ssmzoh_guard_seed42/checkpoints/last.ckpt" --discretization zoh
 ```
 
+A CPU re-test reproduces the recorded test ESR to within 1e-4 (0.03584 against
+0.03580 for ssmzoh_guard_seed42). MR-STFT can differ by up to 2 %, which we
+attribute to the silence the test file opens with: the log-magnitude term
+magnifies small numerical differences there. The paper reports the GPU values
+from the bench's own test loop.
+
 ## Paper
 
 ```bash

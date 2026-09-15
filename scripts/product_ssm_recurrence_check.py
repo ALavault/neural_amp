@@ -61,7 +61,9 @@ def recurrent(model: SSMWaveNet, x: torch.Tensor) -> torch.Tensor:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("checkpoint", type=Path)
-    parser.add_argument("--start", type=int, default=44_100)
+    # The loudest 0.1 s of the test input (RMS 0.23); the file opens with silence,
+    # where the check would only compare the responses to a zero input.
+    parser.add_argument("--start", type=int, default=264_600)
     parser.add_argument("--samples", type=int, default=4_410)
     parser.add_argument("--state-dim", type=int, default=4)
     parser.add_argument("--discretization", default="free", choices=["free", "zoh"])

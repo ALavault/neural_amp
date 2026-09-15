@@ -1,0 +1,32 @@
+{
+  "run_id": "ssmzoh_guard_seed42",
+  "checkpoint": "demo/runs/nablafx_ssmzoh_guard_seed42/checkpoints/last.ckpt",
+  "global_step": 7000,
+  "test_target_mean_abs": 0.01494487002491951,
+  "test_as_is": {
+    "loss/test/tot": 0.04044768586754799,
+    "loss/test/l1": 0.002048332476988435,
+    "loss/test/mrstft": 0.0383993536233902,
+    "loss_scaled/test/tot": 0.38604187965393066,
+    "loss_scaled/test/l1": 0.002048332476988435,
+    "loss_scaled/test/mrstft": 0.383993536233902,
+    "metric/test/l1": 0.002048332476988435,
+    "metric/test/mse": 6.633991142734885e-05,
+    "metric/test/esr": 0.03583712875843048,
+    "metric/test/mape": 3.688426971435547,
+    "metric/test/mrstft": 0.383993536233902
+  },
+  "test_negated": {
+    "loss/test/tot": 0.06816449016332626,
+    "loss/test/l1": 0.029765134677290916,
+    "loss/test/mrstft": 0.0383993536233902,
+    "loss_scaled/test/tot": 0.41375866532325745,
+    "loss_scaled/test/l1": 0.029765134677290916,
+    "loss_scaled/test/mrstft": 0.383993536233902,
+    "metric/test/l1": 0.029765134677290916,
+    "metric/test/mse": 0.01001740526407957,
+    "metric/test/esr": 3.976069688796997,
+    "metric/test/mape": 4.8633809089660645,
+    "metric/test/mrstft": 0.383993536233902
+  }
+}
