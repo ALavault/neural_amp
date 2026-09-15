@@ -1,7 +1,9 @@
 #!/bin/bash
 # ToneTwist Big Muff benchmark in the nablafx framework, one run at a time
 # (each run peaks at 16-17 GiB on the 24 GiB GPU). A run whose result file
-# exists is skipped, so the queue can be restarted after a kill.
+# exists is skipped, so the queue can be restarted after a kill. Seeds of the
+# re-run baseline and of SSM-WaveNet alternate, so the comparison stays
+# balanced whenever the queue is cut.
 set -u
 export TMPDIR=/fastdata/lavaulta/tmp
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
@@ -20,11 +22,16 @@ run() {
   echo "=== ${run_id}: end $(date '+%a %H:%M') (exit ${PIPESTATUS[0]})"
 }
 
+# A run started by an earlier queue may still be training.
+while pgrep -f "scripts/product_nablafx_benc[h].py" > /dev/null; do
+  sleep 30
+done
+
 run s4tfl16_seed42 --model s4-tf-l-16 --seed 42
 run ssmwavenet_seed42 --model ssm-wavenet --seed 42
-run ssmwavenet_seed43 --model ssm-wavenet --seed 43
-run ssmwavenet_seed44 --model ssm-wavenet --seed 44
-run s4l16_seed42 --model s4-l-16 --seed 42
 run s4tfl16_seed43 --model s4-tf-l-16 --seed 43
+run ssmwavenet_seed43 --model ssm-wavenet --seed 43
+run s4l16_seed42 --model s4-l-16 --seed 42
+run ssmwavenet_seed44 --model ssm-wavenet --seed 44
 run s4tfl16_seed44 --model s4-tf-l-16 --seed 44
 echo "=== queue finished $(date '+%a %H:%M')"

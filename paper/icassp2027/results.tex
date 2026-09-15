@@ -6,9 +6,11 @@
 \newcommand{\SSMparamsExact}{12{,}353}
 \newcommand{\SSMn}{0}
 \newcommand{\SSMesrMeanStd}{\pending}
-\newcommand{\RerunSFourTFLesrMeanStd}{\pending}
+\newcommand{\RerunSFourTFLesrMeanStd}{0.1373}
+\newcommand{\RerunSFourTFLn}{1}
+\newcommand{\RerunSFourTFLlossGap}{10\,\%}
 \newcommand{\SSMpeakGiB}{\pending}
-\newcommand{\SFourTFLpeakGiB}{\pending}
+\newcommand{\SFourTFLpeakGiB}{16.3}
 \newcommand{\ResultsTable}{\begin{table}[t]
 \caption{Test results on the Big Muff under the NablAFx protocol. Losses are unweighted. Re-runs and SSM-WaveNet: mean $\pm$ standard deviation over $n$ seeds.}
 \label{tab:results}
@@ -28,10 +30,11 @@ S4-TF-L-16 & 70.2k & 3.1 & 0.5046 & 0.1076 \\
 \midrule
 \multicolumn{5}{@{}l}{\emph{Re-run with the same code as ours}} \\
 S4-L-16 ($n=0$) & \pending & \pending & \pending & \pending \\
-S4-TF-L-16 ($n=0$) & \pending & \pending & \pending & \pending \\
+S4-TF-L-16 ($n=1$) & 70.2k & 3.6 & 0.5550 & 0.1373 \\
 \midrule
 \multicolumn{5}{@{}l}{\emph{Proposed}} \\
 SSM-WaveNet ($n=0$) & \pending & \pending & \pending & \pending \\
 \bottomrule
 \end{tabular}
 \end{table}}
+\newcommand{\PubOffScale}{LSTM-32 (3.59), TCN-2500-S-16 (3.39), GCN-TF-2500-L-16 (3.61)}
