@@ -63,15 +63,21 @@ framework~\cite{comunita2025nablafx}. S4 models with TFiLM were the most
 accurate overall; on the Big Muff fuzz pedal, the largest one reached a test
 error-to-signal ratio (ESR) of \PubSFourTFLesr{} with \PubSFourTFLparams{}
 parameters. Structured state-space models (SSMs)~\cite{gu2022s4, gupta2022dss,
-gu2022s4d} have also been used for audio generation~\cite{goel2022sashimi} and
-to model dynamic range compressors~\cite{yin2024drc, simionato2025ssm}.
+gu2022s4d} have also been used for audio generation~\cite{goel2022sashimi}, to
+model compressors~\cite{yin2024drc, simionato2025jaes}, and compared with
+recurrent networks across several effect types~\cite{simionato2025ssm}. Closest
+to our work, Esqueda and Murai~\cite{esqueda2025lru} interleave real linear
+recurrent units with nonlinear stages to model distortion circuits.
 
 The two families differ in more than their linear operator. WaveNet blocks gate
 every layer with a tanh--sigmoid product and sum the layer outputs through skip
 connections. The S4 models of~\cite{comunita2025frontiers} chain residual layers
 with tanh activations and obtain long-range modulation from TFiLM, an LSTM
 driven by max-pooled features. We ask whether the WaveNet topology, with its
-dilated convolutions replaced by diagonal SSM layers, can do without TFiLM. Our
+dilated convolutions replaced by diagonal SSM layers, can do without TFiLM.
+Unlike~\cite{esqueda2025lru}, our layers have complex, hence oscillatory, poles
+and keep WaveNet's multiplicative gates and skip aggregation, and we compare
+against the best published models under their own protocol. Our
 contributions are:
 (i)~SSM-WaveNet, a gated network whose layers are banks of stable IIR filters
 and which runs as a causal per-sample recurrence (Sec.~\ref{sec:model});
@@ -127,7 +133,7 @@ mapped to the output sample by $\hat{y} = \tanh\big(W_2\,\phi(W_1\,
 convolutions. The network therefore alternates stable linear filter banks with
 memoryless gated nonlinearities and channel mixing, a learned and deep relative
 of the block-oriented (Wiener--Hammerstein) models used for distortion
-circuits. With $K$ blocks it has $K(4C^2 + 6CN + 6C) + C^2 + 4C + 1$ parameters
+circuits, as are the LRU networks of~\cite{esqueda2025lru}. With $K$ blocks it has $K(4C^2 + 6CN + 6C) + C^2 + 4C + 1$ parameters
 and each output sample costs $O(K(C^2 + CN))$ operations. We use $K=8$, $C=16$
 and $N=4$: \SSMparamsExact{} parameters and about $1.3\times10^4$
 multiplications per sample. Since $b$ and $c$ enter (\ref{eq:kernel}) only
@@ -145,26 +151,29 @@ no pooling and no LSTM.
 
 \textbf{Data.} We use the Electro-Harmonix Big Muff recordings of Wright et
 al.~\cite{wright2019realtime} (sustain 5, volume 10) distributed in ToneTwist
-AFx~\cite{comunita2025tonetwist} under CC~BY-NC~4.0: a 340\,s training and a
+AFx~\cite{comunita2025tonetwist, wright2024tonetwistbigmuff} under CC~BY-NC~4.0: a 340\,s training and a
 51\,s validation recording, and a 60\,s test recording with different musical
 content, all mono at 44.1\,kHz. NablAFx resamples them to 48\,kHz, cuts training
 and validation into 3\,s segments, pools them and draws a random 90/10 split
 (117 training and 13 validation segments). The test recording is cut into
-twelve 5\,s segments.
+twelve 5\,s segments. Earlier results on these recordings~\cite{wright2019realtime}
+follow a different protocol and are not comparable.
 
 \textbf{Protocol.} All models are trained and tested with NablAFx (commit
-\texttt{045db6e}) and the settings of its black-box configuration: AdamW with a
-learning rate of 0.01 and batch size 16, an L1 plus multi-resolution STFT
-loss~\cite{steinmetz2020auraloss, yamamoto2020pwg}, gradient clipping at a
-value of 10, learning-rate halving after 20 epochs without validation
-improvement, early stopping after 50, and at most 15k steps. As for the
-published results, test metrics are computed on the last checkpoint, on each
-5\,s segment with states reset, and averaged. SSM-WaveNet uses the loss weights
-of the published S4-TF-L-16 (1 for L1, 0.1 for MR-STFT) and no hyperparameter
-search, whereas each published model is the best of four loss weightings. Our
-only changes to the framework read WAV files with \texttt{soundfile} instead of
-a torchaudio loader removed in recent versions, drop a logging flag removed from
-PyTorch, and log to CSV files instead of Weights \& Biases. Seeds 42 (the
+\texttt{045db6e}) and the S4 training scheme of~\cite{comunita2025frontiers}:
+AdamW with a learning rate of 0.01 and batch size 16, an L1 plus
+multi-resolution STFT loss~\cite{steinmetz2020auraloss, yamamoto2020pwg},
+gradient clipping at a value of 1, learning-rate halving after 20 epochs without
+validation improvement, early stopping after 50, and at most 15k steps (the
+released configuration file sets the clipping value to 10; we follow the
+paper). As in the framework's released test script, test metrics are computed
+on the last checkpoint, on each 5\,s segment with states reset, and averaged.
+SSM-WaveNet uses the loss weights of the published S4-TF-L-16 (1 for L1, 0.1
+for MR-STFT) and no hyperparameter search, whereas each published model is the
+best of four loss weightings. Our only changes to the framework read WAV files
+with \texttt{soundfile} instead of a torchaudio loader removed in recent
+versions, drop a logging flag removed from PyTorch, and log to CSV files
+instead of Weights \& Biases. Seeds 42 (the
 framework default), 43 and 44 change the initialisation, the
 training/validation partition and the batch order; the test files are fixed.
 
