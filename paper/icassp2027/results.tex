@@ -12,14 +12,15 @@
 \newcommand{\RerunSFourTFLesrMeanStd}{0.137}
 \newcommand{\RerunSFourTFLn}{1}
 \newcommand{\RerunSFourTFLlossGap}{10\,\%}
-\newcommand{\ChangesSFourTFLesrMeanStd}{\pending}
-\newcommand{\ChangesSFourTFLn}{0}
+\newcommand{\ChangesSFourTFLesrMeanStd}{0.089}
+\newcommand{\ChangesSFourTFLn}{1}
+\newcommand{\ChangesSFourTFLmrstftMeanStd}{0.486}
 \newcommand{\VoneSSMesr}{0.236}
 \newcommand{\SSMpeakGiB}{17.2}
 \newcommand{\SFourTFLpeakGiB}{16.3}
-\newcommand{\GuardFlips}{4}
-\newcommand{\GuardRuns}{1}
-\newcommand{\GuardLastFlipEpoch}{5}
+\newcommand{\GuardFlips}{7}
+\newcommand{\GuardRuns}{2}
+\newcommand{\GuardLastFlipEpoch}{8}
 \newcommand{\InvertedStep}{5{,}100}
 \newcommand{\InvertedEsr}{3.95}
 \newcommand{\InvertedLone}{0.0286}
@@ -32,6 +33,7 @@
 \newcommand{\ResultsTable}{\begin{table}[t]
 \caption{Test results on the Big Muff under the NablAFx protocol, last checkpoint. Losses are unweighted. Our runs: mean $\pm$ standard deviation over $n$ seeds.}
 \label{tab:results}
+\smallskip
 \centering\footnotesize\setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{@{}lrlll@{}}
 \toprule
@@ -50,7 +52,7 @@ S4-TF-L-16 & 70.2k & 3.1 & 0.505 & 0.108 \\
 S4-TF-L-16 ($n=1$) & 70.2k & 3.6 & 0.555 & 0.137 \\
 \midrule
 \multicolumn{5}{@{}l}{\emph{Both training changes (Sec.~\ref{sec:setup})}} \\
-S4-TF-L-16 ($n=0$) & \pending & \pending & \pending & \pending \\
+S4-TF-L-16 ($n=1$) & 70.2k & 2.8 & 0.486 & 0.089 \\
 SSM-WaveNet ($n=1$) & 11.3k & 2.1 & 0.390 & 0.036 \\
 \midrule
 \multicolumn{5}{@{}l}{\emph{Ablation: learned $b$, released training}} \\
@@ -58,4 +60,9 @@ SSM-WaveNet ($n=1$) & 12.4k & 4.6 & 0.604 & 0.236 \\
 \bottomrule
 \end{tabular}
 \end{table}}
+\newcommand{\ChangesReduction}{35\,\%}
+\newcommand{\SSMRatio}{2.5}
+\newcommand{\ParamRatio}{6.2}
+\newcommand{\SSMLowerSeeds}{1}
+\newcommand{\PairedSeeds}{1}
 \newcommand{\PubOffScale}{LSTM-32 (3.59), TCN-2500-S-16 (3.39), GCN-TF-2500-L-16 (3.61)}
