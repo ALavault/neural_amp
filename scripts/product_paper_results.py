@@ -157,7 +157,7 @@ def table(runs: dict[str, list[dict]]) -> str:
 S4_LABEL_OFFSETS = {
     "S4-S-16": (4, -2),
     "S4-L-16": (-4, 3),
-    "S4-TF-S-16": (4, 1),
+    "S4-TF-S-16": (-4, -6),
     "S4-TF-L-16": (4, -7),
 }
 ESR_AXIS = (0.03, 1.0)
@@ -171,7 +171,7 @@ STYLES = {
 def figure(runs: dict[str, list[dict]]) -> list[str]:
     """Draw ESR against parameters; return the published models off the axis."""
     plt.rcParams.update({"font.size": 7, "font.family": "serif"})
-    fig, ax = plt.subplots(figsize=(3.4, 2.0))
+    fig, ax = plt.subplots(figsize=(3.4, 2.2))
     off_scale = []
     for name, model in PUBLISHED["models"].items():
         if name.startswith("GB"):
@@ -215,9 +215,11 @@ def figure(runs: dict[str, list[dict]]) -> list[str]:
     ax.set_xlabel("Parameters")
     ax.set_ylabel("Test ESR")
     ax.grid(True, which="both", linewidth=0.3, color="0.85")
-    ax.legend(fontsize=6, frameon=False, loc="upper right")
-    fig.tight_layout(pad=0.2)
-    fig.savefig(PAPER / "fig_pareto.pdf")
+    # Below the axes: every corner of the plot holds published models.
+    ax.legend(
+        fontsize=6, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.24)
+    )
+    fig.savefig(PAPER / "fig_pareto.pdf", bbox_inches="tight", pad_inches=0.02)
     return off_scale
 
 
