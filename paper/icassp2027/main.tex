@@ -35,8 +35,8 @@ to training, also applied to a re-run of the best published model: state-space
 parameters are exempted from weight decay, as the framework's layers request,
 and the output is negated whenever it anticorrelates with the validation target.
 The second change is needed because the spectral term of the loss cannot see the
-output's sign: one of our runs converged to an inverted output, and three
-published models have the test errors of one. On the Electro-Harmonix Big Muff,
+output's sign: one of our runs converged to an inverted output, and the test
+errors of three published models show the same signature. On the Electro-Harmonix Big Muff,
 a \SSMparams-parameter SSM-WaveNet reaches a test error-to-signal ratio of
 \SSMesrMeanStd{} over \SSMn{} seeds, against \ChangesSFourTFLesrMeanStd{} for
 the \PubSFourTFLparams-parameter S4-TFiLM model trained the same way and
@@ -189,9 +189,9 @@ for MR-STFT) and no hyperparameter search, whereas each published model is the
 best of four loss weightings. Our changes to the framework's code read WAV files
 with \texttt{soundfile} instead of a torchaudio loader removed in recent
 versions, drop a logging flag removed from PyTorch, and log to CSV files
-instead of Weights \& Biases. Seeds 42 (the
-framework default), 43 and 44 change the initialisation, the
-training/validation partition and the batch order; the test files are fixed.
+instead of Weights \& Biases. Runs use seeds \SeedList{} (42 is the framework
+default); the seed changes the initialisation, the training/validation partition
+and the batch order, while the test files are fixed.
 
 \textbf{Training changes.} The DSSM layers of NablAFx, following the S4
 reference code, mark $\alpha$, $\omega$ and $\delta$ as exempt from weight
@@ -259,8 +259,7 @@ times, never after epoch \GuardLastFlipEpoch.
 
 \textbf{Inverted outputs.} An output $\hat{y} = -y$ has an L1 loss of
 $2\,\mathrm{E}|y|$ whatever the model, \TwiceMeanAbsTarget{} on the test set; our
-stopped run had \InvertedLone{} (\InvertedNegatedLone{} negated) and an MR-STFT
-loss of \InvertedMrstft, below that of every published model. The three
+stopped run had \InvertedLone{} (\InvertedNegatedLone{} negated). The three
 published neural models with a test ESR above 1, \PubOutliers, have L1 losses of
 \PubOutlierLoneRange{} and MR-STFT losses within the range of the other models,
 which is consistent with inverted but otherwise fitted outputs; we cannot

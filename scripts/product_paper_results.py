@@ -248,6 +248,8 @@ def main() -> None:
         loss_gap = f"{100 * excess:.0f}\\,\\%"
 
     guarded = ssm + changes
+    seeds = sorted({r["seed"] for group in runs.values() for r in group})
+    seed_list = ", ".join(map(str, seeds[:-1])) + " and " + str(seeds[-1])
     flips = [epoch for r in guarded for epoch in r["polarity_flips"]]
     outliers = published_outliers()
     outlier_l1 = [PUBLISHED["models"][name]["test"]["l1"] for name in outliers]
@@ -266,6 +268,7 @@ def main() -> None:
         "SSMparamsExact": f"{parameters['ssm']:,}".replace(",", "{,}"),
         "VoneSSMparamsExact": f"{parameters['ssm-v1']:,}".replace(",", "{,}"),
         "SSMn": str(len(ssm)),
+        "SeedList": seed_list if len(seeds) > 1 else str(seeds[0]),
         "SSMesrMeanStd": esr(ssm),
         "SSMmrstftMeanStd": mean_std([r["test_last"][MRSTFT] for r in ssm], 3),
         "RerunSFourTFLesrMeanStd": esr(rerun),
@@ -284,7 +287,6 @@ def main() -> None:
         "InvertedLone": f"{INVERTED['test_as_is'][L1]:.4f}",
         "InvertedNegatedEsr": f"{INVERTED['test_negated'][ESR]:.3f}",
         "InvertedNegatedLone": f"{INVERTED['test_negated'][L1]:.4f}",
-        "InvertedMrstft": f"{INVERTED['test_as_is'][MRSTFT]:.3f}",
         "TwiceMeanAbsTarget": f"{2 * INVERTED['test_target_mean_abs']:.4f}",
         "PubOutliers": ", ".join(outliers[:-1]) + " and " + outliers[-1],
         "PubOutlierLoneRange": f"{min(outlier_l1):.4f}--{max(outlier_l1):.4f}",
