@@ -11,6 +11,9 @@ of Comunità et al. (Frontiers 2025) gives value clipping at 1 for S4, the relea
 YAML sets 10, and the default here follows the paper. The released test script
 loads last.ckpt, so that is the primary result; best.ckpt is recorded too.
 
+One addition to training, for every model: PolarityGuard flips the output sign
+whenever the validation output anticorrelates with the target (see its docstring).
+
 Extra packages, installed with `uv pip install` and not in uv.lock:
 lightning==2.6.1, jsonargparse[signatures]==4.52.0, natsort==8.4.0, wandb==0.30.0,
 torchvision==0.28.0 (https://download.pytorch.org/whl/cu130).
@@ -142,6 +145,62 @@ class SSMWaveNetProcessor(SSMWaveNet):
     num_controls = 0
 
 
+class PolarityGuard(pl.Callback):
+    """Negate the output when the validation output anticorrelates with the target.
+
+    The MR-STFT term cannot see the output's sign and, at the published 1:0.1
+    weighting, outweighs L1, so gradient descent can settle on a well-fitted but
+    inverted output (ESR near 4); an SSM-WaveNet run did (RUNS.jsonl,
+    ssmzoh_seed42). Both processors end in an odd tanh, so negating the weight and
+    bias of the layer before it negates the output exactly; Adam's first moments
+    are negated with them. Checked after every validation epoch except the sanity
+    check; the epochs of the flips are recorded.
+    """
+
+    def __init__(self) -> None:
+        self.flips: list[int] = []
+        self.inner = 0.0
+        self.pred: torch.Tensor | None = None
+        self.hook = None
+
+    def state_dict(self) -> dict:
+        return {"flips": self.flips}
+
+    def load_state_dict(self, state_dict: dict) -> None:
+        self.flips = state_dict["flips"]
+
+    def on_validation_epoch_start(self, trainer, system) -> None:
+        self.inner = 0.0
+        self.hook = system.model.processor.register_forward_hook(self._store)
+
+    def _store(self, module, inputs, output) -> None:
+        self.pred = output
+
+    def on_validation_batch_end(
+        self, trainer, system, outputs, batch, batch_idx, dataloader_idx=0
+    ) -> None:
+        self.inner += float((self.pred * batch[1]).sum())
+
+    def on_validation_epoch_end(self, trainer, system) -> None:
+        self.hook.remove()
+        if trainer.sanity_checking or self.inner >= 0:
+            return
+        processor = system.model.processor
+        layer = (
+            processor.output_net[3]
+            if isinstance(processor, SSMWaveNet)
+            else processor.contract
+        )
+        state = trainer.optimizers[0].state
+        with torch.no_grad():
+            for parameter in (layer.weight, layer.bias):
+                parameter.neg_()
+                if "exp_avg" in state.get(parameter, {}):
+                    state[parameter]["exp_avg"].neg_()
+        self.flips.append(trainer.current_epoch)
+        print(f"polarity guard: output negated after epoch {trainer.current_epoch}")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -247,6 +306,12 @@ def git_head(path: Path) -> str:
 
 def main() -> None:
     args = parse_args()
+    # Taken now, not when the run ends hours later, so commits made meanwhile
+    # are not attributed to this run.
+    commits = {
+        "commit": git_head(ROOT),
+        "nablafx_commit": git_head(ROOT / "third_party/nablafx"),
+    }
     # scripts/main.py settings, applied before the model is built.
     pl.seed_everything(args.seed, workers=True)
     torch.set_float32_matmul_precision("high")
@@ -290,6 +355,7 @@ def main() -> None:
         filename="{epoch}-{step}",
     )
     early_stopping = EarlyStopping(monitor="loss/val/tot", patience=50, verbose=True)
+    polarity_guard = PolarityGuard()
     trainer = pl.Trainer(
         accelerator="gpu",
         devices=1,
@@ -312,6 +378,7 @@ def main() -> None:
             ModelSummary(max_depth=2),
             LearningRateMonitor(),
             early_stopping,
+            polarity_guard,
         ],
     )
     print(
@@ -347,8 +414,7 @@ def main() -> None:
     record = {
         "run_id": args.run_id,
         "timestamp": datetime.now().astimezone().isoformat(timespec="seconds"),
-        "commit": git_head(ROOT),
-        "nablafx_commit": git_head(ROOT / "third_party/nablafx"),
+        **commits,
         "benchmark": f"ToneTwist Big Muff {SETTING}, nablafx protocol",
         "model": args.model,
         "parameters": parameters,
@@ -357,6 +423,8 @@ def main() -> None:
         "loss_weights": {"l1": l1_weight, "mrstft": mrstft_weight},
         "gradient_clip_val": args.clip_value,
         "honor_optim": args.honor_optim,
+        "polarity_guard": True,
+        "polarity_flips": polarity_guard.flips,
         "ssm": (
             {
                 "num_blocks": args.num_blocks,

@@ -3,10 +3,13 @@
 # (each run peaks at 16-17 GiB on the 24 GiB GPU). A run whose result file
 # exists is skipped, so the queue can be restarted after a kill.
 #
-# Second round, after SSM-WaveNet v1 underfit (train loss 0.43 vs 0.31 for
-# S4-TF-L-16) and its learned poles lost all memory beyond 20 ms under weight
-# decay: both models without weight decay on state-space parameters, SSM-WaveNet
-# with S4D zero-order-hold discretization, then with 32 states per channel.
+# Third round. Round 2's SSM-WaveNet (zero-order hold, no weight decay on
+# state-space parameters) fitted well but converged to an inverted output (val
+# ESR 3.96, 0.02 sign-flipped) and was killed; every run now trains with
+# PolarityGuard. S4-TF-L-16 gets the same two changes (no weight decay on its
+# state-space parameters, polarity guard) so that architecture is the only
+# difference. Seeds 42, 43, 44 in that order, alternating models; every
+# finished run is reported.
 set -u
 export TMPDIR=/fastdata/lavaulta/tmp
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
@@ -30,14 +33,8 @@ while pgrep -f "scripts/product_nablafx_benc[h].py" > /dev/null; do
   sleep 30
 done
 
-echo "=== smoke N=32 memory check: start $(date '+%a %H:%M')"
-uv run python scripts/product_nablafx_bench.py --run-id smoke_ssmzoh32 --no-record \
-  --model ssm-wavenet --discretization zoh --honor-optim --state-dim 32 --max-steps 30 2>&1 \
-  | grep -E "peak_gpu_gib|out of memory|Error"
-rm -rf demo/runs/nablafx_smoke_ssmzoh32
-echo "=== smoke N=32 memory check: end $(date '+%a %H:%M')"
-
-run ssmzoh_seed42 --model ssm-wavenet --discretization zoh --honor-optim --seed 42
-run s4tfl16nowd_seed42 --model s4-tf-l-16 --honor-optim --seed 42
-run ssmzoh32_seed42 --model ssm-wavenet --discretization zoh --honor-optim --state-dim 32 --seed 42
+for seed in 42 43 44; do
+  run "ssmzoh_guard_seed${seed}" --model ssm-wavenet --discretization zoh --honor-optim --seed "${seed}"
+  run "s4tfl16_nowd_guard_seed${seed}" --model s4-tf-l-16 --honor-optim --seed "${seed}"
+done
 echo "=== queue finished $(date '+%a %H:%M')"
