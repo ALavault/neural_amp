@@ -1,0 +1,470 @@
+{
+  "schema_version": 1,
+  "config": {
+    "schema_version": 1,
+    "phase": "M4_GRID",
+    "base_protocol": "configs/training/m4_memory.yaml",
+    "diagnosis": "DIAGNOSIS_fulltone_s3t33_residual_vs_a2.md",
+    "fix": "FIX_fulltone_s3t33_residual_vs_a2.md",
+    "hypothesis": "A third of the residual Fulltone S3 t33 gap on the training windows is an optimisation shortfall whose named sub-cause is a spline grid (17 knots over +-2, spacing 0.25) mismatched to the spline input (rms 0.14, 98 percent of samples within +-0.4). Placing the same 17 knots over +-0.4 lets the 200-step budget reach the class optimum measured by the refit.",
+    "intervention": "spline_knot_range_2.0_to_0.4",
+    "models": [
+      "S3"
+    ],
+    "taps": 33,
+    "num_knots": 17,
+    "spline_range": 0.4,
+    "knot_spacing": 0.05,
+    "parameters": 1276,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "devices": [
+      "fulltone_full_drive_2",
+      "electro_harmonix_big_muff"
+    ],
+    "fixed_dimensions": [
+      "data",
+      "split",
+      "loss",
+      "context",
+      "optimizer",
+      "optimizer_steps",
+      "checkpoint_policy",
+      "residual_channels",
+      "taps",
+      "num_knots",
+      "drive_init",
+      "slow_state"
+    ],
+    "references": {
+      "fulltone_full_drive_2": {
+        "S3": [
+          "m4_memory_fulltone_s3t33_seed0_v1",
+          "m4_memory_fulltone_s3t33_seed1_v1",
+          "m4_memory_fulltone_s3t33_seed2_v1"
+        ],
+        "B0": [
+          "m4_fulltone_b0_seed0_v1",
+          "m4_fulltone_b0_seed1_v1",
+          "m4_fulltone_b0_seed2_v1"
+        ]
+      },
+      "electro_harmonix_big_muff": {
+        "S3": [
+          "m4_memory_bigmuff_s3t33_seed0_v1",
+          "m4_memory_bigmuff_s3t33_seed1_v1",
+          "m4_memory_bigmuff_s3t33_seed2_v1"
+        ],
+        "B0": [
+          "m4_bigmuff_b0_seed0_v1",
+          "m4_bigmuff_b0_seed1_v1",
+          "m4_bigmuff_b0_seed2_v1"
+        ]
+      }
+    },
+    "decision": {
+      "primary_model": "S3",
+      "primary_device": "fulltone_full_drive_2",
+      "statistic": "median_over_seeds",
+      "band_hz": [
+        100,
+        300
+      ],
+      "train_window_steps": [
+        101,
+        200
+      ],
+      "reference_medians": {
+        "train_window_esr": 0.1127,
+        "test_esr": 0.1404,
+        "transfer_loss": 0.0299
+      },
+      "confirmed": {
+        "train_window_esr_max": 0.09,
+        "test_esr_max": 0.125,
+        "transfer_loss_max": 0.035
+      },
+      "refuted": {
+        "train_window_esr_min_decrease": 0.01
+      },
+      "regression": {
+        "device": "electro_harmonix_big_muff",
+        "median_test_esr_max_increase": 0.05
+      }
+    },
+    "read_only_bounds": {
+      "s3_class_refit_train_window_esr_median": 0.086,
+      "s3_class_refit_test_esr_median": 0.132,
+      "fir65_ls_400_windows_seed0_train_window_esr": 0.0955,
+      "spline_input_rms_train": 0.143,
+      "spline_input_within_0p4_train": 0.981,
+      "spline_input_within_0p4_test": 0.949
+    },
+    "notes": [
+      "Single intervention. Identity initialisation is exact on any grid (values equal knots, unit slopes, linear extrapolation); the parameter count is unchanged at 1276.",
+      "Beyond +-0.4 the shaper is affine with learnable end slopes; this is a class restriction in the hard-clip regime (1.9 percent of train samples).",
+      "curvature_penalty is in knot units; the same weight regularises less on the fine grid. Not compensated; watched through the transfer-loss threshold.",
+      "Preregistered post-freeze diagnostic inside the M4_MEMORY lineage; PROTOCOL_LOCK M4-P4-v1 and the NO-GO verdict are not modified.",
+      "Big Muff is a regression control against the t33 memory runs, not a claim."
+    ]
+  },
+  "rows": [
+    {
+      "run_id": "m4_grid_fulltone_s3t33_seed0_v1",
+      "phase": "M4_GRID",
+      "model": "S3",
+      "device": "fulltone_full_drive_2",
+      "seed": 0,
+      "taps": 33,
+      "spline_range": 0.4,
+      "parameters": 1276,
+      "best_step": 160,
+      "test_esr": 0.0627671890715486,
+      "test_esr_recomputed": 0.0627671890634374,
+      "gain_error": -0.0838045795075053,
+      "residual_energy_ratio": 3.0085135365022223e-07,
+      "band_error": 0.02222671765516117,
+      "train_window_esr": 0.046392793574975284,
+      "transfer_loss": 0.016374395496573317
+    },
+    {
+      "run_id": "m4_grid_fulltone_s3t33_seed1_v1",
+      "phase": "M4_GRID",
+      "model": "S3",
+      "device": "fulltone_full_drive_2",
+      "seed": 1,
+      "taps": 33,
+      "spline_range": 0.4,
+      "parameters": 1276,
+      "best_step": 200,
+      "test_esr": 0.07912581839254824,
+      "test_esr_recomputed": 0.07912581837984518,
+      "gain_error": -0.09977545476496874,
+      "residual_energy_ratio": 3.470807138972463e-06,
+      "band_error": 0.03238324178365274,
+      "train_window_esr": 0.054333472343160286,
+      "transfer_loss": 0.02479234604938796
+    },
+    {
+      "run_id": "m4_grid_fulltone_s3t33_seed2_v1",
+      "phase": "M4_GRID",
+      "model": "S3",
+      "device": "fulltone_full_drive_2",
+      "seed": 2,
+      "taps": 33,
+      "spline_range": 0.4,
+      "parameters": 1276,
+      "best_step": 160,
+      "test_esr": 0.08570393041604275,
+      "test_esr_recomputed": 0.08570393040428483,
+      "gain_error": -0.14348063645530007,
+      "residual_energy_ratio": 1.4988036907072829e-06,
+      "band_error": 0.037750786409024094,
+      "train_window_esr": 0.05291304217785864,
+      "transfer_loss": 0.032790888238184115
+    },
+    {
+      "run_id": "m4_memory_fulltone_s3t33_seed0_v1",
+      "phase": "M4_MEMORY",
+      "model": "S3",
+      "device": "fulltone_full_drive_2",
+      "seed": 0,
+      "taps": 33,
+      "spline_range": null,
+      "parameters": 1276,
+      "best_step": 160,
+      "test_esr": 0.14040445733663934,
+      "test_esr_recomputed": 0.14040445732304221,
+      "gain_error": -0.1942441007116935,
+      "residual_energy_ratio": 6.122784423165876e-05,
+      "band_error": 0.05447250086190326,
+      "train_window_esr": 0.10407557007652472,
+      "transfer_loss": 0.036328887260114615
+    },
+    {
+      "run_id": "m4_memory_fulltone_s3t33_seed1_v1",
+      "phase": "M4_MEMORY",
+      "model": "S3",
+      "device": "fulltone_full_drive_2",
+      "seed": 1,
+      "taps": 33,
+      "spline_range": null,
+      "parameters": 1276,
+      "best_step": 120,
+      "test_esr": 0.14452726373091615,
+      "test_esr_recomputed": 0.14452726371785687,
+      "gain_error": -0.1968754343467548,
+      "residual_energy_ratio": 1.3766278821169818e-06,
+      "band_error": 0.0642681484055622,
+      "train_window_esr": 0.11463019131991416,
+      "transfer_loss": 0.029897072411001993
+    },
+    {
+      "run_id": "m4_memory_fulltone_s3t33_seed2_v1",
+      "phase": "M4_MEMORY",
+      "model": "S3",
+      "device": "fulltone_full_drive_2",
+      "seed": 2,
+      "taps": 33,
+      "spline_range": null,
+      "parameters": 1276,
+      "best_step": 120,
+      "test_esr": 0.1332617060073355,
+      "test_esr_recomputed": 0.13326170598731482,
+      "gain_error": -0.18466147530646282,
+      "residual_energy_ratio": 4.95373357861097e-07,
+      "band_error": 0.05219011160103932,
+      "train_window_esr": 0.11271604155960621,
+      "transfer_loss": 0.02054566444772929
+    },
+    {
+      "run_id": "m4_fulltone_b0_seed0_v1",
+      "phase": "M4",
+      "model": "B0",
+      "device": "fulltone_full_drive_2",
+      "seed": 0,
+      "taps": null,
+      "spline_range": null,
+      "parameters": 12145,
+      "best_step": 160,
+      "test_esr": 0.06676983683428842,
+      "test_esr_recomputed": 0.06676983682316943,
+      "gain_error": -0.1858595695893558,
+      "residual_energy_ratio": 0.0,
+      "band_error": 0.027185950605258597,
+      "train_window_esr": 0.03873847012656988,
+      "transfer_loss": 0.02803136670771854
+    },
+    {
+      "run_id": "m4_fulltone_b0_seed1_v1",
+      "phase": "M4",
+      "model": "B0",
+      "device": "fulltone_full_drive_2",
+      "seed": 1,
+      "taps": null,
+      "spline_range": null,
+      "parameters": 12145,
+      "best_step": 160,
+      "test_esr": 0.06388282402001225,
+      "test_esr_recomputed": 0.06388282401772233,
+      "gain_error": -0.053021274775834404,
+      "residual_energy_ratio": 0.0,
+      "band_error": 0.023147627737290795,
+      "train_window_esr": 0.03195516714242884,
+      "transfer_loss": 0.03192765687758341
+    },
+    {
+      "run_id": "m4_fulltone_b0_seed2_v1",
+      "phase": "M4",
+      "model": "B0",
+      "device": "fulltone_full_drive_2",
+      "seed": 2,
+      "taps": null,
+      "spline_range": null,
+      "parameters": 12145,
+      "best_step": 200,
+      "test_esr": 0.04090287407923043,
+      "test_esr_recomputed": 0.040902874077350194,
+      "gain_error": -0.06263526166582489,
+      "residual_energy_ratio": 0.0,
+      "band_error": 0.014667518270559234,
+      "train_window_esr": 0.016581475966553415,
+      "transfer_loss": 0.02432139811267701
+    },
+    {
+      "run_id": "m4_grid_bigmuff_s3t33_seed0_v1",
+      "phase": "M4_GRID",
+      "model": "S3",
+      "device": "electro_harmonix_big_muff",
+      "seed": 0,
+      "taps": 33,
+      "spline_range": 0.4,
+      "parameters": 1276,
+      "best_step": 40,
+      "test_esr": 1.0353469426612205,
+      "test_esr_recomputed": 1.0353469429089972,
+      "gain_error": -0.8988420744917492,
+      "residual_energy_ratio": 0.014370317091001783,
+      "band_error": 0.04181917422957006,
+      "train_window_esr": 0.9835299535880151,
+      "transfer_loss": 0.05181698907320542
+    },
+    {
+      "run_id": "m4_grid_bigmuff_s3t33_seed1_v1",
+      "phase": "M4_GRID",
+      "model": "S3",
+      "device": "electro_harmonix_big_muff",
+      "seed": 1,
+      "taps": 33,
+      "spline_range": 0.4,
+      "parameters": 1276,
+      "best_step": 200,
+      "test_esr": 1.0002702092380091,
+      "test_esr_recomputed": 1.0002702095748952,
+      "gain_error": -0.9014952135407586,
+      "residual_energy_ratio": 9.717195835075587e-05,
+      "band_error": 0.05716324616573205,
+      "train_window_esr": 0.9613680530116935,
+      "transfer_loss": 0.038902156226315654
+    },
+    {
+      "run_id": "m4_grid_bigmuff_s3t33_seed2_v1",
+      "phase": "M4_GRID",
+      "model": "S3",
+      "device": "electro_harmonix_big_muff",
+      "seed": 2,
+      "taps": 33,
+      "spline_range": 0.4,
+      "parameters": 1276,
+      "best_step": 40,
+      "test_esr": 1.026522417858757,
+      "test_esr_recomputed": 1.0265224178135977,
+      "gain_error": -0.8905302308134136,
+      "residual_energy_ratio": 0.0002171670601072058,
+      "band_error": 0.04840856571800337,
+      "train_window_esr": 0.992141821605061,
+      "transfer_loss": 0.03438059625369605
+    },
+    {
+      "run_id": "m4_memory_bigmuff_s3t33_seed0_v1",
+      "phase": "M4_MEMORY",
+      "model": "S3",
+      "device": "electro_harmonix_big_muff",
+      "seed": 0,
+      "taps": 33,
+      "spline_range": null,
+      "parameters": 1276,
+      "best_step": 40,
+      "test_esr": 0.944370542995317,
+      "test_esr_recomputed": 0.9443705427964033,
+      "gain_error": -0.9312747432182102,
+      "residual_energy_ratio": 0.0072969514687645275,
+      "band_error": 0.06498100975158554,
+      "train_window_esr": 0.9544322064557296,
+      "transfer_loss": -0.010061663460412595
+    },
+    {
+      "run_id": "m4_memory_bigmuff_s3t33_seed1_v1",
+      "phase": "M4_MEMORY",
+      "model": "S3",
+      "device": "electro_harmonix_big_muff",
+      "seed": 1,
+      "taps": 33,
+      "spline_range": null,
+      "parameters": 1276,
+      "best_step": 80,
+      "test_esr": 0.944253684717685,
+      "test_esr_recomputed": 0.9442536850704544,
+      "gain_error": -0.9131482980383568,
+      "residual_energy_ratio": 0.001159906667758381,
+      "band_error": 0.06292108478013185,
+      "train_window_esr": 0.9510711081638689,
+      "transfer_loss": -0.006817423446183857
+    },
+    {
+      "run_id": "m4_memory_bigmuff_s3t33_seed2_v1",
+      "phase": "M4_MEMORY",
+      "model": "S3",
+      "device": "electro_harmonix_big_muff",
+      "seed": 2,
+      "taps": 33,
+      "spline_range": null,
+      "parameters": 1276,
+      "best_step": 40,
+      "test_esr": 0.9450315101420452,
+      "test_esr_recomputed": 0.9450315102351171,
+      "gain_error": -0.9302045571330443,
+      "residual_energy_ratio": 0.0038287678761179736,
+      "band_error": 0.06420497421056388,
+      "train_window_esr": 0.9493056219964497,
+      "transfer_loss": -0.0042741118544045165
+    },
+    {
+      "run_id": "m4_bigmuff_b0_seed0_v1",
+      "phase": "M4",
+      "model": "B0",
+      "device": "electro_harmonix_big_muff",
+      "seed": 0,
+      "taps": null,
+      "spline_range": null,
+      "parameters": 12145,
+      "best_step": 200,
+      "test_esr": 0.548138314901611,
+      "test_esr_recomputed": 0.5481383145702674,
+      "gain_error": -0.45004971395700366,
+      "residual_energy_ratio": 0.0,
+      "band_error": 0.013334948163347196,
+      "train_window_esr": 0.544300658102403,
+      "transfer_loss": 0.003837656799208
+    },
+    {
+      "run_id": "m4_bigmuff_b0_seed1_v1",
+      "phase": "M4",
+      "model": "B0",
+      "device": "electro_harmonix_big_muff",
+      "seed": 1,
+      "taps": null,
+      "spline_range": null,
+      "parameters": 12145,
+      "best_step": 200,
+      "test_esr": 0.6535172623364656,
+      "test_esr_recomputed": 0.6535172618621284,
+      "gain_error": -0.5289880283722472,
+      "residual_energy_ratio": 0.0,
+      "band_error": 0.014108253652911991,
+      "train_window_esr": 0.5192400257671452,
+      "transfer_loss": 0.13427723656932034
+    },
+    {
+      "run_id": "m4_bigmuff_b0_seed2_v1",
+      "phase": "M4",
+      "model": "B0",
+      "device": "electro_harmonix_big_muff",
+      "seed": 2,
+      "taps": null,
+      "spline_range": null,
+      "parameters": 12145,
+      "best_step": 200,
+      "test_esr": 0.5969261171971662,
+      "test_esr_recomputed": 0.5969261173115502,
+      "gain_error": -0.43684077108326613,
+      "residual_energy_ratio": 0.0,
+      "band_error": 0.010932496459536988,
+      "train_window_esr": 0.516367444236865,
+      "transfer_loss": 0.08055867296030117
+    }
+  ],
+  "decision": {
+    "primary_model": "S3",
+    "primary_device": "fulltone_full_drive_2",
+    "seeds_present": [
+      0,
+      1,
+      2
+    ],
+    "medians": {
+      "test_esr": 0.07912581839254824,
+      "band_error": 0.03238324178365274,
+      "train_window_esr": 0.05291304217785864,
+      "transfer_loss": 0.02479234604938796
+    },
+    "reference_medians": {
+      "test_esr": 0.14040445733663934,
+      "band_error": 0.05447250086190326,
+      "train_window_esr": 0.11271604155960621,
+      "transfer_loss": 0.029897072411001993
+    },
+    "train_window_esr_decrease": 0.059802999381747574,
+    "verdict": "confirmed",
+    "regression_control": {
+      "device": "electro_harmonix_big_muff",
+      "median_test_esr_new": 1.026522417858757,
+      "median_test_esr_reference": 0.944370542995317,
+      "median_increase": 0.08215187486344011,
+      "passes": false
+    }
+  }
+}

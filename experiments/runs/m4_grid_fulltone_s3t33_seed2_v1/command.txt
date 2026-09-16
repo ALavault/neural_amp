@@ -1,0 +1,1 @@
+uv run python scripts/run_m4_smoke.py --model S3 --device fulltone_full_drive_2 --seed 2 --run-id m4_grid_fulltone_s3t33_seed2_v1 --grid-range

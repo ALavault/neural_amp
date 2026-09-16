@@ -1,0 +1,27 @@
+{
+  "initial_validation_esr": 1.7552792626214035,
+  "best_validation_esr": 0.992411956117449,
+  "best_step": 200,
+  "test": {
+    "esr": 1.0002702092380091,
+    "nmse": 1.0002702085380184,
+    "mae": 0.016466031203295074,
+    "gain_error": -0.9014952135407586,
+    "dc_error": 0.0007978399040454898,
+    "correlation": 0.22207219147313548,
+    "log_mel": 2.418641906648368,
+    "mrstft": 2.351988873206938,
+    "magnitude_error": 0.7985989563738131,
+    "log_spectral_distance_db": 13.248836706515977,
+    "phase_error_radians": 1.5207689822449493,
+    "residual_energy_ratio": 9.717195835075587e-05
+  },
+  "checks": {
+    "finite_prediction": true,
+    "alternate_block_max_abs": 0.0
+  },
+  "parameters": 1276,
+  "latency_samples": 0,
+  "training_output_samples_seen": 3276800,
+  "preflight": false
+}

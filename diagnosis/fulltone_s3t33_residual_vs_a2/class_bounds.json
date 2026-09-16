@@ -1,0 +1,478 @@
+{
+  "linear_ls_on_400_windows": {
+    "taps_33": {
+      "taps": 33,
+      "fit_windows_esr_1_400": 0.13301972274014057,
+      "windows_101_200_esr": 0.12503202463845575,
+      "test_esr": 0.1604527206775875,
+      "max_abs_delta_from_delta": 5.078297455040336
+    },
+    "taps_65": {
+      "taps": 65,
+      "fit_windows_esr_1_400": 0.10248776746615174,
+      "windows_101_200_esr": 0.09552956662957729,
+      "test_esr": 0.11875042152803571,
+      "max_abs_delta_from_delta": 2.7255438258415103
+    },
+    "taps_97": {
+      "taps": 97,
+      "fit_windows_esr_1_400": 0.09577918524580285,
+      "windows_101_200_esr": 0.09030670859166086,
+      "test_esr": 0.11926462276761396,
+      "max_abs_delta_from_delta": 1.3542815138664646
+    }
+  },
+  "S3_t33_seed0": {
+    "run_id": "m4_memory_fulltone_s3t33_seed0_v1",
+    "checkpoint_windows_101_200_esr": 0.10407557019666243,
+    "refit_objective_windows_1_400": {
+      "checkpoint": 0.10595711085316427,
+      "post_only": 0.09934167893628079,
+      "spline_only": 0.10105027260866825,
+      "alternated": 0.08460505389508623,
+      "history": [
+        {
+          "iteration": 1,
+          "after_spline": 0.09626794934861418,
+          "after_post": 0.09607627617458152,
+          "after_pre_gn": 0.09178925227604633
+        },
+        {
+          "iteration": 2,
+          "after_spline": 0.0916239350489286,
+          "after_post": 0.08987025001376246,
+          "after_pre_gn": 0.08821325137153072
+        },
+        {
+          "iteration": 3,
+          "after_spline": 0.08819683825240966,
+          "after_post": 0.08716644542023144,
+          "after_pre_gn": 0.08634687315914799
+        },
+        {
+          "iteration": 4,
+          "after_spline": 0.08633000892967296,
+          "after_post": 0.08582226334301676,
+          "after_pre_gn": 0.0854156570178691
+        },
+        {
+          "iteration": 5,
+          "after_spline": 0.08540096171068913,
+          "after_post": 0.08516556634579912,
+          "after_pre_gn": 0.08497350321743782
+        },
+        {
+          "iteration": 6,
+          "after_spline": 0.08496338643886794,
+          "after_post": 0.08485469390344985,
+          "after_pre_gn": 0.08476269448882823
+        },
+        {
+          "iteration": 7,
+          "after_spline": 0.0847571218134918,
+          "after_post": 0.08470454772099267,
+          "after_pre_gn": 0.08465866024206006
+        },
+        {
+          "iteration": 8,
+          "after_spline": 0.08465582855155879,
+          "after_post": 0.08462913855203172,
+          "after_pre_gn": 0.08460505389508623
+        }
+      ],
+      "fitted_parameters": {
+        "pre_max_abs_delta_from_delta": 4.877995014190674,
+        "post_max_abs_delta_from_delta": 5.132143020629883,
+        "spline_values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.6214,
+          -0.5637,
+          -0.4283,
+          -0.2498,
+          -0.0367,
+          0.2381,
+          0.4389,
+          0.6022,
+          0.4927,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spline_slopes": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -1.2618,
+          0.4336,
+          0.6462,
+          0.8639,
+          1.2304,
+          0.5875,
+          0.9014,
+          2.3179,
+          0.0433,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "refit_windows_101_200_esr": 0.08184549411552873,
+    "refit_windows_101_200_bands": {
+      "0-100": {
+        "esr_share": 0.002503790415227721,
+        "target_energy_share": 0.0036715586611762814
+      },
+      "100-300": {
+        "esr_share": 0.021246141305126934,
+        "target_energy_share": 0.2599558617581002
+      },
+      "300-1000": {
+        "esr_share": 0.04169485289629507,
+        "target_energy_share": 0.7007358774776234
+      },
+      "1000-3000": {
+        "esr_share": 0.015290421145106009,
+        "target_energy_share": 0.0348732551071161
+      },
+      "3000-24000": {
+        "esr_share": 0.0011102716577020078,
+        "target_energy_share": 0.000763446762097039
+      },
+      "total": 0.08184549411552873
+    },
+    "refit_test_esr": 0.12033894988924013,
+    "refit_test_bands": {
+      "0-100": {
+        "esr_share": 0.011503416738245462,
+        "target_energy_share": 0.021617456219236754
+      },
+      "100-300": {
+        "esr_share": 0.03783303585760821,
+        "target_energy_share": 0.5873383101206976
+      },
+      "300-1000": {
+        "esr_share": 0.0558163358199899,
+        "target_energy_share": 0.3825155685242463
+      },
+      "1000-3000": {
+        "esr_share": 0.01074462070001386,
+        "target_energy_share": 0.008290083377450637
+      },
+      "3000-24000": {
+        "esr_share": 0.004441340217617531,
+        "target_energy_share": 0.00023858175453694703
+      },
+      "total": 0.12033894988924013
+    },
+    "refit_test_residual_energy_ratio": 6.169686821522191e-05
+  },
+  "S3_t33_seed1": {
+    "run_id": "m4_memory_fulltone_s3t33_seed1_v1",
+    "checkpoint_windows_101_200_esr": 0.11463018901721447,
+    "refit_objective_windows_1_400": {
+      "checkpoint": 0.11140808996322939,
+      "post_only": 0.09691611366240391,
+      "spline_only": 0.10397032054678883,
+      "alternated": 0.08779683225169406,
+      "history": [
+        {
+          "iteration": 1,
+          "after_spline": 0.09329522858864572,
+          "after_post": 0.09316782954326347,
+          "after_pre_gn": 0.08986557186103439
+        },
+        {
+          "iteration": 2,
+          "after_spline": 0.08983340816066215,
+          "after_post": 0.08917072500451621,
+          "after_pre_gn": 0.08864395585656393
+        },
+        {
+          "iteration": 3,
+          "after_spline": 0.08860972204411814,
+          "after_post": 0.08845067709185213,
+          "after_pre_gn": 0.088316160091388
+        },
+        {
+          "iteration": 4,
+          "after_spline": 0.08830084942262982,
+          "after_post": 0.08823191146473114,
+          "after_pre_gn": 0.0881661613824
+        },
+        {
+          "iteration": 5,
+          "after_spline": 0.08815743228818101,
+          "after_post": 0.08811305885131646,
+          "after_pre_gn": 0.08806515066067366
+        },
+        {
+          "iteration": 6,
+          "after_spline": 0.08805891406086512,
+          "after_post": 0.08802270670704257,
+          "after_pre_gn": 0.08797876155345166
+        },
+        {
+          "iteration": 7,
+          "after_spline": 0.08797375509530253,
+          "after_post": 0.0879388246810943,
+          "after_pre_gn": 0.08789250485761262
+        },
+        {
+          "iteration": 8,
+          "after_spline": 0.08788795466953499,
+          "after_post": 0.08784998625655906,
+          "after_pre_gn": 0.08779683225169406
+        }
+      ],
+      "fitted_parameters": {
+        "pre_max_abs_delta_from_delta": 3.744783639907837,
+        "post_max_abs_delta_from_delta": 8.007829666137695,
+        "spline_values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.4345,
+          -0.3981,
+          -0.2577,
+          -0.0427,
+          0.2398,
+          0.3648,
+          0.3601,
+          0.5037,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spline_slopes": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.2984,
+          0.449,
+          0.6539,
+          1.1913,
+          0.7146,
+          0.3049,
+          -0.158,
+          2.9222,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "refit_windows_101_200_esr": 0.08956439764833359,
+    "refit_windows_101_200_bands": {
+      "0-100": {
+        "esr_share": 0.0028805089399083533,
+        "target_energy_share": 0.0026534590880875446
+      },
+      "100-300": {
+        "esr_share": 0.02576380592442729,
+        "target_energy_share": 0.2899465018776097
+      },
+      "300-1000": {
+        "esr_share": 0.03890102179840123,
+        "target_energy_share": 0.6692978470275113
+      },
+      "1000-3000": {
+        "esr_share": 0.019085665081468015,
+        "target_energy_share": 0.037295905818105365
+      },
+      "3000-24000": {
+        "esr_share": 0.0029333948225992047,
+        "target_energy_share": 0.0008062861815967572
+      },
+      "total": 0.08956439764833359
+    },
+    "refit_test_esr": 0.14020347538334127,
+    "refit_test_bands": {
+      "0-100": {
+        "esr_share": 0.013724654162203823,
+        "target_energy_share": 0.021617456219236754
+      },
+      "100-300": {
+        "esr_share": 0.05198431010039927,
+        "target_energy_share": 0.5873383101206976
+      },
+      "300-1000": {
+        "esr_share": 0.056621966049468994,
+        "target_energy_share": 0.3825155685242463
+      },
+      "1000-3000": {
+        "esr_share": 0.010617681930454561,
+        "target_energy_share": 0.008290083377450637
+      },
+      "3000-24000": {
+        "esr_share": 0.0072548628381364205,
+        "target_energy_share": 0.00023858175453694703
+      },
+      "total": 0.14020347538334127
+    },
+    "refit_test_residual_energy_ratio": 1.511348159510817e-06
+  },
+  "S3_t33_seed2": {
+    "run_id": "m4_memory_fulltone_s3t33_seed2_v1",
+    "checkpoint_windows_101_200_esr": 0.11271603991653226,
+    "refit_objective_windows_1_400": {
+      "checkpoint": 0.10936559210212156,
+      "post_only": 0.0980476930936881,
+      "spline_only": 0.104280577777556,
+      "alternated": 0.0857532218247329,
+      "history": [
+        {
+          "iteration": 1,
+          "after_spline": 0.09640568812060886,
+          "after_post": 0.09613368845258774,
+          "after_pre_gn": 0.09272933379836674
+        },
+        {
+          "iteration": 2,
+          "after_spline": 0.09258484496479726,
+          "after_post": 0.09137961062097458,
+          "after_pre_gn": 0.09030540077807062
+        },
+        {
+          "iteration": 3,
+          "after_spline": 0.09027345680906974,
+          "after_post": 0.08966655230385105,
+          "after_pre_gn": 0.08912930447363582
+        },
+        {
+          "iteration": 4,
+          "after_spline": 0.08912159664349616,
+          "after_post": 0.08872769826233921,
+          "after_pre_gn": 0.08831082109354685
+        },
+        {
+          "iteration": 5,
+          "after_spline": 0.08829557315554726,
+          "after_post": 0.08796107830599571,
+          "after_pre_gn": 0.08756739009641092
+        },
+        {
+          "iteration": 6,
+          "after_spline": 0.08753949885828761,
+          "after_post": 0.08722906782053157,
+          "after_pre_gn": 0.08686197174678388
+        },
+        {
+          "iteration": 7,
+          "after_spline": 0.08682918144810171,
+          "after_post": 0.08655340473095013,
+          "after_pre_gn": 0.08624143068367118
+        },
+        {
+          "iteration": 8,
+          "after_spline": 0.08621194832445482,
+          "after_post": 0.08598957012755844,
+          "after_pre_gn": 0.0857532218247329
+        }
+      ],
+      "fitted_parameters": {
+        "pre_max_abs_delta_from_delta": 6.644091606140137,
+        "post_max_abs_delta_from_delta": 6.453680515289307,
+        "spline_values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.7279,
+          -0.5065,
+          -0.3827,
+          -0.2251,
+          -0.033,
+          0.2184,
+          0.3672,
+          0.505,
+          0.9453,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spline_slopes": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          2.0509,
+          0.3698,
+          0.6228,
+          0.7277,
+          1.1068,
+          0.603,
+          0.7518,
+          0.3772,
+          3.5785,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "refit_windows_101_200_esr": 0.08616032150993727,
+    "refit_windows_101_200_bands": {
+      "0-100": {
+        "esr_share": 0.002506709928712366,
+        "target_energy_share": 0.003116889101598343
+      },
+      "100-300": {
+        "esr_share": 0.02210078199317268,
+        "target_energy_share": 0.2392077792133767
+      },
+      "300-1000": {
+        "esr_share": 0.0444316313023734,
+        "target_energy_share": 0.7256066284856282
+      },
+      "1000-3000": {
+        "esr_share": 0.015458892844761873,
+        "target_energy_share": 0.031236540523075233
+      },
+      "3000-24000": {
+        "esr_share": 0.0016623003743152054,
+        "target_energy_share": 0.0008321626762915152
+      },
+      "total": 0.08616032150993727
+    },
+    "refit_test_esr": 0.13186611639190737,
+    "refit_test_bands": {
+      "0-100": {
+        "esr_share": 0.011346967161133262,
+        "target_energy_share": 0.021617456219236754
+      },
+      "100-300": {
+        "esr_share": 0.040907784797470294,
+        "target_energy_share": 0.5873383101206976
+      },
+      "300-1000": {
+        "esr_share": 0.05662830830622164,
+        "target_energy_share": 0.3825155685242463
+      },
+      "1000-3000": {
+        "esr_share": 0.012144106640622699,
+        "target_energy_share": 0.008290083377450637
+      },
+      "3000-24000": {
+        "esr_share": 0.010838949371920904,
+        "target_energy_share": 0.00023858175453694703
+      },
+      "total": 0.13186611639190737
+    },
+    "refit_test_residual_energy_ratio": 5.086674264020985e-07
+  }
+}

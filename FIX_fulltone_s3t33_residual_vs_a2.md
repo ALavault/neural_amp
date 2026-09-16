@@ -174,4 +174,96 @@ dans la session, pas de `/goal`.
 
 ## 6. Rapport
 
-À remplir après la relance.
+Runs : `m4_grid_preflight_fulltone_s3t33_seed0_v1` (2 pas, 13 s),
+`m4_grid_{fulltone,bigmuff}_s3t33_seed{0,1,2}_v1` (215–230 s chacun), tous
+`completed`, code au commit `a8443d4` (les runs Big Muff seeds 1–2 enregistrent
+`dde7419` comme HEAD : commit d'un autre agent sur `DIAGNOSIS_seeds.md`,
+`diagnosis/seeds/` et `scripts/product_nablafx_queue.sh`, sans effet sur cette
+lignée). Résumé : `experiments/summaries/m4_grid/metrics.json`, `reports/M4_GRID.md`.
+
+**Prédiction tenue — verdict `confirmed`** (Fulltone, S3 t33, seeds 0 / 1 / 2, médiane) :
+
+| Métrique | Avant (grille ± 2) | Après (grille ± 0,4) | Seuil | |
+|---|---|---|---|---|
+| ESR fenêtres 101–200 | 0,1041 / 0,1146 / 0,1127 (0,1127) | 0,0464 / 0,0543 / 0,0529 (**0,0529**) | ≤ 0,090 | tenu ; baisse 0,060 ≫ 0,01 |
+| ESR test | 0,1404 / 0,1445 / 0,1333 (0,1404) | 0,0628 / 0,0791 / 0,0857 (**0,0791**) | ≤ 0,125 | tenu |
+| Transfert | +0,0363 / +0,0299 / +0,0205 (+0,0299) | +0,0164 / +0,0248 / +0,0328 (**+0,0248**) | ≤ +0,035 | tenu |
+| Bande 100–300 Hz | 0,0545 / 0,0643 / 0,0522 (0,0545) | 0,0222 / 0,0324 / 0,0378 (0,0324) | informatif | |
+
+Position face aux bornes de la section 1 : le nouveau S3 passe **sous** l'optimum
+local par refit (0,086 fenêtres / 0,132 test) et sous le FIR LS 65 taps
+(0,0955) ; il passe aussi sous la borne « Hammerstein parallèle » du diagnostic
+(0,062, seed 0 : ici 0,046) et rejoint la borne « Hammerstein commuté » (0,049).
+En test, la médiane 0,079 se situe à 0,015 d'A2 (0,064) ; seed 0 (0,063) est sous
+A2 seed 0 (0,067). Sur l'écart test S3 t33 − A2 (0,077), 80 % sont fermés par
+cette seule intervention, contre une part « optimisation » estimée à un tiers
+par le diagnostic : la grille pesait plus que ce que le refit bloc-coordonnées
+(un optimum local, section 6 du diagnostic) laissait voir.
+
+**Test falsifiable de H2 du diagnostic (§5)** : « un correctif qui garde la NL
+statique entre deux filtres fixes et descend sous 0,085 en test réfute H2 ». Sur
+les trois checkpoints, contrôleur lent et résidu sont inertes (drive × [0,96 ;
+0,99], gain × [0,96 ; 0,99], rapport d'énergie du résidu ≤ 3,5e-6) ; la cascade
+statique seule (FIR33 → spline → FIR33, sans contrôleur ni résidu) donne en test
+0,0640 / 0,0809 / 0,0844 (**0,0809**), sous 0,085 pour les trois seeds. Par le
+critère préinscrit du diagnostic, H2 comme mécanisme *nécessaire* est réfutée :
+une non-linéarité statique correctement résolue entre deux FIR appris atteint le
+niveau que la référence LS statique (0,095) laissait croire hors de portée. Les
+mesures de H2 sur la cible (13 dB de compression, forme dépendante du niveau)
+restent des descriptions valides ; c'est leur attribution causale à l'écart qui
+tombe. Marge faible (0,081 contre 0,085 ; seed 2 à 0,084) : à confirmer avant
+d'en faire une conclusion de rapport.
+
+**Contrôles face aux tolérances (section 4) :**
+
+| Contrôle | Résultat | Tolérance | |
+|---|---|---|---|
+| Test unitaire `test_m4_grid_diagnostic_keeps_identity_init_and_block_parity` | passe (identité ≤ 3e-6 à amplitude 0,5 ; parité < 2e-6 ; 1 276 paramètres ; grille ± 2 sans la clé) | — | tenu |
+| `make lint`, `make test` | passent, 704 tests | — | tenu |
+| ESR de validation initiale | 0,155239 (Fulltone), 1,755279 (Big Muff), égaux aux runs mémoire à 1e-7 | identité à l'init | tenu |
+| `finite_prediction` / `alternate_block_max_abs` (7 runs) | vrai / 0,0 (seed 2 Fulltone : 1,5e-8) | vrai / ≈ 0 | tenu |
+| ESR test recalculé depuis `predictions/test_prediction.f32` | écart max 4,7e-10 sur les 18 lignes | — | tenu |
+| Paramètres | 1 276 | égal | tenu |
+| **Big Muff S3 t33, ESR test médiane** | 1,0353 / 1,0003 / 1,0265 (**1,0265**) contre 0,9444 : **+0,082** | hausse ≤ 0,05 | **non tenu** |
+
+Le contrôle hors prédicat échoue : +0,082 sur la médiane, +0,032 au-delà de la
+tolérance, et la hausse est aussi présente sur les fenêtres d'entraînement
+(0,9511 → 0,9835 en médiane), donc ce n'est pas un effet de transfert. Contexte,
+qui ne l'annule pas : dans les deux lignées, S3 n'apprend pas la Big Muff
+(erreur de gain −0,90, corrélation 0,22–0,25 : la sortie vaut ≈ 10 % de la cible,
+l'ESR ≈ 1 est le plancher « prédire zéro ») ; le checkpoint retenu est le pas 40
+pour deux seeds sur trois dans chaque lignée. Sur cet appareil, l'entrée de
+spline reste dans ± 0,15 (p99) même sur la grille fine, la spline apprise reste
+à moins de 0,14 de l'identité et les pentes d'extrémité descendent à 0,48–0,86 :
+le modèle réduit son gain plutôt que d'écrêter. La grille fine n'y est donc pas
+neutre et rend légèrement plus mauvais un modèle déjà au plancher. Ce résultat
+est enregistré tel quel : le correctif est validé sur son prédicat, pas comme
+réglage universel de S3 ; la Big Muff exigerait sa propre lignée (grille ou drive
+adaptés à un rms d'entrée de spline de 0,04, ou une autre classe).
+
+**Effet de bord de la section 3 (régularisation de courbure)** : le transfert
+médian baisse (+0,030 → +0,025) au lieu de monter ; pentes maximales de spline
+1,15–1,36 (contre 3,6 pour le refit non régularisé) ; l'effet redouté ne s'est pas
+matérialisé à 200 pas.
+
+**Régime hors grille** : au checkpoint, le pré-FIR s'est contracté (rms de l'entrée
+de spline 0,10–0,11 contre 0,14 ; 0,4–1,0 % des échantillons train au-delà de
+± 0,4, 0,15–0,4 % en test) : l'optimiseur a ramené le signal dans la grille plutôt
+que d'exploiter les pentes affines.
+
+**Incertitudes restantes.**
+- Un seul niveau de grille (± 0,4) testé ; la dépendance à la borne (± 0,3, ± 0,6)
+  et l'interaction avec le nombre de nœuds ne sont pas mesurées ; le
+  meilleur réglage n'est pas connu.
+- Sélection de checkpoint sur 5 points de validation (± 0,03 entre évaluations) :
+  l'étendue inter-seeds en test (0,063–0,086) en contient une part non quantifiée.
+- La réfutation de H2 repose sur le seuil préinscrit 0,085 et une marge de 0,004 ;
+  elle ne dit pas que la cible n'a pas de filtre dépendant du niveau, seulement
+  que ce n'est pas ce qui séparait S3 t33 d'A2 à ce niveau d'ESR.
+- L'écart restant à A2 (0,015 en test, 0,021 sur les fenêtres) n'est pas décomposé.
+- Régression Big Muff : cause non isolée (grille trop large pour un rms de 0,04,
+  ou interaction avec la sélection précoce au pas 40) ; un seul contrôle, trois seeds.
+- Les seuils de `m4_memory.yaml` (test ≤ 0,125, bande ≤ 0,05, transfert ≤ 0,03)
+  sont tous atteints par cette lignée (0,079 / 0,032 / +0,025), mais elle est
+  post-freeze : `PROTOCOL_LOCK` et le verdict NO-GO restent inchangés ; rouvrir
+  quoi que ce soit demande une décision séparée.

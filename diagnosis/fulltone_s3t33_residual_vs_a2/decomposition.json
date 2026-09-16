@@ -1,0 +1,95 @@
+{
+  "medians": {
+    "s3_t33_windows_101_200": 0.11271603991653226,
+    "a2_windows_101_200": 0.03195516720996243,
+    "s3_t33_test": 0.14040445733663934,
+    "a2_test": 0.06388282402001225,
+    "gap_windows": 0.08267502180725204,
+    "gap_test": 0.0806444397109039,
+    "s3_class_refit_windows_101_200": 0.08616032150993727,
+    "s3_class_refit_test": 0.13186611639190737
+  },
+  "seed0_ladder_windows_101_200": {
+    "s3_t33": 0.10407557019666243,
+    "s3_class_refit": 0.08184549411552873,
+    "fir65_ls_on_400_windows": 0.09552956662957729,
+    "hammerstein63": 0.061878334280171185,
+    "gated_hammerstein63": 0.04858437919059957,
+    "a2": 0.03873846848985951
+  },
+  "test_ladder": {
+    "s3_t33_median": 0.14040445733663934,
+    "s3_class_refit_median": 0.13186611639190737,
+    "fir65_full_train": 0.1246395749933104,
+    "gated_fir65": 0.0929672310059795,
+    "hammerstein63": 0.09489068932408115,
+    "gated_hammerstein63": 0.08497663892995988,
+    "a2_median": 0.06388282402001225
+  },
+  "excess_s3_minus_a2_test_by_band": {
+    "0-100": {
+      "median_excess": 0.0062,
+      "share": 0.072
+    },
+    "100-300": {
+      "median_excess": 0.0375,
+      "share": 0.436
+    },
+    "300-1000": {
+      "median_excess": 0.0334,
+      "share": 0.389
+    },
+    "1000-3000": {
+      "median_excess": 0.0088,
+      "share": 0.103
+    },
+    "3000-24000": {
+      "median_excess": 0.0,
+      "share": 0.0
+    }
+  },
+  "excess_s3_minus_a2_windows_by_band": {
+    "0-100": {
+      "median_excess": 0.0012,
+      "share": 0.015
+    },
+    "100-300": {
+      "median_excess": 0.0245,
+      "share": 0.306
+    },
+    "300-1000": {
+      "median_excess": 0.0367,
+      "share": 0.46
+    },
+    "1000-3000": {
+      "median_excess": 0.0171,
+      "share": 0.214
+    },
+    "3000-24000": {
+      "median_excess": 0.0004,
+      "share": 0.005
+    }
+  },
+  "excess_s3_minus_a2_test_by_tranche": {
+    "0.0-0.02": {
+      "median_excess": 0.0002,
+      "share": 0.002
+    },
+    "0.02-0.05": {
+      "median_excess": 0.0089,
+      "share": 0.111
+    },
+    "0.05-0.1": {
+      "median_excess": 0.033,
+      "share": 0.411
+    },
+    "0.1-0.2": {
+      "median_excess": 0.0365,
+      "share": 0.454
+    },
+    "0.2-10.0": {
+      "median_excess": 0.0018,
+      "share": 0.022
+    }
+  }
+}

@@ -1,0 +1,161 @@
+campaign:
+  schema_version: 1
+  sample_rate: 48000
+  tier: INTERNAL_DEV
+  devices:
+  - fulltone_full_drive_2
+  - electro_harmonix_big_muff
+  models:
+  - B0
+  - B2
+  - S3
+  - S4
+  seeds:
+  - 0
+  - 1
+  - 2
+  context_samples: 6346
+  output_samples: 8192
+  batch_size: 2
+  optimizer_steps: 200
+  validation_interval_steps: 40
+  validation_samples: 240000
+  evaluation_block_samples: 8192
+  optimizer:
+    name: Adam
+    learning_rate: 0.004
+    weight_decay: 3.17e-07
+  gradient_clip_norm: 1.0
+  loss:
+    mse: 1.0
+    mrstft: 0.0005
+    spline_curvature: 1.0e-05
+    normalized_residual_energy: 0.001
+  deterministic_mode: warn_only
+  precision: float32
+  checkpoint_policy: lowest_validation_esr
+  preflight:
+    optimizer_steps: 2
+    validation_interval_steps: 1
+    validation_samples: 32768
+  notes:
+  - Every optimizer step sees the same two 8192-sample output regions.
+  - A shared 6346-sample causal context covers the official A2 receptive field.
+  - M4 is a bounded smoke test and cannot establish final hypotheses.
+model: S3
+device: electro_harmonix_big_muff
+seed: 2
+preflight: false
+recovery: null
+memory: null
+grid:
+  schema_version: 1
+  phase: M4_GRID
+  base_protocol: configs/training/m4_memory.yaml
+  diagnosis: DIAGNOSIS_fulltone_s3t33_residual_vs_a2.md
+  fix: FIX_fulltone_s3t33_residual_vs_a2.md
+  hypothesis: A third of the residual Fulltone S3 t33 gap on the training windows
+    is an optimisation shortfall whose named sub-cause is a spline grid (17 knots
+    over +-2, spacing 0.25) mismatched to the spline input (rms 0.14, 98 percent of
+    samples within +-0.4). Placing the same 17 knots over +-0.4 lets the 200-step
+    budget reach the class optimum measured by the refit.
+  intervention: spline_knot_range_2.0_to_0.4
+  models:
+  - S3
+  taps: 33
+  num_knots: 17
+  spline_range: 0.4
+  knot_spacing: 0.05
+  parameters: 1276
+  seeds:
+  - 0
+  - 1
+  - 2
+  devices:
+  - fulltone_full_drive_2
+  - electro_harmonix_big_muff
+  fixed_dimensions:
+  - data
+  - split
+  - loss
+  - context
+  - optimizer
+  - optimizer_steps
+  - checkpoint_policy
+  - residual_channels
+  - taps
+  - num_knots
+  - drive_init
+  - slow_state
+  references:
+    fulltone_full_drive_2:
+      S3:
+      - m4_memory_fulltone_s3t33_seed0_v1
+      - m4_memory_fulltone_s3t33_seed1_v1
+      - m4_memory_fulltone_s3t33_seed2_v1
+      B0:
+      - m4_fulltone_b0_seed0_v1
+      - m4_fulltone_b0_seed1_v1
+      - m4_fulltone_b0_seed2_v1
+    electro_harmonix_big_muff:
+      S3:
+      - m4_memory_bigmuff_s3t33_seed0_v1
+      - m4_memory_bigmuff_s3t33_seed1_v1
+      - m4_memory_bigmuff_s3t33_seed2_v1
+      B0:
+      - m4_bigmuff_b0_seed0_v1
+      - m4_bigmuff_b0_seed1_v1
+      - m4_bigmuff_b0_seed2_v1
+  decision:
+    primary_model: S3
+    primary_device: fulltone_full_drive_2
+    statistic: median_over_seeds
+    band_hz:
+    - 100
+    - 300
+    train_window_steps:
+    - 101
+    - 200
+    reference_medians:
+      train_window_esr: 0.1127
+      test_esr: 0.1404
+      transfer_loss: 0.0299
+    confirmed:
+      train_window_esr_max: 0.09
+      test_esr_max: 0.125
+      transfer_loss_max: 0.035
+    refuted:
+      train_window_esr_min_decrease: 0.01
+    regression:
+      device: electro_harmonix_big_muff
+      median_test_esr_max_increase: 0.05
+  read_only_bounds:
+    s3_class_refit_train_window_esr_median: 0.086
+    s3_class_refit_test_esr_median: 0.132
+    fir65_ls_400_windows_seed0_train_window_esr: 0.0955
+    spline_input_rms_train: 0.143
+    spline_input_within_0p4_train: 0.981
+    spline_input_within_0p4_test: 0.949
+  notes:
+  - Single intervention. Identity initialisation is exact on any grid (values equal
+    knots, unit slopes, linear extrapolation); the parameter count is unchanged at
+    1276.
+  - Beyond +-0.4 the shaper is affine with learnable end slopes; this is a class restriction
+    in the hard-clip regime (1.9 percent of train samples).
+  - curvature_penalty is in knot units; the same weight regularises less on the fine
+    grid. Not compensated; watched through the transfer-loss threshold.
+  - Preregistered post-freeze diagnostic inside the M4_MEMORY lineage; PROTOCOL_LOCK
+    M4-P4-v1 and the NO-GO verdict are not modified.
+  - Big Muff is a regression control against the t33 memory runs, not a claim.
+execution:
+  optimizer_steps: 200
+  validation_interval_steps: 40
+  validation_samples: 240000
+fssr_model:
+  taps: 33
+  num_knots: 17
+  slow_hidden_size: 8
+  slow_decimation: 64
+  residual_channels: 8
+  oversampling_filter_taps: 33
+  spline_range: 0.4
