@@ -1,8 +1,9 @@
 # DIAGNOSIS_seeds — dispersion inter-graines sur ToneTwist Big Muff
 
-Scripts et tables : `diagnosis/seeds/` (`hypotheses.md`, `measure.py`,
-`validation_loss.py`, `measurements.json`, `validation_loss.json`, `spread.txt`).
-Mesures en lecture seule sur les douze runs de `demo/nablafx_bench/`.
+Scripts et tables : `diagnosis/seeds/` (hypothèses : `hypotheses.md`,
+`hypotheses_nested.md` ; mesures : `measure.py`, `validation_loss.py`,
+`global_factor.py`, avec leurs sorties). Lecture seule sur les runs de
+`demo/nablafx_bench/`.
 
 ## 1. Écart
 
@@ -17,12 +18,10 @@ Métrique : ESR de test du protocole NablAFx, moyenne des ESR de douze segments 
 | SSM-WaveNet 12,4k, `b` appris, entraînement publié | 0,2363 / 0,0738 / 0,1656 | 0,1586 | 0,0815 | 51 % |
 
 Référence : l'étude publiée ne rapporte qu'un run par modèle, donc aucune
-dispersion de référence. L'écart que le papier revendique (0,0822 contre 0,1270,
-soit 0,045) est du même ordre que l'écart-type intra-condition. Il n'est pas
-« non distinguable du bruit » — la comparaison est appariée et SSM-WaveNet est
-plus bas sur les trois graines — mais il n'est pas résoluble sur un run unique.
-L'objet du diagnostic est la dispersion elle-même, et chaque condition a bien
-trois graines.
+dispersion de référence. L'écart SSM/S4 avec changements (0,0822 contre 0,1270)
+est du même ordre que l'écart-type intra-condition : SSM est plus bas sur les
+trois graines appariées, mais un run unique ne le résout pas. L'objet du
+diagnostic est la dispersion elle-même.
 
 ## 2. Comparabilité
 
@@ -83,44 +82,44 @@ Aucun défaut de comparabilité : le diagnostic porte sur l'entraînement.
 
 ## 5. Contribution retenue
 
-**Prédicat.** Dans les quatre conditions, 77 à 81 % de l'écart entre la meilleure
-et la pire graine se situe sur les six segments de test les plus calmes (RMS
-0,029–0,044) ; sur les six plus forts l'écart est trois à quatre fois plus petit.
-Sur ces mêmes segments calmes, l'ESR vaut 2,6 à 4,8 fois celui des segments forts
-pour les douze runs.
+**Révision du 2026-09-16 (après coup, `global_factor.py`, `global_factor.txt`).** La graine
+multiplie l'erreur de tous les segments par un même facteur. Rapport pire/meilleure
+graine, moitié calme contre moitié forte : ×1,69 contre ×1,63 (S4, changements),
+×1,35 contre ×1,44 (S4 publié), ×2,98 contre ×2,73 (ablation SSM). Seul SSM avec
+changements s'écarte, avec ×4,00 contre ×2,03. Sur le log de l'ESR, l'effet run,
+commun aux douze segments, domine l'interaction run × segment : F de 9 à 36.
+Les 77–81 % observés sur la moitié calme relèvent de l'arithmétique. Un facteur
+unique y placerait 73 à 83 % de l'écart, puisque ces segments ont déjà un ESR
+2,6 à 4,8 fois plus grand. Le critère absolu n'est pas en cause non plus :
+l'ESR pondéré par l'énergie, dominé par le matériel fort, varie autant (H4).
+Contribution révisée : la graine fixe un facteur global d'erreur, d'écart-type
+0,53 en log de l'ESR pour SSM-WaveNet (×1,7), 0,27 et 0,16 pour S4, de mécanisme
+inconnu. La question suivante, graine ou non-déterminisme, a ses prédictions
+écrites avant mesure (`hypotheses_nested.md`).
 
-**Mécanisme.** Le critère qui pilote l'entraînement et la sélection — perte
-L1 + 0,1 MR-STFT calculée sur le lot de validation — est une erreur *absolue*,
-dominée par le matériel fort, alors que la métrique rapportée est une erreur
-*relative* moyennée par segment, dominée par le matériel calme. La mesure le
-montre directement : un segment de validation dont l'ESR vaut 7,04 ne pèse que
-6,3 % de la perte de validation. Le régime de bas niveau n'est donc contraint ni
-par l'arrêt anticipé, ni par le palier de learning rate, ni par le choix du
-checkpoint : il est laissé à la graine. C'est cohérent avec la corrélation H2,
-dont le mécanisme reste à établir.
-
-**Prédiction chiffrée.** Un correctif qui aligne la sélection sur la métrique —
-validation stratifiée par niveau, chaque tercile représenté, et sélection sur
-l'ESR moyen par segment calculé au-dessus d'un plancher de niveau — doit ramener
-le CV inter-graines de SSM-WaveNet (graines 42, 43, 44) de 56 % à ≤ 25 %, sans
-dégrader la moyenne au-delà de 0,082, et doit ramener le rapport ESR
-calme/fort sous 3,0 (aujourd'hui 2,6 / 3,7 / 3,9 sur ces trois runs).
+**Version initiale, réfutée (texte complet au commit `6025b26`).** *Prédicat* :
+77 à 81 % de l'écart entre meilleure et pire graine sur les six segments calmes.
+*Mécanisme* : un critère d'entraînement et de sélection absolu face à une
+métrique relative laisserait le bas niveau à la graine. *Prédiction* : une
+validation stratifiée par niveau ramènerait le CV de SSM sous 25 % et le rapport
+calme/fort sous 3,0. Elle vise un mécanisme faux et n'est plus un critère.
 
 ## 6. Non expliqué, non vérifié
 
 - La corrélation H2 reste sans mécanisme : six runs, statistique choisie après
   coup. Trois graines de plus par condition trancheraient.
-- Part non attribuée : même en admettant le mécanisme, rien ne dit quelle
-  fraction de la dispersion disparaîtrait. La seule borne mesurée est la
-  localisation (77–81 % sur la moitié calme).
-- **Variance à graine constante : mesurée après coup** (run
-  `ssmzoh_guard_seed42_repeat`). L'entraînement n'est pas déterministe sur GPU
-  (cuDNN benchmark, `use_deterministic_algorithms` à False, comme dans NablAFx) :
-  la répétition de la graine 42 donne 0,0470 contre 0,0358, soit 0,0112, quand
-  l'écart entre graines vaut 0,0919. La non-reproductibilité n'explique donc pas
-  la dispersion, mais elle rend toute valeur individuelle incertaine à ±0,011.
-  Une seule répétition : la distribution reste inconnue.
-
+- Part non attribuée : toute la dispersion, le facteur global étant sans mécanisme.
+- **Variance à graine constante : une répétition, conclusion retirée.**
+  L'entraînement n'est pas déterministe sur GPU (cuDNN benchmark,
+  `use_deterministic_algorithms` à False, comme dans NablAFx). La répétition de la
+  graine 42 (`ssmzoh_guard_seed42_repeat`) donne 0,0470 contre 0,0358, soit un
+  décalage global de +0,23 en log (écart-type par run estimé à 0,16). C'est le
+  niveau de S4 publié entre graines, et un tiers de celui de SSM, avec un seul
+  degré de liberté. La conclusion « huit fois plus petit que l'écart entre graines,
+  n'explique pas la dispersion » est retirée : elle comparait, en échelle
+  linéaire, une différence isolée prise sur la meilleure graine à l'étendue de
+  trois graines. Répétitions en cours (graines 43 et 44 pour SSM, 42 à 44 pour S4
+  publié).
 - Non séparés : initialisation, partition et ordre des lots changent ensemble
   avec la graine.
 

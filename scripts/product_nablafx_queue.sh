@@ -18,14 +18,28 @@ cd /fastdata/lavaulta/neural_amp
 run() {
   local run_id=$1
   shift
-  if [ -f "demo/nablafx_bench/${run_id}.json" ]; then
-    echo "=== ${run_id}: done, skipped"
-    return
-  fi
-  echo "=== ${run_id}: start $(date '+%a %H:%M')"
-  uv run python scripts/product_nablafx_bench.py --run-id "${run_id}" --resume "$@" 2>&1 \
-    | grep -vE "warn\(msg\)|UserWarning|warnings.warn|is differentiable|^\s*$"
-  echo "=== ${run_id}: end $(date '+%a %H:%M') (exit ${PIPESTATUS[0]})"
+  # The GPU is shared with ollama, which loads models of up to 21 GiB on demand
+  # and unloads them after 5 idle minutes: a run starts once 18.5 GiB have stayed
+  # free for 6 minutes, and a run that fails (out of memory) is started again.
+  for attempt in 1 2 3 4 5 6; do
+    if [ -f "demo/nablafx_bench/${run_id}.json" ]; then
+      echo "=== ${run_id}: done, skipped"
+      return
+    fi
+    local free_minutes=0
+    while [ "${free_minutes}" -lt 6 ]; do
+      if [ "$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits)" -ge 18500 ]; then
+        free_minutes=$((free_minutes + 1))
+      else
+        free_minutes=0
+      fi
+      sleep 60
+    done
+    echo "=== ${run_id}: start $(date '+%a %H:%M') (attempt ${attempt})"
+    uv run python scripts/product_nablafx_bench.py --run-id "${run_id}" --resume "$@" 2>&1 \
+      | grep -vE "warn\(msg\)|UserWarning|warnings.warn|is differentiable|^\s*$"
+    echo "=== ${run_id}: end $(date '+%a %H:%M') (exit ${PIPESTATUS[0]})"
+  done
 }
 
 # A run started by an earlier queue may still be training.
@@ -46,5 +60,16 @@ for seed in 42 43 44; do
 done
 for seed in 42 43 44; do
   run "ssmwavenet_seed${seed}" --model ssm-wavenet --no-polarity-guard --seed "${seed}"
+done
+
+# Round 5, seed sensitivity: training is not deterministic on the GPU, so a
+# second run at the same seed measures the spread that the seed does not set.
+# One repeat per seed completes a 3 seeds x 2 runs layout for SSM-WaveNet
+# (seed 42 was repeated on its own), then for S4-TF-L-16 as released.
+for seed in 43 44; do
+  run "ssmzoh_guard_seed${seed}_repeat" --model ssm-wavenet --discretization zoh --honor-optim --seed "${seed}"
+done
+for seed in 42 43 44; do
+  run "s4tfl16_seed${seed}_repeat" --model s4-tf-l-16 --no-polarity-guard --seed "${seed}"
 done
 echo "=== queue finished $(date '+%a %H:%M')"

@@ -1,0 +1,18 @@
+== Seed spread (CV over the seeds' first runs) of summaries of the same test
+condition      mean ESR energy ESR mean sqrt   L1 MR-STFT
+s4-changes          27%        29%       14%  14%      6%
+s4-released         15%        15%        7%  15%      6%
+ssm-changes         56%        50%       29%  22%     15%
+ssm-released        51%        52%       27%  26%     13%
+== Worst over best seed, geometric mean of the per-segment ratios
+s4-changes     quiet half x1.69, loud half x1.63 | quiet share of the gap 81%, 81% if one factor scaled every segment
+s4-released    quiet half x1.35, loud half x1.44 | quiet share of the gap 79%, 78% if one factor scaled every segment
+ssm-changes    quiet half x4.00, loud half x2.03 | quiet share of the gap 81%, 73% if one factor scaled every segment
+ssm-released   quiet half x2.98, loud half x2.73 | quiet share of the gap 77%, 83% if one factor scaled every segment
+== Log ESR, seeds' first runs x segments: run effect against interaction
+s4-changes     F(2,22) =  20.8 | sd of the run effect 0.27, of the run x segment interaction 0.21 (log ESR)
+s4-released    F(2,22) =   9.3 | sd of the run effect 0.16, of the run x segment interaction 0.19 (log ESR)
+ssm-changes    F(2,22) =  26.3 | sd of the run effect 0.53, of the run x segment interaction 0.36 (log ESR)
+ssm-released   F(2,22) =  36.3 | sd of the run effect 0.53, of the run x segment interaction 0.31 (log ESR)
+== Same seed, second run (GPU nondeterminism only)
+ssmzoh_guard_seed42_repeat     mean ESR 0.0358 -> 0.0469 | log ratio: mean +0.23, sd over segments 0.29 | per segment, quiet to loud: 2.42 1.10 1.14 1.18 1.99 1.22 0.85 1.04 1.27 1.07 1.33 1.12
