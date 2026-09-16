@@ -118,8 +118,9 @@ calme/fort sous 3,0. Elle vise un mécanisme faux et n'est plus un critère.
   degré de liberté. La conclusion « huit fois plus petit que l'écart entre graines,
   n'explique pas la dispersion » est retirée : elle comparait, en échelle
   linéaire, une différence isolée prise sur la meilleure graine à l'étendue de
-  trois graines. Répétitions en cours (graines 43 et 44 pour SSM, 42 à 44 pour S4
-  publié).
+  trois graines. Trois paires pour SSM : écart-type intra-graine 0,18 contre 0,37
+  pour la graine, F(2,3) = 8,8 (p ≈ 0,06), ni N ni G tels qu'écrits
+  (`hypotheses_nested.md`). S4 publié en attente.
 - Non séparés : initialisation, partition et ordre des lots changent ensemble
   avec la graine.
 

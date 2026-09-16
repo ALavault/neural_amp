@@ -30,3 +30,24 @@ nouvelles répétitions restent à moins d'un facteur 1,35 de leur original
 Entre les deux (écart-type intra-graine entre 0,20 et 0,35 pour SSM) : indécidable
 avec trois degrés de liberté ; il faudra plus de graines et de répétitions, pas une
 conclusion.
+
+## Résultat pour SSM-WaveNet (2026-09-16 15:00, écrit après mesure)
+
+Trois paires (`global_factor.txt`, section « Nested ») :
+- effet run, écart-type intra-graine 0,18 ; composante graine 0,37 ; F(2,3) = 8,8,
+  p ≈ 0,06 ;
+- seconde exécution contre première, log du rapport des ESR moyens : graine 42
+  +0,27, 43 −0,44, 44 −0,23 ;
+- ordre des graines par effet moyen : 42 < 44 < 43, conservé.
+
+Verdict, critère par critère :
+- **N** : écart-type intra-graine ≥ 0,35, non (0,18) ; une répétition au-delà d'un
+  facteur 1,5, oui (graine 43, facteur 1,55). Les deux étaient requises : N réfutée.
+- **G** : écart-type intra-graine ≤ 0,20, oui ; les deux nouvelles répétitions à
+  moins d'un facteur 1,35, non (graine 43) ; ordre conservé, oui. G réfutée telle
+  qu'écrite.
+
+Ni N ni G. La graine porte l'essentiel de la variance estimée (0,37² contre 0,18²,
+environ 80 %), sans atteindre 5 % avec trois degrés de liberté. Le non-déterminisme
+seul donne un écart-type de 0,18 par run (facteur 1,2) et a déplacé un run d'un
+facteur 1,55. S4 publié : en attente.

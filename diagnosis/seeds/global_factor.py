@@ -226,6 +226,50 @@ def main() -> None:
             f" {' '.join(f'{v:.2f}' for v in rep['per_segment_ratio_quiet_to_loud'])}"
         )
 
+    # hypotheses_nested.md: run effect = mean log ESR over the segments; seeds
+    # with two runs give the within-seed spread (df = number of pairs) and the
+    # spread of the seed means (df = pairs - 1).
+    print("\n== Nested: seed, then second run at the same seed (run effect)")
+    for name, group in sorted(groups.items()):
+        by_seed: dict[int, list[dict]] = {}
+        for record in group:
+            by_seed.setdefault(record["seed"], []).append(record)
+        pairs = {seed: runs for seed, runs in by_seed.items() if len(runs) == 2}
+        if len(pairs) < 2:
+            continue
+        effect = {
+            seed: [statistics.fmean(math.log(e) for e in r["segment_esr"]) for r in runs]
+            for seed, runs in pairs.items()
+        }
+        ms_within = statistics.fmean((a - b) ** 2 / 2 for a, b in effect.values())
+        seed_means = {seed: statistics.fmean(v) for seed, v in effect.items()}
+        ms_between = 2 * statistics.variance(seed_means.values())
+        log_ratio_mean_esr = {
+            seed: math.log(
+                statistics.fmean(runs[1]["segment_esr"])
+                / statistics.fmean(runs[0]["segment_esr"])
+            )
+            for seed, runs in pairs.items()
+        }
+        out.setdefault("nested", {})[name] = {
+            "seeds": sorted(pairs),
+            "within_seed_sd": math.sqrt(ms_within),
+            "seed_sd": math.sqrt(max(ms_between - ms_within, 0) / 2),
+            "F": ms_between / ms_within,
+            "df": [len(pairs) - 1, len(pairs)],
+            "seed_mean_effect": seed_means,
+            "log_ratio_mean_esr": log_ratio_mean_esr,
+        }
+        n = out["nested"][name]
+        order = sorted(seed_means, key=seed_means.get)
+        print(
+            f"{name:14s} seeds {n['seeds']}: within-seed sd {n['within_seed_sd']:.2f},"
+            f" seed sd {n['seed_sd']:.2f}, F({n['df'][0]},{n['df'][1]}) = {n['F']:.1f}"
+            f" | second run / first, log of mean ESR:"
+            f" {' '.join(f'{s}: {v:+.2f}' for s, v in log_ratio_mean_esr.items())}"
+            f" | seeds by mean effect: {' < '.join(map(str, order))}"
+        )
+
     (Path(__file__).parent / "global_factor.json").write_text(
         json.dumps(out, indent=1) + "\n", encoding="utf-8"
     )
