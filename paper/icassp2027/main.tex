@@ -283,8 +283,16 @@ output on validation data.
 \textbf{Where the error sits.} The protocol averages ESR over the twelve test
 segments, so quiet passages weigh as much as loud ones. For every run in
 Table~\ref{tab:results}, the mean ESR of the six quietest segments is
-\QuietLoudRatioRange{} times that of the six loudest, and the differences
-between seeds are concentrated there.
+\QuietLoudRatioRange{} times that of the six loudest, and \SpreadQuietShare{} of
+the gap between the best and the worst seed of a condition sits there. Training
+does not see that regime the same way: the validation loss is an absolute error,
+dominated by loud material, and in one of our runs a validation segment whose
+ESR is \ValBlindEsr{} weighs \ValBlindShare{} of it. Early stopping, the
+learning-rate schedule and checkpoint selection therefore leave low-level
+behaviour to the seed. Stratifying the validation split by level, or selecting
+in the same relative units as the reported metric, is the obvious test; the
+measurements behind this paragraph are in the repository, in
+\texttt{DIAGNOSIS\_seeds.md}.
 
 \textbf{Limitations.} We evaluate a single device, while the published study
 covers 16, with $n=\SSMn$ seeds per model, and the seed-to-seed spread is of the
@@ -311,7 +319,8 @@ the other devices of ToneTwist AFx and to a compiled real-time implementation
 remains to be tested. The multi-resolution STFT loss used to
 train and rank black-box effect models cannot see the sign of the output;
 checking that sign on validation data costs nothing and should be part of such
-benchmarks.
+benchmarks. More broadly, a selection signal that barely sees the regime its
+metric weights most turns seed variation into reported differences.
 
 \section{Compliance with ethical standards}
 This study uses publicly available recordings released under CC BY-NC 4.0 and

@@ -32,6 +32,7 @@ INVERTED = json.loads(
     (PAPER / "data/polarity_ssmzoh_seed42.json").read_text(encoding="utf-8")
 )
 RECURRENCE = PAPER / "data/recurrence_check.json"
+VALIDATION = ROOT / "diagnosis/seeds/validation_loss.json"
 SEGMENTS = PAPER / "data/test_segments.json"
 RUNS = ROOT / "demo/nablafx_bench"
 
@@ -334,6 +335,32 @@ def main() -> None:
             "RepeatDelta": f"{abs(again - base):.3f}",
         }
 
+    # Share of the best-to-worst seed gap that sits on the six quietest segments.
+    quiet_share = r"\pending"
+    if SEGMENTS.exists():
+        segments = json.loads(SEGMENTS.read_text(encoding="utf-8"))["runs"]
+        shares = []
+        for group in runs.values():
+            if len(group) < 2:
+                continue
+            order = sorted(group, key=lambda r: r["test_last"][ESR])
+            best, worst = order[0]["run_id"], order[-1]["run_id"]
+            gap = order[-1]["test_last"][ESR] - order[0]["test_last"][ESR]
+            quiet = segments[worst]["quiet"] - segments[best]["quiet"]
+            shares.append(quiet / 2 / gap)
+        quiet_share = f"{100 * min(shares):.0f}--{100 * max(shares):.0f}\\,\\%"
+
+    # The validation segment whose relative error is worst, and what it weighs
+    # in the validation loss that drives stopping and selection.
+    blind_esr = blind_share = r"\pending"
+    if VALIDATION.exists():
+        checks = json.loads(VALIDATION.read_text(encoding="utf-8"))
+        _, check = max(
+            checks.items(), key=lambda kv: max(s["esr"] for s in kv[1]["per_segment"])
+        )
+        blind_esr = f"{max(s['esr'] for s in check['per_segment']):.1f}"
+        blind_share = f"{100 * check['share_of_quietest']:.1f}\\,\\%"
+
     quiet_loud = r"\pending"
     if SEGMENTS.exists():
         ratios = [
@@ -355,6 +382,9 @@ def main() -> None:
     macros = {
         "pending": r"\textbf{[pending]}",
         "QuietLoudRatioRange": quiet_loud,
+        "SpreadQuietShare": quiet_share,
+        "ValBlindEsr": blind_esr,
+        "ValBlindShare": blind_share,
         **repeat_macros,
         "PubOutlierValLone": published_val,
         "TwiceMeanAbsTrainval": twice_trainval,
