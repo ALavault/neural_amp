@@ -279,7 +279,21 @@ def main() -> None:
             a["test_last"][ESR] < b["test_last"][ESR]
             for a, b in zip(after, before, strict=True)
         )
+        mine, ablated = pair(ssm, runs["ssm-v1"])
         comparisons = {
+            "SSMLowerThanVoneSeeds": str(
+                sum(
+                    a["test_last"][ESR] < b["test_last"][ESR]
+                    for a, b in zip(mine, ablated, strict=True)
+                )
+            ),
+            "VoneLowerSeeds": str(
+                sum(
+                    b["test_last"][ESR] < a["test_last"][ESR]
+                    for a, b in zip(mine, ablated, strict=True)
+                )
+            ),
+            "VonePairedSeeds": str(len(mine)),
             "ChangesReduction": f"{100 * reduction:.0f}\\,\\%",
             "ChangesPairedSeeds": str(len(after)),
             "ChangesLowerSeeds": str(helped),
@@ -355,6 +369,9 @@ def main() -> None:
         "ChangesReduction",
         "ChangesPairedSeeds",
         "ChangesLowerSeeds",
+        "SSMLowerThanVoneSeeds",
+        "VoneLowerSeeds",
+        "VonePairedSeeds",
         "SSMRatio",
         "ParamRatio",
         "SSMLowerSeeds",
