@@ -274,9 +274,14 @@ def main() -> None:
         )
         after, before = pair(changes, rerun)
         reduction = 1 - mean_esr(after) / mean_esr(before)
+        helped = sum(
+            a["test_last"][ESR] < b["test_last"][ESR]
+            for a, b in zip(after, before, strict=True)
+        )
         comparisons = {
             "ChangesReduction": f"{100 * reduction:.0f}\\,\\%",
             "ChangesPairedSeeds": str(len(after)),
+            "ChangesLowerSeeds": str(helped),
             "SSMRatio": f"{mean_esr(theirs) / mean_esr(ours):.1f}",
             "ParamRatio": f"{changes[0]['parameters'] / parameters['ssm']:.1f}",
             "SSMLowerSeeds": str(lower),
@@ -339,6 +344,7 @@ def main() -> None:
     for name in (
         "ChangesReduction",
         "ChangesPairedSeeds",
+        "ChangesLowerSeeds",
         "SSMRatio",
         "ParamRatio",
         "SSMLowerSeeds",

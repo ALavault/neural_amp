@@ -247,9 +247,10 @@ and budget, and show the published values for context.
 
 With both training changes, S4-TF-L-16 reaches a test ESR of
 \ChangesSFourTFLesrMeanStd{} ($n=\ChangesSFourTFLn$), \ChangesReduction{} below
-its re-run with the released training on the seeds trained both ways
-($n=\ChangesPairedSeeds$; published: \PubSFourTFLesr): part of any difference comes from
-training alone, not from the model. SSM-WaveNet, trained the same way, reaches
+its re-run with the released training on the seeds trained both ways, but lower
+on only \ChangesLowerSeeds{} of those \ChangesPairedSeeds{} seeds (published:
+\PubSFourTFLesr): part of any difference between training recipes comes from the
+seed, not from the recipe. SSM-WaveNet, trained the same way, reaches
 \SSMesrMeanStd{} ($n=\SSMn$), \SSMRatio{} times lower than S4-TF-L-16 on average
 and lower on \SSMLowerSeeds{} of \PairedSeeds{} paired seeds, with \ParamRatio{}
 times fewer parameters, no TFiLM and no look-ahead; its MR-STFT loss is
