@@ -74,3 +74,31 @@ def test_b0_overlap_blocks_match_official_complete_inference() -> None:
         block_samples=1000,
     )
     assert np.max(np.abs(complete - blocked)) < 2.0e-6
+
+
+def test_m4_memory_diagnostic_keeps_identity_init_and_block_parity() -> None:
+    memory = yaml.safe_load((ROOT / "configs/training/m4_memory.yaml").read_text())
+    smoke = yaml.safe_load((ROOT / "configs/training/m4_smoke.yaml").read_text())
+    assert memory["devices"] == smoke["devices"]
+    assert memory["seeds"] == smoke["seeds"]
+    assert memory["cascade_memory_samples"] == 2 * memory["taps"] - 1 >= 63
+    model_config = yaml.safe_load(
+        (ROOT / "configs/training/m3_synthetic.yaml").read_text()
+    )["model"]
+    model_config["taps"] = memory["taps"]
+    model = model_factory("S3", root=ROOT, model_config=model_config).eval()
+    parameters = sum(parameter.numel() for parameter in model.parameters())
+    assert parameters == memory["parameters"] == 1_276
+    signal = torch.rand(20_000, generator=torch.Generator().manual_seed(3)) - 0.5
+    with torch.inference_mode():
+        output = model(signal)
+    torch.testing.assert_close(output, signal, atol=3.0e-6, rtol=3.0e-6)
+    blocked = causal_predict(
+        model,
+        "S3",
+        signal.numpy(),
+        device=torch.device("cpu"),
+        context_samples=smoke["context_samples"],
+        block_samples=4093,
+    )
+    assert np.max(np.abs(blocked - output.numpy())) < 2.0e-6

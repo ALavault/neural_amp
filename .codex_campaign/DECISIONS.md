@@ -112,3 +112,25 @@ Les données de la voie produit sont limitées à Fulltone Full Drive 2, Big Muf
 et aux captures réalisées par le projet. Blackstar HT1, UA 1176 et
 `EXTERNAL_REPORT_ONLY` restent scellés : la voie produit n'a pas le droit de
 lire leurs sorties, afin de préserver la confirmation scientifique future.
+
+## 2026-09-16 — D-M4-010 — Preregistered linear-memory diagnostic for S3
+
+Open one post-freeze diagnostic inside the M4 lineage, phase `M4_MEMORY`,
+governed by `configs/training/m4_memory.yaml`. The read-only autopsy of the
+Fulltone gap (S3 `0.2312` versus A2 `0.0668`, seed 0) attributes it to the
+linear memory of the structured core (autopsy and bounds under
+`experiments/summaries/m4_memory/autopsy/`): two 17-tap FIRs give 33 samples in
+cascade, while the reachable ridge least-squares floor on the test file falls
+from `0.178` at 33 samples to `0.120` at 65 and saturates beyond. The width-31
+recovery could not test this because widening the residual leaves its 31-sample
+receptive field unchanged. Change one variable only: `taps` 17 to 33 (1,276
+parameters, 65-sample cascade). Run S3 on both devices and all three seeds
+with every other M4 setting fixed, after a two-step preflight. Decide on the
+Fulltone median: confirmed at test ESR `<= 0.125`, 100-300 Hz band error
+`<= 0.05` and train-window-to-test transfer loss `<= 0.03`; refuted above
+`0.17`; partial in between, discriminated by the train-window ESR. Big Muff is
+a regression control only (median may not rise by more than `0.05`). S4 rows are
+optional and informational. `PROTOCOL_LOCK.yaml` (M4-P4-v1) and the NO-GO
+verdict are unchanged; reopening MATURATION would require a separate decision.
+This diagnostic is the one exception to the D-PRODUCT-001 freeze on new
+scientific work during the demo sprint, motivated by the completed autopsy.

@@ -1,0 +1,77 @@
+{
+  "identity": {
+    "train": 0.19724254798669746,
+    "validation": 0.2176142363399851,
+    "test": 0.2366733919362742
+  },
+  "taps_17": {
+    "cascade_memory": 33,
+    "ls_fir_esr": {
+      "train": 0.12569669010242562,
+      "validation": 0.15007933469444157,
+      "test": 0.1727605412230399
+    },
+    "factorised_relative_error": 7.12706355181769e-05,
+    "factorised_test_esr": 0.17252084283025118,
+    "ls_fir_max_abs_tap": 66.04704398369539,
+    "ls_fir_l2_delta_from_identity": 107.97936688915352,
+    "pre_max_abs_delta_from_delta": 0.7642013085629353,
+    "post_max_abs_delta_from_delta": 51.11361271097783
+  },
+  "taps_25": {
+    "cascade_memory": 49,
+    "ls_fir_esr": {
+      "train": 0.1050092515431187,
+      "validation": 0.12490689025903894,
+      "test": 0.13400327050518032
+    },
+    "factorised_relative_error": 2.538675714877756e-05,
+    "factorised_test_esr": 0.1336817168241092,
+    "ls_fir_max_abs_tap": 42.10558527689537,
+    "ls_fir_l2_delta_from_identity": 67.48545036613697,
+    "pre_max_abs_delta_from_delta": 0.9005532807346437,
+    "post_max_abs_delta_from_delta": 27.36315762861828
+  },
+  "taps_33": {
+    "cascade_memory": 65,
+    "ls_fir_esr": {
+      "train": 0.09645120345149896,
+      "validation": 0.11996854717021205,
+      "test": 0.12212765506120028
+    },
+    "factorised_relative_error": 2.1747034102120477e-05,
+    "factorised_test_esr": 0.12206724765095325,
+    "ls_fir_max_abs_tap": 28.57524615486151,
+    "ls_fir_l2_delta_from_identity": 46.46990872036549,
+    "pre_max_abs_delta_from_delta": 0.8843259424260977,
+    "post_max_abs_delta_from_delta": 26.558237653249193
+  },
+  "taps_49": {
+    "cascade_memory": 97,
+    "ls_fir_esr": {
+      "train": 0.08957293160992873,
+      "validation": 0.12608150292608533,
+      "test": 0.12024252007200373
+    },
+    "factorised_relative_error": 6.133144905993091e-06,
+    "factorised_test_esr": 0.12021484704620884,
+    "ls_fir_max_abs_tap": 16.98088415524801,
+    "ls_fir_l2_delta_from_identity": 29.76782811435985,
+    "pre_max_abs_delta_from_delta": 0.7215862660783938,
+    "post_max_abs_delta_from_delta": 15.464713705045051
+  },
+  "taps_65": {
+    "cascade_memory": 129,
+    "ls_fir_esr": {
+      "train": 0.08723354067278763,
+      "validation": 0.13347083204921623,
+      "test": 0.12382593281678146
+    },
+    "factorised_relative_error": 7.338239272765991e-08,
+    "factorised_test_esr": 0.12382593907926662,
+    "ls_fir_max_abs_tap": 7.956121473476288,
+    "ls_fir_l2_delta_from_identity": 14.336679972164978,
+    "pre_max_abs_delta_from_delta": 0.417363013986378,
+    "post_max_abs_delta_from_delta": 10.528126859672684
+  }
+}
