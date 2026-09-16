@@ -105,6 +105,29 @@ def _load(
 torchaudio.info = _info
 torchaudio.load = _load
 
+_pad = torch.nn.functional.pad
+
+
+def _reflect_pad_by_slicing(input, pad, mode="constant", value=None):
+    """Reflection padding built from slices, whose CUDA backward is deterministic.
+
+    torch.stft pads its input this way inside the MR-STFT loss, and
+    reflection_pad1d_backward_out_cuda has no deterministic implementation. The
+    padded values are identical; installed only with --deterministic.
+    """
+    if mode != "reflect" or len(pad) != 2:
+        return _pad(input, pad, mode, value)
+    left, right = pad
+    length = input.shape[-1]
+    return torch.cat(
+        [
+            input[..., 1 : left + 1].flip(-1),
+            input,
+            input[..., length - right - 1 : length - 1].flip(-1),
+        ],
+        dim=-1,
+    )
+
 
 class System(BlackBoxSystem):
     """BaseSystem.configure_optimizers minus verbose=True, which torch 2.13 removed.
@@ -231,6 +254,17 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="train exactly as the released code does, without PolarityGuard",
     )
+    parser.add_argument(
+        "--deterministic",
+        action="store_true",
+        help="deterministic CUDA algorithms, so that a run can be repeated bit for bit",
+    )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=16,
+        help="training batch size; smaller only for smoke tests next to another run",
+    )
     parser.add_argument("--resume", action="store_true")
     parser.add_argument(
         "--no-record", action="store_true", help="smoke test: do not write results"
@@ -265,7 +299,7 @@ def build_processor(args: argparse.Namespace) -> torch.nn.Module:
     )
 
 
-def data_module(split: str) -> DryWetFilesPluginDataModule:
+def data_module(split: str, batch_size: int = 16) -> DryWetFilesPluginDataModule:
     if split == "trainval":
         return DryWetFilesPluginDataModule(
             root_dir_dry=str(DATA / "DRY/trainval"),
@@ -275,7 +309,7 @@ def data_module(split: str) -> DryWetFilesPluginDataModule:
             sample_length=144_000,
             sample_rate=48_000,
             preload=True,
-            batch_size=16,
+            batch_size=batch_size,
             num_workers=4,
         )
     return DryWetFilesPluginDataModule(
@@ -318,10 +352,16 @@ def main() -> None:
         "commit": git_head(ROOT),
         "nablafx_commit": git_head(ROOT / "third_party/nablafx"),
     }
-    # scripts/main.py settings, applied before the model is built.
+    # scripts/main.py settings, applied before the model is built. cuBLAS reads
+    # its workspace setting when CUDA starts, so it is set before any CUDA call.
+    if args.deterministic:
+        os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
+        torch.nn.functional.pad = _reflect_pad_by_slicing
     pl.seed_everything(args.seed, workers=True)
     torch.set_float32_matmul_precision("high")
-    torch.use_deterministic_algorithms(False, warn_only=True)
+    torch.use_deterministic_algorithms(
+        args.deterministic, warn_only=not args.deterministic
+    )
     torch.set_num_threads(1)
     # BaseSystem.on_train_start calls wandb.watch unconditionally.
     wandb.init(mode="disabled")
@@ -372,8 +412,8 @@ def main() -> None:
         enable_model_summary=True,
         enable_checkpointing=True,
         enable_progress_bar=False,
-        deterministic=None,
-        benchmark=True,
+        deterministic=True if args.deterministic else None,
+        benchmark=not args.deterministic,
         gradient_clip_val=args.clip_value,
         gradient_clip_algorithm="value",
         max_steps=args.max_steps,
@@ -395,7 +435,11 @@ def main() -> None:
 
     started = time.perf_counter()
     resume_from = str(last) if args.resume and last.exists() else None
-    trainer.fit(system, datamodule=data_module("trainval"), ckpt_path=resume_from)
+    trainer.fit(
+        system,
+        datamodule=data_module("trainval", args.batch_size),
+        ckpt_path=resume_from,
+    )
     minutes = (time.perf_counter() - started) / 60.0
 
     tests = {"best": {}}
@@ -409,7 +453,7 @@ def main() -> None:
             logger=False,
             enable_checkpointing=False,
             enable_progress_bar=False,
-            benchmark=True,
+            benchmark=not args.deterministic,
             callbacks=[metrics_callback()],
         )
         output = tester.test(
@@ -431,6 +475,8 @@ def main() -> None:
         "honor_optim": args.honor_optim,
         "polarity_guard": not args.no_polarity_guard,
         "polarity_flips": polarity_guard.flips,
+        "deterministic": args.deterministic,
+        "batch_size": args.batch_size,
         "ssm": (
             {
                 "num_blocks": args.num_blocks,
