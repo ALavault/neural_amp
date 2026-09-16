@@ -79,3 +79,17 @@ non-déterminisme GPU donne un écart-type de 0,18 sur le log de l'ESR de test
   de A.
 - **Mécanisme, descriptif** : en « décide », les enfants dont la première décision
   diffère du témoin plus tôt ont un |Δk| plus grand.
+
+## Exécution (ajouté après le lancement, prédictions inchangées)
+
+- File lancée le 2026-09-16 à 16 h 11 au commit bb08337 ; journal
+  `demo/runs/fork_pilot_queue.log`, enregistrements `demo/butterfly/`.
+- **Parent** : fourches aux pas 42 (époque 5) et 707 (époque 100), 13,8 min pour 707 pas.
+  La garde a basculé aux époques 7, 8 et 9 : la fourche 5 précède toutes les bascules.
+- **Jumeau** : mêmes bascules, même pas final ; checkpoints des fourches 5 et 100
+  identiques bit à bit à ceux du parent (poids et moments d'Adam). Le prérequis du lot de
+  16 est satisfait.
+- **Coût du mode déterministe** : 51 et 48 pas par minute pour le parent et son jumeau,
+  contre 53 à 56 pour les répétitions non déterministes des graines 43 et 44 ; environ
+  5 à 10 % plus lent. Mesure grossière : le temps inclut le chargement des données et le
+  GPU est partagé.
