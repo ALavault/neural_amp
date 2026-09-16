@@ -2,8 +2,7 @@
 
 Scripts et tables : `diagnosis/seeds/` (`hypotheses.md`, `measure.py`,
 `validation_loss.py`, `measurements.json`, `validation_loss.json`, `spread.txt`).
-Toutes les mesures sont faites en lecture seule sur les douze runs déjà
-enregistrés dans `demo/nablafx_bench/`.
+Mesures en lecture seule sur les douze runs de `demo/nablafx_bench/`.
 
 ## 1. Écart
 
@@ -29,12 +28,10 @@ trois graines.
 
 - **Jeu de test** : les douze mêmes segments de 5 s pour les douze runs
   (`test_segments.json`, champ `segment_rms` commun).
-- **Données et prétraitement** : même archive Zenodo (sha256 dans
-  `paper/icassp2027/README.md`), même rééchantillonnage 48 kHz, même découpe.
-- **Définition de la métrique** : `auraloss` ESR par segment puis moyenne
-  (registre NablAFx `esr_loss`), dernier checkpoint dans tous les cas.
-- **Protocole** : même code (`scripts/product_nablafx_bench.py`), commit
-  enregistré par run ; seuls la graine et la condition changent.
+- **Données, métrique, protocole** : même archive Zenodo (sha256 dans
+  `paper/icassp2027/README.md`), même rééchantillonnage, `auraloss` ESR par
+  segment puis moyenne, dernier checkpoint, même code
+  (`scripts/product_nablafx_bench.py`) avec le commit enregistré par run.
 - **Budget réel** : plafond de 15k pas jamais atteint ; arrêt entre 4 137 et
   8 764 pas ; 11 329 / 12 353 / 70 193 paramètres.
 - **Taille du jeu d'évaluation** : la moyenne sur douze segments a une erreur
@@ -72,11 +69,9 @@ Aucun défaut de comparabilité : le diagnostic porte sur l'entraînement.
   validation ordonne exactement l'ESR de test dans les deux conditions gardées,
   six runs sur six (SSM : 0,0308 → 0,036 ; 0,0201 → 0,083 ; 0,0002 → 0,128 ;
   S4 : 0,0284 → 0,089 ; 0,0201 → 0,135 ; 0,0127 → 0,157). Mais le mécanisme
-  proposé est faux : retirer le segment le plus calme ne change la perte de
-  validation que de 3 à 13 %, et le segment quasi silencieux de la graine 43,
-  d'ESR 7,04, n'en représente que 6,3 %. **Corrélation soutenue, mécanisme
-  réfuté** ; statistique retenue après coup parmi cinq, p ≈ 1/36 sous une
-  hypothèse nulle naïve.
+  proposé est faux : le segment quasi silencieux de la graine 43, d'ESR 7,04,
+  ne pèse que 6,3 % de la perte de validation. **Corrélation soutenue, mécanisme
+  réfuté** ; statistique retenue après coup parmi cinq.
 - **H3** — constantes de temps apprises : les runs avec exemption de weight decay
   ont 99 à 118 pôles au-delà de 10 ms contre 4 à 21 pour l'ablation, ce qui
   confirme l'effet du weight decay *entre* conditions ; à l'intérieur d'une
@@ -114,8 +109,7 @@ calme/fort sous 3,0 (aujourd'hui 2,6 / 3,7 / 3,9 sur ces trois runs).
 ## 6. Non expliqué, non vérifié
 
 - La corrélation H2 reste sans mécanisme : six runs, statistique choisie après
-  coup. Trois graines de plus par condition trancheraient ; non fait faute de
-  temps avant la soumission.
+  coup. Trois graines de plus par condition trancheraient.
 - Part non attribuée : même en admettant le mécanisme, rien ne dit quelle
   fraction de la dispersion disparaîtrait. La seule borne mesurée est la
   localisation (77–81 % sur la moitié calme).
@@ -124,7 +118,7 @@ calme/fort sous 3,0 (aujourd'hui 2,6 / 3,7 / 3,9 sur ces trois runs).
   à False, comme dans NablAFx). Une partie de ce qu'on attribue à la graine peut
   être cette non-reproductibilité. Un seul run répété à graine identique (1 h 30
   de GPU) borne cette part ; c'est la mesure la moins chère qui manque.
-- Non mesuré : le rôle de l'ordre des lots, séparément de l'initialisation et de
-  la partition — les trois changent ensemble avec la graine.
+- Non séparés : initialisation, partition et ordre des lots changent ensemble
+  avec la graine.
 
 Correctif : voir skill controlled-fix.

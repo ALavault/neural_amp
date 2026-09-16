@@ -79,6 +79,10 @@ def load_runs() -> dict[str, list[dict]]:
     runs: dict[str, list[dict]] = {key: [] for key in VARIANT_OF.values()}
     for path in sorted(RUNS.glob("*.json")):
         record = json.loads(path.read_text(encoding="utf-8"))
+        # A repeat trains a seed already trained, to measure how much of the
+        # spread is GPU non-determinism; it is not a further seed.
+        if record["run_id"].endswith("_repeat"):
+            continue
         runs[variant(record)].append(record)
     return runs
 
