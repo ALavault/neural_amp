@@ -1,0 +1,170 @@
+{
+ "runs": {
+  "s4tfl16_nowd_guard_seed42": {
+   "split": {
+    "val_segments": 12,
+    "val_rms_min": 0.02835696190595627,
+    "val_rms_median": 0.04463837668299675,
+    "train_rms_min": 0.00020498587400652468,
+    "train_quiet_count": 13,
+    "train_energy": 38237.703125
+   }
+  },
+  "s4tfl16_nowd_guard_seed43": {
+   "split": {
+    "val_segments": 12,
+    "val_rms_min": 0.02014486864209175,
+    "val_rms_median": 0.041735533624887466,
+    "train_rms_min": 0.00020498587400652468,
+    "train_quiet_count": 12,
+    "train_energy": 38074.0859375
+   }
+  },
+  "s4tfl16_nowd_guard_seed44": {
+   "split": {
+    "val_segments": 12,
+    "val_rms_min": 0.012691193260252476,
+    "val_rms_median": 0.03627021610736847,
+    "train_rms_min": 0.00020498587400652468,
+    "train_quiet_count": 12,
+    "train_energy": 38965.8515625
+   }
+  },
+  "ssmzoh_guard_seed42": {
+   "split": {
+    "val_segments": 12,
+    "val_rms_min": 0.03078283928334713,
+    "val_rms_median": 0.03958199918270111,
+    "train_rms_min": 0.00020498587400652468,
+    "train_quiet_count": 13,
+    "train_energy": 38922.54296875
+   },
+   "poles": {
+    "poles": 512,
+    "tau_ms_median": 1.7673640251159668,
+    "tau_ms_max": 321.5400390625,
+    "poles_over_1ms": 306,
+    "poles_over_10ms": 99
+   }
+  },
+  "ssmzoh_guard_seed43": {
+   "split": {
+    "val_segments": 12,
+    "val_rms_min": 0.00021135467977728695,
+    "val_rms_median": 0.03829425945878029,
+    "train_rms_min": 0.00020498587400652468,
+    "train_quiet_count": 12,
+    "train_energy": 38463.9296875
+   },
+   "poles": {
+    "poles": 512,
+    "tau_ms_median": 1.8506230115890503,
+    "tau_ms_max": 119.60810852050781,
+    "poles_over_1ms": 321,
+    "poles_over_10ms": 113
+   }
+  },
+  "ssmzoh_guard_seed44": {
+   "split": {
+    "val_segments": 12,
+    "val_rms_min": 0.02014486864209175,
+    "val_rms_median": 0.03958199918270111,
+    "train_rms_min": 0.00020498587400652468,
+    "train_quiet_count": 11,
+    "train_energy": 37473.8515625
+   },
+   "poles": {
+    "poles": 512,
+    "tau_ms_median": 2.461488962173462,
+    "tau_ms_max": 395.8280029296875,
+    "poles_over_1ms": 345,
+    "poles_over_10ms": 118
+   }
+  },
+  "ssmwavenet_seed42": {
+   "poles": {
+    "poles": 512,
+    "tau_ms_median": 1.0031671524047852,
+    "tau_ms_max": 20.823183059692383,
+    "poles_over_1ms": 257,
+    "poles_over_10ms": 4
+   }
+  },
+  "ssmwavenet_seed43": {
+   "poles": {
+    "poles": 512,
+    "tau_ms_median": 1.3919339776039124,
+    "tau_ms_max": 55.25050735473633,
+    "poles_over_1ms": 298,
+    "poles_over_10ms": 21
+   }
+  },
+  "ssmwavenet_seed44": {
+   "poles": {
+    "poles": 512,
+    "tau_ms_median": 0.9080198705196381,
+    "tau_ms_max": 43.89979934692383,
+    "poles_over_1ms": 246,
+    "poles_over_10ms": 11
+   }
+  }
+ },
+ "conditions": {
+  "s4-changes": {
+   "segment_mean_esr": [
+    0.08884436637163162,
+    0.1354145109653473,
+    0.1568402796983719
+   ],
+   "energy_weighted_esr": [
+    0.05922509944511897,
+    0.10290699242806853,
+    0.10271754782451137
+   ],
+   "cv_segment_mean": 27.366242027237114,
+   "cv_energy_weighted": 28.505128068134503
+  },
+  "s4-released": {
+   "segment_mean_esr": [
+    0.13734440505504608,
+    0.1568906456232071,
+    0.11710744351148605
+   ],
+   "energy_weighted_esr": [
+    0.09254615522901159,
+    0.10706641787508987,
+    0.0789193991024781
+   ],
+   "cv_segment_mean": 14.508056432635302,
+   "cv_energy_weighted": 15.16077962494727
+  },
+  "ssm-changes": {
+   "segment_mean_esr": [
+    0.03580290451645851,
+    0.1276865452528,
+    0.08316235989332199
+   ],
+   "energy_weighted_esr": [
+    0.026350593240655227,
+    0.08034084978454586,
+    0.05694405104434351
+   ],
+   "cv_segment_mean": 55.88741946268637,
+   "cv_energy_weighted": 49.63767294591746
+  },
+  "ssm-released": {
+   "segment_mean_esr": [
+    0.23632514476776123,
+    0.07384500652551651,
+    0.1656273454427719
+   ],
+   "energy_weighted_esr": [
+    0.14995463474851808,
+    0.04626850574438692,
+    0.10559857997878813
+   ],
+   "cv_segment_mean": 51.36707749560202,
+   "cv_energy_weighted": 51.70896312908331
+  }
+ }
+}
