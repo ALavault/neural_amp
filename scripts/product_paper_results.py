@@ -32,6 +32,7 @@ INVERTED = json.loads(
     (PAPER / "data/polarity_ssmzoh_seed42.json").read_text(encoding="utf-8")
 )
 RECURRENCE = PAPER / "data/recurrence_check.json"
+SEGMENTS = PAPER / "data/test_segments.json"
 RUNS = ROOT / "demo/nablafx_bench"
 
 ESR, L1, MRSTFT = "metric/test/esr", "metric/test/l1", "metric/test/mrstft"
@@ -301,8 +302,17 @@ def main() -> None:
             mantissa, exponent = f"{check['max_abs_deviation']:.0e}".split("e")
             recurrence = f"{mantissa}\\times10^{{{int(exponent)}}}"
 
+    quiet_loud = r"\pending"
+    if SEGMENTS.exists():
+        ratios = [
+            run["quiet"] / run["loud"]
+            for run in json.loads(SEGMENTS.read_text(encoding="utf-8"))["runs"].values()
+        ]
+        quiet_loud = f"{min(ratios):.1f}--{max(ratios):.1f}"
+
     macros = {
         "pending": r"\textbf{[pending]}",
+        "QuietLoudRatioRange": quiet_loud,
         "PubSFourTFLesr": f"{s4tfl['test']['esr']:.3f}",
         "PubSFourTFLparams": s4tfl["params"],
         "SSMparams": params_label(parameters["ssm"]),

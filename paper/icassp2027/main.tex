@@ -275,6 +275,12 @@ confirm it without their checkpoints. Any loss that compares magnitude spectra
 alone has this symmetry, so training with one should check the sign of the
 output on validation data.
 
+\textbf{Where the error sits.} The protocol averages ESR over the twelve test
+segments, so quiet passages weigh as much as loud ones. For every run in
+Table~\ref{tab:results}, the mean ESR of the six quietest segments is
+\QuietLoudRatioRange{} times that of the six loudest, and the differences
+between seeds are concentrated there.
+
 \textbf{Limitations.} We evaluate a single device, while the published study
 covers 16, with $n=\SSMn$ seeds per model, and the seed-to-seed spread is of the
 same order as the difference between the two architectures. The training changes and zero-order hold were
