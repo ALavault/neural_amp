@@ -21,9 +21,10 @@ class S1Slow(nn.Module):
         num_knots: int = 17,
         hidden_size: int = 8,
         decimation: int = 64,
+        spline_range: float = 2.0,
     ):
         super().__init__()
-        self.core = S0Structured(taps, num_knots)
+        self.core = S0Structured(taps, num_knots, spline_range=spline_range)
         self.slow = SlowStateController(hidden_size, decimation)
 
     def reset_state(self) -> None:
@@ -41,9 +42,15 @@ class S2Residual(nn.Module):
     code = "S2"
     latency_samples = 0
 
-    def __init__(self, taps: int = 17, num_knots: int = 17, residual_channels: int = 8):
+    def __init__(
+        self,
+        taps: int = 17,
+        num_knots: int = 17,
+        residual_channels: int = 8,
+        spline_range: float = 2.0,
+    ):
         super().__init__()
-        self.core = S0Structured(taps, num_knots)
+        self.core = S0Structured(taps, num_knots, spline_range=spline_range)
         self.residual = FastResidualTCN(channels=residual_channels)
 
     def reset_state(self) -> None:
@@ -90,9 +97,10 @@ class S3FastSlowResidual(nn.Module):
         hidden_size: int = 8,
         decimation: int = 64,
         residual_channels: int = 8,
+        spline_range: float = 2.0,
     ):
         super().__init__()
-        self.core = S0Structured(taps, num_knots)
+        self.core = S0Structured(taps, num_knots, spline_range=spline_range)
         self.slow = SlowStateController(hidden_size, decimation)
         self.residual = FastResidualTCN(channels=residual_channels)
 

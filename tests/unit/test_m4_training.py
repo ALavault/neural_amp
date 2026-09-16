@@ -102,3 +102,44 @@ def test_m4_memory_diagnostic_keeps_identity_init_and_block_parity() -> None:
         block_samples=4093,
     )
     assert np.max(np.abs(blocked - output.numpy())) < 2.0e-6
+
+
+def test_m4_grid_diagnostic_keeps_identity_init_and_block_parity() -> None:
+    grid = yaml.safe_load((ROOT / "configs/training/m4_grid.yaml").read_text())
+    memory = yaml.safe_load((ROOT / "configs/training/m4_memory.yaml").read_text())
+    smoke = yaml.safe_load((ROOT / "configs/training/m4_smoke.yaml").read_text())
+    assert grid["models"] == ["S3"]
+    assert grid["devices"] == smoke["devices"]
+    assert grid["seeds"] == smoke["seeds"]
+    assert grid["taps"] == memory["taps"] == 33
+    assert grid["spline_range"] == 0.4
+    assert grid["knot_spacing"] == 2 * grid["spline_range"] / (grid["num_knots"] - 1)
+    model_config = yaml.safe_load(
+        (ROOT / "configs/training/m3_synthetic.yaml").read_text()
+    )["model"]
+    default = model_factory("S3", root=ROOT, model_config=dict(model_config))
+    assert default.core.shaper.knots[0].item() == -2.0
+    model_config["taps"] = grid["taps"]
+    model_config["spline_range"] = grid["spline_range"]
+    model = model_factory("S3", root=ROOT, model_config=model_config).eval()
+    knots = model.core.shaper.knots
+    assert len(knots) == grid["num_knots"]
+    torch.testing.assert_close(knots[0].item(), -0.4)
+    torch.testing.assert_close(knots[-1].item(), 0.4)
+    torch.testing.assert_close(model.core.shaper.spacing, 0.05)
+    parameters = sum(parameter.numel() for parameter in model.parameters())
+    assert parameters == grid["parameters"] == memory["parameters"] == 1_276
+    signal = torch.rand(20_000, generator=torch.Generator().manual_seed(3)) - 0.5
+    assert signal.abs().max() > grid["spline_range"]
+    with torch.inference_mode():
+        output = model(signal)
+    torch.testing.assert_close(output, signal, atol=3.0e-6, rtol=3.0e-6)
+    blocked = causal_predict(
+        model,
+        "S3",
+        signal.numpy(),
+        device=torch.device("cpu"),
+        context_samples=smoke["context_samples"],
+        block_samples=4093,
+    )
+    assert np.max(np.abs(blocked - output.numpy())) < 2.0e-6

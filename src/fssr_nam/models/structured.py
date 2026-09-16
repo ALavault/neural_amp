@@ -96,11 +96,19 @@ class S0Structured(nn.Module):
     latency_samples = 0
 
     def __init__(
-        self, taps: int = 17, num_knots: int = 17, shaper: nn.Module | None = None
+        self,
+        taps: int = 17,
+        num_knots: int = 17,
+        shaper: nn.Module | None = None,
+        spline_range: float = 2.0,
     ):
         super().__init__()
         self.pre = CausalFIR(taps)
-        self.shaper = shaper if shaper is not None else SmoothHermiteSpline(num_knots)
+        self.shaper = (
+            shaper
+            if shaper is not None
+            else SmoothHermiteSpline(num_knots, -spline_range, spline_range)
+        )
         self.post = CausalFIR(taps)
         self.latency_samples = int(getattr(self.shaper, "latency_samples", 0))
         self.gain_delay = CausalDelay(self.latency_samples)

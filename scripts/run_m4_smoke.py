@@ -41,6 +41,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "configs/training/m4_smoke.yaml"
 RECOVERY_CONFIG_PATH = ROOT / "configs/training/m4_recovery.yaml"
 MEMORY_CONFIG_PATH = ROOT / "configs/training/m4_memory.yaml"
+GRID_CONFIG_PATH = ROOT / "configs/training/m4_grid.yaml"
 MODEL_CONFIG_PATH = ROOT / "configs/training/m3_synthetic.yaml"
 MANIFEST_PATH = ROOT / "datasets/manifests/m4_internal.json"
 SPLIT_PATH = ROOT / "datasets/splits/m4_internal.json"
@@ -72,6 +73,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--preflight", action="store_true")
     parser.add_argument("--recovery-wide", action="store_true")
     parser.add_argument("--memory-taps", action="store_true")
+    parser.add_argument("--grid-range", action="store_true")
     return parser.parse_args()
 
 
@@ -240,6 +242,17 @@ def main() -> None:
             or args.device not in memory["devices"]
         ):
             raise ValueError("run is outside the preregistered M4 memory diagnostic")
+    grid = None
+    if args.grid_range:
+        grid = yaml.safe_load(GRID_CONFIG_PATH.read_text(encoding="utf-8"))
+        if (
+            args.recovery_wide
+            or args.memory_taps
+            or args.model not in grid["models"]
+            or args.seed not in grid["seeds"]
+            or args.device not in grid["devices"]
+        ):
+            raise ValueError("run is outside the preregistered M4 grid diagnostic")
     run_dir = ROOT / "experiments/runs" / args.run_id
     run_dir.mkdir(parents=True, exist_ok=False)
     for directory in ("checkpoints", "predictions", "figures"):
@@ -260,6 +273,9 @@ def main() -> None:
         model_config["residual_channels"] = int(recovery["residual_channels"])
     if memory is not None:
         model_config["taps"] = int(memory["taps"])
+    if grid is not None:
+        model_config["taps"] = int(grid["taps"])
+        model_config["spline_range"] = float(grid["spline_range"])
     resolved = {
         "campaign": config,
         "model": args.model,
@@ -268,6 +284,7 @@ def main() -> None:
         "preflight": args.preflight,
         "recovery": recovery,
         "memory": memory,
+        "grid": grid,
         "execution": {
             "optimizer_steps": steps,
             "validation_interval_steps": validation_interval,
@@ -286,6 +303,7 @@ def main() -> None:
         + (" --preflight" if args.preflight else "")
         + (" --recovery-wide" if args.recovery_wide else "")
         + (" --memory-taps" if args.memory_taps else "")
+        + (" --grid-range" if args.grid_range else "")
     )
     (run_dir / "config-resolved.yaml").write_bytes(resolved_bytes)
     (run_dir / "command.txt").write_text(command + "\n", encoding="utf-8")
@@ -335,7 +353,9 @@ def main() -> None:
     status = "failed"
     failure_reason = ""
     primary = ""
-    if memory is not None:
+    if grid is not None:
+        phase = "M4_GRID_PREFLIGHT" if args.preflight else "M4_GRID"
+    elif memory is not None:
         phase = "M4_MEMORY_PREFLIGHT" if args.preflight else "M4_MEMORY"
     elif args.preflight:
         phase = "M4_PREFLIGHT"

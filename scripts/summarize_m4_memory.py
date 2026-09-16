@@ -139,7 +139,9 @@ def evaluate_run(run_id: str, manifest: dict, device: torch.device) -> dict:
     return {
         "run_id": run_id,
         "phase": (
-            "M4_MEMORY"
+            "M4_GRID"
+            if resolved.get("grid")
+            else "M4_MEMORY"
             if resolved.get("memory")
             else "M4_RECOVERY"
             if resolved.get("recovery")
@@ -149,6 +151,7 @@ def evaluate_run(run_id: str, manifest: dict, device: torch.device) -> dict:
         "device": resolved["device"],
         "seed": int(resolved["seed"]),
         "taps": fssr.get("taps"),
+        "spline_range": fssr.get("spline_range"),
         "parameters": run["metrics"]["parameters"],
         "best_step": run["metrics"]["best_step"],
         "test_esr": float(test["esr"]),

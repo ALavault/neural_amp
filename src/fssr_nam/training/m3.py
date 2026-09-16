@@ -42,22 +42,29 @@ def model_factory(variant: str, config: dict):
         "taps": int(config["taps"]),
         "num_knots": int(config["num_knots"]),
     }
+    spline_range = float(config.get("spline_range", 2.0))
     if variant == "S0":
-        return S0Structured(**common)
+        return S0Structured(**common, spline_range=spline_range)
     if variant == "S1":
         return S1Slow(
             **common,
             hidden_size=int(config["slow_hidden_size"]),
             decimation=int(config["slow_decimation"]),
+            spline_range=spline_range,
         )
     if variant == "S2":
-        return S2Residual(**common, residual_channels=int(config["residual_channels"]))
+        return S2Residual(
+            **common,
+            residual_channels=int(config["residual_channels"]),
+            spline_range=spline_range,
+        )
     if variant == "S3":
         return S3FastSlowResidual(
             **common,
             hidden_size=int(config["slow_hidden_size"]),
             decimation=int(config["slow_decimation"]),
             residual_channels=int(config["residual_channels"]),
+            spline_range=spline_range,
         )
     if variant == "S4":
         return S4Antialiased(

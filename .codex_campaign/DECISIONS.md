@@ -134,3 +134,25 @@ optional and informational. `PROTOCOL_LOCK.yaml` (M4-P4-v1) and the NO-GO
 verdict are unchanged; reopening MATURATION would require a separate decision.
 This diagnostic is the one exception to the D-PRODUCT-001 freeze on new
 scientific work during the demo sprint, motivated by the completed autopsy.
+
+## 2026-09-16 — D-M4-011 — Preregistered spline-grid diagnostic for S3 t33
+
+Open one further post-freeze diagnostic inside the M4_MEMORY lineage, phase
+`M4_GRID`, governed by `configs/training/m4_grid.yaml`, specified in
+`FIX_fulltone_s3t33_residual_vs_a2.md` from
+`DIAGNOSIS_fulltone_s3t33_residual_vs_a2.md`. The read-only diagnosis of the
+residual Fulltone gap (S3 t33 `0.140` versus A2 `0.064`, medians) attributes a
+third of it on the training windows (`0.113` to `0.086` by refit in the S3
+class) to an optimisation shortfall whose sub-cause is the spline grid: 17 knots
+over `+-2` (spacing `0.25`) while the spline input has rms `0.14` and 98 percent
+of its samples within `+-0.4`. Change one variable only: the knot range `+-2`
+to `+-0.4` (spacing `0.05`), with 33 taps, 17 knots, unit drive and every other
+M4 setting fixed; identity initialisation and the 1,276-parameter count are
+unchanged. Run S3 on both devices and all three seeds after a two-step
+preflight. Decide on the Fulltone median: confirmed at train-window ESR
+`<= 0.090`, test ESR `<= 0.125` and transfer loss `<= 0.035`; refuted if the
+train-window median drops by less than `0.01` from `0.1127`; partial in between.
+Big Muff is a regression control against the t33 memory runs (median may not
+rise by more than `0.05`). `PROTOCOL_LOCK.yaml` (M4-P4-v1) and the NO-GO verdict
+are unchanged. Like D-M4-010, this is an exception to the D-PRODUCT-001 freeze,
+motivated by the completed diagnosis.
