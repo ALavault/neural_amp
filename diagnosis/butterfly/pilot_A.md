@@ -93,3 +93,9 @@ non-déterminisme GPU donne un écart-type de 0,18 sur le log de l'ESR de test
   contre 53 à 56 pour les répétitions non déterministes des graines 43 et 44 ; environ
   5 à 10 % plus lent. Mesure grossière : le temps inclut le chargement des données et le
   GPU est partagé.
+- **Témoin, fourche 100, « décide » k = 0** : arrêt anticipé à l'époque 922 après la
+  fourche (6 461 pas), ESR de test 0,0341, contre 0,0358 et 0,0470 pour les deux runs non
+  déterministes du banc à la graine 42. Dix divisions du learning rate, aux époques 113,
+  213, 292, 385, 647, 706, 808, 854, 894 et 915.
+- **Rejeu k = 0** : dernier checkpoint identique bit à bit au témoin, même ESR de test ;
+  pertes de validation identiques sur les 923 époques. Le bras « rejoue » est valide.
