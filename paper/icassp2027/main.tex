@@ -202,7 +202,7 @@ shortens the memory of every layer; we honour the exemption. Second, the
 MR-STFT term is invariant to the sign of the output and, even at a weight of
 0.1, stays 4 to 20 times larger than the L1 term on validation in our correctly
 signed runs, so gradient descent can fit the spectrum with an inverted waveform.
-SSM-WaveNet trained with the exemption alone did: after
+SSM-WaveNet trained with the first change only did: after
 \InvertedStep{} steps its test ESR was \InvertedEsr, and \InvertedNegatedEsr{}
 with the output negated, and we stopped it. A polarity guard now computes, after
 each validation epoch, the inner product of output and target over the
@@ -214,13 +214,14 @@ exemption and zero-order hold after our first SSM-WaveNet run
 (Table~\ref{tab:results}, ablation) had underperformed on the test set, choosing
 them from its training and validation losses and its learned poles, and the
 guard after the inversion, which validation had shown; the stopped run was
-tested only to confirm it. Apart from the ablation and the
+tested only to confirm it. With three seeds, that first signal turns out to lie
+within the seed spread (Sec.~\ref{sec:results}). Apart from the ablation and the
 re-run labelled as released training, every run below uses both changes.
 
 \textbf{Baselines.} We report the published Big Muff results of the best LSTM,
 TCN and GCN models and of all four S4 variants~\cite{comunita2025frontiers}. We
-re-run S4-TF-L-16, the best of them, with the same code as our model, once with
-the released training and on each seed with our training changes.
+re-run S4-TF-L-16, the best of them, with the same code as our model, on every
+seed with the released training and with our training changes.
 
 \section{Results}
 \label{sec:results}
