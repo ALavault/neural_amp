@@ -38,7 +38,7 @@ and the output is negated whenever it anticorrelates with the validation target.
 The second change is needed because the spectral term of the loss cannot see the
 output's sign: one of our runs converged to an inverted output, and the test
 errors of three published models show the same signature. On the Electro-Harmonix Big Muff,
-a \SSMparams-parameter SSM-WaveNet reaches a test error-to-signal ratio of
+an \SSMparams-parameter SSM-WaveNet reaches a test error-to-signal ratio of
 \SSMesrMeanStd{} over \SSMn{} seeds, against \ChangesSFourTFLesrMeanStd{} for
 the \PubSFourTFLparams-parameter S4-TFiLM model trained the same way and
 \PubSFourTFLesr{} published.
@@ -242,7 +242,7 @@ Our re-run of S4-TF-L-16 with the released training reaches a test ESR of
 \RerunSFourTFLesrMeanStd{} ($n=\RerunSFourTFLn$), against \PubSFourTFLesr{}
 published, and an unweighted test loss \RerunSFourTFLlossGap{} above the
 published one. The published value is the best of four loss weightings, whereas
-the re-run trains the selected weighting once with the released framework. We
+each of our runs trains the selected weighting once with the released framework. We
 therefore compare SSM-WaveNet with re-runs, which share its code, data pipeline
 and budget, and show the published values for context.
 
