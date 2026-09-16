@@ -291,6 +291,9 @@ covers 16, with $n=\SSMn$ seeds per model, and the seed-to-seed spread is of the
 same order as the difference between the two architectures. The training changes and zero-order hold were
 chosen after a first SSM-WaveNet had underperformed on the test set; re-running
 S4-TF-L-16 with the same changes controls for the changes, not for that choice.
+Training is not deterministic on the GPU, as in the released framework:
+repeating seed 42 for SSM-WaveNet gives \RepeatEsr{} against \SSMesrMin{}, a
+difference of \RepeatDelta{} against a seed-to-seed spread of eight times that.
 Training evaluates each SSM kernel over the whole segment, which dominates
 memory: a batch of sixteen 3\,s segments peaks at \SSMpeakGiB\,GiB on the GPU,
 against \SFourTFLpeakGiB\,GiB for S4-TF-L-16. The per-sample cost given in

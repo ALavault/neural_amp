@@ -113,11 +113,14 @@ calme/fort sous 3,0 (aujourd'hui 2,6 / 3,7 / 3,9 sur ces trois runs).
 - Part non attribuée : même en admettant le mécanisme, rien ne dit quelle
   fraction de la dispersion disparaîtrait. La seule borne mesurée est la
   localisation (77–81 % sur la moitié calme).
-- **Jamais mesuré : la variance à graine constante.** L'entraînement n'est pas
-  déterministe sur GPU (cuDNN benchmark activé, `use_deterministic_algorithms`
-  à False, comme dans NablAFx). Une partie de ce qu'on attribue à la graine peut
-  être cette non-reproductibilité. Un seul run répété à graine identique (1 h 30
-  de GPU) borne cette part ; c'est la mesure la moins chère qui manque.
+- **Variance à graine constante : mesurée après coup** (run
+  `ssmzoh_guard_seed42_repeat`). L'entraînement n'est pas déterministe sur GPU
+  (cuDNN benchmark, `use_deterministic_algorithms` à False, comme dans NablAFx) :
+  la répétition de la graine 42 donne 0,0470 contre 0,0358, soit 0,0112, quand
+  l'écart entre graines vaut 0,0919. La non-reproductibilité n'explique donc pas
+  la dispersion, mais elle rend toute valeur individuelle incertaine à ±0,011.
+  Une seule répétition : la distribution reste inconnue.
+
 - Non séparés : initialisation, partition et ordre des lots changent ensemble
   avec la graine.
 

@@ -324,6 +324,16 @@ def main() -> None:
     # validation losses too, so the same test applies to them.
     published_val = r"\pending"
     twice_trainval = r"\pending"
+    repeat = RUNS / "ssmzoh_guard_seed42_repeat.json"
+    repeat_macros = {"RepeatEsr": r"\pending", "RepeatDelta": r"\pending"}
+    if repeat.exists():
+        again = json.loads(repeat.read_text(encoding="utf-8"))["test_last"][ESR]
+        base = next(r["test_last"][ESR] for r in ssm if r["seed"] == 42)
+        repeat_macros = {
+            "RepeatEsr": f"{again:.3f}",
+            "RepeatDelta": f"{abs(again - base):.3f}",
+        }
+
     quiet_loud = r"\pending"
     if SEGMENTS.exists():
         ratios = [
@@ -345,6 +355,7 @@ def main() -> None:
     macros = {
         "pending": r"\textbf{[pending]}",
         "QuietLoudRatioRange": quiet_loud,
+        **repeat_macros,
         "PubOutlierValLone": published_val,
         "TwiceMeanAbsTrainval": twice_trainval,
         "PubSFourTFLesr": f"{s4tfl['test']['esr']:.3f}",
