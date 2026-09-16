@@ -1,0 +1,1 @@
+uv run python scripts/run_m4_smoke.py --model S3 --device fulltone_full_drive_2 --seed 0 --run-id m4_memory_preflight_fulltone_s3t33_seed0_v1 --preflight --memory-taps

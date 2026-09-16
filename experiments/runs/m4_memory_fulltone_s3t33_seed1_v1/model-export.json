@@ -1,0 +1,5 @@
+{
+  "model": "S3",
+  "latency_samples": 0,
+  "state_dict": "checkpoints/model-state.pt"
+}

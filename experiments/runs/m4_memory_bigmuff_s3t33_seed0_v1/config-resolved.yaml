@@ -1,0 +1,160 @@
+campaign:
+  schema_version: 1
+  sample_rate: 48000
+  tier: INTERNAL_DEV
+  devices:
+  - fulltone_full_drive_2
+  - electro_harmonix_big_muff
+  models:
+  - B0
+  - B2
+  - S3
+  - S4
+  seeds:
+  - 0
+  - 1
+  - 2
+  context_samples: 6346
+  output_samples: 8192
+  batch_size: 2
+  optimizer_steps: 200
+  validation_interval_steps: 40
+  validation_samples: 240000
+  evaluation_block_samples: 8192
+  optimizer:
+    name: Adam
+    learning_rate: 0.004
+    weight_decay: 3.17e-07
+  gradient_clip_norm: 1.0
+  loss:
+    mse: 1.0
+    mrstft: 0.0005
+    spline_curvature: 1.0e-05
+    normalized_residual_energy: 0.001
+  deterministic_mode: warn_only
+  precision: float32
+  checkpoint_policy: lowest_validation_esr
+  preflight:
+    optimizer_steps: 2
+    validation_interval_steps: 1
+    validation_samples: 32768
+  notes:
+  - Every optimizer step sees the same two 8192-sample output regions.
+  - A shared 6346-sample causal context covers the official A2 receptive field.
+  - M4 is a bounded smoke test and cannot establish final hypotheses.
+model: S3
+device: electro_harmonix_big_muff
+seed: 0
+preflight: false
+recovery: null
+memory:
+  schema_version: 1
+  phase: M4_MEMORY
+  base_protocol: configs/training/m4_smoke.yaml
+  diagnosis: experiments/summaries/m4_memory/autopsy/DIAGNOSIS_fulltone_s3_vs_a2.md
+  autopsy_bounds: experiments/summaries/m4_memory/autopsy/{cascade_bound,reachable_bound}.json
+  hypothesis: The Fulltone S3 gap is set by the linear memory of the structured core
+    (two 17-tap FIRs, 33 samples in cascade), not by the parameter budget. Giving
+    the cascade at least 63 samples of linear memory closes most of it.
+  intervention: pre_fir_taps_and_post_fir_taps_17_to_33
+  models:
+  - S3
+  - S4
+  taps: 33
+  cascade_memory_samples: 65
+  residual_channels: 8
+  parameters: 1276
+  seeds:
+  - 0
+  - 1
+  - 2
+  devices:
+  - fulltone_full_drive_2
+  - electro_harmonix_big_muff
+  fixed_dimensions:
+  - data
+  - split
+  - loss
+  - context
+  - optimizer
+  - optimizer_steps
+  - checkpoint_policy
+  - residual_channels
+  - num_knots
+  - slow_state
+  references:
+    fulltone_full_drive_2:
+      S3:
+      - m4_fulltone_s3_seed0_v1
+      - m4_fulltone_s3_seed1_v1
+      - m4_fulltone_s3_seed2_v1
+      S4:
+      - m4_fulltone_s4_seed0_v1
+      - m4_fulltone_s4_seed1_v1
+      - m4_fulltone_s4_seed2_v1
+      B0:
+      - m4_fulltone_b0_seed0_v1
+      - m4_fulltone_b0_seed1_v1
+      - m4_fulltone_b0_seed2_v1
+    electro_harmonix_big_muff:
+      S3:
+      - m4_bigmuff_s3_seed0_v1
+      - m4_bigmuff_s3_seed1_v1
+      - m4_bigmuff_s3_seed2_v1
+      S4:
+      - m4_bigmuff_s4_seed0_v1
+      - m4_bigmuff_s4_seed1_v1
+      - m4_bigmuff_s4_seed2_v1
+      B0:
+      - m4_bigmuff_b0_seed0_v1
+      - m4_bigmuff_b0_seed1_v1
+      - m4_bigmuff_b0_seed2_v1
+  decision:
+    primary_model: S3
+    primary_device: fulltone_full_drive_2
+    statistic: median_over_seeds
+    band_hz:
+    - 100
+    - 300
+    train_window_steps:
+    - 101
+    - 200
+    confirmed:
+      test_esr_max: 0.125
+      band_error_max: 0.05
+      transfer_loss_max: 0.03
+    refuted:
+      test_esr_min: 0.17
+    discriminant:
+      train_window_esr_transfer_limited_max: 0.11
+      train_window_esr_optimisation_limited_min: 0.13
+    regression:
+      device: electro_harmonix_big_muff
+      median_test_esr_max_increase: 0.05
+  read_only_bounds:
+    ridge_fir_test_esr_by_cascade_memory:
+      17: 0.24
+      33: 0.178
+      65: 0.12
+      97: 0.116
+      129: 0.119
+    ridge_max_coefficient_displacement: 0.15
+    one_pole_plus_direct_best_test_esr: 0.142
+    identity_test_esr: 0.237
+  notes:
+  - Single intervention. Every other M4 setting, including width 8, is fixed.
+  - Preregistered post-freeze diagnostic inside the M4 lineage; PROTOCOL_LOCK M4-P4-v1
+    and the NO-GO verdict are not modified by these runs.
+  - S4 rows are optional and informational; the decision uses S3 only.
+  - Big Muff is a regression control, not a claim.
+execution:
+  optimizer_steps: 200
+  validation_interval_steps: 40
+  validation_samples: 240000
+fssr_model:
+  taps: 33
+  num_knots: 17
+  slow_hidden_size: 8
+  slow_decimation: 64
+  residual_channels: 8
+  oversampling_filter_taps: 33
