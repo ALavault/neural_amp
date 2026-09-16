@@ -46,7 +46,14 @@ def main() -> None:
     level = targets.pow(2).mean(-1).sqrt().flatten()
     half = len(level) // 2
     quiet = set(map(int, level.argsort()[:half]))
+    # An inverted output has L1 = 2 E|y|; the published tables give validation
+    # losses, so the level of the pooled training and validation recordings is
+    # the reference for them.
+    trainval = bench.data_module("trainval")
+    trainval.setup("fit")
+    pooled = torch.stack([target for _, target in trainval.trainval_dataset])
     record = {
+        "trainval_target_mean_abs": float(pooled.abs().mean()),
         "segment_rms": level.tolist(),
         "quiet_segments": sorted(quiet),
         "runs": {},

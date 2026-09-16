@@ -200,7 +200,7 @@ with the default decay of 0.01. Decay pulls these log-parameters towards zero,
 that is towards $\Delta_c = 1$ and $\mathrm{Re}\,\lambda_{c,n} = -1$, which
 shortens the memory of every layer; we honour the exemption. Second, the
 MR-STFT term is invariant to the sign of the output and, even at a weight of
-0.1, stays 4 to 20 times larger than the L1 term on validation in our correctly
+0.1, stays 4 to 28 times larger than the L1 term on validation in our correctly
 signed runs, so gradient descent can fit the spectrum with an inverted waveform.
 SSM-WaveNet trained with the first change only did: after
 \InvertedStep{} steps its test ESR was \InvertedEsr, and \InvertedNegatedEsr{}
@@ -249,9 +249,8 @@ and budget, and show the published values for context.
 With both training changes, S4-TF-L-16 reaches a test ESR of
 \ChangesSFourTFLesrMeanStd{} ($n=\ChangesSFourTFLn$), \ChangesReduction{} below
 its re-run with the released training on the seeds trained both ways, but lower
-on only \ChangesLowerSeeds{} of those \ChangesPairedSeeds{} seeds (published:
-\PubSFourTFLesr): part of any difference between training recipes comes from the
-seed, not from the recipe. SSM-WaveNet, trained the same way, reaches
+on only \ChangesLowerSeeds{} of those \ChangesPairedSeeds{} seeds: for this
+baseline, the seed accounts for as much of the difference as the training does. SSM-WaveNet, trained the same way, reaches
 \SSMesrMeanStd{} ($n=\SSMn$), \SSMRatio{} times lower than S4-TF-L-16 on average
 and lower on \SSMLowerSeeds{} of \PairedSeeds{} paired seeds, with \ParamRatio{}
 times fewer parameters, no TFiLM and no look-ahead; its MR-STFT loss is
@@ -259,7 +258,7 @@ times fewer parameters, no TFiLM and no look-ahead; its MR-STFT loss is
 With a learned $b$ and the released training, the same network reaches
 \VoneSSMesr{} and is lower than our configuration on \VoneLowerSeeds{} of
 \VonePairedSeeds{} paired seeds, so the two parametrisations are separated by
-less than the seed spread. Seeds matter more than one might expect on this benchmark: test ESR
+less than the seed spread. Seeds matter throughout: test ESR
 spans \SSMesrMin{}--\SSMesrMax{} for SSM-WaveNet and
 \ChangesSFourTFLesrMin{}--\ChangesSFourTFLesrMax{} for S4-TF-L-16, so a single
 run tells little. Over the \GuardRuns{} guarded runs, the polarity guard fired
@@ -274,7 +273,10 @@ stopped run had \InvertedLone{} (\InvertedNegatedLone{} negated). The three
 published neural models with a test ESR above 1, \PubOutliers, have L1 losses of
 \PubOutlierLoneRange{} and MR-STFT losses within the range of the other models,
 which is consistent with inverted but otherwise fitted outputs; we cannot
-confirm it without their checkpoints. Any loss that compares magnitude spectra
+confirm it without their checkpoints. Two of them have a validation L1 of
+\PubOutlierValLone{} as well, against $2\,\mathrm{E}|y| = \TwiceMeanAbsTrainval$
+on the training and validation recordings, so a check on validation data would
+have caught them during training. Any loss that compares magnitude spectra
 alone has this symmetry, so training with one should check the sign of the
 output on validation data.
 

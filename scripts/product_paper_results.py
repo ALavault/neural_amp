@@ -316,6 +316,10 @@ def main() -> None:
             mantissa, exponent = f"{check['max_abs_deviation']:.0e}".split("e")
             recurrence = f"{mantissa}\\times10^{{{int(exponent)}}}"
 
+    # An inverted output has L1 = 2 E|y| on any set; the published tables give
+    # validation losses too, so the same test applies to them.
+    published_val = r"\pending"
+    twice_trainval = r"\pending"
     quiet_loud = r"\pending"
     if SEGMENTS.exists():
         ratios = [
@@ -323,10 +327,22 @@ def main() -> None:
             for run in json.loads(SEGMENTS.read_text(encoding="utf-8"))["runs"].values()
         ]
         quiet_loud = f"{min(ratios):.1f}--{max(ratios):.1f}"
+        level = json.loads(SEGMENTS.read_text(encoding="utf-8"))[
+            "trainval_target_mean_abs"
+        ]
+        twice_trainval = f"{2 * level:.4f}"
+        inverted_on_val = sorted(
+            PUBLISHED["models"][name]["val"]["l1"]
+            for name in published_outliers()
+            if PUBLISHED["models"][name]["val"]["l1"] > 1.5 * level
+        )
+        published_val = f"{min(inverted_on_val):.4f} and {max(inverted_on_val):.4f}"
 
     macros = {
         "pending": r"\textbf{[pending]}",
         "QuietLoudRatioRange": quiet_loud,
+        "PubOutlierValLone": published_val,
+        "TwiceMeanAbsTrainval": twice_trainval,
         "PubSFourTFLesr": f"{s4tfl['test']['esr']:.3f}",
         "PubSFourTFLparams": s4tfl["params"],
         "SSMparams": params_label(parameters["ssm"]),
