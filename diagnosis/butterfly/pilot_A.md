@@ -99,3 +99,28 @@ non-déterminisme GPU donne un écart-type de 0,18 sur le log de l'ESR de test
   213, 292, 385, 647, 706, 808, 854, 894 et 915.
 - **Rejeu k = 0** : dernier checkpoint identique bit à bit au témoin, même ESR de test ;
   pertes de validation identiques sur les 923 époques. Le bras « rejoue » est valide.
+
+## Fourche 100, les deux bras complets (2026-09-17 22 h 55, mesures)
+
+Chiffres de `scripts/product_fork_pilot_analysis.py`, écrits dans
+`diagnosis/butterfly/pilot_A_results.json`.
+
+- **« Décide »** : ESR 0,0341 / 0,0512 / 0,0378 / 0,0382 / 0,0365 ; **s = 0,156** ;
+  Δ = +0,405, +0,102, +0,112, +0,068 ; arrêts entre 4 599 et 6 461 pas. Les dix divisions
+  du learning rate tombent à des époques différentes chez chaque enfant ; la première à
+  35, 98, 175 et 114 contre 113 pour le témoin.
+- **« Rejoue »** : ESR 0,0341 / 0,0339 / 0,0336 / 0,0339 / 0,0334 ; **s = 0,009** ;
+  Δ = −0,007, −0,015, −0,007, −0,023 ; mêmes bascules de garde que le témoin ; écart de
+  validation aux divisions imposées au plus 0,063 en log, atteint par k = 3 à la deuxième
+  division.
+- **Écart de sortie au témoin** : « décide » 8,7·10⁻⁴ à 7,2·10⁻³ ; « rejoue » 4,2·10⁻⁴ à
+  7,3·10⁻⁴, soit 2 à 17 fois moins. L'erreur du témoin vaut 0,0245 sur la même mesure.
+- **Critères pré-enregistrés de A, à la fourche 100** : s(décide) ≥ 0,10 → 0,156 ;
+  s(rejoue) ≤ s(décide)/2 = 0,078 → 0,009 ; rapport des moyennes des |Δ| ≥ 2 → 13,2. Les
+  trois sont satisfaits. **Le verdict du pilote reste suspendu au contrôle positif P0 de
+  la fourche 5**, comme écrit avant les runs.
+- **Mécanisme descriptif** : k = 1 diverge le plus tôt (division à l'époque 35 contre 113)
+  et porte le plus grand |Δ| (0,405). Les trois autres divergent aux époques 98, 113 et
+  113 et ne se départagent pas (0,102, 0,112, 0,068).
+- Coût : 15 runs de 96 à 182 min, le GPU étant partagé. Une tentative a échoué faute de
+  mémoire (k = 4, « décide ») et a été relancée par la file.
