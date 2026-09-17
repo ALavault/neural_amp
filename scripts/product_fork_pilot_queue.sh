@@ -5,7 +5,8 @@
 #    for bit (determinism at batch size 16), or the queue stops.
 # 2. Fork 100, k = 0 "decide", then k = 0 "replay", which must reproduce it bit for bit.
 # 3. Fork 100, k = 1..4 in both arms; fork 5, k = 0..4 "decide".
-# 4. The S4-TF-L-16 same-seed repeats of diagnosis/seeds/hypotheses_nested.md.
+# 4. If P0 holds, fork 5 "replay": k = 0 must reproduce "decide" k = 0, then k = 1..4.
+# 5. The S4-TF-L-16 same-seed repeats of diagnosis/seeds/hypotheses_nested.md.
 set -u
 export TMPDIR=/fastdata/lavaulta/tmp
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
@@ -72,6 +73,28 @@ done
 for k in 0 1 2 3 4; do
   pilot "butterfly_ssm_seed42_f5_decide_k${k}" child --fork 5 --arm decide --k "${k}"
 done
+
+# Addendum (diagnosis/butterfly/pilot_A_fork5_replay.md): the "replay" arm at fork 5,
+# only if the positive control P0 holds.
+if python3 - <<'EOF'
+import json, math, statistics, sys
+esr = [json.load(open(f"demo/butterfly/butterfly_ssm_seed42_f5_decide_k{k}.json"))
+       ["test_last"]["metric/test/esr"] for k in range(5)]
+s = statistics.stdev(math.log(v) for v in esr)
+print(f"=== fork 5 decide: s = {s:.3f}, P0 {'holds' if s >= 0.10 else 'fails, replay arm skipped'}")
+sys.exit(0 if s >= 0.10 else 1)
+EOF
+then
+  pilot butterfly_ssm_seed42_f5_replay_k0 child --fork 5 --arm replay --k 0
+  if grep -q '"identical_to_decide_k0": true' demo/butterfly/butterfly_ssm_seed42_f5_replay_k0.json; then
+    echo "=== fork 5 replay k0 identical to decide k0"
+    for k in 1 2 3 4; do
+      pilot "butterfly_ssm_seed42_f5_replay_k${k}" child --fork 5 --arm replay --k "${k}"
+    done
+  else
+    echo "=== fork 5 replay k0 differs from decide k0, fork 5 replay arm stopped"
+  fi
+fi
 echo "=== pilot finished $(date '+%a %H:%M')"
 
 bash scripts/product_nablafx_queue.sh

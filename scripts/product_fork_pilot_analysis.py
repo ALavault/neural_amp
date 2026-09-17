@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
-"""Verdict of pilot A against the predictions in diagnosis/butterfly/pilot_A.md.
+"""Verdict of pilot A against the predictions in diagnosis/butterfly/pilot_A.md and its
+fork 5 addendum, diagnosis/butterfly/pilot_A_fork5_replay.md.
 
 Read-only, CPU. For each fork and arm: test ESR of the last checkpoint of k = 0..4,
 s = standard deviation of log ESR over the five runs, deltas against k = 0, the
 learning-rate halvings and final step of each run, and the ESR between each child's
-output and the k = 0 output on the test input. Writes
+output and the k = 0 output on the test input. For a "replay" arm, also whether each
+child's polarity flips match the control's and the gap between its validation loss and
+the control's before each imposed halving. Writes
 diagnosis/butterfly/pilot_A_results.json.
 """
 
 from __future__ import annotations
 
+import csv
 import itertools
 import json
 import math
@@ -27,6 +31,8 @@ import torch  # noqa: E402
 RECORDS = ROOT / "demo/butterfly"
 OUT = ROOT / "diagnosis/butterfly/pilot_A_results.json"
 ESR = "metric/test/esr"
+# Largest |gap| of the fork 100 "replay" children k = 1 and 2 (addendum).
+SYNCHRONIZED = 0.06
 
 
 def run_id(fork: int, arm: str, k: int) -> str:
@@ -74,13 +80,50 @@ def halvings(lr_by_epoch: dict[str, float]) -> list[int]:
     ]
 
 
+def validation(name: str) -> dict[int, float]:
+    with (bench.RUNS_DIR / f"nablafx_{name}/logs/metrics.csv").open() as stream:
+        return {
+            int(row["epoch"]): float(row["loss/val/tot"])
+            for row in csv.DictReader(stream)
+            if row["loss/val/tot"]
+        }
+
+
+def halving_gaps(child: str, control: str, epochs: list[int]) -> list[float]:
+    """Log ratio of mean validation losses over the 10 epochs before each halving."""
+    mine, theirs = validation(child), validation(control)
+    return [
+        math.log(
+            sum(mine[e] for e in range(max(0, h - 10), h))
+            / sum(theirs[e] for e in range(max(0, h - 10), h))
+        )
+        for h in epochs
+    ]
+
+
+def compare_arms(decide: dict, replay: dict) -> dict:
+    mean_decide = statistics.fmean(abs(d) for d in decide["delta"])
+    mean_replay = statistics.fmean(abs(d) for d in replay["delta"])
+    ratio = mean_decide / mean_replay if mean_replay > 0 else math.inf
+    return {
+        "s_decide": decide["s"],
+        "s_replay": replay["s"],
+        "mean_abs_delta_ratio": ratio,
+        "supported": decide["s"] >= 0.10
+        and replay["s"] <= decide["s"] / 2
+        and ratio >= 2,
+        "refuted_dynamics": replay["s"] >= 0.10 and ratio < 2,
+        "refuted_stability": decide["s"] < 0.10 and replay["s"] < 0.10,
+    }
+
+
 def main() -> None:
     torch.set_num_threads(16)
     data = bench.data_module("test")
     data.setup("test")
     inputs = torch.stack([x for x, _ in data.test_dataset])
     out: dict = {"groups": {}}
-    for fork, arm in ((100, "decide"), (100, "replay"), (5, "decide")):
+    for fork, arm in ((100, "decide"), (100, "replay"), (5, "decide"), (5, "replay")):
         names = [run_id(fork, arm, k) for k in range(5)]
         if not all((RECORDS / f"{n}.json").exists() for n in names):
             continue
@@ -103,9 +146,6 @@ def main() -> None:
             "nudge": [r["nudge"] for r in records],
             "polarity_flips": [r["polarity_flips"] for r in records],
         }
-        if arm == "replay":
-            group["identical_to_decide_k0"] = records[0].get("identical_to_decide_k0")
-        out["groups"][f"fork{fork}_{arm}"] = group
         print(
             f"fork {fork:3d} {arm:6s} ESR {[round(v, 4) for v in group['test_esr']]}"
             f" s {group['s']:.3f} delta {[round(d, 3) for d in group['delta']]}"
@@ -113,6 +153,24 @@ def main() -> None:
         )
         print(f"   output ESR vs k0 {[f'{v:.2e}' for v in output_esr]}")
         print(f"   halvings {group['halvings']}")
+        if arm == "replay":
+            control = run_id(fork, "decide", 0)
+            imposed = group["halvings"][0]
+            flips = json.loads((RECORDS / f"{control}.json").read_text())[
+                "polarity_flips"
+            ]
+            gaps = [halving_gaps(n, control, imposed) for n in names[1:]]
+            group.update(
+                identical_to_decide_k0=records[0].get("identical_to_decide_k0"),
+                flips_match_control=[r["polarity_flips"] == flips for r in records[1:]],
+                halving_gaps=gaps,
+                synchronized=[all(abs(g) <= SYNCHRONIZED for g in c) for c in gaps],
+            )
+            print(
+                f"   flips match control {group['flips_match_control']}"
+                f" synchronized {group['synchronized']}"
+            )
+        out["groups"][f"fork{fork}_{arm}"] = group
 
     groups = out["groups"]
     verdict = {}
@@ -121,20 +179,32 @@ def main() -> None:
     if "fork5_decide" in groups:
         verdict["P0_positive_control"] = groups["fork5_decide"]["s"] >= 0.10
     if {"fork100_decide", "fork100_replay"} <= groups.keys():
-        decide, replay = groups["fork100_decide"], groups["fork100_replay"]
-        mean_decide = statistics.fmean(abs(d) for d in decide["delta"])
-        mean_replay = statistics.fmean(abs(d) for d in replay["delta"])
-        ratio = mean_decide / mean_replay if mean_replay > 0 else math.inf
+        arms = compare_arms(groups["fork100_decide"], groups["fork100_replay"])
         verdict.update(
-            s_decide=decide["s"],
-            s_replay=replay["s"],
-            mean_abs_delta_ratio=ratio,
-            A_supported=decide["s"] >= 0.10
-            and replay["s"] <= decide["s"] / 2
-            and ratio >= 2,
-            A_refuted_dynamics=replay["s"] >= 0.10 and ratio < 2,
-            A_refuted_stability=decide["s"] < 0.10 and replay["s"] < 0.10,
+            s_decide=arms["s_decide"],
+            s_replay=arms["s_replay"],
+            mean_abs_delta_ratio=arms["mean_abs_delta_ratio"],
+            A_supported=arms["supported"],
+            A_refuted_dynamics=arms["refuted_dynamics"],
+            A_refuted_stability=arms["refuted_stability"],
         )
+    if {"fork5_decide", "fork5_replay"} <= groups.keys():
+        replay = groups["fork5_replay"]
+        arms = compare_arms(groups["fork5_decide"], replay)
+        largest = max(range(4), key=lambda i: abs(replay["delta"][i]))
+        verdict["fork5"] = {
+            "replay_valid": replay["identical_to_decide_k0"],
+            "s_decide": arms["s_decide"],
+            "s_replay": arms["s_replay"],
+            "mean_abs_delta_ratio": arms["mean_abs_delta_ratio"],
+            "B_schedule_dominates": arms["supported"],
+            "weights_count": arms["refuted_dynamics"],
+            "largest_replay_child": {
+                "k": largest + 1,
+                "synchronized": replay["synchronized"][largest],
+                "flips_match_control": replay["flips_match_control"][largest],
+            },
+        }
     out["verdict"] = verdict
     print(json.dumps(verdict, indent=1))
     OUT.write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8")
