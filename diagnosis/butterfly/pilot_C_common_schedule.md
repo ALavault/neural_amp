@@ -6,9 +6,11 @@ Script et file restent à écrire ; ils suivront ce document sans le modifier.
 
 ## Question
 
-Sur Big Muff, SSM-WaveNet ZOH avec garde, l'écart-type du log de l'ESR de test entre
-graines vaut 0,37 (analyse emboîtée, `diagnosis/seeds/hypotheses_nested.md`) et 0,53
-sur les 6 runs non déterministes. **C** : cet écart se réduit-il de moitié au moins
+Sur Big Muff, SSM-WaveNet ZOH avec garde, l'écart-type entre graines du log de l'ESR
+de test vaut 0,37 dans l'analyse emboîtée (3 graines × 2 runs,
+`diagnosis/seeds/hypotheses_nested.md`) et 0,53 sur les premiers runs des 3 graines
+(effet run, `global_factor.txt` ; corrigé le 2026-09-17, le texte initial disait « sur
+les 6 runs »). **C** : cet écart se réduit-il de moitié au moins
 quand les décisions prises sur la validation (divisions du learning rate, arrêt) sont
 remplacées par un calendrier commun fixé d'avance ?
 
