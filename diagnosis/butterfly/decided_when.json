@@ -43,6 +43,88 @@
   },
   "settles_at_epoch": null,
   "val_ranking_settles_at_epoch": 652,
+  "pairs": [
+   {
+    "pair": [
+     0,
+     1
+    ],
+    "gap_log_esr": 0.4046780989224645,
+    "settles_at_epoch": 191
+   },
+   {
+    "pair": [
+     1,
+     4
+    ],
+    "gap_log_esr": 0.33672751985904426,
+    "settles_at_epoch": 115
+   },
+   {
+    "pair": [
+     1,
+     2
+    ],
+    "gap_log_esr": 0.3029574923522912,
+    "settles_at_epoch": 98
+   },
+   {
+    "pair": [
+     1,
+     3
+    ],
+    "gap_log_esr": 0.29222745006932604,
+    "settles_at_epoch": 176
+   },
+   {
+    "pair": [
+     0,
+     3
+    ],
+    "gap_log_esr": 0.11245064885313842,
+    "settles_at_epoch": 652
+   },
+   {
+    "pair": [
+     0,
+     2
+    ],
+    "gap_log_esr": 0.10172060657017316,
+    "settles_at_epoch": 296
+   },
+   {
+    "pair": [
+     0,
+     4
+    ],
+    "gap_log_esr": 0.06795057906342006,
+    "settles_at_epoch": 269
+   },
+   {
+    "pair": [
+     3,
+     4
+    ],
+    "gap_log_esr": 0.04450006978971832,
+    "settles_at_epoch": null
+   },
+   {
+    "pair": [
+     2,
+     4
+    ],
+    "gap_log_esr": 0.03377002750675318,
+    "settles_at_epoch": 454
+   },
+   {
+    "pair": [
+     2,
+     3
+    ],
+    "gap_log_esr": 0.01073004228296521,
+    "settles_at_epoch": null
+   }
+  ],
   "halvings": [
    [
     113,
@@ -185,6 +267,88 @@
   },
   "settles_at_epoch": null,
   "val_ranking_settles_at_epoch": 857,
+  "pairs": [
+   {
+    "pair": [
+     0,
+     4
+    ],
+    "gap_log_esr": 0.022773682575616693,
+    "settles_at_epoch": null
+   },
+   {
+    "pair": [
+     3,
+     4
+    ],
+    "gap_log_esr": 0.015797448748323135,
+    "settles_at_epoch": null
+   },
+   {
+    "pair": [
+     1,
+     4
+    ],
+    "gap_log_esr": 0.01558917326472154,
+    "settles_at_epoch": null
+   },
+   {
+    "pair": [
+     0,
+     2
+    ],
+    "gap_log_esr": 0.015050194527437322,
+    "settles_at_epoch": null
+   },
+   {
+    "pair": [
+     2,
+     3
+    ],
+    "gap_log_esr": 0.008073960700143896,
+    "settles_at_epoch": 857
+   },
+   {
+    "pair": [
+     1,
+     2
+    ],
+    "gap_log_esr": 0.00786568521654215,
+    "settles_at_epoch": null
+   },
+   {
+    "pair": [
+     2,
+     4
+    ],
+    "gap_log_esr": 0.007723488048179187,
+    "settles_at_epoch": null
+   },
+   {
+    "pair": [
+     0,
+     1
+    ],
+    "gap_log_esr": 0.0071845093108951485,
+    "settles_at_epoch": 597
+   },
+   {
+    "pair": [
+     0,
+     3
+    ],
+    "gap_log_esr": 0.006976233827293583,
+    "settles_at_epoch": null
+   },
+   {
+    "pair": [
+     1,
+     3
+    ],
+    "gap_log_esr": 0.00020827548360165862,
+    "settles_at_epoch": 577
+   }
+  ],
   "halvings": [
    [
     113,

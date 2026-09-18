@@ -59,9 +59,18 @@ bras. Elle suit la distance parcourue dans l'espace des poids :
 - ρ(‖Δθ‖, nombre de segments au-dessus) = +0,91 (p = 0,001) ;
 - ρ(barrière, ESR final) = +0,43 (p = 0,29) — pas de lien établi.
 
-L'enfant « rejoue » le plus éloigné (k3, ‖Δθ‖ = 7,77) présente lui aussi 12 segments sur 12
-au-dessus de leur droite, alors que son ESR final ne diffère du témoin que de 0,6 %. Inversement
-décide k2, dont l'ESR final excède celui du témoin de 11 %, n'a aucune barrière.
+Or c'est exactement ce qu'on attend d'un **bassin unique mais courbe** : la corde qui joint deux
+points d'une vallée convexe passe d'autant plus haut que les deux points sont éloignés, et le
+comptage 12/12 teste la présence d'une courbure, pas sa hauteur. L'enfant « rejoue » le plus
+éloigné (k3, ‖Δθ‖ = 7,77) présente lui aussi 12 segments sur 12 au-dessus de leur droite, mais avec
+une barrière dix fois plus basse (+4 % contre +41 %), et son ESR final ne diffère du témoin que de
+0,6 %. Sept des huit enfants sont donc compatibles avec un bassin unique et courbe.
+
+**L'exception est décide k1, et c'est elle le résultat.** Elle est plus proche du témoin que
+décide k3 (8,22 contre 8,37) et sa barrière est 5,2 fois plus haute (+0,0141 contre +0,0027) : aucune
+fonction croissante de la distance ne rend compte des deux à la fois. Le ρ de rang, lui, masque cette
+exception puisqu'il ne lit que l'ordre. Inversement décide k2, dont l'ESR final excède celui du
+témoin de 11 %, n'a aucune barrière.
 
 **Négatif.** Les distances ne séparent pas non plus les bras : moyenne 7,26 (décide) contre 6,40
 (rejoue), plages entièrement chevauchantes (6,07–8,37 contre 5,33–7,77). Les deux bras diffèrent
@@ -70,19 +79,26 @@ d'un facteur 17 en dispersion d'ESR et de presque rien en distance parcourue.
 **Négatif.** La décomposition par famille de paramètres (distance relative à la norme de la famille
 chez le témoin) ne sépare pas davantage : le bras « décide » bouge un peu plus dans six familles
 sur sept, mais chaque plage chevauche celle de l'autre bras — par exemple sur les convolutions,
-0,201–0,305 (décide) contre 0,178–0,277 (rejoue). Indicatif seulement, la structure interne est
-très inégale : les taux de décroissance `log_A_real` (0,16–0,28) et les convolutions (0,18–0,31)
-bougent dix fois plus, relativement, que les pas de temps `log_dt` (0,014–0,023) et les fréquences
-de pôles `A_imag` (0,021–0,030). Après l'époque 100, l'entraînement ne re-règle pratiquement plus
-les fréquences des pôles ; il ajuste les décroissances et le mélange.
+0,201–0,305 (décide) contre 0,178–0,277 (rejoue).
+
+Ces distances relatives ne se comparent **pas** d'une famille à l'autre : `log_dt` et `log_A_real`
+sont des logarithmes, dont la norme est fixée par la valeur moyenne du paramètre (−4,52 pour
+`log_dt`) et non par son amplitude de variation. Converti en grandeur physique, tout bouge du même
+ordre : entre le témoin et décide k1, le pas de temps dt change de 12 % en moyenne quadratique, le
+taux de décroissance de 20 %, et la fréquence de pôle de 0,17 rad/s pour un écart-type de 3,54 dans
+la population. Pour rejoue k3 : 8,6 %, 15,5 % et 0,15 rad/s. Aucune famille n'est gelée après
+l'époque 100, et aucune ne distingue les deux bras.
 
 ## Ce que cela permet de conclure
 
 - Un changement d'ordre des opérations flottantes suffit à faire changer de bassin : décide k1 est
-  séparé du témoin par une barrière franche, visible dans chaque segment de test.
-- Mais la connectivité linéaire **ne fournit pas la signature cherchée**. La hauteur de barrière est
-  prédite par la distance parcourue (ρ = 0,90), pas par le fait de prendre ses propres décisions, et
-  elle n'est pas liée de façon établie à l'écart d'ESR final (ρ = 0,43, n. s.).
+  séparé du témoin par une barrière franche, visible dans chaque segment de test, et
+  disproportionnée par rapport à la distance qui les sépare — le seul enfant sur huit qui échappe
+  à l'explication par un bassin unique et courbe.
+- Mais la connectivité linéaire **ne fournit pas la signature cherchée**. Sur les sept autres
+  enfants, la hauteur de barrière est prédite par la distance parcourue (ρ = 0,90), pas par le fait
+  de prendre ses propres décisions, et elle n'est pas liée de façon établie à l'écart d'ESR final
+  (ρ = 0,43, n. s.). Une barrière entre deux modèles mesure d'abord leur éloignement.
 - Les décisions pilotées par la validation ne déplacent donc pas les poids plus loin, ni dans des
   familles de paramètres différentes. Ce qu'elles changent est l'endroit où l'on s'arrête sur la
   surface d'erreur, pas l'ampleur du trajet. Cela contredit l'idée intuitive d'une divergence qui

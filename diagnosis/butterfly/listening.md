@@ -19,7 +19,7 @@ segment parce que le protocole réinitialise l'état du modèle au début de cha
 fenêtre à cheval transporterait ce transitoire. Chaque côté modèle est corrigé d'un gain des
 moindres carrés contre la cible, propre à l'extrait, pour qu'un écart de niveau ne donne pas la
 réponse ; les corrections appliquées valent au plus 0,25 dB. L'épreuve porte donc sur ce qui
-reste au-delà du niveau. A/B tiré au chargement, X tiré à chaque essai, dix essais par bloc.
+reste au-delà du niveau. A/B tiré au chargement, X tiré à chaque essai, dix essais par bloc. Vérifié sur les extraits rendus : le début de fenêtre ne porte pas de transitoire de réinitialisation — l'ESR sur 0,05–0,7 s de l'extrait n'est pas supérieure à celle du reste dans cinq cas sur six.
 
 Trois paires par extrait, dont deux témoins de l'épreuve elle-même :
 
@@ -44,7 +44,7 @@ de 2 à 6e−4, donne le niveau de hasard attendu.
 ## Lecture pré-déclarée
 
 Trois extraits × dix essais = trente essais par paire ; 20 justes sur 30 donnent p &lt; 0,05
-(binomiale unilatérale), 21 sur 30 donnent p &lt; 0,02.
+(binomiale unilatérale), 21 sur 30 donnent p ≈ 0,021.
 
 - **Témoin contre rejoue k1 détecté (≥ 20/30)** : l'épreuve fuit — repère visuel, indice de
   niveau, ou erreur de rendu. Les autres blocs ne valent alors rien et il faut corriger le

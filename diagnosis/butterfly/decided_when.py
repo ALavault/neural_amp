@@ -18,6 +18,7 @@ which the ranking no longer changes, next to the epoch of each child's first hal
 from __future__ import annotations
 
 import csv
+import itertools
 import json
 import math
 import sys
@@ -75,6 +76,15 @@ def settle(curves: list[dict[int, float]], final: list[float], epochs: list[int]
     return None
 
 
+def settle_pair(a: dict[int, float], b: dict[int, float], order: bool, epochs: list[int]):
+    """Same, for one pair: an exact ranking over five runs is decided by its near-ties,
+    so each pair is read on its own against the size of its final gap."""
+    for start, epoch in enumerate(epochs):
+        if all((a[e] < b[e]) == order for e in epochs[start:]):
+            return epoch
+    return None
+
+
 def group(name: str, run_ids: list[str], final: list[float], report: list[str]) -> dict:
     curves = [validation(r) for r in run_ids]
     bests = [running_best(c) for c in curves]
@@ -99,6 +109,25 @@ def group(name: str, run_ids: list[str], final: list[float], report: list[str]) 
         f" {out['val_ranking_settles_at_epoch']}, and matches the final ESR ranking from"
         f" epoch {out['settles_at_epoch']} (None = never, last common epoch {last},"
         f" {len(run_ids)} runs)"
+    )
+    pairs = [
+        {
+            "pair": [i, j],
+            "gap_log_esr": abs(math.log(final[i] / final[j])),
+            "settles_at_epoch": settle_pair(
+                bests[i], bests[j], final[i] < final[j], epochs
+            ),
+        }
+        for i, j in itertools.combinations(range(len(run_ids)), 2)
+    ]
+    out["pairs"] = sorted(pairs, key=lambda p: -p["gap_log_esr"])
+    report.append(
+        f"{name} per pair, |gap| in log -> epoch from which the running best keeps the"
+        " right order: "
+        + " ".join(
+            f"k{p['pair'][0]}k{p['pair'][1]}:{p['gap_log_esr']:.3f}->{p['settles_at_epoch']}"
+            for p in out["pairs"]
+        )
     )
     return out
 
@@ -135,10 +164,13 @@ def main() -> None:
             f"fork 100 {arm} rho(terminal val loss, final test ESR) = {rho.statistic:+.2f}"
             f" (p = {rho.pvalue:.2f}, n = 5)"
         )
+        # ESR is quadratic in the error amplitude where L1 + 0.1 MR-STFT is linear, so a
+        # factor 2 between the two log spreads is imposed by the definitions alone.
+        spread_val, spread_esr = spread([l for _, l in own]), spread(final)
         report.append(
-            f"fork 100 {arm} log spread: val {spread([l for _, l in own]):.3f},"
-            f" test ESR {spread(final):.3f},"
-            f" ratio {spread(final) / spread([l for _, l in own]):.1f}"
+            f"fork 100 {arm} log spread: val {spread_val:.3f}, test ESR {spread_esr:.3f},"
+            f" ratio {spread_esr / spread_val:.1f},"
+            f" beyond the definitional factor 2 {spread_esr / 2 / spread_val:.1f}"
         )
         # replay k0 is bitwise the control, that is decide k0: pool it once.
         pooled += [(l, f) for (_, l), f in zip(own, final)][1 if arm == "replay" else 0 :]
