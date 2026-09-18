@@ -51,9 +51,11 @@ AUDIO_DIR = OUT_DIR / "audio"
 SAMPLE_RATE = 48_000
 FADE_SECONDS = 0.020
 # The three most divergent test segments (model-to-model ESR 0.93, 0.65 and 0.43 of the
-# model-to-device error), and a window inside one segment.
+# model-to-device error). The window of each is the best second measured in
+# diagnosis/butterfly/when_audible.json, widened to 1.5 s: the gap lives in note tails,
+# and a 4.4 s excerpt averages them away under the sustain.
 SEGMENTS = (0, 6, 1)
-WINDOW = (0.3, 4.7)
+WINDOW_SECONDS = 1.5
 PEAK = 10 ** (-1 / 20)
 STAMP = int(time.time())
 MODELS = {
@@ -87,9 +89,16 @@ def main() -> None:
     rendered = {name: outputs(run, inputs).numpy()[:, 0] for name, run in MODELS.items()}
     rendered["reel"] = targets.numpy()[:, 0]
 
-    span = slice(int(WINDOW[0] * SAMPLE_RATE), int(WINDOW[1] * SAMPLE_RATE))
+    measured = {
+        row["segment"]: row
+        for row in json.loads(
+            (ROOT / "diagnosis/butterfly/when_audible.json").read_text()
+        )
+    }
     excerpts = []
     for index, segment in enumerate(SEGMENTS, start=1):
+        start = min(max(measured[segment]["best_second_at_s"] - 0.25, 0.3), 5.0 - WINDOW_SECONDS - 0.05)
+        span = slice(int(start * SAMPLE_RATE), int((start + WINDOW_SECONDS) * SAMPLE_RATE))
         reference = rendered["reel"][segment][span].astype(np.float64)
         clips, gains = {}, {}
         for name, signal in rendered.items():
@@ -122,7 +131,8 @@ def main() -> None:
                     "key": f"{index}_{left}_vs_{right}",
                     "index": index,
                     "segment": segment,
-                    "window": f"segment {segment}, {WINDOW[0]:g}-{WINDOW[1]:g} s",
+                    "window": f"segment {segment}, {start:.2f}-{start + WINDOW_SECONDS:.2f} s,"
+                    f" ecart median {measured[segment]['ratio_best_second_db']:.0f} dB sous le signal",
                     "label": label,
                     "left": files[left],
                     "right": files[right],
@@ -173,23 +183,25 @@ négatif, leurs sorties diffèrent d'un ESR de 5e-4.</p>
 est hors de portée de cette écoute. Si le réel est trivial et que le témoin contre
 décide k = 1 reste au hasard, alors l'écart d'ESR de 41 % est inaudible sur ce matériel.
 Dix essais par bloc : 20 justes sur 30 donnent p &lt; 0,05 pour un extrait.</p>
-<p class="meta"><b>Deuxième version.</b> La première prenait les segments 2, 6 et 10,
-choisis par position seule, et rien n'y était audible. Mesure faite après coup : c'étaient
-les segments les moins divergents des douze. L'écart entre modèles y vaut 0,17 à 0,65 fois
-l'erreur au réel, contre 0,93 sur le segment 0. Les extraits sont donc maintenant choisis
-<b>sur</b> cette divergence — c'est une épreuve au meilleur endroit possible, plus un
-échantillon aveugle : si rien n'est audible ici, rien ne l'est ailleurs sur cet appareil.</p>
-<p class="meta">Extraits pris dans un seul segment de test (0,3-4,7 s des 5 s). Chaque
-modèle est corrigé d'un gain des moindres carrés contre la cible, propre à l'extrait, pour
-qu'une différence de niveau ne donne pas la réponse ; l'épreuve porte donc sur ce qui reste
-au-delà du niveau. Une seule normalisation par extrait, identique pour tous les côtés,
-amène le crête à -1 dBFS. Le tirage est dans cette page : elle sert à écouter honnêtement,
-pas à résister à quelqu'un qui ouvre les outils de développement. Au casque.</p>
-<p class="meta">Le bouton <b>Différence</b> n'appartient pas à l'épreuve : il joue le signal
-témoin moins décide k1, normalisé, pour entendre <i>ce qui</i> sépare les deux modèles. Sur
-ce matériel cet écart est à 16 à 21 dB sous le signal dans les mêmes demi-octaves, ce qui
-est la configuration de masquage la plus défavorable : une fuzz à fond masque sa propre
-erreur.</p>
+<p class="meta"><b>Troisième version.</b> La première prenait trois segments par position
+seule et 4,4 s chacun : rien n'y était audible. Deux mesures ont suivi. D'abord les
+segments choisis etaient parmi les moins divergents des douze, l'ecart entre modeles y
+valant 0,17 a 0,65 fois l'erreur au reel contre 0,93 sur le segment 0. Ensuite, et
+surtout, l'ecart ne vit pas dans la tenue mais dans les <b>fins de note</b> : il s'y tient
+2 a 5 dB sous le signal, contre 16 a 25 dB pendant la tenue, et un extrait de 4,4 s noie
+ces quelques dixiemes de seconde sous le reste. Les extraits font donc maintenant 1,5 s,
+centres sur la meilleure seconde mesuree de chacun des trois segments les plus divergents.</p>
+<p class="meta">Le choix est donc fait <b>sur</b> la divergence, en segment comme en
+instant : c'est une epreuve au meilleur endroit possible, pas un echantillon aveugle. Si
+rien n'est audible ici, rien ne l'est ailleurs sur cet appareil. Chaque modele est corrige
+d'un gain des moindres carres contre la cible, propre a l'extrait, pour qu'un ecart de
+niveau ne donne pas la reponse ; une seule normalisation par extrait, identique pour tous
+les cotes, amene la crete a -1 dBFS. Le tirage est dans cette page : elle sert a ecouter
+honnetement, pas a resister a quelqu'un qui ouvre les outils de developpement. Au casque.</p>
+<p class="meta">Le bouton <b>Difference</b> n'appartient pas a l'epreuve : il joue le
+signal temoin moins decide k1, normalise, pour entendre <i>ce qui</i> separe les deux
+modeles. Ecoutez-le en premier sur un extrait : il dit si la difference a un caractere ou
+si ce n'est qu'un souffle.</p>
 <div id="excerpts"></div>
 <h2>Résultats</h2>
 <textarea id="results" readonly></textarea>

@@ -1,0 +1,133 @@
+[
+ {
+  "segment": 0,
+  "ratio_median_db": -15.910284042358398,
+  "ratio_best_second_db": -13.413910951614382,
+  "best_second_at_s": 4.0,
+  "by_kind_db": {
+   "attaque": -18.970449447631836,
+   "tenue": -15.975907325744629,
+   "chute": -5.294523239135742
+  }
+ },
+ {
+  "segment": 1,
+  "ratio_median_db": -24.253650665283203,
+  "ratio_best_second_db": -14.616246929168701,
+  "best_second_at_s": 0.32,
+  "by_kind_db": {
+   "attaque": -21.366165161132812,
+   "tenue": -25.34206199645996,
+   "chute": -2.3282740116119385
+  }
+ },
+ {
+  "segment": 2,
+  "ratio_median_db": -28.325027465820312,
+  "ratio_best_second_db": -18.59279746770859,
+  "best_second_at_s": 3.72,
+  "by_kind_db": {
+   "attaque": -25.539737701416016,
+   "tenue": -28.71622085571289,
+   "chute": -18.37318229675293
+  }
+ },
+ {
+  "segment": 3,
+  "ratio_median_db": -19.8858699798584,
+  "ratio_best_second_db": -16.39087998867035,
+  "best_second_at_s": 1.3800000000000001,
+  "by_kind_db": {
+   "attaque": -18.74711036682129,
+   "tenue": -19.990360260009766,
+   "chute": -17.935298919677734
+  }
+ },
+ {
+  "segment": 4,
+  "ratio_median_db": -26.40248680114746,
+  "ratio_best_second_db": -20.02901372909546,
+  "best_second_at_s": 2.46,
+  "by_kind_db": {
+   "attaque": -22.041913986206055,
+   "tenue": -26.614288330078125,
+   "chute": -25.386856079101562
+  }
+ },
+ {
+  "segment": 5,
+  "ratio_median_db": -28.641647338867188,
+  "ratio_best_second_db": -20.111997871398923,
+  "best_second_at_s": 3.94,
+  "by_kind_db": {
+   "attaque": -21.858699798583984,
+   "tenue": -28.877037048339844,
+   "chute": -26.355728149414062
+  }
+ },
+ {
+  "segment": 6,
+  "ratio_median_db": -22.136573791503906,
+  "ratio_best_second_db": -17.248666067123413,
+  "best_second_at_s": 2.92,
+  "by_kind_db": {
+   "attaque": -20.348934173583984,
+   "tenue": -22.389690399169922,
+   "chute": -20.500329971313477
+  }
+ },
+ {
+  "segment": 7,
+  "ratio_median_db": -24.073463439941406,
+  "ratio_best_second_db": -17.42866187095642,
+  "best_second_at_s": 1.0,
+  "by_kind_db": {
+   "attaque": -25.242090225219727,
+   "tenue": -23.284183502197266,
+   "chute": -24.708099365234375
+  }
+ },
+ {
+  "segment": 8,
+  "ratio_median_db": -27.474538803100586,
+  "ratio_best_second_db": -23.372180747985844,
+  "best_second_at_s": 2.72,
+  "by_kind_db": {
+   "attaque": -26.77871322631836,
+   "tenue": -27.725114822387695,
+   "chute": -25.7156982421875
+  }
+ },
+ {
+  "segment": 9,
+  "ratio_median_db": -28.60884666442871,
+  "ratio_best_second_db": -25.376969680786132,
+  "best_second_at_s": 3.92,
+  "by_kind_db": {
+   "attaque": -26.571123123168945,
+   "tenue": -29.332653045654297,
+   "chute": -24.04761505126953
+  }
+ },
+ {
+  "segment": 10,
+  "ratio_median_db": -27.754507064819336,
+  "ratio_best_second_db": -22.39631258010864,
+  "best_second_at_s": 3.6,
+  "by_kind_db": {
+   "attaque": -28.298633575439453,
+   "tenue": -28.79330825805664,
+   "chute": -23.898834228515625
+  }
+ },
+ {
+  "segment": 11,
+  "ratio_median_db": -39.691490173339844,
+  "ratio_best_second_db": -35.91320358276367,
+  "best_second_at_s": 1.52,
+  "by_kind_db": {
+   "tenue": -39.699951171875,
+   "chute": -29.48488998413086
+  }
+ }
+]
