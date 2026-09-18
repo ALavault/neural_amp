@@ -1,6 +1,6 @@
 # Résultats pour la rédaction : SSM-WaveNet, sensibilité à la graine, pilote « effet papillon »
 
-État au 2026-09-17. Chaque chiffre renvoie à un fichier du dépôt ; ne rien citer
+État au 2026-09-18. Chaque chiffre renvoie à un fichier du dépôt ; ne rien citer
 d'autre sans le recalculer. Le brouillon ICASSP 2027 (`paper/icassp2027/`, tag
 `icassp2027-draft`) est abandonné et contient des affirmations retirées (section 3).
 Ce fichier ne concerne pas `paper/claims.md` ni `paper/outline.md`, qui portent sur
@@ -53,8 +53,13 @@ section Setup) :
   (`diagnosis/seeds/spread.txt`).
 
 **Sensibilité à la graine** (`DIAGNOSIS_seeds.md`, `diagnosis/seeds/global_factor.txt`) :
-- La graine multiplie l'erreur de tous les segments de test par un même facteur : sur le
-  log de l'ESR, l'effet run domine l'interaction run × segment (F de 9 à 36).
+- La graine multiplie l'erreur de tous les segments de test par un facteur largement
+  commun : sur le log de l'ESR, l'effet run domine l'interaction run × segment (F de 9
+  à 36). **Nuance mesurée depuis** (`diagnosis/butterfly/where_audible.md`) : le rapport
+  d'ESR segment par segment entre deux graines varie d'un facteur 10 (0,83 à 8,82,
+  écart-type du log 0,629) autour d'une médiane de 3,30. Le facteur global domine
+  (1,19 en log contre 0,63 de résidu) mais c'est une approximation, pas une égalité :
+  écrire « largement commun », jamais « identique ».
 - Écart-type de l'effet run sur les premiers runs des 3 graines : 0,53 pour SSM-WaveNet,
   0,27 pour S4-TF-L-16 avec les deux changements, 0,16 pour S4-TF-L-16 publié.
 - Analyse emboîtée SSM-WaveNet, 3 graines × 2 runs, prédictions écrites avant
@@ -78,26 +83,93 @@ section Setup) :
 - Lot de 16, SSM-WaveNet : parent et jumeau identiques bit à bit aux époques 5 et 100,
   pour un coût de 5 à 10 % en vitesse.
 
+**Pilote A : les décisions pilotées par la validation amplifient une perturbation
+minimale** (`diagnosis/butterfly/pilot_A.md`, prédictions commitées avant tout run à
+`bb08337` ; verdict dans `diagnosis/butterfly/pilot_A_results.json`).
+
+Parent SSM-WaveNet déterministe, graine 42, fourche à l'époque 100. Enfants : chaque
+poids déplacé d'un pas float32, direction tirée par la graine 1000 + k. Bras « décide » :
+décisions propres. Bras « rejoue » : learning rate de chaque époque et pas d'arrêt du
+témoin, sans arrêt anticipé.
+
+- **Verdict : soutenu.** s(décide) = 0,156 ≥ 0,10 ; s(rejoue) = 0,009 ≤ 0,078 ; rapport
+  des moyennes des |Δ| = 13,2 ≥ 2. Les trois critères pré-enregistrés sont satisfaits.
+- **Contrôle positif P0** (fourche 5, bras décide) : s = 0,207 pour un seuil de 0,10. La
+  faible dispersion du bras « rejoue » n'est donc pas une insensibilité du dispositif.
+- Contrôles passés : parent et jumeau identiques ; « rejoue » k = 0 identique bit à bit
+  au témoin, et 923 pertes de validation identiques.
+- Fourche 100, ESR : décide 0,0341 / 0,0512 / 0,0378 / 0,0382 / 0,0365 ; rejoue 0,0341 /
+  0,0339 / 0,0336 / 0,0339 / 0,0334. Écart de sortie au témoin : décide 8,7·10⁻⁴ à
+  7,2·10⁻³, rejoue 4,2·10⁻⁴ à 7,3·10⁻⁴, pour une erreur du témoin de 0,0245 sur la même
+  mesure.
+- **Formulation autorisée** : « une perturbation d'un pas float32 sur chaque poids,
+  appliquée à l'époque 100, change l'ESR final de 0,156 en log lorsque le run prend ses
+  propres décisions de validation, et de 0,009 lorsqu'il rejoue le calendrier du témoin ;
+  5 runs par bras, une graine, un appareil, une architecture ».
+- **Interdit** : présenter ce pilote comme valant pour l'entraînement en général, ou
+  omettre que les seuils sont de qualité pilote.
+
+**Mesures sur les enfants de la fourche 100** (lecture seule, CPU, sans nouveau run) :
+
+- *Quand le sort d'un run se joue* (`diagnosis/butterfly/decided_when.md`). Sur cinq runs
+  partageant le découpage, lecture paire par paire de l'époque à partir de laquelle le
+  minimum courant de la perte de validation conserve le bon ordre : les quatre paires
+  d'écart ≥ 0,29 en log sont tranchées entre les époques 98 et 191 sur environ 900 ; les
+  écarts ≤ 0,11 le sont tard (269 à 652) ou jamais. **Piège à signaler** : l'ESR est
+  quadratique en amplitude d'erreur là où la perte L1 + 0,1·MR-STFT est linéaire, donc un
+  facteur 2 entre les deux dispersions en log est imposé par les définitions. Au-delà de
+  ce facteur, le passage validation → test ajoute ×2,5 (décide) et ×1,9 (rejoue) ; les
+  décisions, elles, dilatent l'écart de validation d'un facteur 16.
+- *Connectivité linéaire des modes* (`diagnosis/butterfly/mode_connectivity.md`).
+  L'enfant le plus divergent franchit une barrière réelle : ESR 0,0567 au milieu du
+  chemin contre 0,0341 et 0,0510 aux extrémités, présente dans 12 segments sur 12. Mais
+  la hauteur de barrière suit la distance L2 parcourue (ρ = +0,90, p = 0,002, n = 8) et
+  non le bras, ce qui est l'hypothèse nulle d'un bassin unique mais courbe : sept enfants
+  sur huit y sont compatibles, et seul le plus divergent y échappe (barrière 5,2 fois
+  celle d'un enfant pourtant plus éloigné). **Ne pas écrire** que la connectivité sépare
+  les deux bras.
+- *Ce que l'écart n'est pas* (`diagnosis/butterfly/is_it_eq.md`). Le meilleur filtre
+  linéaire de la sortie d'un enfant vers celle du témoin ne retire que 1 % de l'écart
+  (ESR 0,0072 → 0,0071) et son module tient entre −0,04 et +0,02 dB par tiers d'octave
+  de 99 Hz à 3,2 kHz. L'écart n'est donc ni un niveau, ni une égalisation, ni un retard
+  constant : il dépend du programme.
+- *Où il se loge* (`diagnosis/butterfly/when_audible.md`). Images de 20 ms classées par
+  la pente de l'enveloppe : pendant les chutes d'enveloppe l'écart se tient 5,3 dB sous
+  le signal sur le segment le plus divergent et 2,3 dB sur le suivant, contre 16,0 et
+  25,3 dB pendant les tenues. Les attaques ne portent rien de particulier.
+- *Ce qui ne le prédit pas* (`diagnosis/butterfly/where_audible.md`). Aucune corrélation
+  de rang entre la part d'erreur prise par l'écart et le RMS (−0,12), le facteur de crête
+  (+0,12), le centroïde spectral (+0,43) ou la proportion de passages calmes (+0,19),
+  n = 12 segments.
+
 ## 2. Préliminaire : ne pas rédiger comme résultat
 
-Pilote A (`diagnosis/butterfly/pilot_A.md`, prédictions commitées avant les runs,
-`bb08337`). Parent SSM-WaveNet déterministe, graine 42, fourches aux époques 5 et 100.
-Enfants : chaque poids déplacé d'un pas float32 (k = 1 à 4). Bras « décide » : décisions
-propres. Bras « rejoue » : learning rate de chaque époque et pas d'arrêt du témoin k = 0,
-sans arrêt anticipé.
+**Écoute** (`diagnosis/butterfly/listening.md`, page `demo/listening/butterfly.html`,
+générateur `scripts/product_butterfly_listening.py`). Un auditeur, sans relevé d'essais
+chiffré, sur des extraits choisis au point de divergence maximale : aucune différence
+entendue entre le témoin et son enfant divergent, **ni entre le témoin et l'appareil
+réel**, et aucune préférence en comparaison A/B non masquée. Le texte écrit d'avance
+prévoit exactement ce cas : sans contrôle positif de la chaîne d'écoute, un nul sur
+« réel contre témoin » signifie que l'épreuve manque de sensibilité et ne conclut rien
+sur les enfants. Une échelle d'audibilité a été ajoutée à la page pour lever
+l'ambiguïté ; elle n'a pas encore été parcourue. **Formulation autorisée si rien de
+plus n'arrive** : « aucune évaluation perceptive n'étaye ces écarts d'ESR ».
+**Interdit** : « la divergence est inaudible » sans le contrôle positif.
 
-- Contrôles passés : jumeaux identiques ; « rejoue » k = 0 identique bit à bit au
-  témoin, et 923 pertes de validation identiques.
-- Fourche 100, écart de log ESR au témoin (ESR 0,0341) : « décide » +0,405, +0,102,
-  +0,112 (k = 1, 2, 3) ; « rejoue » −0,007, −0,015 (k = 1, 2). Écart de sortie au témoin
-  (ESR entre sorties, sur l'ensemble du test) : « rejoue » 5,3·10⁻⁴ et 4,2·10⁻⁴,
-  « décide » 7,2·10⁻³, 9,8·10⁻⁴ et 1,6·10⁻³, pour une erreur du témoin de 0,0245 sur la
-  même mesure.
-- Courbes de validation : les enfants « rejoue » rejoignent le témoin vers l'époque 300 ;
-  pour « décide » k = 1 et 2, le déficit existe à époque égale avant l'arrêt anticipé,
-  avec une première division du learning rate aux époques 35 et 98 contre 113.
-- Le verdict pré-enregistré attend « rejoue » k = 3, les deux bras à k = 4 et le
-  contrôle positif P0 (fourche 5).
+**Fourche 5, bras « rejoue »** (`diagnosis/butterfly/pilot_A_fork5_replay.md`, en cours).
+Trois enfants sur cinq mesurés : Δ = +0,750 (k = 1), −0,129 (k = 2). Le bras ne répond
+pas à la question qu'il posait, parce que la garde de polarité y reste libre : le parent
+bascule aux époques 7, 8 et 9, donc une fourche placée à l'époque 5 laisse chaque enfant
+redécouvrir ses propres bascules, et celles-ci sont elles-mêmes des décisions de
+validation. Nuance : l'historique de bascules est identique entre les deux bras pour un
+même k, les bascules tombant bien avant la première division du learning rate, donc la
+comparaison entre bras reste interprétable ; c'est la lecture de s(rejoue) comme « ce qui
+reste quand on retire les décisions » qui ne tient pas.
+
+**Pilote D, fourche 25** (`diagnosis/butterfly/pilot_D_fork25.md`, pré-enregistré, runs
+non commencés). Fourche placée après la dernière bascule du parent (époque 9) et avant sa
+première division du learning rate (époque 113), pour poser à la phase précoce la
+question que la fourche 100 a tranchée.
 
 ## 3. Retiré ou réfuté, encore présent dans le tag `icassp2027-draft`
 
@@ -105,7 +177,10 @@ sans arrêt anticipé.
   sur les six segments calmes (`\SpreadQuietShare`), mécanisme « perte de validation
   absolue contre métrique relative », validation stratifiée comme correctif. Réfuté :
   remplacé par le facteur global. `\ValBlindEsr` et `\ValBlindShare` sont exacts mais ne
-  soutiennent plus aucun mécanisme.
+  soutiennent plus aucun mécanisme. La localisation sur les segments calmes a été
+  re-testée en 2026-09-18 pour l'écart entre deux enfants d'une même graine, et reste
+  réfutée : deux segments de même proportion de passages calmes (50 %) portent des parts
+  d'écart de 0,93 et 0,10.
 - Répétition de la graine 42 présentée comme petite (`\RepeatDelta` = 0,011, en
   linéaire) et « non-déterminisme huit fois plus petit que l'écart entre graines » :
   retirés. En log, +0,27 ; en emboîté, 0,18 contre 0,37.
@@ -118,15 +193,20 @@ sans arrêt anticipé.
 
 ## 4. En attente
 
-- Fourche 100 : « rejoue » k = 3, puis k = 4 dans les deux bras. Ensuite le verdict A.
-- Fourche 5 : « décide » k = 0 à 4 (P0) ; si P0 tient, « rejoue » k = 0 à 4
-  (`diagnosis/butterfly/pilot_A_fork5_replay.md`). Ensuite le verdict B.
-- Pilote C, huit graines sous un calendrier commun fixe, seulement si B tient
+- Fourche 5 : « rejoue » k = 3 et k = 4, puis lecture du bras avec la réserve ci-dessus.
+- Pilote D, fourche 25 : parent rejoué avec porte au bit près, puis dix enfants.
+- Pilote C, huit graines sous un calendrier commun fixe, conditionné à B
   (`diagnosis/butterfly/pilot_C_common_schedule.md`).
 - S4-TF-L-16 publié : répétitions à graine égale, puis verdict emboîté pour S4.
+- Écoute : parcourir l'échelle d'audibilité, qui donnerait la marge de la divergence sous
+  le seuil, dans l'unité de la divergence elle-même.
+- Question ouverte, sans expérience prévue : la direction de la perturbation. C'est k = 1
+  qui décroche aux deux fourches déjà mesurées, alors que sa direction est tirée avec la
+  même graine 1000 + k sur deux parents différents. Une chance sur quatre d'être fortuit.
 
 **Citations** : clés dans `paper/icassp2027/refs.bib`. Le modèle S4-TF-L-16 est défini
 dans Comunità, Steinmetz et Reiss, *Frontiers in Signal Processing* 5, art. 1580395,
 2025, doi:10.3389/frsip.2025.1580395 (vérifié le 2026-09-17). NablAFx : arXiv:2502.11668.
 S4 : Gu et al., ICLR 2022. TFiLM : Birnbaum et al., NeurIPS 2019 ; Comunità et al.,
-ICASSP 2023.
+ICASSP 2023. Connectivité linéaire des modes : Frankle, Dziugaite, Roy et Carbin, ICML
+2020.
