@@ -123,7 +123,14 @@ def main() -> None:
     data.setup("test")
     inputs = torch.stack([x for x, _ in data.test_dataset])
     out: dict = {"groups": {}}
-    for fork, arm in ((100, "decide"), (100, "replay"), (5, "decide"), (5, "replay")):
+    for fork, arm in (
+        (100, "decide"),
+        (100, "replay"),
+        (5, "decide"),
+        (5, "replay"),
+        (25, "decide"),
+        (25, "replay"),
+    ):
         names = [run_id(fork, arm, k) for k in range(5)]
         if not all((RECORDS / f"{n}.json").exists() for n in names):
             continue
@@ -204,6 +211,30 @@ def main() -> None:
                 "synchronized": replay["synchronized"][largest],
                 "flips_match_control": replay["flips_match_control"][largest],
             },
+        }
+    if {"fork25_decide", "fork25_replay"} <= groups.keys():
+        arms = compare_arms(groups["fork25_decide"], groups["fork25_replay"])
+        # Gate 3 of pilot D: the fork at epoch 25 follows the parent's last flip, so every
+        # child must still carry exactly the parent's history. Any other list is a
+        # validation-driven decision left free, which is what silenced the fork 5 arm.
+        parent = json.loads((RECORDS / "butterfly_ssm_seed42_parent.json").read_text())
+        histories = {
+            arm: groups[f"fork25_{arm}"]["polarity_flips"] for arm in ("decide", "replay")
+        }
+        verdict["fork25"] = {
+            "replay_valid": groups["fork25_replay"]["identical_to_decide_k0"],
+            "s_decide": arms["s_decide"],
+            "s_replay": arms["s_replay"],
+            "mean_abs_delta_ratio": arms["mean_abs_delta_ratio"],
+            "D_decisions_amplify_early": arms["supported"],
+            "D_early_phase_diverges_alone": arms["refuted_dynamics"],
+            "D_undecided": arms["refuted_stability"],
+            "guard_silent": all(
+                flips == parent["polarity_flips"]
+                for arm_flips in histories.values()
+                for flips in arm_flips
+            ),
+            "polarity_flips": histories,
         }
     out["verdict"] = verdict
     print(json.dumps(verdict, indent=1))
