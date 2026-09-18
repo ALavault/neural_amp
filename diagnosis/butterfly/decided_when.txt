@@ -1,0 +1,16 @@
+fork 100 decide [val] rho(epoch): 10:+0.00 25:-0.10 50:-0.40 100:-0.30 150:+0.60 200:-0.10 300:+0.30 400:+0.00 500:+0.40 600:+0.40 656:+0.70
+fork 100 decide [best] rho(epoch): 10:+0.20 25:-0.70 50:-0.70 100:+0.60 150:+0.80 200:+0.40 300:+0.30 400:+0.30 500:+0.40 600:+0.40 656:+0.70
+fork 100 decide running best: its ranking freezes at epoch 652, and matches the final ESR ranking from epoch None (None = never, last common epoch 656, 5 runs)
+fork 100 decide first halving per child: 113 35 98 175 114
+fork 100 decide at each child's own last epoch 922:val=0.0274,esr=0.0341 708:val=0.0298,esr=0.0512 857:val=0.0283,esr=0.0378 656:val=0.0279,esr=0.0382 737:val=0.0282,esr=0.0365
+fork 100 decide rho(terminal val loss, final test ESR) = +0.70 (p = 0.19, n = 5)
+fork 100 decide log spread: val 0.032, test ESR 0.156, ratio 4.9
+fork 100 replay [val] rho(epoch): 10:+0.10 25:+0.70 50:+0.50 100:+0.20 150:+0.10 200:+0.10 300:+0.60 400:-0.60 500:-0.10 600:-0.10 922:-0.50
+fork 100 replay [best] rho(epoch): 10:-0.60 25:+0.60 50:+0.50 100:-0.50 150:+0.60 200:-0.20 300:-0.80 400:-0.50 500:-0.60 600:-0.50 922:-0.50
+fork 100 replay running best: its ranking freezes at epoch 857, and matches the final ESR ranking from epoch None (None = never, last common epoch 922, 5 runs)
+fork 100 replay first halving per child: 113 113 113 113 113
+fork 100 replay at each child's own last epoch 922:val=0.0274,esr=0.0341 922:val=0.0273,esr=0.0339 922:val=0.0274,esr=0.0336 922:val=0.0275,esr=0.0339 922:val=0.0275,esr=0.0334
+fork 100 replay rho(terminal val loss, final test ESR) = -0.50 (p = 0.39, n = 5)
+fork 100 replay log spread: val 0.002, test ESR 0.009, ratio 3.8
+fork 100, the distinct children pooled (same split, same test set): rho(terminal val loss, final test ESR) = +0.70 (p = 0.036, n = 9)
+benchmark same-seed pairs, running best agrees with the final ESR: 10:0/3 25:2/3 50:2/3 100:3/3 150:3/3 200:1/3 300:1/3 400:2/3 500:2/3 600:3/3 666:3/3
