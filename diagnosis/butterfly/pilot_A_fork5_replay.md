@@ -62,3 +62,38 @@ par la dynamique des poids ?
 - **Portée** : 5 runs par bras, 4 degrés de liberté, niveau pilote.
 - **Suite** : si B est soutenue, graines sous un calendrier commun fixe, protocole écrit
   avant les runs. Sinon, pas de run de graines sous calendrier commun sans discussion.
+
+## Confusion découverte en cours d'exécution (2026-09-18, après `replay k1`)
+
+`replay k1` donne ESR 0,0894, soit Δ = +0,75 en log contre le témoin — **plus divergent que son
+homologue « décide »** (+0,482), alors que le calendrier d'apprentissage et le pas d'arrêt lui sont
+imposés. À la fourche 100, les quatre enfants « rejoue » tenaient dans −0,023 à −0,007.
+
+La cause probable n'est pas le calendrier, c'est la garde de polarité, et elle est de ma
+responsabilité. Le parent bascule aux époques **7, 8 et 9** (`demo/butterfly/butterfly_ssm_seed42_parent.json`).
+Donc :
+
+- **fourche 100** : les bascules sont antérieures à la fourche, les cinq enfants héritent tous de
+  `[7, 8, 9]` et la garde ne se déclenche plus jamais. Le bras « rejoue » isole bien le calendrier ;
+- **fourche 5** : la fourche précède les bascules. Chaque enfant redécouvre les siennes, comptées
+  depuis la fourche — témoin `[2, 67]`, k1 `[2, 4]`, k2 `[3, 4]`, k3 et k4 aucune.
+
+Or la garde est elle-même une décision pilotée par la validation, et la plus brutale des trois :
+elle nie la dernière couche et les moments d'Adam. L'addendum la laisse active et ne la rejoue pas —
+choix écrit d'avance, au motif qu'imposer les bascules du témoin inverserait un enfant déjà bien
+orienté. Ce choix se paie ici : **le bras « rejoue » de la fourche 5 n'isole pas le calendrier**, il
+laisse libre une décision de validation, et une grande dispersion n'y départage plus rien.
+
+Ce que cela ne dit pas : que la garde explique l'écart. L'historique des bascules ne s'aligne pas
+simplement sur l'ESR — k2 bascule deux fois tôt (`[3, 4]`) et reste à 0,0438, contre le témoin à
+0,0422, tandis que k1 bascule deux fois tôt aussi (`[2, 4]`) et part à 0,0684. Les enfants qui ne
+basculent jamais (k3, k4) restent près du témoin. C'est une confusion à contrôler, pas une cause
+démontrée.
+
+Ce que cela ne remet pas en cause : le verdict du pilote A, qui porte sur la fourche 100, où la
+garde est éteinte et partagée.
+
+Observation qui départagerait : une fourche placée **après la dernière bascule du parent** (époque 9)
+et avant que le plateau ne se stabilise — par exemple à l'époque 25 — donnerait un bras « rejoue »
+où la garde est éteinte comme à la fourche 100, tout en restant dans la phase précoce. C'est la seule
+façon de poser à la fourche précoce la question que la fourche 100 a tranchée.
