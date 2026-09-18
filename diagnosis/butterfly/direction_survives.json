@@ -1,0 +1,86 @@
+{
+ "f100_decide": {
+  "1": {
+   "cos_nudge_displacement": -0.03405090421438217,
+   "displacement_norm": 8.22000789642334
+  },
+  "2": {
+   "cos_nudge_displacement": -0.03338579088449478,
+   "displacement_norm": 6.069149017333984
+  },
+  "3": {
+   "cos_nudge_displacement": -0.012040839530527592,
+   "displacement_norm": 8.37013053894043
+  },
+  "4": {
+   "cos_nudge_displacement": -0.06226763129234314,
+   "displacement_norm": 6.390190601348877
+  }
+ },
+ "f100_replay": {
+  "1": {
+   "cos_nudge_displacement": -0.023795651271939278,
+   "displacement_norm": 5.331236362457275
+  },
+  "2": {
+   "cos_nudge_displacement": -0.07907656580209732,
+   "displacement_norm": 6.031060695648193
+  },
+  "3": {
+   "cos_nudge_displacement": -0.007022806443274021,
+   "displacement_norm": 7.773601531982422
+  },
+  "4": {
+   "cos_nudge_displacement": -0.08442014455795288,
+   "displacement_norm": 6.482479572296143
+  }
+ },
+ "f100_nudge_pairs": {
+  "1-2": -0.03389539197087288,
+  "1-3": 0.07437427341938019,
+  "1-4": -0.1294989287853241,
+  "2-3": -0.01552305556833744,
+  "2-4": -0.052789684385061264,
+  "3-4": 0.03528458625078201
+ },
+ "f5_decide": {
+  "1": {
+   "cos_nudge_displacement": 0.009548904374241829,
+   "displacement_norm": 34.335567474365234
+  },
+  "2": {
+   "cos_nudge_displacement": 0.008909727446734905,
+   "displacement_norm": 28.230134963989258
+  },
+  "3": {
+   "cos_nudge_displacement": -0.016548482701182365,
+   "displacement_norm": 30.475358963012695
+  },
+  "4": {
+   "cos_nudge_displacement": 0.001918223686516285,
+   "displacement_norm": 30.65312385559082
+  }
+ },
+ "f5_replay": {
+  "1": {
+   "cos_nudge_displacement": 0.0017149619525298476,
+   "displacement_norm": 33.93618392944336
+  },
+  "2": {
+   "cos_nudge_displacement": 0.012721634469926357,
+   "displacement_norm": 29.546533584594727
+  },
+  "3": {
+   "cos_nudge_displacement": -0.01634928584098816,
+   "displacement_norm": 30.779525756835938
+  }
+ },
+ "f5_nudge_pairs": {
+  "1-2": -0.02961377613246441,
+  "1-3": 0.07126918435096741,
+  "1-4": -0.12560217082500458,
+  "2-3": -0.01048713456839323,
+  "2-4": -0.051251284778118134,
+  "3-4": 0.033000148832798004
+ }
+}
