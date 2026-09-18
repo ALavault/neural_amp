@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<title>Écoute aveugle A/B/X : les enfants du papillon</title>
+<style>
+ body { font: 15px/1.5 system-ui, sans-serif; max-width: 46rem; margin: 2rem auto;
+        padding: 0 1rem; }
+ h1 { font-size: 1.4rem; }
+ .excerpt { border: 1px solid #ccc; border-radius: 6px; padding: 1rem;
+            margin: 1rem 0; }
+ button { font: inherit; padding: .4rem .9rem; margin-right: .4rem; }
+ .play { min-width: 3rem; }
+ .on { background: #222; color: #fff; }
+ .score { font-variant-numeric: tabular-nums; }
+ .meta { color: #555; font-size: .9rem; }
+ textarea { width: 100%; height: 10rem; font: 12px monospace; }
+</style>
+<h1>Écoute aveugle A/B/X : les enfants du papillon</h1>
+<p>Trois paires par extrait. <b>Appareil réel contre témoin</b> dit si quoi que ce soit
+est audible ici ; <b>témoin contre décide k = 1</b> est la question, ces deux modèles
+diffèrent de 41 % d'ESR relatif ; <b>témoin contre rejoue k = 1</b> est le témoin
+négatif, leurs sorties diffèrent d'un ESR de 5e-4.</p>
+<p>Si le réel contre le témoin est au hasard, l'épreuve ne mesure rien et l'écart d'ESR
+est hors de portée de cette écoute. Si le réel est trivial et que le témoin contre
+décide k = 1 reste au hasard, alors l'écart d'ESR de 41 % est inaudible sur ce matériel.
+Dix essais par bloc : 20 justes sur 30 donnent p &lt; 0,05 pour un extrait.</p>
+<p class="meta">Extraits pris dans un seul segment de test (0,3-4,7 s des 5 s), aux
+positions fixes 2, 6 et 10 : aucune sélection sur le résultat. Chaque modèle est corrigé
+d'un gain des moindres carrés contre la cible, propre à l'extrait, pour qu'une différence
+de niveau ne donne pas la réponse ; l'épreuve porte donc sur ce qui reste au-delà du
+niveau. Le tirage est dans cette page : elle sert à écouter honnêtement, pas à résister à
+quelqu'un qui ouvre les outils de développement. Au casque.</p>
+<div id="excerpts"></div>
+<h2>Résultats</h2>
+<textarea id="results" readonly></textarea>
+
+<script>
+const EXCERPTS = [{"key": "1_reel_vs_temoin", "index": 1, "segment": 2, "window": "segment 2, 0.3-4.7 s", "label": "appareil réel contre témoin : quelque chose est-il audible ?", "left": "audio/butterfly_1_reel.wav", "right": "audio/butterfly_1_temoin.wav", "names": ["reel", "temoin"], "esr_between_sides": 0.026072813156415398, "gain_db": [0.0, -0.18726016308169396]}, {"key": "1_temoin_vs_decide_k1", "index": 1, "segment": 2, "window": "segment 2, 0.3-4.7 s", "label": "témoin contre enfant divergent : la question", "left": "audio/butterfly_1_temoin.wav", "right": "audio/butterfly_1_decide_k1.wav", "names": ["temoin", "decide_k1"], "esr_between_sides": 0.00917663159016406, "gain_db": [-0.18726016308169396, -0.24852640236549647]}, {"key": "1_temoin_vs_rejoue_k1", "index": 1, "segment": 2, "window": "segment 2, 0.3-4.7 s", "label": "témoin contre enfant « rejoue » : le témoin négatif", "left": "audio/butterfly_1_temoin.wav", "right": "audio/butterfly_1_rejoue_k1.wav", "names": ["temoin", "rejoue_k1"], "esr_between_sides": 0.0002845570256970947, "gain_db": [-0.18726016308169396, -0.17736908258824055]}, {"key": "2_reel_vs_temoin", "index": 2, "segment": 6, "window": "segment 6, 0.3-4.7 s", "label": "appareil réel contre témoin : quelque chose est-il audible ?", "left": "audio/butterfly_2_reel.wav", "right": "audio/butterfly_2_temoin.wav", "names": ["reel", "temoin"], "esr_between_sides": 0.015213062666665398, "gain_db": [0.0, -0.1280865000595752]}, {"key": "2_temoin_vs_decide_k1", "index": 2, "segment": 6, "window": "segment 6, 0.3-4.7 s", "label": "témoin contre enfant divergent : la question", "left": "audio/butterfly_2_temoin.wav", "right": "audio/butterfly_2_decide_k1.wav", "names": ["temoin", "decide_k1"], "esr_between_sides": 0.016842786434500504, "gain_db": [-0.1280865000595752, -0.19817256337511455]}, {"key": "2_temoin_vs_rejoue_k1", "index": 2, "segment": 6, "window": "segment 6, 0.3-4.7 s", "label": "témoin contre enfant « rejoue » : le témoin négatif", "left": "audio/butterfly_2_temoin.wav", "right": "audio/butterfly_2_rejoue_k1.wav", "names": ["temoin", "rejoue_k1"], "esr_between_sides": 0.0002458258874810408, "gain_db": [-0.1280865000595752, -0.12779540030068237]}, {"key": "3_reel_vs_temoin", "index": 3, "segment": 10, "window": "segment 10, 0.3-4.7 s", "label": "appareil réel contre témoin : quelque chose est-il audible ?", "left": "audio/butterfly_3_reel.wav", "right": "audio/butterfly_3_temoin.wav", "names": ["reel", "temoin"], "esr_between_sides": 0.01911760918472481, "gain_db": [0.0, -0.08252190411364617]}, {"key": "3_temoin_vs_decide_k1", "index": 3, "segment": 10, "window": "segment 10, 0.3-4.7 s", "label": "témoin contre enfant divergent : la question", "left": "audio/butterfly_3_temoin.wav", "right": "audio/butterfly_3_decide_k1.wav", "names": ["temoin", "decide_k1"], "esr_between_sides": 0.003568777889520761, "gain_db": [-0.08252190411364617, -0.0942089336057032]}, {"key": "3_temoin_vs_rejoue_k1", "index": 3, "segment": 10, "window": "segment 10, 0.3-4.7 s", "label": "témoin contre enfant « rejoue » : le témoin négatif", "left": "audio/butterfly_3_temoin.wav", "right": "audio/butterfly_3_rejoue_k1.wav", "names": ["temoin", "rejoue_k1"], "esr_between_sides": 0.0006438598049527503, "gain_db": [-0.08252190411364617, -0.07188719726915664]}];
+
+function randomBit() {
+  const buffer = new Uint32Array(1);
+  crypto.getRandomValues(buffer);
+  return buffer[0] % 2;
+}
+
+function pValue(correct, trials) {
+  let logFactorial = [0];
+  for (let i = 1; i <= trials; i++) logFactorial[i] = logFactorial[i - 1] + Math.log(i);
+  let total = 0;
+  for (let k = correct; k <= trials; k++) {
+    total += Math.exp(logFactorial[trials] - logFactorial[k] - logFactorial[trials - k]
+                      - trials * Math.log(2));
+  }
+  return total;
+}
+
+const state = JSON.parse(localStorage.getItem('abx-butterfly') || '{}');
+const container = document.getElementById('excerpts');
+const results = document.getElementById('results');
+
+function save() {
+  localStorage.setItem('abx-butterfly', JSON.stringify(state));
+  results.value = JSON.stringify(EXCERPTS.map(e => {
+    const s = state[e.key] || { trials: 0, correct: 0 };
+    return { bloc: e.key, paire: e.names.join(' / '), essais: s.trials,
+             justes: s.correct,
+             p: s.trials ? Number(pValue(s.correct, s.trials).toFixed(4)) : null };
+  }), null, 1);
+}
+
+for (const excerpt of EXCERPTS) {
+  if (!state[excerpt.key]) state[excerpt.key] = { trials: 0, correct: 0 };
+  // A/B assignment is redrawn each time the page loads, X at each trial.
+  const aIsLeft = randomBit() === 0;
+  const sources = {
+    A: aIsLeft ? excerpt.left : excerpt.right,
+    B: aIsLeft ? excerpt.right : excerpt.left,
+  };
+  let xIsA = randomBit() === 0;
+
+  const node = document.createElement('div');
+  node.className = 'excerpt';
+  node.innerHTML = `<b>${excerpt.label}</b><br>
+    <span class="meta">extrait ${excerpt.index} (${excerpt.window})</span><br>
+    <button class="play" data-k="A">A</button>
+    <button class="play" data-k="B">B</button>
+    <button class="play" data-k="X">X</button>
+    <button data-guess="A">X = A</button>
+    <button data-guess="B">X = B</button>
+    <span class="score"></span>
+    <button data-reveal="1" hidden>Révéler</button>`;
+  container.appendChild(node);
+
+  const audio = { A: new Audio(sources.A), B: new Audio(sources.B), X: new Audio() };
+  audio.X.src = xIsA ? sources.A : sources.B;
+  const score = node.querySelector('.score');
+  const reveal = node.querySelector('[data-reveal]');
+
+  function refresh() {
+    const s = state[excerpt.key];
+    score.textContent = ` ${s.correct}/${s.trials}`
+      + (s.trials ? ` (p = ${pValue(s.correct, s.trials).toFixed(3)})` : '');
+    reveal.hidden = s.trials < 10;
+    save();
+  }
+
+  node.querySelectorAll('.play').forEach(button => {
+    button.onclick = () => {
+      // Keep the playhead when switching, so the comparison is instantaneous.
+      let position = 0;
+      for (const player of Object.values(audio)) {
+        if (!player.paused) { position = player.currentTime; player.pause(); }
+      }
+      node.querySelectorAll('.play').forEach(other => other.classList.remove('on'));
+      button.classList.add('on');
+      const player = audio[button.dataset.k];
+      player.currentTime = position;
+      player.play();
+    };
+  });
+
+  node.querySelectorAll('[data-guess]').forEach(button => {
+    button.onclick = () => {
+      const s = state[excerpt.key];
+      s.trials += 1;
+      if ((button.dataset.guess === 'A') === xIsA) s.correct += 1;
+      xIsA = randomBit() === 0;
+      audio.X.src = xIsA ? sources.A : sources.B;
+      refresh();
+    };
+  });
+
+  reveal.onclick = () => {
+    const [left, right] = excerpt.names;
+    reveal.textContent = `A = ${aIsLeft ? left : right}, B = ${aIsLeft ? right : left}`
+      + ` — ESR entre les deux côtés ${excerpt.esr_between_sides.toExponential(2)}`;
+    reveal.disabled = true;
+  };
+
+  refresh();
+}
+</script>
+</html>
