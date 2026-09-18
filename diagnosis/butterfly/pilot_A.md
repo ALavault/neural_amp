@@ -138,3 +138,31 @@ nouveau run et sans toucher au pré-enregistrement ci-dessus :
   la connectivité linéaire ne fournit pas la signature cherchée.
 - `listening.md` — page d'écoute aveugle A/B/X et sa lecture, écrite avant toute écoute. Aucune
   écoute n'a encore eu lieu.
+
+## Verdict, le contrôle positif ayant été mesuré (2026-09-18 11 h 00)
+
+`scripts/product_fork_pilot_analysis.py`, sortie dans `pilot_A_results.json`.
+
+**Contrôle positif P0, fourche 5, bras « décide »** : ESR 0,0422 / 0,0684 / 0,0438 / 0,0443 /
+0,0422, **s = 0,207** contre un seuil de 0,10. La fourche 5 reproduit donc bien, en pleine phase
+chaotique, la dispersion que le dispositif doit être capable de révéler : la faible dispersion du
+bras « rejoue » à la fourche 100 n'est pas un artefact du dispositif de fourche.
+
+**Verdict de A : soutenu.** Les trois critères pré-enregistrés sont satisfaits à la fourche 100 et
+le contrôle positif tient : s(décide) = 0,156 ≥ 0,10 ; s(rejoue) = 0,009 ≤ 0,078 ; rapport des
+moyennes des |Δ| = 13,2 ≥ 2. Une perturbation d'un pas float32 sur chaque poids, appliquée à
+l'époque 100, change l'ESR final de 0,156 en log quand le run prend ses propres décisions de
+validation, et de 0,009 quand il rejoue celles du témoin.
+
+Observations qui n'appartenaient pas au pré-enregistrement :
+
+- À la fourche 5, la structure est la même qu'à la fourche 100, en plus marqué : un enfant décroche
+  seul (+0,482 en log contre +0,405) et les trois autres tiennent dans 0,05. Les écarts de sortie au
+  témoin y valent 8,7·10⁻³ à 2,0·10⁻², contre 8,7·10⁻⁴ à 7,2·10⁻³ à la fourche 100.
+- C'est k = 1 qui décroche aux deux fourches. La direction de perturbation est tirée avec la graine
+  1000 + k, donc k = 1 porte le même motif de directions sur deux parents différents. Avec quatre
+  enfants, l'événement a une chance sur quatre d'être fortuit ; si le bras « rejoue » de la fourche 5
+  place encore k = 1 en tête, la direction cessera d'être indifférente, ce que le pré-enregistrement
+  suppose pourtant.
+- Les enfants de la fourche 5 s'arrêtent entre 6 076 et 9 471 pas, contre 4 599 à 6 461 à la
+  fourche 100 : perturber tôt allonge aussi l'entraînement.
