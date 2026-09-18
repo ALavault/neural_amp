@@ -15,6 +15,12 @@ export TMPDIR=/fastdata/lavaulta/tmp
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 cd /fastdata/lavaulta/neural_amp
 
+# Pilot D first: the fork pilot queue hands control here when it finishes, and the fork 25
+# runs answer a question that is open now, where these repeats complete a layout that can
+# wait. Asked for by the user on 2026-09-18; pre-registered in
+# diagnosis/butterfly/pilot_D_fork25.md. Its own runs are skipped if already recorded.
+bash scripts/product_fork25_queue.sh
+
 run() {
   local run_id=$1
   shift
