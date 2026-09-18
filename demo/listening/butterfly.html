@@ -24,18 +24,29 @@ négatif, leurs sorties diffèrent d'un ESR de 5e-4.</p>
 est hors de portée de cette écoute. Si le réel est trivial et que le témoin contre
 décide k = 1 reste au hasard, alors l'écart d'ESR de 41 % est inaudible sur ce matériel.
 Dix essais par bloc : 20 justes sur 30 donnent p &lt; 0,05 pour un extrait.</p>
-<p class="meta">Extraits pris dans un seul segment de test (0,3-4,7 s des 5 s), aux
-positions fixes 2, 6 et 10 : aucune sélection sur le résultat. Chaque modèle est corrigé
-d'un gain des moindres carrés contre la cible, propre à l'extrait, pour qu'une différence
-de niveau ne donne pas la réponse ; l'épreuve porte donc sur ce qui reste au-delà du
-niveau. Le tirage est dans cette page : elle sert à écouter honnêtement, pas à résister à
-quelqu'un qui ouvre les outils de développement. Au casque.</p>
+<p class="meta"><b>Deuxième version.</b> La première prenait les segments 2, 6 et 10,
+choisis par position seule, et rien n'y était audible. Mesure faite après coup : c'étaient
+les segments les moins divergents des douze. L'écart entre modèles y vaut 0,17 à 0,65 fois
+l'erreur au réel, contre 0,93 sur le segment 0. Les extraits sont donc maintenant choisis
+<b>sur</b> cette divergence — c'est une épreuve au meilleur endroit possible, plus un
+échantillon aveugle : si rien n'est audible ici, rien ne l'est ailleurs sur cet appareil.</p>
+<p class="meta">Extraits pris dans un seul segment de test (0,3-4,7 s des 5 s). Chaque
+modèle est corrigé d'un gain des moindres carrés contre la cible, propre à l'extrait, pour
+qu'une différence de niveau ne donne pas la réponse ; l'épreuve porte donc sur ce qui reste
+au-delà du niveau. Une seule normalisation par extrait, identique pour tous les côtés,
+amène le crête à -1 dBFS. Le tirage est dans cette page : elle sert à écouter honnêtement,
+pas à résister à quelqu'un qui ouvre les outils de développement. Au casque.</p>
+<p class="meta">Le bouton <b>Différence</b> n'appartient pas à l'épreuve : il joue le signal
+témoin moins décide k1, normalisé, pour entendre <i>ce qui</i> sépare les deux modèles. Sur
+ce matériel cet écart est à 16 à 21 dB sous le signal dans les mêmes demi-octaves, ce qui
+est la configuration de masquage la plus défavorable : une fuzz à fond masque sa propre
+erreur.</p>
 <div id="excerpts"></div>
 <h2>Résultats</h2>
 <textarea id="results" readonly></textarea>
 
 <script>
-const EXCERPTS = [{"key": "1_reel_vs_temoin", "index": 1, "segment": 2, "window": "segment 2, 0.3-4.7 s", "label": "appareil réel contre témoin : quelque chose est-il audible ?", "left": "audio/butterfly_1_reel.wav", "right": "audio/butterfly_1_temoin.wav", "names": ["reel", "temoin"], "esr_between_sides": 0.026072813156415398, "gain_db": [0.0, -0.18726016308169396]}, {"key": "1_temoin_vs_decide_k1", "index": 1, "segment": 2, "window": "segment 2, 0.3-4.7 s", "label": "témoin contre enfant divergent : la question", "left": "audio/butterfly_1_temoin.wav", "right": "audio/butterfly_1_decide_k1.wav", "names": ["temoin", "decide_k1"], "esr_between_sides": 0.00917663159016406, "gain_db": [-0.18726016308169396, -0.24852640236549647]}, {"key": "1_temoin_vs_rejoue_k1", "index": 1, "segment": 2, "window": "segment 2, 0.3-4.7 s", "label": "témoin contre enfant « rejoue » : le témoin négatif", "left": "audio/butterfly_1_temoin.wav", "right": "audio/butterfly_1_rejoue_k1.wav", "names": ["temoin", "rejoue_k1"], "esr_between_sides": 0.0002845570256970947, "gain_db": [-0.18726016308169396, -0.17736908258824055]}, {"key": "2_reel_vs_temoin", "index": 2, "segment": 6, "window": "segment 6, 0.3-4.7 s", "label": "appareil réel contre témoin : quelque chose est-il audible ?", "left": "audio/butterfly_2_reel.wav", "right": "audio/butterfly_2_temoin.wav", "names": ["reel", "temoin"], "esr_between_sides": 0.015213062666665398, "gain_db": [0.0, -0.1280865000595752]}, {"key": "2_temoin_vs_decide_k1", "index": 2, "segment": 6, "window": "segment 6, 0.3-4.7 s", "label": "témoin contre enfant divergent : la question", "left": "audio/butterfly_2_temoin.wav", "right": "audio/butterfly_2_decide_k1.wav", "names": ["temoin", "decide_k1"], "esr_between_sides": 0.016842786434500504, "gain_db": [-0.1280865000595752, -0.19817256337511455]}, {"key": "2_temoin_vs_rejoue_k1", "index": 2, "segment": 6, "window": "segment 6, 0.3-4.7 s", "label": "témoin contre enfant « rejoue » : le témoin négatif", "left": "audio/butterfly_2_temoin.wav", "right": "audio/butterfly_2_rejoue_k1.wav", "names": ["temoin", "rejoue_k1"], "esr_between_sides": 0.0002458258874810408, "gain_db": [-0.1280865000595752, -0.12779540030068237]}, {"key": "3_reel_vs_temoin", "index": 3, "segment": 10, "window": "segment 10, 0.3-4.7 s", "label": "appareil réel contre témoin : quelque chose est-il audible ?", "left": "audio/butterfly_3_reel.wav", "right": "audio/butterfly_3_temoin.wav", "names": ["reel", "temoin"], "esr_between_sides": 0.01911760918472481, "gain_db": [0.0, -0.08252190411364617]}, {"key": "3_temoin_vs_decide_k1", "index": 3, "segment": 10, "window": "segment 10, 0.3-4.7 s", "label": "témoin contre enfant divergent : la question", "left": "audio/butterfly_3_temoin.wav", "right": "audio/butterfly_3_decide_k1.wav", "names": ["temoin", "decide_k1"], "esr_between_sides": 0.003568777889520761, "gain_db": [-0.08252190411364617, -0.0942089336057032]}, {"key": "3_temoin_vs_rejoue_k1", "index": 3, "segment": 10, "window": "segment 10, 0.3-4.7 s", "label": "témoin contre enfant « rejoue » : le témoin négatif", "left": "audio/butterfly_3_temoin.wav", "right": "audio/butterfly_3_rejoue_k1.wav", "names": ["temoin", "rejoue_k1"], "esr_between_sides": 0.0006438598049527503, "gain_db": [-0.08252190411364617, -0.07188719726915664]}];
+const EXCERPTS = [{"key": "1_reel_vs_temoin", "index": 1, "segment": 0, "window": "segment 0, 0.3-4.7 s", "label": "appareil réel contre témoin : quelque chose est-il audible ?", "left": "audio/butterfly_1_reel.wav?1789714217", "right": "audio/butterfly_1_temoin.wav?1789714217", "names": ["reel", "temoin"], "esr_between_sides": 0.03414469010418411, "gain_db": [0.0, -0.22565917355522658], "difference": null}, {"key": "1_temoin_vs_decide_k1", "index": 1, "segment": 0, "window": "segment 0, 0.3-4.7 s", "label": "témoin contre enfant divergent : la question", "left": "audio/butterfly_1_temoin.wav?1789714217", "right": "audio/butterfly_1_decide_k1.wav?1789714217", "names": ["temoin", "decide_k1"], "esr_between_sides": 0.04031534330532077, "gain_db": [-0.22565917355522658, -0.45254038322541984], "difference": "audio/butterfly_1_difference.wav?1789714217"}, {"key": "1_temoin_vs_rejoue_k1", "index": 1, "segment": 0, "window": "segment 0, 0.3-4.7 s", "label": "témoin contre enfant « rejoue » : le témoin négatif", "left": "audio/butterfly_1_temoin.wav?1789714217", "right": "audio/butterfly_1_rejoue_k1.wav?1789714217", "names": ["temoin", "rejoue_k1"], "esr_between_sides": 0.0004991051368811377, "gain_db": [-0.22565917355522658, -0.22716150102251573], "difference": null}, {"key": "2_reel_vs_temoin", "index": 2, "segment": 6, "window": "segment 6, 0.3-4.7 s", "label": "appareil réel contre témoin : quelque chose est-il audible ?", "left": "audio/butterfly_2_reel.wav?1789714217", "right": "audio/butterfly_2_temoin.wav?1789714217", "names": ["reel", "temoin"], "esr_between_sides": 0.015213107590722547, "gain_db": [0.0, -0.1280865000595752], "difference": null}, {"key": "2_temoin_vs_decide_k1", "index": 2, "segment": 6, "window": "segment 6, 0.3-4.7 s", "label": "témoin contre enfant divergent : la question", "left": "audio/butterfly_2_temoin.wav?1789714217", "right": "audio/butterfly_2_decide_k1.wav?1789714217", "names": ["temoin", "decide_k1"], "esr_between_sides": 0.016842823117346972, "gain_db": [-0.1280865000595752, -0.19817256337511455], "difference": "audio/butterfly_2_difference.wav?1789714217"}, {"key": "2_temoin_vs_rejoue_k1", "index": 2, "segment": 6, "window": "segment 6, 0.3-4.7 s", "label": "témoin contre enfant « rejoue » : le témoin négatif", "left": "audio/butterfly_2_temoin.wav?1789714217", "right": "audio/butterfly_2_rejoue_k1.wav?1789714217", "names": ["temoin", "rejoue_k1"], "esr_between_sides": 0.00024583634359853296, "gain_db": [-0.1280865000595752, -0.12779540030068237], "difference": null}, {"key": "3_reel_vs_temoin", "index": 3, "segment": 1, "window": "segment 1, 0.3-4.7 s", "label": "appareil réel contre témoin : quelque chose est-il audible ?", "left": "audio/butterfly_3_reel.wav?1789714217", "right": "audio/butterfly_3_temoin.wav?1789714217", "names": ["reel", "temoin"], "esr_between_sides": 0.038208134190125136, "gain_db": [0.0, -0.23586144506803391], "difference": null}, {"key": "3_temoin_vs_decide_k1", "index": 3, "segment": 1, "window": "segment 1, 0.3-4.7 s", "label": "témoin contre enfant divergent : la question", "left": "audio/butterfly_3_temoin.wav?1789714217", "right": "audio/butterfly_3_decide_k1.wav?1789714217", "names": ["temoin", "decide_k1"], "esr_between_sides": 0.020291090412517084, "gain_db": [-0.23586144506803391, -0.34362913844455195], "difference": "audio/butterfly_3_difference.wav?1789714217"}, {"key": "3_temoin_vs_rejoue_k1", "index": 3, "segment": 1, "window": "segment 1, 0.3-4.7 s", "label": "témoin contre enfant « rejoue » : le témoin négatif", "left": "audio/butterfly_3_temoin.wav?1789714217", "right": "audio/butterfly_3_rejoue_k1.wav?1789714217", "names": ["temoin", "rejoue_k1"], "esr_between_sides": 0.0004022603053816719, "gain_db": [-0.23586144506803391, -0.22580096072189731], "difference": null}];
 
 function randomBit() {
   const buffer = new Uint32Array(1);
@@ -88,8 +99,15 @@ for (const excerpt of EXCERPTS) {
     <button data-guess="A">X = A</button>
     <button data-guess="B">X = B</button>
     <span class="score"></span>
-    <button data-reveal="1" hidden>Révéler</button>`;
+    <button data-reveal="1" hidden>Révéler</button>
+    ${excerpt.difference ? '<button data-difference="1">Différence</button>' : ''}`;
   container.appendChild(node);
+
+  const gap = node.querySelector('[data-difference]');
+  if (gap) {
+    const player = new Audio(excerpt.difference);
+    gap.onclick = () => { player.currentTime = 0; player.play(); };
+  }
 
   const audio = { A: new Audio(sources.A), B: new Audio(sources.B), X: new Audio() };
   audio.X.src = xIsA ? sources.A : sources.B;

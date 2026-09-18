@@ -16,12 +16,23 @@ boundary would carry that transient. Each model side gets its own least-squares 
 against the target, so a level difference cannot give the answer away; the page reports
 the correction applied. Audio goes to demo/listening/audio/ (git-ignored), the page to
 demo/listening/butterfly.html.
+
+Second version. The first one took segments 2, 6 and 10, chosen by position alone, and
+the listener heard no difference anywhere. Measurement afterwards showed those were among
+the least divergent segments of the twelve: the model-to-model error reaches 0.93 of the
+model-to-device error on segment 0 and falls to 0.17 on segment 10. The excerpts are now
+chosen ON that divergence, which makes this a best-case probe rather than a blind sample -
+if the divergence is inaudible here, it is inaudible anywhere on this device. Levels are
+normalised per excerpt, and the difference signal is offered on its own, outside the test,
+because on this material it sits only 16 to 21 dB under the signal in the same half-octaves
+and masking is the likely reason nothing was heard.
 """
 
 from __future__ import annotations
 
 import json
 import sys
+import time
 from pathlib import Path
 
 import numpy as np
@@ -39,9 +50,12 @@ OUT_DIR = ROOT / "demo/listening"
 AUDIO_DIR = OUT_DIR / "audio"
 SAMPLE_RATE = 48_000
 FADE_SECONDS = 0.020
-# Segments of the test set, chosen by position only, and a window inside one segment.
-SEGMENTS = (2, 6, 10)
+# The three most divergent test segments (model-to-model ESR 0.93, 0.65 and 0.43 of the
+# model-to-device error), and a window inside one segment.
+SEGMENTS = (0, 6, 1)
 WINDOW = (0.3, 4.7)
+PEAK = 10 ** (-1 / 20)
+STAMP = int(time.time())
 MODELS = {
     "temoin": "butterfly_ssm_seed42_f100_decide_k0",
     "decide_k1": "butterfly_ssm_seed42_f100_decide_k1",
@@ -84,19 +98,25 @@ def main() -> None:
             gain = 1.0 if name == "reel" else float(clip @ reference / (clip @ clip))
             clips[name] = fade(clip * gain)
             gains[name] = float(20.0 * np.log10(gain))
-        peak = max(float(np.max(np.abs(c))) for c in clips.values())
-        if peak >= 1.0:
-            raise RuntimeError(f"excerpt {index} peaks at {peak:.3f}")
+        # One normalisation per excerpt, the same for every side, so the comparison is
+        # untouched and the material is not played 25 dB below full scale.
+        loud = PEAK / max(float(np.max(np.abs(c))) for c in clips.values())
+        clips = {name: clip * loud for name, clip in clips.items()}
+        # The difference, on its own and outside the test: what separates the two models.
+        difference = clips["temoin"] - clips["decide_k1"]
+        clips["difference"] = difference * (PEAK / float(np.max(np.abs(difference))))
         files = {}
         for name, clip in clips.items():
             files[name] = f"audio/butterfly_{index}_{name}.wav"
-            sf.write(OUT_DIR / files[name], clip, SAMPLE_RATE, subtype="PCM_24")
+            sf.write(OUT_DIR / files[name], clip, SAMPLE_RATE, subtype="PCM_16")
+        # The names do not change between renders, so the page asks for this one.
+        files = {name: f"{path}?{STAMP}" for name, path in files.items()}
         for left, right, label in PAIRS:
             written = {
-                side: sf.read(OUT_DIR / files[side], dtype="float64")[0]
+                side: sf.read(OUT_DIR / files[side].split("?")[0], dtype="float64")[0]
                 for side in (left, right)
             }
-            difference = written[left] - written[right]
+            gap = written[left] - written[right]
             excerpts.append(
                 {
                     "key": f"{index}_{left}_vs_{right}",
@@ -108,9 +128,10 @@ def main() -> None:
                     "right": files[right],
                     "names": [left, right],
                     "esr_between_sides": float(
-                        difference @ difference / (written[right] @ written[right])
+                        gap @ gap / (written[right] @ written[right])
                     ),
                     "gain_db": [gains[left], gains[right]],
+                    "difference": files["difference"] if right == "decide_k1" else None,
                 }
             )
 
@@ -123,7 +144,7 @@ def main() -> None:
             f"{excerpt['key']}: ESR entre les deux côtés {excerpt['esr_between_sides']:.2e}"
             f" gains {excerpt['gain_db'][0]:+.2f} / {excerpt['gain_db'][1]:+.2f} dB"
         )
-    print(f"wrote {OUT_DIR / 'butterfly.html'} and {len(SEGMENTS) * len(rendered)} clips")
+    print(f"wrote {OUT_DIR / 'butterfly.html'} and {len(SEGMENTS) * 5} clips")
 
 
 TEMPLATE = """<!doctype html>
@@ -152,12 +173,23 @@ négatif, leurs sorties diffèrent d'un ESR de 5e-4.</p>
 est hors de portée de cette écoute. Si le réel est trivial et que le témoin contre
 décide k = 1 reste au hasard, alors l'écart d'ESR de 41 % est inaudible sur ce matériel.
 Dix essais par bloc : 20 justes sur 30 donnent p &lt; 0,05 pour un extrait.</p>
-<p class="meta">Extraits pris dans un seul segment de test (0,3-4,7 s des 5 s), aux
-positions fixes 2, 6 et 10 : aucune sélection sur le résultat. Chaque modèle est corrigé
-d'un gain des moindres carrés contre la cible, propre à l'extrait, pour qu'une différence
-de niveau ne donne pas la réponse ; l'épreuve porte donc sur ce qui reste au-delà du
-niveau. Le tirage est dans cette page : elle sert à écouter honnêtement, pas à résister à
-quelqu'un qui ouvre les outils de développement. Au casque.</p>
+<p class="meta"><b>Deuxième version.</b> La première prenait les segments 2, 6 et 10,
+choisis par position seule, et rien n'y était audible. Mesure faite après coup : c'étaient
+les segments les moins divergents des douze. L'écart entre modèles y vaut 0,17 à 0,65 fois
+l'erreur au réel, contre 0,93 sur le segment 0. Les extraits sont donc maintenant choisis
+<b>sur</b> cette divergence — c'est une épreuve au meilleur endroit possible, plus un
+échantillon aveugle : si rien n'est audible ici, rien ne l'est ailleurs sur cet appareil.</p>
+<p class="meta">Extraits pris dans un seul segment de test (0,3-4,7 s des 5 s). Chaque
+modèle est corrigé d'un gain des moindres carrés contre la cible, propre à l'extrait, pour
+qu'une différence de niveau ne donne pas la réponse ; l'épreuve porte donc sur ce qui reste
+au-delà du niveau. Une seule normalisation par extrait, identique pour tous les côtés,
+amène le crête à -1 dBFS. Le tirage est dans cette page : elle sert à écouter honnêtement,
+pas à résister à quelqu'un qui ouvre les outils de développement. Au casque.</p>
+<p class="meta">Le bouton <b>Différence</b> n'appartient pas à l'épreuve : il joue le signal
+témoin moins décide k1, normalisé, pour entendre <i>ce qui</i> sépare les deux modèles. Sur
+ce matériel cet écart est à 16 à 21 dB sous le signal dans les mêmes demi-octaves, ce qui
+est la configuration de masquage la plus défavorable : une fuzz à fond masque sa propre
+erreur.</p>
 <div id="excerpts"></div>
 <h2>Résultats</h2>
 <textarea id="results" readonly></textarea>
@@ -216,8 +248,15 @@ for (const excerpt of EXCERPTS) {
     <button data-guess="A">X = A</button>
     <button data-guess="B">X = B</button>
     <span class="score"></span>
-    <button data-reveal="1" hidden>Révéler</button>`;
+    <button data-reveal="1" hidden>Révéler</button>
+    ${excerpt.difference ? '<button data-difference="1">Différence</button>' : ''}`;
   container.appendChild(node);
+
+  const gap = node.querySelector('[data-difference]');
+  if (gap) {
+    const player = new Audio(excerpt.difference);
+    gap.onclick = () => { player.currentTime = 0; player.play(); };
+  }
 
   const audio = { A: new Audio(sources.A), B: new Audio(sources.B), X: new Audio() };
   audio.X.src = xIsA ? sources.A : sources.B;
