@@ -124,3 +124,17 @@ Chiffres de `scripts/product_fork_pilot_analysis.py`, écrits dans
   113 et ne se départagent pas (0,102, 0,112, 0,068).
 - Coût : 15 runs de 96 à 182 min, le GPU étant partagé. Une tentative a échoué faute de
   mémoire (k = 4, « décide ») et a été relancée par la file.
+
+## Lectures annexes sur les mêmes runs (CPU, lecture seule)
+
+Trois mesures faites sur les enfants de la fourche 100 pendant que la file GPU avance, sans
+nouveau run et sans toucher au pré-enregistrement ci-dessus :
+
+- `decided_when.md` — le sort d'un run ne se lit pas dans sa courbe de validation ; les
+  décisions dilatent l'écart de validation d'un facteur 16, et l'application validation → test
+  multiplie par 4 à 5 dans les deux bras.
+- `mode_connectivity.md` — l'enfant le plus divergent franchit une vraie barrière (12 segments
+  sur 12), mais la hauteur de barrière suit la distance parcourue (ρ = +0,90) et non le bras :
+  la connectivité linéaire ne fournit pas la signature cherchée.
+- `listening.md` — page d'écoute aveugle A/B/X et sa lecture, écrite avant toute écoute. Aucune
+  écoute n'a encore eu lieu.
