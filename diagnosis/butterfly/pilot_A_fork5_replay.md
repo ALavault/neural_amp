@@ -97,3 +97,54 @@ Observation qui départagerait : une fourche placée **après la dernière bascu
 et avant que le plateau ne se stabilise — par exemple à l'époque 25 — donnerait un bras « rejoue »
 où la garde est éteinte comme à la fourche 100, tout en restant dans la phase précoce. C'est la seule
 façon de poser à la fourche précoce la question que la fourche 100 a tranchée.
+
+## Verdict du bras (2026-09-18, 22 h 53)
+
+`scripts/product_fork_pilot_analysis.py`, sortie dans `pilot_A_results.json`.
+
+| bras | ESR (k = 0 à 4) | Δ en log | s | pas |
+|---|---|---|---|---|
+| décide | 0,0422 0,0684 0,0438 0,0443 0,0422 | +0,000 +0,482 +0,036 +0,049 −0,001 | **0,207** | 7 266 à 9 471, propres |
+| rejoue | 0,0422 0,0894 0,0371 0,0416 0,0386 | +0,000 +0,750 −0,129 −0,015 −0,090 | **0,365** | 7 266 pour tous |
+
+Porte d'identité franchie : `rejoue k0` reproduit `décide k0` au bit près.
+
+**Le critère pré-enregistré échoue, et dans le sens qui compte.** s(rejoue) = 0,365 n'est pas
+inférieur à s(décide)/2 = 0,104 ; le rapport des moyennes des |Δ| vaut 0,58 pour un seuil de 2.
+Imposer le calendrier du témoin **ne contient pas** la divergence à la fourche 5 : elle l'augmente.
+
+## Correction de la mise en garde écrite plus haut
+
+J'avais écrit, après `rejoue k1`, que le bras « n'isole pas le calendrier » et qu'« une grande
+dispersion n'y départage plus rien ». La première partie reste vraie, la seconde était trop forte.
+
+Les historiques de bascules sont **identiques entre les deux bras, enfant par enfant** :
+`[2, 67]`, `[2, 4]`, `[3, 4]`, `[]`, `[]`. La raison est mécanique : les bascules tombent aux époques
+2 à 4 après la fourche, très avant la première division du pas d'apprentissage (époque 156 au plus
+tôt), donc les deux bras sont encore indiscernables quand la garde se déclenche. La confusion est
+donc **symétrique** : à k égal, la seule différence entre les deux bras est bien le calendrier et le
+pas d'arrêt.
+
+Ce qui reste vrai de la mise en garde : s(rejoue) ne se lit pas comme « ce qui subsiste quand on
+retire les décisions », puisque la garde varie d'un k à l'autre à l'intérieur de chaque bras et
+contribue aux deux dispersions.
+
+## Ce que le bras permet de conclure
+
+- À la fourche 5, imposer le pas d'apprentissage de chaque époque et le pas d'arrêt ne réduit pas la
+  dispersion d'une perturbation d'un pas float32. Le mécanisme établi à la fourche 100 ne s'étend
+  donc pas à la phase précoce.
+- Le mécanisme est visible enfant par enfant : les enfants forcés à courir jusqu'au pas du témoin
+  s'améliorent (k = 2 passe de 0,0438 à 0,0371, k = 4 de 0,0422 à 0,0386) ou empirent (k = 1 passe
+  de 0,0684 à 0,0894) selon qu'ils s'arrêtaient trop tôt ou trop tard de leur propre chef. Le
+  calendrier commun déplace chaque enfant, il ne les rassemble pas.
+- Image en deux régimes : tard, la divergence passe par les décisions ; tôt, elle existe sans elles.
+
+## Ce qu'il ne permet pas de conclure
+
+- La garde reste libre, donc on ne peut pas dire « la phase précoce diverge sans aucune décision » ;
+  seulement « le calendrier et l'arrêt ne la contiennent pas ». Le pilote D, à la fourche 25, pose
+  la question avec la garde éteinte.
+- Cinq runs par bras, une graine, une fourche, une architecture. Et k = 1 porte à lui seul
+  l'essentiel des deux dispersions : sans lui, les |Δ| valent 0,036 / 0,049 / 0,001 pour « décide »
+  et 0,129 / 0,015 / 0,090 pour « rejoue ».
