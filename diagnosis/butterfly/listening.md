@@ -73,3 +73,36 @@ Si les deux paires décisives sont détectées : refaire l'épreuve en préfére
 l'appareil réel (lequel des deux modèles sonne le plus proche du réel), avec les cinq enfants du
 bras décide, pour savoir si l'ESR ordonne la fidélité perçue. Si elle ne l'ordonne pas, c'est la
 métrique de sélection qui est en cause, pas seulement sa dispersion.
+
+## Résultat de l'écoute (2026-09-18)
+
+Compte rendu de l'auditeur, sans relevé d'essais chiffré : aucune différence entendue sur la
+troisième version de la page, ni entre le témoin et son enfant divergent, **ni entre le témoin et
+l'appareil réel**. Une impression de « un peu plus de grave parfois, un demi-décibel au maximum »,
+que la mesure écarte comme écart statique (`is_it_eq.md` : le meilleur filtre linéaire est plat à
+±0,04 dB près). En comparaison A/B non masquée, **aucune préférence** entre le témoin et l'enfant.
+
+**Lecture selon le texte écrit d'avance :** « réel contre témoin au hasard » signifie que l'épreuve
+n'a pas la sensibilité voulue, et qu'on ne conclut rien sur les enfants tant qu'un contrôle positif
+ne valide pas la chaîne d'écoute. Cette clause reste la bonne, avec une nuance que l'auditeur a
+raison de soulever : l'inférence « si le modèle est indistinguable de l'appareil, alors deux modèles
+plus proches encore le sont aussi » est valide **à condition** que la chaîne puisse montrer quelque
+chose. C'est la seule chose qui manque, et elle se mesure.
+
+**Échelle d'audibilité, ajoutée à la page.** L'écart réel d = témoin − enfant est multiplié par un
+facteur, et l'on compare le témoin à témoin − facteur·d. Le facteur auquel la différence devient
+audible mesure la marge sous le seuil, dans l'unité de la divergence elle-même ; l'ESR croît comme
+le carré du facteur.
+
+| facteur | ESR entre les deux côtés | repère |
+|---|---|---|
+| × 1 | 0,052 | la divergence réelle entre les deux runs |
+| × 1,4 | 0,095 | ordre du meilleur modèle boîte noire publié (0,108) |
+| × 2 | 0,194 | |
+| × 2,8 | 0,380 | |
+| × 4 | 0,775 | ordre des modèles boîte grise publiés (0,59 à 0,70) |
+| × 8 | 3,10 | contrôle de la chaîne : inaudible ici signifie chaîne défaillante |
+
+Réserve : à grand facteur, le signal quitte le domaine des modèles plausibles et peut s'entendre
+comme un artefact plutôt que comme un modèle plus mauvais. Le seuil mesuré vaut donc pour ce type
+d'écart, extrapolé.

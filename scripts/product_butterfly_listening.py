@@ -68,6 +68,14 @@ PAIRS = (
     ("temoin", "decide_k1", "témoin contre enfant divergent : la question"),
     ("temoin", "rejoue_k1", "témoin contre enfant « rejoue » : le témoin négatif"),
 )
+# The listener distinguishes neither the child from the control nor the control from the
+# device, so the test has no sensitivity and says nothing about the children. This ladder
+# turns it into an instrument: the real gap d = control - child, scaled by a factor, gives
+# control - LADDER*d. The factor at which it becomes audible measures how far the
+# divergence sits below threshold, in the units of the divergence itself. ESR grows as the
+# square of the factor. The excerpt is the most divergent one.
+LADDER = (1.4, 2, 2.8, 4, 8)
+LADDER_EXCERPT = 3
 
 
 def fade(signal: np.ndarray) -> np.ndarray:
@@ -144,6 +152,40 @@ def main() -> None:
                     "difference": files["difference"] if right == "decide_k1" else None,
                 }
             )
+
+    # The ladder, built on the excerpt already written.
+    base = sf.read(OUT_DIR / f"audio/butterfly_{LADDER_EXCERPT}_temoin.wav", dtype="float64")[0]
+    child = sf.read(OUT_DIR / f"audio/butterfly_{LADDER_EXCERPT}_decide_k1.wav", dtype="float64")[0]
+    gap = base - child
+    for factor in LADDER:
+        exaggerated = base - factor * gap
+        peak = float(np.max(np.abs(exaggerated)))
+        if peak >= 1.0:
+            exaggerated, base_scaled = exaggerated * PEAK / peak, base * PEAK / peak
+        else:
+            base_scaled = base
+        name = f"audio/butterfly_ladder_x{factor:g}.wav"
+        sf.write(OUT_DIR / name, exaggerated, SAMPLE_RATE, subtype="PCM_16")
+        reference = f"audio/butterfly_ladder_x{factor:g}_temoin.wav"
+        sf.write(OUT_DIR / reference, base_scaled, SAMPLE_RATE, subtype="PCM_16")
+        excerpts.append(
+            {
+                "key": f"echelle_x{factor:g}",
+                "index": LADDER_EXCERPT,
+                "segment": SEGMENTS[LADDER_EXCERPT - 1],
+                "window": f"écart réel multiplié par {factor:g}, soit une ESR de"
+                f" {factor**2 * 0.0516:.2f} entre les deux côtés",
+                "label": f"échelle d'audibilité : écart × {factor:g}",
+                "left": f"{reference}?{STAMP}",
+                "right": f"{name}?{STAMP}",
+                "names": ["temoin", f"temoin moins {factor:g} fois l ecart"],
+                "esr_between_sides": float(
+                    (factor * gap) @ (factor * gap) / (base @ base)
+                ),
+                "gain_db": [0.0, 0.0],
+                "difference": None,
+            }
+        )
 
     OUT_DIR.joinpath("butterfly.html").write_text(
         TEMPLATE.replace("__EXCERPTS__", json.dumps(excerpts, ensure_ascii=False)),
