@@ -49,3 +49,35 @@ remplacées par un calendrier commun fixé d'avance ?
   l'ensemble d'entraînement change de jusqu'à 12 segments sur 130 d'une graine à
   l'autre ; sd(fixe) en contient l'effet, que ce pilote ne sépare pas.
 - **Portée** : un modèle, un appareil, 8 graines ; niveau pilote.
+
+## Levée de la condition (2026-09-21)
+
+Ce pilote était conditionné à B, qui **n'a pas tenu** : à la fourche 5, imposer le calendrier du
+témoin n'a pas réduit la dispersion, il l'a augmentée — s(rejoue) = 0,365 contre s(décide) = 0,207
+(`pilot_A_fork5_replay.md`). La clause prévoyait « sinon, discussion d'abord ». L'utilisateur a
+demandé le lancement le 2026-09-21 ; cette section tient lieu de la discussion et dit pourquoi le
+pilote garde son sens malgré l'échec de sa condition.
+
+**Ce qui a changé depuis l'écriture.** Le pilote E a montré que la chaîne de données — partition
+train/validation et ordre des lots — porte l'essentiel de l'effet de graine : la fixer fait tomber
+la dispersion de 0,375 à 0,191, soit le plancher du non-déterminisme seul
+(`diagnosis/seeds/pilot_E_split.md`). Et la simulation sur les courbes existantes a montré qu'aucun
+seuil fixe ne rend le déclenchement du plateau reproductible
+(`diagnosis/seeds/plateau_simulation.md`).
+
+**Ce que C apporte encore, et que E ne donne pas.** E dit que la chaîne de données porte la
+variance, pas **par quel canal**. Deux mécanismes restent possibles : le découpage change les
+données vues, donc le modèle, directement ; ou bien il change la courbe de validation, donc les
+dates de division et d'arrêt, donc le modèle. C sépare exactement ces deux canaux, puisque le bras
+« fixe » coupe le second en laissant le premier intact. C'est aussi le seul levier restant du côté
+de l'ordonnanceur, la simulation ayant tué le réglage du seuil.
+
+**Prédiction ajoutée, conforme à ce que E laisse attendre.** Si le canal est direct, sd(fixe) sera
+proche de sd(décide) et C sera réfutée. Les seuils écrits d'avance sont inchangés : soutenue si
+sd(fixe) ≤ sd(décide)/2, réfutée si sd(fixe) ≥ 0,75 × sd(décide), et le domaine intermédiaire est
+rapporté tel quel — leçon du pilote D, dont les issues ne partitionnaient pas l'espace.
+
+**Dispositif inchangé**, sauf que les deux options nécessaires n'existaient pas et ont été ajoutées
+au script d'entraînement : `--lr-halvings` installe le calendrier fixe et retire le détecteur de
+plateau, `--no-early-stopping` laisse le run aller jusqu'à `--max-steps`. Leurs défauts reproduisent
+le comportement actuel.

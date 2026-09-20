@@ -165,6 +165,10 @@ class System(BlackBoxSystem):
     # PyTorch's own default; --plateau-threshold raises it above the noise floor of the
     # validation curve, which diagnosis/butterfly/plateau_margin.md measured at 4 to 9e-3.
     plateau_threshold = 1e-4
+    # Pilot C: when a fixed schedule is given, the plateau detector is removed entirely
+    # rather than tuned, since diagnosis/seeds/plateau_simulation.md showed no threshold
+    # makes it fire reproducibly.
+    lr_halvings: list[int] | None = None
 
     def configure_optimizers(self):
         groups: dict[tuple, list] = {}
@@ -184,6 +188,8 @@ class System(BlackBoxSystem):
             patience=20,
             threshold=self.plateau_threshold,
         )
+        if self.lr_halvings is not None:
+            return optimizer
         return [optimizer], [
             {
                 "scheduler": scheduler,
@@ -192,6 +198,18 @@ class System(BlackBoxSystem):
                 "frequency": 1,
             }
         ]
+
+
+class FixedSchedule(pl.Callback):
+    """Halve the learning rate at fixed epochs, in place of the plateau detector."""
+
+    def __init__(self, epochs: list[int]) -> None:
+        self.epochs = set(epochs)
+
+    def on_train_epoch_start(self, trainer, system) -> None:
+        if trainer.current_epoch in self.epochs:
+            for group in trainer.optimizers[0].param_groups:
+                group["lr"] /= 2
 
 
 class SSMWaveNetProcessor(SSMWaveNet):
@@ -268,6 +286,19 @@ def parse_args() -> argparse.Namespace:
         type=float,
         default=1e-4,
         help="relative improvement ReduceLROnPlateau requires; PyTorch's default is 1e-4",
+    )
+    parser.add_argument(
+        "--lr-halvings",
+        type=int,
+        nargs="+",
+        default=None,
+        help="halve the learning rate at the start of these epochs and drop the plateau"
+        " detector altogether (pilot C)",
+    )
+    parser.add_argument(
+        "--no-early-stopping",
+        action="store_true",
+        help="run to --max-steps whatever the validation loss does (pilot C)",
     )
     parser.add_argument(
         "--split-seed",
@@ -434,6 +465,7 @@ def main() -> None:
     )
     system.honor_optim = args.honor_optim
     system.plateau_threshold = args.plateau_threshold
+    system.lr_halvings = args.lr_halvings
 
     run_dir = RUNS_DIR / f"nablafx_{args.run_id}"
     last = run_dir / "checkpoints/last.ckpt"
@@ -468,7 +500,8 @@ def main() -> None:
             checkpoint,
             ModelSummary(max_depth=2),
             LearningRateMonitor(),
-            early_stopping,
+            *([] if args.no_early_stopping else [early_stopping]),
+            *([] if args.lr_halvings is None else [FixedSchedule(args.lr_halvings)]),
             *([] if args.no_polarity_guard else [polarity_guard]),
         ],
     )
@@ -523,6 +556,8 @@ def main() -> None:
         "gradient_clip_val": args.clip_value,
         "honor_optim": args.honor_optim,
         "plateau_threshold": args.plateau_threshold,
+        "lr_halvings": args.lr_halvings,
+        "no_early_stopping": args.no_early_stopping,
         "split_seed": args.split_seed,
         "polarity_guard": not args.no_polarity_guard,
         "polarity_flips": polarity_guard.flips,
