@@ -27,7 +27,7 @@ run() {
       sleep 60
     done
     echo "=== ${run_id}: start $(date '+%a %H:%M') (attempt ${attempt})"
-    uv run python scripts/product_nablafx_bench.py --run-id "${run_id}" --resume "$@" 2>&1 \
+    .venv/bin/python3 scripts/product_nablafx_bench.py --run-id "${run_id}" --resume "$@" 2>&1 \
       | grep -vE "warn\(msg\)|UserWarning|warnings.warn|is differentiable|^\s*$"
     echo "=== ${run_id}: end $(date '+%a %H:%M') (exit ${PIPESTATUS[0]})"
   done

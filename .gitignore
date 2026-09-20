@@ -39,3 +39,4 @@ demo/runs/
 
 # JUCE build artefacts of the demo plugin.
 build/demo_plugin/
+demo/runs/.ipc/

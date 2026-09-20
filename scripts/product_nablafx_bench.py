@@ -27,6 +27,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import time
 from datetime import datetime
 from pathlib import Path
@@ -104,6 +105,29 @@ def _load(
 # torchaudio.functional.resample, as in nablafx.
 torchaudio.info = _info
 torchaudio.load = _load
+
+# Worker sockets must not live in a directory named tmp. On 2026-09-20 the shared
+# /fastdata/lavaulta/tmp was deleted while a run was training; its DataLoader workers died
+# with it and the run hung for 28 minutes holding 19.9 GiB of GPU memory at 0 % use. These
+# two lines put the sockets under the project and make PyTorch's own timeout fail loudly
+# instead of waiting for ever; neither touches the training itself.
+_IPC = Path(__file__).resolve().parents[1] / "demo/runs/.ipc"
+_IPC.mkdir(parents=True, exist_ok=True)
+os.environ["TMPDIR"] = str(_IPC)
+tempfile.tempdir = None
+
+_DataLoader = torch.utils.data.DataLoader
+
+
+def _dataloader_with_timeout(*args, **kwargs):
+    """nablafx builds its loaders without a timeout, so a dead worker hangs the run."""
+    if kwargs.get("num_workers", 0) and "timeout" not in kwargs:
+        kwargs["timeout"] = 600
+    return _DataLoader(*args, **kwargs)
+
+
+torch.utils.data.DataLoader = _dataloader_with_timeout
+
 
 _pad = torch.nn.functional.pad
 
