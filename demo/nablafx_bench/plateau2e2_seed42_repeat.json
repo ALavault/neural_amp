@@ -1,0 +1,66 @@
+{
+  "run_id": "plateau2e2_seed42_repeat",
+  "timestamp": "2026-09-20T19:55:30+02:00",
+  "commit": "6191ea77612eacb2bd82fe3740e57616aa125f75",
+  "nablafx_commit": "045db6e7d6087151c7e3a264844bd8c4eafc885c",
+  "benchmark": "ToneTwist Big Muff S050_V100, nablafx protocol",
+  "model": "ssm-wavenet",
+  "parameters": 11329,
+  "seed": 42,
+  "lr": 0.01,
+  "loss_weights": {
+    "l1": 1.0,
+    "mrstft": 0.1
+  },
+  "gradient_clip_val": 1.0,
+  "honor_optim": true,
+  "plateau_threshold": 0.02,
+  "split_seed": null,
+  "polarity_guard": true,
+  "polarity_flips": [
+    0,
+    2
+  ],
+  "deterministic": false,
+  "batch_size": 16,
+  "ssm": {
+    "num_blocks": 8,
+    "channels": 16,
+    "state_dim": 4,
+    "output_act": "tanh",
+    "discretization": "zoh"
+  },
+  "resumed": false,
+  "global_step": 4263,
+  "stopped_epoch": 608,
+  "best_val_loss": 0.037585970014333725,
+  "best_checkpoint": "epoch=585-step=4100.ckpt",
+  "minutes_this_session": 63.73,
+  "peak_gpu_gib": 17.17,
+  "test_last": {
+    "loss/test/tot": 0.05692102015018463,
+    "loss/test/l1": 0.003418960841372609,
+    "loss/test/mrstft": 0.05350205674767494,
+    "loss_scaled/test/tot": 0.5384395718574524,
+    "loss_scaled/test/l1": 0.003418960841372609,
+    "loss_scaled/test/mrstft": 0.5350205898284912,
+    "metric/test/l1": 0.003418960841372609,
+    "metric/test/mse": 0.00022857631847728044,
+    "metric/test/esr": 0.14408861100673676,
+    "metric/test/mape": 3.657686471939087,
+    "metric/test/mrstft": 0.5350205898284912
+  },
+  "test_best": {
+    "loss/test/tot": 0.05692385509610176,
+    "loss/test/l1": 0.003419045591726899,
+    "loss/test/mrstft": 0.053504813462495804,
+    "loss_scaled/test/tot": 0.5384671688079834,
+    "loss_scaled/test/l1": 0.003419045591726899,
+    "loss_scaled/test/mrstft": 0.5350481271743774,
+    "metric/test/l1": 0.003419045591726899,
+    "metric/test/mse": 0.0002285805094288662,
+    "metric/test/esr": 0.1440943479537964,
+    "metric/test/mape": 3.6584794521331787,
+    "metric/test/mrstft": 0.5350481271743774
+  }
+}

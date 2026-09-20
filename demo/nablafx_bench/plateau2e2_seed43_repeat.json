@@ -1,0 +1,63 @@
+{
+  "run_id": "plateau2e2_seed43_repeat",
+  "timestamp": "2026-09-20T21:46:42+02:00",
+  "commit": "6191ea77612eacb2bd82fe3740e57616aa125f75",
+  "nablafx_commit": "045db6e7d6087151c7e3a264844bd8c4eafc885c",
+  "benchmark": "ToneTwist Big Muff S050_V100, nablafx protocol",
+  "model": "ssm-wavenet",
+  "parameters": 11329,
+  "seed": 43,
+  "lr": 0.01,
+  "loss_weights": {
+    "l1": 1.0,
+    "mrstft": 0.1
+  },
+  "gradient_clip_val": 1.0,
+  "honor_optim": true,
+  "plateau_threshold": 0.02,
+  "split_seed": null,
+  "polarity_guard": true,
+  "polarity_flips": [],
+  "deterministic": false,
+  "batch_size": 16,
+  "ssm": {
+    "num_blocks": 8,
+    "channels": 16,
+    "state_dim": 4,
+    "output_act": "tanh",
+    "discretization": "zoh"
+  },
+  "resumed": false,
+  "global_step": 2891,
+  "stopped_epoch": 412,
+  "best_val_loss": 0.0430847704410553,
+  "best_checkpoint": "epoch=371-step=2600.ckpt",
+  "minutes_this_session": 43.9,
+  "peak_gpu_gib": 17.17,
+  "test_last": {
+    "loss/test/tot": 0.0626244843006134,
+    "loss/test/l1": 0.0041374266147613525,
+    "loss/test/mrstft": 0.05848705768585205,
+    "loss_scaled/test/tot": 0.5890080332756042,
+    "loss_scaled/test/l1": 0.0041374266147613525,
+    "loss_scaled/test/mrstft": 0.5848705768585205,
+    "metric/test/l1": 0.0041374266147613525,
+    "metric/test/mse": 0.0002980751742143184,
+    "metric/test/esr": 0.1881641149520874,
+    "metric/test/mape": 5.080749034881592,
+    "metric/test/mrstft": 0.5848705768585205
+  },
+  "test_best": {
+    "loss/test/tot": 0.0619453601539135,
+    "loss/test/l1": 0.004132378380745649,
+    "loss/test/mrstft": 0.05781297758221626,
+    "loss_scaled/test/tot": 0.5822621583938599,
+    "loss_scaled/test/l1": 0.004132378380745649,
+    "loss_scaled/test/mrstft": 0.578129768371582,
+    "metric/test/l1": 0.004132378380745649,
+    "metric/test/mse": 0.0002983800077345222,
+    "metric/test/esr": 0.1883845329284668,
+    "metric/test/mape": 4.8401594161987305,
+    "metric/test/mrstft": 0.578129768371582
+  }
+}

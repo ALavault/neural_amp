@@ -1,0 +1,63 @@
+{
+  "run_id": "plateau2e2_seed43",
+  "timestamp": "2026-09-20T20:56:32+02:00",
+  "commit": "6191ea77612eacb2bd82fe3740e57616aa125f75",
+  "nablafx_commit": "045db6e7d6087151c7e3a264844bd8c4eafc885c",
+  "benchmark": "ToneTwist Big Muff S050_V100, nablafx protocol",
+  "model": "ssm-wavenet",
+  "parameters": 11329,
+  "seed": 43,
+  "lr": 0.01,
+  "loss_weights": {
+    "l1": 1.0,
+    "mrstft": 0.1
+  },
+  "gradient_clip_val": 1.0,
+  "honor_optim": true,
+  "plateau_threshold": 0.02,
+  "split_seed": null,
+  "polarity_guard": true,
+  "polarity_flips": [],
+  "deterministic": false,
+  "batch_size": 16,
+  "ssm": {
+    "num_blocks": 8,
+    "channels": 16,
+    "state_dim": 4,
+    "output_act": "tanh",
+    "discretization": "zoh"
+  },
+  "resumed": false,
+  "global_step": 3640,
+  "stopped_epoch": 519,
+  "best_val_loss": 0.033990662544965744,
+  "best_checkpoint": "epoch=428-step=3000.ckpt",
+  "minutes_this_session": 54.76,
+  "peak_gpu_gib": 17.17,
+  "test_last": {
+    "loss/test/tot": 0.05198713019490242,
+    "loss/test/l1": 0.0028717555105686188,
+    "loss/test/mrstft": 0.0491153746843338,
+    "loss_scaled/test/tot": 0.49402549862861633,
+    "loss_scaled/test/l1": 0.0028717555105686188,
+    "loss_scaled/test/mrstft": 0.4911537170410156,
+    "metric/test/l1": 0.0028717555105686188,
+    "metric/test/mse": 0.00013409329403657466,
+    "metric/test/esr": 0.08267531543970108,
+    "metric/test/mape": 6.5285325050354,
+    "metric/test/mrstft": 0.4911537170410156
+  },
+  "test_best": {
+    "loss/test/tot": 0.049741506576538086,
+    "loss/test/l1": 0.002831144956871867,
+    "loss/test/mrstft": 0.046910360455513,
+    "loss_scaled/test/tot": 0.4719347059726715,
+    "loss_scaled/test/l1": 0.002831144956871867,
+    "loss_scaled/test/mrstft": 0.4691035747528076,
+    "metric/test/l1": 0.002831144956871867,
+    "metric/test/mse": 0.00013535139441955835,
+    "metric/test/esr": 0.08365333825349808,
+    "metric/test/mape": 4.6830291748046875,
+    "metric/test/mrstft": 0.4691035747528076
+  }
+}
