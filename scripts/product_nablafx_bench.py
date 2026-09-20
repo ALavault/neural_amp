@@ -138,6 +138,9 @@ class System(BlackBoxSystem):
     """
 
     honor_optim = False
+    # PyTorch's own default; --plateau-threshold raises it above the noise floor of the
+    # validation curve, which diagnosis/butterfly/plateau_margin.md measured at 4 to 9e-3.
+    plateau_threshold = 1e-4
 
     def configure_optimizers(self):
         groups: dict[tuple, list] = {}
@@ -151,7 +154,11 @@ class System(BlackBoxSystem):
             eps=1e-8,
         )
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            optimizer, mode="min", factor=0.5, patience=20
+            optimizer,
+            mode="min",
+            factor=0.5,
+            patience=20,
+            threshold=self.plateau_threshold,
         )
         return [optimizer], [
             {
@@ -232,6 +239,19 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument(
+        "--plateau-threshold",
+        type=float,
+        default=1e-4,
+        help="relative improvement ReduceLROnPlateau requires; PyTorch's default is 1e-4",
+    )
+    parser.add_argument(
+        "--split-seed",
+        type=int,
+        default=None,
+        help="reseed just before fit, so the train/val split and the batch order are"
+        " common to every run whatever --seed is",
+    )
     parser.add_argument("--max-steps", type=int, default=15_000)
     parser.add_argument("--lr", type=float)
     parser.add_argument("--l1-weight", type=float)
@@ -389,6 +409,7 @@ def main() -> None:
         use_callbacks=True,
     )
     system.honor_optim = args.honor_optim
+    system.plateau_threshold = args.plateau_threshold
 
     run_dir = RUNS_DIR / f"nablafx_{args.run_id}"
     last = run_dir / "checkpoints/last.ckpt"
@@ -434,6 +455,10 @@ def main() -> None:
     )
 
     started = time.perf_counter()
+    # The split and the batch order are drawn from the global generator inside fit, so
+    # reseeding here makes them common to every run whatever --seed is.
+    if args.split_seed is not None:
+        pl.seed_everything(args.split_seed, workers=True)
     resume_from = str(last) if args.resume and last.exists() else None
     trainer.fit(
         system,
@@ -473,6 +498,8 @@ def main() -> None:
         "loss_weights": {"l1": l1_weight, "mrstft": mrstft_weight},
         "gradient_clip_val": args.clip_value,
         "honor_optim": args.honor_optim,
+        "plateau_threshold": args.plateau_threshold,
+        "split_seed": args.split_seed,
         "polarity_guard": not args.no_polarity_guard,
         "polarity_flips": polarity_guard.flips,
         "deterministic": args.deterministic,
