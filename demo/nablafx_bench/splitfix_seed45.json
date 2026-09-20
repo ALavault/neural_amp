@@ -1,0 +1,66 @@
+{
+  "run_id": "splitfix_seed45",
+  "timestamp": "2026-09-20T15:26:07+02:00",
+  "commit": "757b61e50c2ac365f156ebe1db557ce866272ba8",
+  "nablafx_commit": "045db6e7d6087151c7e3a264844bd8c4eafc885c",
+  "benchmark": "ToneTwist Big Muff S050_V100, nablafx protocol",
+  "model": "ssm-wavenet",
+  "parameters": 11329,
+  "seed": 45,
+  "lr": 0.01,
+  "loss_weights": {
+    "l1": 1.0,
+    "mrstft": 0.1
+  },
+  "gradient_clip_val": 1.0,
+  "honor_optim": true,
+  "plateau_threshold": 0.0001,
+  "split_seed": 42,
+  "polarity_guard": true,
+  "polarity_flips": [
+    15,
+    16
+  ],
+  "deterministic": false,
+  "batch_size": 16,
+  "ssm": {
+    "num_blocks": 8,
+    "channels": 16,
+    "state_dim": 4,
+    "output_act": "tanh",
+    "discretization": "zoh"
+  },
+  "resumed": false,
+  "global_step": 5271,
+  "stopped_epoch": 752,
+  "best_val_loss": 0.03633829951286316,
+  "best_checkpoint": "epoch=699-step=4900.ckpt",
+  "minutes_this_session": 78.68,
+  "peak_gpu_gib": 17.17,
+  "test_last": {
+    "loss/test/tot": 0.04925442114472389,
+    "loss/test/l1": 0.002605246379971504,
+    "loss/test/mrstft": 0.04664917662739754,
+    "loss_scaled/test/tot": 0.4690970182418823,
+    "loss_scaled/test/l1": 0.002605246379971504,
+    "loss_scaled/test/mrstft": 0.46649178862571716,
+    "metric/test/l1": 0.002605246379971504,
+    "metric/test/mse": 0.0001167629670817405,
+    "metric/test/esr": 0.06534358114004135,
+    "metric/test/mape": 3.926738739013672,
+    "metric/test/mrstft": 0.4664917290210724
+  },
+  "test_best": {
+    "loss/test/tot": 0.04894817993044853,
+    "loss/test/l1": 0.0026064279954880476,
+    "loss/test/mrstft": 0.046341750770807266,
+    "loss_scaled/test/tot": 0.4660239517688751,
+    "loss_scaled/test/l1": 0.0026064279954880476,
+    "loss_scaled/test/mrstft": 0.46341753005981445,
+    "metric/test/l1": 0.0026064279954880476,
+    "metric/test/mse": 0.00011691585677908733,
+    "metric/test/esr": 0.06547405570745468,
+    "metric/test/mape": 3.91080641746521,
+    "metric/test/mrstft": 0.46341753005981445
+  }
+}

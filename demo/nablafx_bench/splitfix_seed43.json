@@ -1,0 +1,68 @@
+{
+  "run_id": "splitfix_seed43",
+  "timestamp": "2026-09-20T12:40:14+02:00",
+  "commit": "757b61e50c2ac365f156ebe1db557ce866272ba8",
+  "nablafx_commit": "045db6e7d6087151c7e3a264844bd8c4eafc885c",
+  "benchmark": "ToneTwist Big Muff S050_V100, nablafx protocol",
+  "model": "ssm-wavenet",
+  "parameters": 11329,
+  "seed": 43,
+  "lr": 0.01,
+  "loss_weights": {
+    "l1": 1.0,
+    "mrstft": 0.1
+  },
+  "gradient_clip_val": 1.0,
+  "honor_optim": true,
+  "plateau_threshold": 0.0001,
+  "split_seed": 42,
+  "polarity_guard": true,
+  "polarity_flips": [
+    4,
+    9,
+    14,
+    16
+  ],
+  "deterministic": false,
+  "batch_size": 16,
+  "ssm": {
+    "num_blocks": 8,
+    "channels": 16,
+    "state_dim": 4,
+    "output_act": "tanh",
+    "discretization": "zoh"
+  },
+  "resumed": false,
+  "global_step": 4529,
+  "stopped_epoch": 646,
+  "best_val_loss": 0.03660658746957779,
+  "best_checkpoint": "epoch=614-step=4300.ckpt",
+  "minutes_this_session": 66.99,
+  "peak_gpu_gib": 17.17,
+  "test_last": {
+    "loss/test/tot": 0.05218508467078209,
+    "loss/test/l1": 0.0029998428653925657,
+    "loss/test/mrstft": 0.049185242503881454,
+    "loss_scaled/test/tot": 0.494852215051651,
+    "loss_scaled/test/l1": 0.0029998428653925657,
+    "loss_scaled/test/mrstft": 0.49185240268707275,
+    "metric/test/l1": 0.0029998428653925657,
+    "metric/test/mse": 0.00015847171016503125,
+    "metric/test/esr": 0.09915575385093689,
+    "metric/test/mape": 3.8351354598999023,
+    "metric/test/mrstft": 0.49185240268707275
+  },
+  "test_best": {
+    "loss/test/tot": 0.052187155932188034,
+    "loss/test/l1": 0.003001054050400853,
+    "loss/test/mrstft": 0.0491861067712307,
+    "loss_scaled/test/tot": 0.49486207962036133,
+    "loss_scaled/test/l1": 0.003001054050400853,
+    "loss_scaled/test/mrstft": 0.4918610155582428,
+    "metric/test/l1": 0.003001054050400853,
+    "metric/test/mse": 0.00015863827138673514,
+    "metric/test/esr": 0.09927397221326828,
+    "metric/test/mape": 3.837651491165161,
+    "metric/test/mrstft": 0.4918610155582428
+  }
+}

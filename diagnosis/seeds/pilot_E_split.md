@@ -55,3 +55,50 @@ Soit s le écart-type de l'effet run sur les six runs à partition commune.
 - Six runs, une architecture, un appareil. Comparer s à une référence mesurée sur six autres runs
   ajoute l'incertitude des deux estimations, qu'un pilote à n = 6 ne maîtrise pas.
 - Il ne dit rien de l'effet d'une partition **meilleure** : fixer n'est pas choisir.
+
+## Verdict (2026-09-20, 17 h 46)
+
+| graine | 42 | 43 | 44 | 45 | 46 | 47 |
+|---|---|---|---|---|---|---|
+| ESR | 0,0811 | 0,0992 | 0,0675 | 0,0653 | 0,0916 | 0,1017 |
+
+**s = 0,191**, pour un seuil de 0,25. **L'issue « la chaîne de données porte l'essentiel » est
+réalisée.**
+
+Portes franchies. Les six enregistrements portent `split_seed: 42`. Surtout, la perte de validation
+recalculée sur la partition dérivée de cette graine reproduit celle du journal : 0,03489 contre
+0,03488 pour la graine 47, 0,03300 contre 0,03353 pour la 42. Une partition différente donnerait un
+écart de l'ordre de 30 %, puisque l'écart-type de l'effet segment vaut 1,0 en log.
+
+## Ce que cela permet de conclure
+
+- **La dispersion tombe de 0,375 à 0,191 en fixant la chaîne de données**, c'est-à-dire presque
+  exactement au plancher du non-déterminisme GPU seul, **0,18**. Une fois la partition et l'ordre
+  des lots communs, l'initialisation des poids ne contribue plus rien de mesurable.
+- Autrement dit, ce que la littérature et nos propres notes appellent « effet de graine » est ici,
+  pour l'essentiel, **un effet du tirage des données**. Ce n'est pas une propriété de
+  l'optimisation, c'est une propriété du protocole d'évaluation.
+- **Le correctif est gratuit** : fixer la partition ne coûte pas un pas de calcul. Il ramène la
+  comparaison entre architectures à un bruit de 0,18 au lieu de 0,375, soit une variance quatre
+  fois moindre.
+
+## Ce que cela ne permet pas de conclure, et un avertissement
+
+- **Fixer n'est pas choisir.** La moyenne géométrique des six runs vaut 0,0831 contre 0,068 pour les
+  six runs de référence : cette partition-ci est plus difficile que la moyenne de celles tirées par
+  les graines. Figer une partition fige aussi sa difficulté, et un protocole qui en fixerait une
+  mauvaise publierait des chiffres pessimistes et incomparables à ceux d'autrui.
+- Le pilote ne sépare pas la **partition** de l'**ordre des lots**, fixés ensemble. Il désigne la
+  chaîne de données, pas son maillon.
+- Six runs contre six, un appareil, une architecture. Comparer deux écarts-types estimés sur six
+  points chacun n'a pas la précision que la netteté du résultat suggère : c'est un pilote.
+- s = 0,191 reste au-dessus de 0,18 ; rien n'exclut une contribution résiduelle de
+  l'initialisation, simplement elle n'est pas séparable du non-déterminisme à ce nombre de runs.
+
+## Prochaine expérience discriminante
+
+Séparer la partition de l'ordre des lots demanderait de restaurer l'état du générateur après le
+tirage de la partition, donc de toucher au module de données de nablafx. Plus utile d'abord :
+mesurer la **dispersion entre partitions** elle-même — six partitions différentes, graine
+d'initialisation commune — qui dirait de combien le choix du jeu de validation déplace le résultat,
+et donc ce qu'un protocole gagnerait à en fixer une plutôt qu'à en tirer une.

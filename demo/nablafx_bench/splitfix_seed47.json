@@ -1,0 +1,63 @@
+{
+  "run_id": "splitfix_seed47",
+  "timestamp": "2026-09-20T17:46:08+02:00",
+  "commit": "757b61e50c2ac365f156ebe1db557ce866272ba8",
+  "nablafx_commit": "045db6e7d6087151c7e3a264844bd8c4eafc885c",
+  "benchmark": "ToneTwist Big Muff S050_V100, nablafx protocol",
+  "model": "ssm-wavenet",
+  "parameters": 11329,
+  "seed": 47,
+  "lr": 0.01,
+  "loss_weights": {
+    "l1": 1.0,
+    "mrstft": 0.1
+  },
+  "gradient_clip_val": 1.0,
+  "honor_optim": true,
+  "plateau_threshold": 0.0001,
+  "split_seed": 42,
+  "polarity_guard": true,
+  "polarity_flips": [],
+  "deterministic": false,
+  "batch_size": 16,
+  "ssm": {
+    "num_blocks": 8,
+    "channels": 16,
+    "state_dim": 4,
+    "output_act": "tanh",
+    "discretization": "zoh"
+  },
+  "resumed": false,
+  "global_step": 4921,
+  "stopped_epoch": 702,
+  "best_val_loss": 0.034687161445617676,
+  "best_checkpoint": "epoch=685-step=4800.ckpt",
+  "minutes_this_session": 74.51,
+  "peak_gpu_gib": 17.17,
+  "test_last": {
+    "loss/test/tot": 0.05112604424357414,
+    "loss/test/l1": 0.0028839970473200083,
+    "loss/test/mrstft": 0.04824204370379448,
+    "loss_scaled/test/tot": 0.48530444502830505,
+    "loss_scaled/test/l1": 0.0028839970473200083,
+    "loss_scaled/test/mrstft": 0.4824204444885254,
+    "metric/test/l1": 0.0028839970473200083,
+    "metric/test/mse": 0.00016093980229925364,
+    "metric/test/esr": 0.101709745824337,
+    "metric/test/mape": 3.978130340576172,
+    "metric/test/mrstft": 0.4824204444885254
+  },
+  "test_best": {
+    "loss/test/tot": 0.05111858248710632,
+    "loss/test/l1": 0.002883914625272155,
+    "loss/test/mrstft": 0.048234667629003525,
+    "loss_scaled/test/tot": 0.48523053526878357,
+    "loss_scaled/test/l1": 0.002883914625272155,
+    "loss_scaled/test/mrstft": 0.48234665393829346,
+    "metric/test/l1": 0.002883914625272155,
+    "metric/test/mse": 0.00016101710207294673,
+    "metric/test/esr": 0.10173807293176651,
+    "metric/test/mape": 3.9680709838867188,
+    "metric/test/mrstft": 0.48234665393829346
+  }
+}

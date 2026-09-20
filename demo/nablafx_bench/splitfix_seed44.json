@@ -1,0 +1,63 @@
+{
+  "run_id": "splitfix_seed44",
+  "timestamp": "2026-09-20T14:01:12+02:00",
+  "commit": "757b61e50c2ac365f156ebe1db557ce866272ba8",
+  "nablafx_commit": "045db6e7d6087151c7e3a264844bd8c4eafc885c",
+  "benchmark": "ToneTwist Big Muff S050_V100, nablafx protocol",
+  "model": "ssm-wavenet",
+  "parameters": 11329,
+  "seed": 44,
+  "lr": 0.01,
+  "loss_weights": {
+    "l1": 1.0,
+    "mrstft": 0.1
+  },
+  "gradient_clip_val": 1.0,
+  "honor_optim": true,
+  "plateau_threshold": 0.0001,
+  "split_seed": 42,
+  "polarity_guard": true,
+  "polarity_flips": [],
+  "deterministic": false,
+  "batch_size": 16,
+  "ssm": {
+    "num_blocks": 8,
+    "channels": 16,
+    "state_dim": 4,
+    "output_act": "tanh",
+    "discretization": "zoh"
+  },
+  "resumed": false,
+  "global_step": 4914,
+  "stopped_epoch": 701,
+  "best_val_loss": 0.03661388158798218,
+  "best_checkpoint": "epoch=628-step=4400.ckpt",
+  "minutes_this_session": 74.74,
+  "peak_gpu_gib": 17.17,
+  "test_last": {
+    "loss/test/tot": 0.049126964062452316,
+    "loss/test/l1": 0.0027098588179796934,
+    "loss/test/mrstft": 0.046417105942964554,
+    "loss_scaled/test/tot": 0.4668809175491333,
+    "loss_scaled/test/l1": 0.0027098588179796934,
+    "loss_scaled/test/mrstft": 0.46417108178138733,
+    "metric/test/l1": 0.0027098588179796934,
+    "metric/test/mse": 0.0001232320792041719,
+    "metric/test/esr": 0.06749406456947327,
+    "metric/test/mape": 4.295677661895752,
+    "metric/test/mrstft": 0.46417108178138733
+  },
+  "test_best": {
+    "loss/test/tot": 0.049262017011642456,
+    "loss/test/l1": 0.002713741036131978,
+    "loss/test/mrstft": 0.046548277139663696,
+    "loss_scaled/test/tot": 0.4681965112686157,
+    "loss_scaled/test/l1": 0.002713741036131978,
+    "loss_scaled/test/mrstft": 0.4654827415943146,
+    "metric/test/l1": 0.002713741036131978,
+    "metric/test/mse": 0.0001233636139659211,
+    "metric/test/esr": 0.06742152571678162,
+    "metric/test/mape": 4.363264083862305,
+    "metric/test/mrstft": 0.4654827415943146
+  }
+}
