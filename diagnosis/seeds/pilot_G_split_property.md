@@ -64,3 +64,50 @@ servent qu'à désigner une piste pour un dispositif ultérieur.
   pilote E a déjà montré que figer une partition fige aussi sa difficulté.
 - La propriété primaire est définie sur la cible, pas sur l'entrée sèche. Le RMS minimal d'un
   segment de validation dépend donc de l'appareil modélisé autant que du signal de test.
+
+## Relecture adverse (2026-09-22, avant tout calcul de corrélation)
+
+Soumis à une relecture adverse par Codex, via le CLI. Six critiques, dont trois que je retiens
+sans réserve. **Les prédictions et les seuils ci-dessus ne sont pas modifiés** : ce qui suit les
+commente, le verdict les appliquera tels quels et rapportera ces réserves en regard.
+
+**Retenu, et corrigé sur-le-champ.**
+
+1. *Le script du verdict corrélait des champs dépendant du run.* Il parcourait toutes les clés
+   communes du JSON, donc aussi `logged_val`, `recomputed_val` et `relative_gap`, qui viennent du
+   run dont on veut prédire l'ESR. C'était circulaire, et c'est un vrai défaut, pas une question de
+   style. Corrigé : seules les sept propriétés déclarées ici sont corrélées.
+2. *Mon affirmation « trois graines partagent exactement le même RMS minimal » est fausse.* Deux
+   graines seulement sont exactement égales (46 et 49, à 2,0671791571658105·10⁻⁴) ; la graine 43
+   vaut 2,1135467977728695·10⁻⁴, une valeur différente que mon format d'affichage à cinq décimales
+   arrondissait à la même chaîne. Sept valeurs distinctes sur huit, pas six. L'erreur venait de mon
+   propre formatage et je l'avais propagée dans un message de commit.
+3. *La taille réellement confirmatoire est trois, pas huit.* Le RMS minimal a été choisi parce que
+   H2 le nommait, et H2 vient de six runs dont trois graines ici présentes ; cinq des huit issues
+   existaient déjà au moment du pré-enregistrement. Le texte le disait — « figé avant l'issue pour
+   trois graines sur huit » — mais le reste de la formulation laissait entendre davantage. À lire
+   comme une confirmation prospective à n = 3, ce qui ne soutient rien à soi seul.
+
+**Retenu, appliqué au verdict et non au pré-enregistrement.**
+
+4. *« H2 réfutée » est trop fort à n = 8.* Un |ρ| sous 0,50 n'exclut pas une association réelle ;
+   il constate une absence de détection. Le verdict emploiera le libellé pré-enregistré et lui
+   adjoindra la lecture correcte : **non soutenue, non concluante**. Changer le libellé après coup
+   reviendrait à réécrire une prédiction.
+5. *L'écart du contrôle de reproduction atteint 1,19 %, quand le texte cite 0,15 %.* Le 0,15 %
+   venait d'une vérification antérieure sur d'autres runs ; ici la plage observée est 0,2 à 1,2 %.
+   Aucun seuil d'échec n'avait été fixé pour ce contrôle, ce qui est une négligence : une partition
+   fausse donnerait ~30 %, donc 1,2 % reste concluant, mais le seuil aurait dû être écrit d'avance.
+
+**Retenu partiellement.**
+
+6. *La portée de l'hypothèse glisse.* L'échec du seul RMS minimal ne réfute pas « une propriété
+   mesurable prédit l'ESR » ; et un seuil en valeur absolue autorise les deux directions alors que
+   H2 permettait une prédiction signée. Juste sur les deux points. Le verdict ne conclura donc que
+   sur la propriété primaire, et signalera que la direction n'avait pas été contrainte.
+7. *La protection contre les tests multiples est rhétorique.* Exact : aucune correction n'est
+   appliquée, seule une mise en garde est écrite. Elle suffit tant qu'aucune inférence n'en est
+   tirée, ce que le verdict respectera en ne rapportant les exploratoires que comme descriptives.
+
+**Non retenu.** Le contrôle par les poids finaux n'est pas circulaire pour la propriété primaire,
+calculée uniquement depuis les cibles du découpage ; la relecture en convient.

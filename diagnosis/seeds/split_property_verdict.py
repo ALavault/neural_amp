@@ -22,6 +22,19 @@ from scipy import stats
 ROOT = Path(__file__).resolve().parents[2]
 SEEDS = [str(s) for s in range(42, 50)]
 PRIMARY = "val_rms_min"
+# Only the properties the pre-registration declares. The JSON also holds logged_val,
+# recomputed_val and relative_gap, which depend on the run: correlating those with the
+# run's own ESR would be circular, and iterating over every common key would have done
+# exactly that. Flagged by an adversarial review, 2026-09-22.
+DECLARED = (
+    "val_rms_min",
+    "val_rms_mean",
+    "val_energy",
+    "val_crest_mean",
+    "val_centroid_mean",
+    "val_quiet_share_mean",
+    "train_rms_min",
+)
 SUPPORTED, REFUTED = 0.74, 0.50
 
 
@@ -37,7 +50,7 @@ def main() -> None:
 
     outcome = [math.log(esr[s]) for s in SEEDS]
     rows = {}
-    for name in sorted(k for k in properties[SEEDS[0]] if k != "val_indices"):
+    for name in DECLARED:
         if not all(name in properties[s] for s in SEEDS):
             continue
         values = [properties[s][name] for s in SEEDS]
