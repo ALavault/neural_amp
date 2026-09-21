@@ -6,7 +6,7 @@ depend on the seed alone, not on the run, so they are measured and committed bef
 test ESR of seeds 47 to 49 exists: the predictor is frozen before the outcome for three
 seeds of eight, and the commit order attests it.
 
-Each split is reproduced by repeating the pilot's construction order - seed_everything(s),
+Each split is reproduced by repeating the pilot's construction order - seed_everything,
 then the processor, then the data module - and verified per seed, where a finished run
 allows it, by recomputing that run's validation loss on the reproduced split and
 comparing it with the logged value. A wrong split would differ by about 30 %, the
