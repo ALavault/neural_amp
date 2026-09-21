@@ -1,6 +1,6 @@
 # Résultats pour la rédaction : SSM-WaveNet, sensibilité à la graine, pilote « effet papillon »
 
-État au 2026-09-18. Chaque chiffre renvoie à un fichier du dépôt ; ne rien citer
+État au 2026-09-21. Chaque chiffre renvoie à un fichier du dépôt ; ne rien citer
 d'autre sans le recalculer. Le brouillon ICASSP 2027 (`paper/icassp2027/`, tag
 `icassp2027-draft`) est abandonné et contient des affirmations retirées (section 3).
 Ce fichier ne concerne pas `paper/claims.md` ni `paper/outline.md`, qui portent sur
@@ -46,6 +46,10 @@ section Setup) :
   par modèle, aucun test ne peut descendre sous 5 % (Mann-Whitney bilatéral : p minimal
   0,10), et l'écart entre graines est du même ordre que l'écart entre architectures. »
 - **Interdit** : « SSM-WaveNet bat / surpasse S4-TF-L-16 », « état de l'art ».
+- **Réserve à joindre désormais à cette formulation** (`diagnosis/seeds/variance_sources.md`) : un
+  autre tirage de douze segments de test réordonnerait les six runs du banc dans **41 %** des cas.
+  L'énoncé « un ESR plus bas à chacune des trois graines » est vrai sur ce jeu de test et n'est pas
+  robuste au choix du matériel d'évaluation. Ne pas l'écrire sans cette phrase.
 - Les graines ne forment pas des paires : la partition est tirée après
   l'initialisation, qui consomme un nombre de tirages différent selon le modèle.
 - Un run unique ne se compare pas à une valeur publiée à mieux que ±20 % : l'erreur
@@ -72,6 +76,29 @@ section Setup) :
   facteur global), critère de validation absolu, nombre de pôles lents, pondération
   par l'énergie. Corrélation sans mécanisme, choisie après coup : RMS minimal de la
   partition de validation et ESR de test (6 runs sur 6).
+
+**D'où vient la dispersion entre runs** (`DIAGNOSIS_seeds.md` section 5, révision du 2026-09-21) :
+
+- **La chaîne de données la porte** (`diagnosis/seeds/pilot_E_split.md`). Six graines avec la
+  partition et l'ordre des lots rendus communs : l'écart-type de l'effet run tombe de **0,375 à
+  0,191**, soit le plancher du non-déterminisme GPU seul (0,18). L'initialisation des poids ne
+  contribue plus rien de mesurable. **Formulation autorisée** : « sur ce dispositif, ce qu'on
+  appelle effet de graine est pour l'essentiel un effet du tirage des données ; fixer la partition
+  divise la variance par quatre sans coût de calcul ». **À joindre obligatoirement** : fixer n'est
+  pas choisir — la partition figée donne une moyenne géométrique de 0,0831 contre 0,068 pour les
+  partitions tirées.
+- **L'ordonnanceur ne la porte pas** (`pilot_F_threshold.md`, `plateau_simulation.md`). Le seuil de
+  plateau du protocole est 44 à 88 fois sous le bruit qu'il observe et sa marge de déclenchement
+  vaut souvent moins d'une fluctuation — mais le corriger ne marche pas : remonter le seuil laisse
+  la dispersion à 0,344 pour un critère à 0,25 et coûte un facteur 2,4 en qualité, et **aucun seuil
+  fixe** ne rend le déclenchement reproductible. **Interdit** : présenter le réglage du seuil comme
+  un correctif.
+- **La règle d'arrêt est hors de cause** : `best` et `last` donnent le même ESR à 0,0005 près sur
+  quinze runs.
+- **S4-TF-L-16 se comporte à l'inverse de SSM-WaveNet** (`diagnosis/seeds/s4_nested.md`) : aucun
+  effet de graine détectable, F(2,3) = 0,29 ; l'écart intra-graine (0,173 sur deux paires vérifiées
+  comparables) égale ou dépasse l'écart entre graines. **Interdit** : citer la troisième paire, dont
+  le run initial date d'un état du script antérieur à la garde et à l'exemption de weight decay.
 
 **Déterminisme** (`diagnosis/butterfly/determinism.json`, `diagnosis/butterfly/pilot_A.md`) :
 - Algorithmes CUDA déterministes, et padding par réflexion reconstruit par découpage :
@@ -195,8 +222,10 @@ question que la fourche 100 a tranchée.
 
 - Fourche 5 : « rejoue » k = 3 et k = 4, puis lecture du bras avec la réserve ci-dessus.
 - Pilote D, fourche 25 : parent rejoué avec porte au bit près, puis dix enfants.
-- Pilote C, huit graines sous un calendrier commun fixe, conditionné à B
-  (`diagnosis/butterfly/pilot_C_common_schedule.md`).
+- Pilote C, huit graines sous calendrier commun fixe, **en cours depuis le 2026-09-21** : sa
+  condition sur B a été levée par l'utilisateur, la levée est motivée dans le pré-enregistrement.
+  Il dit par quel canal le tirage des données agit — directement, ou en passant par les décisions
+  de l'ordonnanceur.
 - S4-TF-L-16 publié : répétitions à graine égale, puis verdict emboîté pour S4.
 - Écoute : parcourir l'échelle d'audibilité, qui donnerait la marge de la divergence sous
   le seuil, dans l'unité de la divergence elle-même.
