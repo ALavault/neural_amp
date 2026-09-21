@@ -16,6 +16,7 @@ differing by one float32 step have no reason to halve at the same time.
 from __future__ import annotations
 
 import csv
+import itertools
 import json
 import statistics
 import sys
@@ -40,7 +41,7 @@ def validation(run: str) -> dict[int, float]:
 def halvings(run: str) -> list[int]:
     lr = json.loads((BUTTERFLY / f"{run}.json").read_text())["lr_by_epoch"]
     epochs = sorted(lr, key=int)
-    return [int(b) for a, b in zip(epochs, epochs[1:]) if lr[a] != lr[b]]
+    return [int(b) for a, b in itertools.pairwise(epochs) if lr[a] != lr[b]]
 
 
 def main() -> None:
@@ -51,7 +52,8 @@ def main() -> None:
             losses = validation(run)
             epochs = sorted(losses)
             jumps = [
-                abs(losses[b] - losses[a]) / losses[a] for a, b in zip(epochs, epochs[1:])
+                abs(losses[b] - losses[a]) / losses[a]
+                for a, b in itertools.pairwise(epochs)
             ]
             fluctuation = statistics.median(jumps)
             rows = []

@@ -19,6 +19,7 @@ S_yy (1 - coherence), so the ratio follows from the spectra.
 
 from __future__ import annotations
 
+import itertools
 import json
 import sys
 from pathlib import Path
@@ -30,9 +31,8 @@ from scipy import signal as dsp
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from product_fork_pilot_analysis import outputs  # noqa: E402
-
 import product_nablafx_bench as bench  # noqa: E402
+from product_fork_pilot_analysis import outputs  # noqa: E402
 
 SAMPLE_RATE = 48_000
 NPERSEG = 8192
@@ -54,11 +54,14 @@ def analyse(child: np.ndarray, control: np.ndarray) -> dict:
     # Weight by the control's own spectrum: what the ear meets, not what is empty.
     weight = syy / syy.sum()
     bands = {}
-    for low, high in zip(THIRDS, THIRDS[1:]):
+    for low, high in itertools.pairwise(THIRDS):
         inside = (f >= low) & (f < high)
         if inside.any():
             bands[f"{low:.0f}"] = float(
-                20 * np.log10((response[inside] * weight[inside]).sum() / weight[inside].sum())
+                20
+                * np.log10(
+                    (response[inside] * weight[inside]).sum() / weight[inside].sum()
+                )
             )
     # Gain first, so the residual is not inflated by a plain level difference.
     gain = float(child @ control / (child @ child))
@@ -93,10 +96,7 @@ def main() -> None:
         )
         print(
             "   "
-            + "  ".join(
-                f"{k}Hz:{v:+.2f}"
-                for k, v in list(r["bands_db"].items())[::3]
-            )
+            + "  ".join(f"{k}Hz:{v:+.2f}" for k, v in list(r["bands_db"].items())[::3])
         )
     (Path(__file__).parent / "is_it_eq.json").write_text(
         json.dumps(out, indent=1) + "\n", encoding="utf-8"

@@ -34,7 +34,7 @@ Cosinus entre le coup de pouce et le déplacement final, norme du coup de pouce 
 | 100 | décide | −0,034 | −0,033 | −0,012 | −0,062 |
 | 100 | rejoue | −0,024 | −0,079 | −0,007 | −0,084 |
 | 5 | décide | +0,010 | +0,009 | −0,017 | +0,002 |
-| 5 | rejoue | +0,002 | +0,013 | −0,016 | — |
+| 5 | rejoue | +0,002 | +0,013 | −0,016 | +0,001 |
 
 Cosinus entre coups de pouce : −0,130 à +0,074.
 
@@ -58,7 +58,9 @@ déplacement final, ni à la fourche 100 ni à la fourche 5, dans aucun des deux
   si les signes étaient indépendants. Ils ne le sont pas : les huit déplacements se mesurent depuis
   le même témoin et les huit coups de pouce partagent le même profil d'amplitudes. Motif non
   expliqué, non significatif pris valeur par valeur, à ne pas rapporter comme un effet.
-- Une paire témoin/enfant par k, une graine, deux fourches.
+- Une paire témoin/enfant par k, une graine, deux fourches. La seizième valeur, rejoue k = 4 à
+  la fourche 5, a été ajoutée le 2026-09-21 quand ce run a existé ; elle vaut +0,001 et ne change
+  rien.
 
 ## Prochaine expérience discriminante
 

@@ -52,7 +52,11 @@ def running_best(losses: dict[int, float]) -> dict[int, float]:
 
 def halvings(lr_by_epoch: dict[str, float]) -> list[int]:
     epochs = sorted(lr_by_epoch, key=int)
-    return [int(b) for a, b in zip(epochs, epochs[1:]) if lr_by_epoch[a] != lr_by_epoch[b]]
+    return [
+        int(b)
+        for a, b in itertools.pairwise(epochs)
+        if lr_by_epoch[a] != lr_by_epoch[b]
+    ]
 
 
 def spread(values: list[float]) -> float:
@@ -64,7 +68,9 @@ def common(series: list[dict[int, float]]) -> list[int]:
     return sorted(set.intersection(*(set(s) for s in series)))
 
 
-def settle(curves: list[dict[int, float]], final: list[float], epochs: list[int]) -> int | None:
+def settle(
+    curves: list[dict[int, float]], final: list[float], epochs: list[int]
+) -> int | None:
     """Smallest epoch after which the ranking of the curves matches the final one."""
     target = list(stats.rankdata(final))
     for start, epoch in enumerate(epochs):
@@ -76,7 +82,9 @@ def settle(curves: list[dict[int, float]], final: list[float], epochs: list[int]
     return None
 
 
-def settle_pair(a: dict[int, float], b: dict[int, float], order: bool, epochs: list[int]):
+def settle_pair(
+    a: dict[int, float], b: dict[int, float], order: bool, epochs: list[int]
+):
     """Same, for one pair: an exact ranking over five runs is decided by its near-ties,
     so each pair is read on its own against the size of its final gap."""
     for start, epoch in enumerate(epochs):
@@ -94,7 +102,7 @@ def group(name: str, run_ids: list[str], final: list[float], report: list[str]) 
     for label, series in (("val", curves), ("best", bests)):
         rhos = {
             e: stats.spearmanr([s[e] for s in series], final).statistic
-            for e in list(GRID) + [last]
+            for e in [*GRID, last]
             if e in set(epochs)
         }
         out[f"rho_{label}"] = {str(e): round(float(v), 3) for e, v in rhos.items()}
@@ -103,7 +111,9 @@ def group(name: str, run_ids: list[str], final: list[float], report: list[str]) 
             + " ".join(f"{e}:{v:+.2f}" for e, v in rhos.items())
         )
     out["settles_at_epoch"] = settle(bests, final, epochs)
-    out["val_ranking_settles_at_epoch"] = settle(bests, [b[last] for b in bests], epochs)
+    out["val_ranking_settles_at_epoch"] = settle(
+        bests, [b[last] for b in bests], epochs
+    )
     report.append(
         f"{name} running best: its ranking freezes at epoch"
         f" {out['val_ranking_settles_at_epoch']}, and matches the final ESR ranking from"
@@ -142,23 +152,30 @@ def main() -> None:
         records = [json.loads((BUTTERFLY / f"{r}.json").read_text()) for r in run_ids]
         final = [r["test_last"]["metric/test/esr"] for r in records]
         out[f"fork100_{arm}"] = group(f"fork 100 {arm}", run_ids, final, report)
-        out[f"fork100_{arm}"]["halvings"] = [halvings(r["lr_by_epoch"]) for r in records]
+        out[f"fork100_{arm}"]["halvings"] = [
+            halvings(r["lr_by_epoch"]) for r in records
+        ]
         report.append(
             f"fork 100 {arm} first halving per child: "
-            + " ".join(str(h[0]) if h else "-" for h in out[f"fork100_{arm}"]["halvings"])
+            + " ".join(
+                str(h[0]) if h else "-" for h in out[f"fork100_{arm}"]["halvings"]
+            )
         )
         # The tested checkpoint is last.ckpt, so pair each child's own terminal epoch.
         terminal = [validation(r) for r in run_ids]
         own = [(max(v), v[max(v)]) for v in terminal]
         out[f"fork100_{arm}"]["terminal"] = [
-            {"run": r, "epoch": e, "val": round(l, 5), "test_esr": round(f, 4)}
-            for r, (e, l), f in zip(run_ids, own, final)
+            {"run": r, "epoch": e, "val": round(loss, 5), "test_esr": round(f, 4)}
+            for r, (e, loss), f in zip(run_ids, own, final, strict=True)
         ]
-        rho = stats.spearmanr([l for _, l in own], final)
+        rho = stats.spearmanr([loss for _, loss in own], final)
         out[f"fork100_{arm}"]["rho_terminal"] = round(float(rho.statistic), 3)
         report.append(
             f"fork 100 {arm} at each child's own last epoch "
-            + " ".join(f"{e}:val={l:.4f},esr={f:.4f}" for (e, l), f in zip(own, final))
+            + " ".join(
+                f"{e}:val={loss:.4f},esr={f:.4f}"
+                for (e, loss), f in zip(own, final, strict=True)
+            )
         )
         report.append(
             f"fork 100 {arm} rho(terminal val loss, final test ESR) = {rho.statistic:+.2f}"
@@ -166,14 +183,16 @@ def main() -> None:
         )
         # ESR is quadratic in the error amplitude where L1 + 0.1 MR-STFT is linear, so a
         # factor 2 between the two log spreads is imposed by the definitions alone.
-        spread_val, spread_esr = spread([l for _, l in own]), spread(final)
+        spread_val, spread_esr = spread([loss for _, loss in own]), spread(final)
         report.append(
             f"fork 100 {arm} log spread: val {spread_val:.3f}, test ESR {spread_esr:.3f},"
             f" ratio {spread_esr / spread_val:.1f},"
             f" beyond the definitional factor 2 {spread_esr / 2 / spread_val:.1f}"
         )
         # replay k0 is bitwise the control, that is decide k0: pool it once.
-        pooled += [(l, f) for (_, l), f in zip(own, final)][1 if arm == "replay" else 0 :]
+        pooled += [(loss, f) for (_, loss), f in zip(own, final, strict=True)][
+            1 if arm == "replay" else 0 :
+        ]
 
     rho = stats.spearmanr([p[0] for p in pooled], [p[1] for p in pooled])
     out["fork100_pooled"] = {
@@ -192,7 +211,9 @@ def main() -> None:
     for seed in (42, 43, 44):
         names = [f"ssmzoh_guard_seed{seed}", f"ssmzoh_guard_seed{seed}_repeat"]
         esr = [
-            json.loads((BENCH / f"{n}.json").read_text())["test_last"]["metric/test/esr"]
+            json.loads((BENCH / f"{n}.json").read_text())["test_last"][
+                "metric/test/esr"
+            ]
             for n in names
         ]
         pairs.append((names, [running_best(validation(n)) for n in names], esr))

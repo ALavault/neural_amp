@@ -73,6 +73,10 @@
   "3": {
    "cos_nudge_displacement": -0.01634928584098816,
    "displacement_norm": 30.779525756835938
+  },
+  "4": {
+   "cos_nudge_displacement": 0.0009288614965043962,
+   "displacement_norm": 31.14055633544922
   }
  },
  "f5_nudge_pairs": {

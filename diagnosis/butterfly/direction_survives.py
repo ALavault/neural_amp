@@ -68,14 +68,20 @@ def nudge(fork: int, k: int) -> torch.Tensor:
         ROOT / PARENT / f"fork_epoch{fork}.ckpt", map_location="cpu", weights_only=False
     )["state_dict"]
     model.load_state_dict(
-        {key.removeprefix("model.processor."): v for key, v in state.items() if key.startswith("model.processor.")}
+        {
+            key.removeprefix("model.processor."): v
+            for key, v in state.items()
+            if key.startswith("model.processor.")
+        }
     )
     generator = torch.Generator().manual_seed(1000 + k)
     deltas = []
     for parameter in model.parameters():
         up = torch.randint(0, 2, parameter.shape, generator=generator).bool()
         limit = torch.where(up, 1e30, -1e30).to(parameter)
-        deltas.append((torch.nextafter(parameter.data, limit) - parameter.data).flatten())
+        deltas.append(
+            (torch.nextafter(parameter.data, limit) - parameter.data).flatten()
+        )
     return torch.cat(deltas)
 
 
@@ -107,7 +113,10 @@ def main() -> None:
                 out[f"f{fork}_{arm}"] = rows
                 print(
                     f"  {arm:6s} cos(coup de pouce, deplacement final) "
-                    + "  ".join(f"k{k}:{v['cos_nudge_displacement']:+.4f}" for k, v in rows.items())
+                    + "  ".join(
+                        f"k{k}:{v['cos_nudge_displacement']:+.4f}"
+                        for k, v in rows.items()
+                    )
                 )
         pairs = {
             f"{a}-{b}": cosine(nudges[a], nudges[b])

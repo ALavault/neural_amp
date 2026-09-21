@@ -18,8 +18,8 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import torch  # noqa: E402
-
 from mode_connectivity import CHILDREN, CONTROL, weights  # noqa: E402
+
 
 def family(name: str) -> str:
     """The 94 tensors end in one of: log_dt, log_A_real, A_imag, C, D, weight, bias."""
@@ -29,7 +29,9 @@ def family(name: str) -> str:
 def main() -> None:
     control = weights(CONTROL)
     families = sorted({family(k) for k in control})
-    counts = {f: sum(control[k].numel() for k in control if family(k) == f) for f in families}
+    counts = {
+        f: sum(control[k].numel() for k in control if family(k) == f) for f in families
+    }
     print("parameters per family:", counts)
 
     out = {"control": CONTROL, "parameters": counts, "children": {}}
@@ -44,8 +46,7 @@ def main() -> None:
             rows[f] = {"l2": float(delta), "relative": float(delta / norm)}
         out["children"][child] = rows
         print(
-            f"{child}: "
-            + "  ".join(f"{f} {rows[f]['relative']:.3f}" for f in families)
+            f"{child}: " + "  ".join(f"{f} {rows[f]['relative']:.3f}" for f in families)
         )
 
     (Path(__file__).parent / "weight_distance.json").write_text(

@@ -42,9 +42,8 @@ import torch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from product_fork_pilot_analysis import outputs  # noqa: E402
-
 import product_nablafx_bench as bench  # noqa: E402
+from product_fork_pilot_analysis import outputs  # noqa: E402
 
 OUT_DIR = ROOT / "demo/listening"
 AUDIO_DIR = OUT_DIR / "audio"
@@ -94,7 +93,9 @@ def main() -> None:
     data.setup("test")
     inputs = torch.stack([x for x, _ in data.test_dataset])
     targets = torch.stack([y for _, y in data.test_dataset])
-    rendered = {name: outputs(run, inputs).numpy()[:, 0] for name, run in MODELS.items()}
+    rendered = {
+        name: outputs(run, inputs).numpy()[:, 0] for name, run in MODELS.items()
+    }
     rendered["reel"] = targets.numpy()[:, 0]
 
     measured = {
@@ -105,8 +106,13 @@ def main() -> None:
     }
     excerpts = []
     for index, segment in enumerate(SEGMENTS, start=1):
-        start = min(max(measured[segment]["best_second_at_s"] - 0.25, 0.3), 5.0 - WINDOW_SECONDS - 0.05)
-        span = slice(int(start * SAMPLE_RATE), int((start + WINDOW_SECONDS) * SAMPLE_RATE))
+        start = min(
+            max(measured[segment]["best_second_at_s"] - 0.25, 0.3),
+            5.0 - WINDOW_SECONDS - 0.05,
+        )
+        span = slice(
+            int(start * SAMPLE_RATE), int((start + WINDOW_SECONDS) * SAMPLE_RATE)
+        )
         reference = rendered["reel"][segment][span].astype(np.float64)
         clips, gains = {}, {}
         for name, signal in rendered.items():
@@ -154,8 +160,12 @@ def main() -> None:
             )
 
     # The ladder, built on the excerpt already written.
-    base = sf.read(OUT_DIR / f"audio/butterfly_{LADDER_EXCERPT}_temoin.wav", dtype="float64")[0]
-    child = sf.read(OUT_DIR / f"audio/butterfly_{LADDER_EXCERPT}_decide_k1.wav", dtype="float64")[0]
+    base = sf.read(
+        OUT_DIR / f"audio/butterfly_{LADDER_EXCERPT}_temoin.wav", dtype="float64"
+    )[0]
+    child = sf.read(
+        OUT_DIR / f"audio/butterfly_{LADDER_EXCERPT}_decide_k1.wav", dtype="float64"
+    )[0]
     gap = base - child
     for factor in LADDER:
         exaggerated = base - factor * gap

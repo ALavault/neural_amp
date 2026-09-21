@@ -34,7 +34,9 @@ RECORDS = ROOT / "demo/butterfly"
 ALPHAS = (0.0, 0.25, 0.5, 0.75, 1.0)
 CONTROL = "butterfly_ssm_seed42_f100_decide_k0"
 CHILDREN = [
-    f"butterfly_ssm_seed42_f100_{arm}_k{k}" for arm in ("decide", "replay") for k in (1, 2, 3, 4)
+    f"butterfly_ssm_seed42_f100_{arm}_k{k}"
+    for arm in ("decide", "replay")
+    for k in (1, 2, 3, 4)
 ]
 
 
@@ -68,7 +70,9 @@ def distance(a: dict[str, torch.Tensor], b: dict[str, torch.Tensor]) -> float:
     return math.sqrt(sum(float((a[k] - b[k]).pow(2).sum()) for k in a))
 
 
-def esr(model: torch.nn.Module, inputs: torch.Tensor, targets: torch.Tensor) -> list[float]:
+def esr(
+    model: torch.nn.Module, inputs: torch.Tensor, targets: torch.Tensor
+) -> list[float]:
     """Test ESR per segment. The protocol's figure is the mean over the 12 segments."""
     predictions = []
     with torch.no_grad():
@@ -76,7 +80,9 @@ def esr(model: torch.nn.Module, inputs: torch.Tensor, targets: torch.Tensor) -> 
             model.reset_states()
             predictions.append(model(inputs[start : start + 8]))
     predictions = torch.cat(predictions)
-    per_segment = (predictions - targets).pow(2).sum((1, 2)) / targets.pow(2).sum((1, 2))
+    per_segment = (predictions - targets).pow(2).sum((1, 2)) / targets.pow(2).sum(
+        (1, 2)
+    )
     return [float(v) for v in per_segment]
 
 
@@ -120,7 +126,7 @@ def main() -> None:
             segments.append(esr(model, inputs, targets))
         curve = [mean(s) for s in segments]
         line = [(1 - a) * curve[0] + a * curve[-1] for a in ALPHAS]
-        barrier = max(c - l for c, l in zip(curve, line))
+        barrier = max(point - chord for point, chord in zip(curve, line, strict=True))
         # A barrier on the mean could come from one segment: count the segments whose
         # own midpoint stands above their own straight line.
         middle = segments[ALPHAS.index(0.5)]

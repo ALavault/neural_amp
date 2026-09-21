@@ -24,9 +24,8 @@ import torch
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from product_fork_pilot_analysis import outputs  # noqa: E402
-
 import product_nablafx_bench as bench  # noqa: E402
+from product_fork_pilot_analysis import outputs  # noqa: E402
 
 SAMPLE_RATE = 48_000
 FRAME = int(0.020 * SAMPLE_RATE)
@@ -59,7 +58,9 @@ def main() -> None:
         kind = np.where(slope > 3, "attaque", np.where(slope < -3, "chute", "tenue"))
         # The best one-second window, which is what an excerpt would be built around.
         window = 50
-        means = np.convolve(np.where(loud, ratio, -120), np.ones(window) / window, "valid")
+        means = np.convolve(
+            np.where(loud, ratio, -120), np.ones(window) / window, "valid"
+        )
         best = int(np.argmax(means))
         out.append(
             {
@@ -81,10 +82,15 @@ def main() -> None:
         print(
             f"   {r['segment']:2d}     {r['ratio_median_db']:7.1f}     {r['ratio_best_second_db']:10.1f}"
             f"        {r['best_second_at_s']:5.2f}s"
-            + "".join(f"  {kinds.get(k, float('nan')):6.1f}" for k in ("attaque", "tenue", "chute"))
+            + "".join(
+                f"  {kinds.get(k, float('nan')):6.1f}"
+                for k in ("attaque", "tenue", "chute")
+            )
         )
     gainable = max(r["ratio_best_second_db"] - r["ratio_median_db"] for r in out)
-    print(f"\nmeilleur gain d'une seconde choisie sur la mediane de son segment: {gainable:+.1f} dB")
+    print(
+        f"\nmeilleur gain d'une seconde choisie sur la mediane de son segment: {gainable:+.1f} dB"
+    )
 
     (Path(__file__).parent / "when_audible.json").write_text(
         json.dumps(out, indent=1) + "\n", encoding="utf-8"

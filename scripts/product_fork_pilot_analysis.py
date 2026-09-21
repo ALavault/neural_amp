@@ -214,12 +214,13 @@ def main() -> None:
         }
     if {"fork25_decide", "fork25_replay"} <= groups.keys():
         arms = compare_arms(groups["fork25_decide"], groups["fork25_replay"])
-        # Gate 3 of pilot D: the fork at epoch 25 follows the parent's last flip, so every
-        # child must still carry exactly the parent's history. Any other list is a
-        # validation-driven decision left free, which is what silenced the fork 5 arm.
+        # Gate 3 of pilot D: the fork at epoch 25 follows the parent's last flip, so
+        # every child must still carry exactly the parent's history. Any other list is
+        # a validation-driven decision left free, which silenced the fork 5 arm.
         parent = json.loads((RECORDS / "butterfly_ssm_seed42_parent.json").read_text())
         histories = {
-            arm: groups[f"fork25_{arm}"]["polarity_flips"] for arm in ("decide", "replay")
+            arm: groups[f"fork25_{arm}"]["polarity_flips"]
+            for arm in ("decide", "replay")
         }
         verdict["fork25"] = {
             "replay_valid": groups["fork25_replay"]["identical_to_decide_k0"],

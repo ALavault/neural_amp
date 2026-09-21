@@ -54,3 +54,5 @@ select = ["E", "F", "I", "B", "UP", "RUF"]
 # The deck generator holds the French slide copy and the page stylesheet:
 # typographic apostrophes and CSS line lengths are not Python style issues.
 "scripts/product_deck.py" = ["E501", "RUF001"]
+# Same case: the listening page generator holds the HTML template and the French copy.
+"scripts/product_butterfly_listening.py" = ["E501", "RUF001"]

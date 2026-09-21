@@ -24,7 +24,6 @@ which differ by one float32 step.
 from __future__ import annotations
 
 import json
-import math
 import statistics
 import sys
 from pathlib import Path
@@ -66,7 +65,11 @@ def checkpoints(run: str) -> dict[str, Path]:
 def per_segment(model: torch.nn.Module, path: Path, x, y) -> list[float]:
     state = torch.load(path, map_location="cpu", weights_only=False)["state_dict"]
     model.load_state_dict(
-        {k.removeprefix("model.processor."): v for k, v in state.items() if k.startswith("model.processor.")}
+        {
+            k.removeprefix("model.processor."): v
+            for k, v in state.items()
+            if k.startswith("model.processor.")
+        }
     )
     model.eval()
     out = []
@@ -113,9 +116,7 @@ def main() -> None:
         saved = json.loads(written.read_text())
         for name in ("graines", "enfants f100"):
             for rule in ("last", "best"):
-                table = np.array(
-                    [v[rule] for v in saved[name].values() if rule in v]
-                )
+                table = np.array([v[rule] for v in saved[name].values() if rule in v])
                 decompose(table, f"{name} [{rule}]")
         return
     torch.set_num_threads(8)

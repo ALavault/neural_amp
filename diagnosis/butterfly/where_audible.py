@@ -26,9 +26,8 @@ import torch
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from product_fork_pilot_analysis import outputs  # noqa: E402
-
 import product_nablafx_bench as bench  # noqa: E402
+from product_fork_pilot_analysis import outputs  # noqa: E402
 
 SAMPLE_RATE = 48_000
 CONTROL = "butterfly_ssm_seed42_f100_decide_k0"
@@ -42,12 +41,16 @@ def features(signal: np.ndarray) -> dict[str, float]:
     freqs = np.fft.rfftfreq(len(signal), 1 / SAMPLE_RATE)
     # Envelope over 20 ms, to say how much of the segment is decay or silence.
     frame = int(0.020 * SAMPLE_RATE)
-    envelope = np.sqrt((signal[: len(signal) // frame * frame] ** 2).reshape(-1, frame).mean(1))
+    envelope = np.sqrt(
+        (signal[: len(signal) // frame * frame] ** 2).reshape(-1, frame).mean(1)
+    )
     return {
         "rms_dbfs": 20 * np.log10(rms),
         "crest_db": 20 * np.log10(peak / rms),
         "centroid_hz": float((freqs * spectrum).sum() / spectrum.sum()),
-        "quiet_share": float((envelope < peak / 100).mean()),  # below -40 dB of the peak
+        "quiet_share": float(
+            (envelope < peak / 100).mean()
+        ),  # below -40 dB of the peak
     }
 
 
@@ -68,7 +71,8 @@ def main() -> None:
                 "segment": i,
                 # Model against model, level matched, so only the shape differs.
                 "esr_model_model": float(
-                    ((control[i] - gain * child[i]) ** 2).sum() / (control[i] ** 2).sum()
+                    ((control[i] - gain * child[i]) ** 2).sum()
+                    / (control[i] ** 2).sum()
                 ),
                 "esr_control_device": float(
                     ((control[i] - target[i]) ** 2).sum() / (target[i] ** 2).sum()
