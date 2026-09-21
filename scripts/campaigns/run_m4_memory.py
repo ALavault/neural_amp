@@ -34,7 +34,7 @@ def launch(model: str, device: str, seed: int, run: str, preflight: bool) -> Non
         return
     command = [
         sys.executable,
-        str(ROOT / "scripts/run_m4_smoke.py"),
+        str(ROOT / "scripts/campaigns/run_m4_smoke.py"),
         "--model",
         model,
         "--device",

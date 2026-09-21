@@ -210,7 +210,7 @@ def main() -> int:
     provenance = capture_provenance(
         ROOT,
         RUN_DIR,
-        ["uv", "run", "python", "scripts/run_quality_aa_native.py"],
+        ["uv", "run", "python", "scripts/campaigns/run_quality_aa_native.py"],
     )
     write_new_json(
         RUN_DIR / "status.json",

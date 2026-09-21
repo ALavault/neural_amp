@@ -86,5 +86,5 @@ ajoutée. Tous les runs, y compris échecs, sont inscrits au registre global.
 - matrice et seuils : `configs/training/r1_factorial.yaml` ;
 - limites 3/8/4/4 : `configs/r1/protocol.yaml` ;
 - évaluation fail-closed : `src/fssr_nam/campaign/r1_gates.py` ;
-- exécution déclarative : `scripts/run_r1_diagnostic.py` ;
+- exécution déclarative : `scripts/campaigns/run_r1_diagnostic.py` ;
 - état et décisions : `.codex_campaign/r1/`.

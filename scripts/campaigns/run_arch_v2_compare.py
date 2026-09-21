@@ -144,7 +144,7 @@ def main() -> int:
                 provenance = capture_provenance(
                     ROOT,
                     run_dir,
-                    ["uv", "run", "python", "scripts/run_arch_v2_compare.py"],
+                    ["uv", "run", "python", "scripts/campaigns/run_arch_v2_compare.py"],
                 )
                 write_new_json(
                     run_dir / "status.json",

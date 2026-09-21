@@ -25,7 +25,7 @@ def main() -> None:
         subprocess.run(
             [
                 sys.executable,
-                str(ROOT / "scripts/run_m4_smoke.py"),
+                str(ROOT / "scripts/campaigns/run_m4_smoke.py"),
                 "--model",
                 model,
                 "--device",

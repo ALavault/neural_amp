@@ -238,7 +238,12 @@ def main() -> int:
     _write_new_json(
         RUN_DIR / "command.json",
         {
-            "argv": ["uv", "run", "python", "scripts/run_r2_48k_v2_mechanism.py"],
+            "argv": [
+                "uv",
+                "run",
+                "python",
+                "scripts/campaigns/run_r2_48k_v2_mechanism.py",
+            ],
             "cwd": str(ROOT),
         },
     )

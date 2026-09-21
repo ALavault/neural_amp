@@ -139,10 +139,10 @@ Patch (calqué sur D-M4-010) :
 - `configs/training/m4_grid.yaml` : hypothèse, intervention, seuils ci-dessus.
 - `src/fssr_nam/models/structured.py`, `fssr.py`, `training/m3.py` : paramètre
   `spline_range` (défaut 2,0) transmis à `SmoothHermiteSpline(minimum=−r, maximum=r)`.
-- `scripts/run_m4_smoke.py` : option `--grid-range` (exclusive de `--memory-taps`
+- `scripts/campaigns/run_m4_smoke.py` : option `--grid-range` (exclusive de `--memory-taps`
   et `--recovery-wide`), écrit `fssr_model.spline_range` et `grid` dans
   `config-resolved.yaml`, phase `M4_GRID` / `M4_GRID_PREFLIGHT`.
-- `scripts/run_m4_grid.py` (pilote, `--seeds`/`--devices` pour lancer un run par
+- `scripts/campaigns/run_m4_grid.py` (pilote, `--seeds`/`--devices` pour lancer un run par
   appel), `scripts/summarize_m4_grid.py` (réutilise l'évaluation de
   `summarize_m4_memory.py`, qui apprend à étiqueter la phase `M4_GRID`).
 - `tests/unit/test_m4_training.py` : le test de la section 4.
@@ -160,12 +160,12 @@ Commandes :
 
 ```
 make lint && uv run pytest tests/unit/test_m4_training.py -q && make test
-uv run python scripts/run_m4_grid.py --devices fulltone_full_drive_2 --seeds 0   # préflight + seed 0
-uv run python scripts/run_m4_grid.py --devices fulltone_full_drive_2 --seeds 1
-uv run python scripts/run_m4_grid.py --devices fulltone_full_drive_2 --seeds 2
-uv run python scripts/run_m4_grid.py --devices electro_harmonix_big_muff --seeds 0
-uv run python scripts/run_m4_grid.py --devices electro_harmonix_big_muff --seeds 1
-uv run python scripts/run_m4_grid.py --devices electro_harmonix_big_muff --seeds 2
+uv run python scripts/campaigns/run_m4_grid.py --devices fulltone_full_drive_2 --seeds 0   # préflight + seed 0
+uv run python scripts/campaigns/run_m4_grid.py --devices fulltone_full_drive_2 --seeds 1
+uv run python scripts/campaigns/run_m4_grid.py --devices fulltone_full_drive_2 --seeds 2
+uv run python scripts/campaigns/run_m4_grid.py --devices electro_harmonix_big_muff --seeds 0
+uv run python scripts/campaigns/run_m4_grid.py --devices electro_harmonix_big_muff --seeds 1
+uv run python scripts/campaigns/run_m4_grid.py --devices electro_harmonix_big_muff --seeds 2
 uv run python scripts/summarize_m4_grid.py   # experiments/summaries/m4_grid/metrics.json, reports/M4_GRID.md
 ```
 

@@ -3,7 +3,7 @@
 | ID | Claim vérifié | Source primaire | Date | Accès / portée |
 |---|---|---|---|---|
 | C1 | M4 est NO-GO ; scores, recovery et limites | [FINAL_AUDIT](../FINAL_AUDIT.md), [M4_CORE](../M4_CORE.md), [M4_RECOVERY](../M4_RECOVERY.md) | 2026-08-27 | Artefacts locaux, commit `b38d16f` |
-| C2 | M4 optimise MSE brute + 0,0005 MR-STFT ; 200 updates | [`configs/training/m4_smoke.yaml`](../../configs/training/m4_smoke.yaml), [`run_m4_smoke.py`](../../scripts/run_m4_smoke.py) | 2026-08-27 | Code et config locaux |
+| C2 | M4 optimise MSE brute + 0,0005 MR-STFT ; 200 updates | [`configs/training/m4_smoke.yaml`](../../configs/training/m4_smoke.yaml), [`run_m4_smoke.py`](../../scripts/campaigns/run_m4_smoke.py) | 2026-08-27 | Code et config locaux |
 | C3 | Énergie train Big Muff 0,001548 contre Fulltone 0,012501 | WAV préparés dans `datasets/raw/internal_m4/` | 2026-08-27 | Calcul RMS local ; données non redistribuées |
 | C4 | RF résidu 31 ; RF A2 6 347 | [`residual.py`](../../src/fssr_nam/models/residual.py), [`architecture.json`](../../experiments/summaries/m2_a2_architecture/architecture.json) | 2026-08-27 | Code et synthèse locaux |
 | C5 | Big Muff publié : 5:42 train, loss ESR préaccentuée + DC, 20 h, ESR LSTM-64 4,1 % | [Wright, Damskägg & Välimäki, “Real-Time Black-Box Modelling With Recurrent Neural Networks”](https://dafx.de/paper-archive/2019/DAFx2019_paper_43.pdf) | 2019 | PDF DAFx primaire |

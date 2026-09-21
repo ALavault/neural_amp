@@ -136,7 +136,7 @@ def main() -> int:
             provenance = capture_provenance(
                 ROOT,
                 run_dir,
-                ["uv", "run", "python", "scripts/run_arch_v2_competence.py"],
+                ["uv", "run", "python", "scripts/campaigns/run_arch_v2_competence.py"],
             )
             write_new_json(
                 run_dir / "status.json",

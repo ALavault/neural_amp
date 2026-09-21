@@ -298,7 +298,7 @@ def main() -> None:
     commit = git_commit()
     started_iso = datetime.now().astimezone().isoformat(timespec="seconds")
     command = (
-        f"uv run python scripts/run_m4_smoke.py --model {args.model} "
+        f"uv run python scripts/campaigns/run_m4_smoke.py --model {args.model} "
         f"--device {args.device} --seed {args.seed} --run-id {args.run_id}"
         + (" --preflight" if args.preflight else "")
         + (" --recovery-wide" if args.recovery_wide else "")

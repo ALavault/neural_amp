@@ -267,7 +267,10 @@ def main() -> None:
     data_hash = sha256_bytes(manifest_bytes, split_bytes)
     commit = git_commit()
     timestamp = datetime.now().astimezone().isoformat(timespec="seconds")
-    command = f"uv run python scripts/run_m2_a2.py --seed {args.seed} --run-id {run_id}"
+    command = (
+        "uv run python scripts/campaigns/run_m2_a2.py"
+        f" --seed {args.seed} --run-id {run_id}"
+    )
     (run_dir / "config-resolved.yaml").write_text(
         yaml.safe_dump(resolved, sort_keys=False), encoding="utf-8"
     )

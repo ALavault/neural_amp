@@ -60,7 +60,7 @@ def saved_test_prediction(run_id: str) -> np.ndarray:
 
 
 def replay_starts(seed: int, train_size: int) -> list[np.ndarray]:
-    """Exact per-step window starts of scripts/run_m4_smoke.py for this seed."""
+    """Exact per-step window starts of scripts/campaigns/run_m4_smoke.py for this seed."""
     rng = np.random.default_rng(seed)
     return [rng.integers(CONTEXT, train_size - OUTPUT, size=BATCH) for _ in range(STEPS)]
 

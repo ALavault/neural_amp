@@ -254,7 +254,7 @@ def main() -> None:
     commit = git_commit()
     started_iso = datetime.now().astimezone().isoformat(timespec="seconds")
     command = (
-        f"uv run python scripts/run_m3_synthetic.py --variant {args.variant} "
+        f"uv run python scripts/campaigns/run_m3_synthetic.py --variant {args.variant} "
         f"--case {args.case} --seed {args.seed} --run-id {args.run_id}"
     )
     (run_dir / "config-resolved.yaml").write_text(

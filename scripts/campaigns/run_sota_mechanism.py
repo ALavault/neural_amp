@@ -50,7 +50,7 @@ SOURCE_FILES = (
     "src/fssr_nam/metrics/sota_screen.py",
     "src/fssr_nam/models/approximants.py",
     "src/fssr_nam/models/equiripple.py",
-    "scripts/run_sota_mechanism.py",
+    "scripts/campaigns/run_sota_mechanism.py",
 )
 
 
@@ -109,7 +109,7 @@ def main() -> int:
     provenance = capture_provenance(
         ROOT,
         RUN_DIR,
-        ["uv", "run", "python", "scripts/run_sota_mechanism.py"],
+        ["uv", "run", "python", "scripts/campaigns/run_sota_mechanism.py"],
         source_files=SOURCE_FILES,
     )
     write_new_json(
