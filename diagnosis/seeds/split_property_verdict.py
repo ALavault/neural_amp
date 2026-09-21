@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Verdict of pilot G. (Read-only, CPU, no GPU.)
 
-Refuses to run before the eight "decide" runs of pilot C exist: the pre-registration in
-diagnosis/seeds/pilot_G_split_property.md names eight seeds, and computing the correlation
-on six would be looking early at the very number the pre-registration exists to protect.
+Refuses to run before the eight "decide" runs of pilot C exist. The pre-registration
+in diagnosis/seeds/pilot_G_split_property.md names eight seeds, and computing the
+correlation on six would mean looking early at the number it exists to protect.
 
 Primary property, named in advance: the minimum RMS of the twelve validation segments.
 Everything else is exploratory and reported as such, with the reminder that across seven
@@ -72,9 +72,7 @@ def main() -> None:
     print(f"\nverdict sur la propriete primaire : {verdict}")
 
     (Path(__file__).parent / "split_property_verdict.json").write_text(
-        json.dumps(
-            {"esr": esr, "correlations": rows, "verdict": verdict}, indent=1
-        )
+        json.dumps({"esr": esr, "correlations": rows, "verdict": verdict}, indent=1)
         + "\n",
         encoding="utf-8",
     )
