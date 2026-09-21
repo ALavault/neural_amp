@@ -576,7 +576,12 @@ def main() -> None:
         ),
         "resumed": resume_from is not None,
         "global_step": trainer.global_step,
-        "stopped_epoch": early_stopping.stopped_epoch,
+        # None, not 0, when the callback was never installed: zero would read as
+        # "early stopping was watching and never fired", which is a different fact.
+        "stopped_epoch": (
+            None if args.no_early_stopping else early_stopping.stopped_epoch
+        ),
+        "max_steps": args.max_steps,
         "best_val_loss": float(checkpoint.best_model_score or "nan"),
         "best_checkpoint": Path(checkpoint.best_model_path).name,
         "minutes_this_session": round(minutes, 2),
