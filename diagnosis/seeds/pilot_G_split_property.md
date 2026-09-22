@@ -111,3 +111,62 @@ commente, le verdict les appliquera tels quels et rapportera ces réserves en re
 
 **Non retenu.** Le contrôle par les poids finaux n'est pas circulaire pour la propriété primaire,
 calculée uniquement depuis les cibles du découpage ; la relecture en convient.
+
+## Verdict (2026-09-22, après les huit runs « décide » du pilote C)
+
+| graine | RMS min. validation | ESR de test |
+|---|---|---|
+| 42 | 0,03078 | 0,0358 |
+| 43 | 0,00021 | 0,0744 |
+| 44 | 0,02014 | 0,0979 |
+| 45 | 0,03210 | 0,0832 |
+| 46 | 0,00021 | 0,0540 |
+| 47 | 0,02422 | 0,0628 |
+| 48 | 0,01936 | 0,1580 |
+| 49 | 0,00021 | 0,1781 |
+
+**Propriété primaire : ρ = −0,29, p = 0,49.** |ρ| < 0,50, donc le libellé pré-enregistré est
+**« H2 réfutée »**. Conformément au point 4 de la relecture, la lecture correcte lui est adjointe :
+**non soutenue, non concluante**. Un |ρ| de 0,29 sur huit points n'exclut pas une association
+réelle ; il constate une absence de détection.
+
+Quatre précisions, dont deux affaiblissent le verdict et deux le renforcent.
+
+- **Le signe survit, pas l'amplitude.** H2 prédisait un ρ négatif — un RMS minimal plus haut
+  allant avec une ESR plus basse (0,0308 → 0,036 ; 0,0201 → 0,083 ; 0,0002 → 0,128). Le ρ observé
+  porte bien ce signe. Le seuil ayant été pré-enregistré sur |ρ|, le libellé ne change pas, mais le
+  résultat est un effet faible **dans la direction prédite**, et non un effet absent ou inversé.
+  C'est le point 6 de la relecture : la direction n'avait pas été contrainte, et elle aurait dû.
+- **La taille réellement confirmatoire est trois.** Cinq des huit issues existaient au moment du
+  pré-enregistrement.
+- **L'issue a bougé autant que la corrélation.** L'ordre 6 fois sur 6 de H2 portait sur des runs dont
+  la reproductibilité propre est large : la graine 43 valait 0,128, elle vaut ici 0,0744 ; la graine
+  44 valait 0,083, elle vaut 0,0979. La corrélation ne s'est pas seulement diluée, l'issue s'est
+  déplacée.
+- **Mais ce déplacement n'explique pas la non-détection.** Contrôle d'atténuation : l'écart-type du
+  log de l'ESR sur les huit graines vaut 0,535, le plancher intra-graine 0,18 à 0,191
+  (`pilot_E_split.md`), donc la fiabilité d'une run comme mesure de sa graine est de 0,87 à 0,89 et
+  le facteur d'atténuation de 0,94. Un ρ vrai de 0,90 se serait encore observé autour de 0,84, au-delà
+  du seuil de 0,74. Le dispositif était donc suffisamment puissant sur cet axe. (Formule classique
+  d'atténuation, établie pour Pearson, appliquée ici aux rangs : ordre de grandeur, pas exactitude.)
+
+**Propriété exploratoire dégénérée.** `train_rms_min` n'a pas trois valeurs distinctes sur huit
+graines et a été écartée par la garde du script. Avec 118 segments sur 130, l'entraînement conserve
+presque toujours le segment globalement le plus calme : la propriété était mal choisie, et la garde
+a fonctionné.
+
+**Propriétés exploratoires.** RMS moyen +0,14 ; énergie +0,29 ; facteur de crête +0,07 ; centroïde
++0,40 ; **proportion de passages sous −40 dB +0,81** (p brut 0,015 ; p exact par permutation
+exhaustive des 40 320, 0,022 ; corrigé de Šidák sur les six propriétés effectivement testées,
+**0,124**). Sous la mise en garde pré-enregistrée, et le chiffre corrigé la confirmant : cela
+**désigne une piste et ne conclut rien**.
+
+**Contrôle utile.** Le jeu de test provient d'un répertoire distinct (`DRY/test`), sans
+`trainval_split` : il est identique pour les huit graines. Aucune corrélation rapportée ici,
+primaire ou exploratoire, ne peut donc être médiée par un test plus ou moins facile — c'est ce qui
+rend la piste exploratoire non triviale.
+
+**Ce que ce verdict ne dit pas.** La question du titre — « une propriété mesurable de la partition
+prédit-elle l'ESR ? » — reste ouverte : seul le RMS minimal a été mis à l'épreuve. L'exploration
+qui a suivi la piste des passages calmes est consignée à part, explicitement post hoc, dans
+`quiet_share_exploration.md` ; elle ne pèse pas sur ce verdict.
