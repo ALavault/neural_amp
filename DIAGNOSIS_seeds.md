@@ -104,12 +104,22 @@ fixe la partition pour toutes les graines doit ramener l'écart-type de l'effet 
 et il ne doit pas améliorer la moyenne — la partition figée ici donne 0,0831 contre 0,068 pour la
 moyenne des partitions tirées, parce que fixer n'est pas choisir.
 
-**Voie écartée, mesurée : l'ordonnanceur.** Le détecteur de plateau se déclenche bien sur du
-bruit — seuil 44 à 88 fois sous la fluctuation qu'il observe, marge de déclenchement souvent
-inférieure à celle-ci (`plateau_margin.md`). Mais le correctif est faux : remonter le seuil ne
-réduit pas la dispersion (0,344 pour un critère à 0,25) et dégrade la qualité d'un facteur 2,4
-(`pilot_F_threshold.md`) ; et aucun seuil fixe ne rend le déclenchement reproductible, les seuls
-minima étant dégénérés (`plateau_simulation.md`).
+**Voie écartée : régler le déclencheur. Voie confirmée : l'ordonnanceur comme canal.** Les deux
+tiennent ensemble et il faut les distinguer. Le détecteur de plateau se déclenche bien sur du
+bruit — seuil 44 à 88 fois sous la fluctuation sur les enfants papillon, 153 fois sur huit graines
+indépendantes (`plateau_margin.md`, `quiet_share_exploration.md`). Mais **régler ce seuil est un
+faux correctif** : le remonter ne réduit pas la dispersion (0,344 pour un critère à 0,25) et
+dégrade la qualité d'un facteur 2,4 (`pilot_F_threshold.md`) ; aucun seuil fixe ne rend le
+déclenchement reproductible (`plateau_simulation.md`) ; et surveiller l'ESR de validation à la
+place déclenche plus tôt et plus erratiquement (`monitored_quantity.py`).
+
+En revanche, **retirer le déclencheur** — un calendrier fixe commun — coupe la queue des
+catastrophes et gagne 20 % de qualité moyenne, sans resserrer le gros de la distribution
+(`pilot_C_common_schedule.md`). Et le test du canal y montre que la partition agit *par*
+l'ordonnanceur : une propriété de la partition ordonne l'ESR à ρ = +0,81 sous calendrier libre et
++0,26 sous calendrier fixe. La source reste donc la chaîne de données, mais **la route passe par
+une décision d'optimisation** — ce que la première phrase de cette section, « elle n'est pas dans
+l'optimisation », disait trop vite.
 
 **Versions précédentes de cette section**, dont celle du 2026-09-16 qui a établi le facteur
 global et celle, réfutée, qui plaçait l'écart sur les segments calmes :
