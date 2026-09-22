@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<title>Écoute aveugle A/B/X : la meilleure graine contre la pire</title>
+<style>
+ body { font: 15px/1.5 system-ui, sans-serif; max-width: 46rem; margin: 2rem auto;
+        padding: 0 1rem; }
+ h1 { font-size: 1.4rem; }
+ .excerpt { border: 1px solid #ccc; border-radius: 6px; padding: 1rem;
+            margin: 1rem 0; }
+ button { font: inherit; padding: .4rem .9rem; margin-right: .4rem; }
+ .play { min-width: 3rem; }
+ .on { background: #222; color: #fff; }
+ .score { font-variant-numeric: tabular-nums; }
+ .meta { color: #555; font-size: .9rem; }
+ textarea { width: 100%; height: 10rem; font: 12px monospace; }
+</style>
+<h1>Écoute aveugle A/B/X : la meilleure graine contre la pire</h1>
+<p>Le pilote C sépare la graine 42 (ESR de test <b>0,036</b>) de la graine 49
+(<b>0,178</b>), un facteur 5. Sur les trois segments les plus divergents, l'écart entre
+les deux modèles atteint <b>2,8 fois</b> l'erreur du bon modèle contre l'appareil et ne
+siège qu'à <b>3,7 à 5,7 dB</b> sous le signal. Chez les enfants du papillon, ce rapport
+plafonnait à 0,93 et l'écart vivait 16 à 25 dB plus bas : rien n'y était audible.</p>
+<p>Trois paires par extrait. <b>Réel contre graine 42</b> dit si la meilleure graine se
+distingue de l'appareil. <b>Réel contre graine 49</b> demande si la pire s'en distingue.
+<b>Graine 42 contre graine 49</b> est la question : l'écart entre deux tirages de graine
+s'entend-il ? Dix essais par bloc ; 20 justes sur 30 donnent p &lt; 0,05 pour un extrait.</p>
+<p class="meta">Les extraits sont choisis <b>sur</b> la divergence, segment et fenêtre,
+d'après <code>diagnosis/seeds/seed_gap_where.json</code>. C'est donc un meilleur cas : si
+l'écart est inaudible ici, il l'est partout sur cet appareil. La première page d'écoute
+avait pris ses segments par position seule et tombait sur les moins divergents.</p>
+<p class="meta"><b>L'échelle descend au lieu de monter</b>, parce que l'écart est attendu
+audible. Chaque barreau joue la graine 42 contre une interpolation
+(1 − f) × graine 42 + f × graine 49 : f = 1 est l'écart réel entre les deux graines, et f
+plus petit s'en rapproche. L'ESR de chaque barreau contre l'appareil est indiquée, donc le
+barreau où vous retombez au hasard se lit directement comme « audible jusqu'à cette ESR ».</p>
+<p class="meta">Le bouton <b>Différence</b> n'appartient pas à l'épreuve : il joue
+graine 42 moins graine 49, normalisé, pour entendre <i>ce qui</i> sépare les deux.</p>
+<div id="excerpts"></div>
+<h2>Résultats</h2>
+<textarea id="results" readonly></textarea>
+
+<script>
+const EXCERPTS = [{"key": "1_reel_vs_graine42", "index": 1, "segment": 0, "window": "segment 0, 3.18-4.68 s ; écart entre modèles à -4.2 dB sous le signal, soit 2.81 fois l'erreur de la graine 42", "label": "appareil réel contre la meilleure graine (ESR 0,036)", "left": "audio/seeds_1_reel.wav?1790064523", "right": "audio/seeds_1_graine42.wav?1790064523", "names": ["reel", "graine42"], "esr_between_sides": 0.04926364026695371, "gain_db": [0.0, -0.30200605654889834], "difference": null}, {"key": "1_reel_vs_graine49", "index": 1, "segment": 0, "window": "segment 0, 3.18-4.68 s ; écart entre modèles à -4.2 dB sous le signal, soit 2.81 fois l'erreur de la graine 42", "label": "appareil réel contre la pire graine (ESR 0,178)", "left": "audio/seeds_1_reel.wav?1790064523", "right": "audio/seeds_1_graine49.wav?1790064523", "names": ["reel", "graine49"], "esr_between_sides": 0.790439983620609, "gain_db": [0.0, -2.4167968859039095], "difference": "audio/seeds_1_difference.wav?1790064523"}, {"key": "1_graine42_vs_graine49", "index": 1, "segment": 0, "window": "segment 0, 3.18-4.68 s ; écart entre modèles à -4.2 dB sous le signal, soit 2.81 fois l'erreur de la graine 42", "label": "la meilleure contre la pire : la question", "left": "audio/seeds_1_graine42.wav?1790064523", "right": "audio/seeds_1_graine49.wav?1790064523", "names": ["graine42", "graine49"], "esr_between_sides": 0.6695856929151096, "gain_db": [-0.30200605654889834, -2.4167968859039095], "difference": "audio/seeds_1_difference.wav?1790064523"}, {"key": "2_reel_vs_graine42", "index": 2, "segment": 6, "window": "segment 6, 0.30-1.80 s ; écart entre modèles à -5.5 dB sous le signal, soit 2.77 fois l'erreur de la graine 42", "label": "appareil réel contre la meilleure graine (ESR 0,036)", "left": "audio/seeds_2_reel.wav?1790064523", "right": "audio/seeds_2_graine42.wav?1790064523", "names": ["reel", "graine42"], "esr_between_sides": 0.007804413589990233, "gain_db": [0.0, -0.11947197594889866], "difference": null}, {"key": "2_reel_vs_graine49", "index": 2, "segment": 6, "window": "segment 6, 0.30-1.80 s ; écart entre modèles à -5.5 dB sous le signal, soit 2.77 fois l'erreur de la graine 42", "label": "appareil réel contre la pire graine (ESR 0,178)", "left": "audio/seeds_2_reel.wav?1790064523", "right": "audio/seeds_2_graine49.wav?1790064523", "names": ["reel", "graine49"], "esr_between_sides": 0.40313461105200127, "gain_db": [0.0, -1.2209957357616363], "difference": "audio/seeds_2_difference.wav?1790064523"}, {"key": "2_graine42_vs_graine49", "index": 2, "segment": 6, "window": "segment 6, 0.30-1.80 s ; écart entre modèles à -5.5 dB sous le signal, soit 2.77 fois l'erreur de la graine 42", "label": "la meilleure contre la pire : la question", "left": "audio/seeds_2_graine42.wav?1790064523", "right": "audio/seeds_2_graine49.wav?1790064523", "names": ["graine42", "graine49"], "esr_between_sides": 0.40119774315120654, "gain_db": [-0.11947197594889866, -1.2209957357616363], "difference": "audio/seeds_2_difference.wav?1790064523"}, {"key": "3_reel_vs_graine42", "index": 3, "segment": 2, "window": "segment 2, 2.90-4.40 s ; écart entre modèles à -3.9 dB sous le signal, soit 2.10 fois l'erreur de la graine 42", "label": "appareil réel contre la meilleure graine (ESR 0,036)", "left": "audio/seeds_3_reel.wav?1790064523", "right": "audio/seeds_3_graine42.wav?1790064523", "names": ["reel", "graine42"], "esr_between_sides": 0.053640387982420025, "gain_db": [0.0, -0.24755706557481705], "difference": null}, {"key": "3_reel_vs_graine49", "index": 3, "segment": 2, "window": "segment 2, 2.90-4.40 s ; écart entre modèles à -3.9 dB sous le signal, soit 2.10 fois l'erreur de la graine 42", "label": "appareil réel contre la pire graine (ESR 0,178)", "left": "audio/seeds_3_reel.wav?1790064523", "right": "audio/seeds_3_graine49.wav?1790064523", "names": ["reel", "graine49"], "esr_between_sides": 0.8287192293042128, "gain_db": [0.0, -2.6238361612290193], "difference": "audio/seeds_3_difference.wav?1790064523"}, {"key": "3_graine42_vs_graine49", "index": 3, "segment": 2, "window": "segment 2, 2.90-4.40 s ; écart entre modèles à -3.9 dB sous le signal, soit 2.10 fois l'erreur de la graine 42", "label": "la meilleure contre la pire : la question", "left": "audio/seeds_3_graine42.wav?1790064523", "right": "audio/seeds_3_graine49.wav?1790064523", "names": ["graine42", "graine49"], "esr_between_sides": 0.7014631236732523, "gain_db": [-0.24755706557481705, -2.6238361612290193], "difference": "audio/seeds_3_difference.wav?1790064523"}, {"key": "echelle_f1", "index": 1, "segment": 0, "window": "interpolation f = 1 ; ESR du côté B contre l'appareil 0.440, contre 0.047 pour la graine 42", "label": "échelle : graine 42 contre interpolation f = 1", "left": "audio/seeds_1_graine42.wav?1790064523", "right": "audio/seeds_ladder_f1.wav?1790064523", "names": ["graine42", "interpolation f = 1"], "esr_between_sides": 0.6695856929151096, "gain_db": [0.0, 0.0], "difference": null}, {"key": "echelle_f0.71", "index": 1, "segment": 0, "window": "interpolation f = 0.71 ; ESR du côté B contre l'appareil 0.249, contre 0.047 pour la graine 42", "label": "échelle : graine 42 contre interpolation f = 0.71", "left": "audio/seeds_1_graine42.wav?1790064523", "right": "audio/seeds_ladder_f0.71.wav?1790064523", "names": ["graine42", "interpolation f = 0.71"], "esr_between_sides": 0.3159551655708254, "gain_db": [0.0, 0.0], "difference": null}, {"key": "echelle_f0.5", "index": 1, "segment": 0, "window": "interpolation f = 0.5 ; ESR du côté B contre l'appareil 0.150, contre 0.047 pour la graine 42", "label": "échelle : graine 42 contre interpolation f = 0.5", "left": "audio/seeds_1_graine42.wav?1790064523", "right": "audio/seeds_ladder_f0.5.wav?1790064523", "names": ["graine42", "interpolation f = 0.5"], "esr_between_sides": 0.14089625739612976, "gain_db": [0.0, 0.0], "difference": null}, {"key": "echelle_f0.35", "index": 1, "segment": 0, "window": "interpolation f = 0.35 ; ESR du côté B contre l'appareil 0.100, contre 0.047 pour la graine 42", "label": "échelle : graine 42 contre interpolation f = 0.35", "left": "audio/seeds_1_graine42.wav?1790064523", "right": "audio/seeds_ladder_f0.35.wav?1790064523", "names": ["graine42", "interpolation f = 0.35"], "esr_between_sides": 0.06262385948916624, "gain_db": [0.0, 0.0], "difference": null}, {"key": "echelle_f0.25", "index": 1, "segment": 0, "window": "interpolation f = 0.25 ; ESR du côté B contre l'appareil 0.075, contre 0.047 pour la graine 42", "label": "échelle : graine 42 contre interpolation f = 0.25", "left": "audio/seeds_1_graine42.wav?1790064523", "right": "audio/seeds_ladder_f0.25.wav?1790064523", "names": ["graine42", "interpolation f = 0.25"], "esr_between_sides": 0.029729311324629287, "gain_db": [0.0, 0.0], "difference": null}, {"key": "echelle_f0.18", "index": 1, "segment": 0, "window": "interpolation f = 0.18 ; ESR du côté B contre l'appareil 0.063, contre 0.047 pour la graine 42", "label": "échelle : graine 42 contre interpolation f = 0.18", "left": "audio/seeds_1_graine42.wav?1790064523", "right": "audio/seeds_ladder_f0.18.wav?1790064523", "names": ["graine42", "interpolation f = 0.18"], "esr_between_sides": 0.01461745893319076, "gain_db": [0.0, 0.0], "difference": null}];
+
+function randomBit() {
+  const buffer = new Uint32Array(1);
+  crypto.getRandomValues(buffer);
+  return buffer[0] % 2;
+}
+
+function pValue(correct, trials) {
+  let logFactorial = [0];
+  for (let i = 1; i <= trials; i++) logFactorial[i] = logFactorial[i - 1] + Math.log(i);
+  let total = 0;
+  for (let k = correct; k <= trials; k++) {
+    total += Math.exp(logFactorial[trials] - logFactorial[k] - logFactorial[trials - k]
+                      - trials * Math.log(2));
+  }
+  return total;
+}
+
+const state = JSON.parse(localStorage.getItem('abx-butterfly') || '{}');
+const container = document.getElementById('excerpts');
+const results = document.getElementById('results');
+
+function save() {
+  localStorage.setItem('abx-butterfly', JSON.stringify(state));
+  results.value = JSON.stringify(EXCERPTS.map(e => {
+    const s = state[e.key] || { trials: 0, correct: 0 };
+    return { bloc: e.key, paire: e.names.join(' / '), essais: s.trials,
+             justes: s.correct,
+             p: s.trials ? Number(pValue(s.correct, s.trials).toFixed(4)) : null };
+  }), null, 1);
+}
+
+for (const excerpt of EXCERPTS) {
+  if (!state[excerpt.key]) state[excerpt.key] = { trials: 0, correct: 0 };
+  // A/B assignment is redrawn each time the page loads, X at each trial.
+  const aIsLeft = randomBit() === 0;
+  const sources = {
+    A: aIsLeft ? excerpt.left : excerpt.right,
+    B: aIsLeft ? excerpt.right : excerpt.left,
+  };
+  let xIsA = randomBit() === 0;
+
+  const node = document.createElement('div');
+  node.className = 'excerpt';
+  node.innerHTML = `<b>${excerpt.label}</b><br>
+    <span class="meta">extrait ${excerpt.index} (${excerpt.window})</span><br>
+    <button class="play" data-k="A">A</button>
+    <button class="play" data-k="B">B</button>
+    <button class="play" data-k="X">X</button>
+    <button data-guess="A">X = A</button>
+    <button data-guess="B">X = B</button>
+    <span class="score"></span>
+    <button data-reveal="1" hidden>Révéler</button>
+    ${excerpt.difference ? '<button data-difference="1">Différence</button>' : ''}`;
+  container.appendChild(node);
+
+  const gap = node.querySelector('[data-difference]');
+  if (gap) {
+    const player = new Audio(excerpt.difference);
+    gap.onclick = () => { player.currentTime = 0; player.play(); };
+  }
+
+  const audio = { A: new Audio(sources.A), B: new Audio(sources.B), X: new Audio() };
+  audio.X.src = xIsA ? sources.A : sources.B;
+  const score = node.querySelector('.score');
+  const reveal = node.querySelector('[data-reveal]');
+
+  function refresh() {
+    const s = state[excerpt.key];
+    score.textContent = ` ${s.correct}/${s.trials}`
+      + (s.trials ? ` (p = ${pValue(s.correct, s.trials).toFixed(3)})` : '');
+    reveal.hidden = s.trials < 10;
+    save();
+  }
+
+  node.querySelectorAll('.play').forEach(button => {
+    button.onclick = () => {
+      // Keep the playhead when switching, so the comparison is instantaneous.
+      let position = 0;
+      for (const player of Object.values(audio)) {
+        if (!player.paused) { position = player.currentTime; player.pause(); }
+      }
+      node.querySelectorAll('.play').forEach(other => other.classList.remove('on'));
+      button.classList.add('on');
+      const player = audio[button.dataset.k];
+      player.currentTime = position;
+      player.play();
+    };
+  });
+
+  node.querySelectorAll('[data-guess]').forEach(button => {
+    button.onclick = () => {
+      const s = state[excerpt.key];
+      s.trials += 1;
+      if ((button.dataset.guess === 'A') === xIsA) s.correct += 1;
+      xIsA = randomBit() === 0;
+      audio.X.src = xIsA ? sources.A : sources.B;
+      refresh();
+    };
+  });
+
+  reveal.onclick = () => {
+    const [left, right] = excerpt.names;
+    reveal.textContent = `A = ${aIsLeft ? left : right}, B = ${aIsLeft ? right : left}`
+      + ` — ESR entre les deux côtés ${excerpt.esr_between_sides.toExponential(2)}`;
+    reveal.disabled = true;
+  };
+
+  refresh();
+}
+</script>
+</html>

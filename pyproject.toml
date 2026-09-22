@@ -57,8 +57,9 @@ max-complexity = 10
 # The deck generator holds the French slide copy and the page stylesheet:
 # typographic apostrophes and CSS line lengths are not Python style issues.
 "scripts/product_deck.py" = ["E501", "RUF001"]
-# Same case: the listening page generator holds the HTML template and the French copy.
+# Same case: the listening page generators hold the HTML template and the French copy.
 "scripts/product_butterfly_listening.py" = ["E501", "RUF001"]
+"scripts/product_seed_listening.py" = ["E501", "RUF001"]
 
 # C901 baseline, 2026-09-21: the 52 files below already hold a function above
 # complexity 10, the worst at 30 (train_sota_v12_trajectory). The rule is enabled so
