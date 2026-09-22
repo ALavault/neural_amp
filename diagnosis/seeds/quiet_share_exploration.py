@@ -70,6 +70,16 @@ def fluctuation(w: np.ndarray) -> float:
     return float(np.diff(w[:, 1]).std() / math.sqrt(2) / w[:, 1].mean())
 
 
+def step_median(arr: np.ndarray) -> float:
+    """Median relative change from one epoch to the next, over the whole run.
+
+    The statistic plateau_margin.py already reported on the butterfly children, kept
+    here so the two measurements are comparable rather than merely both large.
+    """
+    v = arr[:, 1]
+    return float(np.median(np.abs(np.diff(v) / v[:-1])))
+
+
 def route_stats(series: dict[str, np.ndarray]) -> dict[str, float]:
     """The four candidate routes, on the fixed window."""
     out = {}
@@ -148,14 +158,20 @@ def main() -> None:
         show(f"part calme -> {key}", quiet, values)
         show(f"{key} -> 1re division", values, first)
 
-    print("\nCe qui n'est pas une correlation : le bruit face au seuil.")
+    print("\nCe qui n'est pas une correlation : le bruit face au seuil de 1e-4.")
+    print("  Deux statistiques, a ne pas confondre. La mediane du changement relatif")
+    print("  d'une epoque a la suivante est comparable a la mesure deja publiee sur")
+    print("  les enfants papillon (44 a 88 fois le seuil) ; l'ecart-type des")
+    print("  differences successives est l'echelle utilisee pour les routes ci-dessus.")
     for name in ("loss/val/tot", "metric/val/esr"):
-        values = [routes[s][f"cv({name})"] for s in SEEDS]
+        step = [step_median(curve(s)[name]) for s in SEEDS]
+        scale = [routes[s][f"cv({name})"] for s in SEEDS]
         print(
-            f"  CV de {name:18s} moyenne {np.mean(values):.3f}"
-            f"  ({min(values):.3f} a {max(values):.3f})"
+            f"  {name:16s} mediane du pas {np.median(step):.4f}"
+            f" ({np.median(step) / 1e-4:.0f} x le seuil)"
+            f"   echelle {np.median(scale):.4f} (mediane),"
+            f" {min(scale):.3f} a {max(scale):.3f}"
         )
-    print("  seuil relatif de ReduceLROnPlateau : 1e-4")
 
 
 if __name__ == "__main__":

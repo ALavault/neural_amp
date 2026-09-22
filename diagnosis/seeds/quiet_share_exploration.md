@@ -68,11 +68,24 @@ identifié — d'une propriété vers la gauche. C'est un résultat modeste et i
 
 ## Ce qui, en revanche, n'est pas une corrélation
 
-Sur cette même fenêtre fixe, la fluctuation relative de `loss/val/tot` vaut **0,080** en moyenne
-(0,031 à 0,248 selon la graine), face au seuil relatif de `ReduceLROnPlateau` de **1e-4** : un
-facteur 800. C'est la mesure de `plateau_margin.md` — le seuil est très au-dessous du bruit qu'il est
-censé départager — étendue des enfants papillon d'une seule graine à **huit graines indépendantes**,
-en mode déterministe. Ce fait ne dépend d'aucune sélection post hoc et vaut par lui-même.
+C'est la mesure de `plateau_margin.md` — le seuil de `ReduceLROnPlateau` est très au-dessous du bruit
+qu'il est censé départager — étendue des enfants papillon d'une seule graine à **huit graines
+indépendantes**, en mode déterministe. Ce fait ne dépend d'aucune sélection post hoc et vaut par
+lui-même.
+
+Deux statistiques, et il ne faut pas les confondre. Sur celle que `plateau_margin.md` rapportait — la
+médiane du changement relatif d'une époque à la suivante — j'obtiens **0,0153 sur tout le run, soit
+153 fois le seuil de 1e-4**, contre 44 à 88 fois sur les cinq enfants papillon : même conclusion,
+amplitude deux fois plus grande, sur des runs indépendants plutôt que sur cinq enfants partageant un
+découpage. Sur la fenêtre 20–140 où le déclenchement tombe, la même statistique vaut 0,037, soit
+372 fois le seuil.
+
+L'échelle utilisée pour les routes ci-dessus est l'écart-type des différences successives : sa
+médiane vaut 0,045 sur la fenêtre fixe, avec une étendue de 0,031 à 0,248. **Correction au passage :
+j'avais d'abord écrit « 0,080, un facteur 800 » en prenant la moyenne de cette quantité sur les
+graines ; c'était une moyenne tirée par la seule graine 43, à 0,248.** La médiane est la bonne
+lecture, et les deux statistiques doivent être nommées pour ce qu'elles sont plutôt que additionnées
+en un seul « facteur » commode.
 
 **Une affirmation retirée.** J'avais d'abord lu les fenêtres de patience comme montrant que l'ESR de
 validation progresse encore de 16 % au moment où la division se déclenche. Retirée : c'est une
