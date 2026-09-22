@@ -29,9 +29,14 @@ for split in $SPLITS; do
       continue
     fi
     echo "=== $id : debut $(date '+%a %H:%M')" | tee -a "$LOG"
+    # --discretization zoh is NOT optional: the flag defaults to "free", and every healthy
+    # run in this repository - pilot C, pilot E - used zoh. The first launch of this queue
+    # omitted it and trained a different model: test ESR 1.14 against 0.32 on its own best
+    # checkpoint, eight polarity flips, stopped at epoch 138 where every prior run reached
+    # 408 to 1103. That record is kept under demo/nablafx_bench/void_discretization_free_*.
     .venv/bin/python3 scripts/product_nablafx_bench.py \
       --run-id "$id" --model "$model" --seed 42 --split-seed "$split" \
-      --deterministic --honor-optim \
+      --deterministic --honor-optim --discretization zoh \
       > "demo/runs/${id}.log" 2>&1
     echo "=== $id : fin $(date '+%a %H:%M') (code $?)" | tee -a "$LOG"
   done

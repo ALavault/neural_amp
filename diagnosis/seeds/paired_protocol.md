@@ -100,3 +100,33 @@ strictement perdant à budget fixé. Le dispositif ci-dessus est la version corr
 de dix-huit, aucune réplique, et un seuil portant sur la quantité mesurée plutôt que sur une
 supposition. Les trois autres corrections retenues : `s4-l-16` exclu pour son échelle de perte, le
 régime déterministe déclaré et tenu, et le contrôle de l'ordre des lots inscrit comme réserve.
+
+## Incident d'exécution (2026-09-22, 11:05) — première file annulée, ma faute
+
+La file lancée à 10:40 omettait `--discretization zoh`. Le drapeau **défaut à `free`**, et toutes
+les runs saines du dépôt — pilote C, pilote E, le banc — utilisent `zoh`. Elle entraînait donc un
+autre modèle.
+
+La première run l'a montré sans ambiguïté, et c'est le contrôle de routine qui l'a attrapée avant
+que les cinq autres ne s'enchaînent :
+
+| | les 14 runs antérieures | la run annulée |
+|---|---|---|
+| rapport ESR `last` / `best` | 0,94 à 1,00 | **3,53** (1,14 contre 0,32) |
+| époque d'arrêt | 408 à 1103 | **138** |
+| bascules de la garde de polarité | 0 à 4 | **8**, dont 105, 106, 107 et 108 |
+
+J'avais d'abord soupçonné la partition, puis le mode déterministe, puis la garde de polarité. C'était
+plus simple : un drapeau manquant. La leçon, elle, ne l'est pas — **le protocole teste `last.ckpt`,
+et cette run y valait 3,5 fois pire que le meilleur point qu'elle avait trouvé.** Sur les quatorze
+runs antérieures ce choix était sans conséquence ; il vient de montrer qu'il ne l'est pas toujours.
+
+Mesures prises, sans rien détruire : l'enregistrement est conservé sous
+`demo/nablafx_bench/void_discretization_free_ssm_wavenet_s925.json` et son répertoire de run sous
+`demo/runs/nablafx_void_discretization_free_*`, hors du périmètre du dispositif. La deuxième run a
+reçu SIGTERM avant d'écrire quoi que ce soit. La file porte désormais le drapeau et un commentaire
+disant pourquoi il n'est pas optionnel.
+
+**Rien du dispositif pré-enregistré n'est modifié** : ni les architectures, ni les partitions
+déclarées, ni les seuils sur r. Seule la ligne de commande est corrigée pour être celle qui était
+décrite.
