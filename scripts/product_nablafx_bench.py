@@ -517,12 +517,16 @@ def main() -> None:
     if args.split_seed is not None:
         pl.seed_everything(args.split_seed, workers=True)
     resume_from = str(last) if args.resume and last.exists() else None
-    trainer.fit(
-        system,
-        datamodule=data_module("trainval", args.batch_size),
-        ckpt_path=resume_from,
-    )
+    trainval = data_module("trainval", args.batch_size)
+    trainer.fit(system, datamodule=trainval, ckpt_path=resume_from)
     minutes = (time.perf_counter() - started) / 60.0
+    # Which twelve segments this run validated on. The split is drawn inside fit,
+    # after the processor is built, so two architectures at the same --seed normally
+    # get almost disjoint splits - one segment in twelve, measured between
+    # ssm-wavenet and s4-tf-l-16. Recording it makes a run say which data it saw
+    # rather than leaving it to be reproduced, and lets a paired design check that
+    # its arms really shared a split.
+    val_indices = sorted(getattr(trainval.val_dataset, "indices", []))
 
     tests = {"best": {}}
     checkpoints = [("last", last)]
@@ -559,6 +563,7 @@ def main() -> None:
         "lr_halvings": args.lr_halvings,
         "no_early_stopping": args.no_early_stopping,
         "split_seed": args.split_seed,
+        "val_indices": val_indices,
         "polarity_guard": not args.no_polarity_guard,
         "polarity_flips": polarity_guard.flips,
         "deterministic": args.deterministic,
