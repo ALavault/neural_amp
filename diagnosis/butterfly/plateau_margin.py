@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """By what margin is a plateau declared? (Read-only, logs only.)
 
-validation_noise.py ruled out the sampling of the twelve validation segments as the cause
-of divergent decisions: the segments are fixed within a run, so their draw cancels in the
-plateau detection. What remains is the epoch-to-epoch fluctuation at fixed segments.
+validation_noise.py ruled out the sampling of the twelve validation segments as the
+cause of divergent decisions: the segments are fixed within a run, so their draw cancels
+in the plateau detection. What remains is the epoch-to-epoch fluctuation at fixed
+segments.
 
-ReduceLROnPlateau halves the learning rate after 20 epochs without an improvement of more
-than 1e-4 in relative terms over the best value so far. So for each halving, two numbers
-decide everything: how close the run came to setting a new best during the twenty epochs
-that triggered it, and how large the ordinary epoch-to-epoch fluctuation is. If the first
-is smaller than the second, the halving epoch is set by optimisation noise, and two runs
-differing by one float32 step have no reason to halve at the same time.
+ReduceLROnPlateau halves the learning rate after 20 epochs without an improvement of
+more than 1e-4 in relative terms over the best value so far. So for each halving, two
+numbers decide everything: how close the run came to setting a new best during the
+twenty epochs that triggered it, and how large the ordinary epoch-to-epoch fluctuation
+is. If the first is smaller than the second, the halving epoch is set by optimisation
+noise, and two runs differing by one float32 step have no reason to halve at the same
+time.
 """
 
 from __future__ import annotations

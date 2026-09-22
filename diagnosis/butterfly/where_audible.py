@@ -2,16 +2,17 @@
 """What kind of material carries the divergence between two children? (Read-only, CPU.)
 
 The first listening page took three test segments by position and nothing was audible
-there; it turned out they were among the least divergent of the twelve. This measures, per
-segment, how far the two models stand from each other against how far the control stands
-from the device, and relates that to measurable features of the material.
+there; it turned out they were among the least divergent of the twelve. This measures,
+per segment, how far the two models stand from each other against how far the control
+stands from the device, and relates that to measurable features of the material.
 
 Two things are separated here, because one of them was already refuted for a different
-effect. The seed multiplies the error of every segment by one global factor (F-0007, which
+effect. The seed multiplies the error of every segment by one global factor
+(F-0007, which
 replaced an earlier "quiet segments carry the spread" claim, withdrawn in
 paper/RESULTS_SSM_SEEDS.md). The question here is not the seed effect but the divergence
-between two children of one seed, so the global-factor part is measured and removed before
-anything is said about localisation.
+between two children of one seed, so the global-factor part is measured and removed
+before anything is said about localisation.
 """
 
 from __future__ import annotations
@@ -95,7 +96,8 @@ def main() -> None:
         print(
             f"   {r['segment']:2d}        {r['esr_model_model']:.4f}"
             f"            {r['share']:.2f}              {r['child_over_control']:.2f}"
-            f"       {r['rms_dbfs']:6.1f}   {r['crest_db']:5.1f}     {r['centroid_hz']:7.0f}"
+            f"       {r['rms_dbfs']:6.1f}   {r['crest_db']:5.1f}"
+            f"     {r['centroid_hz']:7.0f}"
             f"      {r['quiet_share']:.2f}"
         )
 

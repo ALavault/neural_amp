@@ -2,7 +2,8 @@
 """Do the divergent children sit in the same basin as the control? (Read-only, CPU.)
 
 Linear mode connectivity (Frankle et al. 2020): interpolate the weights between the
-control and each child, theta(a) = (1 - a) theta_control + a theta_child, and measure the
+control and each child, theta(a) = (1 - a) theta_control + a theta_child, and
+measure the
 test ESR along the way. A bump above the straight line between the two endpoints, the
 barrier, means the two solutions sit in separate basins; no bump means one basin.
 
@@ -11,7 +12,8 @@ parent by a one-float32-step nudge, so channels and poles are in the same order 
 construction. The checkpoints hold no normalisation buffers, so nothing has to be
 recalibrated after interpolation.
 
-The polarity guard negates the output layer, so two endpoints whose flip counts differ in
+The polarity guard negates the output layer, so two endpoints whose flip counts differ
+in
 parity would cross a zero-output model at a = 0.5 and show a barrier that is only a sign
 convention. The script refuses such a pair rather than measuring it.
 """

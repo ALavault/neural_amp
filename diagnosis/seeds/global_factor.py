@@ -24,7 +24,7 @@ from types import SimpleNamespace
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-import product_nablafx_bench as bench  # noqa: E402, I001
+import product_nablafx_bench as bench  # noqa: E402
 import torch  # noqa: E402
 
 SEGMENTS = json.loads(
@@ -107,7 +107,10 @@ def main() -> None:
         groups.setdefault(condition(record), []).append(record)
     out: dict = {}
 
-    print("== Seed spread (CV over the seeds' first runs) of summaries of the same test")
+    print(
+        "== Seed spread (CV over the seeds' first runs)"
+        " of summaries of the same test"
+    )
     print(
         f"{'condition':14s} {'mean ESR':>8s} {'energy ESR':>10s} {'mean sqrt':>9s}"
         f" {'L1':>4s} {'MR-STFT':>7s}"
@@ -238,7 +241,9 @@ def main() -> None:
         if len(pairs) < 2:
             continue
         effect = {
-            seed: [statistics.fmean(math.log(e) for e in r["segment_esr"]) for r in runs]
+            seed: [
+                statistics.fmean(math.log(e) for e in r["segment_esr"]) for r in runs
+            ]
             for seed, runs in pairs.items()
         }
         ms_within = statistics.fmean((a - b) ** 2 / 2 for a, b in effect.values())

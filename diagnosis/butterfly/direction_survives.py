@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-"""Does the direction of the one-float32-step nudge survive to the end? (Read-only, CPU.)
+"""Does the one-float32-step nudge direction survive to the end? (Read-only, CPU.)
 
 k = 1 is the child that breaks away in all three configurations where a spread exists
-(decide at fork 100, both arms at fork 5), and its nudge direction is drawn with the same
-seed 1000 + k on two different parents. With four children, three times in a row has about
-one chance in sixteen of being fortuitous. If the direction carried information, the final
-displacement of a child should keep some alignment with its initial nudge.
+(decide at fork 100, both arms at fork 5), and its nudge direction is drawn with
+the same
+seed 1000 + k on two different parents. With four children, three times in a row has
+about one chance in sixteen of being fortuitous. If the direction carried information,
+the final displacement of a child should keep some alignment with its initial nudge.
 
-Measured here, on checkpoints already written: the cosine between the nudge delta applied
-at the fork and the displacement the child ends up with, and the cosine between the nudges
-themselves, which have no reason to be anything but orthogonal.
+Measured here, on checkpoints already written: the cosine between the nudge delta
+applied at the fork and the displacement the child ends up with, and the cosine between
+the nudges themselves, which have no reason to be anything but orthogonal.
 
-The nudge is reproduced exactly as scripts/product_fork_pilot.py applies it: a generator of
-seed 1000 + k draws one bit per weight, and torch.nextafter moves each weight one float32
-step in that direction, in the parameter order of the processor.
+The nudge is reproduced exactly as scripts/product_fork_pilot.py applies it: a generator
+of seed 1000 + k draws one bit per weight, and torch.nextafter moves each weight one
+float32 step in that direction, in the parameter order of the processor.
 """
 
 from __future__ import annotations
@@ -103,8 +104,9 @@ def main() -> None:
                 except FileNotFoundError:
                     continue
                 displacement = theta - control
-                # The nudge is applied to the processor's parameters, the final weights are
-                # read in the state dict order; both follow the same declaration order.
+                # The nudge is applied to the processor's parameters, the final weights
+                # are read in the state dict order; both follow the same declaration
+                # order.
                 rows[k] = {
                     "cos_nudge_displacement": cosine(nudges[k], displacement),
                     "displacement_norm": float(displacement.norm()),

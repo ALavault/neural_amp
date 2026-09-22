@@ -8,8 +8,11 @@ bootstrap:
 test:
 	uv run pytest
 
+# diagnosis/seeds et diagnosis/butterfly sont dans le périmètre depuis le 2026-09-22 ;
+# diagnosis/fulltone_s3t33_residual_vs_a2 en reste dehors, avec 129 erreurs dont des
+# zip() non stricts qui demandent un examen cas par cas, pas une correction mécanique.
 lint:
-	uv run ruff check src tests scripts
+	uv run ruff check src tests scripts diagnosis/seeds diagnosis/butterfly
 	uv run ruff format --check src tests scripts
 
 data-audit:

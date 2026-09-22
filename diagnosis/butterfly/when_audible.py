@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Where in time does the gap between two children sit? (Read-only, CPU.)
 
-where_audible.py found no predicate in four aggregate features of a segment, and measured
-that the gap sits 16 to 21 dB under the signal in the same half-octaves on the most
-divergent segment - the masking configuration that most likely explains why nothing was
-heard. Aggregates cannot see a short moment, so this looks frame by frame: 20 ms frames,
-the gap-to-signal ratio in each, and the frames sorted by the slope of the signal envelope
-into attack, sustain and decay.
+where_audible.py found no predicate in four aggregate features of a segment, and
+measured that the gap sits 16 to 21 dB under the signal in the same half-octaves on the
+most divergent segment - the masking configuration that most likely explains why nothing
+was heard. Aggregates cannot see a short moment, so this looks frame by frame: 20 ms
+frames, the gap-to-signal ratio in each, and the frames sorted by the slope of the
+signal envelope into attack, sustain and decay.
 
 What would be actionable: a one-second window whose ratio is well above the segment
 average. That window would be the excerpt to listen to, in place of the 4.4 s one.
@@ -80,7 +80,8 @@ def main() -> None:
     for r in out:
         kinds = r["by_kind_db"]
         print(
-            f"   {r['segment']:2d}     {r['ratio_median_db']:7.1f}     {r['ratio_best_second_db']:10.1f}"
+            f"   {r['segment']:2d}     {r['ratio_median_db']:7.1f}"
+            f"     {r['ratio_best_second_db']:10.1f}"
             f"        {r['best_second_at_s']:5.2f}s"
             + "".join(
                 f"  {kinds.get(k, float('nan')):6.1f}"
@@ -89,7 +90,8 @@ def main() -> None:
         )
     gainable = max(r["ratio_best_second_db"] - r["ratio_median_db"] for r in out)
     print(
-        f"\nmeilleur gain d'une seconde choisie sur la mediane de son segment: {gainable:+.1f} dB"
+        "\nmeilleur gain d'une seconde choisie sur la mediane de son segment: "
+        f"{gainable:+.1f} dB"
     )
 
     (Path(__file__).parent / "when_audible.json").write_text(

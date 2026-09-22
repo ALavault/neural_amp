@@ -3,18 +3,18 @@
 
 Two of the candidate sources can be separated on checkpoints already written.
 
-A - measurement against model. The reported ESR is a mean over twelve test segments. A first
-attempt subtracted the sampling variance of that mean from the variance observed between
-runs; that is wrong, because every run is evaluated on the SAME twelve segments, so their
-difficulty is common and contributes nothing to the differences between runs. What the
-segment draw does threaten is the ORDERING of runs, which a bootstrap over the segments
-measures directly. The variance itself is split two ways, run against segment, with their
-interaction saying whether runs differ in profile or only by a global factor.
+A - measurement against model. The reported ESR is a mean over twelve test segments. A
+first attempt subtracted the sampling variance of that mean from the variance observed
+between runs; that is wrong, because every run is evaluated on the SAME twelve segments,
+so their difficulty is common and contributes nothing to the differences between runs.
+What the segment draw does threaten is the ORDERING of runs, which a bootstrap over the
+segments measures directly. The variance itself is split two ways, run against segment,
+with their interaction saying whether runs differ in profile or only by a global factor.
 
-B - the stopping rule. Each run keeps two checkpoints: the one the protocol tests, "last",
-and the best by validation loss. They stop at different steps. Comparing the spread of the
-two selection rules says how much of the variance is "the run stopped elsewhere" rather
-than "the model is different".
+B - the stopping rule. Each run keeps two checkpoints: the one the protocol tests,
+"last", and the best by validation loss. They stop at different steps. Comparing the
+spread of the two selection rules says how much of the variance is "the run stopped
+elsewhere" rather than "the model is different".
 
 Runs are SSM-WaveNet with both training changes: three seeds and their repeats, where a
 repeat differs only by GPU nondeterminism; and the nine distinct children of fork 100,

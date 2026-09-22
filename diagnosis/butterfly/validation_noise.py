@@ -6,13 +6,14 @@ three-second segments: halve the learning rate on a plateau, stop after fifty ep
 without improvement. E-0011 found that this quantity does not order the final test ESR.
 This measures the obvious candidate cause - the sampling noise of a twelve-segment mean.
 
-The split is the one the runs used: reproduced by repeating the pilot's construction order
+The split is the one the runs used: reproduced by repeating the pilot's construction
+order
 (seed 42, processor, then data module) and checked against the logged validation loss of
 three finished runs, which it reproduces to 0.3 %, the difference being GPU against CPU.
 
 Per child: the loss of each of the twelve segments; then a bootstrap over the segments,
-which says how much of the gap between children a different draw of twelve segments would
-have changed.
+which says how much of the gap between children a different draw of twelve segments
+would have changed.
 """
 
 from __future__ import annotations
@@ -94,7 +95,8 @@ def main() -> None:
     standard_errors = table.std(1, ddof=1) / np.sqrt(table.shape[1])
     print(
         f"\necart entre enfants (ecart-type des moyennes) {means.std(ddof=1):.5f}"
-        f"\nerreur type d'une moyenne sur 12 segments, mediane {np.median(standard_errors):.5f}"
+        "\nerreur type d'une moyenne sur 12 segments, mediane "
+        f"{np.median(standard_errors):.5f}"
         f"\nrapport bruit / signal {np.median(standard_errors) / means.std(ddof=1):.2f}"
     )
 
@@ -115,7 +117,8 @@ def main() -> None:
     print(
         f"bootstrap sur les 12 segments, {DRAWS} tirages :"
         f" classement complet inchange {agree / DRAWS:.1%} du temps ;"
-        f" le meilleur enfant change de nom dans {1 - winners.get(CHILDREN[order[0]][-12:], 0) / DRAWS:.1%} des tirages"
+        f" le meilleur enfant change de nom dans"
+        f" {1 - winners.get(CHILDREN[order[0]][-12:], 0) / DRAWS:.1%} des tirages"
     )
     print("  gagnants du bootstrap :", winners)
 

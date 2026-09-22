@@ -4,11 +4,11 @@
 Pre-registration: diagnosis/butterfly/pilot_C_common_schedule.md, thresholds written
 2026-09-17 and untouched since. Refuses to conclude before the sixteen runs exist.
 
-Three things are printed because the pre-registration asks for them: the ESR of both arms
-seed by seed, the standard deviation of the log per arm and their ratio, and the check
-that the "fixe" arm halved the learning rate at exactly the eight declared epochs and
-nowhere else. That last one is the gate: a fixed schedule that fired anywhere else would
-mean the plateau detector was still running.
+Three things are printed because the pre-registration asks for them: the ESR of both
+arms seed by seed, the standard deviation of the log per arm and their ratio, and the
+check that the "fixe" arm halved the learning rate at exactly the eight declared epochs
+and nowhere else. That last one is the gate: a fixed schedule that fired anywhere else
+would mean the plateau detector was still running.
 """
 
 from __future__ import annotations

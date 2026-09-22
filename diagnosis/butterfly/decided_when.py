@@ -116,7 +116,8 @@ def group(name: str, run_ids: list[str], final: list[float], report: list[str]) 
     )
     report.append(
         f"{name} running best: its ranking freezes at epoch"
-        f" {out['val_ranking_settles_at_epoch']}, and matches the final ESR ranking from"
+        f" {out['val_ranking_settles_at_epoch']}, and matches the final ESR"
+        " ranking from"
         f" epoch {out['settles_at_epoch']} (None = never, last common epoch {last},"
         f" {len(run_ids)} runs)"
     )
@@ -178,14 +179,16 @@ def main() -> None:
             )
         )
         report.append(
-            f"fork 100 {arm} rho(terminal val loss, final test ESR) = {rho.statistic:+.2f}"
+            f"fork 100 {arm} rho(terminal val loss, final test ESR)"
+            f" = {rho.statistic:+.2f}"
             f" (p = {rho.pvalue:.2f}, n = 5)"
         )
         # ESR is quadratic in the error amplitude where L1 + 0.1 MR-STFT is linear, so a
         # factor 2 between the two log spreads is imposed by the definitions alone.
         spread_val, spread_esr = spread([loss for _, loss in own]), spread(final)
         report.append(
-            f"fork 100 {arm} log spread: val {spread_val:.3f}, test ESR {spread_esr:.3f},"
+            f"fork 100 {arm} log spread: val {spread_val:.3f},"
+            f" test ESR {spread_esr:.3f},"
             f" ratio {spread_esr / spread_val:.1f},"
             f" beyond the definitional factor 2 {spread_esr / 2 / spread_val:.1f}"
         )

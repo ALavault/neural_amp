@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """Is the gap between two children just an EQ difference? (Read-only, CPU.)
 
-The listener reports hearing no difference except, sometimes, slightly more low end, half
-a decibel at most. That is a testable claim with a sharp consequence: if what separates the
-two models is a static frequency response, the divergence of ESR is perceptually cheap and
-one filter removes it. If it is not, the models behave differently.
+The listener reports hearing no difference except, sometimes, slightly more low end,
+half a decibel at most. That is a testable claim with a sharp consequence: if what
+separates the two models is a static frequency response, the divergence of ESR is
+perceptually cheap and one filter removes it. If it is not, the models behave
+differently.
 
 Measured here, on the whole test set and on the three listening excerpts:
 
-- |H(f)|, the least-squares linear filter from the child's output to the control's, in dB
-  per third octave: the EQ difference the ear may be picking up;
+- |H(f)|, the least-squares linear filter from the child's output to the control's,
+  in dB per third octave: the EQ difference the ear may be picking up;
 - the magnitude-squared coherence, which says how much of the gap a static filter of any
   shape can remove. The residual 1 - coherence is what no EQ can reach.
 

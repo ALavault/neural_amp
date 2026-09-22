@@ -2,15 +2,15 @@
 """Would another plateau threshold fire more consistently? (Read-only, logs only.)
 
 Pilot F tested one threshold, 2e-2, and it neither reduced the dispersion nor spared the
-quality. Before spending GPU on another value, this replays the validation curves already
-written through a faithful simulation of ReduceLROnPlateau and asks, for each threshold,
-how much the epoch of the first halving varies between runs.
+quality. Before spending GPU on another value, this replays the validation curves
+already written through a faithful simulation of ReduceLROnPlateau and asks, for each
+threshold, how much the epoch of the first halving varies between runs.
 
 The measurement is honest about what it is. A different threshold would change the real
 curve, so this cannot predict the outcome of a real run. What it does measure is the
 sensitivity of the trigger itself: given curves that differ only by a one-float32-step
-perturbation, how differently would the same rule fire? If that dispersion stays large at
-every threshold, no fixed threshold can make the schedule reproducible, and only an
+perturbation, how differently would the same rule fire? If that dispersion stays large
+at every threshold, no fixed threshold can make the schedule reproducible, and only an
 adaptive rule is worth GPU time.
 """
 
