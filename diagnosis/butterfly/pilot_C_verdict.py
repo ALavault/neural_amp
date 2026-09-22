@@ -45,9 +45,11 @@ def halving_epochs(run: str) -> list[int]:
         for r in rows
         if r.get("lr-AdamW/pg1") and r.get("step")
     ]
+    # itertools.pairwise would be tidier, but this file measured pilot C on 2026-09-22
+    # and is kept byte-for-byte as it was then: the instrument stays as it read.
     return [
         round(step / STEPS_PER_EPOCH)
-        for (step, before), (_, after) in zip(lr, lr[1:], strict=False)
+        for (step, before), (_, after) in zip(lr, lr[1:], strict=False)  # noqa: RUF007
         if before != after
     ]
 
