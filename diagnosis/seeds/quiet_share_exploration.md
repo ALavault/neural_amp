@@ -36,41 +36,77 @@ part calme constante, −0,308). Huit points ne peuvent pas dire laquelle agit s
 Mesurées sur la fenêtre **fixe** 20–140 époques, commune aux huit runs — la division la plus précoce
 tombe à 141, donc aucune fenêtre ne dépend de l'issue qu'elle sert à expliquer.
 
-| route | part calme → route | route → 1ʳᵉ division | verdict |
+| route | part calme → route | route → 1ʳᵉ division | lecture |
 |---|---|---|---|
-| niveau de fluctuation, CV de `loss/val/tot` | +0,05 (p 0,91) | −0,10 (p 0,82) | réfutée |
-| dérive par fenêtre de patience sur bruit | −0,17 (p 0,69) | +0,31 (p 0,46) | réfutée |
-| niveau de la courbe de validation | −0,45 (p 0,26) | +0,52 (p 0,18) | réfutée |
-| part du terme MR-STFT dans la perte | +0,48 (p 0,23) | −0,45 (p 0,26) | réfutée |
+| fluctuation de `loss/val/tot` | +0,31 (p 0,46) | −0,41 (p 0,32) | non détectée, direction compatible |
+| dérive par fenêtre de patience sur bruit | −0,21 (p 0,61) | +0,41 (p 0,32) | non détectée, direction compatible |
+| niveau de la courbe de validation | −0,45 (p 0,26) | +0,52 (p 0,18) | non détectée, direction compatible |
+| part du terme MR-STFT dans la perte | +0,48 (p 0,23) | −0,45 (p 0,26) | écartée par la taille de l'effet |
 
-La dernière ligne mérite un mot : la part du terme MR-STFT ne varie qu'entre 0,086 et 0,091 sur les
-huit graines. Sa corrélation de rang à +0,48 ordonne donc un intervalle de 6 % en relatif, ce qui ne
-peut pas porter un écart d'ESR de 5 à 1. Réfutée comme route, mais par la taille de l'effet et non
-par le rang.
+La dernière ligne se traite à part : la part du terme MR-STFT ne varie qu'entre 0,086 et 0,091 sur
+les huit graines. Sa corrélation de rang à +0,48 ordonne donc un intervalle de 6 % en relatif, ce qui
+ne peut pas porter un écart d'ESR de 5 à 1. Écartée par la taille de l'effet, pas par le rang.
+
+**Correction de méthode, et elle change la lecture.** Les trois premières lignes portaient d'abord
++0,05 et −0,10 — des nuls plats — et j'avais écrit « quatre routes réfutées ». La fluctuation était
+estimée par le résidu d'un ajustement **linéaire**, ce qui sur une décroissance courbée compte la
+courbure comme du bruit : 0,225 annoncé contre 0,080 réel, un facteur 2,8. Avec l'estimateur par
+différences successives, insensible à toute tendance lisse et confirmé à 15 % près par une médiane
+glissante, les trois routes remontent à |ρ| de 0,21 à 0,52, **toutes dans la direction attendue**,
+aucune significative. La conclusion correcte n'est donc pas que les routes sont réfutées : c'est que
+**huit graines n'en départagent aucune**. Une réfutation obtenue avec un mauvais estimateur était un
+faux négatif.
 
 Une cinquième mesure a été **écartée avant usage** : la « pente relative avant la première division »
 que j'avais d'abord calculée était un artefact de fenêtre à longueur variable — une fenêtre courte
 est dominée par la descente initiale raide, donc toute run divisant tôt paraît mécaniquement plus
 pentue. Ce n'était pas une observation.
 
-Conclusion de l'exploration : l'association tient et **aucune route mesurable ne la médie**. Le
-pilote G quitte donc H2 pour retomber exactement sur son statut épistémique — une corrélation sans
-mécanisme — d'une propriété vers la gauche. C'est un résultat modeste et il faut l'appeler ainsi.
+Conclusion de l'exploration : l'association tient, et **aucune route mesurable n'est départagée**. Le
+pilote G quitte donc H2 pour retomber sur son statut épistémique — une corrélation sans mécanisme
+identifié — d'une propriété vers la gauche. C'est un résultat modeste et il faut l'appeler ainsi.
 
 ## Ce qui, en revanche, n'est pas une corrélation
 
-Sur cette même fenêtre fixe, le coefficient de variation de `loss/val/tot` vaut **0,23** en moyenne
-(0,12 à 0,40 selon la graine), face au seuil relatif de `ReduceLROnPlateau` de **1e-4** : un facteur
-2 000. C'est la mesure de `plateau_margin.md` — le seuil est très au-dessous du bruit qu'il est censé
-départager — étendue des enfants papillon d'une seule graine à **huit graines indépendantes**, en
-mode déterministe. Ce fait ne dépend d'aucune sélection post hoc et vaut par lui-même.
+Sur cette même fenêtre fixe, la fluctuation relative de `loss/val/tot` vaut **0,080** en moyenne
+(0,031 à 0,248 selon la graine), face au seuil relatif de `ReduceLROnPlateau` de **1e-4** : un
+facteur 800. C'est la mesure de `plateau_margin.md` — le seuil est très au-dessous du bruit qu'il est
+censé départager — étendue des enfants papillon d'une seule graine à **huit graines indépendantes**,
+en mode déterministe. Ce fait ne dépend d'aucune sélection post hoc et vaut par lui-même.
 
 **Une affirmation retirée.** J'avais d'abord lu les fenêtres de patience comme montrant que l'ESR de
 validation progresse encore de 16 % au moment où la division se déclenche. Retirée : c'est une
-différence d'extrémités sur une série dont le CV sur la fenêtre fixe vaut 1,32, avec un écart-type
-inter-graines de 0,36 sur la quantité elle-même. Ininterprétable. Consigné ici pour que l'erreur —
-la même que celle déjà commise sur la marge de déclenchement — ne soit pas refaite une troisième
-fois.
+différence d'extrémités sur une série dont la fluctuation sur la fenêtre fixe vaut 0,83 — dix fois
+celle de la perte — avec un écart-type inter-graines de 0,36 sur la quantité elle-même.
+Ininterprétable. Consigné ici pour que l'erreur, la même que celle déjà commise sur la marge de
+déclenchement, ne soit pas refaite une troisième fois.
+
+## La prédiction inscrite, vérifiée
+
+`plateau_simulation.py` rejoue fidèlement `ReduceLROnPlateau`. **Contrôle d'abord** : rejouée sur
+`loss/val/tot`, elle reproduit les huit vraies dates de première division **à l'époque près**, huit
+fois sur huit. L'outil est donc exact, et ses verdicts sur d'autres quantités surveillées valent.
+
+| quantité surveillée | premières divisions, graines 42 à 49 | médiane | écart-type |
+|---|---|---|---|
+| `loss/val/tot` (le protocole) | 285 252 161 234 255 164 167 141 | 200 | 55 |
+| `loss/val/mrstft` | 359 252 161 234 255 164 167 141 | 200 | 73 |
+| `loss/val/l1` | 23 88 161 21 21 139 23 22 | 23 | 59 |
+| `metric/val/esr` | 23 61 348 21 95 25 23 47 | 36 | 111 |
+
+**La prédiction se vérifie** : surveiller l'ESR de validation déclenche plus tôt (médiane 36 contre
+200) et plus erratiquement (écart-type 111 contre 55, étendue 21 à 348). « Surveiller l'ESR » n'est
+donc pas un correctif, et la sortie la moins chère en apparence est fermée.
+
+Une observation non prédite, et le raisonnement faux qu'elle a d'abord provoqué. Rejouée sur le seul
+terme MR-STFT, la simulation reproduit 7 des 8 dates de la perte totale ; sur le seul terme L1,
+aucune. J'en ai d'abord conclu que L1 stagnait. **C'est faux** : L1 passe de 0,09 à 0,001, un facteur
+90, son minimum tombant entre les époques 391 et 1094. Ce que la date de déclenchement mesure n'est
+donc pas la progression mais la **régularité** — elle tombe à la première fenêtre de 21 époques sans
+nouveau record, et L1, dont la fluctuation vaut 0,155 contre 0,076 pour MR-STFT, en rencontre une dès
+l'époque 23. Le calendrier du protocole se trouve ainsi gouverné par le terme qui pèse 9 % de la
+perte surveillée, parce qu'il est le plus lisse des deux. Observation consignée, mécanisme non
+établi.
 
 ## Levier ou témoin ? L'ordre n'est pas déterminé
 

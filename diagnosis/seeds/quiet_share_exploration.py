@@ -58,13 +58,23 @@ def window(arr: np.ndarray) -> np.ndarray:
     return arr[(arr[:, 0] >= LO) & (arr[:, 0] <= HI)]
 
 
+def fluctuation(w: np.ndarray) -> float:
+    """Relative high-frequency fluctuation, by successive differences.
+
+    Not the residual of a linear fit. A learning curve decays with curvature, and a
+    linear detrend charges that curvature to the noise: on this window it reported
+    0.225 for loss/val/tot where the true fluctuation is 0.080, a factor 2.8. The
+    successive-difference estimator, sd(diff)/sqrt(2), is blind to any smooth trend
+    whatever its shape; a moving-median residual agrees with it to 15 % (0.094).
+    """
+    return float(np.diff(w[:, 1]).std() / math.sqrt(2) / w[:, 1].mean())
+
+
 def route_stats(series: dict[str, np.ndarray]) -> dict[str, float]:
     """The four candidate routes, on the fixed window."""
     out = {}
     for name in ("loss/val/tot", "loss/val/l1", "loss/val/mrstft", "metric/val/esr"):
-        w = window(series[name])
-        trend = np.polyval(np.polyfit(w[:, 0], w[:, 1], 1), w[:, 0])
-        out[f"cv({name})"] = float((w[:, 1] - trend).std() / w[:, 1].mean())
+        out[f"cv({name})"] = fluctuation(window(series[name]))
     w = window(series["loss/val/tot"])
     slope, _ = np.polyfit(w[:, 0], w[:, 1], 1)
     level = w[:, 1].mean()
