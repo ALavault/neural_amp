@@ -71,6 +71,12 @@ Aucun défaut de comparabilité : le diagnostic porte sur l'entraînement.
   proposé est faux : le segment quasi silencieux de la graine 43, d'ESR 7,04,
   ne pèse que 6,3 % de la perte de validation. **Corrélation soutenue, mécanisme
   réfuté** ; statistique retenue après coup parmi cinq.
+  *Suite, pilote G* (`diagnosis/seeds/pilot_G_split_property.md`) : mise à l'épreuve
+  sur huit graines en mode déterministe, avec la propriété nommée d'avance, la
+  corrélation tombe à ρ = −0,29 (p = 0,49). Le signe prédit survit, l'amplitude non.
+  **Non soutenue, non concluante** — l'issue elle-même avait bougé (la graine 43 passe
+  de 0,128 à 0,074), mais un contrôle d'atténuation montre que cela n'explique pas la
+  non-détection.
 - **H3** — constantes de temps apprises : les runs avec exemption de weight decay
   ont 99 à 118 pôles au-delà de 10 ms contre 4 à 21 pour l'ablation, ce qui
   confirme l'effet du weight decay *entre* conditions ; à l'intérieur d'une
@@ -116,8 +122,20 @@ global et celle, réfutée, qui plaçait l'écart sur les segments calmes :
   tous les segments de test.
 - **Partition et ordre des lots** restent inséparés : tirés du même générateur au même instant.
   Les distinguer demanderait de toucher au module de données de nablafx.
-- **H2 sans mécanisme** : la corrélation entre RMS minimal de la partition de validation et ESR
-  de test tient 6 fois sur 6, mais la statistique a été choisie après coup.
+- **H2 est close, et ce qui la remplace est au même point.** Le pilote G a mis la propriété
+  nommée d'avance à l'épreuve de huit graines : ρ = −0,29, non soutenue. Une exploratoire, la
+  proportion de trames sous −40 dB, sort à +0,81 mais retombe à p = 0,124 après correction pour
+  six tests — une piste, pas un résultat. L'exploration qui a suivi
+  (`diagnosis/seeds/quiet_share_exploration.md`) trouve une association plus forte encore, cette
+  part calme prédisant la date de la première division du pas à −0,905, et ne départage aucune des
+  quatre routes qui pourraient la médier : à huit graines les trois quantités forment un seul axe.
+  On a donc remplacé une corrélation sans mécanisme par une autre, d'une propriété vers la gauche.
+- **Ce que le détecteur de plateau mesure** (`diagnosis/seeds/monitored_quantity.py`) : sa date de
+  déclenchement suit la *régularité* de la courbe surveillée, non sa progression — la première
+  fenêtre de 21 époques sans record. D'où deux conséquences. Surveiller l'ESR de validation à la
+  place déclenche plus tôt et plus erratiquement, donc ce correctif gratuit est fermé. Et le
+  calendrier du protocole se trouve gouverné par le terme MR-STFT, qui pèse 9 % de la perte
+  surveillée, parce qu'il est le plus lisse des deux : mécanisme non établi, observation ferme.
 - **S4-TF-L-16** (`s4_nested.md`) : aucun effet de graine détectable, F(2,3) = 0,29 ; l'écart
   intra-graine, 0,173 sur deux paires vérifiées comparables, égale ou dépasse celui entre graines
   — l'inverse de SSM-WaveNet. La troisième paire est inutilisable, son run initial datant d'un
