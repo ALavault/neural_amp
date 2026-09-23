@@ -59,3 +59,41 @@ repliés à 48 kHz : leur « porte » n'a pas d'équivalent continu défini. Le 
   (garder DC et avance), dont la loi en τ² résiduelle devrait disparaître ; (ii) entraîner
   avec une règle symétrique en entrée (trapèze complet ou maintien du premier ordre,
   `verif_biblio_A_C_D_F.md`), qui supprime l'avance au lieu de devoir la corriger.
+
+## Suite : correction à deux coefficients (`*_twotap.json`, prédictions H6-H9, commit ec9e11b)
+
+Contrôle : à 48 kHz, le bras redonne le modèle d'origine (ESR 1e-9 à 1e-8).
+
+| run | 88,2 delta → 2 coef. (réd.) | 96 delta → 2 coef. (réd.) | 192 delta → 2 coef. (réd.) | 2 coef. 192/96 | 44,1 : 2 coef. / delta |
+|---|---|---|---|---|---|
+| ssm s925 | 0,0649 → 0,0002 (×294) | 0,0773 → 0,0002 (×348) | 0,1616 → 0,0003 (×557) | 1,30 | 1,125 |
+| ssm s736 | 0,0556 → 0,0002 (×259) | 0,0661 → 0,0002 (×292) | 0,1375 → 0,0003 (×447) | 1,36 | 1,023 |
+| ssm s688 | 0,0362 → 0,0002 (×182) | 0,0432 → 0,0002 (×219) | 0,0924 → 0,0002 (×394) | 1,19 | 1,042 |
+| s4 s925 | 0,1317 → 0,0703 (×1,87) | 0,1572 → 0,0840 (×1,87) | 0,3399 → 0,4733 (×0,72) | — | 1,072 |
+| s4 s736 | 0,1299 → 0,0724 (×1,79) | 0,1473 → 0,1003 (×1,47) | 0,3073 → 0,2572 (×1,19) | — | 1,048 |
+| s4 s688 | 0,1152 → 0,0770 (×1,50) | 0,1468 → 0,0948 (×1,55) | 0,2810 → 0,2178 (×1,29) | — | 1,041 |
+
+**H6** (réduction ≥ ×10 et meilleure que `delta_hold`) — ×182 à ×557. **Tenue** pour les
+trois graines, très au-delà du seuil. Pour SSM-WaveNet, l'écart de montée était presque
+entièrement une erreur de discrétisation : corrigée à l'ordre 1, la sortie à 88,2-192 kHz
+reste à un ESR de 0,0002 (−37 dB) du modèle à 48 kHz.
+
+**H7** (rapport 192/96 ≥ 3,5, loi en τ⁴) — 1,30 ; 1,36 ; 1,19. **Réfutée** pour les
+trois : le résidu n'est plus une loi en τ mais un plancher presque indépendant de la
+fréquence, vers −37 dB, non attribué (précision du rééchantillonnage, repliement
+résiduel : non départagés).
+
+**H8** (à 44,1 kHz, ≤ 1,02 × `delta`) — 1,125 ; 1,023 ; 1,042. **Réfutée** pour les trois,
+mais ces rapports reproduisent ceux de `around` / `delta` du contrôle post hoc (1,13 ;
+1,03 ; 1,04) : la correction reproduit fidèlement le modèle à 48 kHz, et l'avantage de
+`delta` sur `around` en descente venait d'un décalage de phase qui se trouvait être
+favorable face à l'appareil, pas d'un meilleur transfert.
+
+**H9** (S4 : réduction < ×1,5 à 96 kHz) — ×1,87 (s925), ×1,47 (s736), ×1,55 (s688).
+**Tenue** pour s736, **réfutée** de peu pour s925 et s688. À 192 kHz, la correction
+dégrade s925 (×0,72). Le reste de l'écart de S4 tient au TFiLM et aux pôles déjà repliés.
+
+**Conséquence produit.** Pour SSM-WaveNet, la montée en fréquence est résolue sans
+réentraînement : Δ rééchelonné plus deux coefficients par mode, causal, coût d'une
+multiplication-addition supplémentaire par mode et par échantillon. En descente, `delta`
+seul suffit (ou 2 coefficients pour reproduire exactement le modèle à 48 kHz).

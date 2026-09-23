@@ -1,0 +1,51 @@
+{
+  "run_id": "sr_transfer_paired_s4_tf_l_16_s736_last_twotap",
+  "timestamp": "2026-09-23T11:14:14+02:00",
+  "commit": "34528ad154084f58fdf0c3fd5960d9947c7c6231",
+  "source_run": "paired_s4_tf_l_16_s736",
+  "checkpoint": "last",
+  "model": "s4-tf-l-16",
+  "discretization": "nablafx-dssm",
+  "learned_input_vector": false,
+  "poles": {
+    "44100": {
+      "folded": 575,
+      "total": 4096
+    },
+    "48000": {
+      "folded": 517,
+      "total": 4096
+    },
+    "96000": {
+      "folded": 148,
+      "total": 4096
+    }
+  },
+  "arms": {
+    "48k": {
+      "esr": 0.0811178299287955,
+      "mrstft": 0.48436505595843,
+      "recorded_esr": 0.08117378503084183
+    },
+    "48k_two_tap_identity_esr": {
+      "esr": 9.193570349452784e-10,
+      "mrstft": 0.0001437993438836808
+    },
+    "44k1_delta_2tap_interior": {
+      "esr": 0.08223467692732811,
+      "mrstft": 0.5701712965965271
+    },
+    "88k_delta_2tap_band48_vs_48k_interior": {
+      "esr": 0.07240499307711919,
+      "mrstft": 0.436405469973882
+    },
+    "96k_delta_2tap_band48_vs_48k_interior": {
+      "esr": 0.1002838412920634,
+      "mrstft": 0.5263145367304484
+    },
+    "192k_delta_2tap_band48_vs_48k_interior": {
+      "esr": 0.2572301849722862,
+      "mrstft": 0.778312067190806
+    }
+  }
+}
