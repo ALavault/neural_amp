@@ -113,6 +113,37 @@ def set_rate(
         module.C.data = torch.view_as_real(torch.view_as_complex(c) * factor)
 
 
+def two_tap_kernel(module: torch.nn.Module, dt0: torch.Tensor, length: int):
+    """Mode kernel c (b0 a'^k + b1 a'^(k-1)): DC and first derivative at 0 Hz equal to
+    the 48 kHz mode's (demo/sr_transfer/predictions_hold.md, two-coefficient arm)."""
+    lam = torch.complex(-torch.exp(module.log_A_real), module.A_imag).detach()
+    lam = lam.to(torch.complex128)
+    step = torch.exp(module.log_dt.detach()).double().unsqueeze(-1)
+    base = dt0.double().unsqueeze(-1)
+    a48, a = torch.exp(lam * base), torch.exp(lam * step)
+    total = -(1 - a) / lam
+    b1 = total * (base * a48 / (1 - a48) - step * a / (1 - a)) / step
+    b0 = total - b1
+    c = torch.view_as_complex(module.C.detach().contiguous()).to(torch.complex64)
+    powers = torch.arange(length).float()
+    a_powers = a.to(torch.complex64).unsqueeze(-1) ** powers
+    kernel = 2 * torch.einsum("ch,chl->cl", c * b0.to(torch.complex64), a_powers).real
+    late = 2 * torch.einsum("ch,chl->cl", c * b1.to(torch.complex64), a_powers).real
+    kernel[:, 1:] += late[:, :-1]
+    return kernel
+
+
+def set_two_tap(model: torch.nn.Module, base: dict, on: bool) -> None:
+    """Install (or remove) the two-coefficient kernel on every SSM, after set_rate."""
+    for module in ssm_modules(model):
+        name = "get_kernel" if hasattr(type(module), "get_kernel") else "_kernel"
+        if on:
+            dt0 = torch.exp(base[id(module)][0])
+            setattr(module, name, lambda n, m=module, d=dt0: two_tap_kernel(m, d, n))
+        elif name in vars(module):
+            delattr(module, name)
+
+
 def pole_audit(model: torch.nn.Module, rate: float) -> dict:
     """Modes whose discrete angle |Im(lambda)| * dt exceeds pi at `rate`."""
     folded = total = 0
@@ -218,6 +249,40 @@ def hold_test(model, base, x44, y44, x48) -> dict:
     return arms
 
 
+def two_tap_test(model, base, x44, y44, x48) -> dict:
+    """The two-coefficient arm, scored like hold_test."""
+    arms = {}
+    set_rate(model, TRAIN_RATE, base)
+    set_two_tap(model, base, True)
+    arms["48k_two_tap_identity_esr"] = score(
+        run(model, x48), run_plain(model, base, x48)
+    )
+    set_rate(model, DEVICE_RATE, base)
+    arms["44k1_delta_2tap_interior"] = score(
+        interior(run(model, x44), DEVICE_RATE), interior(y44, DEVICE_RATE)
+    )
+    set_two_tap(model, base, False)
+    set_rate(model, TRAIN_RATE, base)
+    reference = run(model, x48)
+    for rate in (88_200, 96_000, 192_000):
+        x = whole(x44, DEVICE_RATE, rate)
+        set_rate(model, rate, base)
+        set_two_tap(model, base, True)
+        out = whole(run(model, x), rate, TRAIN_RATE)
+        set_two_tap(model, base, False)
+        key = f"{rate // 1000}k_delta_2tap_band48_vs_48k_interior"
+        arms[key] = score(interior(out, TRAIN_RATE), interior(reference, TRAIN_RATE))
+        print(key, arms[key], flush=True)
+    return arms
+
+
+def run_plain(model, base, x):
+    set_two_tap(model, base, False)
+    out = run(model, x)
+    set_two_tap(model, base, True)
+    return out
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-id", required=True, help="a demo/nablafx_bench record")
@@ -236,6 +301,11 @@ def main() -> None:
         "--hold-test",
         action="store_true",
         help="arms of demo/sr_transfer/predictions_hold.md, in a separate file",
+    )
+    parser.add_argument(
+        "--two-tap-test",
+        action="store_true",
+        help="two-coefficient arm of demo/sr_transfer/predictions_hold.md",
     )
     parser.add_argument("--no-record", action="store_true")
     args = parser.parse_args()
@@ -287,6 +357,14 @@ def main() -> None:
     y44 = torch.stack([s[1] for s in native])
     assert len(x44) == len(x48)
     arms = result["arms"]
+    if args.two_tap_test:
+        result["run_id"] += "_twotap"
+        result["arms"] = {
+            "48k": arms["48k"],
+            **two_tap_test(model, base, x44, y44, x48),
+        }
+        record_result(result, args.no_record)
+        return
     if args.hold_test:
         result["run_id"] += "_holdtest"
         result["arms"] = {"48k": arms["48k"], **hold_test(model, base, x44, y44, x48)}
