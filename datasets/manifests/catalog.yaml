@@ -350,3 +350,24 @@ resources:
     allowed_usage: noncommercial research with attribution; product lane only (D-PRODUCT-001)
     assigned_tier: UNASSIGNED
     known_limitations: inputs only
+
+  - name: ToneTwist AFx - Dry with markers (inputs of the digital parametric devices)
+    source: https://zenodo.org/records/10455730
+    version: Zenodo record 10455730
+    commit_or_release: ToneTwist AFx dry inputs with calibration markers
+    license: CC-BY-NC-4.0
+    download_date: 2026-09-23
+    download_method: curl Zenodo API file content, md5 checked
+    sha256: e23935658160c7693544c7daf125366c8f141cf72728e5b5780709ec96dc29d3
+    local_archive: datasets/raw/external/tone_twist_param/DRY-with-markers.zip
+    source_checksum: md5:bc1d1490f6c6cfe5643c0798eb5fb5a4
+    sample_rate: 48000
+    bit_depth: float32
+    channels: 1
+    paired_input_output: true
+    alignment_information: same length as the F-Fuzz targets to the sample; the plain DRY record (10901426) lacks the markers and is 2-3 s out of step with them
+    device_information: dry guitar and bass inputs with calibration markers
+    control_parameters: none
+    allowed_usage: noncommercial research with attribution; product lane only (D-PRODUCT-001)
+    assigned_tier: UNASSIGNED
+    known_limitations: inputs only

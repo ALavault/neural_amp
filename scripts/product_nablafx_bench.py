@@ -77,7 +77,9 @@ DEVICES = {
         "held_out": [],
     },
     "ffuzz": {
-        "dry": PARAM / "DIGITAL-PARAMETRIC/DRY",
+        # The targets were rendered from the dry files with calibration markers; the
+        # plain DRY record is 2-3 s out of step with them (demo/param/DEVIATION.md).
+        "dry": PARAM / "DIGITAL-PARAMETRIC/DRY-with-markers",
         "wet": FFUZZ,
         "params": [0],  # fuzz
         "data_to_use": 0.1,
