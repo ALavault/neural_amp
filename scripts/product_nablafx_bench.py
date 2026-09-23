@@ -54,6 +54,7 @@ from nablafx.callbacks import MetricsLoggingCallback  # noqa: E402
 from nablafx.core import BlackBoxModel, BlackBoxSystem  # noqa: E402
 from nablafx.data.datamodules import DryWetFilesPluginDataModule  # noqa: E402
 from nablafx.evaluation.flexible_loss import FlexibleLoss  # noqa: E402
+from nablafx.evaluation.registry import EvaluationRegistry  # noqa: E402
 from nablafx.processors import S4  # noqa: E402
 
 from fssr_nam.models.ssm_wavenet import SSMWaveNet  # noqa: E402
@@ -61,6 +62,28 @@ from fssr_nam.models.ssm_wavenet import SSMWaveNet  # noqa: E402
 DATA = ROOT / "datasets/raw/external/tone_twist_bigmuff/extracted"
 WET = DATA / "ElectroHarmonix-BigMuff"
 SETTING = "S050_V100"
+PARAM = ROOT / "datasets/raw/external/tone_twist_param/extracted"
+MARSHALL = PARAM / "Marshall-JVM410H-ChOD1-trimmed"
+FFUZZ = PARAM / "MultidrivePedalPro-F-Fuzz"
+# Parametric devices, nablafx's data configs (cfg/data/data-param_*): dry and wet roots
+# per split, knob indices, fraction of trainval used. F-Fuzz has the same eleven
+# settings in trainval and test, so two are held out of training (demo/param).
+DEVICES = {
+    "marshall": {
+        "dry": MARSHALL / "DRY",
+        "wet": MARSHALL / "SpeakerOut",
+        "params": [0, 1, 2, 3],  # bass, mid, treble, gain
+        "data_to_use": 1.0,
+        "held_out": [],
+    },
+    "ffuzz": {
+        "dry": PARAM / "DIGITAL-PARAMETRIC/DRY",
+        "wet": FFUZZ,
+        "params": [0],  # fuzz
+        "data_to_use": 0.1,
+        "held_out": ["F030_V100", "F070_V100"],
+    },
+}
 RUNS_DIR = ROOT / "demo/runs"
 RESULTS_DIR = ROOT / "demo/nablafx_bench"
 RUNS_LOG = ROOT / "demo/RUNS.jsonl"
@@ -69,6 +92,8 @@ RUNS_LOG = ROOT / "demo/RUNS.jsonl"
 PUBLISHED = {
     "s4-tf-l-16": (0.01, (1.0, 0.1)),
     "s4-l-16": (0.01, (10.0, 1.0)),
+    # nablafx's parametric configs (cfg/model/s4-param) weigh both losses equally.
+    "s4-param": (0.01, (0.5, 0.5)),
 }
 METRICS = [
     {"name": name, "alias": alias}
@@ -107,10 +132,11 @@ torchaudio.info = _info
 torchaudio.load = _load
 
 # Worker sockets must not live in a directory named tmp. On 2026-09-20 the shared
-# /fastdata/lavaulta/tmp was deleted while a run was training; its DataLoader workers died
-# with it and the run hung for 28 minutes holding 19.9 GiB of GPU memory at 0 % use. These
-# two lines put the sockets under the project and make PyTorch's own timeout fail loudly
-# instead of waiting for ever; neither touches the training itself.
+# /fastdata/lavaulta/tmp was deleted while a run was training; its DataLoader
+# workers died with it and the run hung for 28 minutes holding 19.9 GiB of GPU
+# memory at 0 % use. These two lines put the sockets under the project and make
+# PyTorch's own timeout fail loudly instead of waiting for ever; neither touches
+# the training itself.
 _IPC = Path(__file__).resolve().parents[1] / "demo/runs/.ipc"
 _IPC.mkdir(parents=True, exist_ok=True)
 os.environ["TMPDIR"] = str(_IPC)
@@ -162,8 +188,9 @@ class System(BlackBoxSystem):
     """
 
     honor_optim = False
-    # PyTorch's own default; --plateau-threshold raises it above the noise floor of the
-    # validation curve, which diagnosis/butterfly/plateau_margin.md measured at 4 to 9e-3.
+    # PyTorch's own default; --plateau-threshold raises it above the noise floor of
+    # the validation curve, which diagnosis/butterfly/plateau_margin.md measured at
+    # 4 to 9e-3.
     plateau_threshold = 1e-4
     # Pilot C: when a fixed schedule is given, the plateau detector is removed entirely
     # rather than tuned, since diagnosis/seeds/plateau_simulation.md showed no threshold
@@ -213,9 +240,7 @@ class FixedSchedule(pl.Callback):
 
 
 class SSMWaveNetProcessor(SSMWaveNet):
-    """BlackBoxModel reads num_controls; the model has no controls."""
-
-    num_controls = 0
+    """BlackBoxModel reads num_controls, which SSMWaveNet now sets itself."""
 
 
 class PolarityGuard(pl.Callback):
@@ -277,7 +302,15 @@ class PolarityGuard(pl.Callback):
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--model", required=True, choices=["s4-tf-l-16", "s4-l-16", "ssm-wavenet"]
+        "--model",
+        required=True,
+        choices=["s4-tf-l-16", "s4-l-16", "ssm-wavenet", "s4-param"],
+    )
+    parser.add_argument(
+        "--device",
+        default="bigmuff",
+        choices=["bigmuff", *DEVICES],
+        help="bigmuff: the original benchmark; the others are parametric (knob inputs)",
     )
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--seed", type=int, default=42)
@@ -285,7 +318,8 @@ def parse_args() -> argparse.Namespace:
         "--plateau-threshold",
         type=float,
         default=1e-4,
-        help="relative improvement ReduceLROnPlateau requires; PyTorch's default is 1e-4",
+        help="relative improvement ReduceLROnPlateau requires;"
+        " PyTorch's default is 1e-4",
     )
     parser.add_argument(
         "--lr-halvings",
@@ -348,6 +382,8 @@ def parse_args() -> argparse.Namespace:
 
 
 def build_processor(args: argparse.Namespace) -> torch.nn.Module:
+    device = getattr(args, "device", "bigmuff")
+    controls = len(DEVICES[device]["params"]) if device in DEVICES else 0
     if args.model == "ssm-wavenet":
         return SSMWaveNetProcessor(
             num_blocks=args.num_blocks,
@@ -355,6 +391,25 @@ def build_processor(args: argparse.Namespace) -> torch.nn.Module:
             state_dim=args.state_dim,
             output_act=args.output_act,
             discretization=args.discretization,
+            num_controls=controls,
+        )
+    if args.model == "s4-param":
+        # cfg/model/s4-param/model_bb-param_s4-f-b8-s32-c16.yaml: static FiLM (MLP).
+        return S4(
+            num_inputs=1,
+            num_outputs=1,
+            num_controls=controls,
+            num_blocks=8,
+            s4_state_dim=32,
+            channel_width=16,
+            batchnorm=False,
+            residual=True,
+            direct_path=False,
+            cond_type="film",
+            cond_block_size=128,
+            cond_num_layers=1,
+            act_type="tanh",
+            s4_learning_rate=0.01,
         )
     return S4(
         num_inputs=1,
@@ -374,7 +429,41 @@ def build_processor(args: argparse.Namespace) -> torch.nn.Module:
     )
 
 
-def data_module(split: str, batch_size: int = 16) -> DryWetFilesPluginDataModule:
+def held_out_view(device: str) -> Path:
+    """Trainval wet directory without the held-out settings, as symlinks."""
+    spec = DEVICES[device]
+    source = spec["wet"] / "trainval"
+    if not spec["held_out"]:
+        return source
+    view = RUNS_DIR / f".views/{device}_trainval"
+    view.mkdir(parents=True, exist_ok=True)
+    for setting in sorted(source.iterdir()):
+        link = view / setting.name
+        if setting.name not in spec["held_out"] and not link.exists():
+            link.symlink_to(setting)
+    return view
+
+
+def data_module(
+    split: str, batch_size: int = 16, device: str = "bigmuff"
+) -> DryWetFilesPluginDataModule:
+    if device in DEVICES:
+        spec = DEVICES[device]
+        trainval = split == "trainval"
+        return DryWetFilesPluginDataModule(
+            root_dir_dry=str(spec["dry"] / split),
+            root_dir_wet=str(
+                held_out_view(device) if trainval else spec["wet"] / split
+            ),
+            params_idxs_to_use=spec["params"],
+            data_to_use=spec["data_to_use"] if trainval else 1.0,
+            trainval_split=0.9,
+            sample_length=144_000 if trainval else 240_000,
+            sample_rate=48_000,
+            preload=True,
+            batch_size=batch_size if trainval else 8,
+            num_workers=4,
+        )
     if split == "trainval":
         return DryWetFilesPluginDataModule(
             root_dir_dry=str(DATA / "DRY/trainval"),
@@ -397,6 +486,40 @@ def data_module(split: str, batch_size: int = 16) -> DryWetFilesPluginDataModule
         batch_size=8,
         num_workers=4,
     )
+
+
+@torch.no_grad()
+def metrics_by_setting(system: System, checkpoint: Path, dataset) -> dict:
+    """ESR and MR-STFT of one checkpoint on each setting of `dataset` (a nablafx
+    parametric dataset, or a Subset of one), averaged over batches of eight
+    weighted by size as Lightning's test loop does."""
+    state = torch.load(checkpoint, map_location="cpu", weights_only=False)
+    system.load_state_dict(state["state_dict"])
+    model = system.model.to("cuda").eval()
+    base = getattr(dataset, "dataset", dataset)
+    indices = getattr(dataset, "indices", range(len(dataset)))
+    groups: dict[str, list[int]] = {}
+    for index in indices:
+        setting = Path(base.samples[index]["target_file"]).parent.name
+        groups.setdefault(setting, []).append(index)
+    esr = EvaluationRegistry.get_function("esr_loss")
+    mrstft = EvaluationRegistry.get_function("mrstft_loss")
+    results = {}
+    for setting, members in sorted(groups.items()):
+        totals = {"esr": 0.0, "mrstft": 0.0}
+        for start in range(0, len(members), 8):
+            items = [base[i] for i in members[start : start + 8]]
+            x, y, controls = (
+                torch.stack(parts).to("cuda") for parts in zip(*items, strict=True)
+            )
+            model.reset_states()
+            pred = model(x, controls)
+            totals["esr"] += float(esr(pred, y)) * len(items)
+            totals["mrstft"] += float(mrstft(pred, y)) * len(items)
+        results[setting] = {
+            key: value / len(members) for key, value in totals.items()
+        } | {"segments": len(members)}
+    return results
 
 
 def metrics_callback() -> MetricsLoggingCallback:
@@ -517,7 +640,7 @@ def main() -> None:
     if args.split_seed is not None:
         pl.seed_everything(args.split_seed, workers=True)
     resume_from = str(last) if args.resume and last.exists() else None
-    trainval = data_module("trainval", args.batch_size)
+    trainval = data_module("trainval", args.batch_size, args.device)
     trainer.fit(system, datamodule=trainval, ckpt_path=resume_from)
     minutes = (time.perf_counter() - started) / 60.0
     # Which twelve segments this run validated on. The split is drawn inside fit,
@@ -543,15 +666,30 @@ def main() -> None:
             callbacks=[metrics_callback()],
         )
         output = tester.test(
-            system, datamodule=data_module("test"), ckpt_path=str(path), verbose=False
+            system,
+            datamodule=data_module("test", device=args.device),
+            ckpt_path=str(path),
+            verbose=False,
         )
         tests[label] = {key: float(value) for key, value in output[0].items()}
+    by_setting = val_by_setting = None
+    if args.device in DEVICES:
+        test_data = data_module("test", device=args.device)
+        test_data.setup("test")
+        by_setting = metrics_by_setting(system, last, test_data.test_dataset)
+        val_by_setting = metrics_by_setting(system, last, trainval.val_dataset)
 
     record = {
         "run_id": args.run_id,
         "timestamp": datetime.now().astimezone().isoformat(timespec="seconds"),
         **commits,
-        "benchmark": f"ToneTwist Big Muff {SETTING}, nablafx protocol",
+        "benchmark": (
+            f"ToneTwist Big Muff {SETTING}, nablafx protocol"
+            if args.device == "bigmuff"
+            else f"ToneTwist {args.device} parametric, nablafx protocol"
+        ),
+        "device": args.device,
+        "held_out_settings": DEVICES.get(args.device, {}).get("held_out"),
         "model": args.model,
         "parameters": parameters,
         "seed": args.seed,
@@ -593,6 +731,10 @@ def main() -> None:
         "peak_gpu_gib": round(torch.cuda.max_memory_allocated() / 2**30, 2),
         "test_last": tests["last"],
         "test_best": tests["best"],
+        "test_last_by_setting": by_setting,
+        # Validation segments come from the same dry files as training: seen settings,
+        # optimistic material.
+        "val_last_by_setting": val_by_setting,
     }
     print(json.dumps(record, indent=2))
     if args.no_record:

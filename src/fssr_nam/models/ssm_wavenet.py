@@ -209,13 +209,17 @@ class GatedSSMBlock(nn.Module):
         self.res_conv = nn.Conv1d(channels, channels, 1)
         self.skip_conv = nn.Conv1d(channels, channels, 1)
 
-    def forward(self, x: Tensor) -> tuple[Tensor, Tensor]:
-        """Returns (residual, skip)."""
+    def forward(self, x: Tensor, film: Tensor | None = None) -> tuple[Tensor, Tensor]:
+        """Returns (residual, skip). film: (batch, 2 * gate channels), scale then shift
+        of the 1x1 pre-gate output; memoryless, so it keeps the SSM rate-independent."""
         h = self.ssm(x)
         if self.act_type == "sine":
             h = self.activation(self.pre_act(h))
         else:
             h = self.pre_gate(h)
+            if film is not None:
+                scale, shift = film.unsqueeze(-1).chunk(2, dim=1)
+                h = (1 + scale) * h + shift
             gate_a, gate_b = h.chunk(2, dim=1)
             h = torch.tanh(gate_a) * torch.sigmoid(gate_b)
         skip = self.skip_conv(h)
@@ -242,6 +246,9 @@ class SSMWaveNet(nn.Module):
             instead of uniform random.
         discretization: "free" (learned input vector) or "zoh" (S4D
             zero-order hold); see DiagonalSSMLayer.
+        num_controls: knob values in [0, 1] per example. When > 0, an MLP maps
+            them to a static FiLM (scale, shift) of every block's gated 1x1 layer,
+            zero at initialisation so training starts from the unconditioned model.
     """
 
     def __init__(
@@ -255,8 +262,21 @@ class SSMWaveNet(nn.Module):
         output_act: str = "tanh",
         circuit_tau_s: Sequence[float] | None = None,
         discretization: str = "free",
+        num_controls: int = 0,
     ) -> None:
         super().__init__()
+        self.num_controls = num_controls
+        self.film_net: nn.Sequential | None = None
+        if num_controls > 0:
+            if act_type != "gated":
+                raise ValueError("controls need act_type='gated'")
+            self.film_net = nn.Sequential(
+                nn.Linear(num_controls, 32),
+                nn.ReLU(),
+                nn.Linear(32, num_blocks * 4 * channels),
+            )
+            nn.init.zeros_(self.film_net[2].weight)
+            nn.init.zeros_(self.film_net[2].bias)
         self.input_conv = nn.Conv1d(input_channels, channels, 1)
         self.blocks = nn.ModuleList(
             [
@@ -287,12 +307,15 @@ class SSMWaveNet(nn.Module):
             final_act,
         )
 
-    def forward(self, x: Tensor) -> Tensor:
-        """x: (batch, 1, length) -> (batch, 1, length)."""
+    def forward(self, x: Tensor, controls: Tensor | None = None) -> Tensor:
+        """x: (batch, 1, length), controls: (batch, num_controls) -> like x."""
+        films: list[Tensor | None] = [None] * len(self.blocks)
+        if self.film_net is not None:
+            films = list(self.film_net(controls).chunk(len(self.blocks), dim=1))
         h = self.input_conv(x)
         skip_sum = torch.zeros_like(h)
-        for block in self.blocks:
-            h, skip = block(h)
+        for block, film in zip(self.blocks, films, strict=True):
+            h, skip = block(h, film)
             skip_sum = skip_sum + skip
         return self.output_net(skip_sum)
 
