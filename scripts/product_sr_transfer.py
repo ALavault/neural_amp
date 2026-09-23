@@ -76,7 +76,11 @@ def ssm_modules(model: torch.nn.Module) -> list[torch.nn.Module]:
 
 
 def set_rate(
-    model: torch.nn.Module, rate: float, base: dict, lead: bool = False
+    model: torch.nn.Module,
+    rate: float,
+    base: dict,
+    lead: bool = False,
+    hold: bool = False,
 ) -> None:
     """Rescale every log_dt from its trained value for a model running at `rate`.
 
@@ -87,6 +91,11 @@ def set_rate(
     (exp(lambda eps) - 1) / lambda * x, so this rescales the modal residues (a DC gain
     of exp(lambda eps) on real modes). Kept as the exploratory arm that was
     pre-registered, not as a test of the timing argument.
+
+    With hold=True, each mode keeps the 48 kHz zero-order-hold gate: its input
+    coefficient (exp(lambda dt') - 1) / lambda becomes (exp(lambda dt0) - 1) / lambda *
+    dt' / dt0, dt0 the trained step (demo/sr_transfer/predictions_hold.md). Causal, and
+    the identity at 48 kHz.
     """
     for module in ssm_modules(model):
         log_dt, c = base[id(module)]
@@ -96,6 +105,11 @@ def set_rate(
             lam = torch.complex(-torch.exp(module.log_A_real), module.A_imag).detach()
             dt = torch.exp(module.log_dt.detach()).unsqueeze(-1)
             factor = torch.exp(lam * dt * (rate / TRAIN_RATE - 1))
+        if hold:
+            lam = torch.complex(-torch.exp(module.log_A_real), module.A_imag).detach()
+            dt0 = torch.exp(log_dt).unsqueeze(-1)
+            dt = torch.exp(module.log_dt.detach()).unsqueeze(-1)
+            factor = torch.expm1(lam * dt0) * (dt / dt0) / torch.expm1(lam * dt)
         module.C.data = torch.view_as_real(torch.view_as_complex(c) * factor)
 
 
@@ -179,6 +193,31 @@ def post_hoc(model, base, x44, y44, out48) -> dict:
     return arms
 
 
+def hold_test(model, base, x44, y44, x48) -> dict:
+    """Arms of demo/sr_transfer/predictions_hold.md, scored on segment interiors."""
+    arms = {}
+    for name, hold in (("delta", False), ("delta_hold", True)):
+        set_rate(model, DEVICE_RATE, base, hold=hold)
+        arms[f"44k1_{name}_interior"] = score(
+            interior(run(model, x44), DEVICE_RATE), interior(y44, DEVICE_RATE)
+        )
+    for gain, tag in ((1.0, ""), (0.1, "_m20db")):
+        set_rate(model, TRAIN_RATE, base)
+        reference = run(model, x48 * gain)
+        rates = (88_200, 96_000, 192_000) if gain == 1.0 else (96_000, 192_000)
+        for rate in rates:
+            x = whole(x44 * gain, DEVICE_RATE, rate)
+            for name, hold in (("delta", False), ("delta_hold", True)):
+                set_rate(model, rate, base, hold=hold)
+                out = whole(run(model, x), rate, TRAIN_RATE)
+                key = f"{rate // 1000}k_{name}{tag}_band48_vs_48k_interior"
+                arms[key] = score(
+                    interior(out, TRAIN_RATE), interior(reference, TRAIN_RATE)
+                )
+                print(key, arms[key], flush=True)
+    return arms
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-id", required=True, help="a demo/nablafx_bench record")
@@ -192,6 +231,11 @@ def main() -> None:
         help="post-hoc checks after Codex's review, in a separate file: whole-file"
         " resampling, scores on segment interiors, and up-rate outputs compared with"
         " the 48 kHz model inside its band",
+    )
+    parser.add_argument(
+        "--hold-test",
+        action="store_true",
+        help="arms of demo/sr_transfer/predictions_hold.md, in a separate file",
     )
     parser.add_argument("--no-record", action="store_true")
     args = parser.parse_args()
@@ -243,6 +287,11 @@ def main() -> None:
     y44 = torch.stack([s[1] for s in native])
     assert len(x44) == len(x48)
     arms = result["arms"]
+    if args.hold_test:
+        result["run_id"] += "_holdtest"
+        result["arms"] = {"48k": arms["48k"], **hold_test(model, base, x44, y44, x48)}
+        record_result(result, args.no_record)
+        return
     if args.post_hoc:
         result["run_id"] += "_posthoc"
         result["arms"] = {"48k": arms["48k"], **post_hoc(model, base, x44, y44, out48)}

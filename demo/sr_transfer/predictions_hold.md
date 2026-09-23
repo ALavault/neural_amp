@@ -40,3 +40,14 @@ avec rééchantillonnage du fichier entier, comme les contrôles post hoc.
   TFiLM à blocs de 128 échantillons n'est pas corrigé) : réduction entre ×1,5 et ×5.
 
 Aucun checkpoint écarté ; un échec sur une graine est rapporté comme tel.
+
+## Limite connue avant les résultats (ajoutée avant tout chiffre de ces bras)
+
+Contrôle d'implémentation sur les checkpoints : le noyau de `delta_hold` est une somme de
+Riemann de h convolué avec la porte de 48 kHz, pas une intégrale exacte. Pour les modes
+rapides, son gain continu s'écarte de celui du modèle à 48 kHz : jusqu'à 26 % du |DC|
+moyen pour un mode (SSM s925, 23 % s688, 11 % S4 s925). Avec un seul coefficient d'entrée
+par mode et un pôle fixé, exiger le DC exact redonne exactement `delta` : rétablir l'avance
+T/2 de façon causale se paie ailleurs, ici sur les modes rapides. **Si H1 échoue, ce défaut
+est une explication concurrente de l'hypothèse A**, pas une réfutation de A ; une
+correction à deux coefficients par mode serait alors le test suivant.
