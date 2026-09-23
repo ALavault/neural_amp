@@ -484,6 +484,12 @@ relâché à 80 % au lieu de 90 %) **[V]**. La seule ancre perceptive disponible
 
 ### 3.4 Le côté convolutif est documenté par du code, pas par de la science
 
+> **Correction du 2026-09-23** (`../2026-09-23/verif_biblio_supersampling.md`, §5) : ce
+> paragraphe est faux sur un point. Carson, Wright, Bilbao, DAFx25, §4.4 et Table 1,
+> mesurent bien la dilatation ×2 sur des TCN NAM pré-entraînés (NMR-S-OS2 : Vox
+> 15,0 → 6,5 dB, JCM 13,4 → 3,0 dB). La mesure existe ; le reste du paragraphe est
+> conservé tel qu'écrit le 22/09.
+
 L'analogue convolutif du delay-line trick (multiplier les dilatations par M) est implémenté
 (NAM-Oversampler, et un plugin LV2 qui affirme dans son README que *« If you run at a sample
 rate that is an even multiple of the model sample rate, the model will be correctly

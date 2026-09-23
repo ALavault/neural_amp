@@ -140,3 +140,30 @@ D répond oui.
 - ADAA pour les RNN (Mikkonen et Werner, DAFx-25).
 - Extension de bande neuronale : NU-Wave 2, AudioSR.
 - Intermodulation ultrasonore dans les chaînes d'effets.
+
+## 4. Corrections après vérification (2026-09-23, `verif_biblio_supersampling.md`)
+
+- **Piste A, affirmation fausse.** « NAM-Oversampler multiplie seulement les dilatations,
+  ce qui ne préserve pas la réponse en fréquence » est faux. Un noyau dilaté ×M (noyau
+  complété de zéros) a exactement la réponse d'origine en bande de base, avec des images
+  au-dessus. Après passe-bas et décimation, on obtient la sortie native moins son
+  repliement, harmoniques identiques (jouet CPU de l'agent : 0,000 dB). L'interpolation
+  à bande limitée proposée en A déplace au contraire les harmoniques de 0,2 à 0,7 dB,
+  parce qu'un noyau appris n'est pas à bande limitée. **Telle qu'écrite, A préserve moins
+  bien le modèle que la méthode existante.** Jouet sans résidus, sans portes, sans
+  données : mécanisme montré, ampleur réelle sur un `.nam` non mesurée.
+- **Mesure existante.** Carson et al. DAFx25 mesurent la dilatation ×2 sur des TCN NAM
+  pré-entraînés (Table 1) : le « sans mesure publiée » de la revue du 22/09 était faux.
+- **Piste B largement faite.** Carson DAFx25 : enseignant figé à sa fréquence native,
+  cible reconstruite à partir des seuls harmoniques sur sinus purs, perte ESR + NMR après
+  passe-bas. Le repliement baisse sur les 8 modèles, au prix d'un ESR guitare et basse
+  plus élevé partout. Non trouvés : un élève à fréquence supérieure, l'excitation
+  multi-sons.
+- **Piste F partiellement faite.** ADAA sur GRU et LSTM pré-entraînés sans réentraînement
+  (Mikkonen et Werner, DAFx25) ; ADAA dans un réseau LRU (Esqueda et Murai, DAFx25), où
+  tanh s'est révélée inutilisable et le retard a été compensé dans la voie directe. Le
+  produit des portes reste hors de portée : l'ADAA sur un WaveNet à portes n'est pas
+  trouvée.
+- **Pistes C et D** : non documentées pour les effets (NU-Wave 2 et AudioSR s'arrêtent à
+  48 kHz ; intermodulation ultrasonore audible montrée seulement via haut-parleur,
+  Ashihara 2000).
