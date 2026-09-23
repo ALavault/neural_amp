@@ -1,0 +1,79 @@
+{
+  "run_id": "sr_transfer_paired_ssm_wavenet_s736_last_holdtest",
+  "timestamp": "2026-09-23T09:32:29+02:00",
+  "commit": "936b7ef8a5984fe0e0f5ef3032247023117ea4b4",
+  "source_run": "paired_ssm_wavenet_s736",
+  "checkpoint": "last",
+  "model": "ssm-wavenet",
+  "discretization": "zoh",
+  "learned_input_vector": false,
+  "poles": {
+    "44100": {
+      "folded": 0,
+      "total": 512
+    },
+    "48000": {
+      "folded": 0,
+      "total": 512
+    },
+    "96000": {
+      "folded": 0,
+      "total": 512
+    }
+  },
+  "arms": {
+    "48k": {
+      "esr": 0.049987357730666794,
+      "mrstft": 0.4164935251077016,
+      "recorded_esr": 0.04998888447880745
+    },
+    "44k1_delta_interior": {
+      "esr": 0.0449951117237409,
+      "mrstft": 0.42432160178820294
+    },
+    "44k1_delta_hold_interior": {
+      "esr": 0.04835100285708904,
+      "mrstft": 0.4305562476317088
+    },
+    "88k_delta_band48_vs_48k_interior": {
+      "esr": 0.055594575901826225,
+      "mrstft": 0.1690849413474401
+    },
+    "88k_delta_hold_band48_vs_48k_interior": {
+      "esr": 0.013434598222374916,
+      "mrstft": 0.2348404328028361
+    },
+    "96k_delta_band48_vs_48k_interior": {
+      "esr": 0.06611605236927669,
+      "mrstft": 0.17819399138291678
+    },
+    "96k_delta_hold_band48_vs_48k_interior": {
+      "esr": 0.01602669122318427,
+      "mrstft": 0.25111449758211773
+    },
+    "192k_delta_band48_vs_48k_interior": {
+      "esr": 0.13749085366725922,
+      "mrstft": 0.2368547022342682
+    },
+    "192k_delta_hold_band48_vs_48k_interior": {
+      "esr": 0.03498465629915396,
+      "mrstft": 0.3469068706035614
+    },
+    "96k_delta_m20db_band48_vs_48k_interior": {
+      "esr": 0.03769691661000252,
+      "mrstft": 0.12234060962994893
+    },
+    "96k_delta_hold_m20db_band48_vs_48k_interior": {
+      "esr": 0.04152944063146909,
+      "mrstft": 0.31415902574857074
+    },
+    "192k_delta_m20db_band48_vs_48k_interior": {
+      "esr": 0.08036467681328456,
+      "mrstft": 0.16272290547688803
+    },
+    "192k_delta_hold_m20db_band48_vs_48k_interior": {
+      "esr": 0.09403352191050847,
+      "mrstft": 0.4132249852021535
+    }
+  }
+}
