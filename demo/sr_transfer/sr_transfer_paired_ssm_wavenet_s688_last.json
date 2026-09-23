@@ -1,0 +1,99 @@
+{
+  "run_id": "sr_transfer_paired_ssm_wavenet_s688_last",
+  "timestamp": "2026-09-22T22:18:37+02:00",
+  "commit": "f34cec58a16837e69c3c69ed3edcdb291d67c28a",
+  "source_run": "paired_ssm_wavenet_s688",
+  "checkpoint": "last",
+  "model": "ssm-wavenet",
+  "discretization": "zoh",
+  "learned_input_vector": false,
+  "poles": {
+    "44100": {
+      "folded": 0,
+      "total": 512
+    },
+    "48000": {
+      "folded": 0,
+      "total": 512
+    },
+    "96000": {
+      "folded": 0,
+      "total": 512
+    }
+  },
+  "arms": {
+    "48k": {
+      "esr": 0.04246394274135431,
+      "mrstft": 0.39711637298266095,
+      "recorded_esr": 0.04244759678840637
+    },
+    "44k1_delta": {
+      "esr": 0.04121732277174791,
+      "mrstft": 0.4107454717159271
+    },
+    "44k1_delta_lead": {
+      "esr": 0.051526907831430435,
+      "mrstft": 0.4073302249113719
+    },
+    "44k1_naive": {
+      "esr": 0.24985549847284952,
+      "mrstft": 0.5716187556584676
+    },
+    "44k1_around": {
+      "esr": 0.042624363054831825,
+      "mrstft": 0.44419606526692706
+    },
+    "44k1_up2_delta": {
+      "esr": 0.0896998072663943,
+      "mrstft": 0.47364922364552814
+    },
+    "44k1_up2_delta_lead": {
+      "esr": 0.1488238126039505,
+      "mrstft": 0.5653176108996073
+    },
+    "44k1_up4_delta": {
+      "esr": 0.14372116327285767,
+      "mrstft": 0.5160545905431112
+    },
+    "44k1_up4_delta_lead": {
+      "esr": 0.2486662119626999,
+      "mrstft": 0.6301226814587911
+    },
+    "88k_naive_vs_around": {
+      "esr": 1.292782147725423,
+      "mrstft": 1.9985307852427165
+    },
+    "88k_delta_vs_around": {
+      "esr": 0.036363713443279266,
+      "mrstft": 0.7449502746264139
+    },
+    "88k_delta_lead_vs_around": {
+      "esr": 0.12676970660686493,
+      "mrstft": 0.9360453287760416
+    },
+    "96k_naive_vs_around": {
+      "esr": 1.319925308227539,
+      "mrstft": 2.173682610193888
+    },
+    "96k_delta_vs_around": {
+      "esr": 0.04339758058389028,
+      "mrstft": 0.8154890934626261
+    },
+    "96k_delta_lead_vs_around": {
+      "esr": 0.14530819157759348,
+      "mrstft": 1.016172170639038
+    },
+    "192k_naive_vs_around": {
+      "esr": 1.2405825058619182,
+      "mrstft": 3.0484675566355386
+    },
+    "192k_delta_vs_around": {
+      "esr": 0.09274045129617055,
+      "mrstft": 1.0488866567611694
+    },
+    "192k_delta_lead_vs_around": {
+      "esr": 0.24288498361905417,
+      "mrstft": 1.2751981417338054
+    }
+  }
+}

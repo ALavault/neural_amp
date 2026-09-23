@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Run a Big Muff bench checkpoint, trained at 48 kHz, at other sample rates.
 
-Every memory in SSM-WaveNet, and in nablafx's S4, is a diagonal SSM whose pole is
-exp(lambda * dt), with dt = exp(log_dt); everything else acts sample by sample. Under
+Every memory in SSM-WaveNet is a diagonal SSM whose pole is exp(lambda * dt), with
+dt = exp(log_dt); everything else acts sample by sample. nablafx's S4-TF-L-16 also keeps
+a TFiLM (pooling over 128-sample blocks and an LSTM), whose physical rate follows fs:
+rescaling its SSMs only transfers it partially. Under
 zero-order hold the input vector follows dt as well, so running the model at fs with
 dt * 48000 / fs samples the same continuous-time system at the new rate. This script
 adds log(48000 / fs) to every log_dt and compares arms on the ToneTwist Big Muff test
@@ -15,7 +17,8 @@ file (60 s, twelve 5 s segments, each starting from a zero state as in the bench
   resample back: offline and non-causal, an upper bound for real-time resampling);
   up2_delta / up4_delta: resample to 88.2 / 176.4 kHz, delta-rescaled model, back to
   44.1 kHz - oversampling without retraining, still scored against the device.
-- *_lead: delta plus the SSM-branch lead restored (see set_rate), exploratory.
+- *_lead: delta with C multiplied by exp(lambda (dt0 - dt')), exploratory; this is not
+  a full time advance (see set_rate), so its failure does not test a timing hypothesis.
 - at 88.2, 96 and 192 kHz there is no device reference: naive and delta are scored
   against `around` resampled to that rate, i.e. consistency with the 48 kHz model.
 
@@ -77,11 +80,13 @@ def set_rate(
 ) -> None:
     """Rescale every log_dt from its trained value for a model running at `rate`.
 
-    Both SSMs output C h[n] with h[n] = a h[n-1] + b x[n]: the state has integrated
-    the held input up to t_n + dt, so each SSM branch leads its D feedthrough by one
-    sample, 1/fs seconds. Training fixed that lead at 1/48000 s. With lead=True, C is
-    multiplied by exp(lambda * (fs/48000 - 1) dt') to restore it; for fs above 48 kHz
-    this drops the input the lead would need from the future (exploratory arm).
+    Both SSMs output C h[n] with h[n] = a h[n-1] + b x[n], read after x[n] enters.
+    With lead=True, C is multiplied by exp(lambda * (fs/48000 - 1) dt'), meant to
+    shift each mode by 1/48000 - 1/fs seconds. Codex's review (2026-09-23) showed it
+    is not a time shift: a true advance also needs the input term
+    (exp(lambda eps) - 1) / lambda * x, so this rescales the modal residues (a DC gain
+    of exp(lambda eps) on real modes). Kept as the exploratory arm that was
+    pre-registered, not as a test of the timing argument.
     """
     for module in ssm_modules(model):
         log_dt, c = base[id(module)]
@@ -128,12 +133,65 @@ def resample(x: torch.Tensor, source: int, target: int) -> torch.Tensor:
     return torchaudio.functional.resample(x, source, target)
 
 
+TRIM_S = 0.1
+
+
+def whole(segments: torch.Tensor, source: int, target: int) -> torch.Tensor:
+    """Resample the concatenated segments as one file, then cut them again."""
+    count = len(segments)
+    signal = resample(segments.reshape(1, -1), source, target)
+    return signal.reshape(count, 1, -1)
+
+
+def interior(x: torch.Tensor, rate: int) -> torch.Tensor:
+    trim = int(rate * TRIM_S)
+    return x[..., trim:-trim]
+
+
+def post_hoc(model, base, x44, y44, out48) -> dict:
+    """Arms rescored without resampling edges (Codex's review, point 5) and, above
+    48 kHz, inside the 48 kHz model's band (point 6). Post hoc: no prediction."""
+    arms = {}
+    set_rate(model, DEVICE_RATE, base)
+    arms["44k1_delta_interior"] = score(
+        interior(run(model, x44), DEVICE_RATE), interior(y44, DEVICE_RATE)
+    )
+    # out48 ran on the bench's own input, resampled as a whole file.
+    around = whole(out48, TRAIN_RATE, DEVICE_RATE)
+    arms["44k1_around_wholefile_interior"] = score(
+        interior(around, DEVICE_RATE), interior(y44, DEVICE_RATE)
+    )
+    for rate in (88_200, 96_000, 192_000):
+        x = whole(x44, DEVICE_RATE, rate)
+        reference = whole(out48, TRAIN_RATE, rate)
+        for name, scale in (("naive", TRAIN_RATE), ("delta", rate)):
+            set_rate(model, scale, base)
+            out = run(model, x)
+            key = f"{rate // 1000}k_{name}"
+            arms[f"{key}_vs_around_interior"] = score(
+                interior(out, rate), interior(reference, rate)
+            )
+            arms[f"{key}_band48_vs_48k_interior"] = score(
+                interior(whole(out, rate, TRAIN_RATE), TRAIN_RATE),
+                interior(out48, TRAIN_RATE),
+            )
+        print(rate, arms[f"{rate // 1000}k_delta_band48_vs_48k_interior"], flush=True)
+    return arms
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-id", required=True, help="a demo/nablafx_bench record")
     parser.add_argument("--checkpoint", default="last", choices=["last", "best"])
     parser.add_argument(
         "--gates-only", action="store_true", help="48 kHz gate and pole audit only"
+    )
+    parser.add_argument(
+        "--post-hoc",
+        action="store_true",
+        help="post-hoc checks after Codex's review, in a separate file: whole-file"
+        " resampling, scores on segment interiors, and up-rate outputs compared with"
+        " the 48 kHz model inside its band",
     )
     parser.add_argument("--no-record", action="store_true")
     args = parser.parse_args()
@@ -185,6 +243,11 @@ def main() -> None:
     y44 = torch.stack([s[1] for s in native])
     assert len(x44) == len(x48)
     arms = result["arms"]
+    if args.post_hoc:
+        result["run_id"] += "_posthoc"
+        result["arms"] = {"48k": arms["48k"], **post_hoc(model, base, x44, y44, out48)}
+        record_result(result, args.no_record)
+        return
 
     set_rate(model, DEVICE_RATE, base)
     arms["44k1_delta"] = score(run(model, x44), y44)
@@ -193,6 +256,7 @@ def main() -> None:
     set_rate(model, TRAIN_RATE, base)
     arms["44k1_naive"] = score(run(model, x44), y44)
     # Input resampled segment by segment, so each 5 s span is the same audio.
+    set_rate(model, TRAIN_RATE, base)
     around44 = resample(
         run(model, resample(x44, DEVICE_RATE, TRAIN_RATE)), TRAIN_RATE, DEVICE_RATE
     )
@@ -221,8 +285,12 @@ def main() -> None:
         arms[f"{rate // 1000}k_delta_lead_vs_around"] = score(run(model, x), reference)
         print(rate, arms[f"{rate // 1000}k_delta_vs_around"], flush=True)
 
+    record_result(result, args.no_record)
+
+
+def record_result(result: dict, no_record: bool) -> None:
     print(json.dumps(result, indent=2))
-    if args.no_record:
+    if no_record:
         return
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     (OUT_DIR / f"{result['run_id']}.json").write_text(

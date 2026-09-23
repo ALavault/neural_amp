@@ -1,0 +1,87 @@
+{
+  "run_id": "sr_transfer_paired_s4_tf_l_16_s736_last_posthoc",
+  "timestamp": "2026-09-23T07:02:44+02:00",
+  "commit": "29a869cbd38ea9b308eddd0480f62a1c2d8b8b19",
+  "source_run": "paired_s4_tf_l_16_s736",
+  "checkpoint": "last",
+  "model": "s4-tf-l-16",
+  "discretization": "nablafx-dssm",
+  "learned_input_vector": false,
+  "poles": {
+    "44100": {
+      "folded": 575,
+      "total": 4096
+    },
+    "48000": {
+      "folded": 517,
+      "total": 4096
+    },
+    "96000": {
+      "folded": 148,
+      "total": 4096
+    }
+  },
+  "arms": {
+    "48k": {
+      "esr": 0.0811178299287955,
+      "mrstft": 0.48436505595843,
+      "recorded_esr": 0.08117378503084183
+    },
+    "44k1_delta_interior": {
+      "esr": 0.07847885414958,
+      "mrstft": 0.5606851379076639
+    },
+    "44k1_around_wholefile_interior": {
+      "esr": 0.07805424928665161,
+      "mrstft": 0.5319375793139139
+    },
+    "88k_naive_vs_around_interior": {
+      "esr": 1.2797269821166992,
+      "mrstft": 1.9841759999593098
+    },
+    "88k_naive_band48_vs_48k_interior": {
+      "esr": 1.275182882944743,
+      "mrstft": 1.1507730881373088
+    },
+    "88k_delta_vs_around_interior": {
+      "esr": 0.12985742340485254,
+      "mrstft": 0.8857493201891581
+    },
+    "88k_delta_band48_vs_48k_interior": {
+      "esr": 0.12993032981952032,
+      "mrstft": 0.5892832477887472
+    },
+    "96k_naive_vs_around_interior": {
+      "esr": 1.3073339859644573,
+      "mrstft": 2.1555376847585044
+    },
+    "96k_naive_band48_vs_48k_interior": {
+      "esr": 1.301835298538208,
+      "mrstft": 1.2418479522069295
+    },
+    "96k_delta_vs_around_interior": {
+      "esr": 0.14724726974964142,
+      "mrstft": 0.9431825081507365
+    },
+    "96k_delta_band48_vs_48k_interior": {
+      "esr": 0.14731281250715256,
+      "mrstft": 0.6041629711786906
+    },
+    "192k_naive_vs_around_interior": {
+      "esr": 1.2264050642649333,
+      "mrstft": 2.995197137196859
+    },
+    "192k_naive_band48_vs_48k_interior": {
+      "esr": 1.2136753400166829,
+      "mrstft": 1.902755856513977
+    },
+    "192k_delta_vs_around_interior": {
+      "esr": 0.3073590298493703,
+      "mrstft": 1.2097670634587605
+    },
+    "192k_delta_band48_vs_48k_interior": {
+      "esr": 0.3073325256506602,
+      "mrstft": 0.7760497530301412
+    }
+  }
+}

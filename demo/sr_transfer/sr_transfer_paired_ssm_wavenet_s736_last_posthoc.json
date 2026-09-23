@@ -1,0 +1,87 @@
+{
+  "run_id": "sr_transfer_paired_ssm_wavenet_s736_last_posthoc",
+  "timestamp": "2026-09-23T06:56:27+02:00",
+  "commit": "29a869cbd38ea9b308eddd0480f62a1c2d8b8b19",
+  "source_run": "paired_ssm_wavenet_s736",
+  "checkpoint": "last",
+  "model": "ssm-wavenet",
+  "discretization": "zoh",
+  "learned_input_vector": false,
+  "poles": {
+    "44100": {
+      "folded": 0,
+      "total": 512
+    },
+    "48000": {
+      "folded": 0,
+      "total": 512
+    },
+    "96000": {
+      "folded": 0,
+      "total": 512
+    }
+  },
+  "arms": {
+    "48k": {
+      "esr": 0.049987357730666794,
+      "mrstft": 0.4164935251077016,
+      "recorded_esr": 0.04998888447880745
+    },
+    "44k1_delta_interior": {
+      "esr": 0.0449951117237409,
+      "mrstft": 0.42432160178820294
+    },
+    "44k1_around_wholefile_interior": {
+      "esr": 0.04616880789399147,
+      "mrstft": 0.4595595101515452
+    },
+    "88k_naive_vs_around_interior": {
+      "esr": 1.278355598449707,
+      "mrstft": 1.9802547295888264
+    },
+    "88k_naive_band48_vs_48k_interior": {
+      "esr": 1.2738401492436726,
+      "mrstft": 1.1589589516321819
+    },
+    "88k_delta_vs_around_interior": {
+      "esr": 0.05560274670521418,
+      "mrstft": 0.6458349227905273
+    },
+    "88k_delta_band48_vs_48k_interior": {
+      "esr": 0.055594575901826225,
+      "mrstft": 0.1690849413474401
+    },
+    "96k_naive_vs_around_interior": {
+      "esr": 1.3052494525909424,
+      "mrstft": 2.1516595681508384
+    },
+    "96k_naive_band48_vs_48k_interior": {
+      "esr": 1.2998348077138264,
+      "mrstft": 1.2534422079722087
+    },
+    "96k_delta_vs_around_interior": {
+      "esr": 0.0661229391892751,
+      "mrstft": 0.7064747412999471
+    },
+    "96k_delta_band48_vs_48k_interior": {
+      "esr": 0.06611605236927669,
+      "mrstft": 0.17819399138291678
+    },
+    "192k_naive_vs_around_interior": {
+      "esr": 1.2191940148671467,
+      "mrstft": 2.974482297897339
+    },
+    "192k_naive_band48_vs_48k_interior": {
+      "esr": 1.206438144048055,
+      "mrstft": 1.9526549180348713
+    },
+    "192k_delta_vs_around_interior": {
+      "esr": 0.13749631742636362,
+      "mrstft": 0.9881137609481812
+    },
+    "192k_delta_band48_vs_48k_interior": {
+      "esr": 0.13749085366725922,
+      "mrstft": 0.2368547022342682
+    }
+  }
+}
