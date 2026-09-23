@@ -51,3 +51,22 @@ par mode et un pôle fixé, exiger le DC exact redonne exactement `delta` : rét
 T/2 de façon causale se paie ailleurs, ici sur les modes rapides. **Si H1 échoue, ce défaut
 est une explication concurrente de l'hypothèse A**, pas une réfutation de A ; une
 correction à deux coefficients par mode serait alors le test suivant.
+
+## Suite : correction à deux coefficients (ajoutée avant tout chiffre de ce bras)
+
+Écrite après `RESULTS_hold.md`, avant d'exécuter ce bras. Par mode, H(z) =
+c·(b0 + b1·z⁻¹)/(1 − a′z⁻¹), a′ = e^{λdt′}, avec b0 + b1 = −(1 − a′)/λ (DC exact) et b1
+choisi pour égaler la dérivée première en Ω=0 de la réponse du mode à 48 kHz :
+T′·b1/(b0+b1) + T′·a′/(1−a′) = T·a48/(1−a48). Identité à 48 kHz ; pour un mode lent à
+96 kHz, environ (1,5 ; −0,5)·dt′ : une extrapolation causale d'un demi-échantillon.
+Bras `delta_2tap`, mêmes mesures que `delta_hold`.
+
+- **H6** À 96 et 192 kHz, SSM-WaveNet : ESR de `delta_2tap` ≤ 1/10 de `delta`, et
+  ≤ celui de `delta_hold`. Réfutée si la réduction est inférieure à celle de `delta_hold`.
+- **H7** L'erreur de phase résiduelle devient d'ordre τ², donc l'ESR d'ordre τ⁴ : rapport
+  192/96 de `delta_2tap` ≥ 3,5 (τ⁴ prédit 5,1). Réfutée s'il reste près de 2,25.
+- **H8** À 44,1 kHz contre l'appareil, `delta_2tap` ≤ 1,02 × `delta` (le DC est exact,
+  contrairement à `delta_hold`).
+- **H9** S4-TF-L-16 : réduction < ×1,5 à 96 kHz (TFiLM et pôles repliés non corrigés).
+- Réserve connue : le filtre (b0, b1) amplifie les hautes fréquences (gain proche de 2 au
+  voisinage de Nyquist à 96 kHz) ; la mesure dans la bande commune ne le voit pas.
