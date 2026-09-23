@@ -286,3 +286,67 @@ resources:
     allowed_usage: metadata_review_only_pending_explicit_license
     assigned_tier: UNASSIGNED
     known_limitations: no target output; Google Drive asset license not established
+
+  - name: ToneTwist AFx - Marshall JVM410H OD1 (external, trimmed copy)
+    source: https://zenodo.org/records/10892012
+    version: Zenodo record 10892012
+    commit_or_release: ToneTwist AFx external copy of Miklanek et al. DAFx-23 data
+    license: CC-BY-NC-4.0
+    download_date: 2026-09-22
+    download_method: curl Zenodo API file content, md5 checked
+    sha256: f079941f9230dd98b03b54ba3acedc8b23cbd1a8d6c1139ed1f3d7dda7a8defa
+    local_archive: datasets/raw/external/tone_twist_param/Marshall-JVM410H-ChOD1.zip
+    source_checksum: md5:05ee998404f44c3a449c4ad6a8160cb6
+    sample_rate: 44100
+    bit_depth: PCM32
+    channels: 1
+    paired_input_output: true
+    alignment_information: trimmed by ToneTwist; DRY/test and DRY/trainval paired by split with PreampOut and SpeakerOut targets
+    device_information: Marshall JVM410H channel OD1; knobs bass, mid, treble, gain
+    control_parameters: 29 trainval settings (one knob varied, others 5, plus all-0 and all-10) and 9 test settings disjoint from trainval, gain 5; ToneTwist names B030_M070_T100_G050 a setting the original record 7970723 names B3_M7_T1_G5 (treble 10 vs 1), unresolved
+    allowed_usage: noncommercial research with attribution; product lane only (D-PRODUCT-001)
+    assigned_tier: UNASSIGNED
+    known_limitations: product lane, no campaign tier; one test setting label disagrees with the original dataset
+
+  - name: ToneTwist AFx - Multidrive Pedal Pro F-Fuzz (digital parametric)
+    source: https://zenodo.org/records/10901450
+    version: Zenodo record 10901450
+    commit_or_release: ToneTwist AFx digital parametric
+    license: CC-BY-NC-4.0
+    download_date: 2026-09-22
+    download_method: curl Zenodo API file content, md5 checked; split archive .zip + .z01
+    sha256: 41e378043f16d3a940dd15e7f31aa0c115e99a8c3508415055002cdf9ffc40ea
+    sha256_part_z01: d6aa041f293b413e648c8e101b825ea25b154349cab66124d298130b4e1f997b
+    local_archive: datasets/raw/external/tone_twist_param/MultidrivePedalPro-F-Fuzz.zip
+    source_checksum: md5:954b3be34a219075e19478e7669d0899 (z01 md5:32cd2d3c931400ab11544c001f3486e7)
+    sample_rate: 48000
+    bit_depth: float32
+    channels: 1
+    paired_input_output: true
+    alignment_information: paired by basename with the ToneTwist digital parametric DRY record 10901426
+    device_information: digital plugin model of a fuzz; knob fuzz 0-100 in steps of 10, volume fixed at 100
+    control_parameters: the same 11 fuzz settings in trainval and test; unseen settings exist only if held out by the user of the data
+    allowed_usage: noncommercial research with attribution; product lane only (D-PRODUCT-001)
+    assigned_tier: UNASSIGNED
+    known_limitations: digital effect, not hardware; test differs from trainval by source audio only
+
+  - name: ToneTwist AFx - Dry (digital parametric inputs)
+    source: https://zenodo.org/records/10901426
+    version: Zenodo record 10901426
+    commit_or_release: ToneTwist AFx digital parametric dry inputs
+    license: CC-BY-NC-4.0
+    download_date: 2026-09-22
+    download_method: curl Zenodo API file content, md5 checked
+    sha256: e3cd237167940d5175e9c242c15e4a603af2ae89fbd064be257efa5936fadb50
+    local_archive: datasets/raw/external/tone_twist_param/DRY.zip
+    source_checksum: md5:e3831d0310d84b0580e149bbd2db1ed1
+    sample_rate: 48000
+    bit_depth: float32
+    channels: 1
+    paired_input_output: true
+    alignment_information: dry side of the digital parametric devices, trainval (5 files) and test (2 files)
+    device_information: dry guitar and bass inputs
+    control_parameters: none
+    allowed_usage: noncommercial research with attribution; product lane only (D-PRODUCT-001)
+    assigned_tier: UNASSIGNED
+    known_limitations: inputs only
