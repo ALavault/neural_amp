@@ -1,0 +1,438 @@
+{
+  "summary": {
+    "procedural_plucks": {
+      "median_db": -73.24709893484356,
+      "max_db": -68.27070657759462,
+      "median_db_cab": -79.59800665800209,
+      "identity_max_db": -74.74572618618281
+    },
+    "multisine": {
+      "median_db": -50.44457878586108,
+      "max_db": -42.073497403831766,
+      "median_db_cab": -62.520261126645764,
+      "identity_max_db": -55.782767999105715
+    },
+    "two_tone": {
+      "median_db": -66.85913994359882,
+      "max_db": -61.6066654332161,
+      "median_db_cab": -67.53520804872167,
+      "identity_max_db": -62.526471218895246
+    },
+    "colored_noise": {
+      "median_db": -57.116094350390696,
+      "max_db": -49.37436162671104,
+      "median_db_cab": -65.36461873620016,
+      "identity_max_db": -56.16909733262132
+    }
+  },
+  "pairs": {
+    "procedural_plucks": {
+      "tanh->identity": {
+        "db": -76.83521299986386,
+        "db_cab": -78.25749026421369,
+        "stage1_above_24k_db": -63.10165994693556
+      },
+      "tanh->tanh": {
+        "db": -73.03147808789181,
+        "db_cab": -79.62899391663204,
+        "stage1_above_24k_db": -63.10165994693556
+      },
+      "tanh->asymmetric_waveshaper": {
+        "db": -72.51398423798562,
+        "db_cab": -79.54293173516918,
+        "stage1_above_24k_db": -63.10165994693556
+      },
+      "tanh->wiener": {
+        "db": -76.65313877616755,
+        "db_cab": -79.98092608647262,
+        "stage1_above_24k_db": -63.10165994693556
+      },
+      "tanh->slow_sag": {
+        "db": -73.46271978179533,
+        "db_cab": -79.88251899710124,
+        "stage1_above_24k_db": -63.10165994693556
+      },
+      "asymmetric_waveshaper->identity": {
+        "db": -75.9074269467918,
+        "db_cab": -78.14147860646148,
+        "stage1_above_24k_db": -59.60826385517727
+      },
+      "asymmetric_waveshaper->tanh": {
+        "db": -69.74747115449416,
+        "db_cab": -78.07363645864372,
+        "stage1_above_24k_db": -59.60826385517727
+      },
+      "asymmetric_waveshaper->asymmetric_waveshaper": {
+        "db": -68.27070657759462,
+        "db_cab": -77.21170244676442,
+        "stage1_above_24k_db": -59.60826385517727
+      },
+      "asymmetric_waveshaper->wiener": {
+        "db": -74.3505547187388,
+        "db_cab": -79.28657148996675,
+        "stage1_above_24k_db": -59.60826385517727
+      },
+      "asymmetric_waveshaper->slow_sag": {
+        "db": -70.34124229445288,
+        "db_cab": -78.59705597037626,
+        "stage1_above_24k_db": -59.60826385517727
+      },
+      "memory_clipper->identity": {
+        "db": -74.74572618618281,
+        "db_cab": -78.37092465119609,
+        "stage1_above_24k_db": -58.55510696776982
+      },
+      "memory_clipper->tanh": {
+        "db": -71.59847604376327,
+        "db_cab": -79.39574601320844,
+        "stage1_above_24k_db": -58.55510696776982
+      },
+      "memory_clipper->asymmetric_waveshaper": {
+        "db": -70.7144548016767,
+        "db_cab": -79.55527917120341,
+        "stage1_above_24k_db": -58.55510696776982
+      },
+      "memory_clipper->wiener": {
+        "db": -75.31890813559967,
+        "db_cab": -79.71207392922753,
+        "stage1_above_24k_db": -58.55510696776982
+      },
+      "memory_clipper->slow_sag": {
+        "db": -71.79079057458927,
+        "db_cab": -79.56701939937214,
+        "stage1_above_24k_db": -58.55510696776982
+      },
+      "hammerstein->identity": {
+        "db": -77.72770246175929,
+        "db_cab": -78.3215238659709,
+        "stage1_above_24k_db": -66.34990337591135
+      },
+      "hammerstein->tanh": {
+        "db": -76.94937768904812,
+        "db_cab": -80.02403223020099,
+        "stage1_above_24k_db": -66.34990337591135
+      },
+      "hammerstein->asymmetric_waveshaper": {
+        "db": -76.22459995290008,
+        "db_cab": -79.81077507542332,
+        "stage1_above_24k_db": -66.34990337591135
+      },
+      "hammerstein->wiener": {
+        "db": -78.79325918617185,
+        "db_cab": -80.09587882119732,
+        "stage1_above_24k_db": -66.34990337591135
+      },
+      "hammerstein->slow_sag": {
+        "db": -77.35391211402428,
+        "db_cab": -80.20518991204484,
+        "stage1_above_24k_db": -66.34990337591135
+      }
+    },
+    "multisine": {
+      "tanh->identity": {
+        "db": -62.0564886363492,
+        "db_cab": -65.56945021058749,
+        "stage1_above_24k_db": -39.28048744718103
+      },
+      "tanh->tanh": {
+        "db": -50.670994085485844,
+        "db_cab": -63.78025868435982,
+        "stage1_above_24k_db": -39.28048744718103
+      },
+      "tanh->asymmetric_waveshaper": {
+        "db": -49.93801668596711,
+        "db_cab": -60.743598639271006,
+        "stage1_above_24k_db": -39.28048744718103
+      },
+      "tanh->wiener": {
+        "db": -55.84790504168165,
+        "db_cab": -67.77948033837308,
+        "stage1_above_24k_db": -39.28048744718103
+      },
+      "tanh->slow_sag": {
+        "db": -52.507739692806304,
+        "db_cab": -66.90735404200942,
+        "stage1_above_24k_db": -39.28048744718103
+      },
+      "asymmetric_waveshaper->identity": {
+        "db": -55.782767999105715,
+        "db_cab": -65.63344402079949,
+        "stage1_above_24k_db": -32.493029495924176
+      },
+      "asymmetric_waveshaper->tanh": {
+        "db": -44.80256326414545,
+        "db_cab": -53.65478274942609,
+        "stage1_above_24k_db": -32.493029495924176
+      },
+      "asymmetric_waveshaper->asymmetric_waveshaper": {
+        "db": -42.073497403831766,
+        "db_cab": -49.55564455819116,
+        "stage1_above_24k_db": -32.493029495924176
+      },
+      "asymmetric_waveshaper->wiener": {
+        "db": -50.21816348623632,
+        "db_cab": -60.18996950462176,
+        "stage1_above_24k_db": -32.493029495924176
+      },
+      "asymmetric_waveshaper->slow_sag": {
+        "db": -46.26783317168666,
+        "db_cab": -56.35783730702822,
+        "stage1_above_24k_db": -32.493029495924176
+      },
+      "memory_clipper->identity": {
+        "db": -55.79011074843944,
+        "db_cab": -65.51933406942513,
+        "stage1_above_24k_db": -31.118451150800276
+      },
+      "memory_clipper->tanh": {
+        "db": -47.508707623590276,
+        "db_cab": -60.28775805388023,
+        "stage1_above_24k_db": -31.118451150800276
+      },
+      "memory_clipper->asymmetric_waveshaper": {
+        "db": -45.390937314497876,
+        "db_cab": -54.613622286684944,
+        "stage1_above_24k_db": -31.118451150800276
+      },
+      "memory_clipper->wiener": {
+        "db": -52.56248034713011,
+        "db_cab": -65.77737385490298,
+        "stage1_above_24k_db": -31.118451150800276
+      },
+      "memory_clipper->slow_sag": {
+        "db": -48.229102583410686,
+        "db_cab": -61.2602635689317,
+        "stage1_above_24k_db": -31.118451150800276
+      },
+      "hammerstein->identity": {
+        "db": -62.772948321467,
+        "db_cab": -65.64671063367214,
+        "stage1_above_24k_db": -45.345033975576854
+      },
+      "hammerstein->tanh": {
+        "db": -56.29827830334815,
+        "db_cab": -68.06657135940192,
+        "stage1_above_24k_db": -45.345033975576854
+      },
+      "hammerstein->asymmetric_waveshaper": {
+        "db": -55.50466769499348,
+        "db_cab": -65.82605257257565,
+        "stage1_above_24k_db": -45.345033975576854
+      },
+      "hammerstein->wiener": {
+        "db": -60.28830629019922,
+        "db_cab": -68.73473310056448,
+        "stage1_above_24k_db": -45.345033975576854
+      },
+      "hammerstein->slow_sag": {
+        "db": -58.260531000976144,
+        "db_cab": -69.48636441126014,
+        "stage1_above_24k_db": -45.345033975576854
+      }
+    },
+    "two_tone": {
+      "tanh->identity": {
+        "db": -62.526471218895246,
+        "db_cab": -62.52483178009575,
+        "stage1_above_24k_db": -62.11957996527491
+      },
+      "tanh->tanh": {
+        "db": -67.39686473925372,
+        "db_cab": -67.59342587181317,
+        "stage1_above_24k_db": -62.11957996527491
+      },
+      "tanh->asymmetric_waveshaper": {
+        "db": -66.84115524319486,
+        "db_cab": -67.04852951727615,
+        "stage1_above_24k_db": -62.11957996527491
+      },
+      "tanh->wiener": {
+        "db": -67.32653534776229,
+        "db_cab": -67.54281476216252,
+        "stage1_above_24k_db": -62.11957996527491
+      },
+      "tanh->slow_sag": {
+        "db": -70.9713406034062,
+        "db_cab": -70.96457132331345,
+        "stage1_above_24k_db": -62.11957996527491
+      },
+      "asymmetric_waveshaper->identity": {
+        "db": -62.53400336435875,
+        "db_cab": -62.53819547085204,
+        "stage1_above_24k_db": -53.72414360874208
+      },
+      "asymmetric_waveshaper->tanh": {
+        "db": -62.86142541759105,
+        "db_cab": -67.49699452745666,
+        "stage1_above_24k_db": -53.72414360874208
+      },
+      "asymmetric_waveshaper->asymmetric_waveshaper": {
+        "db": -61.6066654332161,
+        "db_cab": -66.88813759597033,
+        "stage1_above_24k_db": -53.72414360874208
+      },
+      "asymmetric_waveshaper->wiener": {
+        "db": -65.28693930156363,
+        "db_cab": -67.57748967826743,
+        "stage1_above_24k_db": -53.72414360874208
+      },
+      "asymmetric_waveshaper->slow_sag": {
+        "db": -66.77568602426602,
+        "db_cab": -70.5250525437218,
+        "stage1_above_24k_db": -53.72414360874208
+      },
+      "memory_clipper->identity": {
+        "db": -62.544828270320096,
+        "db_cab": -62.54346287567613,
+        "stage1_above_24k_db": -62.10918552254241
+      },
+      "memory_clipper->tanh": {
+        "db": -65.66421874607113,
+        "db_cab": -65.71246375129344,
+        "stage1_above_24k_db": -62.10918552254241
+      },
+      "memory_clipper->asymmetric_waveshaper": {
+        "db": -65.74552051659981,
+        "db_cab": -65.81453575728781,
+        "stage1_above_24k_db": -62.10918552254241
+      },
+      "memory_clipper->wiener": {
+        "db": -66.10675179103401,
+        "db_cab": -66.17009551308635,
+        "stage1_above_24k_db": -62.10918552254241
+      },
+      "memory_clipper->slow_sag": {
+        "db": -67.73532646718098,
+        "db_cab": -67.75404913681317,
+        "stage1_above_24k_db": -62.10918552254241
+      },
+      "hammerstein->identity": {
+        "db": -62.53226453543671,
+        "db_cab": -62.53026181893841,
+        "stage1_above_24k_db": -62.12373877894511
+      },
+      "hammerstein->tanh": {
+        "db": -67.42395699869716,
+        "db_cab": -67.63066876507611,
+        "stage1_above_24k_db": -62.12373877894511
+      },
+      "hammerstein->asymmetric_waveshaper": {
+        "db": -66.87712464400276,
+        "db_cab": -67.09319637032449,
+        "stage1_above_24k_db": -62.12373877894511
+      },
+      "hammerstein->wiener": {
+        "db": -67.30529886282561,
+        "db_cab": -67.52760133528082,
+        "stage1_above_24k_db": -62.12373877894511
+      },
+      "hammerstein->slow_sag": {
+        "db": -71.02938937597816,
+        "db_cab": -71.01950565874832,
+        "stage1_above_24k_db": -62.12373877894511
+      }
+    },
+    "colored_noise": {
+      "tanh->identity": {
+        "db": -60.87169635679562,
+        "db_cab": -63.52843129604984,
+        "stage1_above_24k_db": -45.917918572852656
+      },
+      "tanh->tanh": {
+        "db": -57.459741121087184,
+        "db_cab": -65.35185914771031,
+        "stage1_above_24k_db": -45.917918572852656
+      },
+      "tanh->asymmetric_waveshaper": {
+        "db": -56.772447579694216,
+        "db_cab": -64.607029857943,
+        "stage1_above_24k_db": -45.917918572852656
+      },
+      "tanh->wiener": {
+        "db": -61.12426172817412,
+        "db_cab": -65.66777185270882,
+        "stage1_above_24k_db": -45.917918572852656
+      },
+      "tanh->slow_sag": {
+        "db": -58.444739589159134,
+        "db_cab": -66.2841686000852,
+        "stage1_above_24k_db": -45.917918572852656
+      },
+      "asymmetric_waveshaper->identity": {
+        "db": -57.03780524874074,
+        "db_cab": -63.58836091278873,
+        "stage1_above_24k_db": -37.79436994527216
+      },
+      "asymmetric_waveshaper->tanh": {
+        "db": -51.93886638903188,
+        "db_cab": -61.94360383699528,
+        "stage1_above_24k_db": -37.79436994527216
+      },
+      "asymmetric_waveshaper->asymmetric_waveshaper": {
+        "db": -49.37436162671104,
+        "db_cab": -57.88660577295025,
+        "stage1_above_24k_db": -37.79436994527216
+      },
+      "asymmetric_waveshaper->wiener": {
+        "db": -56.413193873839816,
+        "db_cab": -64.67696113507095,
+        "stage1_above_24k_db": -37.79436994527216
+      },
+      "asymmetric_waveshaper->slow_sag": {
+        "db": -52.71182313057743,
+        "db_cab": -63.17317003232518,
+        "stage1_above_24k_db": -37.79436994527216
+      },
+      "memory_clipper->identity": {
+        "db": -56.16909733262132,
+        "db_cab": -63.50909968640525,
+        "stage1_above_24k_db": -38.19610960851257
+      },
+      "memory_clipper->tanh": {
+        "db": -53.68144368320648,
+        "db_cab": -64.95173888792804,
+        "stage1_above_24k_db": -38.19610960851257
+      },
+      "memory_clipper->asymmetric_waveshaper": {
+        "db": -52.0327780642007,
+        "db_cab": -62.640464281157804,
+        "stage1_above_24k_db": -38.19610960851257
+      },
+      "memory_clipper->wiener": {
+        "db": -57.801993523033694,
+        "db_cab": -65.37737832469,
+        "stage1_above_24k_db": -38.19610960851257
+      },
+      "memory_clipper->slow_sag": {
+        "db": -53.96131908510738,
+        "db_cab": -65.48130747590541,
+        "stage1_above_24k_db": -38.19610960851257
+      },
+      "hammerstein->identity": {
+        "db": -62.18608418221151,
+        "db_cab": -63.545455881841164,
+        "stage1_above_24k_db": -51.51959715335881
+      },
+      "hammerstein->tanh": {
+        "db": -61.2307828908005,
+        "db_cab": -65.69391955283868,
+        "stage1_above_24k_db": -51.51959715335881
+      },
+      "hammerstein->asymmetric_waveshaper": {
+        "db": -60.71338764865211,
+        "db_cab": -65.42233955589842,
+        "stage1_above_24k_db": -51.51959715335881
+      },
+      "hammerstein->wiener": {
+        "db": -63.454415896002644,
+        "db_cab": -65.80917700451722,
+        "stage1_above_24k_db": -51.51959715335881
+      },
+      "hammerstein->slow_sag": {
+        "db": -62.28029126875404,
+        "db_cab": -66.57228356450443,
+        "stage1_above_24k_db": -51.51959715335881
+      }
+    }
+  }
+}
