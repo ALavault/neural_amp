@@ -76,6 +76,13 @@ réglages vus. Une règle d'agrégation robuste aurait dû être fixée d'avance
 (SSM 0,3708, soit 2,1 fois le deuxième ; S4 0,6315, 1,4 fois le deuxième). **Tenue** : compatible avec une étiquette
 fausse (l'original nomme ce réglage T1, pas T10), sans en être la preuve.
 
+**Q4 close le 2026-09-24 : l'étiquette est fausse** (`label_check.md`). La cible ToneTwist est
+l'enregistrement d'origine B3_M7_T1 (ESR 1,6·10⁻¹³, au niveau du témoin), et le modèle y reconnaît
+treble = 0,1 (ESR 0,018 contre 0,371 avec 1,0). Post hoc, avec ce seul bouton corrigé et sans
+réentraînement, l'ESR moyenne des non vus passe de 0,1008 à 0,0617 (SSM) et de 0,2833 à 0,2268
+(S4). Les tableaux ci-dessus gardent les valeurs enregistrées par le banc, avec l'étiquette
+ToneTwist.
+
 **Écart entre modèles** (non prédit sur Marshall) : SSM-WaveNet-FiLM a un ESR de test 2,8
 fois plus bas que S4 (0,101 contre 0,283) et 32 fois plus bas en médiane sur les réglages
 vus. S4 paramétrique reste à ESR 0,15 à 0,21 sur presque tous les réglages vus : il

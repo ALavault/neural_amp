@@ -1,0 +1,36 @@
+{
+ "same_recording": {
+  "B030_M070_T100_G050": {
+   "original": "B3_M7_T1_G5",
+   "lag_samples": -13230000,
+   "overlap_s": 95.0,
+   "gain": 0.9999997533697373,
+   "correlation": 0.9999999999983142,
+   "esr": 1.5732718907045012e-13
+  },
+  "B010_M030_T070_G050": {
+   "original": "B1_M3_T7_G5",
+   "lag_samples": -13230000,
+   "overlap_s": 95.0,
+   "gain": 0.9999997203189902,
+   "correlation": 0.9999999999983042,
+   "esr": 2.6742756435609884e-13
+  }
+ },
+ "treble_test": {
+  "param_ssm_wavenet_marshall": {
+   "segments": 17,
+   "esr_by_treble": {
+    "1.0": 0.37070487790247975,
+    "0.1": 0.01815868234809707
+   }
+  },
+  "param_s4_marshall": {
+   "segments": 17,
+   "esr_by_treble": {
+    "1.0": 0.6314495766864103,
+    "0.1": 0.12292827052228592
+   }
+  }
+ }
+}
