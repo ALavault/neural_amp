@@ -10,8 +10,10 @@ MAIN=/fastdata/lavaulta/neural_amp
 commit=$1
 RUNNER=${2:-/fastdata/lavaulta/neural_amp_runner}
 if [ -d "${RUNNER}" ]; then
-  if pgrep -f "${RUNNER}/scripts/product_nablafx_bench.py" > /dev/null; then
-    echo "a run is using the runner; refusing to move it"; exit 1
+  # Queues are launched by absolute path; their runs use a relative one after cd, so
+  # the guard looks for the queue script, waiting or running.
+  if pgrep -f "${RUNNER}/scripts/" > /dev/null; then
+    echo "a queue is running from the runner; stop it before moving it"; exit 1
   fi
   git -C "${RUNNER}" checkout -q --detach "${commit}"
 else

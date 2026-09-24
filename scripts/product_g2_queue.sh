@@ -15,7 +15,9 @@ B="--cond film --cond-head additive --cond-hidden 8 8 8 8"
 preflight() {
   local id=$1
   shift
-  wait_gpu
+  # Almost the whole idle GPU (23.6 GiB free when idle): an out-of-memory error is then
+  # the model's, not the contention's (ollama, RACLETTE).
+  GPU_FREE_MIB=23000 wait_gpu
   echo "=== ${id}: preflight start $(date '+%a %d %H:%M')"
   .venv/bin/python3 scripts/product_nablafx_bench.py --run-id "${id}" --no-record \
     --max-steps 200 ${COMMON} "$@" > "demo/runs/${id}.log" 2>&1
@@ -28,17 +30,20 @@ import json, re, sys
 from datetime import datetime
 run = sys.argv[1]
 text = open(f"demo/runs/{run}.log").read()
+oom = "out of memory" in text.lower()
 peaks = re.findall(r'"peak_gpu_reserved_gib": ([0-9.]+)', text)
 minutes = re.findall(r'"minutes_this_session": ([0-9.]+)', text)
 peak = float(peaks[-1]) if peaks else None
 hours = float(minutes[-1]) * 15_000 / 200 / 60 if minutes else None
 ok = peak is not None and hours is not None and peak <= 21.5 and hours <= 12
-print(f"=== {run}: reserved peak {peak} GiB, extrapolated {hours} h -> {'PASS' if ok else 'FAIL'}")
+cause = "out of memory with 23 GiB free" if oom else "no record" if peak is None else "measured"
+print(f"=== {run}: reserved peak {peak} GiB, extrapolated {hours} h ({cause}) -> {'PASS' if ok else 'FAIL'}")
 if peak is not None:
     open(f"demo/runs/{run}.reserved_mib", "w").write(str(int(peak * 1024)))
 with open("demo/RUNS.jsonl", "a", encoding="utf-8") as stream:
     stream.write(json.dumps({
-        "run_id": run, "status": "preflight", "passed": ok, "peak_gpu_reserved_gib": peak,
+        "run_id": run, "status": "preflight", "passed": ok, "cause": cause,
+        "peak_gpu_reserved_gib": peak,
         "extrapolated_hours": hours, "log": f"demo/runs/{run}.log",
         "timestamp": datetime.now().astimezone().isoformat(timespec="seconds"),
         "preregistration": "demo/param/predictions_poles.md",
