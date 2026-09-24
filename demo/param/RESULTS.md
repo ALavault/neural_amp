@@ -49,6 +49,12 @@ fichiers DI que l'entraînement : mesure optimiste.
 | non vus, ESR médian (post hoc) | 0,0475 | 0,2034 |
 | vus, ESR moyen sans G000 (post hoc) | 0,0058 | 0,1611 |
 
+Note (relecture Codex, 2026-09-24) : la MR-STFT d'auraloss contient un rapport de
+normes calculé sur tout un lot ; les MR-STFT rapportées sont des moyennes de scores de
+lots de 8 segments pondérées par la taille, pas des moyennes de scores individuels comme
+l'annonçait `predictions.md`. Elles restent comparables entre modèles (mêmes lots) ;
+les verdicts, fondés sur l'ESR, n'en dépendent pas.
+
 Le réglage vu `B050_M050_T050_G000` (gain 0, sortie presque silencieuse) a un ESR de
 3,18 (SSM) et 17,7 (S4) : l'ESR divise par l'énergie de la cible et explose sur un
 quasi-silence. Il domine à lui seul la moyenne des réglages vus.

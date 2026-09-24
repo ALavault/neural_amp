@@ -7,12 +7,19 @@ excitations sont rapportées.
 
 ## Synthèse (différence dans la bande 0–21,6 kHz, dB relatifs à la sortie de référence)
 
-| excitation | plancher (témoin identité, max) | médiane 16 paires | pire paire | médiane après baffle 5 kHz | ultrasons de l'étage 1 |
+| excitation | plancher (témoin identité, max) | médiane 16 paires | pire paire | médiane après baffle 5 kHz | écart full − lim en sortie d'étage 1* |
 |---|---|---|---|---|---|
 | procedural_plucks | −74,7 | −73,2 | −68,3 | −79,6 | −66 à −59 |
 | multisine | −55,8 | −50,4 | −42,1 | −62,5 | −45 à −31 |
 | two_tone | −62,5 | −66,9 | −61,6 | −67,5 | −62 à −54 |
 | colored_noise | −56,2 | −57,1 | −49,4 | −65,4 | −52 à −38 |
+
+\* Clé `stage1_above_24k_db` du JSON. Correction après relecture Codex (2026-09-24) :
+elle mesure toute la différence entre la version pleine bande et la version passée par
+la chaîne de décimation, donc aussi l'altération du filtrage **sous** 24 kHz (une
+sinusoïde pure à 20 kHz, sans ultrason, y donne −68,2 dB). Ce n'est pas une mesure de
+l'énergie ultrasonore seule. Les différences de sortie (colonnes précédentes) restent
+valides pour l'intervention complète « passer par 48 kHz ».
 
 Pire paire partout : étage 1 dur (asymmetric_waveshaper ou memory_clipper) suivi d'un
 étage 2 sans mémoire (asymmetric_waveshaper ou tanh).
@@ -43,8 +50,9 @@ chaînes) perd sa justification.
 ## Limites
 
 - Systèmes synthétiques simples ; un fuzz réel à fort gain produit plus d'ultrasons.
-  L'effet croît avec l'ultrason de l'étage 1 (multisine, −31 dB au-dessus de 24 kHz,
-  donne les plus grands écarts). Un appareil à −20 dB d'ultrasons n'est pas couvert.
+  L'effet croît avec l'écart full − lim de l'étage 1 (multisine, jusqu'à −31 dB, donne
+  les plus grands écarts) ; cet écart inclut le filtrage sous 24 kHz et n'isole pas les
+  ultrasons. Un appareil à −20 dB d'ultrasons n'est pas couvert.
 - Les « plucks » n'ont que 8 harmoniques (fondamentales 82 à 330 Hz) : un DI de guitare
   réel est plus riche en aigus.
 - Filtres des systèmes définis en échantillons, évalués à 192 kHz.

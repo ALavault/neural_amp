@@ -16,8 +16,9 @@ ROOT = Path(__file__).resolve().parents[1]
 RUNS = {
     ("ssm", "marshall"): "param_ssm_wavenet_marshall",
     ("s4", "marshall"): "param_s4_marshall",
-    ("ssm", "ffuzz"): "param_ssm_wavenet_ffuzz",
-    ("s4", "ffuzz"): "param_s4_ffuzz",
+    # The first F-Fuzz runs trained on misaligned dry files (demo/param/DEVIATION.md).
+    ("ssm", "ffuzz"): "param_ssm_wavenet_ffuzz_r2",
+    ("s4", "ffuzz"): "param_s4_ffuzz_r2",
 }
 UNSEEN_FFUZZ = ("F030_V100", "F070_V100")
 INTERP, EXTREME, SUSPECT = (
