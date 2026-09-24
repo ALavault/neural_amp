@@ -229,6 +229,47 @@ class System(BlackBoxSystem):
         ]
 
 
+class RecordingSampler(torch.utils.data.RandomSampler):
+    """RandomSampler that keeps the order it drew at chosen epochs (0-based).
+
+    It is the sampler shuffle=True would build, drawing its seed from the global
+    generator at the start of every epoch exactly as the original does, so training is
+    unchanged; it only remembers the order (diagnosis/seeds/paired_protocol.md: is the
+    batch order common to two architectures beyond the first epoch?)."""
+
+    def __init__(self, dataset, epochs: list[int]) -> None:
+        super().__init__(dataset)
+        self.epochs = set(epochs)
+        self.epoch = -1
+        self.log: dict[int, list[int]] = {}
+
+    def __iter__(self):
+        self.epoch += 1
+        order = list(super().__iter__())
+        if self.epoch in self.epochs:
+            self.log[self.epoch] = order
+        yield from order
+
+
+def record_sampler(datamodule, epochs: list[int]) -> RecordingSampler:
+    """Rebuild nablafx's train loader (datamodules.py) with a RecordingSampler."""
+    holder = {}
+
+    def train_dataloader():
+        holder["sampler"] = RecordingSampler(datamodule.train_dataset, epochs)
+        return torch.utils.data.DataLoader(
+            datamodule.train_dataset,
+            batch_size=datamodule.batch_size,
+            sampler=holder["sampler"],
+            num_workers=datamodule.num_workers,
+            drop_last=True,
+            pin_memory=True,
+        )
+
+    datamodule.train_dataloader = train_dataloader
+    return holder
+
+
 class FixedSchedule(pl.Callback):
     """Halve the learning rate at fixed epochs, in place of the plateau detector."""
 
@@ -392,6 +433,13 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=16,
         help="training batch size; smaller only for smoke tests next to another run",
+    )
+    parser.add_argument(
+        "--log-sampler-epochs",
+        type=int,
+        nargs="+",
+        default=None,
+        help="record the training order at these epochs (0-based), in the record",
     )
     parser.add_argument("--resume", action="store_true")
     parser.add_argument(
@@ -664,6 +712,11 @@ def main() -> None:
         pl.seed_everything(args.split_seed, workers=True)
     resume_from = str(last) if args.resume and last.exists() else None
     trainval = data_module("trainval", args.batch_size, args.device)
+    sampler = (
+        None
+        if args.log_sampler_epochs is None
+        else record_sampler(trainval, args.log_sampler_epochs)
+    )
     trainer.fit(system, datamodule=trainval, ckpt_path=resume_from)
     minutes = (time.perf_counter() - started) / 60.0
     # Which twelve segments this run validated on. The split is drawn inside fit,
@@ -725,6 +778,15 @@ def main() -> None:
         "no_early_stopping": args.no_early_stopping,
         "split_seed": args.split_seed,
         "val_indices": val_indices,
+        # Training order at the requested epochs, as indices of the trainval dataset.
+        "sampler_order": (
+            None
+            if sampler is None
+            else {
+                str(epoch): [trainval.train_dataset.indices[i] for i in order]
+                for epoch, order in sampler["sampler"].log.items()
+            }
+        ),
         "polarity_guard": not args.no_polarity_guard,
         "polarity_flips": polarity_guard.flips,
         "deterministic": args.deterministic,

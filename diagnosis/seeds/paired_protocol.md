@@ -191,3 +191,36 @@ déclaré) porte l'estimation à 4 degrés de liberté ; c'est lui qui départag
   vérifier avant l'élargissement en journalisant les indices du sampler aux époques 1, 2 et 50.
 - Deux architectures seulement, qui gardent toutes deux leur ordonnanceur. Rien ne dit que r vaut
   pour une ablation qui retire un canal de décision, où le pilote C montre qu'il ne vaut pas.
+
+## Élargissement aux partitions 744 et 369 (pré-enregistré le 2026-09-24, avant les runs)
+
+**Ce qui est ajouté.**
+
+- Les deux partitions suivantes du tirage déclaré plus haut, 744 et 369, pour les deux
+  architectures, avec les drapeaux exacts des six runs existantes. Cela fait quatre runs, avec
+  les run_id `paired_<architecture>_s744` et `paired_<architecture>_s369`.
+- **Contrôle de l'ordre des lots**, réserve écrite plus haut. Chaque nouvelle run journalise
+  l'ordre d'entraînement aux époques 1, 2 et 50 (`--log-sampler-epochs 0 1 49`), et le record le
+  garde sous `sampler_order`.
+  - Le sampler enregistreur est celui que `shuffle=True` construit, et il tire la même graine au
+    même moment. Vérifié sur CPU : même ordre sur trois époques et même état du générateur
+    ensuite, avec 0 et 2 workers.
+  - **Porte avant les quatre runs** : une relance de 200 pas du chemin SSM Big Muff de la porte
+    de reproductibilité, avec l'enregistrement actif, doit rester identique au bit à
+    `pilotC_decide_seed42`. Sinon, la file s'arrête.
+
+**Quantités et seuils, inchangés.**
+
+- r₅ = sd(différence en log sur les cinq partitions) / √2, avec son intervalle khi-deux à 4 ddl.
+- Soutenu si r₅ ≤ 0,25, réfuté si r₅ > 0,35, intermédiaire entre les deux. Le libellé reste
+  « sur l'estimation ponctuelle » si la borne haute de l'intervalle franchit 0,35.
+- Calcul par `diagnosis/seeds/paired_extension_verdict.py`, écrit avant les runs. Le script de
+  2026-09-22 reste tel quel.
+
+**Lecture de l'ordre des lots**, pour chacune des deux nouvelles partitions :
+
+- identique entre architectures aux trois époques → l'appariement fixe aussi l'ordre des lots ;
+- identique à l'époque 1 seulement → il ne fixe que la partition et le premier ordre, et la
+  réserve écrite plus haut se confirme ;
+- différent dès l'époque 1 → `--split-seed` ne fait pas ce qu'on croit, et les six runs
+  existantes sont à relire.
