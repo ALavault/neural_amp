@@ -59,6 +59,37 @@ def test_parameter_counts_match(arm, count) -> None:
     assert abs(count / 28_385 - 1) < 0.011
 
 
+def test_every_arm_starts_from_the_same_trunk() -> None:
+    """At one seed, the four G2 arms share every parameter outside their head and
+    leave the generator in the same state: they differ by their conditioning only."""
+    trunks, after = [], []
+    for cond, head, hidden in ARMS:
+        torch.manual_seed(42)
+        net = SSMWaveNet(
+            num_blocks=8,
+            channels=16,
+            state_dim=4,
+            discretization="zoh",
+            num_controls=4,
+            cond=cond,
+            cond_head=head,
+            cond_hidden=hidden,
+        )
+        after.append(torch.rand(4))
+        trunks.append(
+            {
+                k: v
+                for k, v in net.state_dict().items()
+                if not k.startswith(("film_net", "pole_net"))
+            }
+        )
+    for trunk, draws in zip(trunks[1:], after[1:], strict=True):
+        assert torch.equal(draws, after[0])
+        assert trunk.keys() == trunks[0].keys()
+        for name, value in trunk.items():
+            assert torch.equal(value, trunks[0][name]), name
+
+
 def test_zero_head_is_the_unconditioned_model() -> None:
     torch.manual_seed(0)
     plain = SSMWaveNet(num_blocks=3, channels=4, state_dim=4, discretization="zoh")

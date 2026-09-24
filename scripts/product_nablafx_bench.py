@@ -755,6 +755,8 @@ def main() -> None:
         "best_checkpoint": Path(checkpoint.best_model_path).name,
         "minutes_this_session": round(minutes, 2),
         "peak_gpu_gib": round(torch.cuda.max_memory_allocated() / 2**30, 2),
+        # Allocator cache included: what the GPU must really have free.
+        "peak_gpu_reserved_gib": round(torch.cuda.max_memory_reserved() / 2**30, 2),
         "test_last": tests["last"],
         "test_best": tests["best"],
         "test_last_by_setting": by_setting,

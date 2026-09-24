@@ -13,11 +13,13 @@ export TMPDIR=/fastdata/lavaulta/tmp
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 export PYTHONPATH="${PWD}/src"
 
-# The GPU is shared with RACLETTE and ollama: wait for 18.5 GiB free six minutes running.
+# The GPU is shared with RACLETTE and ollama: wait for GPU_FREE_MIB (default 18.5 GiB)
+# free six minutes running. A queue whose preflight measured more raises it.
+GPU_FREE_MIB=${GPU_FREE_MIB:-18500}
 wait_gpu() {
   local free_minutes=0
   while [ "${free_minutes}" -lt 6 ]; do
-    if [ "$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits)" -ge 18500 ]; then
+    if [ "$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits)" -ge "${GPU_FREE_MIB}" ]; then
       free_minutes=$((free_minutes + 1))
     else
       free_minutes=0

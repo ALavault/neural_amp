@@ -20,22 +20,25 @@ preflight() {
   .venv/bin/python3 scripts/product_nablafx_bench.py --run-id "${id}" --no-record \
     --max-steps 200 ${COMMON} "$@" > "demo/runs/${id}.log" 2>&1
   echo "=== ${id}: preflight end $(date '+%a %d %H:%M') (exit $?)"
-  # Gates: peak <= 21.5 GiB and 15,000 steps in <= 12 h, extrapolated from 200 steps
-  # (data loading included, so pessimistic). A crash leaves no record: gate failed.
+  # Gates: reserved peak (allocator cache included) <= 21.5 GiB and 15,000 steps in
+  # <= 12 h, extrapolated from 200 steps (data loading included, so pessimistic). A
+  # crash leaves no record: gate failed. Writes the reserved peak for the next wait.
   .venv/bin/python3 - "${id}" <<'EOF'
 import json, re, sys
 from datetime import datetime
 run = sys.argv[1]
 text = open(f"demo/runs/{run}.log").read()
-peaks = re.findall(r'"peak_gpu_gib": ([0-9.]+)', text)
+peaks = re.findall(r'"peak_gpu_reserved_gib": ([0-9.]+)', text)
 minutes = re.findall(r'"minutes_this_session": ([0-9.]+)', text)
 peak = float(peaks[-1]) if peaks else None
 hours = float(minutes[-1]) * 15_000 / 200 / 60 if minutes else None
 ok = peak is not None and hours is not None and peak <= 21.5 and hours <= 12
-print(f"=== {run}: peak {peak} GiB, extrapolated {hours} h -> {'PASS' if ok else 'FAIL'}")
+print(f"=== {run}: reserved peak {peak} GiB, extrapolated {hours} h -> {'PASS' if ok else 'FAIL'}")
+if peak is not None:
+    open(f"demo/runs/{run}.reserved_mib", "w").write(str(int(peak * 1024)))
 with open("demo/RUNS.jsonl", "a", encoding="utf-8") as stream:
     stream.write(json.dumps({
-        "run_id": run, "status": "preflight", "passed": ok, "peak_gpu_gib": peak,
+        "run_id": run, "status": "preflight", "passed": ok, "peak_gpu_reserved_gib": peak,
         "extrapolated_hours": hours, "log": f"demo/runs/{run}.log",
         "timestamp": datetime.now().astimezone().isoformat(timespec="seconds"),
         "preregistration": "demo/param/predictions_poles.md",
@@ -46,6 +49,10 @@ EOF
 
 preflight g2pre_poles_joint ${C} || { echo "=== G2.1 stopped by the preflight gate"; exit 1; }
 preflight g2pre_poles_additive ${D} || { echo "=== G2.1 stopped by the preflight gate"; exit 1; }
+# Each run then waits for the larger reserved peak plus 1 GiB of CUDA context free.
+reserved=$(cat demo/runs/g2pre_poles_joint.reserved_mib demo/runs/g2pre_poles_additive.reserved_mib | sort -n | tail -1)
+GPU_FREE_MIB=$(( reserved + 1024 > 18500 ? reserved + 1024 : 18500 ))
+echo "=== G2.1 runs wait for ${GPU_FREE_MIB} MiB free"
 run_once g2_poles_joint_s925 ${COMMON} ${C}
 run_once g2_poles_additive_s925 ${COMMON} ${D}
 run_once g2_film_additive_s925 ${COMMON} ${B}

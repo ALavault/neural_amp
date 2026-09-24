@@ -40,6 +40,13 @@ drapeaux sont ceux de `param_ssm_wavenet_marshall`, seul le conditionnement chan
   par mode. A_imag n'est pas conditionné. Couche de sortie initialisée à zéro : au départ, le
   modèle est le modèle non conditionné.
 - Noyaux propres à chaque exemple, sous `torch.utils.checkpoint`.
+- **Même tronc dans les quatre bras.** À graine égale, les bras B, C et D consomment d'abord
+  exactement les tirages de la tête de A, puis construisent leur tête sur un générateur dérivé.
+  Tous les paramètres hors tête sont donc identiques à ceux de A, et les têtes étant nulles au
+  départ, les quatre bras sont le même modèle au pas 0. Sans cela, chaque forme de tête
+  consommait un nombre différent de tirages, et chaque bras partait d'un tronc différent : un
+  facteur confondant que les partitions de G2.2 n'auraient pas moyenné (relevé à la relecture,
+  avant tout run ; test `test_every_arm_starts_from_the_same_trunk`).
 
 ## Mesures
 
@@ -69,7 +76,8 @@ drapeaux sont ceux de `param_ssm_wavenet_marshall`, seul le conditionnement chan
   spectrale.
 - **H4, rapport extrême / interpolation**, R = ESR(B100_M000_T000) / ESR(B010_M030_T070). Pour A,
   R = 3,64. R_bras ≤ 0,6 × 3,64 = 2,18 → **soutenue** ; R_bras ≥ 3,64 → **réfutée** ; entre les
-  deux → intermédiaire.
+  deux → intermédiaire. En G2.2, la référence est le rapport de A aux mêmes partitions, et non la
+  constante 3,64.
 - **H5, réglages vus**, non-infériorité : médiane sur les 28 réglages vus de ln(ESR_A / ESR_bras)
   ≥ −ln 1,15 → **non inférieur** ; sinon **inférieur**.
 - **H6, diagnostic, pôles figés au réglage central** : les décalages de pôles sont calculés avec
@@ -93,7 +101,8 @@ rapportée en descriptif seulement.
 ## Préflight et portes
 
 - **Préflight** (`--no-record`, 200 pas, bras C, puis bras D à 200 pas).
-  - Porte mémoire : pic ≤ 21,5 Gio pour tous les deux.
+  - Porte mémoire : pic de mémoire **réservée** (`max_memory_reserved`, cache de l'allocateur
+    compris) ≤ 21,5 Gio pour tous les deux. Chaque run attend ensuite ce pic plus 1 Gio libres.
   - Porte temps : durée extrapolée à 15 000 pas ≤ 12 h.
   - Si une porte échoue, **aucune run G2.1 ne part** : la file s'arrête et le problème est
     rapporté. Aucun réglage n'est changé en silence (ni le lot, ni la longueur des segments, ni

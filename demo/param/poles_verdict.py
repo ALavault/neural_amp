@@ -39,7 +39,6 @@ MISLABELLED = "B030_M070_T100_G050"
 TREBLE = 2
 EXTREME, INTERPOLATION = "B100_M000_T000_G050", "B010_M030_T070_G050"
 MARGIN, LARGE, STOP = math.log(1.15), math.log(1.5), -math.log(2)
-R_FILM_925 = 3.64  # H4 reference, bench record of arm A at split 925
 ESR = EvaluationRegistry.get_function("esr_loss")
 MRSTFT = EvaluationRegistry.get_function("mrstft_loss")
 
@@ -151,6 +150,10 @@ def arm_verdict(arm: str, results: dict, splits: list[int], settings: list) -> d
     ratio = statistics.mean(
         esr[s][EXTREME]["esr"] / esr[s][INTERPOLATION]["esr"] for s in splits
     )
+    # H4 reference: arm A's own ratio at the same splits (3.64 at split 925).
+    ratio_a = statistics.mean(
+        ref[s][EXTREME]["esr"] / ref[s][INTERPOLATION]["esr"] for s in splits
+    )
     seen = statistics.mean(
         statistics.median(
             log_ratio(results[f"A_{s}"]["seen"][k], results[f"{arm}_{s}"]["seen"][k])
@@ -169,6 +172,7 @@ def arm_verdict(arm: str, results: dict, splits: list[int], settings: list) -> d
         "d_extreme": per_setting[EXTREME],
         "d_mrstft_unseen": mr,
         "ratio_extreme_interpolation": ratio,
+        "ratio_extreme_interpolation_A": ratio_a,
         "median_d_seen": seen,
         "gate_run": finite and not late_flip,
     }
@@ -180,9 +184,9 @@ def arm_verdict(arm: str, results: dict, splits: list[int], settings: list) -> d
     v["H3"] = band(mr, 0.0, MARGIN, three)
     v["H4"] = (
         "soutenue"
-        if ratio <= 0.6 * R_FILM_925
+        if ratio <= 0.6 * ratio_a
         else "refutee"
-        if ratio >= R_FILM_925
+        if ratio >= ratio_a
         else "intermediaire"
     )
     v["H5"] = "non inferieur" if seen >= -MARGIN else "inferieur"

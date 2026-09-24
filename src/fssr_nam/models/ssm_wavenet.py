@@ -505,23 +505,31 @@ class SSMWaveNet(nn.Module):
         self.film_net: nn.Module | None = None
         self.pole_net: nn.Module | None = None
         if num_controls > 0:
-            if cond == "film":
-                if act_type != "gated":
-                    raise ValueError("controls need act_type='gated'")
-                self.film_net = control_head(
-                    num_controls, num_blocks * 4 * channels, cond_head, cond_hidden
-                )
-            elif cond == "poles":
-                if discretization not in ("zoh", "foh"):
-                    raise ValueError("pole conditioning needs 'zoh' or 'foh'")
-                self.pole_net = control_head(
-                    num_controls,
-                    num_blocks * channels * (1 + state_dim),
-                    cond_head,
-                    cond_hidden,
-                )
-            else:
+            if cond == "film" and act_type != "gated":
+                raise ValueError("controls need act_type='gated'")
+            if cond == "poles" and discretization not in ("zoh", "foh"):
+                raise ValueError("pole conditioning needs 'zoh' or 'foh'")
+            if cond not in ("film", "poles"):
                 raise ValueError(f"unknown cond: {cond}")
+            film_size = num_blocks * 4 * channels
+            size = (
+                film_size if cond == "film" else num_blocks * channels * (1 + state_dim)
+            )
+            if (cond, cond_head, tuple(cond_hidden)) == ("film", "joint", (32,)):
+                head = control_head(num_controls, size, cond_head, cond_hidden)
+            else:
+                # Any other head first consumes exactly the draws of the FiLM head of
+                # 2026-09-23, then is built on a forked generator: the trunk, drawn
+                # next, is the same in every arm at a given seed, so arms differ by
+                # their conditioning only (demo/param/predictions_poles.md).
+                control_head(num_controls, film_size, "joint", (32,))
+                with torch.random.fork_rng(devices=[]):
+                    torch.manual_seed(int(torch.randint(2**62, (1,))))
+                    head = control_head(num_controls, size, cond_head, cond_hidden)
+            if cond == "film":
+                self.film_net = head
+            else:
+                self.pole_net = head
         self.input_conv = nn.Conv1d(input_channels, channels, 1)
         self.blocks = nn.ModuleList(
             [
