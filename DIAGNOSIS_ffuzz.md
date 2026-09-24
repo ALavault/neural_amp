@@ -206,9 +206,14 @@ sortie, et les modèles ont été entraînés contre des cibles décalées.
 - **Le retard brut entrée/cible varie selon le fichier** (−11 à +4), alors que le retard modèle →
   cible est constant. C'est cohérent avec une phase propre de l'effet qui dépend du contenu, mais
   ce n'est pas démontré ; `yt-bass` (−10) est le plus éloigné.
-- **Les autres appareils** : Big Muff et Marshall n'ont pas été soumis à la même mesure. Si leurs
-  cibles portaient aussi une latence, les ESR du banc en contiendraient une part. Mesure à faire,
-  peu coûteuse (CPU).
+- **Les autres appareils, mesurés ensuite** (`diagnosis/ffuzz/other_devices_lag.py`, même
+  instrument, lecture écrite avant) : la latence est **propre aux rendus F-Fuzz**.
+  - Big Muff : retard nul dans 11 segments de test sur 12, pour SSM comme pour S4-TF, et l'ESR ne
+    bouge pas au réalignement (0,0415 → 0,0413). Les résultats du banc et des pilotes de graine
+    n'en portent pas.
+  - Marshall : retard nul dans 121 segments sur 153 (SSM) et 96 sur 153 (S4), ±1 ailleurs, et
+    +4 dans 6 segments pour SSM. Le réalignement par segment ne gagne que 13 % (0,101 → 0,088),
+    et ce chiffre est optimiste, puisque le retard est choisi sur le segment lui-même.
 - **Les résultats publiés** de NablAFx sur F-Fuzz portent vraisemblablement le même plancher, si
   leur chargeur ne compense rien ; non vérifié.
 - Le doublement de la MR-STFT sur les réglages non vus (`demo/param/RESULTS.md`) est une autre
