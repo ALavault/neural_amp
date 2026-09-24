@@ -1,0 +1,51 @@
+{
+  "run_id": "sr_transfer_paired_ssm_wavenet_s925_last_asfoh",
+  "timestamp": "2026-09-24T11:42:44+02:00",
+  "commit": "78825b5bc98ab8b06e212c9ca0651856eee14b73",
+  "source_run": "paired_ssm_wavenet_s925",
+  "checkpoint": "last",
+  "model": "ssm-wavenet",
+  "discretization": "zoh",
+  "learned_input_vector": false,
+  "poles": {
+    "44100": {
+      "folded": 3,
+      "total": 512
+    },
+    "48000": {
+      "folded": 2,
+      "total": 512
+    },
+    "96000": {
+      "folded": 0,
+      "total": 512
+    }
+  },
+  "arms": {
+    "48k": {
+      "esr": 0.043890208626786865,
+      "mrstft": 0.39533864458401996,
+      "recorded_esr": 0.043852299451828
+    },
+    "48k_asfoh_identity_esr": {
+      "esr": 4.007018559552359e-11,
+      "mrstft": 0.0003462310608786841
+    },
+    "44k1_delta_interior": {
+      "esr": 0.03911837749183178,
+      "mrstft": 0.4022507965564728
+    },
+    "88k_delta_band48_vs_48k_interior": {
+      "esr": 0.00022084693773649633,
+      "mrstft": 0.08374109615882237
+    },
+    "96k_delta_band48_vs_48k_interior": {
+      "esr": 0.0002223571160963426,
+      "mrstft": 0.083116315305233
+    },
+    "192k_delta_band48_vs_48k_interior": {
+      "esr": 0.0002901686045030753,
+      "mrstft": 0.09120031694571178
+    }
+  }
+}

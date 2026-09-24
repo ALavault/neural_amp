@@ -130,6 +130,77 @@ faible, sur CPU, et suffit pour (a). (b) demande des runs GPU, pré-enregistrés
   (nouveaux identifiants, dans `demo/sr_transfer/` et `demo/RUNS.jsonl`).
 - Relecture Codex (`review`) avant d'annoncer terminé.
 
-## 6. Rapport
+## 6. Rapport (2026-09-24)
 
-À remplir après la relance.
+**Invariants.**
+
+- Empreintes bit à bit des chemins `free`, `zoh` et `zoh+FiLM` : inchangées.
+- Suite complète : 728 tests verts avant l'ajout du code « pôles ».
+- Tests FOH (`tests/numerical/test_ssm_discretization.py`) : tous verts, après correction de deux
+  constructions de test fautives :
+  - la causalité exigeait une tolérance nulle, alors que la FFT laisse un arrondi de 5·10⁻¹⁶ ;
+  - le test inter-fréquences partait de x[0] ≠ 0. La FOH suppose alors une rampe depuis 0 sur
+    l'intervalle précédent, qui dure dt à 48 kHz et dt/2 à 96 kHz : ce ne sont pas les mêmes
+    entrées.
+
+**Écarts à ce qui était écrit aux sections 2 et 4.**
+
+- `two_tap_kernel` a été déplacé sans changement de `scripts/product_sr_transfer.py` vers
+  `src/fssr_nam/models/ssm_wavenet.py`, pour que les tests l'importent sans charger le banc.
+- La continuité entre la série et la forme fermée de φ₂ est testée sur ses valeurs, de part et
+  d'autre de |z| = 10⁻⁴, et non sur ses gradients. La finitude des gradients près de z = 0,
+  elle, est testée.
+- Les options `--as-foh` et `--plain-test` et le choix `foh` du banc partent dans le même commit
+  que le correctif. Ce commit contient aussi le code « pôles » de l'étape 3, entremêlé dans le
+  même fichier.
+
+**Équivalence avec la correction à deux coefficients : établie, et analytique.** Le noyau FOH
+converti et celui de la correction à deux coefficients, cette dernière recalculée entièrement en
+float64, coïncident à 4 à 8·10⁻¹³ près à 44,1, 88,2, 96 et 192 kHz. Contre `two_tap_kernel`
+tel qu'il a mesuré H6, en complex64, l'écart est de 1 à 2,5·10⁻⁷, soit l'arrondi float32.
+L'affirmation de l'agent de conception (« écart ≤ 7·10⁻⁹ ») est donc confirmée ; l'écart réel en
+float64 est même plus petit.
+
+**Deux défauts trouvés en route.**
+
+1. **Aliasing de C**, trouvé par le test float64. Sur une couche float64, `C.double()` est C
+   lui-même, que `copy_` écrasait avant le calcul de D. Corrigé par `.clone()`.
+2. **Relecture Codex, P2.** La conversion recalculait b = (a − 1)/λ en float64. Or le modèle a
+   été entraîné avec le b de la couche float32, qui perd des chiffres par annulation sur les modes
+   lents. Dans un cas extrême (log_dt = −15), l'écart d'identité atteignait une ESR de 5,8·10⁻³.
+   La conversion part désormais des coefficients calculés par la couche, promus ensuite en
+   float64. Un test float32 la couvre ; il échoue sur l'ancienne conversion.
+
+**Relance de référence** (`compare_asfoh.py` ; enregistrements `*_asfoh.json`, et `*_asfoh_v1.json`
+pour la conversion avant le point 2) :
+
+| graine | identité à 48 kHz, ESR | écart relatif maximal aux quatre bras à 2 coefficients |
+|---|---|---|
+| 925 | 4,0·10⁻¹¹ | 9,4·10⁻⁴ (88,2 kHz) |
+| 736 | 2,3·10⁻¹¹ | 9,97·10⁻⁴ (96 kHz) |
+| 688 | 1,5·10⁻¹¹ | 7,7·10⁻⁴ (192 kHz) |
+
+- **Égalité avec la correction à deux coefficients : tenue**, pour les douze bras, sous la
+  tolérance de 10⁻³. Le bras le plus proche de la limite est à 0,997·10⁻³.
+- **Identité à 48 kHz : critère non tenu tel qu'écrit** (≤ 10⁻¹²). Le témoin
+  (`asfoh_precision.py`) montre que ce seuil était inatteignable en float32 :
+
+  | graine | FOH float64 contre ZOH float64 | FOH float32 contre ZOH float32 | ZOH float32 contre ZOH float64 |
+  |---|---|---|---|
+  | 925 | 1,3·10⁻²⁸ | 3,8·10⁻¹¹ | 2,4·10⁻¹⁰ |
+  | 736 | 5,6·10⁻²⁹ | 1,6·10⁻¹¹ | 2,1·10⁻⁹ |
+  | 688 | 3,2·10⁻²⁹ | 1,0·10⁻¹¹ | 7,8·10⁻¹⁰ |
+
+  La conversion est exacte en float64. En float32, son écart est 10 à 100 fois plus petit que
+  l'écart du modèle d'origine avec lui-même d'une précision à l'autre. Le seuil de la section 1
+  est laissé tel quel ; l'erreur était de l'avoir fixé sans regarder la précision de travail.
+
+**Conséquence produit.** Un checkpoint ZOH existant se relit en FOH sans réentraînement ; il se
+transfère alors à toute fréquence par le seul rééchelonnement de Δ, avec la qualité de la
+correction à deux coefficients (−37 dB face au modèle à 48 kHz). Le moteur natif n'a donc à
+implémenter que la FOH.
+
+**Incertitudes restantes.**
+
+- Le plancher de −37 dB reste non attribué (étape 2e).
+- L'entraînement FOH (b) n'est pas fait : optionnel, en fin de file.
