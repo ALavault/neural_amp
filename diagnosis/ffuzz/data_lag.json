@@ -1,0 +1,58 @@
+{
+ "trainval/idmt-gtr2/F000_V100": {
+  "lag": 3,
+  "normalised_peak": 0.6929417152674677
+ },
+ "trainval/idmt-gtr2/F100_V100": {
+  "lag": 3,
+  "normalised_peak": 0.5840352201351459
+ },
+ "trainval/idmt-gtr4-sg/F000_V100": {
+  "lag": 3,
+  "normalised_peak": 0.6576433030068181
+ },
+ "trainval/idmt-gtr4-sg/F100_V100": {
+  "lag": 3,
+  "normalised_peak": 0.5918280361795378
+ },
+ "trainval/nam/F000_V100": {
+  "lag": 4,
+  "normalised_peak": 0.5683085391329528
+ },
+ "trainval/nam/F100_V100": {
+  "lag": 4,
+  "normalised_peak": 0.45988533502633605
+ },
+ "trainval/prvt-gtr/F000_V100": {
+  "lag": 3,
+  "normalised_peak": 0.6391968972786837
+ },
+ "trainval/prvt-gtr/F100_V100": {
+  "lag": 3,
+  "normalised_peak": 0.5866896750239896
+ },
+ "trainval/yt-bass/F000_V100": {
+  "lag": -10,
+  "normalised_peak": 0.6110369734331594
+ },
+ "trainval/yt-bass/F100_V100": {
+  "lag": -11,
+  "normalised_peak": 0.5412693361417281
+ },
+ "test/idmt-bass/F000_V100": {
+  "lag": -2,
+  "normalised_peak": 0.6431646174725791
+ },
+ "test/idmt-bass/F100_V100": {
+  "lag": -2,
+  "normalised_peak": 0.5507068895268703
+ },
+ "test/idmt-gtr4-ib/F000_V100": {
+  "lag": 2,
+  "normalised_peak": 0.6676299501145269
+ },
+ "test/idmt-gtr4-ib/F100_V100": {
+  "lag": 2,
+  "normalised_peak": 0.6094828946073094
+ }
+}

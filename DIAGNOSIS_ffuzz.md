@@ -133,3 +133,85 @@ classement ci-dessous, et après l'écriture de H1 et la clôture de la liste de
 **Classement a priori** : H1/C1 d'abord (appuyé par la fumée ci-dessus) ; puis C8 et C2, qui
 prédisent une erreur localisée ; puis C3 et C6, communs aux deux architectures par construction
 du protocole ; H2/C4, H3/C5 et H4/C7 ensuite ; H6 en dernier.
+
+## 4. Mesures et verdict
+
+Scripts : `diagnosis/ffuzz/measure.py` (test, 1 463 segments par modèle, `segments.json`),
+`train_lag.py` (entraînement, `train_lag.json`) et `data_lag.py` (audio seul, `data_lag.json`).
+
+- **H1 / C1, alignement : soutenue, et elle explique presque tout le plancher.**
+  - Test : le retard optimal de la sortie à la cible vaut **+4 échantillons dans 1 463 segments
+    sur 1 463** pour SSM, et dans 1 459 sur 1 463 pour S4 (les quatre autres : +3). Il est le même
+    dans les deux fichiers et à tous les réglages ; la cible arrive 4 échantillons après la
+    sortie du modèle.
+  - Réaligné, l'ESR intérieure tombe de 0,136 à **0,0013** pour SSM (÷100) et de 0,137 à
+    **0,0032** pour S4 (÷43). Par réglage, de F000 à F100 : 0,0006 à 0,0042 pour SSM, 0,0015 à
+    0,011 pour S4.
+  - Entraînement : **+4 dans 100 segments sur 100** pour chaque modèle (cinq fichiers, F000 et
+    F100) ; réaligné, l'ESR passe de 0,05–0,32 à 0,001–0,008. Ce n'est donc pas une
+    incohérence entre partitions : les deux modèles, entraînés sur ces cibles, ne produisent
+    pas ce retard.
+  - Le retard mesuré sur l'audio seul, entrée contre cible, varie de −11 à +4 selon le fichier
+    (+3 pour quatre fichiers d'entraînement, +4 pour `nam`, −10 pour `yt-bass`, −2 et +2 en test).
+    L'intercorrélation brute mêle la phase propre de l'effet et le contenu du fichier ; ce n'est
+    pas une mesure propre de latence. Le retard modèle → cible, lui, est constant.
+  - La prédiction écrite (|d| ≥ 1, le même pour les deux modèles, ESR réalignée ≤ 0,5 × ESR)
+    est tenue, et très au-delà.
+- **H2 / C4, bruit de la cible : réfutée.** Une fois réaligné, le résidu vaut 0,1 à 0,3 % de
+  l'énergie de la cible. Aucune composante imprévisible de 11 à 19 % n'existe.
+- **H3 / C5, agrégation : réfutée.** Médiane 0,135 contre moyenne 0,137 (SSM), les 10 % pires
+  segments portent 20 % du total (seuil 50 %), ESR pondérée par l'énergie 0,140.
+- **H4 / C7, aigu hors d'atteinte : réfutée comme cause principale.** 17 % de l'énergie d'erreur
+  au-dessus de 5 kHz (seuil 60 %). L'ESR après un passe-bas à 5 kHz vaut 0,111, soit 0,81 fois
+  l'ESR (seuil 0,5).
+- **H5 / C2, marqueurs : réfutée.** Les 44 segments de début et de fin de fichier portent 3,5 %
+  du total (seuil 30 %).
+- **C8, contexte manquant en début de segment : réfutée.** L'ESR intérieure, 1 000 échantillons
+  retirés de chaque côté, égale l'ESR complète (0,1364 contre 0,1367).
+- **H6 / C3, optimisation, et C6, couverture à 10 % : non mesurées, sans objet.** Le retard
+  explique le plancher, et les modèles atteignent 0,001–0,008 sur le matériau d'entraînement
+  réaligné.
+
+## 5. Contribution retenue
+
+**Prédicat.** Tous les segments, les sept fichiers (entraînement et test), les onze réglages et
+les deux architectures : l'écart est uniforme, ce qui explique la coïncidence entre deux modèles
+dont la MR-STFT diffère d'un facteur 1,7. La MR-STFT, aveugle à la phase, ne voit pas un retard
+pur ; l'ESR le voit entièrement.
+
+**Mécanisme.** Les cibles F-Fuzz rendues portent une latence de 4 échantillons par rapport aux
+entrées `DRY-with-markers`, probablement la latence de traitement du plugin, non vérifiée dans sa
+documentation. Un modèle causal pourrait la reproduire en retardant sa sortie. Mais ni une somme
+d'exponentielles amorties à 4 ou 32 modes par canal suivie de couches sans mémoire (SSM-WaveNet),
+ni S4 ne représentent un retard pur ; entraînés à L1 + MR-STFT, les deux convergent vers la
+réponse non retardée. Le coût en ESR d'un retard fixe croît avec le contenu harmonique, donc avec
+le fuzz : de 0,113 à 0,183.
+
+**Prédiction chiffrée qu'un correctif devra satisfaire.** Compenser la latence dans les données,
+en avançant les cibles de 4 échantillons à l'entraînement comme au test, avec le même protocole
+et les mêmes graines :
+
+- ESR de test moyenne ≤ 0,01 pour les deux architectures, contre 0,137 aujourd'hui ;
+- l'écart entre les deux architectures reparaît : S4 ≥ 1,5 × SSM, comme sur le réalignement a
+  posteriori (0,0032 contre 0,0013) ;
+- le rapport F100/F000 de l'ESR de SSM reste ≤ 10, contre 6 après réalignement a posteriori.
+
+Le réalignement a posteriori ne remplace pas ce correctif. Il choisit le retard après avoir vu la
+sortie, et les modèles ont été entraînés contre des cibles décalées.
+
+## 6. Non expliqué, non vérifié
+
+- **L'origine des 4 échantillons** : latence du plugin Multidrive Pedal Pro, suréchantillonnage
+  interne ou chaîne de rendu de ToneTwist ; non vérifiée.
+- **Le retard brut entrée/cible varie selon le fichier** (−11 à +4), alors que le retard modèle →
+  cible est constant. C'est cohérent avec une phase propre de l'effet qui dépend du contenu, mais
+  ce n'est pas démontré ; `yt-bass` (−10) est le plus éloigné.
+- **Les autres appareils** : Big Muff et Marshall n'ont pas été soumis à la même mesure. Si leurs
+  cibles portaient aussi une latence, les ESR du banc en contiendraient une part. Mesure à faire,
+  peu coûteuse (CPU).
+- **Les résultats publiés** de NablAFx sur F-Fuzz portent vraisemblablement le même plancher, si
+  leur chargeur ne compense rien ; non vérifié.
+- Le doublement de la MR-STFT sur les réglages non vus (`demo/param/RESULTS.md`) est une autre
+  question : il ne dépend pas de ce retard, auquel la MR-STFT est aveugle.
+
+Correctif : voir skill controlled-fix.
