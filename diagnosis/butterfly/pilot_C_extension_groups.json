@@ -1,0 +1,42 @@
+{
+ "50": {
+  "run": "pilotC_decide_seed50",
+  "first_halving_epoch": 164,
+  "group": "precoce"
+ },
+ "51": {
+  "run": "pilotC_decide_seed51",
+  "first_halving_epoch": 217,
+  "group": "tardif"
+ },
+ "52": {
+  "run": "pilotC_decide_seed52",
+  "first_halving_epoch": 197,
+  "group": "precoce"
+ },
+ "53": {
+  "run": "pilotC_decide_seed53",
+  "first_halving_epoch": 206,
+  "group": "tardif"
+ },
+ "54": {
+  "run": "pilotC_decide_seed54",
+  "first_halving_epoch": 126,
+  "group": "precoce"
+ },
+ "55": {
+  "run": "pilotC_decide_seed55",
+  "first_halving_epoch": 232,
+  "group": "tardif"
+ },
+ "56": {
+  "run": "pilotC_decide_seed56",
+  "first_halving_epoch": 233,
+  "group": "tardif"
+ },
+ "57": {
+  "run": "pilotC_decide_seed57",
+  "first_halving_epoch": 199,
+  "group": "precoce"
+ }
+}
