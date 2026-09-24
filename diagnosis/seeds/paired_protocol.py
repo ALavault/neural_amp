@@ -28,6 +28,8 @@ import statistics
 import sys
 from pathlib import Path
 
+from scipy.stats import chi2
+
 ROOT = Path(__file__).resolve().parents[2]
 BENCH = ROOT / "demo/nablafx_bench"
 MODELS = ("ssm-wavenet", "s4-tf-l-16")
@@ -116,6 +118,24 @@ def main() -> None:
         mde = math.exp(Z * residual * math.sqrt(2 / n))
         print(f"  S = {n:2d} partitions : facteur {mde:.2f}")
 
+    # Added 2026-09-24, after the first execution: the pre-registration says the
+    # interval "sera rapporte" and this script did not compute it. Descriptive only;
+    # the thresholds and the verdict above are untouched.
+    df = len(differences) - 1
+    low, high = (residual * math.sqrt(df / chi2.ppf(q, df)) for q in (0.975, 0.025))
+    print(f"\nintervalle a 95 % de r (khi-deux, {df} ddl) : [{low:.3f}, {high:.3f}]")
+    print("Effet minimal detectable a la borne haute de r :")
+    for n in (3, 5, 8, 14):
+        print(
+            f"  S = {n:2d} partitions : facteur "
+            f"{math.exp(Z * high * math.sqrt(2 / n)):.2f}"
+        )
+    mean = statistics.mean(differences)
+    print(
+        f"difference moyenne (descriptive, recettes et non architectures) : "
+        f"{mean:+.3f} en log, facteur {math.exp(-mean):.2f}"
+    )
+
     (Path(__file__).parent / "paired_protocol.json").write_text(
         json.dumps(
             {
@@ -124,6 +144,8 @@ def main() -> None:
                 "log_esr": {f"{m}_{s}": v for (m, s), v in logs.items()},
                 "differences": differences,
                 "residual": residual,
+                "residual_ci95": [low, high],
+                "mean_difference": mean,
                 "gate_same_split": passed,
                 "verdict": verdict,
             },

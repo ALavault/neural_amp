@@ -150,6 +150,13 @@ global et celle, réfutée, qui plaçait l'écart sur les segments calmes :
   intra-graine, 0,173 sur deux paires vérifiées comparables, égale ou dépasse celui entre graines
   — l'inverse de SSM-WaveNet. La troisième paire est inutilisable, son run initial datant d'un
   état antérieur du script.
+- **Comparer deux architectures à partition fixée : soutenu sur l'estimation ponctuelle**
+  (`paired_protocol.md`, verdict du 2026-09-24). À `--split-seed` commun, le résidu apparié entre
+  SSM-WaveNet et S4-TF-L-16 vaut r = 0,066 sur trois partitions, contre 0,301 entre les deux bras
+  du pilote C ; mais son intervalle à 95 % va de 0,034 à 0,41 et dépasse le seuil de réfutation
+  (0,35). L'élargissement aux partitions 744 et 369 départagera. SSM-WaveNet y est plus bas d'un
+  facteur 1,8 sur les trois partitions, en comparant des recettes publiées et non des
+  architectures.
 - **Toute affirmation d'ordre est fragile** (`variance_sources.md`) : un autre tirage de douze
   segments de test réordonnerait les six runs du banc dans 41 % des cas.
 - **Hors de cause, vérifié** : la règle d'arrêt (`best` et `last` donnent le même ESR à 0,0005

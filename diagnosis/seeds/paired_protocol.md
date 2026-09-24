@@ -130,3 +130,64 @@ disant pourquoi il n'est pas optionnel.
 **Rien du dispositif pré-enregistré n'est modifié** : ni les architectures, ni les partitions
 déclarées, ni les seuils sur r. Seule la ligne de commande est corrigée pour être celle qui était
 décrite.
+
+## Verdict (2026-09-24, les six runs faites)
+
+`ls demo/nablafx_bench/paired_*.json | wc -l` → **6**. Calculé par
+`diagnosis/seeds/paired_protocol.py`, écrit le 2026-09-22 avant le premier run et exécuté pour la
+première fois le 2026-09-24, deux jours après la dernière run : la dette relevée par l'inventaire.
+Les seuils ci-dessus ne sont pas touchés, cette section les applique.
+
+**Porte : franchie.** Pour chacune des trois partitions, les deux architectures ont validé sur les
+mêmes douze segments (`val_indices` identiques dans les enregistrements).
+
+| partition | ESR SSM-WaveNet | ESR S4-TF-L-16 | différence en log |
+|---|---|---|---|
+| 925 | 0,0439 | 0,0850 | −0,662 |
+| 736 | 0,0500 | 0,0812 | −0,485 |
+| 688 | 0,0424 | 0,0789 | −0,620 |
+
+sd de la différence = 0,0927 ; **r = 0,0655**. Le calcul à la main de l'inventaire donnait 0,066 :
+c'est le même nombre arrondi, pas une divergence.
+
+### L'issue : appariement soutenu sur l'estimation ponctuelle
+
+r = 0,066 ≤ 0,25 : **soutenu**, et nettement mieux qu'au pilote C (0,301). Mais trois différences
+ne donnent que deux degrés de liberté, et **l'intervalle à 95 % de r va de 0,034 à 0,41** (khi-deux,
+2 ddl). Sa borne haute dépasse le seuil de réfutation, 0,35. Le pilote soutient donc l'appariement
+sur son estimation ponctuelle ; il n'exclut pas qu'il échoue.
+
+L'intervalle et les lignes qui suivent sont calculés par un bloc ajouté au script le 2026-09-24,
+**après sa première exécution** : le texte pré-enregistré promettait l'intervalle, le script ne le
+calculait pas. Le bloc est descriptif ; les seuils et la logique du verdict sont inchangés.
+
+### Ce que cela change au dimensionnement
+
+| partitions S | effet minimal détectable à r = 0,066 | à r = 0,41 (borne haute) |
+|---|---|---|
+| 3 | facteur 1,16 | facteur 2,56 |
+| 5 | facteur 1,12 | facteur 2,07 |
+| 8 | facteur 1,10 | facteur 1,78 |
+| 14 | facteur 1,07 | facteur 1,55 |
+
+Si r se confirme, cinq partitions appariées détectent un effet de 12 % là où le dispositif non
+apparié demandait 170 runs par bras pour 15 %. Si r est en fait à sa borne haute, elles ne détectent
+qu'un facteur 2. L'élargissement déjà prévu aux partitions 744 et 369 (les deux suivantes du tirage
+déclaré) porte l'estimation à 4 degrés de liberté ; c'est lui qui départagera, pas ce pilote.
+
+### Descriptif, hors question posée
+
+- **SSM-WaveNet est plus bas sur les trois partitions**, d'un facteur moyen 1,80 (−0,589 en log).
+  Ce n'est pas la quantité pré-enregistrée, et le dispositif compare des **recettes publiées**, pas
+  des architectures : budget de paramètres ×6,2, arrêt anticipé propre à chacune.
+- **`last` et `best` coïncident** dans les six runs (rapport 0,99 à 1,00), contrairement à la run
+  annulée de l'incident ci-dessus (3,53).
+- La garde de polarité bascule dans toutes les runs, jamais après l'époque 73.
+
+### Ce qui ne peut pas être conclu
+
+- r repose sur trois différences ; c'est une orientation de budget, pas une mesure.
+- L'ordre des lots n'est garanti commun qu'à la première époque (réserve écrite plus haut), à
+  vérifier avant l'élargissement en journalisant les indices du sampler aux époques 1, 2 et 50.
+- Deux architectures seulement, qui gardent toutes deux leur ordonnanceur. Rien ne dit que r vaut
+  pour une ablation qui retire un canal de décision, où le pilote C montre qu'il ne vaut pas.
