@@ -1,0 +1,228 @@
+{
+  "run_id": "param_s4_ffuzz_r2",
+  "timestamp": "2026-09-24T06:54:31+02:00",
+  "commit": "fe0b9580f0f8ca5a2696cdb7273af33fc9516647",
+  "nablafx_commit": "045db6e7d6087151c7e3a264844bd8c4eafc885c",
+  "benchmark": "ToneTwist ffuzz parametric, nablafx protocol",
+  "device": "ffuzz",
+  "held_out_settings": [
+    "F030_V100",
+    "F070_V100"
+  ],
+  "model": "s4-param",
+  "parameters": 29617,
+  "seed": 42,
+  "lr": 0.01,
+  "loss_weights": {
+    "l1": 0.5,
+    "mrstft": 0.5
+  },
+  "gradient_clip_val": 1.0,
+  "honor_optim": false,
+  "plateau_threshold": 0.0001,
+  "lr_halvings": null,
+  "no_early_stopping": false,
+  "split_seed": 925,
+  "val_indices": [
+    0,
+    16,
+    22,
+    28,
+    35,
+    38,
+    46,
+    56,
+    66,
+    84,
+    91,
+    101,
+    115,
+    119,
+    128,
+    135,
+    136,
+    145,
+    151,
+    158,
+    167,
+    173,
+    175,
+    187,
+    189,
+    209,
+    226,
+    241,
+    244,
+    246,
+    260,
+    265,
+    274,
+    275,
+    304,
+    308,
+    318,
+    319,
+    325,
+    354,
+    372,
+    383,
+    399,
+    427,
+    453,
+    463,
+    478,
+    482,
+    488,
+    494,
+    499,
+    500,
+    537,
+    548,
+    553,
+    564,
+    567
+  ],
+  "polarity_guard": true,
+  "polarity_flips": [],
+  "deterministic": true,
+  "batch_size": 16,
+  "ssm": null,
+  "resumed": false,
+  "global_step": 15000,
+  "stopped_epoch": 0,
+  "max_steps": 15000,
+  "best_val_loss": 0.16288848221302032,
+  "best_checkpoint": "epoch=412-step=13200.ckpt",
+  "minutes_this_session": 250.48,
+  "peak_gpu_gib": 17.96,
+  "test_last": {
+    "loss/test/tot": 0.15439347922801971,
+    "loss/test/l1": 0.008986315689980984,
+    "loss/test/mrstft": 0.14540719985961914,
+    "loss_scaled/test/tot": 0.30878695845603943,
+    "loss_scaled/test/l1": 0.017972631379961967,
+    "loss_scaled/test/mrstft": 0.2908143997192383,
+    "metric/test/l1": 0.017972631379961967,
+    "metric/test/mse": 0.003739097621291876,
+    "metric/test/esr": 0.13768984377384186,
+    "metric/test/mape": 4.5107245445251465,
+    "metric/test/mrstft": 0.2908143997192383
+  },
+  "test_best": {
+    "loss/test/tot": 0.15148186683654785,
+    "loss/test/l1": 0.008881134912371635,
+    "loss/test/mrstft": 0.14260073006153107,
+    "loss_scaled/test/tot": 0.3029637336730957,
+    "loss_scaled/test/l1": 0.01776226982474327,
+    "loss_scaled/test/mrstft": 0.28520146012306213,
+    "metric/test/l1": 0.01776226982474327,
+    "metric/test/mse": 0.0037405698094516993,
+    "metric/test/esr": 0.13774706423282623,
+    "metric/test/mape": 3.6693501472473145,
+    "metric/test/mrstft": 0.28520146012306213
+  },
+  "test_last_by_setting": {
+    "F000_V100": {
+      "esr": 0.11549136322691925,
+      "mrstft": 0.254840420152908,
+      "segments": 133
+    },
+    "F010_V100": {
+      "esr": 0.1147319235299763,
+      "mrstft": 0.28478298846044037,
+      "segments": 133
+    },
+    "F020_V100": {
+      "esr": 0.11921153447233644,
+      "mrstft": 0.23153248294851833,
+      "segments": 133
+    },
+    "F030_V100": {
+      "esr": 0.12396417378931117,
+      "mrstft": 0.34625777400525887,
+      "segments": 133
+    },
+    "F040_V100": {
+      "esr": 0.1283005760576492,
+      "mrstft": 0.2574872038418189,
+      "segments": 133
+    },
+    "F050_V100": {
+      "esr": 0.13352855412583603,
+      "mrstft": 0.23908175270360216,
+      "segments": 133
+    },
+    "F060_V100": {
+      "esr": 0.13721646043591032,
+      "mrstft": 0.22046760553704167,
+      "segments": 133
+    },
+    "F070_V100": {
+      "esr": 0.14437290824445567,
+      "mrstft": 0.40441661199232687,
+      "segments": 133
+    },
+    "F080_V100": {
+      "esr": 0.1509668360975452,
+      "mrstft": 0.2722610271066651,
+      "segments": 133
+    },
+    "F090_V100": {
+      "esr": 0.15928703905048228,
+      "mrstft": 0.3119880458466092,
+      "segments": 133
+    },
+    "F100_V100": {
+      "esr": 0.1875166323848237,
+      "mrstft": 0.3752925180851069,
+      "segments": 133
+    }
+  },
+  "val_last_by_setting": {
+    "F000_V100": {
+      "esr": 0.028318414464592934,
+      "mrstft": 0.3687514662742615,
+      "segments": 1
+    },
+    "F010_V100": {
+      "esr": 0.06616874784231186,
+      "mrstft": 0.336059033870697,
+      "segments": 7
+    },
+    "F020_V100": {
+      "esr": 0.11197751760482788,
+      "mrstft": 0.28574228286743164,
+      "segments": 4
+    },
+    "F040_V100": {
+      "esr": 0.34626078605651855,
+      "mrstft": 0.2931493818759918,
+      "segments": 5
+    },
+    "F050_V100": {
+      "esr": 0.16118478775024414,
+      "mrstft": 0.29724693298339844,
+      "segments": 6
+    },
+    "F060_V100": {
+      "esr": 0.25008776783943176,
+      "mrstft": 0.26013582944869995,
+      "segments": 8
+    },
+    "F080_V100": {
+      "esr": 0.28182069842632,
+      "mrstft": 0.275485274883417,
+      "segments": 13
+    },
+    "F090_V100": {
+      "esr": 0.13468413054943085,
+      "mrstft": 0.3177974820137024,
+      "segments": 6
+    },
+    "F100_V100": {
+      "esr": 0.2695566415786743,
+      "mrstft": 0.4013274312019348,
+      "segments": 7
+    }
+  }
+}

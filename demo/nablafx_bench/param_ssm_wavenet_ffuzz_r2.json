@@ -1,0 +1,236 @@
+{
+  "run_id": "param_ssm_wavenet_ffuzz_r2",
+  "timestamp": "2026-09-24T02:39:02+02:00",
+  "commit": "770f149d5412afde64a00d2b3ce3baa44f750d73",
+  "nablafx_commit": "045db6e7d6087151c7e3a264844bd8c4eafc885c",
+  "benchmark": "ToneTwist ffuzz parametric, nablafx protocol",
+  "device": "ffuzz",
+  "held_out_settings": [
+    "F030_V100",
+    "F070_V100"
+  ],
+  "model": "ssm-wavenet",
+  "parameters": 28289,
+  "seed": 42,
+  "lr": 0.01,
+  "loss_weights": {
+    "l1": 0.5,
+    "mrstft": 0.5
+  },
+  "gradient_clip_val": 1.0,
+  "honor_optim": true,
+  "plateau_threshold": 0.0001,
+  "lr_halvings": null,
+  "no_early_stopping": false,
+  "split_seed": 925,
+  "val_indices": [
+    0,
+    16,
+    22,
+    28,
+    35,
+    38,
+    46,
+    56,
+    66,
+    84,
+    91,
+    101,
+    115,
+    119,
+    128,
+    135,
+    136,
+    145,
+    151,
+    158,
+    167,
+    173,
+    175,
+    187,
+    189,
+    209,
+    226,
+    241,
+    244,
+    246,
+    260,
+    265,
+    274,
+    275,
+    304,
+    308,
+    318,
+    319,
+    325,
+    354,
+    372,
+    383,
+    399,
+    427,
+    453,
+    463,
+    478,
+    482,
+    488,
+    494,
+    499,
+    500,
+    537,
+    548,
+    553,
+    564,
+    567
+  ],
+  "polarity_guard": true,
+  "polarity_flips": [
+    0
+  ],
+  "deterministic": true,
+  "batch_size": 16,
+  "ssm": {
+    "num_blocks": 8,
+    "channels": 16,
+    "state_dim": 4,
+    "output_act": "tanh",
+    "discretization": "zoh"
+  },
+  "resumed": false,
+  "global_step": 15000,
+  "stopped_epoch": 0,
+  "max_steps": 15000,
+  "best_val_loss": 0.09896247088909149,
+  "best_checkpoint": "epoch=465-step=14900.ckpt",
+  "minutes_this_session": 273.26,
+  "peak_gpu_gib": 19.15,
+  "test_last": {
+    "loss/test/tot": 0.09855563938617706,
+    "loss/test/l1": 0.008570797741413116,
+    "loss/test/mrstft": 0.08998485654592514,
+    "loss_scaled/test/tot": 0.19711127877235413,
+    "loss_scaled/test/l1": 0.017141595482826233,
+    "loss_scaled/test/mrstft": 0.17996971309185028,
+    "metric/test/l1": 0.017141595482826233,
+    "metric/test/mse": 0.0037093833088874817,
+    "metric/test/esr": 0.13664880394935608,
+    "metric/test/mape": 9.128396987915039,
+    "metric/test/mrstft": 0.17996971309185028
+  },
+  "test_best": {
+    "loss/test/tot": 0.09810718148946762,
+    "loss/test/l1": 0.008508951403200626,
+    "loss/test/mrstft": 0.08959820866584778,
+    "loss_scaled/test/tot": 0.19621436297893524,
+    "loss_scaled/test/l1": 0.017017902806401253,
+    "loss_scaled/test/mrstft": 0.17919641733169556,
+    "metric/test/l1": 0.017017902806401253,
+    "metric/test/mse": 0.0037056447472423315,
+    "metric/test/esr": 0.1365015208721161,
+    "metric/test/mape": 5.347381591796875,
+    "metric/test/mrstft": 0.17919641733169556
+  },
+  "test_last_by_setting": {
+    "F000_V100": {
+      "esr": 0.11287022410030652,
+      "mrstft": 0.13852279862963168,
+      "segments": 133
+    },
+    "F010_V100": {
+      "esr": 0.11534049994963452,
+      "mrstft": 0.13901914913851515,
+      "segments": 133
+    },
+    "F020_V100": {
+      "esr": 0.12017222264207396,
+      "mrstft": 0.13454604031224,
+      "segments": 133
+    },
+    "F030_V100": {
+      "esr": 0.12261579146510676,
+      "mrstft": 0.29959395102092196,
+      "segments": 133
+    },
+    "F040_V100": {
+      "esr": 0.1281147563367858,
+      "mrstft": 0.13702184992625302,
+      "segments": 133
+    },
+    "F050_V100": {
+      "esr": 0.13459603477241402,
+      "mrstft": 0.13751924250807082,
+      "segments": 133
+    },
+    "F060_V100": {
+      "esr": 0.13712303799794132,
+      "mrstft": 0.13977926924712675,
+      "segments": 133
+    },
+    "F070_V100": {
+      "esr": 0.1457735170099072,
+      "mrstft": 0.26389406206912563,
+      "segments": 133
+    },
+    "F080_V100": {
+      "esr": 0.14732948953944042,
+      "mrstft": 0.16298081619398935,
+      "segments": 133
+    },
+    "F090_V100": {
+      "esr": 0.15645797741144224,
+      "mrstft": 0.19276007741017448,
+      "segments": 133
+    },
+    "F100_V100": {
+      "esr": 0.18274309178044026,
+      "mrstft": 0.23385152948978252,
+      "segments": 133
+    }
+  },
+  "val_last_by_setting": {
+    "F000_V100": {
+      "esr": 0.024116558954119682,
+      "mrstft": 0.3450464606285095,
+      "segments": 1
+    },
+    "F010_V100": {
+      "esr": 0.06633596122264862,
+      "mrstft": 0.15044742822647095,
+      "segments": 7
+    },
+    "F020_V100": {
+      "esr": 0.11172635853290558,
+      "mrstft": 0.15275484323501587,
+      "segments": 4
+    },
+    "F040_V100": {
+      "esr": 0.3448176085948944,
+      "mrstft": 0.1462940275669098,
+      "segments": 5
+    },
+    "F050_V100": {
+      "esr": 0.16180436313152313,
+      "mrstft": 0.17301569879055023,
+      "segments": 6
+    },
+    "F060_V100": {
+      "esr": 0.24889333546161652,
+      "mrstft": 0.1424126923084259,
+      "segments": 8
+    },
+    "F080_V100": {
+      "esr": 0.27639445891747105,
+      "mrstft": 0.16564524861482474,
+      "segments": 13
+    },
+    "F090_V100": {
+      "esr": 0.13062793016433716,
+      "mrstft": 0.19970926642417908,
+      "segments": 6
+    },
+    "F100_V100": {
+      "esr": 0.2686958611011505,
+      "mrstft": 0.2577979564666748,
+      "segments": 7
+    }
+  }
+}
