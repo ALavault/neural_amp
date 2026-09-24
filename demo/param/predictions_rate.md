@@ -54,8 +54,8 @@ Médianes sur les neuf réglages :
   réglage). La relecture FOH reproduit le modèle à 48 kHz à l'effet du rééchantillonnage près,
   réglages compris.
 - **P3 non tenue** : à 96 kHz, `foh` ne réduit l'écart que d'un facteur médian de 7,0 (5,1 à 9,4
-  selon le réglage), sous le ×10 prédit. Le rapport vaut 10,4 à 192 kHz, parce que `delta`
-  s'aggrave avec la fréquence et pas le plancher.
+  selon le réglage), sous le ×10 prédit. À 192 kHz, la médiane des rapports vaut 13,3, parce que
+  `delta` s'aggrave avec la fréquence et pas le plancher.
 - **P4** : le plancher de `foh` vaut 0,0096 à 96 kHz et 0,0097 à 192 kHz, soit environ −20 dB.
   Il ne dépend presque pas de la fréquence cible, comme sur Big Muff, mais il est environ 45 fois
   plus haut (2,2·10⁻⁴ sur Big Muff). C'est le sens attendu pour un appareil plus saturé, dont les
