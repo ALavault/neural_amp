@@ -2,11 +2,13 @@
 # Create (or move) the queue runner: a detached worktree of this repository pinned at a
 # commit, sharing with the main tree everything that is not code - the venv, the raw
 # data, the nablafx and auraloss submodules, and the run outputs, which land in the main
-# tree. Records then carry the pinned commit. Usage: product_runner_worktree.sh <commit>
+# tree. Records then carry the pinned commit.
+# Usage: product_runner_worktree.sh <commit> [runner path]. One runner per concurrent
+# queue: moving a runner changes the code of the queue still running from it.
 set -eu
 MAIN=/fastdata/lavaulta/neural_amp
-RUNNER=/fastdata/lavaulta/neural_amp_runner
 commit=$1
+RUNNER=${2:-/fastdata/lavaulta/neural_amp_runner}
 if [ -d "${RUNNER}" ]; then
   if pgrep -f "${RUNNER}/scripts/product_nablafx_bench.py" > /dev/null; then
     echo "a run is using the runner; refusing to move it"; exit 1
