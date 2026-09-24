@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from fssr_nam.product.data import advance
 
@@ -15,3 +16,5 @@ def test_advance_moves_earlier_and_keeps_length() -> None:
     np.testing.assert_array_equal(moved[:6], audio[4:])
     np.testing.assert_array_equal(moved[6:], 0)
     assert advance(audio, 0) is audio
+    with pytest.raises(ValueError):
+        advance(audio, 10)

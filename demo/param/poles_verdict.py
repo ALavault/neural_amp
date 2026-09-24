@@ -109,6 +109,20 @@ def evaluate(splits: list[int]) -> dict | None:
         missing = sorted(set(cells.values()) - set(present.values()))
         print(f"G2.1 incomplet ; il manque {', '.join(missing)}.")
         return None
+    if splits != [925]:
+        # G2.2: every arm retained at 925 must exist at every requested split.
+        g21 = Path(__file__).with_name("poles_verdict_925.json")
+        if not g21.exists():
+            print("verdict G2.1 absent : lancer d'abord --splits 925.")
+            return None
+        retained = json.loads(g21.read_text())["g2_2_arms"]
+        missing = [
+            cells[(a, s)] for a in retained for s in splits if (a, s) not in present
+        ]
+        if missing:
+            print(f"G2.2 incomplet ; il manque {', '.join(missing)}.")
+            return None
+        present = {k: v for k, v in present.items() if k[0] in retained}
     data = bench.data_module("test", device="marshall")
     data.setup("test")
     results = {}
@@ -129,24 +143,45 @@ def log_ratio(a: float, b: float) -> float:
     return math.log(a / b)
 
 
+def spread(values: list[float]) -> float:
+    """Standard deviation across splits; 0 with a single split."""
+    return statistics.stdev(values) if len(values) > 1 else 0.0
+
+
 def arm_verdict(arm: str, results: dict, splits: list[int], settings: list) -> dict:
-    """d = ln(ESR_A / ESR_arm), averaged over the splits where both exist."""
+    """d = ln(ESR_A / ESR_arm) per setting, averaged over the splits (G2.2) before
+    any median, as predictions_poles.md writes it. With several splits, the paired
+    spread of d across splits is reported, and an effect smaller than it is flagged
+    "indistinct" next to its label."""
     esr = {s: results[f"{arm}_{s}"]["unseen"] for s in splits}
     ref = {s: results[f"A_{s}"]["unseen"] for s in splits}
-    per_setting = {
-        k: statistics.mean(
-            log_ratio(ref[s][k]["esr"], esr[s][k]["esr"]) for s in splits
-        )
+    seen = {s: results[f"{arm}_{s}"]["seen"] for s in splits}
+    seen_ref = {s: results[f"A_{s}"]["seen"] for s in splits}
+    values = [x["esr"] for s in splits for x in esr[s].values()]
+    values += [x for s in splits for x in seen[s].values()]
+    finite = all(math.isfinite(x) and x > 0 for x in values)
+    late_flip = any(
+        e > 20 for s in splits for e in results[f"{arm}_{s}"]["polarity_flips"]
+    )
+    v = {"splits": splits, "gate_run": finite and not late_flip}
+    if not finite:
+        v["stopped"] = arm in POLES
+        return v
+    by_split = {
+        k: [log_ratio(ref[s][k]["esr"], esr[s][k]["esr"]) for s in splits]
         for k in settings
     }
+    per_setting = {k: statistics.mean(x) for k, x in by_split.items()}
+    sd_setting = {k: spread(x) for k, x in by_split.items()}
     median_d = statistics.median(per_setting.values())
-    mr = statistics.mean(
+    mr_by_split = [
         log_ratio(
             statistics.mean(ref[s][k]["mrstft"] for k in settings),
             statistics.mean(esr[s][k]["mrstft"] for k in settings),
         )
         for s in splits
-    )
+    ]
+    mr = statistics.mean(mr_by_split)
     ratio = statistics.mean(
         esr[s][EXTREME]["esr"] / esr[s][INTERPOLATION]["esr"] for s in splits
     )
@@ -154,28 +189,30 @@ def arm_verdict(arm: str, results: dict, splits: list[int], settings: list) -> d
     ratio_a = statistics.mean(
         ref[s][EXTREME]["esr"] / ref[s][INTERPOLATION]["esr"] for s in splits
     )
-    seen = statistics.mean(
-        statistics.median(
-            log_ratio(results[f"A_{s}"]["seen"][k], results[f"{arm}_{s}"]["seen"][k])
-            for k in results[f"A_{s}"]["seen"]
-        )
-        for s in splits
-    )
-    finite = all(math.isfinite(v["esr"]) for s in splits for v in esr[s].values())
-    late_flip = any(
-        e > 20 for s in splits for e in results[f"{arm}_{s}"]["polarity_flips"]
-    )
-    v = {
-        "splits": splits,
+    seen_by_setting = {
+        k: [log_ratio(seen_ref[s][k], seen[s][k]) for s in splits]
+        for k in seen_ref[splits[0]]
+    }
+    seen_d = statistics.median(statistics.mean(x) for x in seen_by_setting.values())
+    seen_sd = statistics.median(spread(x) for x in seen_by_setting.values())
+    typical_sd = statistics.median(sd_setting.values())
+    v |= {
         "d_by_setting": per_setting,
+        "sd_by_setting": sd_setting,
         "median_d_unseen": median_d,
         "d_extreme": per_setting[EXTREME],
         "d_mrstft_unseen": mr,
         "ratio_extreme_interpolation": ratio,
         "ratio_extreme_interpolation_A": ratio_a,
-        "median_d_seen": seen,
-        "gate_run": finite and not late_flip,
+        "median_d_seen": seen_d,
     }
+    if len(splits) > 1:
+        v["indistinct"] = {
+            "H1": abs(per_setting[EXTREME]) < sd_setting[EXTREME],
+            "H2": abs(median_d) < typical_sd,
+            "H3": abs(mr) < spread(mr_by_split),
+            "H5": abs(seen_d) < seen_sd,
+        }
     if arm not in POLES:
         return v
     three = ("soutenue", "intermediaire", "refutee")
@@ -189,7 +226,7 @@ def arm_verdict(arm: str, results: dict, splits: list[int], settings: list) -> d
         if ratio >= ratio_a
         else "intermediaire"
     )
-    v["H5"] = "non inferieur" if seen >= -MARGIN else "inferieur"
+    v["H5"] = "non inferieur" if seen_d >= -MARGIN else "inferieur"
     frozen = statistics.median(
         statistics.mean(
             results[f"{arm}_{s}"]["unseen_frozen"][k]["esr"] / esr[s][k]["esr"]
@@ -218,6 +255,14 @@ def structure_reading(
     ]
     if not splits:
         return None
+    values = [
+        results[f"{a}_{s}"]["unseen"][k]["esr"]
+        for a in (joint, additive)
+        for s in splits
+        for k in settings
+    ]
+    if not all(math.isfinite(x) and x > 0 for x in values):
+        return {"median_ln_joint_over_additive": math.nan, "reading": "non evaluable"}
     m = statistics.median(
         statistics.mean(
             log_ratio(
@@ -262,7 +307,10 @@ def report(verdicts: dict, structure: dict) -> None:
             "ratio_extreme_interpolation",
             "median_d_seen",
         ):
-            print(f"  {key:28s} {v[key]:+.3f}")
+            if key in v:
+                print(f"  {key:28s} {v[key]:+.3f}")
+        if "indistinct" in v:
+            print(f"  {'indistinct':28s} {v['indistinct']}")
         for key in ("H1", "H2", "H3", "H4", "H5", "H6", "frozen_over_moving_median"):
             if key in v:
                 print(f"  {key:28s} {v[key]}")

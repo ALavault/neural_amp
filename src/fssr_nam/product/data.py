@@ -33,5 +33,7 @@ def advance(audio: np.ndarray, frames: int) -> np.ndarray:
     length is kept: compensates a fixed latency of rendered targets (FIX_ffuzz.md)."""
     if frames <= 0:
         return audio
+    if frames >= len(audio):
+        raise ValueError("advance longer than the audio")
     tail = np.zeros((frames, audio.shape[1]), dtype=audio.dtype)
     return np.concatenate([audio[frames:], tail])

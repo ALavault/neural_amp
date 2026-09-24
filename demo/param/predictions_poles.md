@@ -103,9 +103,13 @@ rapportée en descriptif seulement.
 - **Préflight** (`--no-record`, 200 pas, bras C, puis bras D à 200 pas).
   - Porte mémoire : pic de mémoire **réservée** (`max_memory_reserved`, cache de l'allocateur
     compris) ≤ 21,5 Gio pour tous les deux. Chaque run attend ensuite ce pic plus 1 Gio libres.
-  - Le préflight attend 23 Gio libres (presque tout le GPU au repos) : un dépassement de mémoire y
+  - Le préflight attend 23 000 Mio libres (22,5 Gio, presque tout le GPU au repos) : un dépassement de mémoire y
     est alors celui du modèle, pas celui d'un autre projet. Le registre distingue « dépassement
-    de mémoire » de « pic mesuré au-dessus du seuil ». Amendement du 2026-09-24, avant tout run.
+    de mémoire » de « pic mesuré au-dessus du seuil ». Un préflight qui dépasse la mémoire ou
+    sort en erreur échoue la porte, quels que soient les chiffres imprimés avant. Amendement du
+    2026-09-24, avant tout run.
+- **Une run G2.1 en échec arrête la file** : elle est inscrite comme échec et relancée à la main
+  sous un nouveau run_id (`_r2`), sans que les bras suivants partent entre-temps.
   - Porte temps : durée extrapolée à 15 000 pas ≤ 12 h.
   - Si une porte échoue, **aucune run G2.1 ne part** : la file s'arrête et le problème est
     rapporté. Aucun réglage n'est changé en silence (ni le lot, ni la longueur des segments, ni
@@ -134,7 +138,12 @@ run.
 Verdict G2.2 : les mêmes H1 à H5, sur la moyenne des d des trois partitions. Avant de juger un
 chiffre proche d'un seuil, l'écart-type apparié de d **par réglage** entre partitions est estimé et
 rapporté (deux degrés de liberté, donc très incertain). Un d moyen dont la valeur absolue est
-inférieure à cet écart-type est rapporté comme « indistinct ».
+inférieure à cet écart-type est rapporté comme « indistinct ». Précision de mise en œuvre, écrite
+avant tout run : d est moyenné par réglage sur les partitions avant toute médiane. L'écart-type
+de comparaison est celui du réglage extrême pour H1, la médiane des écarts-types par réglage pour
+H2 (non vus) et H5 (vus), et celui de la quantité par partition pour H3. La mention « indistinct »
+s'ajoute au libellé sans le remplacer. G2.2 ne conclut que si tous les bras retenus existent aux
+trois partitions.
 
 **Bras témoin « résidus »** (réglages appliqués aux seuls résidus C des SSM) : pas lancé en G2.1.
 Il n'est écrit et lancé que si un bras « pôles » soutient H1 et H2 en G2.2, pour séparer « déplacer

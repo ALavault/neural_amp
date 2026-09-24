@@ -524,7 +524,11 @@ class SSMWaveNet(nn.Module):
                 # their conditioning only (demo/param/predictions_poles.md).
                 control_head(num_controls, film_size, "joint", (32,))
                 with torch.random.fork_rng(devices=[]):
-                    torch.manual_seed(int(torch.randint(2**62, (1,))))
+                    # CPU generator only: torch.manual_seed would reseed CUDA as well,
+                    # which fork_rng(devices=[]) does not restore.
+                    torch.random.default_generator.manual_seed(
+                        int(torch.randint(2**62, (1,)))
+                    )
                     head = control_head(num_controls, size, cond_head, cond_hidden)
             if cond == "film":
                 self.film_net = head

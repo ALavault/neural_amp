@@ -15,28 +15,37 @@ B="--cond film --cond-head additive --cond-hidden 8 8 8 8"
 preflight() {
   local id=$1
   shift
-  # Almost the whole idle GPU (23.6 GiB free when idle): an out-of-memory error is then
+  # Almost the whole idle GPU (23 000 MiB, 22.5 GiB; 23.6 GiB free when idle): OOM is then
   # the model's, not the contention's (ollama, RACLETTE).
   GPU_FREE_MIB=23000 wait_gpu
   echo "=== ${id}: preflight start $(date '+%a %d %H:%M')"
   .venv/bin/python3 scripts/product_nablafx_bench.py --run-id "${id}" --no-record \
     --max-steps 200 ${COMMON} "$@" > "demo/runs/${id}.log" 2>&1
-  echo "=== ${id}: preflight end $(date '+%a %d %H:%M') (exit $?)"
+  local code=$?
+  echo "=== ${id}: preflight end $(date '+%a %d %H:%M') (exit ${code})"
   # Gates: reserved peak (allocator cache included) <= 21.5 GiB and 15,000 steps in
   # <= 12 h, extrapolated from 200 steps (data loading included, so pessimistic). A
   # crash leaves no record: gate failed. Writes the reserved peak for the next wait.
-  .venv/bin/python3 - "${id}" <<'EOF'
+  .venv/bin/python3 - "${id}" "${code}" <<'EOF'
 import json, re, sys
 from datetime import datetime
-run = sys.argv[1]
+run, code = sys.argv[1], int(sys.argv[2])
 text = open(f"demo/runs/{run}.log").read()
 oom = "out of memory" in text.lower()
 peaks = re.findall(r'"peak_gpu_reserved_gib": ([0-9.]+)', text)
 minutes = re.findall(r'"minutes_this_session": ([0-9.]+)', text)
 peak = float(peaks[-1]) if peaks else None
 hours = float(minutes[-1]) * 15_000 / 200 / 60 if minutes else None
-ok = peak is not None and hours is not None and peak <= 21.5 and hours <= 12
-cause = "out of memory with 23 GiB free" if oom else "no record" if peak is None else "measured"
+ok = (
+    code == 0 and not oom and peak is not None and hours is not None
+    and peak <= 21.5 and hours <= 12
+)
+cause = (
+    "out of memory with 22.5 GiB free" if oom
+    else f"exit {code}" if code != 0
+    else "no record" if peak is None
+    else "measured"
+)
 print(f"=== {run}: reserved peak {peak} GiB, extrapolated {hours} h ({cause}) -> {'PASS' if ok else 'FAIL'}")
 if peak is not None:
     open(f"demo/runs/{run}.reserved_mib", "w").write(str(int(peak * 1024)))
@@ -58,7 +67,8 @@ preflight g2pre_poles_additive ${D} || { echo "=== G2.1 stopped by the preflight
 reserved=$(cat demo/runs/g2pre_poles_joint.reserved_mib demo/runs/g2pre_poles_additive.reserved_mib | sort -n | tail -1)
 GPU_FREE_MIB=$(( reserved + 1024 > 18500 ? reserved + 1024 : 18500 ))
 echo "=== G2.1 runs wait for ${GPU_FREE_MIB} MiB free"
-run_once g2_poles_joint_s925 ${COMMON} ${C}
-run_once g2_poles_additive_s925 ${COMMON} ${D}
-run_once g2_film_additive_s925 ${COMMON} ${B}
+# A failed run stops G2.1: it is recorded by run_once, and relaunched by hand as _r2.
+run_once g2_poles_joint_s925 ${COMMON} ${C} || { echo "=== G2.1 stopped: C failed"; exit 1; }
+run_once g2_poles_additive_s925 ${COMMON} ${D} || { echo "=== G2.1 stopped: D failed"; exit 1; }
+run_once g2_film_additive_s925 ${COMMON} ${B} || { echo "=== G2.1 stopped: B failed"; exit 1; }
 echo "=== G2.1 finished $(date '+%a %d %H:%M')"
