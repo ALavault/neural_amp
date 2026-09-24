@@ -58,6 +58,7 @@ from nablafx.evaluation.registry import EvaluationRegistry  # noqa: E402
 from nablafx.processors import S4  # noqa: E402
 
 from fssr_nam.models.ssm_wavenet import SSMWaveNet  # noqa: E402
+from fssr_nam.product.data import advance  # noqa: E402
 
 DATA = ROOT / "datasets/raw/external/tone_twist_bigmuff/extracted"
 WET = DATA / "ElectroHarmonix-BigMuff"
@@ -113,6 +114,10 @@ def _info(path: str) -> SimpleNamespace:
     return SimpleNamespace(num_frames=sf.info(path).frames)
 
 
+# --target-advance (F-Fuzz only): targets are read this many samples earlier.
+TARGET_ADVANCE = 0
+
+
 def _load(
     path: str,
     frame_offset: int = 0,
@@ -123,6 +128,10 @@ def _load(
     audio, rate = sf.read(
         path, start=frame_offset, frames=num_frames, dtype="float32", always_2d=True
     )
+    if TARGET_ADVANCE and ".target." in Path(path).name:
+        if frame_offset or num_frames != -1:
+            raise ValueError("--target-advance needs whole-file loads (preload=True)")
+        audio = advance(audio, TARGET_ADVANCE)
     return torch.from_numpy(audio.T.copy()), rate
 
 
@@ -435,6 +444,13 @@ def parse_args() -> argparse.Namespace:
         help="training batch size; smaller only for smoke tests next to another run",
     )
     parser.add_argument(
+        "--target-advance",
+        type=int,
+        default=0,
+        help="F-Fuzz only: read every target this many samples earlier, compensating"
+        " the latency of its renders (DIAGNOSIS_ffuzz.md, FIX_ffuzz.md)",
+    )
+    parser.add_argument(
         "--log-sampler-epochs",
         type=int,
         nargs="+",
@@ -615,6 +631,11 @@ def git_head(path: Path) -> str:
 
 def main() -> None:
     args = parse_args()
+    if args.target_advance:
+        if args.device != "ffuzz":
+            raise SystemExit("--target-advance is for --device ffuzz only")
+        global TARGET_ADVANCE
+        TARGET_ADVANCE = args.target_advance
     # Taken now, not when the run ends hours later, so commits made meanwhile
     # are not attributed to this run.
     commits = {
@@ -766,6 +787,7 @@ def main() -> None:
         ),
         "device": args.device,
         "held_out_settings": DEVICES.get(args.device, {}).get("held_out"),
+        "target_advance": args.target_advance,
         "model": args.model,
         "parameters": parameters,
         "seed": args.seed,

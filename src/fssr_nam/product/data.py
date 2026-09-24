@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import numpy as np
+
 # Sealed for the scientific lane's single future confirmation (D-PRODUCT-001).
 SEALED_DEVICES = ("blackstar_ht1", "blackstar", "ua1176", "ua_6176", "ua6176")
 
@@ -24,3 +26,12 @@ def device_pairs(
     if set(pairs) != {"train", "validation", "test"}:
         raise ValueError(f"incomplete prepared pairs for {device}")
     return pairs
+
+
+def advance(audio: np.ndarray, frames: int) -> np.ndarray:
+    """audio (frames, channels) moved `frames` samples earlier, zeros appended so the
+    length is kept: compensates a fixed latency of rendered targets (FIX_ffuzz.md)."""
+    if frames <= 0:
+        return audio
+    tail = np.zeros((frames, audio.shape[1]), dtype=audio.dtype)
+    return np.concatenate([audio[frames:], tail])
