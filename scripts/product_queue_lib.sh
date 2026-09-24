@@ -7,7 +7,11 @@
 set -u
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export TMPDIR=/fastdata/lavaulta/tmp
-cd /fastdata/lavaulta/neural_amp
+# Queues run from a worktree pinned at a commit (scripts/product_runner_worktree.sh), so
+# code edited in the main tree during a multi-day queue never reaches its runs. The
+# venv's editable install points at the main tree's src/, hence PYTHONPATH.
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+export PYTHONPATH="${PWD}/src"
 
 # The GPU is shared with RACLETTE and ollama: wait for 18.5 GiB free six minutes running.
 wait_gpu() {

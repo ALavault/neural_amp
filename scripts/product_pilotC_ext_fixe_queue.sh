@@ -2,8 +2,9 @@
 # Pilot C extension, phase 3 (diagnosis/butterfly/pilot_C_extension.md): the eight
 # "fixe" arms, only once the early/late classification is committed.
 source "$(dirname "$0")/product_queue_lib.sh"
-if ! git cat-file -e HEAD:diagnosis/butterfly/pilot_C_extension_groups.json 2>/dev/null; then
-  echo "=== classification not committed at HEAD: phase 2 refused"
+# Checked on main, not on the runner's pinned HEAD, which predates the classification.
+if ! git cat-file -e main:diagnosis/butterfly/pilot_C_extension_groups.json 2>/dev/null; then
+  echo "=== classification not committed on main: phase 2 refused"
   exit 1
 fi
 COMMON="--model ssm-wavenet --discretization zoh --honor-optim --deterministic"
