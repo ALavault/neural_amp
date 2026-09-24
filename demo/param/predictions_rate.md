@@ -31,3 +31,39 @@ segments, 0,1 s retiré de chaque côté.
   plancher plus haut que les 2·10⁻⁴ du Big Muff, sans chiffre prédit.
 
 Chaque prédiction est jugée sur la médiane, et le détail par réglage est rapporté.
+
+## Résultats (2026-09-24, `rate_transfer.py`, `rate_transfer.json`)
+
+Écart de mise en œuvre : à 48 kHz, nablafx compte ses segments d'après la longueur du fichier à
+44,1 kHz. Il en garde 17 par réglage, soit 85 s sur 95, contre 19 à 44,1 kHz. Seuls les 153
+segments natifs qui ont leur jumeau à 48 kHz sont notés.
+
+Médianes sur les neuf réglages :
+
+| | 44,1 kHz contre l'appareil | 96 kHz contre 48 kHz | 192 kHz contre 48 kHz |
+|---|---|---|---|
+| `delta` | 0,0416 | 0,0516 | 0,1007 |
+| `foh` | 0,0435 | 0,0096 | 0,0097 |
+| `around` | 0,0444 | — | — |
+
+**Verdicts**, sur la médiane des rapports par réglage, comme écrit :
+
+- **P1 tenue** : `delta` / `around` = 0,96 (fourchette 0,85 à 1,05 ; de 0,87 à 1,14 selon le
+  réglage).
+- **P2 tenue** : `foh` / `around` = 0,98 (fourchette 0,95 à 1,05 ; de 0,95 à 1,00 selon le
+  réglage). La relecture FOH reproduit le modèle à 48 kHz à l'effet du rééchantillonnage près,
+  réglages compris.
+- **P3 non tenue** : à 96 kHz, `foh` ne réduit l'écart que d'un facteur médian de 7,0 (5,1 à 9,4
+  selon le réglage), sous le ×10 prédit. Le rapport vaut 10,4 à 192 kHz, parce que `delta`
+  s'aggrave avec la fréquence et pas le plancher.
+- **P4** : le plancher de `foh` vaut 0,0096 à 96 kHz et 0,0097 à 192 kHz, soit environ −20 dB.
+  Il ne dépend presque pas de la fréquence cible, comme sur Big Muff, mais il est environ 45 fois
+  plus haut (2,2·10⁻⁴ sur Big Muff). C'est le sens attendu pour un appareil plus saturé, dont les
+  non-linéarités replient davantage. Ce n'est pas vérifié ici par un test de niveau.
+
+**Lecture produit.** Le modèle paramétrique change de fréquence vers le bas sans perte, et sans
+toucher aux réglages : le FiLM, sans mémoire, ne s'en aperçoit pas. Vers le haut, la relecture FOH
+supprime l'essentiel de l'écart dû à la discrétisation. Il reste un écart de −20 dB entre le
+modèle à 48 kHz et le même modèle suréchantillonné. Sur un ampli saturé, c'est la part
+vraisemblablement due au repliement à 48 kHz, et donc un argument pour faire tourner le modèle
+au-dessus de 48 kHz plutôt qu'une erreur à corriger ; à confirmer par un test de niveau.
