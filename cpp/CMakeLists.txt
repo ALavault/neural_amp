@@ -189,3 +189,16 @@ set_target_properties(sota_interleaved_benchmark PROPERTIES
 if(BUILD_TESTING)
   add_test(NAME sota_block_runner COMMAND sota_block_runner)
 endif()
+
+# SSM native v1 requires IEEE arithmetic, independently of NAM_TOOLS_FAST_MATH.
+add_library(ssm_wavenet_native STATIC src/ssm_wavenet_native.cpp)
+target_include_directories(ssm_wavenet_native
+  PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+  PRIVATE "${NAM_CORE_ROOT}/Dependencies/nlohmann"
+)
+target_compile_options(ssm_wavenet_native PRIVATE -O3)
+set_target_properties(ssm_wavenet_native PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+add_executable(ssm_wavenet_block_runner tests/ssm_wavenet_block_runner.cpp)
+target_link_libraries(ssm_wavenet_block_runner PRIVATE ssm_wavenet_native)
+add_executable(ssm_wavenet_benchmark benchmarks/ssm_wavenet_benchmark.cpp)
+target_link_libraries(ssm_wavenet_benchmark PRIVATE ssm_wavenet_native)
