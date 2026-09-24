@@ -354,7 +354,24 @@ def parse_args() -> argparse.Namespace:
         "--output-act", default="tanh", choices=["tanh", "softsign", "none"]
     )
     parser.add_argument("--clip-value", type=float, default=1.0)
-    parser.add_argument("--discretization", default="free", choices=["free", "zoh"])
+    parser.add_argument(
+        "--discretization", default="free", choices=["free", "zoh", "foh"]
+    )
+    parser.add_argument(
+        "--cond",
+        default="film",
+        choices=["film", "poles"],
+        help="parametric devices: knobs act on the gated 1x1 layers (FiLM) or move the"
+        " SSM poles (demo/param/predictions_poles.md)",
+    )
+    parser.add_argument("--cond-head", default="joint", choices=["joint", "additive"])
+    parser.add_argument(
+        "--cond-hidden",
+        type=int,
+        nargs="+",
+        default=[32],
+        help="hidden width of a joint head, or one width per knob of an additive one",
+    )
     parser.add_argument(
         "--honor-optim",
         action="store_true",
@@ -394,6 +411,10 @@ def build_processor(args: argparse.Namespace) -> torch.nn.Module:
             output_act=args.output_act,
             discretization=args.discretization,
             num_controls=controls,
+            # getattr: records written before these options load without them.
+            cond=getattr(args, "cond", "film"),
+            cond_head=getattr(args, "cond_head", "joint"),
+            cond_hidden=tuple(getattr(args, "cond_hidden", (32,))),
         )
     if args.model == "s4-param":
         # cfg/model/s4-param/model_bb-param_s4-f-b8-s32-c16.yaml: static FiLM (MLP).
@@ -715,6 +736,9 @@ def main() -> None:
                 "state_dim": args.state_dim,
                 "output_act": args.output_act,
                 "discretization": args.discretization,
+                "cond": args.cond,
+                "cond_head": args.cond_head,
+                "cond_hidden": args.cond_hidden,
             }
             if args.model == "ssm-wavenet"
             else None
