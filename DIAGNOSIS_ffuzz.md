@@ -97,3 +97,39 @@ perte imposé par le protocole (15 000 pas, pertes 0,5/0,5).
 - *Prédiction si vraie* : perte de validation encore décroissante (> 5 % sur les 2 000 derniers
   pas) et ESR de validation proche de l'ESR de test. H6 n'explique pas à elle seule
   l'égalité réglage par réglage ; elle est la moins probable.
+
+### 3b. Hypothèses de Codex, et ce qui était connu au moment du classement
+
+Codex a été consulté en lecture seule, avec les faits et les chemins mais sans les hypothèses
+ci-dessus (`task`, 2026-09-24). Il n'a lancé aucune inférence. Il a proposé huit causes ; celles
+qui recoupent les miennes sont renvoyées.
+
+- **C1, décalage temporel résiduel** (= H1). Précision ajoutée : un retard d'un échantillon à
+  48 kHz donne à lui seul une ESR de 0,11 à 0,19 vers 2,5–3,4 kHz ; et la lag doit être estimée
+  sur une autre fenêtre que celle qui est notée.
+- **C2, intervalles localement incohérents** (marqueurs, raccords, trous ; = H5, élargie).
+  Prédiction : plus de la moitié de l'erreur quadratique dans moins de 5 % des échantillons. Indice
+  relevé par Codex : MSE/MAE² ≈ 12, signe d'erreurs concentrées.
+- **C3, compromis L1/MR-STFT** (optimisation, nouveau). L'ESR n'est pas la perte entraînée.
+  Codex a relevé que l'ESR de validation passe par son minimum tôt (pas 2 015 pour SSM, 2 751
+  pour S4, ≈ 0,204) puis remonte légèrement jusqu'au pas 15 000.
+- **C4, bruit ou état non observé de la cible** (= H2). Pour tout expliquer, il faudrait une
+  composante imprévisible de 11 à 19 % de l'énergie de la cible.
+- **C5, pondération par segment** (= H3). Contre-indice mesuré par Codex : aux réglages F000 et
+  F100, les 133 segments de test ont tous un RMS supérieur à 0,08. Aucun dénominateur n'est
+  quasi nul.
+- **C6, couverture d'entraînement réduite** (données, nouveau). `data_to_use = 0.1` ne garde que
+  10 % des segments trainval, puis la partition 90/10.
+- **C7, limite de représentation commune** (capacité, = H4 élargie).
+- **C8, contexte manquant en début de segment** (évaluation, nouveau). Les segments sont notés
+  depuis un état nul, alors que la cible a été rendue avec son passé.
+
+**Ce que je savais avant de classer, et qui rend ce classement non aveugle.** Le test de fumée
+de `diagnosis/ffuzz/measure.py` (deux segments par réglage, SSM seul, lancé pour vérifier le
+script) a montré un retard de +4 échantillons de la cible sur la sortie. Le réalignement y faisait
+tomber l'ESR intérieure de 0,040 à 0,0013 et de 0,025 à 0,0017. Ce résultat a été vu avant le
+classement ci-dessous, et après l'écriture de H1 et la clôture de la liste de Codex.
+
+**Classement a priori** : H1/C1 d'abord (appuyé par la fumée ci-dessus) ; puis C8 et C2, qui
+prédisent une erreur localisée ; puis C3 et C6, communs aux deux architectures par construction
+du protocole ; H2/C4, H3/C5 et H4/C7 ensuite ; H6 en dernier.
