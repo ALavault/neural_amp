@@ -50,4 +50,13 @@ Verdict, critère par critère :
 Ni N ni G. La graine porte l'essentiel de la variance estimée (0,37² contre 0,18²,
 environ 80 %), sans atteindre 5 % avec trois degrés de liberté. Le non-déterminisme
 seul donne un écart-type de 0,18 par run (facteur 1,2) et a déplacé un run d'un
-facteur 1,55. S4 publié : en attente.
+facteur 1,55.
+
+## Résultat pour S4-TF-L-16 publié (renvoi, 2026-09-24)
+
+Mesuré le 2026-09-20 et consigné dans `s4_nested.md` : sur les deux paires vérifiées comparables
+(graines 43 et 44), écart-type intra-graine 0,173 ; sur les trois paires, F(2,3) = 0,29, p = 0,77.
+Critère N pour S4 (intra-graine ≥ 0,12) : **atteint**, ce que la prédiction attendait si le
+non-déterminisme dominait. Aucun effet de graine détectable, à l'inverse de SSM-WaveNet. La paire de
+la graine 42 reste inutilisable tant que la reprise `s4tfl16_seed42_redo`, lancée le 2026-09-24,
+n'est pas faite.

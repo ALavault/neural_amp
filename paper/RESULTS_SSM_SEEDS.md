@@ -1,6 +1,6 @@
 # Résultats pour la rédaction : SSM-WaveNet, sensibilité à la graine, pilote « effet papillon »
 
-État au 2026-09-21. Chaque chiffre renvoie à un fichier du dépôt ; ne rien citer
+État au 2026-09-24. Chaque chiffre renvoie à un fichier du dépôt ; ne rien citer
 d'autre sans le recalculer. Le brouillon ICASSP 2027 (`paper/icassp2027/`, tag
 `icassp2027-draft`) est abandonné et contient des affirmations retirées (section 3).
 Ce fichier ne concerne pas `paper/claims.md` ni `paper/outline.md`, qui portent sur
@@ -76,6 +76,11 @@ section Setup) :
   facteur global), critère de validation absolu, nombre de pôles lents, pondération
   par l'énergie. Corrélation sans mécanisme, choisie après coup : RMS minimal de la
   partition de validation et ESR de test (6 runs sur 6).
+- **Cette corrélation ne résiste pas à huit nouvelles graines** (pilote G,
+  `diagnosis/seeds/pilot_G_split_property.md`, propriété nommée d'avance) : ρ = −0,29, p = 0,49,
+  signe prédit mais amplitude absente. **Non soutenue, non concluante** ; un contrôle d'atténuation
+  montre que le dispositif aurait vu un ρ vrai de 0,90. Exploratoire : la proportion de trames sous
+  −40 dB donne +0,81, p corrigé (Šidák, six propriétés) 0,124 — une piste, pas un résultat.
 
 **D'où vient la dispersion entre runs** (`DIAGNOSIS_seeds.md` section 5, révision du 2026-09-21) :
 
@@ -99,6 +104,43 @@ section Setup) :
   effet de graine détectable, F(2,3) = 0,29 ; l'écart intra-graine (0,173 sur deux paires vérifiées
   comparables) égale ou dépasse l'écart entre graines. **Interdit** : citer la troisième paire, dont
   le run initial date d'un état du script antérieur à la garde et à l'exemption de weight decay.
+
+**Pilote C : un calendrier fixe commun à la place des décisions de validation**
+(`diagnosis/butterfly/pilot_C_common_schedule.md`, seuils écrits le 2026-09-17, verdict du
+2026-09-22). Huit graines × deux bras, mode déterministe.
+
+- **Issue : intermédiaire, rapportée telle quelle.** sd(décide) = 0,535, sd(fixe) = 0,300, rapport
+  0,56, entre « soutenue » (≤ 0,50) et « réfutée » (≥ 0,75). F(7,7) = 3,19, p = 0,074. Le retrait
+  d'une graine fait varier le rapport de 0,48 à 0,69 : direction robuste, étiquette non.
+- Le bras fixe est meilleur en moyenne de 0,219 en log (ESR ×0,80).
+- **Post hoc, non pré-enregistré** : le calendrier fixe ne resserre rien pour six graines (rapport
+  0,98 sans 48 et 49) et sauve les deux pires. Aucun prédicteur n'identifie la paire sauvée : 44 et
+  47 divisent plus tôt que 48 et ne sont pas sauvées.
+- Test du canal, bras par bras : la part de trames calmes de la partition ordonne l'ESR à ρ = +0,81
+  sous calendrier libre et +0,26 sous calendrier fixe. Lecture prudente à n = 8 : la partition agit
+  **par** l'ordonnanceur.
+- **Formulation autorisée** : « sur huit graines, remplacer les décisions de l'ordonnanceur par un
+  calendrier fixe réduit la dispersion du log de l'ESR de 0,535 à 0,300, sans atteindre le seuil
+  pré-enregistré ; l'essentiel de la réduction tient à deux graines ».
+- **Interdit** : « le calendrier fixe supprime l'effet de graine », ou présenter la lecture par la
+  queue comme établie. L'extension hors échantillon (graines 50 à 57, coupure à l'époque 200
+  pré-enregistrée, `diagnosis/butterfly/pilot_C_extension.md`) est lancée le 2026-09-24.
+
+**Comparer deux architectures à partition fixée** (`diagnosis/seeds/paired_protocol.md`,
+pré-enregistré le 2026-09-22, verdict du 2026-09-24).
+
+- À `--split-seed` commun, le résidu apparié entre SSM-WaveNet et S4-TF-L-16 vaut **r = 0,066**
+  sur trois partitions, contre 0,301 entre les deux bras du pilote C. **Soutenu sur l'estimation
+  ponctuelle** ; intervalle à 95 % de 0,034 à 0,41, dont la borne haute dépasse le seuil de
+  réfutation (0,35).
+- Effet minimal détectable à cinq partitions : facteur 1,12 si r se confirme, 2,07 à la borne
+  haute. Les partitions 744 et 369 du tirage déclaré départageront.
+- SSM-WaveNet plus bas sur les trois partitions, facteur 1,80 : descriptif, recettes publiées et non
+  architectures (paramètres ×6,2, arrêt propre à chacune).
+- **Formulation autorisée** : « à partition commune, l'écart entre les deux architectures varie
+  peu d'une partition à l'autre (r = 0,066, trois partitions, intervalle 0,034–0,41) ».
+- **Interdit** : présenter l'appariement comme validé, ou le facteur 1,80 comme un effet
+  d'architecture.
 
 **Déterminisme** (`diagnosis/butterfly/determinism.json`, `diagnosis/butterfly/pilot_A.md`) :
 - Algorithmes CUDA déterministes, et padding par réflexion reconstruit par découpage :
@@ -183,20 +225,20 @@ l'ambiguïté ; elle n'a pas encore été parcourue. **Formulation autorisée si
 plus n'arrive** : « aucune évaluation perceptive n'étaye ces écarts d'ESR ».
 **Interdit** : « la divergence est inaudible » sans le contrôle positif.
 
-**Fourche 5, bras « rejoue »** (`diagnosis/butterfly/pilot_A_fork5_replay.md`, en cours).
-Trois enfants sur cinq mesurés : Δ = +0,750 (k = 1), −0,129 (k = 2). Le bras ne répond
-pas à la question qu'il posait, parce que la garde de polarité y reste libre : le parent
-bascule aux époques 7, 8 et 9, donc une fourche placée à l'époque 5 laisse chaque enfant
-redécouvrir ses propres bascules, et celles-ci sont elles-mêmes des décisions de
-validation. Nuance : l'historique de bascules est identique entre les deux bras pour un
-même k, les bascules tombant bien avant la première division du learning rate, donc la
-comparaison entre bras reste interprétable ; c'est la lecture de s(rejoue) comme « ce qui
-reste quand on retire les décisions » qui ne tient pas.
+**Fourche 5, bras « rejoue »** (`diagnosis/butterfly/pilot_A_fork5_replay.md`, verdict du
+2026-09-18). **Critère pré-enregistré en échec, dans le sens qui compte** : s(rejoue) = 0,365
+contre s(décide) = 0,207. Imposer le calendrier du témoin ne contient pas la divergence à
+l'époque 5, il l'augmente. Les historiques de bascules de la garde sont identiques entre bras à k
+égal, donc la comparaison entre bras est interprétable ; ce qui ne l'est pas, c'est s(rejoue) comme
+« ce qui reste sans décisions », la garde restant libre. k = 1 porte l'essentiel des deux
+dispersions.
 
-**Pilote D, fourche 25** (`diagnosis/butterfly/pilot_D_fork25.md`, pré-enregistré, runs
-non commencés). Fourche placée après la dernière bascule du parent (époque 9) et avant sa
-première division du learning rate (époque 113), pour poser à la phase précoce la
-question que la fourche 100 a tranchée.
+**Pilote D, fourche 25** (`diagnosis/butterfly/pilot_D_fork25.md`, verdict du 2026-09-19). Garde
+éteinte (les dix enfants portent `[7, 8, 9]`). **Aucune des trois issues pré-enregistrées n'est
+réalisée** : s(décide) = 0,106, s(rejoue) = 0,056, rapport 0,52 pour un seuil de 0,50, et rapport
+des |Δ| 0,99 pour un seuil de 2. Ne pas le ranger dans « soutenu ». Lecture d'ensemble des trois
+fourches, sur trois points dont un confondu : le pouvoir de contention du calendrier imposé croît
+avec la profondeur de la fourche (rapport 1,76 à l'époque 5, 0,52 à 25, 0,06 à 100).
 
 ## 3. Retiré ou réfuté, encore présent dans le tag `icassp2027-draft`
 
@@ -220,13 +262,12 @@ question que la fourche 100 a tranchée.
 
 ## 4. En attente
 
-- Fourche 5 : « rejoue » k = 3 et k = 4, puis lecture du bras avec la réserve ci-dessus.
-- Pilote D, fourche 25 : parent rejoué avec porte au bit près, puis dix enfants.
-- Pilote C, huit graines sous calendrier commun fixe, **en cours depuis le 2026-09-21** : sa
-  condition sur B a été levée par l'utilisateur, la levée est motivée dans le pré-enregistrement.
-  Il dit par quel canal le tirage des données agit — directement, ou en passant par les décisions
-  de l'ordonnanceur.
-- S4-TF-L-16 publié : répétitions à graine égale, puis verdict emboîté pour S4.
+- Pilote C, extension hors échantillon : graines 50 à 57, bras « décide », puis classement
+  précoce / tardif commité, puis bras « fixe » (`diagnosis/butterfly/pilot_C_extension.md`).
+- S4-TF-L-16 : reprise du run initial de la graine 42 au commit courant, qui rend la troisième
+  paire utilisable (`diagnosis/seeds/s4_nested.md`, audit de comparabilité écrit avant la run).
+- Protocole apparié : élargissement aux partitions 744 et 369, après journalisation des indices du
+  sampler aux époques 1, 2 et 50.
 - Écoute : parcourir l'échelle d'audibilité, qui donnerait la marge de la divergence sous
   le seuil, dans l'unité de la divergence elle-même.
 - Question ouverte, sans expérience prévue : la direction de la perturbation. C'est k = 1

@@ -65,3 +65,25 @@ runs par groupe, cette coïncidence n'est pas distinguable du hasard.
 Refaire le run initial de la graine 42 au commit courant, ce qui rend la troisième paire utilisable
 et porte à trois le nombre de paires comparables. Un run d'environ 1 h 30. Sans cela, toute
 statistique emboîtée pour S4 repose sur deux paires.
+
+## Reprise de la graine 42 : audit de comparabilité (2026-09-24, avant la run)
+
+La run `s4tfl16_seed42_redo` refait le run initial de la graine 42 au commit courant, avec les
+drapeaux de `s4tfl16_seed42_repeat.json` : `--model s4-tf-l-16 --seed 42 --no-polarity-guard`,
+ni exemption de weight decay, ni mode déterministe, lot de 16, écrêtage à 1. Elle est placée en fin
+de `scripts/product_pilotC_ext_decide_queue.sh`. La paire utilisable sera (répétition 1fc118b,
+reprise HEAD) ; le run initial de 35b468f reste hors analyse.
+
+Diff du script d'entraînement entre 1fc118b et `HEAD` au moment du lancement (b2a1e5b), classé
+selon ce qu'il touche sur ce chemin :
+
+- **équivalent au défaut** : `ReduceLROnPlateau` reçoit désormais `threshold=plateau_threshold`,
+  qui vaut 1e-4, le défaut de PyTorch ;
+- **hors calcul** : sockets des workers sous `demo/runs/.ipc`, `timeout=600` sur les DataLoader ;
+- **options non utilisées** : `--device`, `--lr-halvings`, `--no-early-stopping`, `--split-seed`,
+  `s4-param`, l'évaluation par réglage (appareils paramétriques seulement), `SSMWaveNetProcessor` ;
+- **enregistrement seulement** : `val_indices`, `max_steps`, champs paramétriques.
+
+nablafx reste au commit 045db6e. Rien ne change l'entraînement de ce chemin. Ce que l'audit ne
+couvre pas : les versions des paquets installés hors de `uv.lock` (lightning et voisins), inconnues
+au 2026-09-19 ; celles du 2026-09-24 sont dans `diagnosis/seeds/repro_gate.json`.
