@@ -95,3 +95,25 @@ l'entrée sèche. On prolonge le balayage de V2 à −40 et −60 dB, sur les tr
   valeur du plateau mesure la part de Q.
 - **Décroissance continue** (ESR(−60) / ESR(−40) ≤ 0,2) : N domine partout.
 - Entre les deux : non départagé.
+
+### Résultat du balayage (`floor_levels.py`, `floor_levels.json`)
+
+| graine | 0 dB | −20 dB | −40 dB | −60 dB | ESR(−60) / ESR(−40) |
+|---|---|---|---|---|---|
+| 925 | 2,35·10⁻⁴ | 4,37·10⁻⁵ | 1,32·10⁻⁵ | 5,76·10⁻⁶ | 0,44 |
+| 736 | 2,39·10⁻⁴ | 5,65·10⁻⁵ | 1,24·10⁻⁵ | 4,86·10⁻⁶ | 0,39 |
+| 688 | 2,05·10⁻⁴ | 3,95·10⁻⁵ | 1,02·10⁻⁵ | 3,58·10⁻⁶ | 0,35 |
+
+**Verdict : non départagé** pour les trois graines (entre 0,2 et 0,5). L'écart décroît encore
+entre −40 et −60 dB, mais bien moins vite qu'une distorsion faible, dont l'ESR baisserait d'un
+facteur 100 par tranche de 20 dB. Aucun plateau n'est atteint non plus. Le Big Muff a beaucoup de
+gain : il n'est peut-être pas encore linéaire à −60 dB, auquel cas le discriminant supposé ne
+s'applique pas.
+
+**Ce qui reste établi.**
+
+- Le plancher n'est ni le rééchantillonneur, ni la précision.
+- La part qui ne dépend pas du niveau est bornée par la valeur à −60 dB : au plus 1,7 à 2,5 % du
+  plancher à 0 dB.
+- Son attribution entre repliement non linéaire et erreur de discrétisation dépendante du contenu
+  reste ouverte.
