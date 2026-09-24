@@ -78,3 +78,20 @@ continu appris que le modèle à 48 kHz, puisqu'il replie moins. « −37 dB du 
 donc pas une erreur de transfert, mais l'écart entre deux fréquences d'échantillonnage d'un même
 modèle non linéaire. Le vérifier demanderait une cible native à 96 kHz, qui n'existe pas pour Big
 Muff.
+
+## Correction et mesure complémentaire (2026-09-24, écrite avant le calcul, post hoc)
+
+**Le critère « N plutôt que Q » était confondu** (relevé à la relecture). Sur un appareil non
+linéaire, baisser le niveau d'entrée appauvrit aussi les signaux internes en aigus. Or l'erreur de
+discrétisation Q croît en (ωT)² : elle baisse donc aussi avec le niveau. Un rapport V3/V2 ≈ 0,2 est
+ce que prédisent N **et** Q. La lecture ci-dessus est retirée tant que la mesure suivante n'a
+pas tranché.
+
+**Discriminant.** À très bas niveau, le réseau est linéaire autour de son point de repos : N
+s'annule (aucune harmonique), Q reste constant rapporté au signal, fixé par le spectre de
+l'entrée sèche. On prolonge le balayage de V2 à −40 et −60 dB, sur les trois graines.
+
+- **Plateau** entre −40 et −60 dB (rapport ESR(−60) / ESR(−40) ≥ 0,5) : Q domine à bas niveau, et la
+  valeur du plateau mesure la part de Q.
+- **Décroissance continue** (ESR(−60) / ESR(−40) ≤ 0,2) : N domine partout.
+- Entre les deux : non départagé.
