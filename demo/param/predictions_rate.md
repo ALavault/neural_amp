@@ -64,6 +64,8 @@ Médianes sur les neuf réglages :
 **Lecture produit.** Le modèle paramétrique change de fréquence vers le bas sans perte, et sans
 toucher aux réglages : le FiLM, sans mémoire, ne s'en aperçoit pas. Vers le haut, la relecture FOH
 supprime l'essentiel de l'écart dû à la discrétisation. Il reste un écart de −20 dB entre le
-modèle à 48 kHz et le même modèle suréchantillonné. Sur un ampli saturé, c'est la part
-vraisemblablement due au repliement à 48 kHz, et donc un argument pour faire tourner le modèle
-au-dessus de 48 kHz plutôt qu'une erreur à corriger ; à confirmer par un test de niveau.
+modèle à 48 kHz et le même modèle suréchantillonné. Son origine n'est pas établie : repliement
+des non-linéarités à 48 kHz, ou erreur de discrétisation linéaire qui croît avec le contenu aigu,
+lui-même plus riche sur un ampli saturé. Le test de niveau de Big Muff ne départage pas ces deux
+lectures (`demo/sr_transfer/predictions_floor.md`). Faire tourner le modèle au-dessus de 48 kHz
+n'est donc ni établi comme meilleur, ni comme moins bon.
