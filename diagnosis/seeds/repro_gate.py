@@ -70,6 +70,14 @@ def compare(gate: str, reference: str) -> dict:
     # Rows the reference logged at steps the gate also reached, in logging order.
     old = [r for r in old if "step" in r and int(r["step"]) <= last]
     new = [r for r in new if "step" in r and int(r["step"]) <= last]
+    # Stopping at --max-steps closes the running epoch early, and Lightning then logs
+    # that epoch's train loss averaged over its first few steps only. The reference
+    # logs the same row at the end of the full epoch, past `last`. Such trailing rows,
+    # after every reference row, are set aside and reported, not compared.
+    truncated = (
+        new[len(old) :] if all(int(r["step"]) == last for r in new[len(old) :]) else []
+    )
+    new = new[: len(new) - len(truncated)]
     values = sum(len(r) for r in old)
     mismatches = []
     for i, (a, b) in enumerate(zip(old, new, strict=False)):
@@ -89,6 +97,7 @@ def compare(gate: str, reference: str) -> dict:
         "last_step": last,
         "rows_reference": len(old),
         "rows_gate": len(new),
+        "truncated_epoch_rows": truncated,
         "values_compared": values,
         "mismatches": len(mismatches),
         "first_mismatches": mismatches[:10],
@@ -111,6 +120,8 @@ def main() -> int:
             f"{r['rows_reference']} lignes / {r['rows_gate']}, "
             f"{r['values_compared']} valeurs, {r['mismatches']} ecarts -> {verdict}"
         )
+        for row in r["truncated_epoch_rows"]:
+            print(f"    ecartee, epoque tronquee {row['epoch']}, pas {row['step']}")
         for m in r["first_mismatches"]:
             print(
                 f"    ligne {m['row']} pas {m['step']} {m['column']}: "

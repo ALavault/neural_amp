@@ -1,0 +1,79 @@
+{
+ "environment": {
+  "torch": "2.13.0+cu130",
+  "cuda": "13.0",
+  "cudnn": 92000,
+  "lightning": "2.6.1",
+  "driver_gpu": "595.84, NVIDIA RTX PRO 4000 Blackwell",
+  "commit": "a950cb0f86b7866edd77b393d98a84c8aa69caa0"
+ },
+ "results": {
+  "repro_gate_ssm_bigmuff": {
+   "reference": "pilotC_decide_seed42",
+   "last_step": 199,
+   "rows_reference": 87,
+   "rows_gate": 87,
+   "truncated_epoch_rows": [
+    {
+     "epoch": "28",
+     "loss/train/l1": "0.026238350197672844",
+     "loss/train/mrstft": "0.1429106593132019",
+     "loss/train/tot": "0.1691490113735199",
+     "loss_scaled/train/l1": "0.026238350197672844",
+     "loss_scaled/train/mrstft": "1.429106593132019",
+     "loss_scaled/train/tot": "1.4553449153900146",
+     "step": "199"
+    }
+   ],
+   "values_compared": 865,
+   "mismatches": 0,
+   "first_mismatches": [],
+   "identical": true
+  },
+  "repro_gate_s4tf_bigmuff": {
+   "reference": "paired_s4_tf_l_16_s925",
+   "last_step": 199,
+   "rows_reference": 87,
+   "rows_gate": 87,
+   "truncated_epoch_rows": [
+    {
+     "epoch": "28",
+     "loss/train/l1": "0.01622827723622322",
+     "loss/train/mrstft": "0.11340583860874176",
+     "loss/train/tot": "0.12963411211967468",
+     "loss_scaled/train/l1": "0.01622827723622322",
+     "loss_scaled/train/mrstft": "1.1340583562850952",
+     "loss_scaled/train/tot": "1.1502865552902222",
+     "step": "199"
+    }
+   ],
+   "values_compared": 881,
+   "mismatches": 0,
+   "first_mismatches": [],
+   "identical": true
+  },
+  "repro_gate_ssm_marshall": {
+   "reference": "param_ssm_wavenet_marshall",
+   "last_step": 299,
+   "rows_reference": 10,
+   "rows_gate": 10,
+   "truncated_epoch_rows": [
+    {
+     "epoch": "2",
+     "loss/train/l1": "0.027480443939566612",
+     "loss/train/mrstft": "0.3721146583557129",
+     "loss/train/tot": "0.39959508180618286",
+     "loss_scaled/train/l1": "0.054960887879133224",
+     "loss_scaled/train/mrstft": "0.7442293167114258",
+     "loss_scaled/train/tot": "0.7991901636123657",
+     "step": "299"
+    }
+   ],
+   "values_compared": 348,
+   "mismatches": 0,
+   "first_mismatches": [],
+   "identical": true
+  }
+ },
+ "passed": true
+}
