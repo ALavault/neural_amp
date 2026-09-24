@@ -40,24 +40,30 @@ The test compares two-second noise-and-sweep inputs against PyTorch float64 FFT
 at 48 and 96 kHz, including slow modes, all output activations, irregular blocks,
 reset and causality. `-s` displays the measured maximum errors.
 
-## Measured (2026-09-24, Xeon E5-2630 v3, machine shared, load average 13 to 26)
+## Measured (2026-09-24, Xeon E5-2630 v3, machine shared)
 
 Parity (`test_ssm_wavenet_cpp_parity.py`, float32 state, IEEE `-O3`): max absolute error
 1.2e-6 to 1.5e-6 at 48 kHz and 2.0e-6 to 2.7e-6 at 96 kHz, for a 1e-5 contract; irregular
 blocks and reset exact (0).
 
-Cost, `paired_ssm_wavenet_s925` (8 blocks, 16 channels, 4 modes), median ns per sample:
+Cost, like for like (`scripts/product_ssm_cost.sh`, raw lines with build and load average
+in `demo/plugin/ssm_cost_2026-09-24.jsonl`): the three engines back to back, each build
+applied to all of them. SSM-WaveNet is `paired_ssm_wavenet_s925` (8 blocks, 16 channels,
+4 modes) exported to FOH; NAM A2 lite and full are the Big Muff models of
+`scripts/product_report.py`. Median ns per sample, block sizes 32 / 64 / 128 / 256:
 
-| engine | block 32 | 64 | 128 | 256 |
-|---|---:|---:|---:|---:|
-| SSM-WaveNet, first version (Codex) | 18 899 | 17 191 | 10 792 | 11 302 |
-| SSM-WaveNet, 1x1 layers input-major and SSM state as structure of arrays, IEEE | 8 459 | 8 489 | 8 434 | 8 481 |
-| same, `-ffast-math` (not the default: parity is only guaranteed for IEEE) | 7 041 | 6 818 | 6 891 | 6 921 |
-| NAM A2 lite (Codex, same session) | 966 | 869 | 900 | 612 |
-| NAM A2 full (Codex, same session) | 5 256 | 3 806 | 4 125 | 4 213 |
+| build | A2 lite | A2 full | SSM-WaveNet |
+|---|---|---|---|
+| IEEE `-O3` (`NAM_TOOLS_FAST_MATH=OFF`) | 583 / 555 / 535 / 541 | 3 244 / 2 965 / 2 900 / 2 828 | 8 438 / 8 431 / 8 414 / 8 422 |
+| fast-math (`ON`, SSM with `-ffast-math`) | 540 / 492 / 739 / 434 | 3 438 / 3 304 / 3 118 / 3 077 | 6 792 / 6 839 / 6 855 / 6 869 |
 
-SSM-WaveNet is about twice the cost of A2 full and ten times A2 lite here: 2.5 times
-real time at 48 kHz on one core of this machine. A profile of the first version put 47 %
-in the SSM recurrence (`std::complex` in arrays of structures), 29 % in the 1x1 layers and
-22 % in libm `tanhf`/`expf`. The two rewrites above removed about a fifth of the cost.
-Next lever, not taken: approximate tanh/sigmoid as NAM A2 does, which changes parity.
+SSM-WaveNet costs about 3 times A2 full in IEEE and about 2 times in fast-math, 12 to 15
+times A2 lite; 2.5 to 3 times real time at 48 kHz on one core of this machine. A2 keeps
+its approximate activations (`NAM_ENABLE_A2_FAST`) in both builds; SSM-WaveNet uses libm.
+Load average during the runs: 10 to 15 on 32 threads.
+
+History: Codex's first version measured 10.8 to 18.9 us per sample. A profile put 47 % in
+the SSM recurrence (`std::complex` in arrays of structures), 29 % in the 1x1 layers and
+22 % in libm `tanhf`/`expf`; storing the 1x1 weights input-major and the SSM state as a
+structure of arrays brought it to 8.4 us. Next lever, not taken: approximate tanh and
+sigmoid as A2 does, which changes parity.
