@@ -15,7 +15,14 @@ if [ -d "${RUNNER}" ]; then
   if pgrep -f "${RUNNER}/scripts/" > /dev/null; then
     echo "a queue is running from the runner; stop it before moving it"; exit 1
   fi
-  git -C "${RUNNER}" checkout -q --detach "${commit}"
+  # Unlink the shared paths first (the links, never their targets), so that checkout
+  # can restore the runner's own tracked copies without going through a link into the
+  # main tree; they are linked again below.
+  for shared in .venv datasets/raw third_party/nablafx third_party/auraloss demo/runs \
+      demo/nablafx_bench demo/RUNS.jsonl; do
+    if [ -L "${RUNNER}/${shared}" ]; then rm -- "${RUNNER}/${shared}"; fi
+  done
+  git -C "${RUNNER}" checkout -q -f --detach "${commit}"
 else
   git -C "${MAIN}" worktree add -q --detach "${RUNNER}" "${commit}"
 fi
