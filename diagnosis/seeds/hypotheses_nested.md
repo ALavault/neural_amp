@@ -58,5 +58,5 @@ Mesuré le 2026-09-20 et consigné dans `s4_nested.md` : sur les deux paires vé
 (graines 43 et 44), écart-type intra-graine 0,173 ; sur les trois paires, F(2,3) = 0,29, p = 0,77.
 Critère N pour S4 (intra-graine ≥ 0,12) : **atteint**, ce que la prédiction attendait si le
 non-déterminisme dominait. Aucun effet de graine détectable, à l'inverse de SSM-WaveNet. La paire de
-la graine 42 reste inutilisable tant que la reprise `s4tfl16_seed42_redo`, lancée le 2026-09-24,
-n'est pas faite.
+la graine 42 est devenue utilisable le 2026-09-25 grâce à la reprise `s4tfl16_seed42_redo`. Sur trois
+paires, l'écart-type intra-graine vaut 0,248, la composante graine 0, et F(2,3) = 0,15 (`s4_nested.md`).

@@ -87,3 +87,36 @@ selon ce qu'il touche sur ce chemin :
 nablafx reste au commit 045db6e. Rien ne change l'entraînement de ce chemin. Ce que l'audit ne
 couvre pas : les versions des paquets installés hors de `uv.lock` (lightning et voisins), inconnues
 au 2026-09-19 ; celles du 2026-09-24 sont dans `diagnosis/seeds/repro_gate.json`.
+
+## Reprise de la graine 42 : la troisième paire (2026-09-25)
+
+`s4tfl16_seed42_redo`, commit 2874c6a, drapeaux de la répétition : ESR 0,1646, arrêt anticipé à
+l'époque 403 (pas 2 828), contre 0,0999 et l'époque 905 pour la répétition du 2026-09-19. Calcul par
+`diagnosis/seeds/s4_nested_verdict.py`. Contrôle : le script redonne l'écart-type intra-graine des
+deux paires vérifiées, 0,173.
+
+| graine | paire | Δ en log |
+|---|---|---|
+| 42 | répétition (1fc118b) → reprise (2874c6a) | **+0,499** |
+| 43 | initial → répétition | −0,345 |
+| 44 | initial → répétition | −0,023 |
+
+**Trois paires comparables : écart-type intra-graine 0,248, composante graine 0 (estimation
+négative, tronquée), F(2,3) = 0,15, p = 0,86.** Le critère N pour S4 (intra-graine ≥ 0,12) est
+atteint, comme sur deux paires.
+
+**Ce que cela permet de conclure.** Chez S4-TF-L-16 entraîné comme publié, sans mode déterministe,
+le seul non-déterminisme GPU déplace une run jusqu'à un facteur 1,65 (+0,50 en log) à graine,
+données et code égaux. Sur trois graines, aucun effet de graine ne se détache : la variation d'une
+run à sa jumelle égale ou dépasse celle d'une graine à l'autre. C'est l'inverse de SSM-WaveNet
+(intra-graine 0,18, composante graine 0,37).
+
+**Ce que cela ne permet pas de conclure.**
+
+- F(2,3) n'a aucune puissance : « p = 0,86 » constate une absence de détection, pas une absence
+  d'effet.
+- La reprise et la répétition sont séparées de six jours d'environnement ; l'audit de code écrit
+  avant la run ne couvre pas les paquets installés hors de `uv.lock`.
+- Le grand écart de la graine 42 va de pair avec un arrêt anticipé deux fois plus tôt : c'est la
+  décision d'arrêt qui amplifie ici le non-déterminisme, comme l'avait montré le pilote A pour
+  SSM-WaveNet.

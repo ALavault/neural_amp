@@ -101,9 +101,12 @@ section Setup) :
 - **La règle d'arrêt est hors de cause** : `best` et `last` donnent le même ESR à 0,0005 près sur
   quinze runs.
 - **S4-TF-L-16 se comporte à l'inverse de SSM-WaveNet** (`diagnosis/seeds/s4_nested.md`) : aucun
-  effet de graine détectable, F(2,3) = 0,29 ; l'écart intra-graine (0,173 sur deux paires vérifiées
-  comparables) égale ou dépasse l'écart entre graines. **Interdit** : citer la troisième paire, dont
-  le run initial date d'un état du script antérieur à la garde et à l'exemption de weight decay.
+  effet de graine détectable. Sur trois paires comparables (graine 42 refaite le 2026-09-25 ; la paire
+  initiale de cette graine reste exclue), écart-type intra-graine 0,248, composante graine 0,
+  F(2,3) = 0,15, p = 0,86. Le non-déterminisme GPU seul a déplacé une run d'un facteur 1,65, avec un
+  arrêt anticipé deux fois plus tôt. **Formulation autorisée** : « chez S4-TF-L-16, la variation
+  d'une run à sa jumelle égale ou dépasse celle d'une graine à l'autre ». **Interdit** : lire
+  p = 0,86 comme une absence d'effet de graine.
 
 **Pilote C : un calendrier fixe commun à la place des décisions de validation**
 (`diagnosis/butterfly/pilot_C_common_schedule.md`, seuils écrits le 2026-09-17, verdict du
@@ -264,8 +267,6 @@ avec la profondeur de la fourche (rapport 1,76 à l'époque 5, 0,52 à 25, 0,06 
 
 - Pilote C, extension hors échantillon : graines 50 à 57, bras « décide », puis classement
   précoce / tardif commité, puis bras « fixe » (`diagnosis/butterfly/pilot_C_extension.md`).
-- S4-TF-L-16 : reprise du run initial de la graine 42 au commit courant, qui rend la troisième
-  paire utilisable (`diagnosis/seeds/s4_nested.md`, audit de comparabilité écrit avant la run).
 - Protocole apparié : élargissement aux partitions 744 et 369, après journalisation des indices du
   sampler aux époques 1, 2 et 50.
 - Écoute : parcourir l'échelle d'audibilité, qui donnerait la marge de la divergence sous

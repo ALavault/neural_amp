@@ -146,10 +146,10 @@ global et celle, réfutée, qui plaçait l'écart sur les segments calmes :
   place déclenche plus tôt et plus erratiquement, donc ce correctif gratuit est fermé. Et le
   calendrier du protocole se trouve gouverné par le terme MR-STFT, qui pèse 9 % de la perte
   surveillée, parce qu'il est le plus lisse des deux : mécanisme non établi, observation ferme.
-- **S4-TF-L-16** (`s4_nested.md`) : aucun effet de graine détectable, F(2,3) = 0,29 ; l'écart
-  intra-graine, 0,173 sur deux paires vérifiées comparables, égale ou dépasse celui entre graines
-  — l'inverse de SSM-WaveNet. La troisième paire est inutilisable, son run initial datant d'un
-  état antérieur du script.
+- **S4-TF-L-16** (`s4_nested.md`) : aucun effet de graine détectable. Sur les trois paires
+  comparables (reprise de la graine 42 le 2026-09-25), l'écart-type intra-graine vaut 0,248, la
+  composante graine 0, F(2,3) = 0,15 ; le non-déterminisme seul a déplacé une run d'un facteur
+  1,65. C'est l'inverse de SSM-WaveNet.
 - **Comparer deux architectures à partition fixée : soutenu sur l'estimation ponctuelle**
   (`paired_protocol.md`, verdict du 2026-09-24). À `--split-seed` commun, le résidu apparié entre
   SSM-WaveNet et S4-TF-L-16 vaut r = 0,066 sur trois partitions, contre 0,301 entre les deux bras
