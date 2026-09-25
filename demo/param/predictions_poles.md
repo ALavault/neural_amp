@@ -156,3 +156,57 @@ les pôles » de « donner une mémoire au conditionnement ».
   test sont sur un DI différent de l'entraînement, ce qui mêle généralisation de réglage et de
   matériau.
 - « Pôles » ne teste que les modes réels : A_imag n'est pas conditionné, par choix.
+
+## Verdict G2.1 (2026-09-26, partition 925, `poles_verdict.py`, `poles_verdict_925.json`)
+
+Les quatre runs passent la porte de run : ESR finies sur les réglages vus et non vus, une seule
+bascule de polarité, à l'époque 0, 15 000 pas sans arrêt anticipé. Préflights : 13,4 Gio réservés,
+9,1 h extrapolées.
+
+ESR de test par réglage non vu (étiquette corrigée) :
+
+| réglage | A FiLM joint | B FiLM additif | C pôles joint | D pôles additif |
+|---|---|---|---|---|
+| B000_M000_T100 | 0,121 | 0,101 | 0,122 | **0,074** |
+| B000_M100_T000 | 0,042 | 0,059 | 0,057 | **0,041** |
+| B000_M100_T100 | 0,076 | 0,050 | 0,122 | **0,028** |
+| B010_M030_T070 (interpolation) | 0,048 | 0,046 | 0,060 | **0,025** |
+| B030_M070_T010 (étiquette corrigée) | 0,018 | 0,017 | 0,029 | **0,010** |
+| B065_M085_T035 | 0,015 | 0,019 | 0,030 | **0,011** |
+| **B100_M000_T000 (extrême)** | 0,173 | 0,250 | **0,101** | 0,141 |
+| B100_M000_T100 | 0,044 | 0,082 | 0,069 | **0,034** |
+| B100_M100_T000 | 0,018 | 0,028 | 0,060 | **0,013** |
+| moyenne / médiane | 0,062 / 0,044 | 0,073 / 0,050 | 0,072 / 0,060 | **0,042 / 0,028** |
+
+| | C pôles joint | D pôles additif |
+|---|---|---|
+| H1, extrême (d) | **soutenue** (+0,54) | intermédiaire (+0,21) |
+| H2, médiane des non vus (d) | **inférieur** (−0,44) | **non inférieur** (+0,35) |
+| H3, MR-STFT (d) | intermédiaire (+0,05) | intermédiaire (+0,04) |
+| H4, extrême / interpolation (A : 3,64) | **soutenue** (1,67) | **réfutée** (5,63) |
+| H5, médiane des vus (d) | **inférieur** (−0,81) | **non inférieur** (+0,14) |
+| H6, pôles figés / mobiles | se sert des pôles (×5,5) | se sert des pôles (×12,4) |
+
+**Question de structure** :
+
+- FiLM : B contre A, médiane −0,22, « le joint généralise mieux » ;
+- pôles : D contre C, médiane +0,88, « l'additif généralise mieux ».
+
+Descriptif, sans seuil : l'interaction du plan 2×2 est nette. La tête additive aide sous « pôles »
+et nuit sous FiLM.
+
+**Règle d'arrêt et G2.2** : aucun bras « pôles » n'est arrêté (médianes −0,44 et +0,35, au-dessus
+de −ln 2). D est le meilleur, et C en est à plus de ln 1,15 : seul D passe. Le FiLM additif n'est
+pas retenu. **G2.2 : bras A et D, partitions 736 et 688.**
+
+**Lecture, une partition, bruit inconnu.**
+
+- Déplacer les pôles par une somme de fonctions d'un seul bouton (D) donne la meilleure
+  généralisation aux combinaisons jamais vues, sur huit réglages sur neuf. Elle améliore
+  davantage l'interpolation que l'extrême, d'où H4 réfutée.
+- La tête jointe (C) fait l'inverse : c'est elle qui gagne sur la combinaison extrême, mais elle
+  perd partout ailleurs, réglages vus compris.
+- Les deux bras « pôles » dépendent fortement de leurs pôles : figés au réglage central, leur ESR
+  est multipliée par 5 à 12.
+- Rien de cela n'est encore une conclusion : c'est l'objet de G2.2, qui estimera aussi l'écart
+  apparié d'une partition à l'autre.
