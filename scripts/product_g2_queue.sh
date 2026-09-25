@@ -15,6 +15,12 @@ B="--cond film --cond-head additive --cond-hidden 8 8 8 8"
 preflight() {
   local id=$1
   shift
+  # A preflight that passed and was recorded is not redone after a relaunch of the queue.
+  if grep -q "\"run_id\": \"${id}\", \"status\": \"preflight\", \"passed\": true" \
+      demo/RUNS.jsonl && [ -f "demo/runs/${id}.reserved_mib" ]; then
+    echo "=== ${id}: preflight already passed, not redone"
+    return 0
+  fi
   # Almost the whole idle GPU (23 000 MiB, 22.5 GiB; 23.6 GiB free when idle): OOM is then
   # the model's, not the contention's (ollama, RACLETTE).
   GPU_FREE_MIB=23000 wait_gpu
@@ -64,8 +70,15 @@ EOF
 preflight g2pre_poles_joint ${C} || { echo "=== G2.1 stopped by the preflight gate"; exit 1; }
 preflight g2pre_poles_additive ${D} || { echo "=== G2.1 stopped by the preflight gate"; exit 1; }
 # Each run then waits for the larger reserved peak plus 1 GiB of CUDA context free.
-reserved=$(cat demo/runs/g2pre_poles_joint.reserved_mib demo/runs/g2pre_poles_additive.reserved_mib | sort -n | tail -1)
+# One value per line before taking the maximum: the files have no trailing newline, and
+# a plain cat glued 13701 and 13701 into one number on 2026-09-25 (the queue then waited
+# for 1.37e9 MiB and was stopped by hand).
+reserved=$(for f in demo/runs/g2pre_poles_joint.reserved_mib \
+    demo/runs/g2pre_poles_additive.reserved_mib; do cat "${f}"; echo; done | sort -n | tail -1)
 GPU_FREE_MIB=$(( reserved + 1024 > 18500 ? reserved + 1024 : 18500 ))
+if [ "${GPU_FREE_MIB}" -gt 23500 ]; then
+  echo "=== G2.1 stopped: waiting for ${GPU_FREE_MIB} MiB free would never end"; exit 1
+fi
 echo "=== G2.1 runs wait for ${GPU_FREE_MIB} MiB free"
 # A failed run stops G2.1: it is recorded by run_once, and relaunched by hand as _r2.
 run_once g2_poles_joint_s925 ${COMMON} ${C} || { echo "=== G2.1 stopped: C failed"; exit 1; }
