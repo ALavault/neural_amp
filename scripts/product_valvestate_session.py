@@ -3,9 +3,9 @@
 
 Product lane. Writes, with fixed seeds:
 
-- the reamp source, 96 kHz 24-bit mono, to datasets/raw/internal/valvestate_vs100r/
+- the reamp source, 192 kHz 24-bit mono, to datasets/raw/internal/valvestate_vs100r/
   (not committed: it carries ToneTwist DI material, CC BY-NC):
-  calibration blips (as fssr_nam.product.capture, at 96 kHz), silence, low-level pink
+  calibration blips (as fssr_nam.product.capture, at 192 kHz), silence, low-level pink
   noise, three sine sweeps, DI guitar and bass (train 120 s, validation 30 s, test
   30 s, the test from recordings the train never uses), calibration blips again;
 - demo/capture/valvestate/layout.json: where each section starts, and the file's sha256;
@@ -32,11 +32,13 @@ DRY = ROOT / "datasets/raw/external/tone_twist_param/extracted/DIGITAL-PARAMETRI
 DRY = DRY / "DRY-with-markers"
 AUDIO_DIR = ROOT / "datasets/raw/internal/valvestate_vs100r"
 SHEET_DIR = ROOT / "demo/capture/valvestate"
-RATE = 96_000
+# 192 kHz: one capture then gives native references at 192, 96 and 48 kHz by
+# integer decimation (demo/sr_transfer: rate transfer and the -37 dB floor).
+RATE = 192_000
 SOURCE_RATE = 48_000
 SEED = 20260926
 
-# Calibration blips as fssr_nam.product.capture defines them, at 96 kHz.
+# Calibration blips as fssr_nam.product.capture defines them, at RATE.
 BLIP_MS, BLIP_HZ, BLIP_AMPLITUDE, GAP_S = 2.0, 1_000.0, 0.5, 0.5
 FADE_S = 0.01
 # DI excerpts (file, start in seconds): away from the calibration markers that open
@@ -272,9 +274,11 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "",
         "## Avant la première prise",
         "",
-        f"- Source : `{layout['file']}`, {layout['seconds']} s, 96 kHz, 24 bits, "
+        f"- Source : `{layout['file']}`, {layout['seconds']} s, {RATE // 1000} kHz, "
+        "24 bits, "
         f"sha256 `{layout['sha256'][:16]}…`. Sections et positions : `layout.json`.",
-        "- Interface : Antelope Zen Go Synergy Core, **96 kHz**, 24 bits, taille de "
+        f"- Interface : Antelope Zen Go Synergy Core, **{RATE // 1000} kHz**, 24 bits, "
+        "taille de "
         "tampon fixe pour toute la séance. **Tous les effets Synergy Core et le "
         "monitoring direct coupés** sur les entrées enregistrées.",
         "- Deux voies (la Zen Go n'a que deux entrées), en mode **ligne** : entrée 1 = "
@@ -285,6 +289,15 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "boîte de réamplification branchée sur l'entrée 2 à la place de l'ampli, mêmes "
         "réglages, source jouée en entier (`loopback_start.wav`, `loopback_end.wav`). "
         "Elle donne la latence propre de la chaîne ; les blips suffisent ensuite.",
+        f"- **Reaper** : projet et interface à {RATE // 1000} kHz (le fichier source "
+        "doit avoir la fréquence du projet, sinon Reaper le rééchantillonne à la "
+        "lecture) ; enregistrement en WAV 24 bits. Piste source : volume 0 dB, "
+        "aucun effet, envoi au master **décoché**, sortie matérielle 1 (jack gauche "
+        "de la sortie moniteur) ; master sans effet. Deux pistes mono armées sur les "
+        "entrées 1 et 2, monitoring d'entrée coupé, aucun effet d'entrée. Lancer "
+        "l'enregistrement une seconde avant la lecture, l'arrêter après les blips de "
+        "fin. Une prise par ligne du tableau, dans l'ordre ; noter toute prise "
+        "refaite.",
         "- Reverb Clean et OD à **0**. Power Dimension **éteint** sauf pour le dernier "
         "bloc. Retour de boucle vide.",
         "- **Test de 2 minutes** : note tenue ; bouger le master, puis Power "
@@ -352,7 +365,7 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
 def main() -> None:
     signal, layout = reamp()
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
-    path = AUDIO_DIR / "reamp_valvestate_96k.wav"
+    path = AUDIO_DIR / f"reamp_valvestate_{RATE // 1000}k.wav"
     sf.write(path, signal, RATE, subtype="PCM_24")
     written, _ = sf.read(path, dtype="float32")
     layout |= {
