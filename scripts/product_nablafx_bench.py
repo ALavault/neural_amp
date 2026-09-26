@@ -66,6 +66,8 @@ SETTING = "S050_V100"
 PARAM = ROOT / "datasets/raw/external/tone_twist_param/extracted"
 MARSHALL = PARAM / "Marshall-JVM410H-ChOD1-trimmed"
 FFUZZ = PARAM / "MultidrivePedalPro-F-Fuzz"
+# Exploratory VS100R capture of 2026-09-26 (scripts/product_valvestate_dataset.py).
+VS100R = ROOT / "datasets/raw/internal/valvestate_vs100r/explore_48k"
 # Parametric devices, nablafx's data configs (cfg/data/data-param_*): dry and wet roots
 # per split, knob indices, fraction of trainval used. F-Fuzz has the same eleven
 # settings in trainval and test, so two are held out of training (demo/param).
@@ -85,6 +87,15 @@ DEVICES = {
         "params": [0],  # fuzz
         "data_to_use": 0.1,
         "held_out": ["F030_V100", "F070_V100"],
+    },
+    "vs100r": {
+        # Input = each take's loopback, target = FX loop send, OD2, Power Dimension off.
+        "dry": VS100R / "dry",
+        "wet": VS100R / "wet",
+        "params": [0, 1, 2, 3, 4],  # gain, contour, bass, middle, treble
+        "data_to_use": 1.0,
+        "held_out": [],
+        "benchmark": "Marshall VS100R exploratory capture 2026-09-26, OD2, PD off",
     },
 }
 RUNS_DIR = ROOT / "demo/runs"
@@ -783,7 +794,9 @@ def main() -> None:
         "benchmark": (
             f"ToneTwist Big Muff {SETTING}, nablafx protocol"
             if args.device == "bigmuff"
-            else f"ToneTwist {args.device} parametric, nablafx protocol"
+            else DEVICES[args.device].get(
+                "benchmark", f"ToneTwist {args.device} parametric, nablafx protocol"
+            )
         ),
         "device": args.device,
         "held_out_settings": DEVICES.get(args.device, {}).get("held_out"),
