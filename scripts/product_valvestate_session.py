@@ -274,10 +274,17 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "",
         f"- Source : `{layout['file']}`, {layout['seconds']} s, 96 kHz, 24 bits, "
         f"sha256 `{layout['sha256'][:16]}…`. Sections et positions : `layout.json`.",
-        "- Enregistrer à **96 kHz**, 24 bits ou float, trois voies : départ de boucle "
-        "(FX Send), sortie ligne émulée, retour en boucle du signal envoyé.",
-        "- Interface → boîte de réamplification → entrée de l'ampli. **Jamais** la "
-        "sortie haut-parleur vers l'interface.",
+        "- Interface : Antelope Zen Go Synergy Core, **96 kHz**, 24 bits, taille de "
+        "tampon fixe pour toute la séance. **Tous les effets Synergy Core et le "
+        "monitoring direct coupés** sur les entrées enregistrées.",
+        "- Deux voies (la Zen Go n'a que deux entrées), en mode **ligne** : entrée 1 = "
+        "départ de boucle (FX Send), entrée 2 = sortie ligne émulée.",
+        "- Sortie moniteur (jack TRS) → boîte de réamplification → entrée de l'ampli. "
+        "**Jamais** la sortie haut-parleur vers l'interface.",
+        "- **Prise de bouclage** au début et à la fin de la séance : sortie de la "
+        "boîte de réamplification branchée sur l'entrée 2 à la place de l'ampli, mêmes "
+        "réglages, source jouée en entier (`loopback_start.wav`, `loopback_end.wav`). "
+        "Elle donne la latence propre de la chaîne ; les blips suffisent ensuite.",
         "- Reverb Clean et OD à **0**. Power Dimension **éteint** sauf pour le dernier "
         "bloc. Retour de boucle vide.",
         "- **Test de 2 minutes** : note tenue ; bouger le master, puis Power "
@@ -286,11 +293,16 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "  - Sortie émulée dépend du master : oui / non. De Power Dimension : "
         "oui / non.",
         "- **Niveau d'entrée de l'ampli** : viser 0 dBFS du fichier = 0 dBu à l'entrée "
-        "de l'ampli (crêtes DI vers 1 V, comme un humbucker attaqué franchement). Sans "
-        "voltmètre : enregistrer la guitare sur l'entrée Hi-Z de l'interface, puis "
-        "régler la boîte de réamplification pour que le programme DI y crête au même "
-        "niveau. Avec voltmètre (AC) : une sinusoïde 1 kHz à -6 dBFS doit donner "
-        "0,39 V RMS à l'entrée de l'ampli.",
+        "de l'ampli (crêtes DI vers 1 V, comme un humbucker attaqué franchement), "
+        "fourchette acceptable -6 à 0 dBu.",
+        "  - D'après les fiches : niveau (dBu) = +20 (Zen Go, 0 dBFS, volume moniteur "
+        "au maximum) + volume moniteur (dB, lu dans le panneau de contrôle) + gain de "
+        "la boîte (dB, fiche, à la position choisie). Viser volume + boîte = -20 dB. "
+        "Valable seulement si le volume se lit en dB et si la boîte est à une "
+        "position documentée ; sinon, méthode suivante.",
+        "  - Sans fiche : enregistrer la guitare sur une entrée en mode Hi-Z, puis "
+        "brancher la sortie de la boîte sur cette même entrée, même gain, et régler "
+        "la boîte pour que le programme DI y crête au même niveau.",
         "- Puis, prise 1 (centre) : aucune voie enregistrée ne doit écrêter, crêtes "
         "vers -6 dBFS. **Ne plus toucher à aucun niveau** ensuite.",
         "",
@@ -302,16 +314,19 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "| Volume Clean | |",
         "| Master (s'il existe) | |",
         "| Niveau de départ de boucle (FX level) | |",
-        "| Niveau de sortie de l'interface / boîte de réamplification | |",
+        "| Volume moniteur de la Zen Go (dB, panneau de contrôle) | |",
+        "| Boîte de réamplification : modèle, position, gain de la fiche (dB) | |",
         "| Calibration : dBu à l'entrée de l'ampli pour 0 dBFS (visé 0 dBu) | |",
-        "| Gains d'entrée de l'interface (3 voies) | |",
+        "| Méthode de calibration (fiches / guitare) | |",
+        "| Gains et modes des deux entrées de la Zen Go | |",
+        "| Taille de tampon | |",
         "",
         "## Prises, dans cet ordre",
         "",
         "Boutons de 0 à 10. Revenir au 5 des prises « centre » **depuis un côté "
         "différent** à chaque fois. Une photo du panneau par prise. Nommer chaque "
         "fichier comme dans la dernière colonne (suffixe de voie à ajouter : `_send`, "
-        "`_line`, `_loop`).",
+        "`_line`).",
         "",
         "| # | fait | canal | gain | contour | grave | médium | aigu | "
         "tone shift | power dim. | rôle | fichier |",
