@@ -15,11 +15,13 @@ the mean, and are reported as descriptions only.
 from __future__ import annotations
 
 import csv
+import itertools
 import json
 import math
 import sys
 from pathlib import Path
 
+import numpy as np
 import torch
 from scipy import stats
 
@@ -38,6 +40,14 @@ SEEDS = range(50, 58)
 def log_esr(arm: str, seed: int) -> float:
     path = ROOT / f"demo/nablafx_bench/pilotC_{arm}_seed{seed}.json"
     return math.log(json.loads(path.read_text())["test_last"]["metric/test/esr"])
+
+
+def spearman_exact(x: list[float], y: list[float]) -> tuple[float, float]:
+    """Spearman rho and its two-sided p by enumerating all permutations (n = 8)."""
+    rx, ry = stats.rankdata(x), stats.rankdata(y)
+    rho = float(np.corrcoef(rx, ry)[0, 1])
+    null = [np.corrcoef(rx, p)[0, 1] for p in itertools.permutations(ry)]
+    return rho, float(np.mean(np.abs(null) >= abs(rho) - 1e-12))
 
 
 def last_epoch(run: str) -> int:
@@ -86,19 +96,17 @@ def main() -> None:
     print("\nTest du canal, bras par bras (comme pilot_C_channel.py) :")
     for name in ("quiet_share", "first_halving"):
         for arm in ("decide", "fixe"):
-            r = stats.spearmanr(column[name], column[f"log_{arm}"])
-            out["spearman"][f"{name}->{arm}"] = [r.statistic, r.pvalue]
-            print(
-                f"  {name:15s} -> ESR {arm:6s} rho {r.statistic:+.3f} p {r.pvalue:.3f}"
-            )
+            r = spearman_exact(column[name], column[f"log_{arm}"])
+            out["spearman"][f"{name}->{arm}"] = list(r)
+            print(f"  {name:15s} -> ESR {arm:6s} rho {r[0]:+.3f} p {r[1]:.4f}")
     print("\nGain apparie ln(fixe / decide), descriptif (regression vers la moyenne) :")
     for name in ("first_halving", "decide_last_epoch"):
-        r = stats.spearmanr(column[name], gain)
-        out["spearman"][f"{name}->gain"] = [r.statistic, r.pvalue]
-        print(f"  {name:17s} -> gain rho {r.statistic:+.3f} p {r.pvalue:.3f}")
-    r = stats.spearmanr(column["first_halving"], column["decide_last_epoch"])
-    out["spearman"]["first_halving->decide_last_epoch"] = [r.statistic, r.pvalue]
-    print(f"  first_halving -> decide_last_epoch rho {r.statistic:+.3f}")
+        r = spearman_exact(column[name], gain)
+        out["spearman"][f"{name}->gain"] = list(r)
+        print(f"  {name:17s} -> gain rho {r[0]:+.3f} p {r[1]:.4f}")
+    r = spearman_exact(column["first_halving"], column["decide_last_epoch"])
+    out["spearman"]["first_halving->decide_last_epoch"] = list(r)
+    print(f"  first_halving -> decide_last_epoch rho {r[0]:+.3f}")
     (Path(__file__).parent / "pilot_C_extension_channel.json").write_text(
         json.dumps(out, indent=1) + "\n", encoding="utf-8"
     )
