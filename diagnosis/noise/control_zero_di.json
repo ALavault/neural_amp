@@ -1,0 +1,102 @@
+{
+ "rows": {
+  "pilotC_decide_seed42": {
+   "db_zero_vs_measured": -63.84854416297698
+  },
+  "pilotC_decide_seed43": {
+   "db_zero_vs_measured": -57.156760522880454
+  },
+  "pilotC_decide_seed44": {
+   "db_zero_vs_measured": -67.23345991660544
+  },
+  "pilotC_decide_seed45": {
+   "db_zero_vs_measured": -64.54354835714862
+  },
+  "pilotC_decide_seed46": {
+   "db_zero_vs_measured": -66.35254543073205
+  },
+  "pilotC_decide_seed47": {
+   "db_zero_vs_measured": -69.59699521112627
+  },
+  "pilotC_decide_seed48": {
+   "db_zero_vs_measured": -64.33732778917212
+  },
+  "pilotC_decide_seed49": {
+   "db_zero_vs_measured": -65.67974137305706
+  },
+  "pilotC_decide_seed50": {
+   "db_zero_vs_measured": -64.05850040160396
+  },
+  "pilotC_decide_seed51": {
+   "db_zero_vs_measured": -61.16146506065639
+  },
+  "pilotC_decide_seed52": {
+   "db_zero_vs_measured": -65.87297941723422
+  },
+  "pilotC_decide_seed53": {
+   "db_zero_vs_measured": -64.43924249891344
+  },
+  "pilotC_decide_seed54": {
+   "db_zero_vs_measured": -63.1401161698479
+  },
+  "pilotC_decide_seed55": {
+   "db_zero_vs_measured": -64.0021386689961
+  },
+  "pilotC_decide_seed56": {
+   "db_zero_vs_measured": -61.272145492212346
+  },
+  "pilotC_decide_seed57": {
+   "db_zero_vs_measured": -62.33530733509251
+  },
+  "pilotC_fixe_seed42": {
+   "db_zero_vs_measured": -64.8871387002395
+  },
+  "pilotC_fixe_seed43": {
+   "db_zero_vs_measured": -53.84687956736584
+  },
+  "pilotC_fixe_seed44": {
+   "db_zero_vs_measured": -65.20263850100322
+  },
+  "pilotC_fixe_seed45": {
+   "db_zero_vs_measured": -64.4370619820345
+  },
+  "pilotC_fixe_seed46": {
+   "db_zero_vs_measured": -67.44849231979536
+  },
+  "pilotC_fixe_seed47": {
+   "db_zero_vs_measured": -68.75090512266513
+  },
+  "pilotC_fixe_seed48": {
+   "db_zero_vs_measured": -64.97742155265372
+  },
+  "pilotC_fixe_seed49": {
+   "db_zero_vs_measured": -64.95275769574495
+  },
+  "pilotC_fixe_seed50": {
+   "db_zero_vs_measured": -63.675648579459
+  },
+  "pilotC_fixe_seed51": {
+   "db_zero_vs_measured": -60.22708289598996
+  },
+  "pilotC_fixe_seed52": {
+   "db_zero_vs_measured": -66.28911375238692
+  },
+  "pilotC_fixe_seed53": {
+   "db_zero_vs_measured": -64.86076174131009
+  },
+  "pilotC_fixe_seed54": {
+   "db_zero_vs_measured": -61.24140916085228
+  },
+  "pilotC_fixe_seed55": {
+   "db_zero_vs_measured": -64.25993272647543
+  },
+  "pilotC_fixe_seed56": {
+   "db_zero_vs_measured": -61.94573339599928
+  },
+  "pilotC_fixe_seed57": {
+   "db_zero_vs_measured": -62.602409403417205
+  }
+ },
+ "median_db": -64.38719488560332,
+ "verdict": "amplification du DI calme"
+}
