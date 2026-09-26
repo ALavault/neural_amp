@@ -4,7 +4,7 @@
 In the 5 s silence section the source is digital zero, so the amp receives only the
 noise of the playback chain (converter, reamp box), which the loopback also records,
 plus the loopback input's own noise, which the amp never receives. Per take:
-- FX noise level in 100 Hz - 10 kHz;
+- FX noise level, full band and in 100 Hz - 10 kHz;
 - C = sum(|S_lf|^2 / S_ll) / sum S_ff: share of the FX noise linearly explained by the
   loopback noise (estimator floor about 1/windows when nothing is shared).
 High C: the amp amplifies the noise it is sent. C at the floor: its own noise (or noise
@@ -47,6 +47,10 @@ def spectra(a: np.ndarray, b: np.ndarray):
     )
 
 
+def share(coherent: np.ndarray, total: np.ndarray, mask: np.ndarray) -> float:
+    return round(float(coherent[mask].sum() / total[mask].sum()), 4)
+
+
 def dbfs(power: float) -> float:
     return round(float(10 * np.log10(max(power, 1e-30))), 2)
 
@@ -62,6 +66,7 @@ def main() -> None:
     for k in range(1, int(BAND[1] // 50) + 1):
         hum |= np.abs(freqs - 50 * k) <= width
     line = np.abs(freqs - 8_000) <= 4 * RATE / WIN
+    hum &= ~line  # 8 kHz is also a multiple of 50 Hz: disjoint masks
     plain = band & ~hum & ~line
     rows = []
     for p in sorted(passes, key=lambda p: p["order"]):
@@ -75,6 +80,7 @@ def main() -> None:
         s_ll, s_ff_all, s_lf, count = spectra(loop, fx)
         scale = np.mean(fx**2) / s_ff_all.sum()  # bins in mean-square units
         floor = np.median(s_ff_all[plain])
+        coherent = np.abs(s_lf) ** 2 / s_ll  # FX power linearly explained, per bin
         s_ll, s_ff, s_lf = s_ll[band], s_ff_all[band], np.abs(s_lf[band])
         setting = settings[p["order"]]
         row = {
@@ -83,9 +89,13 @@ def main() -> None:
             "channel": setting["channel"],
             "gain": setting["G"],
             "power_dimension": setting["power_dimension"],
-            "fx_noise_dbfs": round(float(10 * np.log10(np.mean(fx**2))), 2),
+            "fx_noise_fullband_dbfs": round(float(10 * np.log10(np.mean(fx**2))), 2),
+            "fx_noise_dbfs": dbfs(s_ff_all[band].sum() * scale),
             "coherent_share": round(float((s_lf**2 / s_ll).sum() / s_ff.sum()), 4),
             "estimator_floor": round(1 / count, 4),
+            "coherent_share_broadband": share(coherent, s_ff_all, plain),
+            "coherent_share_mains": share(coherent, s_ff_all, band & hum),
+            "coherent_share_8k": share(coherent, s_ff_all, line),
             "broadband_dbfs": dbfs(floor * band.sum() * scale),
             "mains_dbfs": dbfs((s_ff_all[band & hum] - floor).sum() * scale),
             "line_8k_dbfs": dbfs((s_ff_all[line] - floor).sum() * scale),

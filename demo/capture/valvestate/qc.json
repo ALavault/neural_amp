@@ -9,6 +9,9 @@
   "di_rms_dbfs": -22.26,
   "silence_rms_dbfs": -67.83,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 45.6,
   "clipped": false,
   "low_signal": false
@@ -23,6 +26,9 @@
   "di_rms_dbfs": -21.26,
   "silence_rms_dbfs": -63.87,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 75,
+  "blip_lag_end": 75,
   "snr_db": 42.6,
   "clipped": false,
   "low_signal": false
@@ -37,6 +43,9 @@
   "di_rms_dbfs": -21.32,
   "silence_rms_dbfs": -67.96,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 50,
+  "blip_lag_end": 50,
   "snr_db": 46.6,
   "clipped": false,
   "low_signal": false
@@ -51,6 +60,9 @@
   "di_rms_dbfs": -21.18,
   "silence_rms_dbfs": -66.98,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 53,
   "snr_db": 45.8,
   "clipped": false,
   "low_signal": false
@@ -65,6 +77,9 @@
   "di_rms_dbfs": -24.22,
   "silence_rms_dbfs": -75.13,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 51,
+  "blip_lag_end": 51,
   "snr_db": 50.9,
   "clipped": false,
   "low_signal": false
@@ -79,6 +94,9 @@
   "di_rms_dbfs": -78.46,
   "silence_rms_dbfs": -80.91,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": -25,
+  "blip_lag_end": -26,
   "snr_db": 2.5,
   "clipped": false,
   "low_signal": true
@@ -93,6 +111,9 @@
   "di_rms_dbfs": -78.23,
   "silence_rms_dbfs": -80.57,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": -29,
+  "blip_lag_end": -30,
   "snr_db": 2.3,
   "clipped": false,
   "low_signal": true
@@ -107,6 +128,9 @@
   "di_rms_dbfs": -19.13,
   "silence_rms_dbfs": -57.3,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 89,
+  "blip_lag_end": 89,
   "snr_db": 38.2,
   "clipped": false,
   "low_signal": false
@@ -121,6 +145,9 @@
   "di_rms_dbfs": -19.72,
   "silence_rms_dbfs": -56.61,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 58,
+  "blip_lag_end": 58,
   "snr_db": 36.9,
   "clipped": false,
   "low_signal": false
@@ -135,6 +162,9 @@
   "di_rms_dbfs": -77.44,
   "silence_rms_dbfs": -79.19,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": -29,
+  "blip_lag_end": -29,
   "snr_db": 1.8,
   "clipped": false,
   "low_signal": true
@@ -149,6 +179,9 @@
   "di_rms_dbfs": -21.21,
   "silence_rms_dbfs": -67.22,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 53,
+  "blip_lag_end": 53,
   "snr_db": 46.0,
   "clipped": false,
   "low_signal": false
@@ -163,6 +196,9 @@
   "di_rms_dbfs": -21.18,
   "silence_rms_dbfs": -67.13,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 53,
+  "blip_lag_end": 54,
   "snr_db": 45.9,
   "clipped": false,
   "low_signal": false
@@ -177,6 +213,9 @@
   "di_rms_dbfs": -21.17,
   "silence_rms_dbfs": -67.41,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 46.2,
   "clipped": false,
   "low_signal": false
@@ -193,6 +232,11 @@
   "spikes_s": [
    193.8507
   ],
+  "spikes_wav_sample": [
+   37989410
+  ],
+  "blip_lag_start": 51,
+  "blip_lag_end": 51,
   "snr_db": 45.6,
   "clipped": false,
   "low_signal": false
@@ -207,6 +251,9 @@
   "di_rms_dbfs": -21.16,
   "silence_rms_dbfs": -66.89,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 53,
+  "blip_lag_end": 53,
   "snr_db": 45.7,
   "clipped": false,
   "low_signal": false
@@ -221,6 +268,9 @@
   "di_rms_dbfs": -26.06,
   "silence_rms_dbfs": -77.21,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 48,
+  "blip_lag_end": 48,
   "snr_db": 51.1,
   "clipped": false,
   "low_signal": false
@@ -235,6 +285,9 @@
   "di_rms_dbfs": -20.48,
   "silence_rms_dbfs": -68.01,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 83,
+  "blip_lag_end": 84,
   "snr_db": 47.5,
   "clipped": false,
   "low_signal": false
@@ -249,6 +302,9 @@
   "di_rms_dbfs": -20.89,
   "silence_rms_dbfs": -68.23,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 72,
+  "blip_lag_end": 72,
   "snr_db": 47.3,
   "clipped": false,
   "low_signal": false
@@ -263,6 +319,9 @@
   "di_rms_dbfs": -21.03,
   "silence_rms_dbfs": -67.33,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 46.3,
   "clipped": false,
   "low_signal": false
@@ -277,6 +336,9 @@
   "di_rms_dbfs": -21.07,
   "silence_rms_dbfs": -66.75,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 45.7,
   "clipped": false,
   "low_signal": false
@@ -291,6 +353,9 @@
   "di_rms_dbfs": -21.07,
   "silence_rms_dbfs": -66.42,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 45.4,
   "clipped": false,
   "low_signal": false
@@ -305,6 +370,9 @@
   "di_rms_dbfs": -21.3,
   "silence_rms_dbfs": -66.04,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 52,
+  "blip_lag_end": 52,
   "snr_db": 44.7,
   "clipped": false,
   "low_signal": false
@@ -319,6 +387,9 @@
   "di_rms_dbfs": -21.08,
   "silence_rms_dbfs": -66.68,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 45.6,
   "clipped": false,
   "low_signal": false
@@ -333,6 +404,9 @@
   "di_rms_dbfs": -21.08,
   "silence_rms_dbfs": -67.33,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 46.2,
   "clipped": false,
   "low_signal": false
@@ -347,6 +421,9 @@
   "di_rms_dbfs": -21.07,
   "silence_rms_dbfs": -67.54,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 46.5,
   "clipped": false,
   "low_signal": false
@@ -361,6 +438,9 @@
   "di_rms_dbfs": -25.92,
   "silence_rms_dbfs": -78.72,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 51,
+  "blip_lag_end": 51,
   "snr_db": 52.8,
   "clipped": false,
   "low_signal": false
@@ -375,6 +455,9 @@
   "di_rms_dbfs": -78.7,
   "silence_rms_dbfs": -81.47,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": -3,
+  "blip_lag_end": -4,
   "snr_db": 2.8,
   "clipped": false,
   "low_signal": true
@@ -389,6 +472,9 @@
   "di_rms_dbfs": -21.11,
   "silence_rms_dbfs": -66.85,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 45.7,
   "clipped": false,
   "low_signal": false
@@ -403,6 +489,9 @@
   "di_rms_dbfs": -19.71,
   "silence_rms_dbfs": -58.83,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 78,
+  "blip_lag_end": 78,
   "snr_db": 39.1,
   "clipped": false,
   "low_signal": false
@@ -417,6 +506,9 @@
   "di_rms_dbfs": -19.61,
   "silence_rms_dbfs": -55.09,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 58,
+  "blip_lag_end": 58,
   "snr_db": 35.5,
   "clipped": false,
   "low_signal": false
@@ -431,6 +523,9 @@
   "di_rms_dbfs": -20.52,
   "silence_rms_dbfs": -67.25,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 84,
+  "blip_lag_end": 84,
   "snr_db": 46.7,
   "clipped": false,
   "low_signal": false
@@ -445,6 +540,9 @@
   "di_rms_dbfs": -28.17,
   "silence_rms_dbfs": -80.44,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 69,
+  "blip_lag_end": 69,
   "snr_db": 52.3,
   "clipped": false,
   "low_signal": false
@@ -459,6 +557,9 @@
   "di_rms_dbfs": -19.8,
   "silence_rms_dbfs": -58.58,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 76,
+  "blip_lag_end": 76,
   "snr_db": 38.8,
   "clipped": false,
   "low_signal": false
@@ -473,6 +574,9 @@
   "di_rms_dbfs": -21.16,
   "silence_rms_dbfs": -66.56,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 45.4,
   "clipped": false,
   "low_signal": false
@@ -487,6 +591,9 @@
   "di_rms_dbfs": -20.27,
   "silence_rms_dbfs": -58.77,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 52,
+  "blip_lag_end": 52,
   "snr_db": 38.5,
   "clipped": false,
   "low_signal": false
@@ -501,6 +608,9 @@
   "di_rms_dbfs": -24.17,
   "silence_rms_dbfs": -75.82,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 51,
+  "blip_lag_end": 51,
   "snr_db": 51.6,
   "clipped": false,
   "low_signal": false
@@ -515,6 +625,9 @@
   "di_rms_dbfs": -21.33,
   "silence_rms_dbfs": -65.03,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 50,
+  "blip_lag_end": 50,
   "snr_db": 43.7,
   "clipped": false,
   "low_signal": false
@@ -529,6 +642,9 @@
   "di_rms_dbfs": -20.17,
   "silence_rms_dbfs": -58.93,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 57,
+  "blip_lag_end": 57,
   "snr_db": 38.8,
   "clipped": false,
   "low_signal": false
@@ -543,6 +659,9 @@
   "di_rms_dbfs": -21.2,
   "silence_rms_dbfs": -66.21,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 45.0,
   "clipped": false,
   "low_signal": false
@@ -557,6 +676,9 @@
   "di_rms_dbfs": -50.66,
   "silence_rms_dbfs": -72.69,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 0,
+  "blip_lag_end": 0,
   "snr_db": 22.0,
   "clipped": false,
   "low_signal": false
@@ -571,6 +693,9 @@
   "di_rms_dbfs": -55.48,
   "silence_rms_dbfs": -72.35,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": -35,
+  "blip_lag_end": -35,
   "snr_db": 16.9,
   "clipped": false,
   "low_signal": true
@@ -585,6 +710,9 @@
   "di_rms_dbfs": -54.37,
   "silence_rms_dbfs": -73.34,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 39,
+  "blip_lag_end": 39,
   "snr_db": 19.0,
   "clipped": true,
   "low_signal": true
@@ -599,6 +727,9 @@
   "di_rms_dbfs": -52.66,
   "silence_rms_dbfs": -74.02,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": -35,
+  "blip_lag_end": -35,
   "snr_db": 21.4,
   "clipped": false,
   "low_signal": false
@@ -613,6 +744,9 @@
   "di_rms_dbfs": -53.25,
   "silence_rms_dbfs": -73.65,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": -11,
+  "blip_lag_end": -10,
   "snr_db": 20.4,
   "clipped": false,
   "low_signal": false
@@ -627,6 +761,9 @@
   "di_rms_dbfs": -24.82,
   "silence_rms_dbfs": -67.33,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 54,
+  "blip_lag_end": 54,
   "snr_db": 42.5,
   "clipped": false,
   "low_signal": false
@@ -641,6 +778,9 @@
   "di_rms_dbfs": -24.23,
   "silence_rms_dbfs": -67.66,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 84,
+  "blip_lag_end": 84,
   "snr_db": 43.4,
   "clipped": false,
   "low_signal": false
@@ -655,6 +795,9 @@
   "di_rms_dbfs": -23.53,
   "silence_rms_dbfs": -61.76,
   "spikes_s": [],
+  "spikes_wav_sample": [],
+  "blip_lag_start": 76,
+  "blip_lag_end": 76,
   "snr_db": 38.2,
   "clipped": false,
   "low_signal": false

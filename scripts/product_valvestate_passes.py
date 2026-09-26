@@ -57,7 +57,7 @@ def coarse_starts(recording: np.ndarray, source: np.ndarray) -> list[tuple[int, 
 
 
 def exact(recording: np.ndarray, source: np.ndarray, section: str, guess: int):
-    """Position in the recording of the source's `section` start, near `guess`."""
+    """Start of the pass (source time 0) in the recording, found on `section`."""
     s = SECTIONS[section]
     template = source[s["start"] : s["start"] + s["samples"]]
     lo = max(guess + s["start"] - SEARCH, 0)
@@ -82,7 +82,10 @@ def lag_profile(recording: np.ndarray, source: np.ndarray, start: int) -> list:
         if len(rec) < CHUNK + 2 * MAX_LAG:
             break
         ncc = normalised_xcorr(rec, src)
-        out.append((round(t / RATE, 1), int(np.argmax(np.abs(ncc))) - MAX_LAG))
+        best = int(np.argmax(np.abs(ncc)))
+        # A peak on the search bound or a weak one is no estimate: left out.
+        if 0 < best < 2 * MAX_LAG and abs(ncc[best]) >= 0.5:
+            out.append((round(t / RATE, 1), best - MAX_LAG))
     return out
 
 
@@ -134,9 +137,7 @@ def map_settings(passes: list[dict]) -> None:
         rows = list(csv.DictReader(stream))
     complete = sorted((p for p in passes if p["complete"]), key=lambda p: p["file"])
     if len(complete) != len(rows):
-        print(
-            f"{len(complete)} passes pour {len(rows)} reglages : pas d'appariement"
-        )
+        print(f"{len(complete)} passes pour {len(rows)} reglages : pas d'appariement")
         return
     for take, row in zip(complete, rows, strict=True):
         take |= {

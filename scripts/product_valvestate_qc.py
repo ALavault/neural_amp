@@ -6,7 +6,10 @@ stream, so the pass start found on the loopback (passes.json) holds for the FX t
 Per take, following demo/capture/valvestate/ANALYSIS_RULES.md:
 - peak of the FX track over the pass (clipping at >= -0.1 dBFS);
 - RMS of the DI sections and of the 5 s silence section (the take's noise floor);
-- SNR = DI RMS / silence RMS; below 20 dB the take is "faible signal".
+- SNR = DI RMS / silence RMS; below 20 dB the take is "faible signal";
+- isolated spikes, as seconds from the pass start (source time) and WAV sample index;
+- FX-vs-loopback delay on the opening and closing blips: equal values mean the two
+  tracks stayed in step over the pass (not that they never slipped in between).
 
 Writes demo/capture/valvestate/qc.json.
 """
@@ -19,6 +22,7 @@ from pathlib import Path
 import numpy as np
 import soundfile as sf
 from scipy.ndimage import maximum_filter1d
+from scipy.signal import fftconvolve
 
 ROOT = Path(__file__).resolve().parents[1]
 SHEET = ROOT / "demo/capture/valvestate"
@@ -52,6 +56,15 @@ def spikes(x: np.ndarray) -> list[int]:
     return index[a[index] > SPIKE_RATIO * neighbours].tolist()
 
 
+def blip_lag(fx: np.ndarray, loop: np.ndarray, start: int, name: str) -> int:
+    s = SECTIONS[name]
+    a, n, reach = start + s["start"], s["samples"], 4_096
+    reference = loop[a : a + n].astype(np.float64)
+    window = fx[a - reach : a + n + reach].astype(np.float64)
+    corr = fftconvolve(window, reference[::-1], mode="valid")
+    return int(np.argmax(np.abs(corr))) - reach
+
+
 def main() -> None:
     passes = json.loads((SHEET / "passes.json").read_text())
     rows = []
@@ -80,7 +93,11 @@ def main() -> None:
             "silence_rms_dbfs": round(dbfs(silence), 2),
         }
         found = spikes(fx[start:end])
-        row["spikes_s"] = [round(i / RATE, 4) for i in found]
+        row["spikes_s"] = [round(i / RATE, 4) for i in found]  # from the pass start
+        row["spikes_wav_sample"] = [start + i for i in found]
+        loop = sf.read(MEDIA / p["file"], dtype="float32")[0]
+        row["blip_lag_start"] = blip_lag(fx, loop, start, "markers_start")
+        row["blip_lag_end"] = blip_lag(fx, loop, start, "markers_end")
         row["snr_db"] = round(row["di_rms_dbfs"] - row["silence_rms_dbfs"], 1)
         row["clipped"] = row["peak_dbfs"] >= -0.1
         row["low_signal"] = row["snr_db"] < LOW_SNR_DB
@@ -92,7 +109,8 @@ def main() -> None:
             + ("  ECRETE" if row["clipped"] else "")
             + ("  FAIBLE" if row["low_signal"] else "")
             + ("" if row["same_length_as_loopback"] else "  LONGUEUR")
-            + (f"  PICS {row['spikes_s']}" if found else ""),
+            + (f"  PICS {row['spikes_s']}" if found else "")
+            + f"  decalage bips {row['blip_lag_start']}/{row['blip_lag_end']}",
             flush=True,
         )
     (SHEET / "qc.json").write_text(json.dumps(rows, indent=1) + "\n")
