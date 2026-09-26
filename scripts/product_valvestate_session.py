@@ -285,8 +285,14 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "  - FX Send dépend du master : oui / non. De Power Dimension : oui / non.",
         "  - Sortie émulée dépend du master : oui / non. De Power Dimension : "
         "oui / non.",
-        "- Régler le niveau de réamplification sur la prise 1 (centre) : aucune voie "
-        "ne doit écrêter, crêtes vers -6 dBFS. **Ne plus y toucher** ensuite.",
+        "- **Niveau d'entrée de l'ampli** : viser 0 dBFS du fichier = 0 dBu à l'entrée "
+        "de l'ampli (crêtes DI vers 1 V, comme un humbucker attaqué franchement). Sans "
+        "voltmètre : enregistrer la guitare sur l'entrée Hi-Z de l'interface, puis "
+        "régler la boîte de réamplification pour que le programme DI y crête au même "
+        "niveau. Avec voltmètre (AC) : une sinusoïde 1 kHz à -6 dBFS doit donner "
+        "0,39 V RMS à l'entrée de l'ampli.",
+        "- Puis, prise 1 (centre) : aucune voie enregistrée ne doit écrêter, crêtes "
+        "vers -6 dBFS. **Ne plus toucher à aucun niveau** ensuite.",
         "",
         "Valeurs fixes, à noter une fois :",
         "",
@@ -297,6 +303,7 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "| Master (s'il existe) | |",
         "| Niveau de départ de boucle (FX level) | |",
         "| Niveau de sortie de l'interface / boîte de réamplification | |",
+        "| Calibration : dBu à l'entrée de l'ampli pour 0 dBFS (visé 0 dBu) | |",
         "| Gains d'entrée de l'interface (3 voies) | |",
         "",
         "## Prises, dans cet ordre",
