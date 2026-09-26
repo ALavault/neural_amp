@@ -133,19 +133,25 @@ sd(log ESR) passe de 0,15 à 0,26, parce que les précoces y gagnent et les tard
 verdict.
 
 - **Contrôle** : chaque partition est reproduite, et la perte de validation du bras « décide » y
-  est recalculée à 0,1 à 1,2 % de la valeur journalisée. Une mauvaise partition s'écarterait
-  d'environ 30 %.
-- **Environ sept corrélations** sont calculées sur huit points. Les p ne sont pas corrigés.
+  est recalculée à 0,1 à 1,2 % de la valeur journalisée. C'est une cohérence numérique, pas une
+  preuve d'identité des partitions : les 30 % qu'une mauvaise partition donnerait sont une
+  estimation de `diagnosis/seeds/split_property.py`, pas un contrôle négatif mesuré.
+- **Environ sept corrélations** sont calculées sur huit points. Les p ci-dessous sont exacts
+  (énumération des 40 320 permutations, bilatéral) et non corrigés pour la multiplicité ; ceux de
+  `pilot_C_common_schedule.md` étaient des approximations (0,015 là-bas, 0,022 exact).
+  Relevé par une relecture Codex.
 
 **Seize graines sans 48 et 49** (partition post hoc) : R = 1,16 sur les quatorze autres
-(sd décide 0,248, sd fixe 0,288). Hors de ces deux rechutes, le calendrier fixe ne resserre rien.
+(sd décide 0,248, sd fixe 0,288). Hors de ces deux graines, le calendrier fixe ne resserre rien.
+Rien n'attribue leurs ESR libres élevés à l'ordonnanceur seul : le bras fixe change aussi la durée
+d'entraînement et toutes les divisions suivantes.
 
 **Les deux lectures post hoc des graines 42 à 49 ne se reproduisent pas.**
 
 | prédicteur → ESR décide | graines 42 à 49 | graines 50 à 57 |
 |---|---|---|
-| date de la 1ʳᵉ division libre | ρ = −0,81 (p 0,015) | **ρ = +0,71** (p 0,047) |
-| part de trames calmes de la partition | ρ = +0,81 (p 0,015) | ρ = +0,31 (p 0,46) |
+| date de la 1ʳᵉ division libre | ρ = −0,81 (p 0,022) | **ρ = +0,71** (p 0,058) |
+| part de trames calmes de la partition | ρ = +0,81 (p 0,022) | ρ = +0,31 (p 0,46) |
 
 - La division précoce n'annonce plus un mauvais modèle libre : le signe s'inverse.
 - La part de trames calmes n'ordonne plus l'ESR libre. Le « test du canal » de
@@ -156,22 +162,29 @@ groupe :
 - sur les huit nouvelles graines, les précoces gagnent au calendrier fixe et les tardives y
   perdent ;
 - sur les seize graines, 15 suivent ce motif ; seule la 43 fait exception ;
-- ρ(1ʳᵉ division libre, gain) = +0,93 (p 0,001) sur 50 à 57, +0,69 (p 0,058) sur 42 à 49 ;
-- ρ(1ʳᵉ division libre, ESR fixe) = +0,91 (p 0,002).
+- ρ(1ʳᵉ division libre, gain) = +0,93 (p 0,002) sur 50 à 57, +0,69 (p 0,069) sur 42 à 49 ;
+- ρ(1ʳᵉ division libre, ESR fixe) = +0,90 (p 0,005).
 
-Trois réserves, dans l'ordre de leur poids :
+Quatre réserves, dans l'ordre de leur poids :
 
 1. **Post hoc.** La variable a été choisie après avoir vu le motif des signes.
 2. **Longueur d'entraînement confondue.** Le bras « fixe » tourne 850 époques sans arrêt anticipé ;
    les bras « décide » s'arrêtent entre les époques 634 et 918. La date de la 1ʳᵉ division et
-   l'époque d'arrêt sont corrélées : ρ = +0,67. L'époque d'arrêt ordonne aussi le gain : ρ = +0,83.
-   On ne peut pas séparer « diviser plus tard aide » de « le calendrier fixe donne plus d'époques
-   aux graines dont le bras libre s'est arrêté tôt ».
+   l'époque d'arrêt sont corrélées : ρ = +0,67 (p 0,083). L'époque d'arrêt ordonne aussi le gain :
+   ρ = +0,83 (p 0,015). On ne peut pas séparer « diviser plus tard aide » de « le calendrier fixe
+   donne plus d'époques aux graines dont le bras libre s'est arrêté tôt ». La durée seule
+   n'explique pas le signe : sept graines sur huit s'entraînent plus longtemps sous calendrier
+   fixe, et trois d'entre elles (53, 55, 56) y perdent.
 3. **Régression vers la moyenne.** Le gain contient l'issue du bras « décide », ce que
    `pilot_C_common_schedule.md` interdisait justement de corréler. Réponse partielle seulement :
    sur les nouvelles graines, les précoces ont le *meilleur* ESR libre (ρ = +0,71). La régression
-   vers la moyenne prédirait donc qu'elles perdent au calendrier fixe, et elles y gagnent.
+   vers la moyenne prédirait donc qu'elles perdent au calendrier fixe, et elles y gagnent. Cela ne
+   rend pas la date libre exogène.
+4. **Le calendrier entier diffère, pas seulement la 1ʳᵉ division.** Les bras libres divisent 8 à
+   11 fois, à leurs propres dates (graine 52 : 197, 309, 374, 401… contre 203, 265, 422, 486…).
+   Égaliser la durée ne suffirait pas à attribuer un effet à la première division seule.
 
 Prédiction candidate, pour une éventuelle préinscription : **le gain apparié ln(fixe / décide)
 décroît avec le retard que le calendrier fixe impose à la première division (203 moins la date
-libre), à longueur d'entraînement égale entre les bras.**
+libre), à longueur d'entraînement égale entre les bras.** Seule une manipulation de la première
+division, à suite de divisions et durée égales, départagerait les réserves 2 et 4.

@@ -134,12 +134,17 @@ section Setup) :
   - Aucun bras libre ne rechute (pire ESR 0,078, contre 0,158 et 0,178 pour 48 et 49). Sur les
     huit nouvelles graines, le calendrier fixe élargit la dispersion (R = 1,71), et son effet
     moyen tombe à −0,028 en log.
-  - Post hoc : ni la date de division (ρ = −0,81 → +0,71), ni la part de trames calmes
-    (+0,81 → +0,31) n'ordonnent plus l'ESR libre. Le test du canal n'est pas reproduit.
-- **Formulation autorisée, mise à jour** : « sur seize graines, un calendrier fixe commun ne
-  réduit pas la dispersion due à la graine hors de deux rechutes de l'ordonnanceur, observées
-  sur les huit premières graines et absentes des huit suivantes ». Sur les seize, R = 0,68 ; sans
-  48 et 49, R = 1,16 sur les quatorze autres (partition post hoc, descriptif).
+  - Post hoc : la date de la 1ʳᵉ division libre ordonne l'ESR libre en sens inverse
+    (ρ = −0,81 → +0,71) ; la part de trames calmes ne l'ordonne plus (+0,81 → +0,31). Le test
+    du canal n'est pas reproduit, ce qui ne démontre pas l'absence de canal.
+- **Formulation autorisée, mise à jour** : « sur huit nouvelles graines, la prédiction
+  pré-enregistrée est réfutée : R_précoce = 1,53 et R_tardif = 1,02. Le rapport global vaut 1,71,
+  contre 0,56 sur les huit premières graines. Sur les seize graines, il vaut 0,68 ; l'exclusion
+  post hoc des graines 48 et 49 le porte à 1,16 ». (Formulation proposée par une relecture
+  Codex : l'ancienne attribuait les ESR élevés de 48 et 49 à l'ordonnanceur, ce que rien
+  n'établit.)
+- **Interdit** : « le calendrier fixe réduit la dispersion due à la graine », ou attribuer à
+  l'ordonnanceur seul les ESR libres élevés de 48 et 49.
 
 **Comparer deux architectures à partition fixée** (`diagnosis/seeds/paired_protocol.md`,
 pré-enregistré le 2026-09-22, verdict du 2026-09-24).
