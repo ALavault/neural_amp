@@ -41,6 +41,8 @@ SEED = 20260926
 # Calibration blips as fssr_nam.product.capture defines them, at RATE.
 BLIP_MS, BLIP_HZ, BLIP_AMPLITUDE, GAP_S = 2.0, 1_000.0, 0.5, 0.5
 FADE_S = 0.01
+# Digital silence around the whole program: pre-roll, then room for the tail.
+PAD_START_S, PAD_END_S = 3, 6
 # DI excerpts (file, start in seconds): away from the calibration markers that open
 # and close every ToneTwist dry file.
 TRAIN = [
@@ -123,6 +125,7 @@ def reamp() -> tuple[np.ndarray, dict]:
     rng = np.random.default_rng(SEED)
     gap = np.zeros(int(GAP_S * RATE))
     sections = [
+        ("pad_start", np.zeros(PAD_START_S * RATE)),
         ("markers_start", markers()),
         ("silence", np.zeros(5 * RATE)),
         ("gap", gap),
@@ -137,7 +140,7 @@ def reamp() -> tuple[np.ndarray, dict]:
         ("test", TEST),
     ):
         sections.append((f"di_{split}", di(excerpts, SECONDS[split])))
-    sections.append(("markers_end", markers()))
+    sections += [("markers_end", markers()), ("pad_end", np.zeros(PAD_END_S * RATE))]
     layout, position = [], 0
     for name, x in sections:
         if name != "gap":
@@ -154,7 +157,7 @@ def self_check(signal: np.ndarray) -> int:
     rng = np.random.default_rng(1)
     capture = np.concatenate([np.zeros(delay), 0.3 * signal])
     capture += 1e-4 * rng.standard_normal(len(capture))
-    start = int(GAP_S * RATE)
+    start = int((PAD_START_S + GAP_S) * RATE)
     window = capture[start : start + RATE]
     baseline = capture[start - 9_600 : start]
     threshold = 10 * np.std(baseline)
@@ -294,9 +297,10 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "lecture) ; enregistrement en WAV 24 bits. Piste source : volume 0 dB, "
         "aucun effet, envoi au master **décoché**, sortie matérielle 1 (jack gauche "
         "de la sortie moniteur) ; master sans effet. Deux pistes mono armées sur les "
-        "entrées 1 et 2, monitoring d'entrée coupé, aucun effet d'entrée. Lancer "
-        "l'enregistrement une seconde avant la lecture, l'arrêter après les blips de "
-        "fin. Une prise par ligne du tableau, dans l'ordre ; noter toute prise "
+        "entrées 1 et 2, monitoring d'entrée coupé, aucun effet d'entrée. La source "
+        f"commence par {PAD_START_S} s et finit par {PAD_END_S} s de silence "
+        "numérique : lancer lecture et enregistrement ensemble, arrêter après la fin "
+        "du fichier. Une prise par ligne du tableau, dans l'ordre ; noter toute prise "
         "refaite.",
         "- Reverb Clean et OD à **0**. Power Dimension **éteint** sauf pour le dernier "
         "bloc. Retour de boucle vide.",

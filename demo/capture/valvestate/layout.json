@@ -2,58 +2,68 @@
  "sample_rate": 192000,
  "sections": [
   {
-   "section": "markers_start",
+   "section": "pad_start",
    "start": 0,
+   "samples": 576000
+  },
+  {
+   "section": "markers_start",
+   "start": 576000,
    "samples": 288768
   },
   {
    "section": "silence",
-   "start": 288768,
+   "start": 864768,
    "samples": 960000
   },
   {
    "section": "pink_noise_-30dBFS_rms",
-   "start": 1344768,
+   "start": 1920768,
    "samples": 960000
   },
   {
    "section": "sweep_-20dBFS",
-   "start": 2400768,
+   "start": 2976768,
    "samples": 960000
   },
   {
    "section": "sweep_-10dBFS",
-   "start": 3456768,
+   "start": 4032768,
    "samples": 960000
   },
   {
    "section": "sweep_-3dBFS",
-   "start": 4512768,
+   "start": 5088768,
    "samples": 960000
   },
   {
    "section": "di_train",
-   "start": 5568768,
+   "start": 6144768,
    "samples": 23040000
   },
   {
    "section": "di_validation",
-   "start": 28608768,
+   "start": 29184768,
    "samples": 5760000
   },
   {
    "section": "di_test",
-   "start": 34368768,
+   "start": 34944768,
    "samples": 5760000
   },
   {
    "section": "markers_end",
-   "start": 40128768,
+   "start": 40704768,
    "samples": 288768
+  },
+  {
+   "section": "pad_end",
+   "start": 40993536,
+   "samples": 1152000
   }
  ],
  "file": "datasets/raw/internal/valvestate_vs100r/reamp_valvestate_192k.wav",
- "sha256": "6bd902de34c20df225c2d14e95a7a8df654ce6441dd72db66e7bda967abaec6d",
- "seconds": 210.508,
+ "sha256": "7a0409353eae8bbfd0167f958852cb62ecf5d3f01967dcc6a5bb47d3fef95e1e",
+ "seconds": 219.508,
  "di_source": "ToneTwist AFx DRY-with-markers (Zenodo 10455730, CC BY-NC 4.0)"
 }

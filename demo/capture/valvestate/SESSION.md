@@ -4,12 +4,12 @@ Voie produit. Généré par `scripts/product_valvestate_session.py` (graine 2026
 
 ## Avant la première prise
 
-- Source : `datasets/raw/internal/valvestate_vs100r/reamp_valvestate_192k.wav`, 210.508 s, 192 kHz, 24 bits, sha256 `6bd902de34c20df2…`. Sections et positions : `layout.json`.
+- Source : `datasets/raw/internal/valvestate_vs100r/reamp_valvestate_192k.wav`, 219.508 s, 192 kHz, 24 bits, sha256 `7a0409353eae8bbf…`. Sections et positions : `layout.json`.
 - Interface : Antelope Zen Go Synergy Core, **192 kHz**, 24 bits, taille de tampon fixe pour toute la séance. **Tous les effets Synergy Core et le monitoring direct coupés** sur les entrées enregistrées.
 - Deux voies (la Zen Go n'a que deux entrées), en mode **ligne** : entrée 1 = départ de boucle (FX Send), entrée 2 = sortie ligne émulée.
 - Sortie moniteur (jack TRS) → boîte de réamplification → entrée de l'ampli. **Jamais** la sortie haut-parleur vers l'interface.
 - **Prise de bouclage** au début et à la fin de la séance : sortie de la boîte de réamplification branchée sur l'entrée 2 à la place de l'ampli, mêmes réglages, source jouée en entier (`loopback_start.wav`, `loopback_end.wav`). Elle donne la latence propre de la chaîne ; les blips suffisent ensuite.
-- **Reaper** : projet et interface à 192 kHz (le fichier source doit avoir la fréquence du projet, sinon Reaper le rééchantillonne à la lecture) ; enregistrement en WAV 24 bits. Piste source : volume 0 dB, aucun effet, envoi au master **décoché**, sortie matérielle 1 (jack gauche de la sortie moniteur) ; master sans effet. Deux pistes mono armées sur les entrées 1 et 2, monitoring d'entrée coupé, aucun effet d'entrée. Lancer l'enregistrement une seconde avant la lecture, l'arrêter après les blips de fin. Une prise par ligne du tableau, dans l'ordre ; noter toute prise refaite.
+- **Reaper** : projet et interface à 192 kHz (le fichier source doit avoir la fréquence du projet, sinon Reaper le rééchantillonne à la lecture) ; enregistrement en WAV 24 bits. Piste source : volume 0 dB, aucun effet, envoi au master **décoché**, sortie matérielle 1 (jack gauche de la sortie moniteur) ; master sans effet. Deux pistes mono armées sur les entrées 1 et 2, monitoring d'entrée coupé, aucun effet d'entrée. La source commence par 3 s et finit par 6 s de silence numérique : lancer lecture et enregistrement ensemble, arrêter après la fin du fichier. Une prise par ligne du tableau, dans l'ordre ; noter toute prise refaite.
 - Reverb Clean et OD à **0**. Power Dimension **éteint** sauf pour le dernier bloc. Retour de boucle vide.
 - **Test de 2 minutes** : note tenue ; bouger le master, puis Power Dimension ; noter laquelle des deux sorties change.
   - FX Send dépend du master : oui / non. De Power Dimension : oui / non.
