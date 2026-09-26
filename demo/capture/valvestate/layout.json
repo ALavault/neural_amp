@@ -1,0 +1,59 @@
+{
+ "sample_rate": 96000,
+ "sections": [
+  {
+   "section": "markers_start",
+   "start": 0,
+   "samples": 144384
+  },
+  {
+   "section": "silence",
+   "start": 144384,
+   "samples": 480000
+  },
+  {
+   "section": "pink_noise_-30dBFS_rms",
+   "start": 672384,
+   "samples": 480000
+  },
+  {
+   "section": "sweep_-20dBFS",
+   "start": 1200384,
+   "samples": 480000
+  },
+  {
+   "section": "sweep_-10dBFS",
+   "start": 1728384,
+   "samples": 480000
+  },
+  {
+   "section": "sweep_-3dBFS",
+   "start": 2256384,
+   "samples": 480000
+  },
+  {
+   "section": "di_train",
+   "start": 2784384,
+   "samples": 11520000
+  },
+  {
+   "section": "di_validation",
+   "start": 14304384,
+   "samples": 2880000
+  },
+  {
+   "section": "di_test",
+   "start": 17184384,
+   "samples": 2880000
+  },
+  {
+   "section": "markers_end",
+   "start": 20064384,
+   "samples": 144384
+  }
+ ],
+ "file": "datasets/raw/internal/valvestate_vs100r/reamp_valvestate_96k.wav",
+ "sha256": "90719ea2bd8dcb39a42e21d7690f54a12a0ec4e1a87351aad9e579e5a1d36df5",
+ "seconds": 210.508,
+ "di_source": "ToneTwist AFx DRY-with-markers (Zenodo 10455730, CC BY-NC 4.0)"
+}
