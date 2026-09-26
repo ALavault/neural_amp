@@ -56,3 +56,20 @@ excès incohérent coûte du L1 partout où il apparaît.
 - Un appareil, une architecture ; données rééchantillonnées de 44,1 à 48 kHz.
 - C est une borne basse : une part prévisible que le modèle n'a pas apprise compte comme
   imprévisible.
+
+## Contrôle ajouté le 2026-09-26, après la mesure et avant son exécution
+
+La mesure (section suivante, quand elle sera écrite) montre un excès de sortie dans les passages
+calmes. Une relecture Codex en propose une autre cause : les constantes de temps les plus lentes
+des modèles vont de 0,09 à 0,50 s. Les états n'ont donc peut-être pas fini de décroître, et la
+garde de 200 ms ne porte que sur le DI.
+
+**Contrôle** : même calcul, mais avec le DI mis à **zéro exact sur toutes les trames calmes**
+(seuil de 10 dB, avant la garde). On compare, dans les mêmes 225 fenêtres, la puissance de la
+sortie dans la bande, P₀, à celle de la mesure, P.
+
+- P₀ / P ≤ −10 dB → l'excès vient de l'**amplification du DI calme** (résidu de quantification) ;
+- P₀ / P ≥ −3 dB → il vient des **états, des biais ou du calcul**, et pas du DI calme ;
+- entre les deux → cause mixte.
+
+Jugé sur la médiane des 32 modèles.
