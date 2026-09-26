@@ -180,6 +180,12 @@ La corrélation **s'effondre quand l'ordonnanceur est retiré**. Lue avec la pr�
 elle dit que la partition agit **par** le calendrier plutôt que directement sur la matière
 d'entraînement. C'est la question que ce pilote posait, et c'est la première réponse qu'on en tire.
 
+**Ajout du 2026-09-26 : non reproduit sur les graines 50 à 57.** Sur ces huit graines, les deux
+corrélations de ce test ne se retrouvent pas. Date de la 1ʳᵉ division libre → ESR décide :
+ρ = +0,71, de signe inverse. Part de trames calmes → ESR décide : ρ = +0,31 (p 0,46). Le texte
+ci-dessus est laissé tel qu'il a été écrit. Détail dans `pilot_C_extension.md`, section « Après
+le verdict ».
+
 ### Ce qui ne peut pas être conclu
 
 - **Le canal n'est pas pur.** sd(fixe) = 0,300 reste bien au-dessus du plancher de non-déterminisme

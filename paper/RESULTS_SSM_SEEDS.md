@@ -126,8 +126,20 @@ section Setup) :
   calendrier fixe réduit la dispersion du log de l'ESR de 0,535 à 0,300, sans atteindre le seuil
   pré-enregistré ; l'essentiel de la réduction tient à deux graines ».
 - **Interdit** : « le calendrier fixe supprime l'effet de graine », ou présenter la lecture par la
-  queue comme établie. L'extension hors échantillon (graines 50 à 57, coupure à l'époque 200
-  pré-enregistrée, `diagnosis/butterfly/pilot_C_extension.md`) est lancée le 2026-09-24.
+  queue comme établie.
+- **Extension hors échantillon** (graines 50 à 57, coupure à l'époque 200 pré-enregistrée,
+  `diagnosis/butterfly/pilot_C_extension.md`, verdict du 2026-09-26).
+  - R_précoce = 1,53, R_tardif = 1,02 : **réfutée, aucun resserrement**. Le libellé tient quand
+    on retire une graine.
+  - Aucun bras libre ne rechute (pire ESR 0,078, contre 0,158 et 0,178 pour 48 et 49). Sur les
+    huit nouvelles graines, le calendrier fixe élargit la dispersion (R = 1,71), et son effet
+    moyen tombe à −0,028 en log.
+  - Post hoc : ni la date de division (ρ = −0,81 → +0,71), ni la part de trames calmes
+    (+0,81 → +0,31) n'ordonnent plus l'ESR libre. Le test du canal n'est pas reproduit.
+- **Formulation autorisée, mise à jour** : « sur seize graines, un calendrier fixe commun ne
+  réduit pas la dispersion due à la graine hors de deux rechutes de l'ordonnanceur, observées
+  sur les huit premières graines et absentes des huit suivantes ». Sur les seize, R = 0,68 ; sans
+  48 et 49, R = 1,16 sur les quatorze autres (partition post hoc, descriptif).
 
 **Comparer deux architectures à partition fixée** (`diagnosis/seeds/paired_protocol.md`,
 pré-enregistré le 2026-09-22, verdict du 2026-09-24).
@@ -265,8 +277,6 @@ avec la profondeur de la fourche (rapport 1,76 à l'époque 5, 0,52 à 25, 0,06 
 
 ## 4. En attente
 
-- Pilote C, extension hors échantillon : graines 50 à 57, bras « décide », puis classement
-  précoce / tardif commité, puis bras « fixe » (`diagnosis/butterfly/pilot_C_extension.md`).
 - Protocole apparié : élargissement aux partitions 744 et 369, après journalisation des indices du
   sampler aux époques 1, 2 et 50.
 - Écoute : parcourir l'échelle d'audibilité, qui donnerait la marge de la divergence sous
