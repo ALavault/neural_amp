@@ -70,3 +70,31 @@ est comparée à la vraie capture.
 - Une seule partition, une seule graine, un jeu d'exploration.
 - Le départ de boucle ne contient ni la lampe, ni le correcteur, ni l'ampli de puissance.
 - Le bouclage en entrée porte son propre bruit (−97,6 dBFS), que l'ampli n'a pas reçu.
+
+## Amendement du 2026-09-27, avant le run (relecture Codex, lecture seule)
+
+Il remplace les passages concernés ci-dessus ; aucun seuil n'a été déplacé.
+
+- **Jeu corrigé.** Le constructeur réparait l'échantillon 37 989 402 de la prise 14 au lieu du
+  pic, en 37 989 410, parce qu'il repartait d'un temps arrondi. Le jeu a été reconstruit avec
+  l'indice exact : sa cible de test coïncide avec la référence réparée à 1,5·10⁻⁸ près. Ce pic est
+  dans le test de la prise 14.
+- **Fenêtre notée** : 0,5 s écartée au début et 0,1 s à la fin, soit 29,4 s par prise.
+- **P1 et P2.** D/2 est un plafond **supposé** : il suppose des écarts indépendants et comparables
+  autour d'une moyenne commune. Le modèle reçoit en plus le bouclage propre à chaque prise, qui
+  peut expliquer une partie de l'écart d'une prise à l'autre. P2 compare aussi le couple (5, 5) à
+  d'autres couples gain × contour : un rapport de 1,5 ou plus serait compatible avec l'effet du
+  regroupement, sans l'isoler.
+- **P5, lecture.** R dit quelle fréquence de fonctionnement rapproche le modèle de l'appareil,
+  pas pourquoi : bande d'entrée, discrétisation et repliement changent ensemble. La table devient :
+  - R ≤ 0,95 : plus proche de l'appareil à 192 kHz, cause non isolée ;
+  - entre 0,95 et 1,05 : écart inférieur à la tolérance conventionnelle de ±5 %, sans estimation
+    d'incertitude ;
+  - R ≥ 1,05 : plus loin de l'appareil à 192 kHz.
+- **P5, borne.** Replier une énergie normalisée H sur une erreur E change l'ESR d'au plus
+  H + 2√(EH), à cause du terme croisé : pour E = 0,02 et H = 10⁻⁴·², au plus 11,5 % de E. Si le
+  contenu replié n'est pas corrélé à l'erreur, la variation tombe à environ 0,3 %. La valeur de
+  −42 dB vaut au gain 5, pas à tous les gains. L'a priori R ≥ 0,95 à 80 % est maintenu.
+- **P7 homogène.** La part de l'appareil est désormais mesurée sur la même fenêtre de test que le
+  modèle, pic réparé, bruit de fond soustrait (silence de la même prise), dans la même bande :
+  24–48 kHz pour le modèle à 96 kHz, 24–96 kHz pour le modèle à 192 kHz.

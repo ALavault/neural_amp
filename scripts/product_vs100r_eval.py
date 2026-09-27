@@ -7,10 +7,11 @@ its own loopback, the reference its FX loop send (spikes repaired as in the data
 - At 48 kHz, both decimated by 4: ESR of the model (P1 to P4).
 - At 96 and 192 kHz, on the native loopback: dt rescaled (`delta`), then read as first
   order hold and rescaled (`foh`). The output is decimated to 48 kHz and scored against
-  the device (P5), against the 48 kHz model output (P6); its share of power above 24 kHz
-  is set beside the device's, noise subtracted, from hf.json (P7).
+  the device (P5), against the 48 kHz model output (P6). Its share of power between
+  24 kHz and its Nyquist frequency is set beside the device's in the same band, on the
+  same scored window, the device's noise (its silence section) subtracted (P7).
 Each section runs in one piece from a zero state; the first 0.5 s and the last 0.1 s are
-not scored.
+not scored (29.4 s per take).
 
 Usage: product_vs100r_eval.py [--run-id RUN] [--dry-run]
 --dry-run: untrained model, two takes, output to the scratch directory; checks the
@@ -43,6 +44,7 @@ SHEET = ROOT / "demo/capture/valvestate"
 MEDIA = ROOT / "datasets/amp_capture/Media"
 LAYOUT = json.loads((SHEET / "layout.json").read_text())
 SECTION = next(s for s in LAYOUT["sections"] if s["section"] == "di_test")
+SILENCE = next(s for s in LAYOUT["sections"] if s["section"] == "silence")
 CAPTURE = LAYOUT["sample_rate"]
 RATES = (96_000, 192_000)
 DRY_SSM = {
@@ -76,7 +78,6 @@ def load(run_id: str | None) -> BlackBoxModel:
 def takes() -> list[dict]:
     passes = {p["order"]: p for p in json.loads((SHEET / "passes.json").read_text())}
     qc = {r["order"]: r for r in json.loads((SHEET / "qc.json").read_text())}
-    hf = {r["order"]: r for r in json.loads((SHEET / "hf.json").read_text())}
     with (SHEET / "settings.csv").open() as stream:
         rows = [
             r
@@ -98,7 +99,6 @@ def takes() -> list[dict]:
                 "low_signal": qc[order]["low_signal"],
                 "pass": passes[order],
                 "spikes": qc[order]["spikes_wav_sample"],
-                "device_above_24k_db": hf[order]["fx_above_24k_db"],
             }
         )
     return out
@@ -133,9 +133,24 @@ def esr(pred: np.ndarray, ref: np.ndarray) -> float:
     return float(((r - p) ** 2).sum() / (r**2).sum())
 
 
-def above_24k_db(x: np.ndarray, rate: int) -> float:
+def band_share_db(
+    x: np.ndarray, rate: int, high: float, noise: np.ndarray | None = None
+) -> float:
+    """Share of power between 24 kHz and `high`, noise PSD subtracted if given."""
     freqs, power = welch(scored(x, rate), rate, nperseg=8192)
-    return float(10 * np.log10(power[freqs >= 24_000].sum() / power.sum() + 1e-30))
+    if noise is not None:
+        power = np.maximum(power - noise, 0.0)
+    band = (freqs >= 24_000) & (freqs < high)
+    return float(10 * np.log10(power[band].sum() / power.sum() + 1e-30))
+
+
+def device_noise(take: dict) -> np.ndarray:
+    p = take["pass"]
+    a = p["start"] + SILENCE["start"] + CAPTURE // 10
+    b = p["start"] + SILENCE["start"] + SILENCE["samples"] - CAPTURE // 10
+    stamp = p["file"].removeprefix("02-Looopbck-")
+    x = sf.read(MEDIA / f"03-FX Out-{stamp}", dtype="float64", start=a, stop=b)[0]
+    return welch(x, CAPTURE, nperseg=8192)[1]
 
 
 def main() -> None:
@@ -161,8 +176,12 @@ def main() -> None:
         m48 = run(model, x48, controls)
         row = {k: v for k, v in take.items() if k not in ("pass", "spikes")}
         row["esr_48k"] = esr(m48, y48)
+        noise = device_noise(take)
+        for high in (48_000, 96_000):
+            row[f"device_24k_{high // 1000}k_db"] = band_share_db(
+                fx, CAPTURE, high, noise
+            )
         rows.append(row)
-    variants = {}
     for variant in ("delta", "foh"):
         if variant == "foh":
             transfer.set_rate(model, 48_000, base)
@@ -171,7 +190,6 @@ def main() -> None:
             id(m): (m.log_dt.detach().clone(), m.C.detach().clone())
             for m in transfer.ssm_modules(model)
         }
-        variants[variant] = current
         for take, row in zip(chosen, rows, strict=True):
             loop, fx = audio(take)
             controls = torch.tensor([v / 10 for v in take["gain_contour"]])
@@ -187,7 +205,7 @@ def main() -> None:
                 row[f"{key}_esr_vs_device"] = esr(back, y48)
                 row[f"{key}_ratio_R"] = row[f"{key}_esr_vs_device"] / row["esr_48k"]
                 row[f"{key}_vs_48k_model"] = esr(back, m48)
-                row[f"{key}_above_24k_db"] = above_24k_db(m, rate)
+                row[f"{key}_above_24k_db"] = band_share_db(m, rate, rate / 2)
             print(
                 f"{variant} prise {row['order']:>2} ESR48 {row['esr_48k']:.4f}"
                 f"  R192 {row[f'{variant}_192k_ratio_R']:.3f}"
@@ -238,9 +256,9 @@ def summarise(rows: list[dict]) -> dict:
             summary[f"P7_{key}_median_above_24k_db"] = median(
                 [r[f"{key}_above_24k_db"] for r in kept]
             )
-    summary["P7_device_median_above_24k_db"] = median(
-        [r["device_above_24k_db"] for r in kept]
-    )
+    for high in (48_000, 96_000):
+        key = f"device_24k_{high // 1000}k_db"
+        summary[f"P7_{key}_median"] = median([r[key] for r in kept])
     ratio = summary.get("P5_foh_192k_median_R")
     if ratio is not None:
         summary["P5_outcome"] = (

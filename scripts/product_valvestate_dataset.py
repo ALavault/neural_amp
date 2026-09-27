@@ -63,8 +63,8 @@ def main() -> None:
         stamp = p["file"].removeprefix("02-Looopbck-")
         loop = sf.read(MEDIA / p["file"], dtype="float64")[0][p["start"] :]
         fx = sf.read(MEDIA / f"03-FX Out-{stamp}", dtype="float64")[0][p["start"] :]
-        for seconds in qc[order]["spikes_s"]:
-            i = round(seconds * RATE)
+        for sample in qc[order]["spikes_wav_sample"]:  # exact WAV index, not seconds
+            i = sample - p["start"]
             fx[i] = 0.5 * (fx[i - 1] + fx[i + 1])
         parts = [
             (
@@ -86,7 +86,7 @@ def main() -> None:
                     "split": split,
                     "seconds": round((b - a) / RATE, 3),
                     "low_signal": qc[order]["low_signal"],
-                    "spikes_repaired": qc[order]["spikes_s"],
+                    "spikes_repaired_wav_sample": qc[order]["spikes_wav_sample"],
                 }
             )
         print(order, row["setting"], row["split"], flush=True)
