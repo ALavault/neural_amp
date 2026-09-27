@@ -200,3 +200,22 @@ def test_zoh_to_foh_refuses_knob_driven_poles() -> None:
     with pytest.raises(ValueError):
         zoh_to_foh(net)
     assert all(block.ssm.discretization == "zoh" for block in net.blocks)
+
+
+@pytest.mark.parametrize("disc", ["zoh", "foh"])
+def test_underflowing_pole_keeps_the_kernel_finite(disc: str) -> None:
+    """g2_poles_additive_s688 died on a NaN (2026-09-28): a fast mode pushed further by
+    its knob shift underflowed a = exp(lambda dt) to exactly 0 in float32, and the
+    kernel's a ** 0 = exp(0 * log 0) was NaN. The mode dies within a sample anyway."""
+    layer = DiagonalSSMLayer(2, 2, discretization=disc)
+    with torch.no_grad():
+        layer.log_A_real.fill_(3.0)
+        layer.log_dt.fill_(-1.0)
+    shift = (torch.full((1, 2), POLE_SCALE), torch.full((1, 2, 2), POLE_SCALE))
+    y = layer(torch.randn(1, 2, LENGTH), shift)
+    assert torch.isfinite(y).all()
+    y.square().sum().backward()
+    assert all(torch.isfinite(p.grad).all() for p in layer.parameters())
+    with torch.no_grad():
+        layer.log_A_real.fill_(6.0)
+    assert torch.isfinite(layer(torch.randn(1, 2, LENGTH))).all()

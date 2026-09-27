@@ -48,6 +48,28 @@ def phi2(z: Tensor) -> Tensor:
     return torch.where(small, 0.5 + z / 6 + z**2 / 24, closed)
 
 
+# Below this real part, exp(lambda dt) underflows in float32 (0 below about -103),
+# and the kernel's a ** 0 = exp(0 * log 0) is NaN; such a mode dies within one sample
+# anyway. g2_poles_additive_s688 died this way (demo/param/predictions_poles.md).
+MIN_LOG_POLE = -80.0
+
+
+def pole(z: Tensor) -> Tensor:
+    """exp(z) with Re(z) floored at MIN_LOG_POLE; unchanged bits above the floor."""
+    return torch.exp(torch.complex(z.real.clamp(min=MIN_LOG_POLE), z.imag))
+
+
+def foh_late(dt: Tensor, z: Tensor) -> Tensor:
+    """FOH weight of x[n-1], dt * exp(z) * phi2(-z), whose two factors under- and
+    overflow together for Re(z) < -709 (0 * inf). Below MIN_LOG_POLE it takes its limit
+    dt / z**2; each branch only sees values it can compute, so no NaN reaches the
+    gradient through torch.where. Unchanged bits above the floor."""
+    fast = z.real < MIN_LOG_POLE
+    slow = torch.where(fast, torch.zeros_like(z), z)
+    quick = torch.where(fast, z, -torch.ones_like(z))
+    return torch.where(fast, dt / quick**2, dt * torch.exp(slow) * phi2(-slow))
+
+
 class DiagonalSSMLayer(nn.Module):
     """One diagonal SSM: complex state, real I/O, FFT convolution in training.
 
@@ -126,7 +148,7 @@ class DiagonalSSMLayer(nn.Module):
     def _a(self) -> Tensor:
         """Discrete-time poles, |a| < 1 guaranteed by Re(A) < 0."""
         dt = torch.exp(self.log_dt).unsqueeze(-1)
-        return torch.exp(self._lambda() * dt)
+        return pole(self._lambda() * dt)
 
     def _b(self, a: Tensor) -> Tensor:
         if self.discretization == "zoh":
@@ -143,7 +165,7 @@ class DiagonalSSMLayer(nn.Module):
         dt = torch.exp(self.log_dt).unsqueeze(-1).to(torch.float64)
         z = self._lambda().to(torch.complex128) * dt
         beta1 = dt * phi2(z)
-        beta0 = dt * torch.exp(z) * phi2(-z)
+        beta0 = foh_late(dt, z)
         return a, beta1.to(a.dtype), beta0.to(a.dtype)
 
     def _foh_kernel(self, length: int) -> Tensor:
@@ -197,13 +219,13 @@ class DiagonalSSMLayer(nn.Module):
             -torch.exp(self.log_A_real + dlog_a), self.A_imag.expand_as(dlog_a)
         )
         dt = torch.exp(self.log_dt + dlog_dt).unsqueeze(-1)
-        a = torch.exp(lam * dt)
+        a = pole(lam * dt)
         if self.discretization == "zoh":
             return a, (a - 1) / lam, torch.zeros_like(a)
         dt64 = dt.to(torch.float64)
         z = lam.to(torch.complex128) * dt64
         beta1 = dt64 * phi2(z)
-        beta0 = dt64 * torch.exp(z) * phi2(-z)
+        beta0 = foh_late(dt64, z)
         return a, beta1.to(a.dtype), beta0.to(a.dtype)
 
     def _shifted_kernel(self, length: int, shift: tuple[Tensor, Tensor]) -> Tensor:
