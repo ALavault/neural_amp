@@ -90,9 +90,12 @@ DEVICES = {
     },
     "vs100r": {
         # Input = each take's loopback, target = FX loop send, OD2, Power Dimension off.
+        # The send is taken before the ECC83 stage and the tone stack (VS100 schematic
+        # V100-60-02): bass, middle and treble do not reach it (repeat.json), so only
+        # gain and contour are given; takes differing in those three are pooled.
         "dry": VS100R / "dry",
         "wet": VS100R / "wet",
-        "params": [0, 1, 2, 3, 4],  # gain, contour, bass, middle, treble
+        "params": [0, 1],  # gain, contour (names also carry bass, middle, treble)
         "data_to_use": 1.0,
         "held_out": [],
         "benchmark": "Marshall VS100R exploratory capture 2026-09-26, OD2, PD off",
