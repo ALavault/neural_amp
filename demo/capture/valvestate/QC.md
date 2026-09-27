@@ -35,6 +35,23 @@ dans `datasets/amp_capture/Media/` (non versionnés). Scripts : `scripts/product
   sans saut. Les écarts vus ailleurs (jusqu'à −6,06 dB) viennent du désalignement.
 - **Bruit du bouclage** : −97,6 dBFS avant la lecture comme pendant le silence.
 
+## Ce que capte le départ de boucle (schéma Marshall VS100, V100-60-02)
+
+- **Mesure** (`repeat.json`, `hf.json`) : graves, médiums et aigus poussés à 0 ou à 10 changent
+  le départ de boucle de 2,3 à 4,9 % (D), du même ordre que deux prises du même réglage (1,9 à
+  2,8 %). Contour et gain le changent de 13 à 33 %. Aigus à 0 et à 10 donnent le même spectre au dB
+  près jusqu'à 24 kHz.
+- **Schéma** (carte préampli V100-60-02, lecture de l'auteur, à confirmer) : le départ de boucle
+  (`FXLPOUT`) est pris après les étages d'entrée à amplificateurs opérationnels, où se trouvent
+  gain et contour, et **avant l'étage à lampe ECC83 (V1) et avant le correcteur de tonalité**. Ce
+  correcteur est le réseau Marshall classique : VR10 A1M, VR11 B20K, VR12 B200K, avec 470 pF,
+  22 nF, 22 nF et 33 kΩ. Il suit V1 et alimente `PREAMPOUT`. Sur la carte fille (V100-61-02), la
+  sortie émulée (`DIOUT`) est tirée de ce signal, via le filtre d'émulation de haut-parleur : elle
+  est donc en aval du correcteur.
+- **Conséquences** : ce jeu modélise l'avant de l'ampli, entrée, gain, contour et écrêtage des
+  étages à semi-conducteurs, sans la lampe, le correcteur ni l'ampli de puissance. Le premier
+  modèle ne reçoit que gain et contour.
+
 ## Défauts par prise
 
 - **Faible signal** (rapport signal sur bruit sous 20 dB, règle de `ANALYSIS_RULES.md`) :
