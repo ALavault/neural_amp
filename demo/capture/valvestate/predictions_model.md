@@ -235,8 +235,10 @@ appareil » porte toujours sur les 35 prises.
   spectre croisé. Les « environ 13,5 échantillons » tirés des bips, sur un signal très saturé,
   n'étaient pas fiables.
 - **Hypothèse, non testée** : un retard pur de 21 µs, identique à toutes les fréquences, ressemble
-  plus à un décalage entre les deux entrées de l'interface (départ sur l'entrée 1, bouclage sur
-  l'entrée 2) qu'à un comportement de préampli analogique. Un réseau fait de SSM et de
+  plus à un décalage entre les deux entrées de l'interface qu'à un comportement de préampli
+  analogique. Précision de l'utilisateur (2026-09-28) : les deux entrées étaient en mode ligne,
+  le départ de boucle sur l'entrée 2 avec +20 dB de gain, le bouclage sur l'entrée 1. Cette
+  différence de gain est la première suspecte. Un réseau fait de SSM et de
   convolutions 1×1 produit mal un retard pur sur toute la bande.
 - **Observation qui départage** : le même signal sur les deux entrées de la Zen Go, pour mesurer
-  leur décalage.
+  leur décalage, d'abord avec les gains de la séance (0 et +20 dB), puis les deux à 0 dB.
