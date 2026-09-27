@@ -108,3 +108,12 @@ Lecture, sous forme d'hypothèses :
 - recaler la source sur le bouclage et l'utiliser comme entrée ;
 - un passage répété à l'intérieur d'une même prise, pour mesurer le bruit sans dérive ;
 - volume Clean plus haut, sans écrêter.
+
+## Premier modèle (2026-09-27)
+
+- `vs100r_gc_film_joint_s925` (tête ReLU) n'a rien appris : sa tête de sortie s'est fermée et il
+  sort une constante. L'échec est consigné dans `demo/RUNS.jsonl`.
+- Les sondes de 600 pas (`predictions_model.md`) montrent qu'une tête LeakyReLU apprend à graine
+  égale, et qu'une tête ReLU apprend aussi avec une autre graine.
+- `vs100r_gc_film_joint_s925_r2` (LeakyReLU, garde-fou actif, graine 42) est lancé selon la règle
+  fixée d'avance.

@@ -116,3 +116,24 @@ Diagnostic : `diag_dead_head.py` et relecture Codex. Rien de ce qui précède n'
   complet.
 - **P1 à P7 s'appliquent sans changement au run `_r2`**, évalué par
   `product_vs100r_eval.py --run-id vs100r_gc_film_joint_s925_r2`.
+
+## Résultats des sondes (2026-09-27, 600 pas chacune)
+
+| sonde | perte de validation (dernière époque) | ESR de test | issue |
+|---|---|---|---|
+| 1. LeakyReLU, garde-fou actif, graine 42 | 0,320 | 0,134 | sort du plateau |
+| 2. ReLU, garde-fou coupé, graine 42 | 2,497 | 1,057 | reste bloquée |
+| 3. LeakyReLU, garde-fou coupé, graine 42 | 0,320 | 0,134 | sort, identique à la 1 |
+| 4. ReLU, garde-fou actif, graine 43 | 0,382 | 0,108 | sort du plateau |
+
+**Règle appliquée** : le run `_r2` prend la sonde 1 (LeakyReLU, garde-fou actif, graine 42).
+
+**Lecture, chaque case ne comptant qu'une trajectoire (n = 1), donc « compatible avec » :**
+
+- **Tête** : sonde 1 contre le run d'origine, sonde 3 contre sonde 2. À graine 42, la ReLU reste
+  bloquée, avec ou sans garde-fou ; la LeakyReLU apprend.
+- **Garde-fou** : sondes 1 et 3 identiques. Le modèle apprenant, le garde-fou ne s'est pas
+  déclenché. Couper le garde-fou ne sauve pas la ReLU (sonde 2).
+- **Graine** : la sonde 4 apprend avec une tête ReLU. La trajectoire compte donc beaucoup : l'échec
+  d'origine combine une tête ReLU fragile et une trajectoire défavorable. La LeakyReLU supprime ce
+  risque par construction, car une tête fermée garde un gradient.
