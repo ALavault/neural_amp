@@ -98,3 +98,21 @@ Il remplace les passages concernés ci-dessus ; aucun seuil n'a été déplacé.
 - **P7 homogène.** La part de l'appareil est désormais mesurée sur la même fenêtre de test que le
   modèle, pic réparé, bruit de fond soustrait (silence de la même prise), dans la même bande :
   24–48 kHz pour le modèle à 96 kHz, 24–96 kHz pour le modèle à 192 kHz.
+
+## Relance, écrite le 2026-09-27 avant les sondes
+
+Le run `vs100r_gc_film_joint_s925` n'a rien appris : sa tête de sortie ReLU s'est fermée, et
+le modèle sort une constante (ESR de test 1,05 à 1,29, échec consigné dans `demo/RUNS.jsonl`).
+Diagnostic : `diag_dead_head.py` et relecture Codex. Rien de ce qui précède n'est mesuré sur lui.
+
+- **Quatre sondes de 600 pas**, toutes lancées, dans cet ordre :
+  1. tête LeakyReLU, garde-fou de polarité actif, graine 42 ;
+  2. ReLU, garde-fou coupé, graine 42 ;
+  3. LeakyReLU, garde-fou coupé, graine 42 ;
+  4. ReLU, garde-fou actif, graine 43.
+- **Règle, fixée d'avance** : le run complet `vs100r_gc_film_joint_s925_r2` prend le premier bras
+  de cet ordre qui quitte le plateau, c'est-à-dire dernière perte de validation < 2,0 et ESR de
+  test < 0,9 (`scripts/product_vs100r_probe_check.py`). Si aucun n'en sort, il n'y a pas de run
+  complet.
+- **P1 à P7 s'appliquent sans changement au run `_r2`**, évalué par
+  `product_vs100r_eval.py --run-id vs100r_gc_film_joint_s925_r2`.
