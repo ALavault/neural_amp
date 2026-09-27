@@ -430,6 +430,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--cond-head", default="joint", choices=["joint", "additive"])
     parser.add_argument(
+        "--head-act",
+        default="relu",
+        choices=["relu", "leaky"],
+        help="SSM-WaveNet output head: leaky keeps a gradient once every skip sum < 0",
+    )
+    parser.add_argument(
         "--cond-hidden",
         type=int,
         nargs="+",
@@ -493,6 +499,7 @@ def build_processor(args: argparse.Namespace) -> torch.nn.Module:
             cond=getattr(args, "cond", "film"),
             cond_head=getattr(args, "cond_head", "joint"),
             cond_hidden=tuple(getattr(args, "cond_hidden", (32,))),
+            head_act=getattr(args, "head_act", "relu"),
         )
     if args.model == "s4-param":
         # cfg/model/s4-param/model_bb-param_s4-f-b8-s32-c16.yaml: static FiLM (MLP).
@@ -839,6 +846,7 @@ def main() -> None:
                 "cond": args.cond,
                 "cond_head": args.cond_head,
                 "cond_hidden": args.cond_hidden,
+                "head_act": args.head_act,
             }
             if args.model == "ssm-wavenet"
             else None

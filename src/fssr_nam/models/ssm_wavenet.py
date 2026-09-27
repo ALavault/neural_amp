@@ -454,6 +454,15 @@ class GatedSSMBlock(nn.Module):
         self.ssm.reset_state()
 
 
+def head_activation(name: str) -> nn.Module:
+    """Activation of SSMWaveNet's output head (see its head_act argument)."""
+    if name == "relu":
+        return nn.ReLU()
+    if name == "leaky":
+        return nn.LeakyReLU(0.01)
+    raise ValueError(f"unknown head_act: {name}")
+
+
 class SSMWaveNet(nn.Module):
     """A WaveNet backbone with diagonal SSMs replacing dilated convolutions.
 
@@ -481,6 +490,10 @@ class SSMWaveNet(nn.Module):
             entry); "additive", one hidden layer per knob (widths: cond_hidden, one
             entry per knob) into a shared output layer, so the head is a sum of
             functions of one knob each.
+        head_act: activation of the output head, "relu" (default) or "leaky"
+            (LeakyReLU, slope 0.01). A ReLU head closes for good once every skip
+            sum is negative, and no gradient then reaches the trunk; "leaky" keeps
+            one. It has no parameters, so initialisation draws are unchanged.
     """
 
     def __init__(
@@ -498,6 +511,7 @@ class SSMWaveNet(nn.Module):
         cond: str = "film",
         cond_head: str = "joint",
         cond_hidden: Sequence[int] = (32,),
+        head_act: str = "relu",
     ) -> None:
         super().__init__()
         self.num_controls = num_controls
@@ -557,9 +571,9 @@ class SSMWaveNet(nn.Module):
         else:
             raise ValueError(f"unknown output_act: {output_act}")
         self.output_net = nn.Sequential(
-            nn.ReLU(),
+            head_activation(head_act),
             nn.Conv1d(channels, channels, 1),
-            nn.ReLU(),
+            head_activation(head_act),
             nn.Conv1d(channels, output_channels, 1),
             final_act,
         )
