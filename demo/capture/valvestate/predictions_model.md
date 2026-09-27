@@ -137,3 +137,59 @@ Diagnostic : `diag_dead_head.py` et relecture Codex. Rien de ce qui précède n'
 - **Graine** : la sonde 4 apprend avec une tête ReLU. La trajectoire compte donc beaucoup : l'échec
   d'origine combine une tête ReLU fragile et une trajectoire défavorable. La LeakyReLU supprime ce
   risque par construction, car une tête fermée garde un gradient.
+
+## Résultats du run `_r2` (2026-09-27, `eval_vs100r_gc_film_joint_s925_r2.json`)
+
+`vs100r_gc_film_joint_s925_r2` : LeakyReLU, garde-fou actif, graine 42, 15 000 pas, perte de
+validation finale 0,18. Évaluation sur 29,4 s de test par prise ; médianes sur les 35 prises hors
+gain 0.
+
+| prédiction | mesure | verdict |
+|---|---|---|
+| P1, ESR médian du test ≥ 0,010 (attendu 0,01–0,05) | 0,0218 | **tenue** |
+| P2, couple (5, 5) ≥ 1,5 × prises seules (test_seen) | 0,0270 contre 0,0218, rapport 1,24 | **non tenue** |
+| P3, gain 0 : ESR ≥ 0,3 | 16,3 à 23,6 | **tenue** |
+| P4, prise 16 (seul couple jamais vu) | 0,110, la plus forte du test | rapportée |
+| P5, R (`foh`, 192 kHz) | 1,044 (96 kHz : 1,035) | **indiscernable** (entre 0,95 et 1,05) |
+| P6, écart au modèle à 48 kHz | `foh` : 0,0001 à 96 et 192 kHz ; `delta` : 0,0049 (96 kHz), 0,0113 (192 kHz) | rapporté ; le Marshall donnait 0,0097 en `foh` |
+| P7, énergie au-dessus de 24 kHz | modèle (`foh`, 192 kHz) −49,9 dB, appareil −50,4 dB (24–96 kHz) | rapporté |
+
+- **P3** : l'ESR des prises au gain 0 dépasse 16. Le modèle sort bien plus d'énergie que ces cibles
+  presque muettes.
+- **P5 en `delta`** (R de 0,41 à 96 kHz et 0,21 à 192 kHz) n'était pas jugé par la table.
+  L'analyse suivante montre que c'est un effet de timing.
+- **P7, prise par prise**, l'énergie du modèle au-dessus de 24 kHz suit celle de l'appareil :
+  −46,2 contre −46,7 dB (prise 2), −44,6 contre −44,1 dB (prise 30). Il s'agit du niveau, pas de la
+  forme d'onde.
+
+## Après le verdict : le modèle est en avance d'un échantillon (post hoc)
+
+`timing_shift.py`, sortie dans `timing_shift.json`, écrit après l'évaluation : la sortie du modèle
+à 48 kHz est retardée d'un nombre fractionnaire d'échantillons, entre −2 et +3.
+
+- **Sur les 35 prises**, un **retard commun de +1,0 échantillon** fait passer l'ESR médian de
+  0,0243 à 0,0024. Le meilleur retard propre à chaque prise ne fait guère mieux (0,0022, médiane
+  à +1,1).
+  - Le décalage est donc commun, pas propre au réglage.
+  - Exceptions : la prise 2 (+0,2, sans gain) et les gains faibles (prises 16, 26, 32 : gains
+    modestes).
+- **Sur les 8 prises de test**, avec ce retard commun, l'ESR médian passe de 0,0218 à 0,0070.
+- **Même avance sur les données d'entraînement** (5 segments) : de 0,005–0,117 à 0,0007–0,0028,
+  au retard de +0,9 à +1,5. L'entraînement a convergé vers ce timing, et le banc donne les mêmes
+  ESR que cette évaluation : le pipeline ne décale rien.
+- **Contrôle sur les autres appareils** (3 segments chacun), meilleur retard entre −0,3 et +0,4,
+  gain faible ou nul :
+  - Big Muff, pilote C, graines 42 et 44 ;
+  - Marshall FiLM.
+
+  Le décalage est propre au VS100R.
+- **Lecture proposée, non démontrée.** Les cibles ToneTwist sont alignées. Le départ de boucle du
+  VS100R porte un vrai retard, environ 13,5 échantillons à 48 kHz vers 1 kHz d'après les bips, et
+  davantage dans les graves. Le modèle en reproduit l'essentiel mais pas le dernier échantillon :
+  c'est la même famille d'échec que la latence de 4 échantillons de F-Fuzz.
+- **Conséquences.**
+  - Sur le VS100R, l'ESR brut mesure surtout ce défaut de timing, environ dix fois l'erreur qui
+    reste une fois recalé.
+  - Le plafond supposé D/2 ≈ 0,01 ne limitait pas le modèle : son erreur recalée est plus basse.
+  - L'écart entre prises D, mesuré sans recalage fractionnaire, est peut-être lui aussi gonflé par
+    le timing. Non vérifié.
