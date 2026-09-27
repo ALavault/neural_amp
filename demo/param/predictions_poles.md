@@ -210,3 +210,27 @@ pas retenu. **G2.2 : bras A et D, partitions 736 et 688.**
   est multipliée par 5 à 12.
 - Rien de cela n'est encore une conclusion : c'est l'objet de G2.2, qui estimera aussi l'écart
   apparié d'une partition à l'autre.
+
+## Écart de G2.2 (2026-09-28, écrit avant la relance)
+
+- **Échec.** `g2_poles_additive_s688` (bras D, partition 688) s'est arrêté sur « NaN loss »
+  vers le pas 9 385, sans écrire de résultat. L'échec est consigné dans `demo/RUNS.jsonl`.
+- **Cause, diagnostiquée sur les checkpoints** (commit `2d49ac7`) : le noyau calcule
+  `a ** k = exp(k · log a)`. Quand un mode rapide, accéléré encore par son décalage de réglage,
+  fait tomber le pôle `a = exp(λ·dt)` exactement à 0 en float32 (Re(λ·dt) < −103), a⁰ donne NaN.
+  - Au pas 9 300, le bloc 7 atteignait −98,9 pour un réglage d'entraînement.
+  - Les gradients étaient stables (norme de 1 à 4,5).
+  - Le lien avec le pas exact du NaN est inféré, pas démontré.
+- **Correctif** : Re(λ·dt) est bornée à −80 avant l'exponentielle, et le poids FOH prend sa limite
+  dt/z². Les bits sont inchangés au-dessus du seuil, vérifié sur 200 000 valeurs et par les
+  tests au bit près. Un test permanent reproduit le bug.
+- **Relance** : `g2_poles_additive_s688_r2`, drapeaux identiques, code avec le correctif.
+  - En mode déterministe, elle suit le run d'origine jusqu'au premier pas où un mode passe sous
+    −80, puis s'en écarte.
+  - Les autres bras, faits avant le correctif, ne sont pas relancés.
+  - `poles_verdict.py` prend `_r2` quand le premier essai n'a pas de résultat. Il réévalue les
+    checkpoints avec le code courant : un mode sous −80 à l'évaluation y donnerait une valeur
+    très légèrement différente, au lieu d'un NaN.
+- **Limites connues, non corrigées** : les conversions hors ligne `zoh_to_foh` et
+  `two_tap_kernel` ne sont pas protégées ; sous le seuil, la vitesse du mode ne reçoit plus de
+  gradient par le pôle `a` (relecture Codex, lecture seule).

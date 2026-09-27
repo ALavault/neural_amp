@@ -44,10 +44,17 @@ MRSTFT = EvaluationRegistry.get_function("mrstft_loss")
 
 
 def run_id(arm: str, split: int) -> str:
+    """The first attempt, else its one relaunch _r2 (a failed run is relaunched once,
+    predictions_poles.md): g2_poles_additive_s688 died on a NaN."""
     if arm == "A" and split == 925:
         return "param_ssm_wavenet_marshall"
     cond, head = ARMS[arm]
-    return f"g2_{cond}_{head}_s{split}"
+    run = f"g2_{cond}_{head}_s{split}"
+    if not (bench.RESULTS_DIR / f"{run}.json").exists():
+        relaunch = f"{run}_r2"
+        if (bench.RESULTS_DIR / f"{relaunch}.json").exists():
+            return relaunch
+    return run
 
 
 def load(run: str) -> BlackBoxModel:
