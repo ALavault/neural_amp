@@ -147,15 +147,15 @@ gain 0.
 | prédiction | mesure | verdict |
 |---|---|---|
 | P1, ESR médian du test ≥ 0,010 (attendu 0,01–0,05) | 0,0218 | **tenue** |
-| P2, couple (5, 5) ≥ 1,5 × prises seules (test_seen) | 0,0270 contre 0,0218, rapport 1,24 | **non tenue** |
+| P2, couple (5, 5) ≥ 1,5 × prises seules dans leur couple (test_seen) | 0,0270 contre 0,0218, rapport 1,24 | **non tenue** |
 | P3, gain 0 : ESR ≥ 0,3 | 16,3 à 23,6 | **tenue** |
 | P4, prise 16 (seul couple jamais vu) | 0,110, la plus forte du test | rapportée |
 | P5, R (`foh`, 192 kHz) | 1,044 (96 kHz : 1,035) | **indiscernable** (entre 0,95 et 1,05) |
 | P6, écart au modèle à 48 kHz | `foh` : 0,0001 à 96 et 192 kHz ; `delta` : 0,0049 (96 kHz), 0,0113 (192 kHz) | rapporté ; le Marshall donnait 0,0097 en `foh` |
 | P7, énergie au-dessus de 24 kHz | modèle (`foh`, 192 kHz) −49,9 dB, appareil −50,4 dB (24–96 kHz) | rapporté |
 
-- **P3** : l'ESR des prises au gain 0 dépasse 16. Le modèle sort bien plus d'énergie que ces cibles
-  presque muettes.
+- **P3** : l'ESR des prises au gain 0 dépasse 16. L'erreur y dépasse de loin l'énergie de ces
+  cibles presque muettes.
 - **P5 en `delta`** (R de 0,41 à 96 kHz et 0,21 à 192 kHz) n'était pas jugé par la table.
   L'analyse suivante montre que c'est un effet de timing.
 - **P7, prise par prise**, l'énergie du modèle au-dessus de 24 kHz suit celle de l'appareil :
@@ -175,21 +175,33 @@ gain 0.
     modestes).
 - **Sur les 8 prises de test**, avec ce retard commun, l'ESR médian passe de 0,0218 à 0,0070.
 - **Même avance sur les données d'entraînement** (5 segments) : de 0,005–0,117 à 0,0007–0,0028,
-  au retard de +0,9 à +1,5. L'entraînement a convergé vers ce timing, et le banc donne les mêmes
-  ESR que cette évaluation : le pipeline ne décale rien.
+  au retard de +0,9 à +1,5. Le banc, sur ses segments de test, donne les mêmes ESR que cette
+  évaluation. Ces deux faits décrivent le timing du modèle ; ils n'en établissent pas la cause, et
+  ne vérifient pas toutes les étapes de construction du jeu.
 - **Contrôle sur les autres appareils** (3 segments chacun), meilleur retard entre −0,3 et +0,4,
   gain faible ou nul :
   - Big Muff, pilote C, graines 42 et 44 ;
   - Marshall FiLM.
 
-  Le décalage est propre au VS100R.
+  Le décalage est observé sur le VS100R et n'est pas retrouvé dans ces contrôles limités
+  (`timing_controls.py`, 10 segments par modèle, même fenêtre notée). Médianes, meilleur retard
+  et ESR brut → recalé :
+  - Big Muff, graine 42 : −0,1, 0,023 → 0,021 ;
+  - Big Muff, graine 44 : −0,1, 0,099 → 0,097 ;
+  - Marshall FiLM : −0,1, 0,038 → 0,028 ;
+  - VS100R, 10 segments d'entraînement : +0,95, 0,025 → 0,005.
 - **Lecture proposée, non démontrée.** Les cibles ToneTwist sont alignées. Le départ de boucle du
   VS100R porte un vrai retard, environ 13,5 échantillons à 48 kHz vers 1 kHz d'après les bips, et
   davantage dans les graves. Le modèle en reproduit l'essentiel mais pas le dernier échantillon :
   c'est la même famille d'échec que la latence de 4 échantillons de F-Fuzz.
 - **Conséquences.**
-  - Sur le VS100R, l'ESR brut mesure surtout ce défaut de timing, environ dix fois l'erreur qui
-    reste une fois recalé.
+  - Sur le VS100R, le rapport des ESR médians avant et après recalage vaut environ 10. C'est une
+    comparaison exploratoire, avec un retard choisi après coup, pas une décomposition causale de
+    l'erreur.
   - Le plafond supposé D/2 ≈ 0,01 ne limitait pas le modèle : son erreur recalée est plus basse.
   - L'écart entre prises D, mesuré sans recalage fractionnaire, est peut-être lui aussi gonflé par
     le timing. Non vérifié.
+- **Relecture Codex (lecture seule)** : formulations tempérées ci-dessus. Codex jugeait le calcul
+  noté sur le signal entier ; en fait, `timing_shift.py` note avec `product_vs100r_eval.esr`, qui
+  retire 0,5 s au début et 0,1 s à la fin. Les causes concurrentes (alignement du jeu, architecture,
+  retard réel de l'appareil) restent à départager.
