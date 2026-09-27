@@ -205,3 +205,38 @@ gain 0.
   noté sur le signal entier ; en fait, `timing_shift.py` note avec `product_vs100r_eval.esr`, qui
   retire 0,5 s au début et 0,1 s à la fin. Les causes concurrentes (alignement du jeu, architecture,
   retard réel de l'appareil) restent à départager.
+
+## Retard de groupe, bande par bande (post hoc, `group_delay.py`, `group_delay.json`)
+
+Écrit après `timing_shift.py`. Lectures fixées avant le calcul : un écart d'environ +1 échantillon
+dans toutes les bandes (à ±0,3) signalerait un décalage global ; un écart qui varie selon la bande
+signalerait un retard de groupe mal rendu. Estimateur : phase du spectre croisé par bande
+d'octave, bins de cohérence ≥ 0,5. Il est vérifié sur des retards connus (13,5, 1,0 et −0,4
+échantillon, retrouvés à 0,04 près).
+
+| bande | appareil (bouclage → départ) | modèle (bouclage → sortie) | modèle → appareil |
+|---|---|---|---|
+| 250 Hz | 50,7 | 49,8 | +0,68 |
+| 500 Hz | 8,2 | 6,7 | +1,26 |
+| 1 kHz | 2,7 | 1,5 | +1,04 |
+| 2 kHz | 2,0 (5 prises) | 0,6 | +0,97 |
+| 4 kHz | 2,4 (5 prises) | 1,7 | +1,09 |
+| 8 kHz | 1,8 (5 prises) | 0,95 | +1,17 |
+
+Valeurs en échantillons à 48 kHz, médianes sur 35 prises sauf mention. La colonne « modèle →
+appareil » porte toujours sur les 35 prises.
+
+- **Décalage global.** L'écart modèle → appareil vaut environ +1 échantillon de 500 Hz à 8 kHz :
+  écart interquartile de 0,15 à 0,27, écart-type d'une bande à l'autre dans une même prise de
+  0,24. Il est moins net à 250 Hz (+0,68) ; 63 Hz n'est pas exploitable.
+- **Le modèle rend bien le retard de groupe dispersif de l'appareil** (50 échantillons à 250 Hz,
+  2,7 à 1 kHz). Il lui manque un retard pur d'environ 1 échantillon (21 µs).
+- **Correction.** Le retard de l'appareil vers 1 kHz vaut environ 2,7 échantillons d'après le
+  spectre croisé. Les « environ 13,5 échantillons » tirés des bips, sur un signal très saturé,
+  n'étaient pas fiables.
+- **Hypothèse, non testée** : un retard pur de 21 µs, identique à toutes les fréquences, ressemble
+  plus à un décalage entre les deux entrées de l'interface (départ sur l'entrée 1, bouclage sur
+  l'entrée 2) qu'à un comportement de préampli analogique. Un réseau fait de SSM et de
+  convolutions 1×1 produit mal un retard pur sur toute la bande.
+- **Observation qui départage** : le même signal sur les deux entrées de la Zen Go, pour mesurer
+  leur décalage.
