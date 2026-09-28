@@ -67,6 +67,24 @@ Deux runs d'environ 4,5 h chacune, dans une file après G2.1 et le pilote C « f
 (`scripts/product_ffuzz_fix_queue.sh`), depuis un worktree figé. Nouveaux run_id, jamais
 d'écrasement ; enregistrement dans `demo/RUNS.jsonl`.
 
+**Écart déclaré avant relance (2026-09-28).** `param_ssm_wavenet_ffuzz_adv4` a été tué par
+SIGTERM au redémarrage de 21:46, après `apt full-upgrade`, et après 3 h 26 de calcul. Il est
+consigné `killed` dans `demo/RUNS.jsonl`. `param_s4_ffuzz_adv4` n'a jamais démarré.
+
+- La cause est externe. Aucune mesure du run tué n'est exploitée. Une seule ligne de son
+  `metrics.csv` (époque 334) a été affichée par inadvertance lors de l'inventaire des
+  artefacts, après la décision de relance.
+- **Une seule relance**, sous `param_ssm_wavenet_ffuzz_adv4_r2`, avec les mêmes drapeaux et le
+  même code (runner `neural_amp_runner_g2` @ a0a4a4f). Elle repart de zéro, sans `--resume`.
+  `param_s4_ffuzz_adv4` garde son id.
+- **Le pilote NVIDIA a changé** (595.84 → 595.91.07, même noyau), alors que les références
+  `param_*_ffuzz_r2` ont été entraînées sous l'ancien. Une porte de reproductibilité au bit
+  précède les deux runs (`scripts/product_chain_after_reboot.sh`, trois chemins de
+  `diagnosis/seeds/repro_gate.md`). Elle couvre le chemin SSM-WaveNet-FiLM (Marshall), pas
+  S4-param, que la porte du 2026-09-24 ne couvrait déjà pas. Pour S4-param, le changement de
+  pilote reste un facteur non contrôlé. Il est très petit devant les seuils de la section 1
+  (ESR ≤ 0,01 contre 0,1377, rapport 1,5).
+
 ## 6. Rapport
 
 À remplir après les runs.

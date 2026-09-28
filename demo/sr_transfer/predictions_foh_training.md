@@ -28,3 +28,12 @@ la relecture FOH d'un checkpoint ZOH résout déjà la montée en fréquence san
 Le bruit apparié entre deux règles de discrétisation n'est pas connu. Sur trois partitions, le
 résidu apparié entre architectures valait 0,066 (`diagnosis/seeds/paired_protocol.md`) : un d
 moyen de quelques centièmes n'est pas lisible.
+
+## Écart déclaré avant les runs (2026-09-28)
+
+Le pilote NVIDIA est passé de 595.84 à 595.91.07 (même noyau) avant ces runs. Les jumelles ZOH
+ont été entraînées sous l'ancien pilote. La porte au bit de `scripts/product_chain_after_reboot.sh`
+vérifie, sous le nouveau pilote, le chemin ZOH SSM-WaveNet Big Muff (`pilotC_decide_seed42`),
+pas le chemin FOH, qui n'a pas de référence. Les runs tournent au code a0a4a4f, qui n'a pas le
+plancher des pôles de 2d49ac7. Un pôle sous-dépassé y donnerait un NaN, que `run_once` consigne
+en échec. Les jumelles ZOH, sans ce plancher elles non plus, n'en ont pas eu.
