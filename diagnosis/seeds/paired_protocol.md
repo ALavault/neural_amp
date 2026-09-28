@@ -224,3 +224,49 @@ déclaré) porte l'estimation à 4 degrés de liberté ; c'est lui qui départag
   réserve écrite plus haut se confirme ;
 - différent dès l'époque 1 → `--split-seed` ne fait pas ce qu'on croit, et les six runs
   existantes sont à relire.
+
+## Verdict de l'élargissement (2026-09-28, les quatre runs faites)
+
+Calculé par `diagnosis/seeds/paired_extension_verdict.py`, écrit avant les runs, sortie dans
+`paired_extension.json`. Les seuils ci-dessus ne sont pas touchés, cette section les applique.
+
+**Portes : franchies.**
+
+- La porte au bit avant les runs (`repro_gate_sampler_ssm_bigmuff`, enregistrement de l'ordre
+  actif) est identique à `pilotC_decide_seed42` : 865 valeurs et 0 écart (`demo/RUNS.jsonl`).
+- Pour chacune des cinq partitions, les deux architectures valident sur les mêmes segments
+  (`val_indices` identiques).
+
+| partition | ESR SSM-WaveNet | ESR S4-TF-L-16 | différence en log |
+|---|---|---|---|
+| 925 | 0,0439 | 0,0850 | −0,662 |
+| 736 | 0,0500 | 0,0812 | −0,485 |
+| 688 | 0,0424 | 0,0789 | −0,620 |
+| 744 | 0,0452 | 0,0785 | −0,553 |
+| 369 | 0,0481 | 0,0862 | −0,585 |
+
+**r₅ = 0,048, avec un IC à 95 % de [0,029 ; 0,137]** (khi-deux, 4 ddl) : **appariement soutenu**.
+La borne haute reste sous le seuil de réfutation (0,35), et même sous le seuil de soutien (0,25).
+La réserve « sur l'estimation ponctuelle » du verdict à trois partitions, dont la borne haute
+valait 0,41, tombe.
+
+**Ordre des lots : identique entre architectures aux époques 1, 2 et 50**, aux deux nouvelles
+partitions. D'après la lecture pré-enregistrée, l'appariement fixe donc aussi l'ordre des lots,
+et la réserve écrite plus haut ne se confirme pas.
+
+### Descriptif, hors question posée
+
+- SSM-WaveNet est plus bas sur les cinq partitions, d'une différence moyenne de −0,581 en log,
+  soit un facteur 1,79. Les mêmes réserves s'appliquent qu'au verdict à trois partitions :
+  recettes publiées, budget de paramètres ×6,2, arrêt anticipé propre à chacune.
+- `last` et `best` coïncident en ESR à 1 % près dans les quatre nouvelles runs (pas pour toutes
+  les métriques : la MAPE de S4 diffère de 8 et 13 %). La garde de polarité
+  bascule dans chacune, jamais après l'époque 11.
+
+### Ce qui ne peut pas être conclu
+
+- Deux architectures et une graine d'initialisation. r₅ mesure le résidu apparié de ces deux
+  recettes ; rien ne dit qu'il vaut pour une ablation qui retire un canal de décision.
+- Les quatre nouvelles runs ont tourné au code a0a4a4f et sous le pilote NVIDIA 595.84. Le
+  pilote a changé le 2026-09-28 à 21:46 (595.91.07) ; une porte au bit sous le nouveau pilote
+  précède les runs suivantes (`scripts/product_chain_after_reboot.sh`).
