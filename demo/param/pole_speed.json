@@ -68,6 +68,23 @@
     }
    ]
   },
+  "g2_poles_additive_s688_r2": {
+   "step": 15000,
+   "modes": 512,
+   "fast_any": 1,
+   "fast_all": 1,
+   "switched": 0,
+   "past_30": [
+    {
+     "block": 7,
+     "channel": 11,
+     "mode": 2,
+     "s_max": 220.0,
+     "s_min": 159.78,
+     "abs_C": 0.045
+    }
+   ]
+  },
   "g2_poles_joint_s925": {
    "step": 15000,
    "modes": 512,

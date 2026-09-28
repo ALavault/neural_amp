@@ -29,6 +29,7 @@ RUNS = [
     "g2_poles_additive_s925",
     "g2_poles_additive_s736",
     "g2_poles_additive_s688",  # stopped on a NaN; last checkpoint, step 9300
+    "g2_poles_additive_s688_r2",  # its relaunch, floored poles (2d49ac7)
     "g2_poles_joint_s925",
     "param_ssm_wavenet_marshall",
     "g2_film_joint_s736",

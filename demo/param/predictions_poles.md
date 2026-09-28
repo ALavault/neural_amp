@@ -258,3 +258,79 @@ numérique. Un avantage de D, s'il se confirme, ne
 prouverait pas à lui seul que les réglages déplacent des coupures. Au verdict, ces comptes seront
 rapportés à côté de H1–H6. Une comparaison qui aiderait à départager (modes normalisés en gain, avec et sans tête explicite
 de gain) est décrite dans `pole_speed_theory.md`, section 6. Elle n'est pas lancée.
+
+## Verdict G2.2 (2026-09-28, partitions 925, 736 et 688, `poles_verdict.py --splits 925 736 688`)
+
+Sortie : `poles_verdict_925_736_688.json`. Bras A et D, retenus par G2.1. Pour D à 688, le script
+prend `g2_poles_additive_s688_r2`, la relance avec le plancher des pôles. Les seuils ne sont pas
+touchés, cette section les applique.
+
+**Portes.** Les six runs passent la porte de run : ESR finies sur les réglages vus et non vus, une
+seule bascule de polarité par run, à l'époque 0. La partie 925 redonne au bit les valeurs de
+`poles_verdict_925.json` (ESR non vues de A et de D, pôles figés de D, réglages vus). C'est un
+contrôle sur CPU que le plancher de 2d49ac7 ne change pas ces deux checkpoints ; ce n'est pas un
+contrôle du pilote GPU.
+
+ESR de test par réglage non vu (étiquette corrigée), par partition 925 / 736 / 688. d est la
+moyenne sur les trois partitions de ln(ESR_A / ESR_D), et sd son écart-type apparié entre
+partitions (2 ddl) :
+
+| réglage | A FiLM joint | D pôles additif | d moyen | sd |
+|---|---|---|---|---|
+| B000_M000_T100 | 0,121 / 0,220 / 0,089 | 0,074 / 0,128 / 0,126 | +0,228 | 0,503 |
+| B000_M100_T000 | 0,042 / 0,286 / 0,059 | 0,041 / 0,074 / 0,075 | +0,372 | 0,860 |
+| B000_M100_T100 | 0,076 / 0,235 / 0,112 | 0,028 / 0,055 / 0,082 | +0,919 | 0,574 |
+| B010_M030_T070 (interpolation) | 0,047 / 0,059 / 0,058 | 0,025 / 0,057 / 0,064 | +0,194 | 0,392 |
+| B030_M070_T010 (étiquette corrigée) | 0,018 / 0,022 / 0,030 | 0,010 / 0,015 / 0,022 | +0,433 | 0,154 |
+| B065_M085_T035 | 0,015 / 0,022 / 0,028 | 0,011 / 0,028 / 0,033 | −0,016 | 0,300 |
+| **B100_M000_T000 (extrême)** | 0,173 / 0,195 / 0,245 | 0,141 / 0,077 / 0,114 | **+0,633** | 0,379 |
+| B100_M000_T100 | 0,044 / 0,067 / 0,051 | 0,034 / 0,067 / 0,079 | −0,054 | 0,357 |
+| B100_M100_T000 | 0,018 / 0,019 / 0,027 | 0,012 / 0,020 / 0,023 | +0,159 | 0,193 |
+
+| | D pôles additif, trois partitions | indistinct |
+|---|---|---|
+| H1, extrême (d) | **soutenue** (+0,63 ≥ ln 1,5) | non (sd 0,38) |
+| H2, médiane des non vus (d) | **non inférieur** (+0,23) | **oui** (sd typique 0,38) |
+| H3, MR-STFT (d) | intermédiaire (+0,05) | non |
+| H4, extrême / interpolation | intermédiaire (2,92 ; A aux mêmes partitions : 3,71, seuil de soutien 2,23) | — |
+| H5, médiane des vus (d) | **non inférieur** (+0,08) | **oui** |
+| H6, pôles figés / mobiles | se sert des pôles (×9,1) | — |
+
+Médiane de d par partition, descriptive : +0,35 à 925, +0,37 à 736, **−0,09 à 688**. L'avantage
+de D ne tient pas à 688 en médiane de d. En moyenne des neuf réglages, D y reste
+plus bas que A (0,069 contre 0,078), et aussi sur l'extrême (0,114 contre 0,245).
+
+**Conséquence pré-enregistrée.** D soutient H1 et est non inférieur pour H2. Or la règle ouvre le
+bras témoin « résidus » quand un bras « pôles » « soutient H1 et H2 » en G2.2. H2 est une
+non-infériorité et porte la mention « indistinct ». La condition est donc remplie à la lettre, mais
+sur un H2 qui ne se distingue pas du bruit entre partitions. Le témoin n'est ni écrit ni lancé :
+la décision revient à l'utilisateur.
+
+### Lecture à vérifier, confrontée (post hoc, descriptive)
+
+`pole_speed.json`, relancé avec `g2_poles_additive_s688_r2`. Les entrées déjà présentes sont
+identiques au bit.
+
+| run D | sans mémoire pour ≥ 1 réglage | pour tous | commutés | médiane de d |
+|---|---|---|---|---|
+| 925 | 9 | 2 | 4 | +0,35 |
+| 736 | 4 | 1 | 1 | +0,37 |
+| 688 `_r2` | 1 | 1 | 0 | −0,09 |
+
+- À 688 `_r2`, le seul mode rapide (bloc 7, canal 11, mode 2) est à s = 160–220 sur les 28
+  réglages : Re(λ·dt) = −s y est partout sous −80, donc écrêtée. Le gradient par cette partie
+  réelle est nul (limite connue de 2d49ac7) ; la phase et le coefficient d'entrée (a − 1)/λ
+  restent différentiables. Le mode agit comme un gain quasi instantané.
+- La partition sans mode commuté est celle où D ne bat pas A en médiane de d. Trois points ne
+  permettent pas d'en tirer un lien, et la variation de A d'une partition à l'autre (moyenne des
+  non vus 0,062, 0,125 et 0,078) contribue aussi aux différences observées. Conformément à la lecture écrite avant le verdict, un avantage de D
+  ne prouve pas que les réglages déplacent des coupures. Une comparaison qui aiderait à départager (modes
+  normalisés en gain, `pole_speed_theory.md` section 6) n'est pas lancée.
+
+### Ce qui ne peut pas être conclu
+
+- Une graine, trois partitions, deux ddl pour chaque écart-type. H2 et H5 sont indistincts.
+- Le FiLM joint (A) varie fortement d'une partition à l'autre (0,286 contre 0,042 et 0,059 sur
+  B000_M100_T000). Une part de d vient de là, pas de D.
+- D à 688 est une relance avec un code différent au-dessous du seuil de −80, et un mode y vit sous
+  ce seuil.
