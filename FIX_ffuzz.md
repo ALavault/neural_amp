@@ -81,9 +81,14 @@ consigné `killed` dans `demo/RUNS.jsonl`. `param_s4_ffuzz_adv4` n'a jamais dém
   `param_*_ffuzz_r2` ont été entraînées sous l'ancien. Une porte de reproductibilité au bit
   précède les deux runs (`scripts/product_chain_after_reboot.sh`, trois chemins de
   `diagnosis/seeds/repro_gate.md`). Elle couvre le chemin SSM-WaveNet-FiLM (Marshall), pas
-  S4-param, que la porte du 2026-09-24 ne couvrait déjà pas. Pour S4-param, le changement de
-  pilote reste un facteur non contrôlé. Il est très petit devant les seuils de la section 1
-  (ESR ≤ 0,01 contre 0,1377, rapport 1,5).
+  S4-param, que la porte du 2026-09-24 ne couvrait déjà pas. S4-param partage la classe `S4`
+  de nablafx et ses blocs (8 × 32 × 16) avec le chemin S4-TF, que la porte couvre. Ce qui lui est
+  propre (FiLM statique, pas de `--honor-optim`) ne l'est pas : pour lui, le changement de pilote
+  reste un facteur non mesuré.
+
+  Résultat de la porte (2026-09-28, 22:59–23:31, a0a4a4f, pilote 595.91.07) : les trois chemins
+  sont identiques au bit à leurs références (865, 881 et 348 valeurs, 0 écart ; lignes
+  `repro_gate_drv59591_*` de `demo/RUNS.jsonl`).
 
 ## 6. Rapport
 
