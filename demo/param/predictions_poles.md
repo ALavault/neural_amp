@@ -217,7 +217,8 @@ pas retenu. **G2.2 : bras A et D, partitions 736 et 688.**
   vers le pas 9 385, sans écrire de résultat. L'échec est consigné dans `demo/RUNS.jsonl`.
 - **Cause, diagnostiquée sur les checkpoints** (commit `2d49ac7`) : le noyau calcule
   `a ** k = exp(k · log a)`. Quand un mode rapide, accéléré encore par son décalage de réglage,
-  fait tomber le pôle `a = exp(λ·dt)` exactement à 0 en float32 (Re(λ·dt) < −103), a⁰ donne NaN.
+  fait tomber le pôle `a = exp(λ·dt)` exactement à 0 en float32 (Re(λ·dt) < −104 environ), a⁰
+  donne NaN.
   - Au pas 9 300, le bloc 7 atteignait −98,9 pour un réglage d'entraînement.
   - Les gradients étaient stables (norme de 1 à 4,5).
   - Le lien avec le pas exact du NaN est inféré, pas démontré.
@@ -246,12 +247,14 @@ n'a plus de mémoire et agit comme un gain instantané.
 | D, partition 925 | 9 | 2 | 4 |
 | D, partition 736 | 4 | 1 | 1 |
 | D, partition 688 (pas 9 300) | 1 | 1 | 0 |
-| C, partition 925 | 5 (dont s = 101,7, à 1,6 du sous-dépassement) | 2 | 1 |
+| C, partition 925 | 5 (dont s = 101,7, à environ 2,3 de l'annulation en float32, s ≈ 103,97) | 2 | 1 |
 | FiLM (A 925, 736, 688 ; B 925) | 0 | 0 | 0 |
 
-**Lecture à vérifier** : dans le régime sans mémoire, le décalage d'un pôle agit comme un gain
-dépendant du réglage. Les bras « pôles » peuvent donc **commuter des modes entre filtre et gain**,
-en plus de déplacer des coupures comme un correcteur. Un avantage de D, s'il se confirme, ne
+**Lecture à vérifier** : dans le régime sans mémoire, le décalage de α agit asymptotiquement sur un
+gain qui dépend du réglage. Les bras « pôles » ont donc un moyen de **régler des gains par la
+vitesse des pôles**, en plus de déplacer des dynamiques comme un correcteur. Les comptes décrivent
+des changements de régime, pas leur effet sur la sortie : « commuté » est le nom d'un critère
+numérique. Un avantage de D, s'il se confirme, ne
 prouverait pas à lui seul que les réglages déplacent des coupures. Au verdict, ces comptes seront
-rapportés à côté de H1–H6. Le bras qui départagerait (modes normalisés en gain) est décrit dans
-`pole_speed_theory.md`, section 6, et n'est pas lancé.
+rapportés à côté de H1–H6. Une comparaison qui aiderait à départager (modes normalisés en gain, avec et sans tête explicite
+de gain) est décrite dans `pole_speed_theory.md`, section 6. Elle n'est pas lancée.
