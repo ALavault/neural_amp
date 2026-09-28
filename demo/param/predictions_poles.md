@@ -234,3 +234,24 @@ pas retenu. **G2.2 : bras A et D, partitions 736 et 688.**
 - **Limites connues, non corrigées** : les conversions hors ligne `zoh_to_foh` et
   `two_tap_kernel` ne sont pas protégées ; sous le seuil, la vitesse du mode ne reçoit plus de
   gradient par le pôle `a` (relecture Codex, lecture seule).
+
+## Lecture à vérifier au verdict G2.2 (écrite le 2026-09-28, avant le verdict, sans changer les seuils)
+
+`pole_speed.py`, `pole_speed.json`, théorie dans `pole_speed_theory.md`. On note s = −Re(λ·dt),
+la décroissance par échantillon, sur les 28 réglages d'entraînement. Au-delà de s ≈ 10, un mode
+n'a plus de mémoire et agit comme un gain instantané.
+
+| run | sans mémoire pour ≥ 1 réglage | pour tous | commutés (s < 1 pour un réglage, > 10 pour un autre) |
+|---|---|---|---|
+| D, partition 925 | 9 | 2 | 4 |
+| D, partition 736 | 4 | 1 | 1 |
+| D, partition 688 (pas 9 300) | 1 | 1 | 0 |
+| C, partition 925 | 5 (dont s = 101,7, à 1,6 du sous-dépassement) | 2 | 1 |
+| FiLM (A 925, 736, 688 ; B 925) | 0 | 0 | 0 |
+
+**Lecture à vérifier** : dans le régime sans mémoire, le décalage d'un pôle agit comme un gain
+dépendant du réglage. Les bras « pôles » peuvent donc **commuter des modes entre filtre et gain**,
+en plus de déplacer des coupures comme un correcteur. Un avantage de D, s'il se confirme, ne
+prouverait pas à lui seul que les réglages déplacent des coupures. Au verdict, ces comptes seront
+rapportés à côté de H1–H6. Le bras qui départagerait (modes normalisés en gain) est décrit dans
+`pole_speed_theory.md`, section 6, et n'est pas lancé.
