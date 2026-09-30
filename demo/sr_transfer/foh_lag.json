@@ -1,0 +1,32 @@
+{
+ "paired_ssm_wavenet_foh_s688": {
+  "segments": 12,
+  "lags": {
+   "-1": 2,
+   "0": 10
+  },
+  "esr_mean": 0.13664834449688593,
+  "interior_lag0": 0.13478365210661045,
+  "interior_best_lag": 0.13326307801374546
+ },
+ "paired_ssm_wavenet_s688": {
+  "segments": 12,
+  "lags": {
+   "-1": 1,
+   "0": 11
+  },
+  "esr_mean": 0.04246394054886574,
+  "interior_lag0": 0.04008964022311071,
+  "interior_best_lag": 0.0400173410307616
+ },
+ "paired_ssm_wavenet_foh_s925": {
+  "segments": 12,
+  "lags": {
+   "-1": 1,
+   "0": 11
+  },
+  "esr_mean": 0.03942432724094639,
+  "interior_lag0": 0.03722104924963787,
+  "interior_best_lag": 0.036436629151770226
+ }
+}

@@ -102,3 +102,22 @@ cause n'est pas établie : ce texte ne l'examine pas.
   de `FIX_foh.md` pour la montée en fréquence. Ce verdict ne la remet pas en cause.
 - Les runs FOH tournent au code a0a4a4f, sans le plancher des pôles de 2d49ac7. Aucun n'a produit
   de NaN.
+
+### Examen post hoc du run FOH à 688 (2026-09-30, descriptif)
+
+Deux explications mécaniques ont été testées. Aucune ne tient.
+
+- **Un simple décalage temporel** (comme pour F-Fuzz ou le VS100R) : écarté.
+  `demo/sr_transfer/foh_lag.py`, sortie `foh_lag.json` : le retard optimal sortie → cible vaut 0
+  dans 10 segments de test sur 12, et −1 dans les 2 autres. Réaligné, l'ESR intérieure ne passe
+  que de 0,135 à 0,133, contre 0,040 pour la jumelle ZOH. Le modèle FOH à 688 est réellement
+  moins bon, il n'est pas mal calé.
+- **Des pôles trop rapides**, avec le code a0a4a4f sans plancher : écarté. Aucun mode n'a
+  s = −Re(λ·dt) > 10 ; le s maximal vaut 0,6, contre 0,5 pour la jumelle ZOH, et les médianes
+  sont égales (0,0100 et 0,0101). Mesure faite sur le `last.ckpt` des six runs appariés.
+
+Reste descriptif : la perte de validation du run FOH à 688 remonte entre les époques 5 et 10
+(0,437 puis 0,469), alors que sa jumelle descend (0,374 puis 0,262). Il ne rattrape jamais tout à fait :
+0,035 contre 0,030 à l'époque 1 000. Sa jumelle avait basculé de polarité aux époques 9 à 11,
+lui jamais. La cause reste inconnue. Une trajectoire d'entraînement divergente sans mécanisme
+propre à la FOH est compatible avec ces faits ; elle n'est pas démontrée.
