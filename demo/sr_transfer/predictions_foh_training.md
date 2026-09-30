@@ -37,3 +37,68 @@ vérifie, sous le nouveau pilote, le chemin ZOH SSM-WaveNet Big Muff (`pilotC_de
 pas le chemin FOH, qui n'a pas de référence. Les runs tournent au code a0a4a4f, qui n'a pas le
 plancher des pôles de 2d49ac7. Un pôle sous-dépassé y donnerait un NaN, que `run_once` consigne
 en échec. Les jumelles ZOH, sans ce plancher elles non plus, n'en ont pas eu.
+
+## Verdict (2026-09-30, trois partitions)
+
+Chiffres recopiés des enregistrements `demo/nablafx_bench/paired_ssm_wavenet_s{925,736,688}.json`
+(ZOH), `demo/nablafx_bench/paired_ssm_wavenet_foh_s{925,736,688}.json` (FOH), et des sorties
+`demo/sr_transfer/sr_transfer_paired_ssm_wavenet_foh_sXXX_last_plain.json` de
+`scripts/product_sr_transfer.py --run-id paired_ssm_wavenet_foh_sXXX --plain-test`. La jumelle
+ZOH relue en FOH est `sr_transfer_paired_ssm_wavenet_sXXX_last_asfoh.json` (conversion actuelle
+de `FIX_foh.md`, pas `_asfoh_v1`).
+
+**Runs.** Chaque run FOH a les mêmes graine, partition, drapeaux et `val_indices` que sa jumelle
+ZOH ; seule `--discretization foh` diffère. Code a0a4a4f, pilote 595.91.07, une session sans
+reprise chacun. Le run à 925 a tourné le 29/09 ; ceux à 736 et 688, le 30/09, après environ
+16 h d'attente du GPU, pris par un autre projet.
+
+| partition | pas (FOH / ZOH) | arrêt, époque (FOH / ZOH) | bascules de polarité (FOH / ZOH) |
+|---|---|---|---|
+| 925 | 6 818 / 7 049 | 973 / 1 006 | 72 / 11, 73 |
+| 736 | 5 964 / 6 531 | 851 / 932 | aucune / 9, 12 |
+| 688 | 8 967 / 7 266 | 1 280 / 1 037 | aucune / 9, 10, 11 |
+
+**Non-infériorité à 48 kHz : INFÉRIEUR.** d = ln(ESR_ZOH / ESR_FOH), ESR de test du dernier
+checkpoint :
+
+| partition | ESR ZOH | ESR FOH | d |
+|---|---|---|---|
+| 925 | 0,04385 | 0,03947 | +0,105 |
+| 736 | 0,04999 | 0,04148 | +0,187 |
+| 688 | 0,04245 | **0,13668** | **−1,169** |
+| moyenne | | | **−0,292** |
+
+Le seuil est −ln 1,15 = −0,140. La moyenne vaut −0,292, en dessous : le libellé pré-enregistré
+est « inférieur ». Il tient entièrement au run à 688. Aux deux autres partitions, le run FOH est
+plus bas que sa jumelle ZOH ; la moyenne sur ces deux seules partitions (+0,146) n'est pas la
+quantité pré-enregistrée.
+
+**Transfert sans correction** (`--plain-test`) :
+
+| partition | 96 kHz, écart au modèle 48 kHz (seuil 5·10⁻⁴) | 44,1 kHz contre l'appareil, FOH / jumelle ZOH relue en FOH (seuil 1,15) |
+|---|---|---|
+| 925 | 2,94·10⁻⁴ : tenu | 0,03505 / 0,03912 = 0,896 : tenu |
+| 736 | 2,59·10⁻⁴ : tenu | 0,03728 / 0,04604 = 0,810 : tenu |
+| 688 | 3,16·10⁻⁴ : tenu | 0,13339 / 0,03757 = **3,55 : non tenu** |
+
+- Le critère à 96 kHz est tenu pour les trois runs. Il compare chaque modèle à lui-même à
+  48 kHz et ne dépend donc pas de sa qualité : l'écart vaut 2,6 à 3,2·10⁻⁴, sous le plancher
+  de 5·10⁻⁴.
+- Le critère à 44,1 kHz est tenu à 925 et 736, et non tenu à 688, où il hérite de l'ESR élevée du
+  run à 48 kHz.
+
+**Descriptif, run FOH à 688.** Il est moins bon aussi en validation : meilleure perte 0,0345
+contre 0,0295 pour sa jumelle. Ce n'est donc pas un écart propre au test. Il a tourné plus
+longtemps (8 967 pas contre 7 266, arrêt anticipé à l'époque 1 280 contre 1 037), et sa MR-STFT
+de test est aussi plus haute (0,527 contre 0,399). La garde de polarité n'a pas basculé. La
+cause n'est pas établie : ce texte ne l'examine pas.
+
+**Ce que le verdict ne dit pas.**
+
+- Une graine, trois partitions. L'écart entre partitions (+0,11, +0,19, −1,17) domine :
+  un seul run fait passer le libellé de « non inférieur » à « inférieur ». Le bruit apparié entre
+  deux règles de discrétisation n'est pas connu (section précédente).
+- La lecture FOH d'un checkpoint ZOH, qui ne demande aucun réentraînement, reste la solution
+  de `FIX_foh.md` pour la montée en fréquence. Ce verdict ne la remet pas en cause.
+- Les runs FOH tournent au code a0a4a4f, sans le plancher des pôles de 2d49ac7. Aucun n'a produit
+  de NaN.

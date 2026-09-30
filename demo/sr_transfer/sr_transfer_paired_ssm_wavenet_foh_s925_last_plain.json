@@ -1,0 +1,47 @@
+{
+  "run_id": "sr_transfer_paired_ssm_wavenet_foh_s925_last_plain",
+  "timestamp": "2026-09-29T11:05:37+02:00",
+  "commit": "3192b2f081c877effcf582b650a0011f4c3332fa",
+  "source_run": "paired_ssm_wavenet_foh_s925",
+  "checkpoint": "last",
+  "model": "ssm-wavenet",
+  "discretization": "foh",
+  "learned_input_vector": false,
+  "poles": {
+    "44100": {
+      "folded": 4,
+      "total": 512
+    },
+    "48000": {
+      "folded": 3,
+      "total": 512
+    },
+    "96000": {
+      "folded": 0,
+      "total": 512
+    }
+  },
+  "arms": {
+    "48k": {
+      "esr": 0.039424328754345574,
+      "mrstft": 0.3917072316010793,
+      "recorded_esr": 0.03946751728653908
+    },
+    "44k1_delta_interior": {
+      "esr": 0.03505276764432589,
+      "mrstft": 0.4022732774416606
+    },
+    "88k_delta_band48_vs_48k_interior": {
+      "esr": 0.0002783107435485969,
+      "mrstft": 0.08781679222981136
+    },
+    "96k_delta_band48_vs_48k_interior": {
+      "esr": 0.0002936218709995349,
+      "mrstft": 0.08886416008075078
+    },
+    "192k_delta_band48_vs_48k_interior": {
+      "esr": 0.00040474570899580914,
+      "mrstft": 0.0992466410001119
+    }
+  }
+}
