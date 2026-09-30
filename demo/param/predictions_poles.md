@@ -334,3 +334,66 @@ identiques au bit.
   B000_M100_T000). Une part de d vient de là, pas de D.
 - D à 688 est une relance avec un code différent au-dessous du seuil de −80, et un mode y vit sous
   ce seuil.
+
+## Élargissement de G2.2 aux partitions 744 et 369 (pré-enregistré le 2026-09-30, avant les runs)
+
+**Pourquoi.** Au verdict G2.2, D soutient H1, mais H2 (non-infériorité sur la médiane des non
+vus) et H5 sont « indistincts », et la médiane de d s'inverse à 688 (−0,09). La condition
+d'ouverture du bras témoin « résidus » n'est remplie qu'à la lettre. Lancer un témoin pour
+expliquer un effet pas encore établi serait prématuré. Deux partitions de plus portent les
+écarts-types entre partitions à 4 degrés de liberté. Sur Big Muff, l'appariement a été validé
+sur cinq partitions, avec r₅ = 0,048 (`diagnosis/seeds/paired_protocol.md`). Décision de
+l'utilisateur du 2026-09-30.
+
+**Runs.**
+
+- Bras A et D aux partitions 744 et 369, les deux suivantes du tirage déclaré dans
+  `paired_protocol.md`. Nouveaux run_id `g2_film_joint_s{744,369}` et
+  `g2_poles_additive_s{744,369}`.
+- Drapeaux exacts de `scripts/product_g22_queue.sh`, entrelacés par partition (A puis D) :
+  une file arrêtée laisse ainsi des partitions complètes. Une run en échec arrête la file, sans
+  relance automatique.
+- Code du runner `neural_amp_runner_g22r2` @ 561eef4, qui contient le plancher des pôles de
+  2d49ac7. Il est identique à HEAD pour `src/` et le banc. File :
+  `scripts/product_g22_ext_queue.sh`.
+
+**Porte avant les runs, au bit.** Les runs existantes ont été entraînées à d'autres commits et
+sous le pilote 595.84. Le chemin « pôles » n'a pas été porté sous le nouveau pilote (595.91.07).
+Deux relances courtes, `--no-record`, comparées par `repro_gate.compare` :
+
+- chemin D contre `g2_poles_additive_s925` (ac7274a), 300 pas ;
+- chemin A contre `param_ssm_wavenet_marshall` (29a869c), 300 pas.
+
+Au premier écart, la file s'arrête. Elle s'arrête aussi si le banc sort en erreur ou si la
+relance n'atteint pas ses 300 pas. Le plancher de 2d49ac7 ne change aucun bit au-dessus de −80
+(vérifié sur les checkpoints à 925, section du verdict G2.2). Un écart désignerait donc le pilote
+ou un autre changement de code, et il serait rapporté avant toute run.
+
+**Hétérogénéité connue, non neutralisée.** Les nouveaux D ont le plancher des pôles, comme
+`g2_poles_additive_s688_r2`. Les anciens D, à 925 et 736, ne l'avaient pas. Leurs modes
+finissent sous le plancher (s maximal 72,4 et 77,6, `pole_speed.json`), qui n'y aurait donc rien
+changé à la fin de l'entraînement ; pendant l'entraînement, ce n'est pas vérifié. La porte de
+300 pas ne peut pas exclure qu'un nouveau D passe sous −80 plus tard. Les comptes de
+`pole_speed.py` le diront.
+
+**Verdict.** `poles_verdict.py --splits 925 736 688 744 369`, sans modification du script :
+
+- mêmes H1 à H6 et mêmes seuils, d moyenné par réglage sur les cinq partitions ;
+- mêmes règles « indistinct », avec des écarts-types à 4 degrés de liberté ;
+- D à 688 reste `g2_poles_additive_s688_r2`.
+
+Les comptes de `pole_speed.py` (modes sans mémoire et commutés) sont ajoutés pour les deux
+nouveaux D, en descriptif.
+
+**Écart déclaré : règle d'ouverture du bras témoin « résidus ».** Cette règle est décidée après
+le verdict à trois partitions, donc en connaissant ses chiffres, et avant les deux nouvelles
+partitions. Le témoin ne s'ouvre que si, sur les cinq partitions, D soutient H1 et est non
+inférieur pour H2, **sans la mention « indistinct »** pour H1 ni pour H2. Elle remplace la
+règle d'origine pour cette décision ; les seuils de H1 à H6 ne changent pas. Elle est plus
+stricte, donc elle ne peut pas rendre l'ouverture plus facile. Le verdict à trois partitions
+reste tel qu'il est écrit plus haut ; il n'est pas réécrit.
+
+**Ce que l'élargissement ne dira pas.** Il reste une seule graine d'initialisation. Le résidu
+apparié de 0,048 vaut pour deux architectures sur Big Muff, pas pour ces bras sur Marshall.
+Durée attendue : environ 27 h de GPU (A environ 4,7 h et D environ 8,7 h par partition, d'après
+les runs existantes), sans compter les attentes du GPU partagé.
