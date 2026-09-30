@@ -14,6 +14,9 @@ DIAGNOSIS_ffuzz.md section 3 need:
   of output and target (H4).
 
 Writes diagnosis/ffuzz/segments.json. Usage: measure.py [--limit N] (smoke test).
+FIX_ffuzz.md section 4, on the adv4 runs with the targets they were trained on:
+measure.py --runs param_ssm_wavenet_ffuzz_adv4_r2 param_s4_ffuzz_adv4
+--target-advance 4 --out segments_adv4.json
 """
 
 from __future__ import annotations
@@ -131,15 +134,19 @@ def measure(model: torch.nn.Module, dataset, limit: int | None) -> list[dict]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--runs", nargs="+", default=list(RUNS))
+    parser.add_argument("--target-advance", type=int, default=0)
+    parser.add_argument("--out", default="segments.json")
     args = parser.parse_args()
     torch.set_num_threads(16)
+    bench.TARGET_ADVANCE = args.target_advance
     data = bench.data_module("test", device="ffuzz")
     data.setup("test")
-    out = {run: measure(load(run), data.test_dataset, args.limit) for run in RUNS}
+    out = {run: measure(load(run), data.test_dataset, args.limit) for run in args.runs}
     if args.limit:
         print(json.dumps({r: v[:3] for r, v in out.items()}, indent=1))
         return
-    path = Path(__file__).with_name("segments.json")
+    path = Path(__file__).parent / args.out
     path.write_text(json.dumps(out) + "\n", encoding="utf-8")
     print(f"written {path}")
 

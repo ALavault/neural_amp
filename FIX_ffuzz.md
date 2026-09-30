@@ -92,4 +92,85 @@ consigné `killed` dans `demo/RUNS.jsonl`. `param_s4_ffuzz_adv4` n'a jamais dém
 
 ## 6. Rapport
 
-À remplir après les runs.
+Rempli le 2026-09-29 après les deux runs. Sources :
+
+- enregistrements `demo/nablafx_bench/param_ssm_wavenet_ffuzz_adv4_r2.json` et
+  `demo/nablafx_bench/param_s4_ffuzz_adv4.json` (ESR de test du dernier checkpoint, ESR et
+  MR-STFT par réglage) ;
+- mesure croisée `diagnosis/ffuzz/segments_adv4.json`, produite par `diagnosis/ffuzz/measure.py
+  --runs param_ssm_wavenet_ffuzz_adv4_r2 param_s4_ffuzz_adv4 --target-advance 4 --out
+  segments_adv4.json`.
+
+Pour la mesure, `measure.py` a reçu trois arguments (`--runs`, `--target-advance`, `--out`).
+Avec leurs valeurs par défaut, sa relance sur `param_*_ffuzz_r2` redonne `segments.json` au bit
+(même SHA-256).
+
+**Runs.**
+
+| run | pas | fin | commit |
+|---|---|---|---|
+| `param_ssm_wavenet_ffuzz_adv4_r2` | 15 000 | pas d'arrêt anticipé | a0a4a4f |
+| `param_s4_ffuzz_adv4` | 14 944 | arrêt anticipé à l'époque 466 (meilleur checkpoint à l'époque 365) | a0a4a4f |
+
+L'arrêt anticipé est actif dans les deux runs, comme dans les références `_r2`. Chaque run a été
+écrit en une seule session, sans reprise. Les deux ont tourné sous le pilote 595.91.07, après la
+porte au bit décrite en section 5.
+
+**Critères de la section 1 : tous tenus.**
+
+| critère | seuil | avant (`_r2`) | après (`adv4`) | issue |
+|---|---|---|---|---|
+| ESR de test moyenne, SSM-WaveNet-FiLM | ≤ 0,01 | 0,1366 | **0,00164** | tenu |
+| ESR de test moyenne, S4-param | ≤ 0,01 | 0,1377 | **0,00344** | tenu |
+| l'écart entre architectures reparaît : ESR(S4) / ESR(SSM) | ≥ 1,5 | 1,01 | **2,10** | tenu |
+| F100 / F000 de l'ESR de SSM | ≤ 10 | 1,62 | **5,49** (0,00455 / 0,00083) | tenu |
+
+Comparaison avec les bornes du réalignement a posteriori, qui sont des seuils et non des gains
+attendus : l'ESR intérieure à retard 0 (`segments_adv4.json`, moyenne des segments) vaut
+**0,00109** pour SSM, contre 0,0013 réalignée a posteriori, et **0,00284** pour S4, contre
+0,0032. Les modèles entraînés sur les cibles avancées font donc un peu mieux que le réalignement
+après coup des modèles `_r2`. Pour S4 à F100, l'ESR vaut 0,01181, soit plus que 0,01, mais le
+critère porte sur la moyenne des réglages.
+
+**Invariant, MR-STFT des réglages non vus (SSM)** : dans le facteur 1,5, tenu.
+
+| réglage non vu | avant | après | rapport |
+|---|---|---|---|
+| F030 | 0,300 | 0,307 | ×1,02 |
+| F070 | 0,264 | 0,316 | ×1,20 |
+
+L'invariant pré-enregistré est respecté, ce qui ne démontre pas une absence d'effet (+2 % et
++20 %). Descriptif,
+hors critère : les voisins vus, eux, baissent (F020, F040, F060 et F080 : de 0,135–0,163 à
+0,104–0,128). L'écart de MR-STFT entre réglages vus et non vus s'élargit donc, d'environ ×2 à
+×2,5 à ×3 : c'est la question, distincte, de `demo/param/RESULTS.md`.
+
+**Invariant, Big Muff et Marshall intouchés** : tenu par construction, puisque l'option
+n'agit que sur `--device ffuzz`. C'est aussi vérifié empiriquement : au code a0a4a4f, qui
+contient l'option, la porte pilote de la section 5 reproduit au bit les chemins SSM Big Muff,
+S4-TF Big Muff et SSM-FiLM Marshall.
+
+**Mesure croisée de la section 4** : le retard optimal vaut **0 dans 1 463 segments sur 1 463**,
+pour chacun des deux modèles. Avant le correctif (`diagnosis/ffuzz/segments.json`), il valait +4
+dans 1 463 segments pour SSM, et dans 1 459 pour S4 (+3 dans les 4 autres).
+L'ESR intérieure au meilleur retard est égale à celle à retard 0 (0,00109 et 0,00284).
+
+**Invariant de code : tenu, après ajout du test prévu.** `tests/unit/test_product_advance.py`
+vérifie `advance()` seul : décalage de N échantillons, complément de N zéros, longueur
+conservée. Le test de `_load` prévu en section 4 manquait (relevé à la relecture Codex du
+rapport). Il est ajouté après les runs : `tests/integration/test_bench_target_advance.py`. Avec
+`TARGET_ADVANCE = 4`, il vérifie que `_load` rend un fichier `.target.` décalé de 4 et complété
+de 4 zéros, de même longueur, et qu'il rend un fichier `.input.` intact. Le banc y est importé
+dans un sous-processus. Contrôle du test lui-même : une copie dont la sonde règle `bench.TARGET_ADVANCE = 0`
+au lieu de 4 échoue. Le test ne change rien aux
+runs, qui ont tourné au code a0a4a4f, dont `_load` est le même.
+
+**Incertitudes restantes.**
+
+- Une graine et une partition (925) par architecture. Le rapport 2,10 entre architectures
+  n'a pas de barre d'erreur. Sur Big Muff, le résidu apparié valait 0,048 en log
+  (`diagnosis/seeds/paired_protocol.md`), mais rien ne dit qu'il vaut pour F-Fuzz.
+- Pour S4-param, le changement de pilote n'est contrôlé que par les blocs S4 que la porte
+  couvre, pas par son FiLM statique (section 5).
+- Le doublement de la MR-STFT sur les réglages non vus reste entier : ce correctif ne le visait
+  pas.
