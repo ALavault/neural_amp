@@ -15,6 +15,8 @@
   --brass-soft: #f1e7d2;
   --residual: #8b3743;
   --residual-soft: #f5e3e5;
+  --added: #c2452d;
+  --removed: #2a78d6;
   --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
   --body: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -23,12 +25,14 @@
   :root:not([data-theme="light"]) {
     --bg: #141816; --panel: #1d2320; --ink: #e5e9e3; --muted: #9ba59f; --line: #313a35;
     --brass: #d6a94c; --brass-soft: #3a311d; --residual: #dc8f99; --residual-soft: #3b2328;
+    --added: #e06a50; --removed: #4a92e8;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #141816; --panel: #1d2320; --ink: #e5e9e3; --muted: #9ba59f; --line: #313a35;
   --brass: #d6a94c; --brass-soft: #3a311d; --residual: #dc8f99; --residual-soft: #3b2328;
+  --added: #e06a50; --removed: #4a92e8;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -102,6 +106,24 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--brass); out
 .readout { display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; font: 0.8rem/1.5 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .readout b { color: var(--ink); font-weight: 600; }
 .note { font-size: 0.9rem; color: var(--muted); }
+.chart { position: relative; display: grid; gap: 0.4rem; min-width: 0; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-size: 0.8rem; color: var(--muted); }
+.chart-legend .sw { display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 2px; margin-right: 0.35rem; vertical-align: -0.05rem; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { font: 10px var(--mono); fill: var(--muted); }
+.chart .row-label { font: 600 11px var(--body); fill: var(--ink); }
+.chart .zero { stroke: var(--muted); stroke-width: 1; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .up { fill: var(--added); }
+.chart .down { fill: var(--removed); }
+.chart .hit { fill: transparent; cursor: crosshair; }
+.chart .hit:hover { fill: var(--line); fill-opacity: 0.35; }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--panel); font: 0.75rem/1.3 var(--mono); padding: 0.3rem 0.45rem; border-radius: 3px; white-space: nowrap; }
+.chart details { font-size: 0.8rem; color: var(--muted); }
+.chart table { border-collapse: collapse; font: 0.75rem var(--mono); font-variant-numeric: tabular-nums; }
+.chart th, .chart td { padding: 0.15rem 0.45rem; text-align: right; border-bottom: 1px solid var(--line); }
+.chart th:first-child, .chart td:first-child { text-align: left; }
+.table-wrap { overflow-x: auto; }
 footer { border-top: 1px solid var(--line); padding-top: 1rem; display: grid; gap: 0.6rem; font-size: 0.85rem; color: var(--muted); }
 footer p { max-width: 80ch; }
 code { font: 0.85em var(--mono); overflow-wrap: anywhere; }
@@ -121,7 +143,8 @@ code { font: 0.85em var(--mono); overflow-wrap: anywhere; }
     <div class="howto">
       <span><b>Changer de piste</b> en cours de lecture garde la position.</span>
       <span><b>Résidu</b> = réel − modèle (bordure en tirets) ; pour le transfert, modèle à 48 kHz − modèle à 192 kHz.</span>
-      <span><b>À l'aveugle</b> mélange les pistes non résiduelles, masque leurs noms, les résidus et les mesures de la tranche.</span>
+      <span><b>À l'aveugle</b> mélange les pistes non résiduelles, masque leurs noms, les résidus, les mesures et le graphique de la tranche.</span>
+      <span><b>Graphique</b> : niveau de chaque piste moins celui du réel, par octave. Au-dessus de zéro, contenu ajouté ; en dessous, contenu retiré.</span>
     </div>
   </header>
   <div id="sections"></div>
@@ -130,19 +153,19 @@ code { font: 0.85em var(--mono); overflow-wrap: anywhere; }
     <code>github.com/mcomunita/tonetwist-afx-dataset</code>), licence CC BY-NC 4.0, usage non commercial.
     VS100R : capture personnelle (envoi de boucle d'effets, canal OD2), dont l'entrée est le signal
     DRY de ToneTwist AFx (Zenodo 10455730, CC BY-NC 4.0).</p>
-    <p><b>Fabrication.</b> <code>scripts/product_results_listening.py</code> ; WAV 48 kHz 16 bits, un
-    gain par tranche (crête −1 dBFS), fondus de 10 ms. Les ESR affichées sont calculées sur les extraits avant fondus et
-    quantification 16 bits (écart relatif inférieur à 0,3 % sur les fichiers joués). Les ESR
-    enregistrées portent sur tout le jeu de test et diffèrent donc. Voie
+    <p><b>Fabrication.</b> <code>scripts/product_results_listening.py</code> ; WAV 48 kHz 24 bits, un
+    gain par tranche (crête −1 dBFS), fondus de 10 ms. ESR, niveaux des résidus et écarts par octave
+    sont calculés sur les fichiers tels qu'ils sont joués. Les ESR enregistrées portent sur tout le
+    jeu de test et diffèrent donc. Voie
     produit : aucun résultat de cette page n'est une revendication scientifique.</p>
   </footer>
 </main>
 
 <script>
-const DATA = {"vs100r": [{"label": "Prise 16 : gain 2.5, contour 7.5 (couple non vu)", "window_s": [4.5, 10.5], "esr": 0.09439822864476731, "residual_db": -10.25036155034778, "files": {"real": "audio/results_vs100r_take16_real.wav", "model": "audio/results_vs100r_take16_model.wav", "residual": "audio/results_vs100r_take16_residual.wav"}}, {"label": "Prise 17 : gain 5, contour 0 (couple vu)", "window_s": [4.5, 10.5], "esr": 0.002891616716060765, "residual_db": -25.38859273317804, "files": {"real": "audio/results_vs100r_take17_real.wav", "model": "audio/results_vs100r_take17_model.wav", "residual": "audio/results_vs100r_take17_residual.wav"}}, {"label": "Prise 30 : gain 10, contour 5 (couple vu)", "window_s": [4.5, 10.5], "esr": 0.019661659143124965, "residual_db": -17.063798371498127, "files": {"real": "audio/results_vs100r_take30_real.wav", "model": "audio/results_vs100r_take30_model.wav", "residual": "audio/results_vs100r_take30_residual.wav"}}], "marshall": [{"label": "Basses 0, médiums 10, aigus 10, gain 5", "rule": "Plus grand avantage du bras pôles", "setting": "B000_M100_T100_G050", "recorded_esr": {"film": 0.07633635248331462, "poles": 0.02837620544082978}, "esr": {"film": 0.04512287051257968, "poles": 0.022158010089978662}, "files": {"real": "audio/results_marshall_B000_M100_T100_G050_real.wav", "film": "audio/results_marshall_B000_M100_T100_G050_film.wav", "poles": "audio/results_marshall_B000_M100_T100_G050_poles.wav", "residual_film": "audio/results_marshall_B000_M100_T100_G050_residual_film.wav", "residual_poles": "audio/results_marshall_B000_M100_T100_G050_residual_poles.wav"}}, {"label": "Basses 0, médiums 10, aigus 0, gain 5", "rule": "Plus petit écart entre bras", "setting": "B000_M100_T000_G050", "recorded_esr": {"film": 0.04182093798675958, "poles": 0.04129871923257323}, "esr": {"film": 0.027962303437144884, "poles": 0.029682990254521327}, "files": {"real": "audio/results_marshall_B000_M100_T000_G050_real.wav", "film": "audio/results_marshall_B000_M100_T000_G050_film.wav", "poles": "audio/results_marshall_B000_M100_T000_G050_poles.wav", "residual_film": "audio/results_marshall_B000_M100_T000_G050_residual_film.wav", "residual_poles": "audio/results_marshall_B000_M100_T000_G050_residual_poles.wav"}}, {"label": "Basses 10, médiums 0, aigus 0, gain 5", "rule": "Réglage le plus difficile", "setting": "B100_M000_T000_G050", "recorded_esr": {"film": 0.17292140687213226, "poles": 0.14081807938568733}, "esr": {"film": 0.05998505588050049, "poles": 0.028507095661734847}, "files": {"real": "audio/results_marshall_B100_M000_T000_G050_real.wav", "film": "audio/results_marshall_B100_M000_T000_G050_film.wav", "poles": "audio/results_marshall_B100_M000_T000_G050_poles.wav", "residual_film": "audio/results_marshall_B100_M000_T000_G050_residual_film.wav", "residual_poles": "audio/results_marshall_B100_M000_T000_G050_residual_poles.wav"}}], "rate": {"segments": [10, 8], "models": {"zoh": {"run_id": "paired_ssm_wavenet_s925", "excerpts": [{"segment": 10, "esr_vs_48k": 0.17514984007732182, "residual_db": -7.565902548839329, "files": {"real": "audio/results_rate_zoh_seg10_real.wav", "model48": "audio/results_rate_zoh_seg10_model48.wav", "model192": "audio/results_rate_zoh_seg10_model192.wav", "residual": "audio/results_rate_zoh_seg10_residual.wav"}}, {"segment": 8, "esr_vs_48k": 0.17949320650387326, "residual_db": -7.459519840422817, "files": {"real": "audio/results_rate_zoh_seg8_real.wav", "model48": "audio/results_rate_zoh_seg8_model48.wav", "model192": "audio/results_rate_zoh_seg8_model192.wav", "residual": "audio/results_rate_zoh_seg8_residual.wav"}}]}, "foh": {"run_id": "paired_ssm_wavenet_foh_s925", "excerpts": [{"segment": 10, "esr_vs_48k": 0.0008753086446442803, "residual_db": -30.57838782371342, "files": {"real": "audio/results_rate_foh_seg10_real.wav", "model48": "audio/results_rate_foh_seg10_model48.wav", "model192": "audio/results_rate_foh_seg10_model192.wav", "residual": "audio/results_rate_foh_seg10_residual.wav"}}, {"segment": 8, "esr_vs_48k": 0.0007416650330470953, "residual_db": -31.297921959951793, "files": {"real": "audio/results_rate_foh_seg8_real.wav", "model48": "audio/results_rate_foh_seg8_model48.wav", "model192": "audio/results_rate_foh_seg8_model192.wav", "residual": "audio/results_rate_foh_seg8_residual.wav"}}]}}}, "ffuzz": [{"label": "Fuzz 0", "setting": "F000_V100", "recorded_esr": {"before": 0.11287022410030652, "after": 0.0008282009315242837}, "esr": {"before": 0.22272256261210555, "after": 0.00010416971598540256}, "files": {"real": "audio/results_ffuzz_F000_V100_real.wav", "before": "audio/results_ffuzz_F000_V100_before.wav", "after": "audio/results_ffuzz_F000_V100_after.wav", "residual_before": "audio/results_ffuzz_F000_V100_residual_before.wav", "residual_after": "audio/results_ffuzz_F000_V100_residual_after.wav"}}, {"label": "Fuzz 7 (réglage non vu)", "setting": "F070_V100", "recorded_esr": {"before": 0.1457735170099072, "after": 0.0028123228838737298}, "esr": {"before": 0.2970015612620602, "after": 0.0004370546827523937}, "files": {"real": "audio/results_ffuzz_F070_V100_real.wav", "before": "audio/results_ffuzz_F070_V100_before.wav", "after": "audio/results_ffuzz_F070_V100_after.wav", "residual_before": "audio/results_ffuzz_F070_V100_residual_before.wav", "residual_after": "audio/results_ffuzz_F070_V100_residual_after.wav"}}, {"label": "Fuzz 10", "setting": "F100_V100", "recorded_esr": {"before": 0.18274309178044026, "after": 0.004549953608626598}, "esr": {"before": 0.31609030891721346, "after": 0.0007900780234638227}, "files": {"real": "audio/results_ffuzz_F100_V100_real.wav", "before": "audio/results_ffuzz_F100_V100_before.wav", "after": "audio/results_ffuzz_F100_V100_after.wav", "residual_before": "audio/results_ffuzz_F100_V100_residual_before.wav", "residual_after": "audio/results_ffuzz_F100_V100_residual_after.wav"}}]};
+const DATA = {"vs100r": [{"label": "Prise 16 : gain 2.5, contour 7.5 (couple non vu)", "window_s": [4.5, 10.5], "files": {"real": "audio/results_vs100r_take16_real.wav", "model": "audio/results_vs100r_take16_model.wav", "residual": "audio/results_vs100r_take16_residual.wav"}, "ref": "real", "esr": {"model": 0.0944640456145833}, "octaves": {"model": [0.66, 1.63, 1.57, 2.24, 2.76, 4.59, 4.47, 3.22, 2.4]}, "residual_db": {"residual": -10.247334969343338}}, {"label": "Prise 17 : gain 5, contour 0 (couple vu)", "window_s": [4.5, 10.5], "files": {"real": "audio/results_vs100r_take17_real.wav", "model": "audio/results_vs100r_take17_model.wav", "residual": "audio/results_vs100r_take17_residual.wav"}, "ref": "real", "esr": {"model": 0.0028858908137900773}, "octaves": {"model": [0.23, 0.06, -0.05, -0.17, -0.35, -0.39, -0.32, -0.05, 0.44]}, "residual_db": {"residual": -25.39720186184814}}, {"label": "Prise 30 : gain 10, contour 5 (couple vu)", "window_s": [4.5, 10.5], "files": {"real": "audio/results_vs100r_take30_real.wav", "model": "audio/results_vs100r_take30_model.wav", "residual": "audio/results_vs100r_take30_residual.wav"}, "ref": "real", "esr": {"model": 0.01963826486163056}, "octaves": {"model": [-0.17, -0.27, -0.08, -0.09, 0.05, -0.05, -0.01, 0.16, 0.32]}, "residual_db": {"residual": -17.068969426882152}}], "marshall": [{"label": "Basses 0, médiums 10, aigus 10, gain 5", "rule": "Plus grand avantage du bras pôles", "setting": "B000_M100_T100_G050", "recorded_esr": {"film": 0.07633635248331462, "poles": 0.02837620544082978}, "files": {"real": "audio/results_marshall_B000_M100_T100_G050_real.wav", "film": "audio/results_marshall_B000_M100_T100_G050_film.wav", "poles": "audio/results_marshall_B000_M100_T100_G050_poles.wav", "residual_film": "audio/results_marshall_B000_M100_T100_G050_residual_film.wav", "residual_poles": "audio/results_marshall_B000_M100_T100_G050_residual_poles.wav"}, "ref": "real", "esr": {"film": 0.04514431106236774, "poles": 0.022153899705732897}, "octaves": {"film": [0.54, -0.08, -0.51, -1.15, -1.79, -1.72, -1.5, -1.07, -0.63], "poles": [-1.28, -0.08, 0.47, 0.32, 0.17, -0.48, -0.48, -0.23, -0.23]}, "residual_db": {"residual_film": -13.453970325864375, "residual_poles": -16.545498188335547}}, {"label": "Basses 0, médiums 10, aigus 0, gain 5", "rule": "Plus petit écart entre bras", "setting": "B000_M100_T000_G050", "recorded_esr": {"film": 0.04182093798675958, "poles": 0.04129871923257323}, "files": {"real": "audio/results_marshall_B000_M100_T000_G050_real.wav", "film": "audio/results_marshall_B000_M100_T000_G050_film.wav", "poles": "audio/results_marshall_B000_M100_T000_G050_poles.wav", "residual_film": "audio/results_marshall_B000_M100_T000_G050_residual_film.wav", "residual_poles": "audio/results_marshall_B000_M100_T000_G050_residual_poles.wav"}, "ref": "real", "esr": {"film": 0.02795582332058379, "poles": 0.029677826455405367}, "octaves": {"film": [-0.51, 0.42, 1.17, 1.29, 0.6, -0.32, -0.97, -1.51, -1.59], "poles": [-1.35, 0.27, 1.08, 1.0, 0.37, -1.01, -1.92, -2.86, -4.1]}, "residual_db": {"residual_film": -15.535275289805453, "residual_poles": -15.275677770052706}}, {"label": "Basses 10, médiums 0, aigus 0, gain 5", "rule": "Réglage le plus difficile", "setting": "B100_M000_T000_G050", "recorded_esr": {"film": 0.17292140687213226, "poles": 0.14081807938568733}, "files": {"real": "audio/results_marshall_B100_M000_T000_G050_real.wav", "film": "audio/results_marshall_B100_M000_T000_G050_film.wav", "poles": "audio/results_marshall_B100_M000_T000_G050_poles.wav", "residual_film": "audio/results_marshall_B100_M000_T000_G050_residual_film.wav", "residual_poles": "audio/results_marshall_B100_M000_T000_G050_residual_poles.wav"}, "ref": "real", "esr": {"film": 0.060000013925116995, "poles": 0.02852194566921244}, "octaves": {"film": [-1.73, -1.46, -1.21, -0.97, 0.21, 3.5, 10.24, 18.5, 30.59], "poles": [-1.52, -0.72, -0.8, -0.94, 0.46, 3.81, 8.51, 15.8, 27.89]}, "residual_db": {"residual_film": -12.21848662422633, "residual_poles": -15.448207762679909}}], "rate": {"segments": [10, 8], "models": {"zoh": {"run_id": "paired_ssm_wavenet_s925", "excerpts": [{"segment": 10, "delay_samples": 0.9481942489996638, "files": {"real": "audio/results_rate_zoh_seg10_real.wav", "model48": "audio/results_rate_zoh_seg10_model48.wav", "model192": "audio/results_rate_zoh_seg10_model192.wav", "control": "audio/results_rate_zoh_seg10_control.wav", "residual": "audio/results_rate_zoh_seg10_residual.wav", "residual_compensated": "audio/results_rate_zoh_seg10_residual_compensated.wav"}, "ref": "model48", "esr": {"model192": 0.17546972982224712, "control": 2.3113207766941307e-05}, "octaves": {"model48": [0.19, 0.19, 0.07, 0.07, 0.13, 0.08, 0.0, 0.02, -0.27], "model192": [0.23, 0.26, 0.21, 0.22, 0.28, 0.21, 0.01, -0.32, -1.42], "control": [0.19, 0.19, 0.07, 0.07, 0.13, 0.08, 0.0, 0.02, -0.27]}, "residual_db": {"residual": -7.557977937100561, "residual_compensated": -22.32797444810599}}, {"segment": 8, "delay_samples": 0.9481942489996638, "files": {"real": "audio/results_rate_zoh_seg8_real.wav", "model48": "audio/results_rate_zoh_seg8_model48.wav", "model192": "audio/results_rate_zoh_seg8_model192.wav", "control": "audio/results_rate_zoh_seg8_control.wav", "residual": "audio/results_rate_zoh_seg8_residual.wav", "residual_compensated": "audio/results_rate_zoh_seg8_residual_compensated.wav"}, "ref": "model48", "esr": {"model192": 0.17983508868014572, "control": 2.026373359298896e-05}, "octaves": {"model48": [0.17, 0.08, 0.08, 0.08, 0.08, 0.08, 0.06, 0.07, -0.11], "model192": [0.27, 0.2, 0.23, 0.22, 0.2, 0.17, 0.02, -0.34, -1.3], "control": [0.17, 0.08, 0.08, 0.08, 0.08, 0.08, 0.06, 0.07, -0.11]}, "residual_db": {"residual": -7.4512556915352235, "residual_compensated": -21.528725740695652}}]}, "foh": {"run_id": "paired_ssm_wavenet_foh_s925", "excerpts": [{"segment": 10, "files": {"real": "audio/results_rate_foh_seg10_real.wav", "model48": "audio/results_rate_foh_seg10_model48.wav", "model192": "audio/results_rate_foh_seg10_model192.wav", "control": "audio/results_rate_foh_seg10_control.wav", "residual": "audio/results_rate_foh_seg10_residual.wav"}, "ref": "model48", "esr": {"model192": 0.0009564253155022735, "control": 1.830545501700454e-05}, "octaves": {"model48": [0.33, 0.18, 0.06, 0.12, 0.11, 0.07, 0.04, 0.1, -0.2], "model192": [0.31, 0.16, 0.02, 0.08, 0.07, 0.05, 0.09, 0.27, 0.31], "control": [0.33, 0.18, 0.06, 0.12, 0.11, 0.07, 0.04, 0.1, -0.2]}, "residual_db": {"residual": -30.19348785015982}}, {"segment": 8, "files": {"real": "audio/results_rate_foh_seg8_real.wav", "model48": "audio/results_rate_foh_seg8_model48.wav", "model192": "audio/results_rate_foh_seg8_model192.wav", "control": "audio/results_rate_foh_seg8_control.wav", "residual": "audio/results_rate_foh_seg8_residual.wav"}, "ref": "model48", "esr": {"model192": 0.000817024677665486, "control": 1.7639708691849534e-05}, "octaves": {"model48": [0.02, 0.06, 0.06, 0.07, 0.06, 0.05, 0.04, 0.06, -0.01], "model192": [0.01, 0.03, 0.02, 0.05, 0.04, 0.05, 0.11, 0.24, 0.47], "control": [0.02, 0.06, 0.06, 0.07, 0.06, 0.05, 0.04, 0.06, -0.01]}, "residual_db": {"residual": -30.877646902507454}}]}}}, "ffuzz": [{"label": "Fuzz 0", "setting": "F000_V100", "recorded_esr": {"before": 0.11287022410030652, "after": 0.0008282009315242837}, "files": {"real": "audio/results_ffuzz_F000_V100_real.wav", "before": "audio/results_ffuzz_F000_V100_before.wav", "after": "audio/results_ffuzz_F000_V100_after.wav", "residual_before": "audio/results_ffuzz_F000_V100_residual_before.wav", "residual_after": "audio/results_ffuzz_F000_V100_residual_after.wav"}, "ref": "real", "esr": {"before": 0.22256681852854998, "after": 0.00010428176061188302}, "octaves": {"before": [0.06, 0.04, 0.02, 0.01, -0.02, -0.03, -0.02, 0.03, -0.02], "after": [-0.02, -0.01, -0.02, -0.01, 0.01, 0.0, -0.02, -0.04, -0.05]}, "residual_db": {"residual_before": -6.525395821785153, "residual_after": -39.817895028290955}}, {"label": "Fuzz 7 (réglage non vu)", "setting": "F070_V100", "recorded_esr": {"before": 0.1457735170099072, "after": 0.0028123228838737298}, "files": {"real": "audio/results_ffuzz_F070_V100_real.wav", "before": "audio/results_ffuzz_F070_V100_before.wav", "after": "audio/results_ffuzz_F070_V100_after.wav", "residual_before": "audio/results_ffuzz_F070_V100_residual_before.wav", "residual_after": "audio/results_ffuzz_F070_V100_residual_after.wav"}, "ref": "real", "esr": {"before": 0.29720635585938077, "after": 0.000437672517924366}, "octaves": {"before": [0.08, 0.05, 0.06, 0.05, 0.02, -0.0, 0.01, 0.05, 0.08], "after": [-0.01, -0.01, 0.01, 0.0, -0.0, -0.01, -0.06, -0.11, -0.19]}, "residual_db": {"residual_before": -5.26941904506165, "residual_after": -33.58850012113818}}, {"label": "Fuzz 10", "setting": "F100_V100", "recorded_esr": {"before": 0.18274309178044026, "after": 0.004549953608626598}, "files": {"real": "audio/results_ffuzz_F100_V100_real.wav", "before": "audio/results_ffuzz_F100_V100_before.wav", "after": "audio/results_ffuzz_F100_V100_after.wav", "residual_before": "audio/results_ffuzz_F100_V100_residual_before.wav", "residual_after": "audio/results_ffuzz_F100_V100_residual_after.wav"}, "ref": "real", "esr": {"before": 0.3163395874567842, "after": 0.0007914451294347203}, "octaves": {"before": [0.08, 0.03, 0.03, 0.03, -0.01, -0.04, -0.06, -0.08, -0.08], "after": [-0.0, -0.01, 0.0, -0.0, -0.0, 0.0, -0.01, 0.0, 0.07]}, "residual_db": {"residual_before": -4.998464520466287, "residual_after": -31.01579250355409}}]};
 
 const fmt = (x, d = 4) => x.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
-const db = esr => (10 * Math.log10(esr)).toLocaleString("fr-FR", { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + " dB";
+const dB = v => v.toLocaleString("fr-FR", { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + " dB";
 const mmss = t => { const s = Math.max(0, t); return `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, "0")}`; };
 const el = (tag, attrs = {}, ...kids) => {
   const n = document.createElement(tag);
@@ -157,7 +180,62 @@ const ICON_PAUSE = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 2.
 const strips = [];
 let stripId = 0;
 
-function Strip({ title, rule, knob, tracks, readout, note }) {
+const OCTAVES = ["63", "125", "250", "500", "1k", "2k", "4k", "8k", "16k"];
+const SVGNS = "http://www.w3.org/2000/svg";
+const svg = (tag, attrs = {}) => { const n = document.createElementNS(SVGNS, tag); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); return n; };
+const signed = v => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+// Diverging bars per octave, one row per track, one symmetric scale per strip.
+function OctaveChart(series) {
+  const peak = Math.max(1, ...series.flatMap(s => s.values.map(Math.abs)));
+  const scale = [1, 2, 3, 4, 6, 8, 12, 18, 24].find(v => v >= peak) || Math.ceil(peak);
+  const left = 92, col = 30, rowH = 58, half = 22, width = left + col * OCTAVES.length + 4;
+  const height = series.length * rowH + 16;
+  const box = el("div", { class: "chart" });
+  const legend = el("div", { class: "chart-legend" },
+    el("span", {}, el("span", { class: "sw", style: "background: var(--added)" }), "ajouté"),
+    el("span", {}, el("span", { class: "sw", style: "background: var(--removed)" }), "retiré"),
+    el("span", { text: `dB par octave, piste − réel, échelle ±${scale} dB` }));
+  const plot = svg("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "Écart de niveau par octave, piste moins réel" });
+  const tip = el("div", { class: "tip" }); tip.hidden = true;
+  series.forEach((s, r) => {
+    const mid = r * rowH + half + 6;
+    const label = svg("text", { x: 0, y: mid - half + 10, class: "row-label" }); label.textContent = s.label; plot.append(label);
+    for (const [v, y] of [[scale, mid - half], [-scale, mid + half]]) {
+      plot.append(svg("line", { x1: left, x2: width - 4, y1: y, y2: y, class: "grid" }));
+      const t = svg("text", { x: left - 6, y: y + 3, "text-anchor": "end" }); t.textContent = signed(v); plot.append(t);
+    }
+    s.values.forEach((v, i) => {
+      const x = left + i * col + 6, h = Math.min(Math.abs(v), scale) / scale * half;
+      if (h > 0.4) {
+        const bar = svg("rect", { x, width: col - 12, y: v >= 0 ? mid - h : mid, height: h, rx: 2, class: v >= 0 ? "up" : "down" });
+        plot.append(bar);
+      }
+      const hit = svg("rect", { x: left + i * col, y: mid - half, width: col, height: 2 * half, class: "hit" });
+      hit.addEventListener("mouseenter", () => {
+        tip.textContent = `${s.label} · ${OCTAVES[i]} Hz : ${signed(v)} dB`;
+        tip.hidden = false;
+        const bx = plot.getBoundingClientRect(), k = bx.width / width;
+        tip.style.left = `${Math.min((left + i * col) * k, bx.width - 160)}px`;
+        tip.style.top = `${(mid - half) * k - 26}px`;
+      });
+      hit.addEventListener("mouseleave", () => { tip.hidden = true; });
+      plot.append(hit);
+    });
+    plot.append(svg("line", { x1: left, x2: width - 4, y1: mid, y2: mid, class: "zero" }));
+  });
+  OCTAVES.forEach((o, i) => {
+    const t = svg("text", { x: left + i * col + col / 2, y: height - 2, "text-anchor": "middle" }); t.textContent = o; plot.append(t);
+  });
+  const table = el("table", {}, el("thead", {}, el("tr", {}, el("th", { text: "piste" }), ...OCTAVES.map(o => el("th", { text: o })))));
+  const body = el("tbody");
+  series.forEach(s => body.append(el("tr", {}, el("td", { text: s.label }), ...s.values.map(v => el("td", { text: signed(v) })))));
+  table.append(body);
+  box.append(legend, plot, tip, el("details", {}, el("summary", { text: "Valeurs en dB" }), el("div", { class: "table-wrap" }, table)));
+  return box;
+}
+
+function Strip({ title, rule, knob, tracks, readout, note, chart }) {
   const id = ++stripId;
   const audios = tracks.map(t => { const a = new Audio(); a.preload = "none"; a.loop = true; a.src = t.src; return a; });
   let current = 0, playing = false, order = tracks.map((_, i) => i), blind = false, revealed = false;
@@ -171,6 +249,7 @@ function Strip({ title, rule, knob, tracks, readout, note }) {
   reveal.hidden = true;
   const readoutBox = el("div", { class: "readout" });
   const ruleBox = rule ? el("p", { class: "rule", text: rule }) : null;
+  const chartBox = chart ? OctaveChart(chart) : null;
   const buttons = [];
 
   function renderTracks() {
@@ -190,6 +269,7 @@ function Strip({ title, rule, knob, tracks, readout, note }) {
     });
     readoutBox.hidden = blind && !revealed;
     if (ruleBox) ruleBox.hidden = blind && !revealed;
+    if (chartBox) chartBox.hidden = blind && !revealed;
   }
 
   // One reference position, kept from the current track; a token voids stale loads.
@@ -270,6 +350,7 @@ function Strip({ title, rule, knob, tracks, readout, note }) {
     el("div", { class: "transport" }, play, seek, time,
       el("label", { class: "blind", for: `blind-${id}` }, blindBox, "À l'aveugle"), reveal),
     readoutBox,
+    chartBox,
     note ? el("p", { class: "note", text: note }) : null);
   const api = { node, stop() { token++; pauseAll(); setPlaying(false); } };
   strips.push(api);
@@ -299,10 +380,11 @@ root.append(Device({
     knob: `${fmt(r.window_s[0], 1)}–${fmt(r.window_s[1], 1)} s`,
     tracks: [
       { label: "Réel", src: r.files.real },
-      { label: "Modèle", src: r.files.model, tag: `ESR ${fmt(r.esr)}` },
-      { label: "Résidu", src: r.files.residual, residual: true, tag: db(r.esr) },
+      { label: "Modèle", src: r.files.model, tag: `ESR ${fmt(r.esr.model)}` },
+      { label: "Résidu", src: r.files.residual, residual: true, tag: dB(r.residual_db.residual) },
     ],
-    readout: [["ESR de l'extrait", fmt(r.esr)], ["résidu", db(r.esr)]],
+    readout: [["ESR de l'extrait", fmt(r.esr.model)], ["résidu", dB(r.residual_db.residual)]],
+    chart: [{ label: "Modèle", values: r.octaves.model }],
   })),
 }));
 
@@ -321,10 +403,11 @@ root.append(Device({
       { label: "Réel", src: r.files.real },
       { label: "FiLM (A)", src: r.files.film, tag: `ESR ${fmt(r.esr.film)}` },
       { label: "Pôles (D)", src: r.files.poles, tag: `ESR ${fmt(r.esr.poles)}` },
-      { label: "Résidu FiLM", src: r.files.residual_film, residual: true, tag: db(r.esr.film) },
-      { label: "Résidu pôles", src: r.files.residual_poles, residual: true, tag: db(r.esr.poles) },
+      { label: "Résidu FiLM", src: r.files.residual_film, residual: true, tag: dB(r.residual_db.residual_film) },
+      { label: "Résidu pôles", src: r.files.residual_poles, residual: true, tag: dB(r.residual_db.residual_poles) },
     ],
     readout: [["ESR FiLM", fmt(r.esr.film)], ["ESR pôles", fmt(r.esr.poles)], ["rapport", fmt(r.esr.film / r.esr.poles, 2)]],
+    chart: [{ label: "FiLM (A)", values: r.octaves.film }, { label: "Pôles (D)", values: r.octaves.poles }],
   })),
 }));
 
@@ -337,19 +420,23 @@ for (const [kind, m] of Object.entries(DATA.rate.models)) {
     tracks: [
       { label: "Réel", src: r.files.real },
       { label: "Modèle à 48 kHz", src: r.files.model48 },
-      { label: "Modèle à 192 kHz", src: r.files.model192, tag: `ESR ${fmt(r.esr_vs_48k, 5)}` },
-      { label: "Écart 48 − 192", src: r.files.residual, residual: true, tag: db(r.esr_vs_48k) },
+      { label: "Modèle à 192 kHz", src: r.files.model192, tag: `ESR ${fmt(r.esr.model192, 5)}` },
+      { label: "Témoin rééchantillonneur", src: r.files.control, tag: `ESR ${fmt(r.esr.control, 6)}` },
+      { label: "Écart 48 − 192", src: r.files.residual, residual: true, tag: dB(r.residual_db.residual) },
+      ...(r.files.residual_compensated ? [{ label: "Écart, retard compensé", src: r.files.residual_compensated, residual: true, tag: dB(r.residual_db.residual_compensated) }] : []),
     ],
-    readout: [["ESR 192 kHz contre 48 kHz", fmt(r.esr_vs_48k, 5)], ["écart", db(r.esr_vs_48k)]],
+    readout: [["ESR 192 kHz contre 48 kHz", fmt(r.esr.model192, 5)], ["écart", dB(r.residual_db.residual)],
+      ...(r.residual_db.residual_compensated != null ? [["retard compensé", dB(r.residual_db.residual_compensated)]] : [])],
+    chart: [{ label: "48 kHz", values: r.octaves.model48 }, { label: "192 kHz", values: r.octaves.model192 }],
     note: k === 0 ? (kind === "zoh"
-      ? "Le ZOH rééchelonné prend un retard de 0,95 échantillon à 48 kHz (κ = 2,53 pour ce checkpoint, T4). Un tel retard ne s'entend pas seul, mais il laisse un écart fort."
-      : "Par couche linéaire et à fréquence nulle, le FOH n'a pas d'avance (T1). Mesuré par bande sur le réseau, κ médian 0,036 sur trois checkpoints et deux fréquences (T1-P1 soutenue) : ici, l'écart descend vers −31 dB.") : null,
+      ? `Le ZOH rééchelonné prend un retard de ${fmt(r.delay_samples, 2)} échantillon à 48 kHz (κ = 2,53 pour ce checkpoint, T4). L'écart brut en est presque entièrement fait ; avancé de ce retard, il tombe d'environ 15 dB. Sur tout le jeu de test, ce ZOH perd 0,5 dB entre 4 et 16 kHz à 192 kHz, alors que les FOH en gagnent 0,2 à 0,3 (predictions_brightness.md, lectures non tranchées).`
+      : "Par couche linéaire et à fréquence nulle, le FOH n'a pas d'avance (T1). Mesuré par bande sur le réseau, κ médian 0,036 sur trois checkpoints et deux fréquences (T1-P1 soutenue). Ce FOH gagne 0,24 dB entre 4 et 16 kHz à 192 kHz.") : null,
   })));
 }
 root.append(Device({
   eyebrow: "T1, T4 · transfert de fréquence d'échantillonnage",
   title: "Big Muff à 192 kHz",
-  intro: "Un modèle entraîné à 48 kHz tourne à 192 kHz en rééchelonnant ses pas Δ, puis sa sortie est ramenée à 48 kHz. L'écart fait entendre ce que coûte le changement de fréquence, en ZOH et en FOH. Les deux modèles sont des entraînements différents à la même graine.",
+  intro: "Un modèle entraîné à 48 kHz tourne à 192 kHz en rééchelonnant ses pas Δ, puis sa sortie est ramenée à 48 kHz (sinc de Kaiser de largeur 64, aller et retour). L'écart fait entendre ce que coûte le changement de fréquence, en ZOH et en FOH. Le témoin est la sortie à 48 kHz passée seule par le rééchantillonneur. Les deux modèles sont des entraînements différents à la même graine.",
   meta: ["Big Muff, segments de test au plus fort niveau", "extraits de 0,5 à 4,5 s"],
   strips: rateStrips,
 }));
@@ -367,9 +454,10 @@ root.append(Device({
       { label: "Réel", src: r.files.real },
       { label: "Avant", src: r.files.before, tag: `ESR ${fmt(r.esr.before)}` },
       { label: "Après", src: r.files.after, tag: `ESR ${fmt(r.esr.after)}` },
-      { label: "Résidu avant", src: r.files.residual_before, residual: true, tag: db(r.esr.before) },
-      { label: "Résidu après", src: r.files.residual_after, residual: true, tag: db(r.esr.after) },
+      { label: "Résidu avant", src: r.files.residual_before, residual: true, tag: dB(r.residual_db.residual_before) },
+      { label: "Résidu après", src: r.files.residual_after, residual: true, tag: dB(r.residual_db.residual_after) },
     ],
+    chart: [{ label: "Avant", values: r.octaves.before }, { label: "Après", values: r.octaves.after }],
     readout: [["ESR avant", fmt(r.esr.before)], ["ESR après", fmt(r.esr.after, 5)], ["enregistrées", `${fmt(r.recorded_esr.before)} → ${fmt(r.recorded_esr.after)}`]],
   })),
 }));

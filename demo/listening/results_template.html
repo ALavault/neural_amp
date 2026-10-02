@@ -15,6 +15,8 @@
   --brass-soft: #f1e7d2;
   --residual: #8b3743;
   --residual-soft: #f5e3e5;
+  --added: #c2452d;
+  --removed: #2a78d6;
   --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
   --body: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -23,12 +25,14 @@
   :root:not([data-theme="light"]) {
     --bg: #141816; --panel: #1d2320; --ink: #e5e9e3; --muted: #9ba59f; --line: #313a35;
     --brass: #d6a94c; --brass-soft: #3a311d; --residual: #dc8f99; --residual-soft: #3b2328;
+    --added: #e06a50; --removed: #4a92e8;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #141816; --panel: #1d2320; --ink: #e5e9e3; --muted: #9ba59f; --line: #313a35;
   --brass: #d6a94c; --brass-soft: #3a311d; --residual: #dc8f99; --residual-soft: #3b2328;
+  --added: #e06a50; --removed: #4a92e8;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -102,6 +106,24 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--brass); out
 .readout { display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; font: 0.8rem/1.5 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .readout b { color: var(--ink); font-weight: 600; }
 .note { font-size: 0.9rem; color: var(--muted); }
+.chart { position: relative; display: grid; gap: 0.4rem; min-width: 0; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-size: 0.8rem; color: var(--muted); }
+.chart-legend .sw { display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 2px; margin-right: 0.35rem; vertical-align: -0.05rem; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { font: 10px var(--mono); fill: var(--muted); }
+.chart .row-label { font: 600 11px var(--body); fill: var(--ink); }
+.chart .zero { stroke: var(--muted); stroke-width: 1; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .up { fill: var(--added); }
+.chart .down { fill: var(--removed); }
+.chart .hit { fill: transparent; cursor: crosshair; }
+.chart .hit:hover { fill: var(--line); fill-opacity: 0.35; }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--panel); font: 0.75rem/1.3 var(--mono); padding: 0.3rem 0.45rem; border-radius: 3px; white-space: nowrap; }
+.chart details { font-size: 0.8rem; color: var(--muted); }
+.chart table { border-collapse: collapse; font: 0.75rem var(--mono); font-variant-numeric: tabular-nums; }
+.chart th, .chart td { padding: 0.15rem 0.45rem; text-align: right; border-bottom: 1px solid var(--line); }
+.chart th:first-child, .chart td:first-child { text-align: left; }
+.table-wrap { overflow-x: auto; }
 footer { border-top: 1px solid var(--line); padding-top: 1rem; display: grid; gap: 0.6rem; font-size: 0.85rem; color: var(--muted); }
 footer p { max-width: 80ch; }
 code { font: 0.85em var(--mono); overflow-wrap: anywhere; }
@@ -121,7 +143,8 @@ code { font: 0.85em var(--mono); overflow-wrap: anywhere; }
     <div class="howto">
       <span><b>Changer de piste</b> en cours de lecture garde la position.</span>
       <span><b>Résidu</b> = réel − modèle (bordure en tirets) ; pour le transfert, modèle à 48 kHz − modèle à 192 kHz.</span>
-      <span><b>À l'aveugle</b> mélange les pistes non résiduelles, masque leurs noms, les résidus et les mesures de la tranche.</span>
+      <span><b>À l'aveugle</b> mélange les pistes non résiduelles, masque leurs noms, les résidus, les mesures et le graphique de la tranche.</span>
+      <span><b>Graphique</b> : niveau de chaque piste moins celui du réel, par octave. Au-dessus de zéro, contenu ajouté ; en dessous, contenu retiré.</span>
     </div>
   </header>
   <div id="sections"></div>
@@ -130,10 +153,10 @@ code { font: 0.85em var(--mono); overflow-wrap: anywhere; }
     <code>github.com/mcomunita/tonetwist-afx-dataset</code>), licence CC BY-NC 4.0, usage non commercial.
     VS100R : capture personnelle (envoi de boucle d'effets, canal OD2), dont l'entrée est le signal
     DRY de ToneTwist AFx (Zenodo 10455730, CC BY-NC 4.0).</p>
-    <p><b>Fabrication.</b> <code>scripts/product_results_listening.py</code> ; WAV 48 kHz 16 bits, un
-    gain par tranche (crête −1 dBFS), fondus de 10 ms. Les ESR affichées sont calculées sur les extraits avant fondus et
-    quantification 16 bits (écart relatif inférieur à 0,3 % sur les fichiers joués). Les ESR
-    enregistrées portent sur tout le jeu de test et diffèrent donc. Voie
+    <p><b>Fabrication.</b> <code>scripts/product_results_listening.py</code> ; WAV 48 kHz 24 bits, un
+    gain par tranche (crête −1 dBFS), fondus de 10 ms. ESR, niveaux des résidus et écarts par octave
+    sont calculés sur les fichiers tels qu'ils sont joués. Les ESR enregistrées portent sur tout le
+    jeu de test et diffèrent donc. Voie
     produit : aucun résultat de cette page n'est une revendication scientifique.</p>
   </footer>
 </main>
@@ -142,7 +165,7 @@ code { font: 0.85em var(--mono); overflow-wrap: anywhere; }
 const DATA = /*DATA*/null;
 
 const fmt = (x, d = 4) => x.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
-const db = esr => (10 * Math.log10(esr)).toLocaleString("fr-FR", { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + " dB";
+const dB = v => v.toLocaleString("fr-FR", { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + " dB";
 const mmss = t => { const s = Math.max(0, t); return `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, "0")}`; };
 const el = (tag, attrs = {}, ...kids) => {
   const n = document.createElement(tag);
@@ -157,7 +180,62 @@ const ICON_PAUSE = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 2.
 const strips = [];
 let stripId = 0;
 
-function Strip({ title, rule, knob, tracks, readout, note }) {
+const OCTAVES = ["63", "125", "250", "500", "1k", "2k", "4k", "8k", "16k"];
+const SVGNS = "http://www.w3.org/2000/svg";
+const svg = (tag, attrs = {}) => { const n = document.createElementNS(SVGNS, tag); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); return n; };
+const signed = v => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+// Diverging bars per octave, one row per track, one symmetric scale per strip.
+function OctaveChart(series) {
+  const peak = Math.max(1, ...series.flatMap(s => s.values.map(Math.abs)));
+  const scale = [1, 2, 3, 4, 6, 8, 12, 18, 24].find(v => v >= peak) || Math.ceil(peak);
+  const left = 92, col = 30, rowH = 58, half = 22, width = left + col * OCTAVES.length + 4;
+  const height = series.length * rowH + 16;
+  const box = el("div", { class: "chart" });
+  const legend = el("div", { class: "chart-legend" },
+    el("span", {}, el("span", { class: "sw", style: "background: var(--added)" }), "ajouté"),
+    el("span", {}, el("span", { class: "sw", style: "background: var(--removed)" }), "retiré"),
+    el("span", { text: `dB par octave, piste − réel, échelle ±${scale} dB` }));
+  const plot = svg("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "Écart de niveau par octave, piste moins réel" });
+  const tip = el("div", { class: "tip" }); tip.hidden = true;
+  series.forEach((s, r) => {
+    const mid = r * rowH + half + 6;
+    const label = svg("text", { x: 0, y: mid - half + 10, class: "row-label" }); label.textContent = s.label; plot.append(label);
+    for (const [v, y] of [[scale, mid - half], [-scale, mid + half]]) {
+      plot.append(svg("line", { x1: left, x2: width - 4, y1: y, y2: y, class: "grid" }));
+      const t = svg("text", { x: left - 6, y: y + 3, "text-anchor": "end" }); t.textContent = signed(v); plot.append(t);
+    }
+    s.values.forEach((v, i) => {
+      const x = left + i * col + 6, h = Math.min(Math.abs(v), scale) / scale * half;
+      if (h > 0.4) {
+        const bar = svg("rect", { x, width: col - 12, y: v >= 0 ? mid - h : mid, height: h, rx: 2, class: v >= 0 ? "up" : "down" });
+        plot.append(bar);
+      }
+      const hit = svg("rect", { x: left + i * col, y: mid - half, width: col, height: 2 * half, class: "hit" });
+      hit.addEventListener("mouseenter", () => {
+        tip.textContent = `${s.label} · ${OCTAVES[i]} Hz : ${signed(v)} dB`;
+        tip.hidden = false;
+        const bx = plot.getBoundingClientRect(), k = bx.width / width;
+        tip.style.left = `${Math.min((left + i * col) * k, bx.width - 160)}px`;
+        tip.style.top = `${(mid - half) * k - 26}px`;
+      });
+      hit.addEventListener("mouseleave", () => { tip.hidden = true; });
+      plot.append(hit);
+    });
+    plot.append(svg("line", { x1: left, x2: width - 4, y1: mid, y2: mid, class: "zero" }));
+  });
+  OCTAVES.forEach((o, i) => {
+    const t = svg("text", { x: left + i * col + col / 2, y: height - 2, "text-anchor": "middle" }); t.textContent = o; plot.append(t);
+  });
+  const table = el("table", {}, el("thead", {}, el("tr", {}, el("th", { text: "piste" }), ...OCTAVES.map(o => el("th", { text: o })))));
+  const body = el("tbody");
+  series.forEach(s => body.append(el("tr", {}, el("td", { text: s.label }), ...s.values.map(v => el("td", { text: signed(v) })))));
+  table.append(body);
+  box.append(legend, plot, tip, el("details", {}, el("summary", { text: "Valeurs en dB" }), el("div", { class: "table-wrap" }, table)));
+  return box;
+}
+
+function Strip({ title, rule, knob, tracks, readout, note, chart }) {
   const id = ++stripId;
   const audios = tracks.map(t => { const a = new Audio(); a.preload = "none"; a.loop = true; a.src = t.src; return a; });
   let current = 0, playing = false, order = tracks.map((_, i) => i), blind = false, revealed = false;
@@ -171,6 +249,7 @@ function Strip({ title, rule, knob, tracks, readout, note }) {
   reveal.hidden = true;
   const readoutBox = el("div", { class: "readout" });
   const ruleBox = rule ? el("p", { class: "rule", text: rule }) : null;
+  const chartBox = chart ? OctaveChart(chart) : null;
   const buttons = [];
 
   function renderTracks() {
@@ -190,6 +269,7 @@ function Strip({ title, rule, knob, tracks, readout, note }) {
     });
     readoutBox.hidden = blind && !revealed;
     if (ruleBox) ruleBox.hidden = blind && !revealed;
+    if (chartBox) chartBox.hidden = blind && !revealed;
   }
 
   // One reference position, kept from the current track; a token voids stale loads.
@@ -270,6 +350,7 @@ function Strip({ title, rule, knob, tracks, readout, note }) {
     el("div", { class: "transport" }, play, seek, time,
       el("label", { class: "blind", for: `blind-${id}` }, blindBox, "À l'aveugle"), reveal),
     readoutBox,
+    chartBox,
     note ? el("p", { class: "note", text: note }) : null);
   const api = { node, stop() { token++; pauseAll(); setPlaying(false); } };
   strips.push(api);
@@ -299,10 +380,11 @@ root.append(Device({
     knob: `${fmt(r.window_s[0], 1)}–${fmt(r.window_s[1], 1)} s`,
     tracks: [
       { label: "Réel", src: r.files.real },
-      { label: "Modèle", src: r.files.model, tag: `ESR ${fmt(r.esr)}` },
-      { label: "Résidu", src: r.files.residual, residual: true, tag: db(r.esr) },
+      { label: "Modèle", src: r.files.model, tag: `ESR ${fmt(r.esr.model)}` },
+      { label: "Résidu", src: r.files.residual, residual: true, tag: dB(r.residual_db.residual) },
     ],
-    readout: [["ESR de l'extrait", fmt(r.esr)], ["résidu", db(r.esr)]],
+    readout: [["ESR de l'extrait", fmt(r.esr.model)], ["résidu", dB(r.residual_db.residual)]],
+    chart: [{ label: "Modèle", values: r.octaves.model }],
   })),
 }));
 
@@ -321,10 +403,11 @@ root.append(Device({
       { label: "Réel", src: r.files.real },
       { label: "FiLM (A)", src: r.files.film, tag: `ESR ${fmt(r.esr.film)}` },
       { label: "Pôles (D)", src: r.files.poles, tag: `ESR ${fmt(r.esr.poles)}` },
-      { label: "Résidu FiLM", src: r.files.residual_film, residual: true, tag: db(r.esr.film) },
-      { label: "Résidu pôles", src: r.files.residual_poles, residual: true, tag: db(r.esr.poles) },
+      { label: "Résidu FiLM", src: r.files.residual_film, residual: true, tag: dB(r.residual_db.residual_film) },
+      { label: "Résidu pôles", src: r.files.residual_poles, residual: true, tag: dB(r.residual_db.residual_poles) },
     ],
     readout: [["ESR FiLM", fmt(r.esr.film)], ["ESR pôles", fmt(r.esr.poles)], ["rapport", fmt(r.esr.film / r.esr.poles, 2)]],
+    chart: [{ label: "FiLM (A)", values: r.octaves.film }, { label: "Pôles (D)", values: r.octaves.poles }],
   })),
 }));
 
@@ -337,19 +420,23 @@ for (const [kind, m] of Object.entries(DATA.rate.models)) {
     tracks: [
       { label: "Réel", src: r.files.real },
       { label: "Modèle à 48 kHz", src: r.files.model48 },
-      { label: "Modèle à 192 kHz", src: r.files.model192, tag: `ESR ${fmt(r.esr_vs_48k, 5)}` },
-      { label: "Écart 48 − 192", src: r.files.residual, residual: true, tag: db(r.esr_vs_48k) },
+      { label: "Modèle à 192 kHz", src: r.files.model192, tag: `ESR ${fmt(r.esr.model192, 5)}` },
+      { label: "Témoin rééchantillonneur", src: r.files.control, tag: `ESR ${fmt(r.esr.control, 6)}` },
+      { label: "Écart 48 − 192", src: r.files.residual, residual: true, tag: dB(r.residual_db.residual) },
+      ...(r.files.residual_compensated ? [{ label: "Écart, retard compensé", src: r.files.residual_compensated, residual: true, tag: dB(r.residual_db.residual_compensated) }] : []),
     ],
-    readout: [["ESR 192 kHz contre 48 kHz", fmt(r.esr_vs_48k, 5)], ["écart", db(r.esr_vs_48k)]],
+    readout: [["ESR 192 kHz contre 48 kHz", fmt(r.esr.model192, 5)], ["écart", dB(r.residual_db.residual)],
+      ...(r.residual_db.residual_compensated != null ? [["retard compensé", dB(r.residual_db.residual_compensated)]] : [])],
+    chart: [{ label: "48 kHz", values: r.octaves.model48 }, { label: "192 kHz", values: r.octaves.model192 }],
     note: k === 0 ? (kind === "zoh"
-      ? "Le ZOH rééchelonné prend un retard de 0,95 échantillon à 48 kHz (κ = 2,53 pour ce checkpoint, T4). Un tel retard ne s'entend pas seul, mais il laisse un écart fort."
-      : "Par couche linéaire et à fréquence nulle, le FOH n'a pas d'avance (T1). Mesuré par bande sur le réseau, κ médian 0,036 sur trois checkpoints et deux fréquences (T1-P1 soutenue) : ici, l'écart descend vers −31 dB.") : null,
+      ? `Le ZOH rééchelonné prend un retard de ${fmt(r.delay_samples, 2)} échantillon à 48 kHz (κ = 2,53 pour ce checkpoint, T4). L'écart brut en est presque entièrement fait ; avancé de ce retard, il tombe d'environ 15 dB. Sur tout le jeu de test, ce ZOH perd 0,5 dB entre 4 et 16 kHz à 192 kHz, alors que les FOH en gagnent 0,2 à 0,3 (predictions_brightness.md, lectures non tranchées).`
+      : "Par couche linéaire et à fréquence nulle, le FOH n'a pas d'avance (T1). Mesuré par bande sur le réseau, κ médian 0,036 sur trois checkpoints et deux fréquences (T1-P1 soutenue). Ce FOH gagne 0,24 dB entre 4 et 16 kHz à 192 kHz.") : null,
   })));
 }
 root.append(Device({
   eyebrow: "T1, T4 · transfert de fréquence d'échantillonnage",
   title: "Big Muff à 192 kHz",
-  intro: "Un modèle entraîné à 48 kHz tourne à 192 kHz en rééchelonnant ses pas Δ, puis sa sortie est ramenée à 48 kHz. L'écart fait entendre ce que coûte le changement de fréquence, en ZOH et en FOH. Les deux modèles sont des entraînements différents à la même graine.",
+  intro: "Un modèle entraîné à 48 kHz tourne à 192 kHz en rééchelonnant ses pas Δ, puis sa sortie est ramenée à 48 kHz (sinc de Kaiser de largeur 64, aller et retour). L'écart fait entendre ce que coûte le changement de fréquence, en ZOH et en FOH. Le témoin est la sortie à 48 kHz passée seule par le rééchantillonneur. Les deux modèles sont des entraînements différents à la même graine.",
   meta: ["Big Muff, segments de test au plus fort niveau", "extraits de 0,5 à 4,5 s"],
   strips: rateStrips,
 }));
@@ -367,9 +454,10 @@ root.append(Device({
       { label: "Réel", src: r.files.real },
       { label: "Avant", src: r.files.before, tag: `ESR ${fmt(r.esr.before)}` },
       { label: "Après", src: r.files.after, tag: `ESR ${fmt(r.esr.after)}` },
-      { label: "Résidu avant", src: r.files.residual_before, residual: true, tag: db(r.esr.before) },
-      { label: "Résidu après", src: r.files.residual_after, residual: true, tag: db(r.esr.after) },
+      { label: "Résidu avant", src: r.files.residual_before, residual: true, tag: dB(r.residual_db.residual_before) },
+      { label: "Résidu après", src: r.files.residual_after, residual: true, tag: dB(r.residual_db.residual_after) },
     ],
+    chart: [{ label: "Avant", values: r.octaves.before }, { label: "Après", values: r.octaves.after }],
     readout: [["ESR avant", fmt(r.esr.before)], ["ESR après", fmt(r.esr.after, 5)], ["enregistrées", `${fmt(r.recorded_esr.before)} → ${fmt(r.recorded_esr.after)}`]],
   })),
 }));

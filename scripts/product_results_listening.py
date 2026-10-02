@@ -15,7 +15,7 @@ representative):
 - F-Fuzz: param_ssm_wavenet_ffuzz_r2 (before) and _adv4_r2 (after, delayed back by its
   4-sample target advance) at F000, F070 (held out) and F100.
 Bench excerpts are 0.5-4.5 s of the test segment of highest real RMS for that setting.
-Each group shares one gain, so residuals keep their true level. Writes 16-bit WAV
+Each group shares one gain, so residuals keep their true level. Writes 24-bit WAV
 files to demo/listening/audio/results_*.wav (git-ignored: derived from CC BY-NC 4.0
 ToneTwist audio) and demo/listening/results.json.
 """
@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import importlib.util
 import json
 import math
 import statistics
@@ -41,6 +42,12 @@ from nablafx.core import BlackBoxModel
 from scipy.signal import resample_poly
 
 ROOT = Path(__file__).resolve().parents[1]
+_spec = importlib.util.spec_from_file_location(
+    "floor", ROOT / "demo/sr_transfer/floor.py"
+)
+floor = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(floor)
+OCTAVES = (63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000)
 
 AUDIO = ROOT / "demo/listening/audio"
 RATE = 48_000
@@ -89,23 +96,52 @@ def esr(pred: np.ndarray, ref: np.ndarray) -> float:
     return float(((ref - pred) ** 2).sum() / (ref**2).sum())
 
 
-def level_db(x: np.ndarray, ref: np.ndarray) -> float:
-    return 10 * math.log10((x**2).sum() / (ref**2).sum() + 1e-30)
+def octave_db(x: np.ndarray) -> np.ndarray:
+    power = np.abs(np.fft.rfft(x)) ** 2
+    freqs = np.fft.rfftfreq(len(x), 1 / RATE)
+    return np.array(
+        [
+            10 * math.log10(power[(freqs >= c / 2**0.5) & (freqs < c * 2**0.5)].sum())
+            for c in OCTAVES
+        ]
+    )
 
 
-def write_group(name: str, tracks: dict[str, np.ndarray]) -> dict[str, str]:
-    """One gain for the whole group: peak 0.89 (-1 dBFS), 10 ms fades."""
+def write_group(name: str, tracks: dict[str, np.ndarray], ref: str = "real") -> dict:
+    """One gain for the whole group: peak 0.89 (-1 dBFS), 10 ms fades, 24-bit WAV.
+    Metrics are computed on the files read back, as they are played: ESR of each
+    non-residual track against `ref`, per-octave level minus the real track, and each
+    residual's level relative to `ref`."""
     gain = 0.89 / max(np.abs(t).max() for t in tracks.values())
     fade = np.linspace(0, 1, RATE // 100)
-    files = {}
+    files, played = {}, {}
     for key, track in tracks.items():
         y = track * gain
         y[: len(fade)] *= fade
         y[-len(fade) :] *= fade[::-1]
         path = AUDIO / f"results_{name}_{key}.wav"
-        sf.write(path, y.astype(np.float32), RATE, subtype="PCM_16")
+        sf.write(path, y, RATE, subtype="PCM_24")
         files[key] = f"audio/{path.name}"
-    return files
+        played[key] = sf.read(path, dtype="float64")[0]
+    signals = [k for k in tracks if not k.startswith("residual")]
+    real = octave_db(played["real"])
+    return {
+        "files": files,
+        "ref": ref,
+        "esr": {
+            k: esr(played[k], played[ref]) for k in signals if k not in (ref, "real")
+        },
+        "octaves": {
+            k: (octave_db(played[k]) - real).round(2).tolist()
+            for k in signals
+            if k != "real"
+        },
+        "residual_db": {
+            k: 10 * math.log10((played[k] ** 2).sum() / (played[ref] ** 2).sum())
+            for k in tracks
+            if k.startswith("residual")
+        },
+    }
 
 
 def excerpt(x: np.ndarray) -> np.ndarray:
@@ -134,9 +170,7 @@ def vs100r() -> list[dict]:
             {
                 "label": f"Prise {take['order']} : gain {g:g}, contour {c:g}",
                 "window_s": [a / RATE, (a + window) / RATE],
-                "esr": esr(mod, real),
-                "residual_db": level_db(real - mod, real),
-                "files": write_group(
+                **write_group(
                     name, {"real": real, "model": mod, "residual": real - mod}
                 ),
             }
@@ -173,8 +207,7 @@ def marshall() -> list[dict]:
                 "rule": rule,
                 "setting": setting,
                 "recorded_esr": {"film": esr_a[setting], "poles": esr_d[setting]},
-                "esr": {"film": esr(ya, real), "poles": esr(yd, real)},
-                "files": write_group(
+                **write_group(
                     f"marshall_{setting}",
                     {
                         "real": real,
@@ -190,13 +223,18 @@ def marshall() -> list[dict]:
     return out
 
 
-def rate_transfer() -> list[dict]:
+def rate_transfer() -> dict:
+    """Kaiser-64 resampling both ways (floor.hq), as in brightness.py. Tracks: the
+    model at 48 kHz, at 192 kHz brought back, the 48 kHz output through the resampler
+    alone (control), 48 - 192, and for ZOH 48 - 192 advanced by the checkpoint's
+    median fractional delay at 192 kHz (kappa.json)."""
     data = bench.data_module("test")
     data.setup("test")
     dataset = data.test_dataset
     rms = [float(dataset[i][1].pow(2).mean()) for i in range(len(dataset))]
     picks = sorted(range(len(dataset)), key=lambda i: -rms[i])[:2]
     x48 = torch.stack([dataset[i][0] for i in picks])
+    kappa = json.loads((ROOT / "demo/sr_transfer/kappa.json").read_text())["bigmuff"]
     out = {"segments": picks, "models": {}}
     for kind, run_id in (
         ("zoh", "paired_ssm_wavenet_s925"),
@@ -209,31 +247,35 @@ def rate_transfer() -> list[dict]:
         }
         transfer.set_rate(model, RATE, base)
         y48 = transfer.run(model, x48)
+        control = floor.hq(floor.hq(y48, RATE, 192_000), 192_000, RATE)
         transfer.set_rate(model, 192_000, base)
-        y192 = transfer.run(model, transfer.whole(x48, RATE, 192_000))
-        back = transfer.whole(y192, 192_000, RATE)
+        y192 = transfer.run(model, floor.hq(x48, RATE, 192_000))
+        back = floor.hq(y192, 192_000, RATE)
         rows = []
         for k, i in enumerate(picks):
             ref = excerpt(y48[k, 0].double().numpy())
             moved = excerpt(back[k, 0].double().numpy())
-            real = excerpt(dataset[i][1][0].double().numpy())
+            tracks = {
+                "real": excerpt(dataset[i][1][0].double().numpy()),
+                "model48": ref,
+                "model192": moved,
+                "control": excerpt(control[k, 0].double().numpy()),
+                "residual": ref - moved,
+            }
+            row = {"segment": i}
+            if kind == "zoh":
+                delay = kappa[run_id]["192000"]["delay_median"]
+                full = back[k, 0].double().numpy()
+                spectrum = np.fft.rfft(full)
+                phase = np.exp(2j * np.pi * np.fft.rfftfreq(len(full)) * delay)
+                tracks["residual_compensated"] = ref - excerpt(
+                    np.fft.irfft(spectrum * phase, len(full))
+                )
+                row["delay_samples"] = delay
             rows.append(
-                {
-                    "segment": i,
-                    "esr_vs_48k": esr(moved, ref),
-                    "residual_db": level_db(ref - moved, ref),
-                    "files": write_group(
-                        f"rate_{kind}_seg{i}",
-                        {
-                            "real": real,
-                            "model48": ref,
-                            "model192": moved,
-                            "residual": ref - moved,
-                        },
-                    ),
-                }
+                {**row, **write_group(f"rate_{kind}_seg{i}", tracks, "model48")}
             )
-            print(kind, i, rows[-1]["esr_vs_48k"], flush=True)
+            print(kind, i, rows[-1]["esr"], flush=True)
         out["models"][kind] = {"run_id": run_id, "excerpts": rows}
     return out
 
@@ -264,8 +306,7 @@ def ffuzz() -> list[dict]:
                 + (" (réglage non vu)" if setting == "F070_V100" else ""),
                 "setting": setting,
                 "recorded_esr": {"before": esr_b[setting], "after": esr_a[setting]},
-                "esr": {"before": esr(yb, real), "after": esr(ya, real)},
-                "files": write_group(
+                **write_group(
                     f"ffuzz_{setting}",
                     {
                         "real": real,
@@ -292,7 +333,7 @@ def main() -> None:
     }
     path = ROOT / "demo/listening/results.json"
     path.write_text(json.dumps(result, indent=1, ensure_ascii=False) + "\n")
-    print(statistics.median(r["esr"] for r in result["vs100r"]))
+    print(statistics.median(r["esr"]["model"] for r in result["vs100r"]))
 
 
 if __name__ == "__main__":
