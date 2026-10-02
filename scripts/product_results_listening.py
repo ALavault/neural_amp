@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Audio of the listening page for the results of 2026-09-23 to 2026-10-02.
 
-Product lane, read-only, CPU. Four sections, excerpts chosen by fixed rules that look
-at the real signal's level only, never at a model's error:
+Product lane, read-only, CPU. Four sections. Within a setting, the excerpt is chosen
+by the real signal's level only; settings follow fixed rules, except the Marshall ones,
+which are picked from the recorded per-setting test ESRs (illustrative, not
+representative):
 - VS100R: vs100r_gc_film_joint_s925_r2 on the unseen test takes of lowest, median and
   highest gain; the 6 s window of highest real RMS.
 - Marshall: arm A (param_ssm_wavenet_marshall, FiLM) and arm D (g2_poles_additive_s925,

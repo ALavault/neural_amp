@@ -111,9 +111,12 @@ code { font: 0.85em var(--mono); overflow-wrap: anywhere; }
   <header class="top">
     <span class="eyebrow">neural_amp · voie produit · 23 sept. – 2 oct. 2026</span>
     <h1>Banc d'écoute SSM-WaveNet</h1>
-    <p class="lede">Quatre résultats récents, à écouter contre l'appareil réel. Chaque tranche joue un
-    extrait choisi par une règle fixée d'avance sur le niveau du réel, jamais sur l'erreur d'un modèle.
-    Toutes les pistes d'une tranche partagent le même gain : un résidu s'entend à son vrai niveau.</p>
+    <p class="lede">Quatre résultats récents, à écouter contre l'appareil réel. Dans chaque réglage,
+    l'extrait est choisi par une règle fixée d'avance sur le niveau du réel. Les réglages eux-mêmes
+    suivent une règle simple (gain minimal, médian, maximal ; fuzz 0, 7, 10), sauf pour le Marshall,
+    où ils ont été choisis sur les ESR de test enregistrées : ces trois-là illustrent, ils ne
+    représentent pas. Toutes les pistes d'une tranche partagent le même gain : un résidu s'entend à
+    son vrai niveau.</p>
     <div class="howto">
       <span><b>Changer de piste</b> en cours de lecture garde la position.</span>
       <span><b>Résidu</b> = réel − modèle (bordure en tirets).</span>
@@ -283,7 +286,7 @@ const knobs = s => s.replace(/_G\d+$/, "").replace(/B(\d+)_M(\d+)_T(\d+)/, (_, b
 root.append(Device({
   eyebrow: "G2.2 · conditionnement des réglages",
   title: "Marshall JVM410H OD1",
-  intro: "Deux façons de faire entrer les boutons dans le modèle, à budget égal : FiLM (bras A) module les portes non linéaires, « pôles » (bras D) déplace les pôles des SSM. Sur cinq partitions, D l'emporte nettement au réglage extrême (H1 soutenue). Sur la médiane des réglages, il est non inférieur mais indistinct. Ici, partition 925, réglages de test non vus.",
+  intro: "Deux façons de faire entrer les boutons dans le modèle, à budget égal : FiLM (bras A) module les portes non linéaires, « pôles » (bras D) déplace les pôles des SSM. Sur cinq partitions, D l'emporte nettement au réglage extrême (H1 soutenue). Sur la médiane des réglages, il est non inférieur mais indistinct. Ici, partition 925, l'une des plus favorables à D : il y bat A sur les 8 réglages de test utilisables (médiane de d +0,35, contre −0,09 à 688 et −0,02 à 744). Les trois réglages sont choisis sur les ESR enregistrées, la règle est rappelée sous chaque tranche.",
   meta: ["A : param_ssm_wavenet_marshall", "D : g2_poles_additive_s925", "réglage mal étiqueté exclu"],
   strips: DATA.marshall.map(r => Strip({
     title: r.label,
