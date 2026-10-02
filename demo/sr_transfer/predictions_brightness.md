@@ -98,9 +98,14 @@ fractionnaire (retards médians de `kappa.json`) ; le ZOH à 96 kHz.
 
 ## Résultats (2026-10-02, `brightness.py`, `brightness.json`)
 
-12 segments de test, valeur efficace d'entrée 0,103. Témoin du rééchantillonneur : 0,000 dB sur
-4 à 16 kHz pour les six checkpoints. Le sinc de Kaiser ne colore rien ; tout écart vient du
-modèle.
+12 segments de test, valeur efficace d'entrée 0,103. Témoin du rééchantillonneur : de −2·10⁻⁶ à
++10⁻⁷ dB en moyenne sur 4 à 16 kHz, pour les six checkpoints. Cela vaut pour cet aller-retour
+appliqué à la sortie à 48 kHz, et pour cette moyenne de bandes ; ce n'est pas une transparence
+prouvée jusqu'à 24 kHz.
+
+Écart déclaré après coup (relecture Codex) : I exclut la case 0 du numérateur et du
+dénominateur, c'est donc une part de l'énergie hors composante continue. La pré-inscription
+disait « sur l'énergie totale ».
 
 | checkpoint | 48 − réel, 4–16 kHz | B_96 | B_192 | D_48 | D_96 | D_192 | I_48 | I_192 | H_192 |
 |---|---|---|---|---|---|---|---|---|---|
@@ -114,35 +119,47 @@ modèle.
 En dB ; I et H : sinus à 997 Hz au niveau du jeu de test.
 
 **Lectures pré-inscrites : toutes « non tranché ».**
-- R1 (96 et 192) : 2 checkpoints sur 6 à ≤ −0,5 dB à 192 kHz, aucun à 96. Les ZOH perdent de
-  l'aigu (−0,18 à −0,56 dB à 192), les FOH en gagnent (+0,22 à +0,27). Les signes s'opposent
-  selon la discrétisation.
-- R2 (96 et 192) : « plus loin » pour 2 sur 6 seulement (ZOH s925 et s736, +0,30 dB). Les autres
-  écarts sont sous 0,25 dB, un seul est négatif (FOH s688, −0,02). Condition préalable : le
-  modèle à 48 kHz n'est pas plus brillant que le réel (−0,23 à +0,01 dB sur 4 à 16 kHz) ; ses
-  niveaux par bande sont déjà à 0,06–0,14 dB du réel en moyenne sur 1 à 16 kHz. Retirer de l'aigu
-  ne pouvait donc pas le rapprocher, et 192 kHz ne le rapproche pas.
-- R3 : la condition sur I tient pour les 6 checkpoints (baisse de 10,5 à 31,4 dB), celle sur
-  H_192 ≤ 0,5 dB pour 2 sur 6 seulement (les trois ZOH entre 0,87 et 0,97 dB, FOH s688 0,57).
-  Aucun H_192 ne dépasse 1 dB. Le repliement existe et 192 kHz en retire l'essentiel, mais les
-  harmoniques bougent aussi, plus en ZOH.
+- R1 (96 et 192) : 2 checkpoints sur 6 à ≤ −0,5 dB à 192 kHz, aucun à 96. Les trois ZOH perdent
+  de l'aigu (−0,18 à −0,56 dB à 192), les trois FOH en gagnent (+0,22 à +0,27).
+- R2 : à 192 kHz, « plus loin » pour 2 sur 6 (ZOH s925 +0,29 dB, s736 +0,30) ; à 96 kHz, aucun
+  (ZOH s925 et s736 +0,18). Les autres écarts sont sous 0,25 dB ; FOH s688 se rapproche un peu
+  (−0,04 à 96, −0,03 à 192). L'écart signé 48 − réel sur 4 à 16 kHz vaut −0,23 à +0,01 dB : en
+  moyenne, le modèle à 48 kHz n'est pas plus brillant que le réel. Une moyenne signée peut
+  toutefois masquer des bandes en excès et d'autres en défaut. D_48 vaut 0,06 à 0,14 dB, une
+  distance moyenne sur 1 à 16 kHz, pas une borne par bande ni par segment.
+- R3 : la condition sur I tient pour les 6 checkpoints (baisse de 10,6 à 31,4 dB), celle sur
+  H_192 ≤ 0,5 dB pour 2 sur 6 (les trois ZOH entre 0,87 et 0,97 dB, FOH s688 0,57). Aucun H_192
+  ne dépasse 1 dB.
 
-**Descriptif (segments écoutés 10 et 8, checkpoint s925).** ZOH à 192 kHz : −0,49 et −0,55 dB
-sur 4 à 16 kHz, ce que l'oreille a entendu. Le résidu de la page vaut une ESR de 0,177. Compensé
-du retard fractionnaire de `kappa.json`, il tombe à 0,0057 : le retard fait environ 97 % du
-résidu ZOH entendu. FOH à 192 kHz : +0,24 dB, ESR 0,0009 face au modèle à 48 kHz.
+**Limites de l'instrument sinus (relecture Codex).**
+- I compte toute énergie hors de la grille harmonique : repliement, mais aussi transitoire
+  résiduel du réseau à 0,5 s ou composante continue encore lente. L'établissement n'a pas été
+  vérifié, et les spectres ne sont pas conservés.
+- Le filtre de retour de `hq` atténue près de 24 kHz : −0,4 dB à 23 kHz, −9,0 dB à 23 928 Hz
+  (24 × 997). Il touche les chemins à 96 et 192 kHz, pas celui à 48. L'effet sur I n'a pas de
+  sens connu. Il est nul entre 4 et 16 kHz, donc il n'explique pas H.
+- H est une médiane d'écarts absolus. Ses versions signées ZOH valent +0,63, +0,04 et −0,95 dB :
+  les harmoniques bougent, mais pas dans un sens uniforme.
+
+**Descriptif (segments écoutés 10 et 8, checkpoint s925).**
+- ZOH à 192 kHz : −0,49 et −0,55 dB sur 4 à 16 kHz, dans le sens de l'impression d'écoute.
+  L'ESR face au modèle à 48 kHz vaut 0,177 et 0,181. Après compensation du retard fractionnaire de
+  `kappa.json`, elle tombe à 0,0057 et 0,0069, soit 96 à 97 % d'énergie d'erreur en moins. La
+  translation est circulaire et appliquée après découpe ; ses bords restent dans l'ESR compensée.
+- FOH à 192 kHz : +0,24 et +0,23 dB ; ESR 0,0009 et 0,00085.
 
 **Ce qu'on en tire, sans lecture pré-inscrite.**
-- L'aigu en moins à 192 kHz est propre au ZOH. Le FOH, qui perd lui aussi son repliement,
-  devient un peu plus brillant. Le retrait du repliement n'explique donc pas seul la perte d'aigu
-  du ZOH ; le changement de réponse du ZOH quand Δ change (H_192 de 0,9 dB) en est le candidat.
-- Les niveaux par bande ne tranchent ni A ni B : le modèle à 48 kHz colle déjà au réel à
-  0,1 dB près, et les écarts à 192 kHz restent sous 0,4 dB. Ils ne voient pas la nature
-  inharmonique du repliement, que seule l'écoute ou une mesure sur sinus distingue.
-- Rapprochement post hoc, à tester : la part inharmonique à 48 kHz (−35 à −39 dB) est du même
-  ordre que le plancher à −37 dB entre FOH à 88–192 kHz et 48 kHz (`predictions_floor.md`). Ce
-  plancher pourrait être le repliement retiré.
-- Décision produit (2× interne) : non tranchée. Le repliement baisse de 9,4 à 17,6 dB à 96 kHz sur
-  le sinus à 997 Hz, sans rapprocher les niveaux du réel. L'étape suivante est une écoute à
-  l'aveugle du FOH à 48 contre 192 kHz : s'il paraît encore moins dur, c'est le repliement ;
-  sinon, l'impression venait de l'aigu perdu par le ZOH.
+- Sur ces six checkpoints, les ZOH perdent un peu d'aigu à 192 kHz et les FOH en gagnent un
+  peu. Ce sont des entraînements différents : cela ne prouve pas que la discrétisation en soit la
+  cause. La baisse de la part hors grille, présente des deux côtés, n'explique pas à elle seule
+  la perte d'aigu des ZOH.
+- Les niveaux par bande ne départagent ni A ni B : les écarts à 192 kHz restent sous 0,4 dB et ne
+  disent rien de la nature inharmonique de ce qui change.
+- La part hors grille baisse nettement à 96 et 192 kHz. C'est compatible avec un repliement
+  retiré, sans l'établir seul (voir les limites ci-dessus).
+- Rapprochement post hoc, hypothèse seulement : la part hors grille à 48 kHz (−35 à −39 dB) est du
+  même ordre que le plancher à −37 dB de `predictions_floor.md`. Les deux grandeurs diffèrent
+  (part d'énergie sur sinus contre ESR sur programme), et le plancher portait sur des ZOH relus en
+  FOH, pas sur des FOH entraînés.
+- Décision produit (2× interne) : non tranchée. Une écoute à l'aveugle du FOH à 48 contre 192 kHz
+  dirait si une différence s'entend dans ces conditions. Elle n'en identifierait pas la cause.
