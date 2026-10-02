@@ -45,7 +45,7 @@ l'ESR de 2,8 à 4,0·10⁻⁴ des modèles entraînés en FOH face à eux-mêmes
 (`demo/sr_transfer/sr_transfer_paired_ssm_wavenet_foh_s*_last_plain.json`), contre 0,036 à 0,077
 pour le ZOH non corrigé
 Prédictions nouvelles :
-- T1-P1 (non mesurée, inscrite le 2026-10-02) : sur `paired_ssm_wavenet_foh_s{925,736,688}`,
+- T1-P1 (mesurée le 2026-10-02, soutenue ; inscrite le 2026-10-02) : sur `paired_ssm_wavenet_foh_s{925,736,688}`,
   avec la méthode de `demo/sr_transfer/kappa.py` (rééchelonnement de Δ à 96 et 192 kHz, retour
   à 48 kHz, retard par bande d'octave, Welch 4096, cohérence ≥ 0,5), la médiane des κ aux bandes
   500, 1 000 et 2 000 Hz (3 checkpoints × 2 fréquences) vérifie |κ| ≤ 0,15 ; réfutée si
@@ -63,6 +63,16 @@ Prédictions nouvelles :
   cible est à 2 % relatifs de `arms["48k"]["esr"]` du `_last_plain.json` du même checkpoint ;
   l'ESR entre la sortie ramenée de 96 ou 192 kHz et la sortie à 48 kHz (intérieurs) est
   ≤ 10⁻³ (ZOH non corrigé : 0,036 à 0,077).
+  Résultat (`demo/sr_transfer/kappa_foh.json`, commit 34c0032) : portes tenues (FOH sur les
+  trois checkpoints, ESR à 48 kHz égale au record, aller-retour de 2,6 à 4,3·10⁻⁴). κ primaire
+  0,036, soutenue. Lecture secondaire 0,034, aucune bande omise. Les 6 κ par
+  (checkpoint, fréquence) vont de 0,031 à 0,043, les 18 κ par bande de 0,003 à 0,059. Sans
+  lecture : à 4 et 8 kHz, κ de 0,041 à 0,157. Les ZOH aux mêmes graines (`kappa.json`), qui sont
+  d'autres entraînements, ont des κ de 1,9 à 2,6 aux trois bandes prédites (1,8 à 2,6 sur les
+  cinq). Non prédit : les 18 estimations par bande sont positives sur ces segments. Aucune
+  incertitude n'est estimée, donc le signe n'est pas établi, et l'énoncé ne dit rien de lui.
+  Relecture Codex gpt-6-astra, lecture seule, 2026-10-02 : règle, portes et chiffres conformes ;
+  deux formulations corrigées (plage ZOH par bandes, signe non établi).
 Historique : 2026-10-02 — → E : preuve et contrôles écrits ; 2026-10-02 E → D : relecture
 en deux passes, corrections appliquées
 
