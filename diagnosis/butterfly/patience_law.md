@@ -80,11 +80,18 @@ bruit.
 
 ## Résultats (2026-10-02, `patience_law.json`)
 
+**Correction d'implémentation déclarée (2026-10-02).** La première version du script prenait
+121 époques (de stop − 120 à stop inclus) au lieu des 120 prescrites ; écart relevé par la
+relecture Codex. Le script corrigé prend les 120 époques qui se terminent à l'époque qui a
+déclenché la division, sans autre changement ; les seuils ne bougent pas. Les chiffres ci-dessous
+sont ceux de la version corrigée. Avec 121 époques, les lectures étaient les mêmes (VR médian
+0,165, couverture 12/21, décalages 0 et +1 époque).
+
 **Porte de rejeu : franchie.** Avec un décalage de convention d'une époque, le rejeu reproduit
 l'époque observée de première division pour **21 runs sur 21**. Sans décalage, il n'en reproduit
 aucune.
 
-**Étape 1 : bruit indépendant.** VR(10) médian **0,165** (de 0,106 à 0,630 selon la run) ; 20 runs
+**Étape 1 : bruit indépendant.** VR(10) médian **0,166** (de 0,106 à 0,635 selon la run) ; 20 runs
 sur 21 sont sous 0,3. Le modèle retenu est « tendance + bruit indépendant ». Le modèle cumulatif
 n'est pas simulé.
 
@@ -93,16 +100,18 @@ n'est pas simulé.
 n'est pas atteint, celui de réfutation (0,40) non plus.
 
 **Indépendance au seuil : soutenue.** La médiane des 21 médianes prédites bouge de 0 époque avec
-θ = 10⁻³ et d'une époque avec θ = 10⁻⁵, contre un critère de 5.
+θ = 10⁻³ et de −1 époque avec θ = 10⁻⁵, contre un critère de 5.
 
 **Descriptif, hors critère.** Les écarts sont tous du même côté : les 9 runs non couvertes divisent
 **plus tard** que prévu (au-dessus de q90), aucune plus tôt. Exemples : enfant k0, observé 113
-contre [23 ; 90] ; k4, 114 contre [27 ; 100]. Les intervalles prédits ont une largeur médiane de
-73 à 77 époques. Le modèle à bruit indépendant fait donc diviser trop tôt. Deux lectures, non
-départagées : une tendance extrapolée trop plate près du plateau, ou des fluctuations qui, sans
-être cumulatives au sens de VR(10), ont plus de mémoire que du bruit blanc à l'échelle des 21
-époques de la patience.
+contre [26 ; 90] ; k4, 114 contre [28 ; 100]. Les intervalles prédits ont une largeur médiane de
+72 époques (77 pour les enfants, 70,5 pour le pilote C). Le modèle à bruit indépendant fait donc
+diviser trop tôt. Deux lectures, non départagées : une tendance extrapolée trop plate près du
+plateau, ou des fluctuations qui, sans être cumulatives au sens de VR(10), ont plus de mémoire
+que du bruit blanc à l'échelle des 21 époques de la patience.
 
-**Ce qui se dit.** Le seuil θ = 10⁻⁴ ne joue aucun rôle, et c'est maintenant une prédiction tenue
-du modèle de premier passage, pas seulement une observation de marge. La forme précise de la loi
-n'est que partiellement capturée par une tendance quadratique plus un bruit indépendant.
+**Ce qui se dit.** Selon le test préinscrit, la médiane prédite de la première division ne bouge
+pas de plus de 5 époques quand θ passe de 10⁻⁴ à 10⁻³ ou 10⁻⁵ : c'est une prédiction tenue du
+modèle de premier passage, pas seulement une observation de marge. Le test ne dit rien d'un
+rôle de θ hors de cette plage ni hors de ce modèle. La forme précise de la loi n'est que
+partiellement capturée par une tendance quadratique plus un bruit indépendant.

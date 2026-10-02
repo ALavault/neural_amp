@@ -144,7 +144,8 @@ def main() -> None:
     for run in runs:
         full, offset = info[run]["curve"], info[run]["offset"]
         stop = info[run]["observed"] + offset - shift
-        start = max(stop - WINDOW, 20 if run in PILOT_C else 0)
+        # WINDOW epochs ending at the one that triggered the halving (stop included).
+        start = max(stop - WINDOW + 1, 20 if run in PILOT_C else 0)
         info[run]["window"] = (start, stop)
         t = np.arange(start, stop + 1, dtype=float)
         y = np.log(np.asarray(full[start : stop + 1]))
