@@ -62,3 +62,48 @@ Les retards sont en échantillons à 48 kHz.
 
 Un checkpoint par appareil ; Big Muff et VS100R diffèrent aussi par le conditionnement (FiLM sur
 le VS100R). Le retard est mesuré modèle contre modèle, pas contre l'appareil.
+
+## Résultats (2026-10-02, `kappa.json`)
+
+Retards en échantillons à 48 kHz ; VS100R : 8 prises de test (2, 3, 14, 16, 17, 30, 33, 36).
+
+| checkpoint | κ à 96 kHz | κ à 192 kHz | rapport 192/96 | écart-type entre bandes (96 / 192) |
+|---|---|---|---|---|
+| `vs100r_gc_film_joint_s925_r2` | 1,934 | 1,993 | 1,031 | 0,175 / 0,265 |
+| `paired_ssm_wavenet_s925` | 2,525 | 2,529 | 1,001 | 0,033 / 0,050 |
+| `paired_ssm_wavenet_s736` | 2,428 | 2,419 | 0,996 | 0,031 / 0,048 |
+| `paired_ssm_wavenet_s688` | 1,920 | 1,903 | 0,991 | 0,022 / 0,031 |
+
+**R1, forme (1 − T′/T) : confirmée pour les 4 checkpoints** (rapports de 0,991 à 1,031, dans
+[0,8 ; 1,25]).
+
+**R2 : la mesure directe confirme l'estimation indirecte.** κ_VS100R = 1,964 (médiane des deux
+fréquences), |1,964 − 1,86| = 0,104 ≤ 0,3.
+
+**R3 : pas une propriété de l'architecture.** Médiane des 6 κ Big Muff = 2,423, à 0,460 du κ du
+VS100R, au-delà de 20 % (0,393). Le κ dépend du checkpoint ou de l'appareil. Descriptif : sur le
+même appareil, les trois graines Big Muff vont de 1,90 (s688) à 2,53 (s925).
+
+**R4 : retard pur pour les 3 checkpoints Big Muff** à 96 et 192 kHz (écarts-types de 0,022 à
+0,050). **Dispersif pour le VS100R** (0,175 et 0,265) : la bande de 500 Hz retarde nettement
+moins que les autres (0,144 contre 0,442 à 0,549 à 96 kHz ; 0,225 contre 0,686 à 0,847 à
+192 kHz).
+
+**R5 : lecture non interprétable, défaut du protocole.** Les seuils donnent : pas de cascade
+(Σ_b δ_b = 6,17 contre δ_tous = 0,483 à 96 kHz ; 67,82 contre 0,748 à 192 kHz) et compensation
+dans une couche (δ_b maximal 1,276 > 0,25 à 96 kHz ; 14,65 > 0,375 à 192 kHz). Mais le bras
+« bloc seul », tel qu'il est spécifié plus haut et exécuté, fait tourner tout le réseau à fs′ en
+laissant les 7 autres blocs à leur Δ de 48 kHz : leur dynamique est alors ralentie d'un facteur
+fs′/48 000 (×2, ×4) en temps physique. Chaque δ_b mesure donc surtout ce désaccord, et non la
+jauge d'un seul bloc ; d'où des retards jusqu'à 14,7 échantillons. Ce défaut a été vu en lisant
+les chiffres ; les seuils ne sont pas modifiés, et **aucune conclusion sur l'origine de κ n'est
+tirée de R5**. Retards par bloc (blocs 0 à 7) : 96 kHz 0,705, 1,027, 1,276, 1,210, 1,275, 0,768,
+−0,082, −0,004 ; 192 kHz 14,65, 9,17, 10,33, 10,30, 8,87, 5,89, 8,56, 0,04. Une mesure qui isole
+un bloc (par exemple le réseau à 48 kHz, ce seul bloc à fs′ avec rééchantillonnage autour de lui)
+demanderait une nouvelle préinscription.
+
+**Ce qui se dit.** Rééchelonner Δ sans correction retarde la sortie de κ (1 − 48 000/fs′)/2
+échantillon, avec la forme prévue sur les deux appareils. κ vaut 1,9 à 2,5 selon le checkpoint ;
+il n'est pas fixé par l'architecture. Le κ du VS100R mesuré modèle contre modèle rejoint
+l'estimation tirée de l'appareil. κ > 1 partout : d'après T1 (`THEORY.md`), un mode réel seul ne
+dépasse pas 1 ; l'origine (cascade, modes complexes, signes mêlés) reste ouverte.
