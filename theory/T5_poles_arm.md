@@ -110,9 +110,9 @@ L'expression ne contient pas Δ. On somme sur les modes et on ajoute D. ∎
   arrondit en float32 et complex64.]
 - Portée :
   - L'énoncé 1 dit par quoi passe u, pas ce qui est appris.
-  - Les énoncés 2 et 3 portent sur la fréquence nulle seulement. Aux autres fréquences, Δ
-    change bien la réponse du canal : il en dilate l'axe des fréquences, à l'erreur de
-    discrétisation près.
+  - Les énoncés 2 et 3 portent sur la fréquence nulle seulement. Aux autres fréquences, Δ peut
+    changer la réponse du canal : il dilate l'axe des fréquences de chaque mode, à l'erreur de
+    discrétisation près. Il ne la change pas toujours (C = 0 donne H = D à toute fréquence).
   - En temps discret, le résidu effectif c·b(λ, Δ) et le premier échantillon K[0] varient avec
     δ et ε. L'énoncé ne contredit donc pas la mesure de `D + K[0]` dans
     `demo/param/predictions_fast_modes.md`.

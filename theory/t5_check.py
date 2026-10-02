@@ -15,11 +15,11 @@ and FOH:
      change the response to noise (dt is not ignored);
   N4 real modes (A_imag = 0), one mode per channel: the kernel sum equals
      2 Re(c) e^-(alpha + eps), and is 0 at every setting when Re c = 0;
-  N5 boundaries: below the floor Re z < -80 the sum still equals -c/lambda (ZOH exact,
-     FOH through foh_late); a slow ZOH mode's truncated sum is
-     2 Re(-c (1 - a^L)/lambda),
-     which differs from the infinite one.
-Fails loudly.
+  N5 boundaries: around and below the floor (Re z from -79.9 to -800) the sum equals
+     2 Re(-c/lambda) (ZOH exact; FOH through foh_late, relative error of order e^-80,
+     below float64 resolution); a slow mode's truncated sum matches a 50-digit
+     reference to 1e-9 and differs from the infinite one.
+Every compared value is checked finite. Fails loudly.
 """
 
 from __future__ import annotations
@@ -114,8 +114,20 @@ def kernel_dc(ssm, shift) -> torch.Tensor:
     return ssm._shifted_kernel(LENGTH, shift)[0].sum(-1) + ssm.D
 
 
+def finite(*tensors: torch.Tensor) -> None:
+    """max() and min() silently drop NaN, so every compared value is checked first."""
+    for t in tensors:
+        assert bool(torch.isfinite(t).all()), t
+
+
 def rel(a: torch.Tensor, b: torch.Tensor) -> float:
+    finite(a, b)
     return float((a - b).abs().max() / b.abs().max())
+
+
+def gap(a: torch.Tensor, b: torch.Tensor) -> float:
+    finite(a, b)
+    return float((a - b).abs().max())
 
 
 @torch.no_grad()
@@ -127,7 +139,7 @@ def numeric(discretization: str, seed: int) -> None:
 
     # N1: the knobs reach the output only through the pole shifts.
     y0, y1 = model(x, u0), model(x, u1)
-    differ = float((y0 - y1).abs().max())
+    differ = gap(y0, y1)
     assert differ > 1e-6, differ
     shifts0 = model.pole_shifts(u0)
     model.pole_shifts = lambda controls: shifts0
@@ -173,10 +185,10 @@ def numeric(discretization: str, seed: int) -> None:
         poles_only = [
             (r[0], o[1]) for o, r in zip(other, reference_shifts, strict=True)
         ]
-        net_dt = max(net_dt, float((last(dt_only) - ref).abs().max()))
-        net_poles = max(net_poles, float((last(poles_only) - ref).abs().max()))
+        net_dt = max(net_dt, gap(last(dt_only), ref))
+        net_poles = max(net_poles, gap(last(poles_only), ref))
         # dt does act away from DC: the same dt-only move changes a noise response.
-        moved = float((last(dt_only, noise) - ref_noise).abs().max())
+        moved = gap(last(dt_only, noise), ref_noise)
         noise_dt = min(noise_dt, moved)
     assert net_dt < 1e-9, net_dt
     assert noise_dt > 1e-4, noise_dt
