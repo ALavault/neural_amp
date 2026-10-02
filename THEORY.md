@@ -209,11 +209,12 @@ elle est nulle si Re c = 0. Rien n'est dit du gain total d'un canal.
 Hypothèses : H1 `cond="poles"`, ZOH ou FOH [mathématique ; lecture du code, énoncé 1] ;
 H2 noyaux infinis [mathématique ; sur un segment de longueur L, la somme tronquée d'un mode ZOH
 vaut 2 Re(−c (1 − a^L)/λ)] ; H3 formules fermées exactes [mathématique ; le code s'en écarte par
-`pole` (Re z ≥ −80 ; exact en ZOH ; en FOH, `foh_late` et écart relatif d'ordre e^{−80}), `phi2`
+`pole` (Re z ≥ −80 ; exact en ZOH ; en FOH, `foh_late`, écart relatif d'ordre e^{−80} sur le
+gain modal complexe, pas sur sa partie réelle), `phi2`
 en série et l'arrondi float32/complex64]
-Portée : (2) et (3) portent sur la fréquence nulle seulement. À toute fréquence non nulle, Δ seul
-change le gain d'un canal (mode réel normalisé, Ω = 0,01 : |H| = 0,707 à Δ = 0,01, 0,894 à
-Δ = 0,02). (3) porte sur une entrée constante, et sa limite peut ne pas être atteinte sur un
+Portée : (2) et (3) portent sur la fréquence nulle seulement. À une fréquence non nulle, Δ seul
+peut changer le gain d'un canal (mode réel normalisé, Ω = 0,01 : |H| = 0,707 à Δ = 0,01, 0,894 à
+Δ = 0,02) ; il ne le change pas toujours (C = 0, ou contributions qui se compensent). (3) porte sur une entrée constante, et sa limite peut ne pas être atteinte sur un
 segment si un mode est lent. Le chemin récurrent (`step`), qui dépend de l'historique de l'état,
 n'est pas couvert. En temps discret, c·b(λ, Δ) et K[0] varient avec δ et ε. (1) dit par quoi passe
 u, pas ce qui est appris.
@@ -231,10 +232,13 @@ FOH ; mode réel). Numérique `theory/t5_check.py` : vrai `SSMWaveNet(cond="pole
 - N3 : dernier échantillon de la réponse à une constante, 2¹⁵ échantillons. Avec Δ seul
   déplacé, écart ≤ 7,2·10⁻¹⁵. Avec les pôles seuls, ≥ 2,1·10⁻². Le même déplacement de Δ seul
   change la réponse au bruit d'au moins 1,5·10⁻³.
-- N4 : modes réels isolés, à cinq valeurs de ε, somme = 2 Re(c) e^{−(α+ε)} à ≤ 9,4·10⁻¹⁴ près ;
-  somme nulle si Re c = 0.
-- N5 : sous le plancher (Re z < −80), somme = −c/λ à ≤ 1,5·10⁻¹⁶ près en relatif ; un mode lent
-  (Re z = −10⁻⁵, L = 2¹⁵) a une somme tronquée de 0,2794 = 1 − a^L, contre une limite de 1.
+- N4 : modes réels isolés, à cinq valeurs de ε, somme finie = 2 Re(c) e^{−(α+ε)} à ≤ 9,4·10⁻¹⁴
+  près ; somme nulle si Re c = 0.
+- N5 : autour du plancher et au-delà (Re z = −79,9 ; −80,1 ; −202 ; −800, sous le −709 que
+  `foh_late` évite), somme finie = 2 Re(−c/λ) à ≤ 1,7·10⁻¹⁶ près en relatif ; float64 ne mesure
+  pas l'écart d'ordre e^{−80}. Mode lent (λ = −1, Δ = 10⁻⁵, L = 2¹⁵) : somme tronquée égale à sa
+  référence en précision 50 chiffres (ZOH 0,279406427 = 1 − a^L ; FOH 0,279402824), contre une
+  limite de 1.
 Relecture : Codex gpt-6-astra, 2026-10-02, passe 1 (xhigh). (1) tenu pour `forward`, mais le
 chemin récurrent dépend de l'historique : l'objet a été restreint (accepté). (2) correct ;
 `foh_late` à citer, et e^{−80} est relatif (accepté). (3) récurrence valide une fois la
@@ -244,10 +248,15 @@ coupure discrète déplacée par Δ (énoncé restreint). Utilité : glissement 
 basses fréquences, contre-exemple chiffré vérifié (corrigé). Contrôles manquants pour (4) et pour
 les cas limites (N4 et N5 ajoutés). Son exécution de `t5_check.py` a échoué dans son bac à sable
 (`snap-confine`, caches). Il a rejoué la branche sans checkpointing des noyaux et reproduit les
-chiffres. Verdict : D impossible en l'état. Passe 2 à faire.
+chiffres. Verdict : D impossible en l'état. Passe 2 (high) : restriction à `forward`, (2), (3) et
+troncature justes ; restent la condition Re c ≠ 0 dans l'Utilité (corrigé), « à toute fréquence
+non nulle » faux pour C = 0 (corrigé en « peut »), e^{−80} relatif au gain modal complexe
+seulement (précisé), N4 sans contrôle de finitude (ajouté), N5b FOH sans référence (référence en
+50 chiffres ajoutée, valeur FOH égale à celle calculée par Codex), N5a sans cas autour de −80 ni
+sous −709 (ajoutés). Verdict : pas encore D. Passe 3 à faire.
 Utilité : « conditionner les pôles » ne teste pas seul « déplacer les coupures »
-(`demo/param/predictions_poles.md`, verdict G2.2). Le décalage ε d'un pôle réel change aussi sa
-contribution au gain continu (4). Le gain d'un canal à fréquence nulle ne change pas par Δ seul
+(`demo/param/predictions_poles.md`, verdict G2.2). Si Re c ≠ 0, le décalage ε d'un pôle réel
+change aussi sa contribution au gain continu (4). Le gain d'un canal à fréquence nulle ne change pas par Δ seul
 (2). Cela ne vaut qu'à fréquence nulle, voir Portée. L'analyse C de `predictions_fast_modes.md`
 mesure par quelle voie passent les boutons.
 Rétrodictions : aucune mesurée.
@@ -256,4 +265,5 @@ lire une mesure du bras D (toute variation du gain d'un canal à fréquence null
 lit dans ε), il ne prédit pas de résultat d'entraînement.
 Historique : 2026-10-02 — → E ; 2026-10-02 : énoncé précisé en quatre points, preuve et
 contrôles écrits ; 2026-10-02 : passe 1 de Codex, objet, énoncé 4 et Utilité restreints, N4 et
-N5 ajoutés (E, passe 2 à faire)
+N5 ajoutés ; 2026-10-02 : passe 2, surénoncés résiduels et contrôles N4 et N5 corrigés (E,
+passe 3 à faire)

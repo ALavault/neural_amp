@@ -101,9 +101,12 @@ L'expression ne contient pas Δ. On somme sur les modes et on ajoute D. ∎
   limite de 1).
 - H3 formules fermées exactes [mathématique ; le code s'en écarte par `pole`, qui plafonne
   Re z ≥ −80. En ZOH, b est calculé avec le même a plafonné, et l'énoncé 2 reste exact. En FOH,
-  `foh_late` remplace β₀ par sa limite Δ/z² sous le seuil, et β₁ vient du z exact. L'écart
-  relatif sur la somme du mode est d'ordre e^{−80}. Ce n'est pas une borne absolue après
-  multiplication par c/λ et passage dans le réseau. Le code calcule aussi `phi2` en série et
+  `foh_late` remplace β₀ par sa limite Δ/z² sous le seuil, et β₁ vient du z exact. Avec
+  A = e^{−80 + i Im z}, le rapport du gain modal complexe calculé au gain idéal vaut
+  (1 − e^{z}/z)/(1 − A), d'où une erreur relative ≤ (1 + 1/80) e^{−80}/(1 − e^{−80}) (calcul de
+  la relecture). Cette borne porte sur le gain modal complexe −c/λ, pas sur sa partie réelle,
+  qui peut être nulle : sur la contribution réelle, l'écart absolu est borné par
+  2 |c/λ| (1 + 1/80) e^{−80}/(1 − e^{−80}). Le code calcule aussi `phi2` en série et
   arrondit en float32 et complex64.]
 - Portée :
   - L'énoncé 1 dit par quoi passe u, pas ce qui est appris.
@@ -118,9 +121,10 @@ L'expression ne contient pas Δ. On somme sur les modes et on ajoute D. ∎
 ## Correspondance avec la mesure G2.2
 
 Le verdict G2.2 (`demo/param/predictions_poles.md`) compare le bras D (pôles) au bras A (FiLM).
-Le bras D ne teste pas seulement « déplacer des coupures ». Le décalage ε du pôle continu d'un mode
-réel change aussi sa contribution au gain continu (énoncé 4). Le gain d'un canal à fréquence nulle
-ne change pas par Δ seul (énoncé 2). Ce résultat vaut à fréquence nulle seulement : à toute
-fréquence non nulle, Δ seul change le gain. Contre-exemple de la relecture : mode réel normalisé,
+Le bras D ne teste pas seulement « déplacer des coupures ». Si Re c ≠ 0, le décalage ε du pôle
+continu d'un mode réel change aussi sa contribution au gain continu (énoncé 4). Le gain d'un canal à fréquence nulle
+ne change pas par Δ seul (énoncé 2). Ce résultat vaut à fréquence nulle seulement : à une
+fréquence non nulle, Δ seul peut changer le gain, sans le faire toujours (C = 0, ou contributions
+qui se compensent). Exemple de la relecture : mode réel normalisé,
 H = (1 − a)/(1 − a e^{−iΩ}), a = e^{−Δ}. À Ω = 0,01, on obtient |H| = 0,7071 pour Δ = 0,01 et
 0,8944 pour Δ = 0,02.

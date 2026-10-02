@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import math
 
+import mpmath
 import sympy as sp
 import torch
 
@@ -223,37 +224,58 @@ def boundaries(discretization: str) -> None:
             [2 * ci[0] * math.exp(-(a + eps)) for ci, a in zip(c, alpha, strict=True)],
             dtype=torch.float64,
         )
+        assert bool(torch.isfinite(sums).all()), sums
         worst = max(worst, float((sums - expected).abs().max()))
         assert abs(float(sums[1])) < 1e-12, float(sums[1])
     assert worst < 1e-9, worst
 
-    # N5a: below the floor, Re z = -0.5 e^6 * ... < -80.
+    # N5a: around and below the floor: Re z = -79.9, -80.1, -202 and -800 (beyond the
+    # -709 overflow of e^-z that foh_late avoids). Reference 2 Re(-c/lambda).
+    depths = [79.9, 80.1, 202.0, 800.0]
     fast = single_modes(
         discretization,
-        [6.0, 7.0],
-        [0.0, 2.0],
-        [math.log(0.5)] * 2,
-        [[0.6, -0.3], [-0.4, 0.8]],
+        [math.log(d / 0.5) for d in depths],
+        [0.0, 2.0, 0.0, 5.0],
+        [math.log(0.5)] * 4,
+        [[0.6, -0.3], [-0.4, 0.8], [1.1, 0.2], [-0.7, -0.5]],
     )
     z_real = -torch.exp(fast.log_A_real[:, 0]) * torch.exp(fast.log_dt)
-    assert float(z_real.max()) < -80, z_real
+    assert torch.allclose(z_real, -torch.tensor(depths, dtype=torch.float64)), z_real
     sums = fast._shifted_kernel(64, no_shift(fast))[0].sum(-1)
+    assert bool(torch.isfinite(sums).all()), sums
     lam = torch.complex(-torch.exp(fast.log_A_real), fast.A_imag)
     closed = 2 * (-torch.view_as_complex(fast.C.contiguous()) / lam).sum(-1).real
-    floor = rel(sums, closed)
+    floor = float(((sums - closed) / closed).abs().max())
     assert floor < 1e-12, floor
 
-    # N5b: a slow real mode, Re z = -1e-5, over LENGTH samples (a^L about 0.72).
+    # N5b: a slow real mode (lambda = -1, c = 1/2, dt = 1e-5) over LENGTH samples
+    # (a^L about 0.72). Reference, in 50-digit arithmetic, of the truncated sum
+    # 2 Re(c (w_now (1 - a^L) + w_late (1 - a^(L-1))) / (1 - a)).
     slow = single_modes(discretization, [0.0], [0.0], [math.log(1e-5)], [[0.5, 0.0]])
     truncated = float(slow._shifted_kernel(LENGTH, no_shift(slow))[0].sum())
-    a_l = math.exp(-1e-5 * LENGTH)
+    mp = mpmath
+    mp.mp.dps = 50
+    dt, lam_mp = mp.mpf("1e-5"), mp.mpf(-1)
+    z = lam_mp * dt
+    a = mp.exp(z)
     if discretization == "zoh":
-        assert abs(truncated - (1 - a_l)) < 1e-9, truncated
+        now, late = (a - 1) / lam_mp, mp.mpf(0)
+    else:
+        phi2 = lambda u: (mp.exp(u) - 1 - u) / u**2  # noqa: E731
+        now, late = dt * phi2(z), dt * a * phi2(-z)
+    reference = float(
+        2
+        * mp.mpf("0.5")
+        * (now * (1 - a**LENGTH) + late * (1 - a ** (LENGTH - 1)))
+        / (1 - a)
+    )
+    slow_err = abs(truncated - reference)
+    assert math.isfinite(truncated) and slow_err < 1e-9, (truncated, reference)
     assert abs(truncated - 1.0) > 0.5, truncated  # far from the infinite gain 1
     print(
-        f"{discretization} : N4 modes reels {worst:.1e}, Re c = 0 nul ; "
-        f"N5 plancher {floor:.1e}, mode lent tronque {truncated:.4f} "
-        f"(1 - a^L = {1 - a_l:.4f}, limite 1)"
+        f"{discretization} : N4 modes reels {worst:.1e}, Re c = 0 nul, finis ; "
+        f"N5 plancher (Re z = -79,9 a -800) {floor:.1e} ; mode lent tronque "
+        f"{truncated:.9f} contre reference {reference:.9f} (limite 1)"
     )
 
 
