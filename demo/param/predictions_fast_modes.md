@@ -63,3 +63,38 @@ d'entraînement. Il est commuté si son s minimal est inférieur à 1.
 L'ablation mesure l'effet d'un mode sur la sortie à l'inférence, pas ce que l'entraînement aurait
 fait sans lui. Une graine, cinq partitions. Les réglages non vus sont joués sur un autre DI que
 l'entraînement.
+
+## Résultats (2026-10-02, `fast_modes.json`)
+
+Les comptes retrouvent ceux de `pole_speed.json` : 22 modes rapides (9, 4, 1, 4 et 4 à 925, 736,
+688 `_r2`, 744 et 369), dont 9 commutés (4, 1, 0, 2 et 2). Notation bloc/canal/mode ; ln r est la
+médiane sur les 9 non vus.
+
+**C1, ablation : 19 morts, 2 mineurs, 1 porteur.**
+- Porteur : 744, 0/0/2 (commuté), ln r = +0,2597 (ESR des non vus × 1,30).
+- Mineurs : 736, 2/9/2 (commuté), +0,0470 ; 369, 6/11/2 (commuté), +0,0313.
+- Tous les modes rapides non commutés sont morts (|ln r| ≤ 0,0042) ; 6 des 9 commutés le sont
+  aussi (de −0,0049 à +0,0038).
+
+**C2 : G domine** D + K[0] dans **6 des 8** canaux qui portent un mode commuté (seuil : 2/3, soit
+au moins 6). Les deux exceptions :
+- 925, 0/0 : étendue G 1,643, T 0,893, B 0,302, M 0,072 ;
+- 369, 6/11 : étendue T 0,366, M 0,063, G 0,027, B 0,016.
+
+Dans les 6 autres, l'étendue de G va de 0,102 à 1,803, et le plus grand des trois autres
+boutons de 0,001 à 0,144.
+
+**C3 : commandés par G.** La part de G dans Δα est ≥ 0,5 pour **7 des 9** modes commutés (de 0,72
+à 0,93) ; seuil 2/3, soit au moins 6. Exceptions :
+- 925, 0/10/2 : G 0,22, T 0,40, B 0,25, M 0,14 ;
+- 369, 6/11/2 : G 0,24, T 0,35, M 0,29, B 0,12.
+
+**Ce qui se dit.**
+- Les modes rapides du bras D sont presque tous inertes à l'inférence. Leur dérive ne porte pas
+  la sortie, à une exception près (744, +30 % d'ESR).
+- Les modes commutés et le terme instantané des canaux qui les portent suivent surtout le bouton
+  Gain. Or G vaut 5 sur tous les réglages de test : ce mécanisme ne peut pas expliquer
+  l'avantage de D sur les non vus, qui diffèrent par B, M et T.
+- Descriptif, hors critère : le seul porteur (744, 0/0/2) est commandé par G (part 0,93).
+  Son Δα dépend donc surtout de G, qui ne varie pas sur les réglages de test ; ce qu'il apporte
+  à ces réglages n'est pas analysé ici.
