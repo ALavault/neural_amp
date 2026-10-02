@@ -1,0 +1,229 @@
+{
+ "vs100r": [
+  {
+   "label": "Prise 16 : gain 2.5, contour 7.5",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "esr": 0.09439822864476731,
+   "residual_db": -10.25036155034778,
+   "files": {
+    "real": "audio/results_vs100r_take16_real.wav",
+    "model": "audio/results_vs100r_take16_model.wav",
+    "residual": "audio/results_vs100r_take16_residual.wav"
+   }
+  },
+  {
+   "label": "Prise 17 : gain 5, contour 0",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "esr": 0.002891616716060765,
+   "residual_db": -25.38859273317804,
+   "files": {
+    "real": "audio/results_vs100r_take17_real.wav",
+    "model": "audio/results_vs100r_take17_model.wav",
+    "residual": "audio/results_vs100r_take17_residual.wav"
+   }
+  },
+  {
+   "label": "Prise 30 : gain 10, contour 5",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "esr": 0.019661659143124965,
+   "residual_db": -17.063798371498127,
+   "files": {
+    "real": "audio/results_vs100r_take30_real.wav",
+    "model": "audio/results_vs100r_take30_model.wav",
+    "residual": "audio/results_vs100r_take30_residual.wav"
+   }
+  }
+ ],
+ "marshall": [
+  {
+   "label": "Basses 0, médiums 10, aigus 10, gain 5",
+   "rule": "Plus grand avantage du bras pôles",
+   "setting": "B000_M100_T100_G050",
+   "recorded_esr": {
+    "film": 0.07633635248331462,
+    "poles": 0.02837620544082978
+   },
+   "esr": {
+    "film": 0.04512287051257968,
+    "poles": 0.022158010089978662
+   },
+   "files": {
+    "real": "audio/results_marshall_B000_M100_T100_G050_real.wav",
+    "film": "audio/results_marshall_B000_M100_T100_G050_film.wav",
+    "poles": "audio/results_marshall_B000_M100_T100_G050_poles.wav",
+    "residual_film": "audio/results_marshall_B000_M100_T100_G050_residual_film.wav",
+    "residual_poles": "audio/results_marshall_B000_M100_T100_G050_residual_poles.wav"
+   }
+  },
+  {
+   "label": "Basses 0, médiums 10, aigus 0, gain 5",
+   "rule": "Plus petit écart entre bras",
+   "setting": "B000_M100_T000_G050",
+   "recorded_esr": {
+    "film": 0.04182093798675958,
+    "poles": 0.04129871923257323
+   },
+   "esr": {
+    "film": 0.027962303437144884,
+    "poles": 0.029682990254521327
+   },
+   "files": {
+    "real": "audio/results_marshall_B000_M100_T000_G050_real.wav",
+    "film": "audio/results_marshall_B000_M100_T000_G050_film.wav",
+    "poles": "audio/results_marshall_B000_M100_T000_G050_poles.wav",
+    "residual_film": "audio/results_marshall_B000_M100_T000_G050_residual_film.wav",
+    "residual_poles": "audio/results_marshall_B000_M100_T000_G050_residual_poles.wav"
+   }
+  },
+  {
+   "label": "Basses 10, médiums 0, aigus 0, gain 5",
+   "rule": "Réglage le plus difficile",
+   "setting": "B100_M000_T000_G050",
+   "recorded_esr": {
+    "film": 0.17292140687213226,
+    "poles": 0.14081807938568733
+   },
+   "esr": {
+    "film": 0.05998505588050049,
+    "poles": 0.028507095661734847
+   },
+   "files": {
+    "real": "audio/results_marshall_B100_M000_T000_G050_real.wav",
+    "film": "audio/results_marshall_B100_M000_T000_G050_film.wav",
+    "poles": "audio/results_marshall_B100_M000_T000_G050_poles.wav",
+    "residual_film": "audio/results_marshall_B100_M000_T000_G050_residual_film.wav",
+    "residual_poles": "audio/results_marshall_B100_M000_T000_G050_residual_poles.wav"
+   }
+  }
+ ],
+ "rate": {
+  "segments": [
+   10,
+   8
+  ],
+  "models": {
+   "zoh": {
+    "run_id": "paired_ssm_wavenet_s925",
+    "excerpts": [
+     {
+      "segment": 10,
+      "esr_vs_48k": 0.17514984007732182,
+      "residual_db": -7.565902548839329,
+      "files": {
+       "real": "audio/results_rate_zoh_seg10_real.wav",
+       "model48": "audio/results_rate_zoh_seg10_model48.wav",
+       "model192": "audio/results_rate_zoh_seg10_model192.wav",
+       "residual": "audio/results_rate_zoh_seg10_residual.wav"
+      }
+     },
+     {
+      "segment": 8,
+      "esr_vs_48k": 0.17949320650387326,
+      "residual_db": -7.459519840422817,
+      "files": {
+       "real": "audio/results_rate_zoh_seg8_real.wav",
+       "model48": "audio/results_rate_zoh_seg8_model48.wav",
+       "model192": "audio/results_rate_zoh_seg8_model192.wav",
+       "residual": "audio/results_rate_zoh_seg8_residual.wav"
+      }
+     }
+    ]
+   },
+   "foh": {
+    "run_id": "paired_ssm_wavenet_foh_s925",
+    "excerpts": [
+     {
+      "segment": 10,
+      "esr_vs_48k": 0.0008753086446442803,
+      "residual_db": -30.57838782371342,
+      "files": {
+       "real": "audio/results_rate_foh_seg10_real.wav",
+       "model48": "audio/results_rate_foh_seg10_model48.wav",
+       "model192": "audio/results_rate_foh_seg10_model192.wav",
+       "residual": "audio/results_rate_foh_seg10_residual.wav"
+      }
+     },
+     {
+      "segment": 8,
+      "esr_vs_48k": 0.0007416650330470953,
+      "residual_db": -31.297921959951793,
+      "files": {
+       "real": "audio/results_rate_foh_seg8_real.wav",
+       "model48": "audio/results_rate_foh_seg8_model48.wav",
+       "model192": "audio/results_rate_foh_seg8_model192.wav",
+       "residual": "audio/results_rate_foh_seg8_residual.wav"
+      }
+     }
+    ]
+   }
+  }
+ },
+ "ffuzz": [
+  {
+   "label": "Fuzz 0",
+   "setting": "F000_V100",
+   "recorded_esr": {
+    "before": 0.11287022410030652,
+    "after": 0.0008282009315242837
+   },
+   "esr": {
+    "before": 0.22272256261210555,
+    "after": 0.00010416971598540256
+   },
+   "files": {
+    "real": "audio/results_ffuzz_F000_V100_real.wav",
+    "before": "audio/results_ffuzz_F000_V100_before.wav",
+    "after": "audio/results_ffuzz_F000_V100_after.wav",
+    "residual_before": "audio/results_ffuzz_F000_V100_residual_before.wav",
+    "residual_after": "audio/results_ffuzz_F000_V100_residual_after.wav"
+   }
+  },
+  {
+   "label": "Fuzz 7 (réglage non vu)",
+   "setting": "F070_V100",
+   "recorded_esr": {
+    "before": 0.1457735170099072,
+    "after": 0.0028123228838737298
+   },
+   "esr": {
+    "before": 0.2970015612620602,
+    "after": 0.0004370546827523937
+   },
+   "files": {
+    "real": "audio/results_ffuzz_F070_V100_real.wav",
+    "before": "audio/results_ffuzz_F070_V100_before.wav",
+    "after": "audio/results_ffuzz_F070_V100_after.wav",
+    "residual_before": "audio/results_ffuzz_F070_V100_residual_before.wav",
+    "residual_after": "audio/results_ffuzz_F070_V100_residual_after.wav"
+   }
+  },
+  {
+   "label": "Fuzz 10",
+   "setting": "F100_V100",
+   "recorded_esr": {
+    "before": 0.18274309178044026,
+    "after": 0.004549953608626598
+   },
+   "esr": {
+    "before": 0.31609030891721346,
+    "after": 0.0007900780234638227
+   },
+   "files": {
+    "real": "audio/results_ffuzz_F100_V100_real.wav",
+    "before": "audio/results_ffuzz_F100_V100_before.wav",
+    "after": "audio/results_ffuzz_F100_V100_after.wav",
+    "residual_before": "audio/results_ffuzz_F100_V100_residual_before.wav",
+    "residual_after": "audio/results_ffuzz_F100_V100_residual_after.wav"
+   }
+  }
+ ]
+}

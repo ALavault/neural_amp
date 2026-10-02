@@ -1,0 +1,348 @@
+<title>Banc d'écoute SSM-WaveNet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a rack of channel strips. Each device is a faceplate; each excerpt is a strip
+   with its track selector and one shared transport. */
+:root {
+  --bg: #eceee9;
+  --panel: #f9faf7;
+  --ink: #1b201d;
+  --muted: #5b655f;
+  --line: #d2d7d0;
+  --brass: #8a6619;
+  --brass-soft: #f1e7d2;
+  --residual: #8b3743;
+  --residual-soft: #f5e3e5;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141816; --panel: #1d2320; --ink: #e5e9e3; --muted: #9ba59f; --line: #313a35;
+    --brass: #d6a94c; --brass-soft: #3a311d; --residual: #dc8f99; --residual-soft: #3b2328;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141816; --panel: #1d2320; --ink: #e5e9e3; --muted: #9ba59f; --line: #313a35;
+  --brass: #d6a94c; --brass-soft: #3a311d; --residual: #dc8f99; --residual-soft: #3b2328;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font: 400 1rem/1.55 var(--body);
+  padding-inline: 16px; padding-block: 0 4rem; margin: 0;
+}
+main { max-width: 60rem; margin: 0 auto; display: grid; gap: 3rem; }
+header.top { padding-block: 2.5rem 0.5rem; display: grid; gap: 0.75rem; }
+.eyebrow {
+  font: 600 0.75rem/1 var(--display); font-stretch: 85%; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--brass);
+}
+h1 {
+  font: 800 clamp(2rem, 5vw, 3.1rem)/1.02 var(--display); font-stretch: 70%;
+  text-transform: uppercase; letter-spacing: 0.01em; margin: 0; text-wrap: balance;
+}
+h2 {
+  font: 800 1.6rem/1.1 var(--display); font-stretch: 72%; text-transform: uppercase;
+  letter-spacing: 0.02em; margin: 0; text-wrap: balance;
+}
+p { margin: 0; max-width: 65ch; }
+.lede { color: var(--muted); font-size: 1.05rem; }
+.howto {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; color: var(--muted);
+  font-size: 0.9rem; border-top: 1px solid var(--line); padding-top: 0.9rem;
+}
+.howto b { color: var(--ink); font-weight: 600; }
+section.device { display: grid; gap: 1.25rem; }
+.plate {
+  display: grid; gap: 0.6rem; padding-block: 1.1rem; border-top: 3px solid var(--ink);
+}
+.plate .meta { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; font: 0.8rem/1.4 var(--mono); color: var(--muted); }
+.strips { display: grid; gap: 1rem; }
+.strip {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 4px;
+  padding: 1rem; display: grid; gap: 0.85rem; min-width: 0;
+}
+.strip-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.3rem 1rem; align-items: baseline; }
+.strip-title { font: 700 1.05rem/1.3 var(--display); font-stretch: 88%; }
+.rule { font-size: 0.85rem; color: var(--muted); }
+.knob { font: 0.78rem/1.4 var(--mono); color: var(--muted); }
+.tracks { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.track {
+  font: 600 0.88rem/1.2 var(--body); color: var(--ink); background: transparent;
+  border: 1px solid var(--line); border-radius: 3px; padding: 0.5rem 0.75rem; cursor: pointer;
+  display: inline-flex; gap: 0.5rem; align-items: baseline;
+}
+.track .num { font: 400 0.75rem/1 var(--mono); color: var(--muted); }
+.track:hover { border-color: var(--brass); }
+.track[aria-pressed="true"] { background: var(--brass-soft); border-color: var(--brass); }
+.track.residual { border-style: dashed; }
+.track.residual[aria-pressed="true"] { background: var(--residual-soft); border-color: var(--residual); }
+.track.residual .label { color: var(--residual); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.transport { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 0.9rem; }
+.play {
+  width: 2.75rem; height: 2.75rem; border-radius: 50%; border: 2px solid var(--ink);
+  background: var(--ink); color: var(--panel); cursor: pointer; display: grid; place-items: center;
+  flex: none;
+}
+.play svg { width: 1rem; height: 1rem; fill: currentColor; }
+.seek { flex: 1 1 12rem; min-width: 0; accent-color: var(--brass); }
+.time { font: 0.8rem/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 5.5rem; }
+.blind { display: inline-flex; gap: 0.4rem; align-items: center; font-size: 0.85rem; color: var(--muted); cursor: pointer; }
+.reveal {
+  font: 600 0.8rem/1 var(--body); background: none; border: 1px solid var(--line); border-radius: 3px;
+  color: var(--ink); padding: 0.4rem 0.6rem; cursor: pointer;
+}
+.readout { display: flex; flex-wrap: wrap; gap: 0.3rem 1.2rem; font: 0.8rem/1.5 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.readout b { color: var(--ink); font-weight: 600; }
+.note { font-size: 0.9rem; color: var(--muted); }
+footer { border-top: 1px solid var(--line); padding-top: 1rem; display: grid; gap: 0.6rem; font-size: 0.85rem; color: var(--muted); }
+footer p { max-width: 80ch; }
+code { font: 0.85em var(--mono); overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<main>
+  <header class="top">
+    <span class="eyebrow">neural_amp · voie produit · 23 sept. – 2 oct. 2026</span>
+    <h1>Banc d'écoute SSM-WaveNet</h1>
+    <p class="lede">Quatre résultats récents, à écouter contre l'appareil réel. Chaque tranche joue un
+    extrait choisi par une règle fixée d'avance sur le niveau du réel, jamais sur l'erreur d'un modèle.
+    Toutes les pistes d'une tranche partagent le même gain : un résidu s'entend à son vrai niveau.</p>
+    <div class="howto">
+      <span><b>Changer de piste</b> en cours de lecture garde la position.</span>
+      <span><b>Résidu</b> = réel − modèle (bordure en tirets).</span>
+      <span><b>À l'aveugle</b> mélange et masque les noms des pistes non résiduelles.</span>
+    </div>
+  </header>
+  <div id="sections"></div>
+  <footer>
+    <p><b>Sources.</b> Big Muff, Marshall JVM410H et F-Fuzz : ToneTwist AFx (M. Comunità et al.,
+    <code>github.com/mcomunita/tonetwist-afx-dataset</code>), licence CC BY-NC 4.0, usage non commercial.
+    VS100R : capture personnelle (envoi de boucle d'effets, canal OD2), dont l'entrée est le signal
+    DRY de ToneTwist AFx (Zenodo 10455730, CC BY-NC 4.0).</p>
+    <p><b>Fabrication.</b> <code>scripts/product_results_listening.py</code> ; WAV 48 kHz 16 bits, un
+    gain par tranche (crête −1 dBFS), fondus de 10 ms. Les ESR affichées sont celles des extraits tels
+    qu'ils sont joués. Les ESR enregistrées portent sur tout le jeu de test et diffèrent donc. Voie
+    produit : aucun résultat de cette page n'est une revendication scientifique.</p>
+  </footer>
+</main>
+
+<script>
+const DATA = {"vs100r": [{"label": "Prise 16 : gain 2.5, contour 7.5 (couple non vu)", "window_s": [4.5, 10.5], "esr": 0.09439822864476731, "residual_db": -10.25036155034778, "files": {"real": "audio/results_vs100r_take16_real.wav", "model": "audio/results_vs100r_take16_model.wav", "residual": "audio/results_vs100r_take16_residual.wav"}}, {"label": "Prise 17 : gain 5, contour 0 (couple vu)", "window_s": [4.5, 10.5], "esr": 0.002891616716060765, "residual_db": -25.38859273317804, "files": {"real": "audio/results_vs100r_take17_real.wav", "model": "audio/results_vs100r_take17_model.wav", "residual": "audio/results_vs100r_take17_residual.wav"}}, {"label": "Prise 30 : gain 10, contour 5 (couple vu)", "window_s": [4.5, 10.5], "esr": 0.019661659143124965, "residual_db": -17.063798371498127, "files": {"real": "audio/results_vs100r_take30_real.wav", "model": "audio/results_vs100r_take30_model.wav", "residual": "audio/results_vs100r_take30_residual.wav"}}], "marshall": [{"label": "Basses 0, médiums 10, aigus 10, gain 5", "rule": "Plus grand avantage du bras pôles", "setting": "B000_M100_T100_G050", "recorded_esr": {"film": 0.07633635248331462, "poles": 0.02837620544082978}, "esr": {"film": 0.04512287051257968, "poles": 0.022158010089978662}, "files": {"real": "audio/results_marshall_B000_M100_T100_G050_real.wav", "film": "audio/results_marshall_B000_M100_T100_G050_film.wav", "poles": "audio/results_marshall_B000_M100_T100_G050_poles.wav", "residual_film": "audio/results_marshall_B000_M100_T100_G050_residual_film.wav", "residual_poles": "audio/results_marshall_B000_M100_T100_G050_residual_poles.wav"}}, {"label": "Basses 0, médiums 10, aigus 0, gain 5", "rule": "Plus petit écart entre bras", "setting": "B000_M100_T000_G050", "recorded_esr": {"film": 0.04182093798675958, "poles": 0.04129871923257323}, "esr": {"film": 0.027962303437144884, "poles": 0.029682990254521327}, "files": {"real": "audio/results_marshall_B000_M100_T000_G050_real.wav", "film": "audio/results_marshall_B000_M100_T000_G050_film.wav", "poles": "audio/results_marshall_B000_M100_T000_G050_poles.wav", "residual_film": "audio/results_marshall_B000_M100_T000_G050_residual_film.wav", "residual_poles": "audio/results_marshall_B000_M100_T000_G050_residual_poles.wav"}}, {"label": "Basses 10, médiums 0, aigus 0, gain 5", "rule": "Réglage le plus difficile", "setting": "B100_M000_T000_G050", "recorded_esr": {"film": 0.17292140687213226, "poles": 0.14081807938568733}, "esr": {"film": 0.05998505588050049, "poles": 0.028507095661734847}, "files": {"real": "audio/results_marshall_B100_M000_T000_G050_real.wav", "film": "audio/results_marshall_B100_M000_T000_G050_film.wav", "poles": "audio/results_marshall_B100_M000_T000_G050_poles.wav", "residual_film": "audio/results_marshall_B100_M000_T000_G050_residual_film.wav", "residual_poles": "audio/results_marshall_B100_M000_T000_G050_residual_poles.wav"}}], "rate": {"segments": [10, 8], "models": {"zoh": {"run_id": "paired_ssm_wavenet_s925", "excerpts": [{"segment": 10, "esr_vs_48k": 0.17514984007732182, "residual_db": -7.565902548839329, "files": {"real": "audio/results_rate_zoh_seg10_real.wav", "model48": "audio/results_rate_zoh_seg10_model48.wav", "model192": "audio/results_rate_zoh_seg10_model192.wav", "residual": "audio/results_rate_zoh_seg10_residual.wav"}}, {"segment": 8, "esr_vs_48k": 0.17949320650387326, "residual_db": -7.459519840422817, "files": {"real": "audio/results_rate_zoh_seg8_real.wav", "model48": "audio/results_rate_zoh_seg8_model48.wav", "model192": "audio/results_rate_zoh_seg8_model192.wav", "residual": "audio/results_rate_zoh_seg8_residual.wav"}}]}, "foh": {"run_id": "paired_ssm_wavenet_foh_s925", "excerpts": [{"segment": 10, "esr_vs_48k": 0.0008753086446442803, "residual_db": -30.57838782371342, "files": {"real": "audio/results_rate_foh_seg10_real.wav", "model48": "audio/results_rate_foh_seg10_model48.wav", "model192": "audio/results_rate_foh_seg10_model192.wav", "residual": "audio/results_rate_foh_seg10_residual.wav"}}, {"segment": 8, "esr_vs_48k": 0.0007416650330470953, "residual_db": -31.297921959951793, "files": {"real": "audio/results_rate_foh_seg8_real.wav", "model48": "audio/results_rate_foh_seg8_model48.wav", "model192": "audio/results_rate_foh_seg8_model192.wav", "residual": "audio/results_rate_foh_seg8_residual.wav"}}]}}}, "ffuzz": [{"label": "Fuzz 0", "setting": "F000_V100", "recorded_esr": {"before": 0.11287022410030652, "after": 0.0008282009315242837}, "esr": {"before": 0.22272256261210555, "after": 0.00010416971598540256}, "files": {"real": "audio/results_ffuzz_F000_V100_real.wav", "before": "audio/results_ffuzz_F000_V100_before.wav", "after": "audio/results_ffuzz_F000_V100_after.wav", "residual_before": "audio/results_ffuzz_F000_V100_residual_before.wav", "residual_after": "audio/results_ffuzz_F000_V100_residual_after.wav"}}, {"label": "Fuzz 7 (réglage non vu)", "setting": "F070_V100", "recorded_esr": {"before": 0.1457735170099072, "after": 0.0028123228838737298}, "esr": {"before": 0.2970015612620602, "after": 0.0004370546827523937}, "files": {"real": "audio/results_ffuzz_F070_V100_real.wav", "before": "audio/results_ffuzz_F070_V100_before.wav", "after": "audio/results_ffuzz_F070_V100_after.wav", "residual_before": "audio/results_ffuzz_F070_V100_residual_before.wav", "residual_after": "audio/results_ffuzz_F070_V100_residual_after.wav"}}, {"label": "Fuzz 10", "setting": "F100_V100", "recorded_esr": {"before": 0.18274309178044026, "after": 0.004549953608626598}, "esr": {"before": 0.31609030891721346, "after": 0.0007900780234638227}, "files": {"real": "audio/results_ffuzz_F100_V100_real.wav", "before": "audio/results_ffuzz_F100_V100_before.wav", "after": "audio/results_ffuzz_F100_V100_after.wav", "residual_before": "audio/results_ffuzz_F100_V100_residual_before.wav", "residual_after": "audio/results_ffuzz_F100_V100_residual_after.wav"}}]};
+
+const fmt = (x, d = 4) => x.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+const db = esr => (10 * Math.log10(esr)).toLocaleString("fr-FR", { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + " dB";
+const mmss = t => { const s = Math.max(0, t); return `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, "0")}`; };
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else n.setAttribute(k, v);
+  }
+  for (const k of kids) if (k != null) n.append(k);
+  return n;
+};
+const ICON_PLAY = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>';
+const ICON_PAUSE = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z"/></svg>';
+const strips = [];
+let stripId = 0;
+
+function Strip({ title, rule, knob, tracks, readout, note }) {
+  const id = ++stripId;
+  const audios = tracks.map(t => { const a = new Audio(); a.preload = "none"; a.loop = true; a.src = t.src; return a; });
+  let current = 0, playing = false, order = tracks.map((_, i) => i), blind = false, revealed = false;
+  const play = el("button", { class: "play", type: "button", "aria-label": "Lire" });
+  play.innerHTML = ICON_PLAY;
+  const seek = el("input", { class: "seek", type: "range", min: "0", max: "1000", value: "0", id: `seek-${id}`, "aria-label": "Position" });
+  const time = el("span", { class: "time", text: "0:00.0" });
+  const trackBox = el("div", { class: "tracks", role: "group", "aria-label": "Pistes" });
+  const blindBox = el("input", { type: "checkbox", id: `blind-${id}` });
+  const reveal = el("button", { class: "reveal", type: "button", text: "Révéler" });
+  reveal.hidden = true;
+  const readoutBox = el("div", { class: "readout" });
+  const buttons = [];
+
+  function renderTracks() {
+    trackBox.replaceChildren();
+    buttons.length = 0;
+    let letter = 0;
+    order.forEach(i => {
+      const t = tracks[i];
+      if (blind && !revealed && t.residual) return;
+      const hide = blind && !revealed;
+      const b = el("button", { class: "track" + (t.residual ? " residual" : ""), type: "button", "aria-pressed": String(i === current) },
+        el("span", { class: "label", text: hide ? `Piste ${"ABCDE"[letter++]}` : t.label }),
+        hide || t.tag == null ? null : el("span", { class: "num", text: t.tag }));
+      b.addEventListener("click", () => select(i));
+      trackBox.append(b);
+      buttons[i] = b;
+    });
+    readoutBox.hidden = blind && !revealed;
+  }
+
+  function select(i) {
+    if (i === current) return;
+    const from = audios[current], to = audios[i];
+    const t = from.currentTime || 0;
+    if (playing) from.pause();
+    current = i;
+    to.preload = "auto";
+    const go = () => { try { to.currentTime = t; } catch (e) {} if (playing) to.play().catch(() => {}); };
+    if (to.readyState >= 1) go(); else to.addEventListener("loadedmetadata", go, { once: true });
+    if (to.readyState < 1) to.load();
+    for (const [k, b] of Object.entries(buttons)) if (b) b.setAttribute("aria-pressed", String(Number(k) === i));
+  }
+
+  function setPlaying(on) {
+    playing = on;
+    play.innerHTML = on ? ICON_PAUSE : ICON_PLAY;
+    play.setAttribute("aria-label", on ? "Pause" : "Lire");
+  }
+  play.addEventListener("click", () => {
+    const a = audios[current];
+    if (playing) { a.pause(); setPlaying(false); return; }
+    strips.forEach(s => s !== api && s.stop());
+    audios.forEach(x => { x.preload = "auto"; });
+    a.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+  });
+  seek.addEventListener("input", () => {
+    const a = audios[current];
+    if (a.duration) a.currentTime = (seek.value / 1000) * a.duration;
+  });
+  audios.forEach((a, i) => a.addEventListener("timeupdate", () => {
+    if (i !== current || !a.duration) return;
+    seek.value = String(Math.round((a.currentTime / a.duration) * 1000));
+    time.textContent = `${mmss(a.currentTime)} / ${mmss(a.duration)}`;
+  }));
+  blindBox.addEventListener("change", () => {
+    blind = blindBox.checked; revealed = false; reveal.hidden = !blind;
+    if (blind) {
+      const signals = tracks.map((t, i) => i).filter(i => !tracks[i].residual);
+      for (let k = signals.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [signals[k], signals[j]] = [signals[j], signals[k]]; }
+      order = [...signals, ...tracks.map((t, i) => i).filter(i => tracks[i].residual)];
+      if (tracks[current].residual) select(signals[0]);
+    } else order = tracks.map((_, i) => i);
+    renderTracks();
+  });
+  reveal.addEventListener("click", () => { revealed = true; reveal.hidden = true; renderTracks(); });
+
+  for (const [k, v] of readout) readoutBox.append(el("span", {}, `${k} `, el("b", { text: v })));
+  renderTracks();
+  const node = el("article", { class: "strip" },
+    el("div", { class: "strip-head" },
+      el("span", { class: "strip-title", text: title }),
+      knob ? el("span", { class: "knob", text: knob }) : null),
+    rule ? el("p", { class: "rule", text: rule }) : null,
+    trackBox,
+    el("div", { class: "transport" }, play, seek, time,
+      el("label", { class: "blind", for: `blind-${id}` }, blindBox, "À l'aveugle"), reveal),
+    readoutBox,
+    note ? el("p", { class: "note", text: note }) : null);
+  const api = { node, stop() { if (playing) { audios[current].pause(); setPlaying(false); } } };
+  strips.push(api);
+  return node;
+}
+
+function Device({ eyebrow, title, intro, meta, strips: items }) {
+  const metaBox = el("div", { class: "meta" });
+  meta.forEach(m => metaBox.append(el("span", { text: m })));
+  return el("section", { class: "device" },
+    el("div", { class: "plate" }, el("span", { class: "eyebrow", text: eyebrow }), el("h2", { text: title }),
+      el("p", { text: intro }), metaBox),
+    el("div", { class: "strips" }, ...items));
+}
+
+const root = document.getElementById("sections");
+root.style.display = "grid"; root.style.gap = "3rem";
+
+// VS100R
+root.append(Device({
+  eyebrow: "Capture personnelle · ampli à lampe hybride",
+  title: "Marshall Valvestate VS100R",
+  intro: "Le modèle conditionné par le gain et le contour, contre l'envoi de boucle d'effets de l'ampli, sur trois prises de test qu'il n'a jamais entendues : gain minimal, médian et maximal parmi elles. Ce sont des prises non vues, pas toutes des réglages non vus : seule la prise 16 a un couple gain–contour absent de l'entraînement.",
+  meta: ["vs100r_gc_film_joint_s925_r2", "canal OD2, Power Dimension off", "fenêtre de 6 s au plus fort niveau du réel"],
+  strips: DATA.vs100r.map(r => Strip({
+    title: r.label,
+    knob: `${fmt(r.window_s[0], 1)}–${fmt(r.window_s[1], 1)} s`,
+    tracks: [
+      { label: "Réel", src: r.files.real },
+      { label: "Modèle", src: r.files.model, tag: `ESR ${fmt(r.esr)}` },
+      { label: "Résidu", src: r.files.residual, residual: true, tag: db(r.esr) },
+    ],
+    readout: [["ESR de l'extrait", fmt(r.esr)], ["résidu", db(r.esr)]],
+  })),
+}));
+
+// Marshall
+const knobs = s => s.replace(/_G\d+$/, "").replace(/B(\d+)_M(\d+)_T(\d+)/, (_, b, m, t) => `B ${+b / 10} · M ${+m / 10} · T ${+t / 10} · G 5`);
+root.append(Device({
+  eyebrow: "G2.2 · conditionnement des réglages",
+  title: "Marshall JVM410H OD1",
+  intro: "Deux façons de faire entrer les boutons dans le modèle, à budget égal : FiLM (bras A) module les portes non linéaires, « pôles » (bras D) déplace les pôles des SSM. Sur cinq partitions, D l'emporte nettement au réglage extrême (H1 soutenue). Sur la médiane des réglages, il est non inférieur mais indistinct. Ici, partition 925, réglages de test non vus.",
+  meta: ["A : param_ssm_wavenet_marshall", "D : g2_poles_additive_s925", "réglage mal étiqueté exclu"],
+  strips: DATA.marshall.map(r => Strip({
+    title: r.label,
+    rule: `Règle : ${r.rule.toLowerCase()} (ESR enregistrées : FiLM ${fmt(r.recorded_esr.film)}, pôles ${fmt(r.recorded_esr.poles)}).`,
+    knob: knobs(r.setting),
+    tracks: [
+      { label: "Réel", src: r.files.real },
+      { label: "FiLM (A)", src: r.files.film, tag: `ESR ${fmt(r.esr.film)}` },
+      { label: "Pôles (D)", src: r.files.poles, tag: `ESR ${fmt(r.esr.poles)}` },
+      { label: "Résidu FiLM", src: r.files.residual_film, residual: true, tag: db(r.esr.film) },
+      { label: "Résidu pôles", src: r.files.residual_poles, residual: true, tag: db(r.esr.poles) },
+    ],
+    readout: [["ESR FiLM", fmt(r.esr.film)], ["ESR pôles", fmt(r.esr.poles)], ["rapport", fmt(r.esr.film / r.esr.poles, 2)]],
+  })),
+}));
+
+// Rate transfer
+const rateStrips = [];
+for (const [kind, m] of Object.entries(DATA.rate.models)) {
+  m.excerpts.forEach((r, k) => rateStrips.push(Strip({
+    title: `${kind === "zoh" ? "Maintien d'ordre zéro (ZOH)" : "Maintien d'ordre un (FOH)"} · segment ${r.segment}`,
+    knob: m.run_id,
+    tracks: [
+      { label: "Réel", src: r.files.real },
+      { label: "Modèle à 48 kHz", src: r.files.model48 },
+      { label: "Modèle à 192 kHz", src: r.files.model192, tag: `ESR ${fmt(r.esr_vs_48k, 5)}` },
+      { label: "Écart 48 − 192", src: r.files.residual, residual: true, tag: db(r.esr_vs_48k) },
+    ],
+    readout: [["ESR 192 kHz contre 48 kHz", fmt(r.esr_vs_48k, 5)], ["écart", db(r.esr_vs_48k)]],
+    note: k === 0 ? (kind === "zoh"
+      ? "Le ZOH rééchelonné prend un retard de 0,95 échantillon à 48 kHz (κ = 2,53 pour ce checkpoint, T4). Un tel retard ne s'entend pas seul, mais il laisse un écart fort."
+      : "Le FOH n'a pas d'avance à fréquence nulle (T1). Mesuré par bande, κ = 0,036 (T1-P1 soutenue) : l'écart descend vers −30 dB.") : null,
+  })));
+}
+root.append(Device({
+  eyebrow: "T1, T4 · transfert de fréquence d'échantillonnage",
+  title: "Big Muff à 192 kHz",
+  intro: "Un modèle entraîné à 48 kHz tourne à 192 kHz en rééchelonnant ses pas Δ, puis sa sortie est ramenée à 48 kHz. L'écart fait entendre ce que coûte le changement de fréquence, en ZOH et en FOH. Les deux modèles sont des entraînements différents à la même graine.",
+  meta: ["Big Muff, segments de test au plus fort niveau", "extraits de 0,5 à 4,5 s"],
+  strips: rateStrips,
+}));
+
+// F-Fuzz
+root.append(Device({
+  eyebrow: "FIX_ffuzz · latence de la cible",
+  title: "F-Fuzz paramétrique",
+  intro: "Les cibles F-Fuzz arrivent 4 échantillons (0,08 ms) en retard sur l'entrée. Avant le correctif, le modèle s'ajustait à cette cible décalée (ESR de test moyenne 0,137). Après, il est entraîné sur la cible avancée de 4 échantillons (0,0016), et sa sortie est ici retardée d'autant pour être jouée contre le même réel. L'ESR change beaucoup, l'oreille peu : le résidu montre l'écart.",
+  meta: ["avant : param_ssm_wavenet_ffuzz_r2", "après : param_ssm_wavenet_ffuzz_adv4_r2"],
+  strips: DATA.ffuzz.map(r => Strip({
+    title: r.label,
+    knob: r.setting,
+    tracks: [
+      { label: "Réel", src: r.files.real },
+      { label: "Avant", src: r.files.before, tag: `ESR ${fmt(r.esr.before)}` },
+      { label: "Après", src: r.files.after, tag: `ESR ${fmt(r.esr.after)}` },
+      { label: "Résidu avant", src: r.files.residual_before, residual: true, tag: db(r.esr.before) },
+      { label: "Résidu après", src: r.files.residual_after, residual: true, tag: db(r.esr.after) },
+    ],
+    readout: [["ESR avant", fmt(r.esr.before)], ["ESR après", fmt(r.esr.after, 5)], ["enregistrées", `${fmt(r.recorded_esr.before)} → ${fmt(r.recorded_esr.after)}`]],
+  })),
+}));
+</script>
