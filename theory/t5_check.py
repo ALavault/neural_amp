@@ -12,7 +12,13 @@ and FOH:
      only dlog_dt moves, changed when dlog_A_real moves;
   N3 network: the response to a constant input, at its last sample, is unchanged when
      only dlog_dt moves and changed when dlog_A_real moves; the same dt-only moves do
-     change the response to noise (dt is not ignored).
+     change the response to noise (dt is not ignored);
+  N4 real modes (A_imag = 0), one mode per channel: the kernel sum equals
+     2 Re(c) e^-(alpha + eps), and is 0 at every setting when Re c = 0;
+  N5 boundaries: below the floor Re z < -80 the sum still equals -c/lambda (ZOH exact,
+     FOH through foh_late); a slow ZOH mode's truncated sum is
+     2 Re(-c (1 - a^L)/lambda),
+     which differs from the infinite one.
 Fails loudly.
 """
 
@@ -23,7 +29,7 @@ import math
 import sympy as sp
 import torch
 
-from fssr_nam.models.ssm_wavenet import SSMWaveNet
+from fssr_nam.models.ssm_wavenet import DiagonalSSMLayer, SSMWaveNet
 
 LENGTH = 2**15
 BOUND = 1.0  # random shifts in [-1, 1], so every mode dies within LENGTH samples
@@ -184,11 +190,79 @@ def numeric(discretization: str, seed: int) -> None:
     )
 
 
+def single_modes(discretization: str, log_a, a_imag, log_dt, c) -> DiagonalSSMLayer:
+    """One mode per channel, float64, parameters set exactly."""
+    layer = DiagonalSSMLayer(len(c), 1, discretization=discretization).double()
+    with torch.no_grad():
+        layer.log_A_real.copy_(torch.tensor(log_a, dtype=torch.float64).unsqueeze(-1))
+        layer.A_imag.copy_(torch.tensor(a_imag, dtype=torch.float64).unsqueeze(-1))
+        layer.log_dt.copy_(torch.tensor(log_dt, dtype=torch.float64))
+        layer.C.copy_(torch.tensor(c, dtype=torch.float64).unsqueeze(1))
+        layer.D.zero_()
+    return layer
+
+
+def no_shift(layer, eps: float = 0.0) -> tuple[torch.Tensor, torch.Tensor]:
+    channels = layer.channels
+    return (
+        torch.zeros(1, channels, dtype=torch.float64),
+        torch.full((1, channels, 1), eps, dtype=torch.float64),
+    )
+
+
+@torch.no_grad()
+def boundaries(discretization: str) -> None:
+    # N4: real modes; Re c = 0.7, 0 (Im c = 0.9) and -1.3.
+    c = [[0.7, 0.2], [0.0, 0.9], [-1.3, 0.4]]
+    alpha = [math.log(0.5), math.log(1.5), math.log(0.8)]
+    layer = single_modes(discretization, alpha, [0.0] * 3, [math.log(0.2)] * 3, c)
+    worst = 0.0
+    for eps in (-1.0, -0.3, 0.0, 0.4, 1.0):
+        sums = layer._shifted_kernel(LENGTH, no_shift(layer, eps))[0].sum(-1)
+        expected = torch.tensor(
+            [2 * ci[0] * math.exp(-(a + eps)) for ci, a in zip(c, alpha, strict=True)],
+            dtype=torch.float64,
+        )
+        worst = max(worst, float((sums - expected).abs().max()))
+        assert abs(float(sums[1])) < 1e-12, float(sums[1])
+    assert worst < 1e-9, worst
+
+    # N5a: below the floor, Re z = -0.5 e^6 * ... < -80.
+    fast = single_modes(
+        discretization,
+        [6.0, 7.0],
+        [0.0, 2.0],
+        [math.log(0.5)] * 2,
+        [[0.6, -0.3], [-0.4, 0.8]],
+    )
+    z_real = -torch.exp(fast.log_A_real[:, 0]) * torch.exp(fast.log_dt)
+    assert float(z_real.max()) < -80, z_real
+    sums = fast._shifted_kernel(64, no_shift(fast))[0].sum(-1)
+    lam = torch.complex(-torch.exp(fast.log_A_real), fast.A_imag)
+    closed = 2 * (-torch.view_as_complex(fast.C.contiguous()) / lam).sum(-1).real
+    floor = rel(sums, closed)
+    assert floor < 1e-12, floor
+
+    # N5b: a slow real mode, Re z = -1e-5, over LENGTH samples (a^L about 0.72).
+    slow = single_modes(discretization, [0.0], [0.0], [math.log(1e-5)], [[0.5, 0.0]])
+    truncated = float(slow._shifted_kernel(LENGTH, no_shift(slow))[0].sum())
+    a_l = math.exp(-1e-5 * LENGTH)
+    if discretization == "zoh":
+        assert abs(truncated - (1 - a_l)) < 1e-9, truncated
+    assert abs(truncated - 1.0) > 0.5, truncated  # far from the infinite gain 1
+    print(
+        f"{discretization} : N4 modes reels {worst:.1e}, Re c = 0 nul ; "
+        f"N5 plancher {floor:.1e}, mode lent tronque {truncated:.4f} "
+        f"(1 - a^L = {1 - a_l:.4f}, limite 1)"
+    )
+
+
 def main() -> None:
     symbolic()
     for discretization in ("zoh", "foh"):
         for seed in (0, 1, 2):
             numeric(discretization, seed)
+        boundaries(discretization)
 
 
 if __name__ == "__main__":

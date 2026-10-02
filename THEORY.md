@@ -194,23 +194,29 @@ dépendant du checkpoint)
 Statut : E (2026-10-02) ; à revérifier si `src/fssr_nam/models/ssm_wavenet.py`
 (`SSMWaveNet.__init__`, `forward`, `pole_shifts`, `GatedSSMBlock.forward`,
 `DiagonalSSMLayer.forward`, `_shifted_inputs`, `_shifted_kernel`) change
-Énoncé : pour `SSMWaveNet(cond="poles")` en ZOH ou en FOH, au réglage u :
+Énoncé : pour `SSMWaveNet(cond="poles").forward` en ZOH ou en FOH (convolution à état initial
+nul, réglage u constant sur le segment) :
 (1) la sortie dépend de u seulement à travers les Δ_{i,c}(u) et les Re λ_{i,c,m}(u). Deux
 réglages qui donnent ces mêmes familles donnent la même sortie. ω (`A_imag`), C, D et les autres
 couches ne dépendent pas de u.
 (2) Le gain continu de chaque canal SSM vaut D + Σ_m 2 Re(−c_m/λ_m(u)) et ne dépend pas de Δ(u).
-(3) Pour une entrée constante, la limite de la sortie du réseau ne dépend de u qu'à travers les
-Re λ(u). Un réglage qui ne déplace que les Δ la laisse inchangée.
-(4) Le résidu continu w_m(u) = −c_m/λ_m(u) vérifie w λ = −c. Pour un mode réel, déplacer le pôle
-d'un facteur e^{ε} multiplie son gain continu par e^{−ε}.
+(3) Pour une entrée constante, la limite de la sortie du réseau (convolution prolongée
+indéfiniment) ne dépend de u qu'à travers les Re λ(u). Un réglage qui ne déplace que les Δ la
+laisse inchangée.
+(4) Le résidu continu w_m(u) = −c_m/λ_m(u) vérifie w λ = −c. Pour un mode réel, la contribution
+au gain continu vaut 2 Re(c) e^{−(α+ε)} : un décalage ε la multiplie par e^{−ε} si Re c ≠ 0, et
+elle est nulle si Re c = 0. Rien n'est dit du gain total d'un canal.
 Hypothèses : H1 `cond="poles"`, ZOH ou FOH [mathématique ; lecture du code, énoncé 1] ;
-H2 noyaux infinis [mathématique ; le code tronque à la longueur du segment] ; H3 formules
-fermées exactes [mathématique ; le code s'en écarte par `pole` (Re z ≥ −80 ; exact en ZOH, écart
-d'ordre e^{−80} en FOH), `phi2` en série et l'arrondi float32/complex64]
-Portée : (2) et (3) portent sur la fréquence nulle seulement : ailleurs, Δ change la réponse du
-canal. (3) ne vaut que si les modes s'éteignent dans le segment, et ne dit rien de l'audio, qui
-n'a pas de composante continue. En temps discret, c·b(λ, Δ) et K[0] varient avec δ et ε. (1) dit
-par quoi passe u, pas ce qui est appris.
+H2 noyaux infinis [mathématique ; sur un segment de longueur L, la somme tronquée d'un mode ZOH
+vaut 2 Re(−c (1 − a^L)/λ)] ; H3 formules fermées exactes [mathématique ; le code s'en écarte par
+`pole` (Re z ≥ −80 ; exact en ZOH ; en FOH, `foh_late` et écart relatif d'ordre e^{−80}), `phi2`
+en série et l'arrondi float32/complex64]
+Portée : (2) et (3) portent sur la fréquence nulle seulement. À toute fréquence non nulle, Δ seul
+change le gain d'un canal (mode réel normalisé, Ω = 0,01 : |H| = 0,707 à Δ = 0,01, 0,894 à
+Δ = 0,02). (3) porte sur une entrée constante, et sa limite peut ne pas être atteinte sur un
+segment si un mode est lent. Le chemin récurrent (`step`), qui dépend de l'historique de l'état,
+n'est pas couvert. En temps discret, c·b(λ, Δ) et K[0] varient avec δ et ε. (1) dit par quoi passe
+u, pas ce qui est appris.
 Objet : `src/fssr_nam/models/ssm_wavenet.py` @ 2d49ac7 ; correspondance dans la preuve
 Preuve : `theory/T5_poles_arm.md` (1 par lecture du code ; 2 par T1, énoncé 1 ; 3 par
 récurrence sur les blocs ; 4 immédiat)
@@ -225,15 +231,29 @@ FOH ; mode réel). Numérique `theory/t5_check.py` : vrai `SSMWaveNet(cond="pole
 - N3 : dernier échantillon de la réponse à une constante, 2¹⁵ échantillons. Avec Δ seul
   déplacé, écart ≤ 7,2·10⁻¹⁵. Avec les pôles seuls, ≥ 2,1·10⁻². Le même déplacement de Δ seul
   change la réponse au bruit d'au moins 1,5·10⁻³.
-Relecture : à faire.
+- N4 : modes réels isolés, à cinq valeurs de ε, somme = 2 Re(c) e^{−(α+ε)} à ≤ 9,4·10⁻¹⁴ près ;
+  somme nulle si Re c = 0.
+- N5 : sous le plancher (Re z < −80), somme = −c/λ à ≤ 1,5·10⁻¹⁶ près en relatif ; un mode lent
+  (Re z = −10⁻⁵, L = 2¹⁵) a une somme tronquée de 0,2794 = 1 − a^L, contre une limite de 1.
+Relecture : Codex gpt-6-astra, 2026-10-02, passe 1 (xhigh). (1) tenu pour `forward`, mais le
+chemin récurrent dépend de l'historique : l'objet a été restreint (accepté). (2) correct ;
+`foh_late` à citer, et e^{−80} est relatif (accepté). (3) récurrence valide une fois la
+convergence dominée détaillée (fait), mais « s'éteindre dans le segment » confondait limite et
+troncature (reformulé avec le facteur 1 − a^L). (4) surénoncé : contre-exemples Re c = 0 et
+coupure discrète déplacée par Δ (énoncé restreint). Utilité : glissement de la fréquence nulle aux
+basses fréquences, contre-exemple chiffré vérifié (corrigé). Contrôles manquants pour (4) et pour
+les cas limites (N4 et N5 ajoutés). Son exécution de `t5_check.py` a échoué dans son bac à sable
+(`snap-confine`, caches). Il a rejoué la branche sans checkpointing des noyaux et reproduit les
+chiffres. Verdict : D impossible en l'état. Passe 2 à faire.
 Utilité : « conditionner les pôles » ne teste pas seul « déplacer les coupures »
-(`demo/param/predictions_poles.md`, verdict G2.2). Le bras couple le gain continu de chaque mode
-à son pôle (4). Il ne peut changer aucun gain continu de canal par Δ seul (2). Un gain réglable
-à basse fréquence passe donc par ε ou par les non-linéarités en aval. L'analyse C de
-`predictions_fast_modes.md` mesure par quelle voie passent les boutons.
+(`demo/param/predictions_poles.md`, verdict G2.2). Le décalage ε d'un pôle réel change aussi sa
+contribution au gain continu (4). Le gain d'un canal à fréquence nulle ne change pas par Δ seul
+(2). Cela ne vaut qu'à fréquence nulle, voir Portée. L'analyse C de `predictions_fast_modes.md`
+mesure par quelle voie passent les boutons.
 Rétrodictions : aucune mesurée.
 Prédictions nouvelles : aucune. L'énoncé est structurel, des identités du code. Il dit comment
-lire une mesure du bras D (toute variation de gain continu d'un canal entre réglages se lit dans
-ε), il ne prédit pas de résultat d'entraînement.
+lire une mesure du bras D (toute variation du gain d'un canal à fréquence nulle entre réglages se
+lit dans ε), il ne prédit pas de résultat d'entraînement.
 Historique : 2026-10-02 — → E ; 2026-10-02 : énoncé précisé en quatre points, preuve et
-contrôles écrits (E, relecture en attente)
+contrôles écrits ; 2026-10-02 : passe 1 de Codex, objet, énoncé 4 et Utilité restreints, N4 et
+N5 ajoutés (E, passe 2 à faire)

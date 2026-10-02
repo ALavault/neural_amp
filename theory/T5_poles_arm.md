@@ -6,7 +6,12 @@ Preuve de l'entrée T5 de `THEORY.md` (le statut est dans le registre). Contrôl
 ## Objet et correspondance
 
 `src/fssr_nam/models/ssm_wavenet.py` @ 2d49ac7, `SSMWaveNet(num_controls > 0, cond="poles",
-discretization ∈ {"zoh", "foh"})`. Notations : bloc i, canal c, mode m, réglage u.
+discretization ∈ {"zoh", "foh"})`, appelé par `SSMWaveNet.forward` : convolution sur un segment, à
+état initial nul, réglage constant sur le segment. Le chemin récurrent (`step`, `_shifted_step`)
+n'est pas couvert : sa sortie dépend aussi de l'historique de l'état `_h` et `_x_prev`, donc de
+l'historique des réglages. L'export natif refuse les modèles conditionnés
+(`scripts/product_ssm_export.py`), et l'API C++ n'a pas d'entrée de réglage. Notations : bloc i,
+canal c, mode m, réglage u.
 
 | ici | code |
 |---|---|
@@ -30,13 +35,17 @@ Le code flottant n'est contrôlé que dans le domaine de `t5_check.py` (voir Por
    paramètre des couches 1×1, des portes ou de la tête de sortie ne dépendent de u.
 2. **Gain continu d'un canal.** Σ_k K_{i,c}[k] + D_{i,c} = D_{i,c} + Σ_m 2 Re(−c_{i,c,m}/λ_{i,c,m}(u)),
    en ZOH comme en FOH. Ce gain ne dépend pas de Δ_{i,c}(u).
-3. **Régime permanent du réseau.** Pour une entrée constante x₀, la sortie converge vers une
+3. **Régime permanent du réseau.** Pour une entrée constante x₀ et un réglage constant, la sortie
+   de la convolution à préhistoire nulle, prolongée indéfiniment, converge vers une
    limite F(x₀, u). Cette limite dépend de u seulement à travers les (Re λ_{i,c,m}(u)). En
    particulier, un réglage qui ne déplace que les Δ (ε ≡ 0) laisse F inchangé.
 4. **Résidu lié au pôle.** Le résidu continu de chaque mode, w_{i,c,m}(u) = −c_{i,c,m}/λ_{i,c,m}(u),
-   vérifie w λ = −c pour tout u. Pour un mode réel (ω = 0), déplacer le pôle d'un facteur e^{ε}
-   multiplie la contribution du mode au gain continu par e^{−ε}. Le bras ne peut donc déplacer
-   la coupure d'un mode réel sans changer, en sens inverse, son gain continu.
+   vérifie w λ = −c pour tout u. Pour un mode réel (ω = 0), la contribution du mode au gain
+   continu vaut 2 Re(c) e^{−(α+ε)}. Si Re c ≠ 0, un décalage ε du pôle continu la multiplie par
+   e^{−ε}. Si Re c = 0, elle est nulle à tout réglage. Le décalage δ de Δ déplace le pôle discret
+   e^{λΔ}, donc la coupure en fréquence discrète, sans changer cette contribution (énoncé 2).
+   L'énoncé ne dit rien du gain total d'un canal, où les contributions des modes peuvent se
+   compenser.
 
 ## Preuve
 
@@ -64,10 +73,14 @@ L'expression ne contient pas Δ. On somme sur les modes et on ajoute D. ∎
 **3.** Par récurrence sur les blocs.
 - Pour une entrée constante, `input_conv` (1×1) produit un signal constant.
 - Si l'entrée d'un canal SSM converge vers h∞, sa sortie converge vers G_{i,c}(u) h∞, G étant
-  le gain de l'énoncé 2. En effet, le noyau est absolument sommable (|a| < 1, puisque
-  Re λ < 0 et Δ > 0). Écrivons x[n] = h∞ + e[n] avec e → 0. Alors (K ∗ e)[n] → 0 par convergence
-  dominée, et (K ∗ h∞)[n] → (Σ K) h∞.
-- Les couches 1×1, la porte tanh·sigmoid et la tête de sortie sont sans mémoire et continues.
+  le gain de l'énoncé 2. En effet, le noyau est absolument sommable : |a| < 1, puisque
+  Re λ < 0 et Δ > 0, et le noyau FOH est une somme de deux suites géométriques décalées.
+  Écrivons x[n] = h∞ + e[n] avec e → 0. Une suite convergente est bornée, |e[n]| ≤ M. Les termes
+  f_n(k) = 1_{k ≤ n} K[k] e[n − k] tendent vers 0 et sont majorés par M |K[k]|, sommable. Donc
+  (K ∗ e)[n] → 0 par convergence dominée, (K ∗ h∞)[n] → (Σ K) h∞, et le terme direct tend vers
+  D h∞.
+- Les couches 1×1, la porte tanh·sigmoid et la tête de sortie (ReLU ou LeakyReLU, tanh, softsign
+  ou identité) sont sans mémoire et continues.
   Elles préservent la convergence, et leur limite est leur valeur en la limite. Les sommes
   résiduelle et `skip_sum` la préservent aussi.
 - La limite F est donc une composition de fonctions continues fixes et des gains G_{i,c}(u).
@@ -79,13 +92,19 @@ L'expression ne contient pas Δ. On somme sur les modes et on ajoute D. ∎
 ## Hypothèses et portée
 
 - H1 `cond="poles"`, discrétisation ZOH ou FOH [mathématique ; le constructeur refuse `free`].
-- H2 noyaux infinis [mathématique ; le code tronque à la longueur du segment]. Les énoncés 2
-  et 3 ne valent que lorsque les modes sont éteints dans la longueur du segment. Un mode
-  lent (|Re z| petit) peut ne pas l'être, et le régime permanent n'est alors pas atteint.
+- H2 noyaux infinis [mathématique]. La limite de l'énoncé 3 existe pour tout mode stable, même
+  lent. Sur un segment de longueur L, la convolution causale à préhistoire nulle est exacte pour
+  les L premiers échantillons. Seul l'estimateur du gain permanent par la somme tronquée Σ_{k<L} K[k]
+  s'écarte de la limite. Pour un mode ZOH, cette somme vaut 2 Re(−c (1 − a^L)/λ) : l'écart est
+  borné par 2 |c/λ| |a|^L. Un mode lent (|Re z| L petit) n'atteint donc pas son régime sur le
+  segment (exemple de la relecture : λ = −1, c = 1/2, Δ = 10⁻⁶, L = 2¹⁵ donne 0,032 pour une
+  limite de 1).
 - H3 formules fermées exactes [mathématique ; le code s'en écarte par `pole`, qui plafonne
   Re z ≥ −80. En ZOH, b est calculé avec le même a plafonné, et l'énoncé 2 reste exact. En FOH,
-  β₁ et β₀ viennent du z exact : l'écart est d'ordre e^{−80}. Le code calcule aussi `phi2` en
-  série et arrondit en float32 et complex64.]
+  `foh_late` remplace β₀ par sa limite Δ/z² sous le seuil, et β₁ vient du z exact. L'écart
+  relatif sur la somme du mode est d'ordre e^{−80}. Ce n'est pas une borne absolue après
+  multiplication par c/λ et passage dans le réseau. Le code calcule aussi `phi2` en série et
+  arrondit en float32 et complex64.]
 - Portée :
   - L'énoncé 1 dit par quoi passe u, pas ce qui est appris.
   - Les énoncés 2 et 3 portent sur la fréquence nulle seulement. Aux autres fréquences, Δ
@@ -94,13 +113,14 @@ L'expression ne contient pas Δ. On somme sur les modes et on ajoute D. ∎
   - En temps discret, le résidu effectif c·b(λ, Δ) et le premier échantillon K[0] varient avec
     δ et ε. L'énoncé ne contredit donc pas la mesure de `D + K[0]` dans
     `demo/param/predictions_fast_modes.md`.
-  - L'énoncé 3 porte sur un régime permanent de signal constant, pas sur l'audio. Les signaux
-    du banc n'ont pas de composante continue.
+  - L'énoncé 3 porte sur une entrée constante seulement.
 
 ## Correspondance avec la mesure G2.2
 
 Le verdict G2.2 (`demo/param/predictions_poles.md`) compare le bras D (pôles) au bras A (FiLM).
-L'énoncé 1 dit que le bras D ne teste pas seulement « déplacer des coupures ». Il couple aussi les
-gains continus des modes à leurs pôles (énoncé 4). Il ne peut changer aucun gain continu de canal
-par Δ seul (énoncé 2). Tout effet de gain réglable à basse fréquence passe donc par ε, ou par les
-non-linéarités en aval, qui reçoivent des signaux dépendant de u.
+Le bras D ne teste pas seulement « déplacer des coupures ». Le décalage ε du pôle continu d'un mode
+réel change aussi sa contribution au gain continu (énoncé 4). Le gain d'un canal à fréquence nulle
+ne change pas par Δ seul (énoncé 2). Ce résultat vaut à fréquence nulle seulement : à toute
+fréquence non nulle, Δ seul change le gain. Contre-exemple de la relecture : mode réel normalisé,
+H = (1 − a)/(1 − a e^{−iΩ}), a = e^{−Δ}. À Ω = 0,01, on obtient |H| = 0,7071 pour Δ = 0,01 et
+0,8944 pour Δ = 0,02.
