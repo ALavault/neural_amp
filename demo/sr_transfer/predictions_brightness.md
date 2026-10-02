@@ -163,3 +163,24 @@ En dB ; I et H : sinus à 997 Hz au niveau du jeu de test.
   FOH, pas sur des FOH entraînés.
 - Décision produit (2× interne) : non tranchée. Une écoute à l'aveugle du FOH à 48 contre 192 kHz
   dirait si une différence s'entend dans ces conditions. Elle n'en identifierait pas la cause.
+
+## Lecture par bande (post hoc, 2026-10-02, après remarque de l'utilisateur)
+
+D moyennait 13 tiers d'octave de 1 à 16 kHz, ce qui dilue un écart concentré dans l'aigu. J'ai
+donc écrit à tort « écarts minuscules ». Au tiers d'octave de 16 kHz (`brightness.json`, niveaux
+par bande) :
+
+| checkpoint | 192 − 48 | 48 − réel | 192 − réel |
+|---|---|---|---|
+| ZOH s925 | −1,35 | −0,25 | −1,60 |
+| ZOH s736 | −1,25 | −0,35 | −1,60 |
+| ZOH s688 | −0,06 | −0,34 | −0,40 |
+| FOH s925 | +0,61 | −0,16 | +0,45 |
+| FOH s736 | +0,57 | −0,33 | +0,24 |
+| FOH s688 | +0,86 | −0,26 | +0,59 |
+
+À 16 kHz, le modèle à 48 kHz est plus proche du réel pour 5 checkpoints sur 6 ; FOH s736 est
+l'exception, à 0,09 dB près. Lecture produit retenue par l'utilisateur : faire tourner le modèle à
+96 ou 192 kHz sans réentraînement est un sur-échantillonnage qui n'améliore pas la fidélité. On
+garde le 48 kHz. Le témoin montre que les filtres ne sont pas en cause (moins de 10⁻⁵ dB sur 4 à
+16 kHz) : c'est le modèle rééchelonné qui change dans l'aigu.
