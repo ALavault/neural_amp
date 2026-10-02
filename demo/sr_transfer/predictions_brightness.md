@@ -142,7 +142,7 @@ résidu ZOH entendu. FOH à 192 kHz : +0,24 dB, ESR 0,0009 face au modèle à 48
 - Rapprochement post hoc, à tester : la part inharmonique à 48 kHz (−35 à −39 dB) est du même
   ordre que le plancher à −37 dB entre FOH à 88–192 kHz et 48 kHz (`predictions_floor.md`). Ce
   plancher pourrait être le repliement retiré.
-- Décision produit (2× interne) : non tranchée. Le repliement baisse de 10 à 18 dB à 96 kHz sur
+- Décision produit (2× interne) : non tranchée. Le repliement baisse de 9,4 à 17,6 dB à 96 kHz sur
   le sinus à 997 Hz, sans rapprocher les niveaux du réel. L'étape suivante est une écoute à
   l'aveugle du FOH à 48 contre 192 kHz : s'il paraît encore moins dur, c'est le repliement ;
   sinon, l'impression venait de l'aigu perdu par le ZOH.
