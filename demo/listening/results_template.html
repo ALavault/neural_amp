@@ -32,6 +32,7 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body {
   background: var(--bg); color: var(--ink); font: 400 1rem/1.55 var(--body);
   padding-inline: 16px; padding-block: 0 4rem; margin: 0;
@@ -119,8 +120,8 @@ code { font: 0.85em var(--mono); overflow-wrap: anywhere; }
     son vrai niveau.</p>
     <div class="howto">
       <span><b>Changer de piste</b> en cours de lecture garde la position.</span>
-      <span><b>Résidu</b> = réel − modèle (bordure en tirets).</span>
-      <span><b>À l'aveugle</b> mélange et masque les noms des pistes non résiduelles.</span>
+      <span><b>Résidu</b> = réel − modèle (bordure en tirets) ; pour le transfert, modèle à 48 kHz − modèle à 192 kHz.</span>
+      <span><b>À l'aveugle</b> mélange les pistes non résiduelles, masque leurs noms, les résidus et les mesures de la tranche.</span>
     </div>
   </header>
   <div id="sections"></div>
@@ -130,8 +131,9 @@ code { font: 0.85em var(--mono); overflow-wrap: anywhere; }
     VS100R : capture personnelle (envoi de boucle d'effets, canal OD2), dont l'entrée est le signal
     DRY de ToneTwist AFx (Zenodo 10455730, CC BY-NC 4.0).</p>
     <p><b>Fabrication.</b> <code>scripts/product_results_listening.py</code> ; WAV 48 kHz 16 bits, un
-    gain par tranche (crête −1 dBFS), fondus de 10 ms. Les ESR affichées sont celles des extraits tels
-    qu'ils sont joués. Les ESR enregistrées portent sur tout le jeu de test et diffèrent donc. Voie
+    gain par tranche (crête −1 dBFS), fondus de 10 ms. Les ESR affichées sont calculées sur les extraits avant fondus et
+    quantification 16 bits (écart relatif inférieur à 0,3 % sur les fichiers joués). Les ESR
+    enregistrées portent sur tout le jeu de test et diffèrent donc. Voie
     produit : aucun résultat de cette page n'est une revendication scientifique.</p>
   </footer>
 </main>
@@ -168,6 +170,7 @@ function Strip({ title, rule, knob, tracks, readout, note }) {
   const reveal = el("button", { class: "reveal", type: "button", text: "Révéler" });
   reveal.hidden = true;
   const readoutBox = el("div", { class: "readout" });
+  const ruleBox = rule ? el("p", { class: "rule", text: rule }) : null;
   const buttons = [];
 
   function renderTracks() {
@@ -186,19 +189,33 @@ function Strip({ title, rule, knob, tracks, readout, note }) {
       buttons[i] = b;
     });
     readoutBox.hidden = blind && !revealed;
+    if (ruleBox) ruleBox.hidden = blind && !revealed;
+  }
+
+  // One reference position, kept from the current track; a token voids stale loads.
+  let position = 0, token = 0;
+  const pauseAll = () => audios.forEach(x => x.pause());
+
+  function start(i) {
+    const mine = ++token, a = audios[i];
+    const go = () => {
+      if (mine !== token || !playing) return;
+      try { a.currentTime = position; } catch (e) {}
+      a.play().catch(() => { if (mine === token) setPlaying(false); });
+    };
+    a.preload = "auto";
+    if (a.readyState >= 1) go(); else { a.addEventListener("loadedmetadata", go, { once: true }); a.load(); }
   }
 
   function select(i) {
     if (i === current) return;
-    const from = audios[current], to = audios[i];
-    const t = from.currentTime || 0;
-    if (playing) from.pause();
+    const from = audios[current];
+    if (from.readyState >= 1) position = from.currentTime || position;
+    token++;
+    pauseAll();
     current = i;
-    to.preload = "auto";
-    const go = () => { try { to.currentTime = t; } catch (e) {} if (playing) to.play().catch(() => {}); };
-    if (to.readyState >= 1) go(); else to.addEventListener("loadedmetadata", go, { once: true });
-    if (to.readyState < 1) to.load();
-    for (const [k, b] of Object.entries(buttons)) if (b) b.setAttribute("aria-pressed", String(Number(k) === i));
+    if (playing) start(i);
+    buttons.forEach((b, k) => b && b.setAttribute("aria-pressed", String(k === i)));
   }
 
   function setPlaying(on) {
@@ -207,18 +224,20 @@ function Strip({ title, rule, knob, tracks, readout, note }) {
     play.setAttribute("aria-label", on ? "Pause" : "Lire");
   }
   play.addEventListener("click", () => {
-    const a = audios[current];
-    if (playing) { a.pause(); setPlaying(false); return; }
+    if (playing) { api.stop(); return; }
     strips.forEach(s => s !== api && s.stop());
-    audios.forEach(x => { x.preload = "auto"; });
-    a.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    setPlaying(true);
+    start(current);
   });
   seek.addEventListener("input", () => {
     const a = audios[current];
-    if (a.duration) a.currentTime = (seek.value / 1000) * a.duration;
+    if (!a.duration) return;
+    position = (seek.value / 1000) * a.duration;
+    a.currentTime = position;
   });
   audios.forEach((a, i) => a.addEventListener("timeupdate", () => {
     if (i !== current || !a.duration) return;
+    position = a.currentTime;
     seek.value = String(Math.round((a.currentTime / a.duration) * 1000));
     time.textContent = `${mmss(a.currentTime)} / ${mmss(a.duration)}`;
   }));
@@ -228,8 +247,14 @@ function Strip({ title, rule, knob, tracks, readout, note }) {
       const signals = tracks.map((t, i) => i).filter(i => !tracks[i].residual);
       for (let k = signals.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [signals[k], signals[j]] = [signals[j], signals[k]]; }
       order = [...signals, ...tracks.map((t, i) => i).filter(i => tracks[i].residual)];
-      if (tracks[current].residual) select(signals[0]);
-    } else order = tracks.map((_, i) => i);
+      // Always land on the first shuffled track, so the selection does not reveal it.
+      renderTracks();
+      const first = signals[0];
+      if (first === current) buttons.forEach((b, k) => b && b.setAttribute("aria-pressed", String(k === first)));
+      else select(first);
+      return;
+    }
+    order = tracks.map((_, i) => i);
     renderTracks();
   });
   reveal.addEventListener("click", () => { revealed = true; reveal.hidden = true; renderTracks(); });
@@ -240,13 +265,13 @@ function Strip({ title, rule, knob, tracks, readout, note }) {
     el("div", { class: "strip-head" },
       el("span", { class: "strip-title", text: title }),
       knob ? el("span", { class: "knob", text: knob }) : null),
-    rule ? el("p", { class: "rule", text: rule }) : null,
+    ruleBox,
     trackBox,
     el("div", { class: "transport" }, play, seek, time,
       el("label", { class: "blind", for: `blind-${id}` }, blindBox, "À l'aveugle"), reveal),
     readoutBox,
     note ? el("p", { class: "note", text: note }) : null);
-  const api = { node, stop() { if (playing) { audios[current].pause(); setPlaying(false); } } };
+  const api = { node, stop() { token++; pauseAll(); setPlaying(false); } };
   strips.push(api);
   return node;
 }
@@ -286,7 +311,7 @@ const knobs = s => s.replace(/_G\d+$/, "").replace(/B(\d+)_M(\d+)_T(\d+)/, (_, b
 root.append(Device({
   eyebrow: "G2.2 · conditionnement des réglages",
   title: "Marshall JVM410H OD1",
-  intro: "Deux façons de faire entrer les boutons dans le modèle, à budget égal : FiLM (bras A) module les portes non linéaires, « pôles » (bras D) déplace les pôles des SSM. Sur cinq partitions, D l'emporte nettement au réglage extrême (H1 soutenue). Sur la médiane des réglages, il est non inférieur mais indistinct. Ici, partition 925, l'une des plus favorables à D : il y bat A sur les 8 réglages de test utilisables (médiane de d +0,35, contre −0,09 à 688 et −0,02 à 744). Les trois réglages sont choisis sur les ESR enregistrées, la règle est rappelée sous chaque tranche.",
+  intro: "Deux façons de faire entrer les boutons dans le modèle, à budget comparable (28 385 et 28 661 paramètres) : FiLM (bras A) module les portes non linéaires, « pôles » (bras D) déplace les pôles des SSM. Sur cinq partitions, D l'emporte nettement au réglage extrême (H1 soutenue). Sur la médiane des réglages, il est non inférieur mais indistinct. Ici, partition 925, l'une des plus favorables à D : il y bat A sur les 8 réglages de test utilisables (médiane de d +0,35, contre −0,09 à 688 et −0,02 à 744). Les trois réglages sont choisis sur les ESR enregistrées, la règle est rappelée sous chaque tranche.",
   meta: ["A : param_ssm_wavenet_marshall", "D : g2_poles_additive_s925", "réglage mal étiqueté exclu"],
   strips: DATA.marshall.map(r => Strip({
     title: r.label,
@@ -318,7 +343,7 @@ for (const [kind, m] of Object.entries(DATA.rate.models)) {
     readout: [["ESR 192 kHz contre 48 kHz", fmt(r.esr_vs_48k, 5)], ["écart", db(r.esr_vs_48k)]],
     note: k === 0 ? (kind === "zoh"
       ? "Le ZOH rééchelonné prend un retard de 0,95 échantillon à 48 kHz (κ = 2,53 pour ce checkpoint, T4). Un tel retard ne s'entend pas seul, mais il laisse un écart fort."
-      : "Le FOH n'a pas d'avance à fréquence nulle (T1). Mesuré par bande, κ = 0,036 (T1-P1 soutenue) : l'écart descend vers −30 dB.") : null,
+      : "Par couche linéaire et à fréquence nulle, le FOH n'a pas d'avance (T1). Mesuré par bande sur le réseau, κ médian 0,036 sur trois checkpoints et deux fréquences (T1-P1 soutenue) : ici, l'écart descend vers −31 dB.") : null,
   })));
 }
 root.append(Device({
@@ -333,7 +358,7 @@ root.append(Device({
 root.append(Device({
   eyebrow: "FIX_ffuzz · latence de la cible",
   title: "F-Fuzz paramétrique",
-  intro: "Les cibles F-Fuzz arrivent 4 échantillons (0,08 ms) en retard sur l'entrée. Avant le correctif, le modèle s'ajustait à cette cible décalée (ESR de test moyenne 0,137). Après, il est entraîné sur la cible avancée de 4 échantillons (0,0016), et sa sortie est ici retardée d'autant pour être jouée contre le même réel. L'ESR change beaucoup, l'oreille peu : le résidu montre l'écart.",
+  intro: "Les cibles F-Fuzz rendues arrivent 4 échantillons (0,08 ms) après ce que les modèles produisent, et les modèles ne l'apprennent pas (DIAGNOSIS_ffuzz). Avant le correctif, ESR de test moyenne 0,137. Après entraînement sur la cible avancée de 4 échantillons, 0,0016. La sortie « après » est ici retardée de 4 échantillons pour être jouée contre le même réel brut. Le résidu fait entendre l'écart ; l'effet perçu n'a pas été mesuré.",
   meta: ["avant : param_ssm_wavenet_ffuzz_r2", "après : param_ssm_wavenet_ffuzz_adv4_r2"],
   strips: DATA.ffuzz.map(r => Strip({
     title: r.label,
