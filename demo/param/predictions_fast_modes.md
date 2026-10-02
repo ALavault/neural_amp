@@ -93,8 +93,10 @@ boutons de 0,001 à 0,144.
 - Les modes rapides du bras D sont presque tous inertes à l'inférence. Leur dérive ne porte pas
   la sortie, à une exception près (744, +30 % d'ESR).
 - Les modes commutés et le terme instantané des canaux qui les portent suivent surtout le bouton
-  Gain. Or G vaut 5 sur tous les réglages de test : ce mécanisme ne peut pas expliquer
-  l'avantage de D sur les non vus, qui diffèrent par B, M et T.
+  Gain. Or G vaut 5 sur tous les réglages de test : ce mécanisme n'explique pas les écarts
+  entre réglages non vus, qui diffèrent par B, M et T. Il peut encore contribuer, à G = 5, à
+  l'écart moyen entre D et A ; ce n'est pas mesuré ici (portée restreinte après relecture
+  Codex).
 - Descriptif, hors critère : le seul porteur (744, 0/0/2) est commandé par G (part 0,93).
   Son Δα dépend donc surtout de G, qui ne varie pas sur les réglages de test ; ce qu'il apporte
   à ces réglages n'est pas analysé ici.

@@ -93,9 +93,11 @@ moins que les autres (0,144 contre 0,442 à 0,549 à 96 kHz ; 0,225 contre 0,686
 (Σ_b δ_b = 6,17 contre δ_tous = 0,483 à 96 kHz ; 67,82 contre 0,748 à 192 kHz) et compensation
 dans une couche (δ_b maximal 1,276 > 0,25 à 96 kHz ; 14,65 > 0,375 à 192 kHz). Mais le bras
 « bloc seul », tel qu'il est spécifié plus haut et exécuté, fait tourner tout le réseau à fs′ en
-laissant les 7 autres blocs à leur Δ de 48 kHz : leur dynamique est alors ralentie d'un facteur
-fs′/48 000 (×2, ×4) en temps physique. Chaque δ_b mesure donc surtout ce désaccord, et non la
-jauge d'un seul bloc ; d'où des retards jusqu'à 14,7 échantillons. Ce défaut a été vu en lisant
+laissant les 7 autres blocs à leur Δ de 48 kHz : comptée en échantillons, leur dynamique ne
+change pas, donc en temps physique elle va fs′/48 000 fois trop vite (×2, ×4). Le bras ne mesure
+donc pas la jauge d'un bloc isolé ; la part de ce désaccord dans des retards qui montent jusqu'à
+14,7 échantillons n'est pas établie (sens corrigé après relecture Codex : la première rédaction
+disait « ralentie »). Ce défaut a été vu en lisant
 les chiffres ; les seuils ne sont pas modifiés, et **aucune conclusion sur l'origine de κ n'est
 tirée de R5**. Retards par bloc (blocs 0 à 7) : 96 kHz 0,705, 1,027, 1,276, 1,210, 1,275, 0,768,
 −0,082, −0,004 ; 192 kHz 14,65, 9,17, 10,33, 10,30, 8,87, 5,89, 8,56, 0,04. Une mesure qui isole
