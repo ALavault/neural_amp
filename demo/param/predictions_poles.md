@@ -480,3 +480,13 @@ sans cette mention.
 - Le bras « pôles » garde C et D indépendants des boutons : tout gain réglable y passe par des modes
   rapides, et tout déplacement de zéro par un déplacement de pôles. « Conditionner les pôles » ne
   teste donc pas, à lui seul, « déplacer les fréquences de coupure ».
+
+## Note du 2026-10-02 sur la prémisse de la section « Question »
+
+La section « Question », pré-enregistrée et non modifiée, dit qu'« un tone stack passif est un filtre
+dont les boutons déplacent les pôles ». C'est vrai pour les graves et les médiums, faux pour l'aigu.
+Dans le tone stack TMB, le dénominateur ne dépend pas du bouton d'aigus, qui ne déplace que les zéros ;
+les graves et les médiums déplacent pôles et zéros à la fois (Yeh et Smith, DAFx-06, §3.2 et éq. (1),
+lu ; recalcul symbolique du 2026-10-02). Aucun bouton du TMB ne déplace donc seulement des pôles. Le
+schéma du JVM410H OD1 n'est pas vérifié. Avec C et D fixes, le bras « pôles » ne peut reproduire
+exactement aucun des trois boutons ; c'est la limite écrite à la fin du verdict de l'élargissement.
