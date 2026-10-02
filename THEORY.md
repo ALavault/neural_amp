@@ -52,6 +52,17 @@ Prédictions nouvelles :
   |κ| ≥ 0,5. Aucune prédiction à 4 et 8 kHz, où l'erreur du FOH n'est plus petite
   (ωΔ ≈ 0,5 à 1). L'ESR existante borne déjà le retard global ; l'apport est la résolution par
   bande.
+  Précisions inscrites le 2026-10-02, avant toute mesure (script `demo/sr_transfer/kappa_foh.py`,
+  pas encore écrit). Checkpoint `last`, segments de test du banc comme `kappa.py:bigmuff`.
+  Lecture primaire : pour chaque (checkpoint, fréquence), médiane des retards aux bandes 500,
+  1 000 et 2 000 Hz, divisée par (1 − 48 000/fs)/2 ; puis médiane des 6 κ ; soutenue si
+  |κ| ≤ 0,15, réfutée si |κ| ≥ 0,5, intermédiaire entre les deux ; une bande sans valeur
+  (cohérence) est omise et déclarée. Lecture secondaire, sans verdict propre : médiane des 18 κ
+  par bande. Bandes 4 et 8 kHz rapportées sans lecture. Portes, sans lesquelles aucune lecture
+  n'est faite : chaque module SSM chargé a `discretization == "foh"` ; l'ESR à 48 kHz contre la
+  cible est à 2 % relatifs de `arms["48k"]["esr"]` du `_last_plain.json` du même checkpoint ;
+  l'ESR entre la sortie ramenée de 96 ou 192 kHz et la sortie à 48 kHz (intérieurs) est
+  ≤ 10⁻³ (ZOH non corrigé : 0,036 à 0,077).
 Historique : 2026-10-02 — → E : preuve et contrôles écrits ; 2026-10-02 E → D : relecture
 en deux passes, corrections appliquées
 
