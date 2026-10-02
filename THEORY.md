@@ -119,14 +119,14 @@ revérifier si `diagnosis/seeds/plateau_simulation.py` ou la configuration de
 (b) c'est le temps de premier passage d'une tendance plus un bruit indépendant de l'époque à
 l'époque.
 Hypothèses : H1 résidus de log L de validation indépendants d'une époque à l'autre [mesurée :
-VR(10) médian 0,165, `diagnosis/butterfly/patience_law.json`] ; H2 tendance quadratique en
+VR(10) médian 0,166, `diagnosis/butterfly/patience_law.json`] ; H2 tendance quadratique en
 log(époque + 1) [supposée]
 Portée : 21 runs SSM-WaveNet Big Muff (5 enfants de la fourche 100, 16 runs du pilote C) ; une
 architecture, une configuration de l'ordonnanceur
 Objet : idéal (simulation) ; rejeu `plateau_simulation.halvings`, porte 21 sur 21
 Preuve : aucune ; mesure `diagnosis/butterfly/patience_law.md`
 Vérifications : mesure préinscrite (commit 2b447f3) ; (a) médiane des médianes prédites décalée
-de 0 et 1 époque contre un critère de 5 ; (b) couverture 12/21 = 0,57, intermédiaire (soutien
+de 0 et −1 époque contre un critère de 5 ; (b) couverture 12/21 = 0,57, intermédiaire (soutien
 ≥ 0,60, réfutation ≤ 0,40), les 9 écarts tous vers une division plus tardive que prévu
 Utilité : ne pas régler θ ; traiter les décisions précoces de l'ordonnanceur comme aléatoires
 entre graines ; (b) reste à corriger (tendance ou mémoire du bruit) avant de prédire une loi
@@ -134,21 +134,26 @@ Historique : 2026-10-02 — → M (a), S (b) : résultats de `patience_law.md`
 
 ## T4 — Décalage du réseau au transfert de fréquence (κ)
 
-Statut : PH (2026-10-02) ; mesure préinscrite en cours (`demo/sr_transfer/predictions_kappa.md`)
+Statut : M (2026-10-02) pour la forme ; à revérifier si `src/fssr_nam/models/ssm_wavenet.py`
+(discrétisation ZOH) change
 Énoncé : un SSM-WaveNet ZOH entraîné à 48 kHz, rééchelonné par Δ à fs′, prend un retard de
-κ (1 − 48 000/fs′)/2 échantillon à 48 kHz, avec κ propre au réseau.
-Hypothèses : H1 forme (1 − T′/T) [supposée, à mesurer : R1] ; H2 κ ≈ 1,86 pour le VS100R
-[post hoc : estimation indirecte d'une relecture critique du 2026-10-01, deux estimateurs,
-35 prises]
-Portée : ZOH, Δ rééchelonné sans correction ; pas le FOH (T1-P1)
-Objet : `demo/sr_transfer/kappa.py` (en cours)
-Preuve : aucune. T1 borne κ_mode ∈ ]0 ; 1[ pour un mode réel ; un κ réseau > 1 exige donc une
-cascade de couches, des modes complexes ou des signes mêlés entre modes (pas démontré pour le
-réseau)
-Vérifications : à venir (R1 à R5 de `predictions_kappa.md`)
-Utilité : taille du retard non corrigé à 96 et 192 kHz pour le produit, et choix entre une
-correction par couche et une correction globale
-Historique : 2026-10-02 — → PH
+κ (1 − 48 000/fs′)/2 échantillon à 48 kHz, avec κ propre au checkpoint.
+Hypothèses : H1 forme (1 − T′/T) [mesurée : R1 de `demo/sr_transfer/predictions_kappa.md`,
+rapport κ(192)/κ(96) de 0,991 à 1,031 sur 4 checkpoints] ; H2 κ constant pour une architecture
+[réfutée : R3, κ de 1,90 à 2,53 entre trois graines Big Muff]
+Portée : ZOH, Δ rééchelonné sans correction, 96 et 192 kHz ; pas le FOH (T1-P1) ; retard pur
+(R4) sur Big Muff, dispersif sur le VS100R (500 Hz moins retardé)
+Objet : `demo/sr_transfer/kappa.py` @ fa44f45
+Preuve : aucune pour le réseau. T1 borne κ_mode ∈ ]0 ; 1[ pour un mode réel ; κ > 1 partout
+exige donc une cascade de couches, des modes complexes ou des signes mêlés, non départagés
+(la mesure par bloc, R5, est invalide par construction)
+Vérifications : mesure préinscrite (2b447f3) ; κ VS100R 1,964, en accord avec l'estimation
+indirecte 1,86 (R2)
+Utilité : taille du retard non corrigé à 96 et 192 kHz pour le produit (0,25 κ et 0,375 κ
+échantillon, soit 0,48 à 0,95 échantillon) ; une correction doit être calculée par checkpoint,
+pas fixée par architecture
+Historique : 2026-10-02 — → PH ; 2026-10-02 PH → M : mesure préinscrite (forme tenue, κ
+dépendant du checkpoint)
 
 ## T5 — Ce que conditionne le bras « pôles » (C et D fixes)
 
