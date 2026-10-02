@@ -128,6 +128,19 @@ Prédictions nouvelles :
 - T2-P1 (non mesurée, demande des entraînements, hors du goal en cours) : SSM-WaveNet sur
   Big Muff, sans `PolarityGuard`, avec w₁ E|y| ≥ 1,5 w₂ m (par exemple w₁ = 20 pour w₂ = 0,1),
   ne finit inversé pour aucune graine sur cinq.
+  Non lancée (décision du 2026-10-02) : telle quelle, la prédiction ne départage rien. Runs Big
+  Muff SSM-WaveNet entraînés sans garde aux poids 1 / 0,1 (`demo/nablafx_bench`, `RUNS.jsonl`) :
+  en ZOH, configuration actuelle, un seul run, `ssmzoh_seed42`, inversé ; en discrétisation
+  `free`, trois runs (`ssmwavenet_seed42` à `44`), aucun inversé. Taux en commun p ≈ 1/4, donc
+  (1 − p)⁵ ≈ 0,24 : « 0/5 inversées » s'observerait une fois sur quatre sans aucun effet. Le
+  taux en ZOH est inconnu (n = 1). Indice descriptif : les runs ZOH gardés
+  (`ssmzoh_guard_seed4*`) ont 0 à 5 retournements chacun, jusqu'à l'époque 20, mais un
+  retournement du garde n'est pas une inversion finale.
+  Esquisse d'un plan qui départagerait : deux bras en ZOH sans garde, aux mêmes graines, l'un
+  aux poids 1 / 0,1 (témoin), l'autre à w₁ = 20 ; comparaison des comptes d'inversions finales
+  par un test exact. Pour p ≈ 0,4, il faut environ 12 graines par bras, soit à peu près 85 h de
+  GPU. Confondant à déclarer : le seuil d'écrêtage du gradient (1) ne se rééchelonne pas avec
+  la perte.
 Historique : 2026-10-02 — → E : preuve et contrôles écrits ; 2026-10-02 E → D : relecture
 en deux passes, critère corrigé au cas d'égalité
 
