@@ -191,7 +191,7 @@ dépendant du checkpoint)
 
 ## T5 — Ce que conditionne le bras « pôles » (C et D fixes)
 
-Statut : E (2026-10-02) ; à revérifier si `src/fssr_nam/models/ssm_wavenet.py`
+Statut : D (2026-10-02) ; à revérifier si `src/fssr_nam/models/ssm_wavenet.py`
 (`SSMWaveNet.__init__`, `forward`, `pole_shifts`, `GatedSSMBlock.forward`,
 `DiagonalSSMLayer.forward`, `_shifted_inputs`, `_shifted_kernel`) change
 Énoncé : pour `SSMWaveNet(cond="poles").forward` en ZOH ou en FOH (convolution à état initial
@@ -266,7 +266,8 @@ nulle, bornes de N1 précisées. Verdict : conserver E. Passe 5 (high) : finitud
 validées ; un seul point bloquant, « donc la coupure » (une contribution non nulle ne garantit pas
 de coupure dans la bande : λ = −1, c = 1/2, Δ = 2 donne un minimum de |H| de 0,762, vérifié ;
 la phrase est limitée au déplacement du pôle discret) ; mineur : variante `sine` à citer (fait).
-Passe 6 à faire.
+Passe 6 (medium) : corrections justes et suffisantes, exemple de coupure propre au ZOH (précisé) ;
+« preuve complète, statut démontré possible ».
 Utilité : « conditionner les pôles » ne teste pas seul « déplacer les coupures »
 (`demo/param/predictions_poles.md`, verdict G2.2). Si Re c ≠ 0, le décalage ε d'un pôle réel
 change aussi sa contribution au gain continu (4). Le gain d'un canal à fréquence nulle ne change pas par Δ seul
@@ -281,4 +282,5 @@ contrôles écrits ; 2026-10-02 : passe 1 de Codex, objet, énoncé 4 et Utilit�
 N5 ajoutés ; 2026-10-02 : passe 2, surénoncés résiduels et contrôles N4 et N5 corrigés ; 2026-10-02 : passe 3, phrase universelle,
 finitude de N2 et N3 et précision de N5b corrigées ; 2026-10-02 : passe 4, finitude des
 résultats et deux formulations corrigées ; 2026-10-02 : passe 5, phrase sur la coupure retirée
-(E, passe 6 à faire)
+; 2026-10-02 E → D : passe 6, preuve complète
+dans la portée idéale déclarée

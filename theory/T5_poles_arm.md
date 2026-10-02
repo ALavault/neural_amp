@@ -44,7 +44,7 @@ Le code flottant n'est contrôlé que dans le domaine de `t5_check.py` (voir Por
    continu vaut 2 Re(c) e^{−(α+ε)}. Si Re c ≠ 0, un décalage ε du pôle continu la multiplie par
    e^{−ε}. Si Re c = 0, elle est nulle à tout réglage. Le décalage δ de Δ déplace le pôle discret
    e^{λΔ} sans changer cette contribution (énoncé 2). L'énoncé ne dit rien d'une coupure : un
-   mode peut n'en avoir aucune à demi-puissance dans la bande (λ = −1, c = 1/2, Δ = 2 : minimum de
+   mode peut n'en avoir aucune à demi-puissance dans la bande (ZOH, λ = −1, c = 1/2, Δ = 2 : minimum de
    |H| sur [0 ; π] égal à (1 − a)/(1 + a) = 0,762).
    L'énoncé ne dit rien du gain total d'un canal, où les contributions des modes peuvent se
    compenser.
