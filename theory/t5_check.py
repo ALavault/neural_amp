@@ -122,12 +122,18 @@ def finite(*tensors: torch.Tensor) -> None:
 
 def rel(a: torch.Tensor, b: torch.Tensor) -> float:
     finite(a, b)
-    return float((a - b).abs().max() / b.abs().max())
+    scale = float(b.abs().max())
+    assert scale > 0, "relative error against a zero reference"
+    out = float((a - b).abs().max()) / scale
+    assert math.isfinite(out), out
+    return out
 
 
 def gap(a: torch.Tensor, b: torch.Tensor) -> float:
     finite(a, b)
-    return float((a - b).abs().max())
+    out = float((a - b).abs().max())
+    assert math.isfinite(out), out
+    return out
 
 
 @torch.no_grad()

@@ -43,7 +43,8 @@ Le code flottant n'est contrôlé que dans le domaine de `t5_check.py` (voir Por
    vérifie w λ = −c pour tout u. Pour un mode réel (ω = 0), la contribution du mode au gain
    continu vaut 2 Re(c) e^{−(α+ε)}. Si Re c ≠ 0, un décalage ε du pôle continu la multiplie par
    e^{−ε}. Si Re c = 0, elle est nulle à tout réglage. Le décalage δ de Δ déplace le pôle discret
-   e^{λΔ}, donc la coupure en fréquence discrète, sans changer cette contribution (énoncé 2).
+   e^{λΔ}, donc la coupure en fréquence discrète du mode (observable seulement si sa
+   contribution n'est pas nulle), sans changer cette contribution (énoncé 2).
    L'énoncé ne dit rien du gain total d'un canal, où les contributions des modes peuvent se
    compenser.
 
@@ -113,8 +114,8 @@ L'expression ne contient pas Δ. On somme sur les modes et on ajoute D. ∎
   - Les énoncés 2 et 3 portent sur la fréquence nulle seulement. Aux autres fréquences, Δ peut
     changer la réponse du canal : il dilate l'axe des fréquences de chaque mode, à l'erreur de
     discrétisation près. Il ne la change pas toujours (C = 0 donne H = D à toute fréquence).
-  - En temps discret, le résidu effectif c·b(λ, Δ) et le premier échantillon K[0] varient avec
-    δ et ε. L'énoncé ne contredit donc pas la mesure de `D + K[0]` dans
+  - En temps discret, le résidu effectif c·b(λ, Δ) et le premier échantillon K[0] peuvent
+    varier avec δ et ε (ils restent nuls si c = 0). L'énoncé ne contredit donc pas la mesure de `D + K[0]` dans
     `demo/param/predictions_fast_modes.md`.
   - L'énoncé 3 porte sur une entrée constante seulement.
 

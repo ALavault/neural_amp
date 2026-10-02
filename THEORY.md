@@ -216,7 +216,7 @@ Portée : (2) et (3) portent sur la fréquence nulle seulement. À une fréquenc
 peut changer le gain d'un canal (mode réel normalisé, Ω = 0,01 : |H| = 0,707 à Δ = 0,01, 0,894 à
 Δ = 0,02) ; il ne le change pas toujours (C = 0, ou contributions qui se compensent). (3) porte sur une entrée constante, et sa limite peut ne pas être atteinte sur un
 segment si un mode est lent. Le chemin récurrent (`step`), qui dépend de l'historique de l'état,
-n'est pas couvert. En temps discret, c·b(λ, Δ) et K[0] varient avec δ et ε. (1) dit par quoi passe
+n'est pas couvert. En temps discret, c·b(λ, Δ) et K[0] peuvent varier avec δ et ε. (1) dit par quoi passe
 u, pas ce qui est appris.
 Objet : `src/fssr_nam/models/ssm_wavenet.py` @ 2d49ac7 ; correspondance dans la preuve
 Preuve : `theory/T5_poles_arm.md` (1 par lecture du code ; 2 par T1, énoncé 1 ; 3 par
@@ -224,7 +224,7 @@ récurrence sur les blocs ; 4 immédiat)
 Vérifications : symbolique `theory/t5_check.py` (gain −c/λ et dérivée nulle en Δ, en ZOH et en
 FOH ; mode réel). Numérique `theory/t5_check.py` : vrai `SSMWaveNet(cond="poles")` en float64,
 3 blocs × 4 canaux × 3 modes, paramètres et têtes tirés au hasard, ZOH et FOH, 3 graines.
-- N1 : deux réglages donnent des sorties distinctes (écart de 0,09 à 0,25), mais le second,
+- N1 : deux réglages donnent des sorties distinctes (écart maximal de 0,091 à 0,251 selon le cas), mais le second,
   évalué avec les décalages du premier, donne exactement la sortie du premier.
 - N2 : somme du noyau + D contre la forme fermée, écart relatif ≤ 4,6·10⁻¹³. Avec Δ seul
   déplacé, ≤ 8,3·10⁻¹⁶ en ZOH et ≤ 5,9·10⁻¹³ en FOH. Avec les pôles seuls déplacés, écart
@@ -258,7 +258,11 @@ sous −709 (ajoutés). Verdict : pas encore D. Passe 3 (high) : Re c ≠ 0, bor
 N5a suffisants ; restaient une phrase universelle dans la preuve (« Aux autres fréquences, Δ change
 bien la réponse », corrigée en « peut »), des NaN qui pouvaient passer N2 et N3 (max(0, NaN) = 0 en
 Python ; contrôle de finitude ajouté avant chaque agrégation) et la précision « 50 chiffres »
-revendiquée pour N5b (ramenée à 10⁻⁹). Verdict : conserver E. Passe 4 à faire.
+revendiquée pour N5b (ramenée à 10⁻⁹). Verdict : conserver E. Passe 4 (high) : N5b et la phrase
+de la preuve sont justes ; le contrôle de finitude ne portait que sur les opérandes (0/0 donne NaN,
+1e308 − (−1e308) donne inf ; le résultat et le dénominateur sont maintenant contrôlés) ;
+« varient » ramené à « peuvent varier », coupure observable seulement si la contribution est non
+nulle, bornes de N1 précisées. Verdict : conserver E. Passe 5 à faire.
 Utilité : « conditionner les pôles » ne teste pas seul « déplacer les coupures »
 (`demo/param/predictions_poles.md`, verdict G2.2). Si Re c ≠ 0, le décalage ε d'un pôle réel
 change aussi sa contribution au gain continu (4). Le gain d'un canal à fréquence nulle ne change pas par Δ seul
@@ -271,4 +275,5 @@ lit dans ε), il ne prédit pas de résultat d'entraînement.
 Historique : 2026-10-02 — → E ; 2026-10-02 : énoncé précisé en quatre points, preuve et
 contrôles écrits ; 2026-10-02 : passe 1 de Codex, objet, énoncé 4 et Utilité restreints, N4 et
 N5 ajoutés ; 2026-10-02 : passe 2, surénoncés résiduels et contrôles N4 et N5 corrigés ; 2026-10-02 : passe 3, phrase universelle,
-finitude de N2 et N3 et précision de N5b corrigées (E, passe 4 à faire)
+finitude de N2 et N3 et précision de N5b corrigées ; 2026-10-02 : passe 4, finitude des
+résultats et deux formulations corrigées (E, passe 5 à faire)
