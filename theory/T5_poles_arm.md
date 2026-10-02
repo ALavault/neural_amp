@@ -43,8 +43,9 @@ Le code flottant n'est contrôlé que dans le domaine de `t5_check.py` (voir Por
    vérifie w λ = −c pour tout u. Pour un mode réel (ω = 0), la contribution du mode au gain
    continu vaut 2 Re(c) e^{−(α+ε)}. Si Re c ≠ 0, un décalage ε du pôle continu la multiplie par
    e^{−ε}. Si Re c = 0, elle est nulle à tout réglage. Le décalage δ de Δ déplace le pôle discret
-   e^{λΔ}, donc la coupure en fréquence discrète du mode (observable seulement si sa
-   contribution n'est pas nulle), sans changer cette contribution (énoncé 2).
+   e^{λΔ} sans changer cette contribution (énoncé 2). L'énoncé ne dit rien d'une coupure : un
+   mode peut n'en avoir aucune à demi-puissance dans la bande (λ = −1, c = 1/2, Δ = 2 : minimum de
+   |H| sur [0 ; π] égal à (1 − a)/(1 + a) = 0,762).
    L'énoncé ne dit rien du gain total d'un canal, où les contributions des modes peuvent se
    compenser.
 
@@ -80,8 +81,8 @@ L'expression ne contient pas Δ. On somme sur les modes et on ajoute D. ∎
   f_n(k) = 1_{k ≤ n} K[k] e[n − k] tendent vers 0 et sont majorés par M |K[k]|, sommable. Donc
   (K ∗ e)[n] → 0 par convergence dominée, (K ∗ h∞)[n] → (Σ K) h∞, et le terme direct tend vers
   D h∞.
-- Les couches 1×1, la porte tanh·sigmoid et la tête de sortie (ReLU ou LeakyReLU, tanh, softsign
-  ou identité) sont sans mémoire et continues.
+- Les couches 1×1, la porte tanh·sigmoid (ou x + sin(w x) avec `act_type="sine"`) et la tête de
+  sortie (ReLU ou LeakyReLU, tanh, softsign ou identité) sont sans mémoire et continues.
   Elles préservent la convergence, et leur limite est leur valeur en la limite. Les sommes
   résiduelle et `skip_sum` la préservent aussi.
 - La limite F est donc une composition de fonctions continues fixes et des gains G_{i,c}(u).

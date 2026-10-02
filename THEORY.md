@@ -262,7 +262,11 @@ revendiquée pour N5b (ramenée à 10⁻⁹). Verdict : conserver E. Passe 4 (hi
 de la preuve sont justes ; le contrôle de finitude ne portait que sur les opérandes (0/0 donne NaN,
 1e308 − (−1e308) donne inf ; le résultat et le dénominateur sont maintenant contrôlés) ;
 « varient » ramené à « peuvent varier », coupure observable seulement si la contribution est non
-nulle, bornes de N1 précisées. Verdict : conserver E. Passe 5 à faire.
+nulle, bornes de N1 précisées. Verdict : conserver E. Passe 5 (high) : finitude et formulations
+validées ; un seul point bloquant, « donc la coupure » (une contribution non nulle ne garantit pas
+de coupure dans la bande : λ = −1, c = 1/2, Δ = 2 donne un minimum de |H| de 0,762, vérifié ;
+la phrase est limitée au déplacement du pôle discret) ; mineur : variante `sine` à citer (fait).
+Passe 6 à faire.
 Utilité : « conditionner les pôles » ne teste pas seul « déplacer les coupures »
 (`demo/param/predictions_poles.md`, verdict G2.2). Si Re c ≠ 0, le décalage ε d'un pôle réel
 change aussi sa contribution au gain continu (4). Le gain d'un canal à fréquence nulle ne change pas par Δ seul
@@ -276,4 +280,5 @@ Historique : 2026-10-02 — → E ; 2026-10-02 : énoncé précisé en quatre po
 contrôles écrits ; 2026-10-02 : passe 1 de Codex, objet, énoncé 4 et Utilité restreints, N4 et
 N5 ajoutés ; 2026-10-02 : passe 2, surénoncés résiduels et contrôles N4 et N5 corrigés ; 2026-10-02 : passe 3, phrase universelle,
 finitude de N2 et N3 et précision de N5b corrigées ; 2026-10-02 : passe 4, finitude des
-résultats et deux formulations corrigées (E, passe 5 à faire)
+résultats et deux formulations corrigées ; 2026-10-02 : passe 5, phrase sur la coupure retirée
+(E, passe 6 à faire)
