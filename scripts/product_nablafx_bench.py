@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import subprocess
 import sys
@@ -68,6 +69,15 @@ MARSHALL = PARAM / "Marshall-JVM410H-ChOD1-trimmed"
 FFUZZ = PARAM / "MultidrivePedalPro-F-Fuzz"
 # Exploratory VS100R capture of 2026-09-26 (scripts/product_valvestate_dataset.py).
 VS100R = ROOT / "datasets/raw/internal/valvestate_vs100r/explore_48k"
+# The same takes, not decimated (demo/capture/valvestate/predictions_192k.md).
+VS100R_192K = ROOT / "datasets/raw/internal/valvestate_vs100r/explore_192k"
+# auraloss's MultiResolutionSTFTLoss defaults, in samples at 48 kHz; a device at another
+# rate scales them so the loss keeps the same resolution in seconds and Hz.
+MRSTFT_48K = {
+    "fft_sizes": [1024, 2048, 512],
+    "hop_sizes": [120, 240, 50],
+    "win_lengths": [600, 1200, 240],
+}
 # Parametric devices, nablafx's data configs (cfg/data/data-param_*): dry and wet roots
 # per split, knob indices, fraction of trainval used. F-Fuzz has the same eleven
 # settings in trainval and test, so two are held out of training (demo/param).
@@ -100,7 +110,39 @@ DEVICES = {
         "held_out": [],
         "benchmark": "Marshall VS100R exploratory capture 2026-09-26, OD2, PD off",
     },
+    "vs100r_192k": {
+        "dry": VS100R_192K / "dry",
+        "wet": VS100R_192K / "wet",
+        "params": [0, 1],
+        "data_to_use": 1.0,
+        "held_out": [],
+        "rate": 192_000,
+        "benchmark": (
+            "Marshall VS100R exploratory capture 2026-09-26, OD2, PD off, 192 kHz"
+        ),
+    },
 }
+
+
+def device_rate(device: str) -> int:
+    return DEVICES.get(device, {}).get("rate", 48_000)
+
+
+def at_rate(processor: torch.nn.Module, rate: int) -> dict:
+    """For a device not at 48 kHz: the same continuous-time initialisation (every SSM
+    step dt scaled by 48000/rate, in place, no random draw) and MR-STFT sizes scaled so
+    the loss keeps its resolution in seconds and Hz. Returns the loss entry's params."""
+    if rate == 48_000:
+        return {}
+    with torch.no_grad():
+        for module in processor.modules():
+            if hasattr(module, "log_dt"):
+                module.log_dt.add_(math.log(48_000 / rate))
+    return {
+        "params": {k: [v * rate // 48_000 for v in vs] for k, vs in MRSTFT_48K.items()}
+    }
+
+
 RUNS_DIR = ROOT / "demo/runs"
 RESULTS_DIR = ROOT / "demo/nablafx_bench"
 RUNS_LOG = ROOT / "demo/RUNS.jsonl"
@@ -221,6 +263,7 @@ class System(BlackBoxSystem):
     # rather than tuned, since diagnosis/seeds/plateau_simulation.md showed no threshold
     # makes it fire reproducibly.
     lr_halvings: list[int] | None = None
+    lr_halving_steps: list[int] | None = None
 
     def configure_optimizers(self):
         groups: dict[tuple, list] = {}
@@ -240,7 +283,7 @@ class System(BlackBoxSystem):
             patience=20,
             threshold=self.plateau_threshold,
         )
-        if self.lr_halvings is not None:
+        if self.lr_halvings is not None or self.lr_halving_steps is not None:
             return optimizer
         return [optimizer], [
             {
@@ -301,6 +344,19 @@ class FixedSchedule(pl.Callback):
 
     def on_train_epoch_start(self, trainer, system) -> None:
         if trainer.current_epoch in self.epochs:
+            for group in trainer.optimizers[0].param_groups:
+                group["lr"] /= 2
+
+
+class FixedStepSchedule(pl.Callback):
+    """Halve the learning rate before the optimizer steps of these global step numbers
+    (the steps where a twin run's plateau detector halved it), plateau detector off."""
+
+    def __init__(self, steps: list[int]) -> None:
+        self.steps = set(steps)
+
+    def on_train_batch_start(self, trainer, system, batch, batch_idx) -> None:
+        if trainer.global_step in self.steps:
             for group in trainer.optimizers[0].param_groups:
                 group["lr"] /= 2
 
@@ -394,6 +450,14 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="halve the learning rate at the start of these epochs and drop the plateau"
         " detector altogether (pilot C)",
+    )
+    parser.add_argument(
+        "--lr-halving-steps",
+        type=int,
+        nargs="+",
+        default=None,
+        help="halve the learning rate before these global steps and drop the plateau"
+        " detector (replay of a twin run's schedule, predictions_192k.md)",
     )
     parser.add_argument(
         "--no-early-stopping",
@@ -567,7 +631,7 @@ def data_module(
             data_to_use=spec["data_to_use"] if trainval else 1.0,
             trainval_split=0.9,
             sample_length=144_000 if trainval else 240_000,
-            sample_rate=48_000,
+            sample_rate=device_rate(device),
             preload=True,
             batch_size=batch_size if trainval else 8,
             num_workers=4,
@@ -685,11 +749,18 @@ def main() -> None:
     )
 
     processor = build_processor(args)
+    rate = device_rate(args.device)
+    mrstft_params = at_rate(processor, rate)
     parameters = sum(p.numel() for p in processor.parameters())
     loss = FlexibleLoss(
         losses=[
             {"name": "l1_loss", "weight": l1_weight, "alias": "l1"},
-            {"name": "mrstft_loss", "weight": mrstft_weight, "alias": "mrstft"},
+            {
+                "name": "mrstft_loss",
+                "weight": mrstft_weight,
+                "alias": "mrstft",
+                **mrstft_params,
+            },
         ]
     )
     system = System(
@@ -702,6 +773,7 @@ def main() -> None:
     system.honor_optim = args.honor_optim
     system.plateau_threshold = args.plateau_threshold
     system.lr_halvings = args.lr_halvings
+    system.lr_halving_steps = args.lr_halving_steps
 
     run_dir = RUNS_DIR / f"nablafx_{args.run_id}"
     last = run_dir / "checkpoints/last.ckpt"
@@ -738,6 +810,11 @@ def main() -> None:
             LearningRateMonitor(),
             *([] if args.no_early_stopping else [early_stopping]),
             *([] if args.lr_halvings is None else [FixedSchedule(args.lr_halvings)]),
+            *(
+                []
+                if args.lr_halving_steps is None
+                else [FixedStepSchedule(args.lr_halving_steps)]
+            ),
             *([] if args.no_polarity_guard else [polarity_guard]),
         ],
     )
@@ -820,6 +897,8 @@ def main() -> None:
         "honor_optim": args.honor_optim,
         "plateau_threshold": args.plateau_threshold,
         "lr_halvings": args.lr_halvings,
+        "lr_halving_steps": args.lr_halving_steps,
+        "sample_rate": rate,
         "no_early_stopping": args.no_early_stopping,
         "split_seed": args.split_seed,
         "val_indices": val_indices,

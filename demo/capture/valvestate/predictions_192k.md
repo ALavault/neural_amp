@@ -105,3 +105,16 @@ calendrier. Écouter la graine 42 seule ne permet aucun classement.
 - Rien hors VS100R, OD2, Power Dimension off.
 - Avec 3 graines par bras, seuls de grands écarts peuvent ressortir (σ attendu autour de 0,4 sur
   ln ESR).
+
+## Précisions déclarées avant les runs (2026-10-02, après les contrôles 2 et 3 et la relecture Codex)
+
+- Contrôle 2 tenu : 140 fichiers à 192 000 Hz, chargés à 192 000 Hz sans rééchantillonnage ;
+  5 581 segments d'entraînement contre 1 396 à 48 kHz (348 pas par époque contre 87) ; part
+  d'énergie au-dessus de 24 kHz de 3·10⁻⁵ pour la cible et 1·10⁻⁵ pour l'entrée sur un segment.
+- Contrôle 3 tenu : à la graine 42, tous les paramètres sauf `log_dt` sont identiques au bit, et
+  le tirage suivant aussi ; `log_dt` diffère de log(1/4) à 4,8·10⁻⁷ près, l'arrondi float32
+  (« exactement » plus haut s'entend à cet arrondi près).
+- La MR-STFT par réglage que le banc enregistre au test (`metrics_by_setting`) garde les tailles
+  de 48 kHz pour B192. Comme l'ESR de test du banc à 192 kHz, elle n'est pas lue.
+- Les segments de test du banc font 240 000 échantillons à 192 kHz (1,25 s). Sans effet sur
+  l'évaluation pré-inscrite, faite à 48 kHz par `eval_192k.py`.

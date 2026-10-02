@@ -4,7 +4,9 @@
 Input = each take's own loopback (the signal the amp received), target = its FX loop
 send: the two tracks share one USB stream, so the pair stays in step through the
 microframe slips (demo/capture/valvestate/QC.md). OD2, Power Dimension off, knobs
-gain, contour, bass, middle, treble. Decimated 192 -> 48 kHz, written as float WAV.
+gain, contour, bass, middle, treble. Decimated 192 -> 48 kHz (explore_48k), or kept at
+192 kHz with --rate 192000 (explore_192k, demo/capture/valvestate/predictions_192k.md),
+written as float WAV.
 
 Layout read by nablafx's ParametricPluginDataset (params parsed from the target name):
   dry/trainval/takeNN.input.wav     di_train + di_validation of the train settings
@@ -17,6 +19,7 @@ neighbours before decimation.
 
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import shutil
@@ -29,33 +32,44 @@ from scipy.signal import resample_poly
 ROOT = Path(__file__).resolve().parents[1]
 SHEET = ROOT / "demo/capture/valvestate"
 MEDIA = ROOT / "datasets/amp_capture/Media"
-OUT = ROOT / "datasets/raw/internal/valvestate_vs100r/explore_48k"
+DATA = ROOT / "datasets/raw/internal/valvestate_vs100r"
 LAYOUT = json.loads((SHEET / "layout.json").read_text())
 SECTIONS = {s["section"]: s for s in LAYOUT["sections"]}
-RATE, DOWN = LAYOUT["sample_rate"], 4
+RATE = LAYOUT["sample_rate"]
 
 
 def span(first: str, last: str) -> tuple[int, int]:
     return SECTIONS[first]["start"], SECTIONS[last]["start"] + SECTIONS[last]["samples"]
 
 
-def write(kind: str, split: str, take: int, setting: str, audio: np.ndarray) -> None:
+def write(
+    out: Path, rate: int, kind: str, split: str, take: int, setting: str, audio
+) -> None:
     if kind == "dry":
-        path = OUT / "dry" / split / f"take{take:02d}.input.wav"
+        path = out / "dry" / split / f"take{take:02d}.input.wav"
     else:
-        path = OUT / "wet" / split / setting / f"{setting}.take{take:02d}.target.wav"
+        path = out / "wet" / split / setting / f"{setting}.take{take:02d}.target.wav"
     path.parent.mkdir(parents=True, exist_ok=True)
-    sf.write(path, audio.astype(np.float32), RATE // DOWN, subtype="FLOAT")
+    sf.write(path, audio.astype(np.float32), rate, subtype="FLOAT")
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--rate", type=int, choices=(48_000, 192_000), default=48_000)
+    rate = parser.parse_args().rate
+    down = RATE // rate
+    out = DATA / f"explore_{rate // 1000}k"
+
+    def resampled(x: np.ndarray) -> np.ndarray:
+        return x if down == 1 else resample_poly(x, 1, down)
+
     passes = {p["order"]: p for p in json.loads((SHEET / "passes.json").read_text())}
     qc = {r["order"]: r for r in json.loads((SHEET / "qc.json").read_text())}
     with (SHEET / "settings.csv").open() as stream:
         rows = [r for r in csv.DictReader(stream)]
     rows = [r for r in rows if r["channel"] == "OD2" and r["power_dimension"] == "off"]
-    if OUT.exists():
-        shutil.rmtree(OUT)  # derived data, rebuilt whole from the raw takes
+    if out.exists():
+        shutil.rmtree(out)  # derived data, rebuilt whole from the raw takes
     manifest = []
     for row in rows:
         order = int(row["order"])
@@ -75,10 +89,8 @@ def main() -> None:
         if row["split"] == "train":
             parts.append(("trainval", span("di_train", "di_validation")))
         for split, (a, b) in parts:
-            write(
-                "dry", split, order, row["setting"], resample_poly(loop[a:b], 1, DOWN)
-            )
-            write("wet", split, order, row["setting"], resample_poly(fx[a:b], 1, DOWN))
+            write(out, rate, "dry", split, order, row["setting"], resampled(loop[a:b]))
+            write(out, rate, "wet", split, order, row["setting"], resampled(fx[a:b]))
             manifest.append(
                 {
                     "take": order,
@@ -90,7 +102,7 @@ def main() -> None:
                 }
             )
         print(order, row["setting"], row["split"], flush=True)
-    (OUT / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n")
+    (out / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n")
     counts = {}
     for m in manifest:
         counts[m["split"]] = counts.get(m["split"], 0) + 1
