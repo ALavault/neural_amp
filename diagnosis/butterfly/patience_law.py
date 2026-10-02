@@ -10,6 +10,7 @@ noise model, compared with the observed epochs. Writes patience_law.json.
 from __future__ import annotations
 
 import csv
+import importlib
 import itertools
 import json
 import statistics
@@ -20,7 +21,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "diagnosis/seeds"))
-from plateau_simulation import halvings  # noqa: E402
+halvings = importlib.import_module("plateau_simulation").halvings
 
 RUNS = ROOT / "demo/runs"
 PATIENCE, THRESHOLD = 20, 1e-4
