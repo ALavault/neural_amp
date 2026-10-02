@@ -75,6 +75,10 @@ alors sur des cases hors de la grille harmonique.
 - « Réponse changée » si H_192 > 1 dB pour au moins 5 sur 6 : les harmoniques elles-mêmes
   changent, ce qui relève de la discrétisation ou d'une réponse linéaire, pas du repliement.
 - Sinon, non tranché. Les autres f0 et le niveau −12 dB sont rapportés sans lecture propre.
+- Écart déclaré avant toute mesure (2026-10-02, en écrivant le script) : chaque sinus dure 1,6 s
+  et l'on analyse la fenêtre de 0,5 à 1,5 s, toujours 48 000 échantillons et un nombre entier de
+  périodes. La « dernière seconde » d'un sinus de 1,5 s aurait contenu l'effet de bord de fin
+  de fichier du rééchantillonneur. Le sinus est engendré directement à chaque fréquence.
 - Réserve : 192 kHz n'est pas exempt de repliement. Les harmoniques au-delà de 96 kHz se
   replient encore, ce qui borne la baisse de I_192.
 
