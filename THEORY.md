@@ -281,6 +281,5 @@ Historique : 2026-10-02 — → E ; 2026-10-02 : énoncé précisé en quatre po
 contrôles écrits ; 2026-10-02 : passe 1 de Codex, objet, énoncé 4 et Utilité restreints, N4 et
 N5 ajoutés ; 2026-10-02 : passe 2, surénoncés résiduels et contrôles N4 et N5 corrigés ; 2026-10-02 : passe 3, phrase universelle,
 finitude de N2 et N3 et précision de N5b corrigées ; 2026-10-02 : passe 4, finitude des
-résultats et deux formulations corrigées ; 2026-10-02 : passe 5, phrase sur la coupure retirée
-; 2026-10-02 E → D : passe 6, preuve complète
-dans la portée idéale déclarée
+résultats et deux formulations corrigées ; 2026-10-02 : passe 5, phrase sur la coupure retirée ;
+2026-10-02 E → D : passe 6, preuve complète dans la portée idéale déclarée
