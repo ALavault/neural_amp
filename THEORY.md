@@ -179,20 +179,48 @@ dépendant du checkpoint)
 ## T5 — Ce que conditionne le bras « pôles » (C et D fixes)
 
 Statut : E (2026-10-02) ; à revérifier si `src/fssr_nam/models/ssm_wavenet.py`
-(`pole_shifts`, `_shifted_inputs`, `_shifted_kernel`) change
-Énoncé : dans le bras D (`cond="poles"`), C et D ne dépendent pas des boutons ; la réponse de
-chaque canal SSM au réglage u ne dépend de u qu'à travers (λ_m(u), Δ(u)). Donc un gain réglable
-passe par les gains continus 2 Re(−C/λ_m(u)), et un zéro ne bouge que si des pôles ou Δ bougent.
-Hypothèses : H1 aucune autre voie de conditionnement dans le bras D [lecture du code le
-2026-10-02 : `SSMWaveNet.forward` n'applique FiLM que si `cond="film"` ; `_shifted_inputs` ne
-déplace que `log_dt` et `log_A_real`, pas `A_imag`, ni C, ni D]
-Portée : l'énoncé porte sur les couches SSM ; les couches 1×1 et les portes non linéaires
-reçoivent des entrées qui dépendent de u, sans paramètres conditionnés. En temps discret, le
-résidu effectif C·b(λ, Δ) varie avec u.
-Objet : `src/fssr_nam/models/ssm_wavenet.py` (`pole_shifts`, `_shifted_inputs`) @ 2d49ac7
-Preuve : à écrire (lecture de structure)
-Vérifications : aucune
+(`SSMWaveNet.__init__`, `forward`, `pole_shifts`, `GatedSSMBlock.forward`,
+`DiagonalSSMLayer.forward`, `_shifted_inputs`, `_shifted_kernel`) change
+Énoncé : pour `SSMWaveNet(cond="poles")` en ZOH ou en FOH, au réglage u :
+(1) la sortie dépend de u seulement à travers les Δ_{i,c}(u) et les Re λ_{i,c,m}(u). Deux
+réglages qui donnent ces mêmes familles donnent la même sortie. ω (`A_imag`), C, D et les autres
+couches ne dépendent pas de u.
+(2) Le gain continu de chaque canal SSM vaut D + Σ_m 2 Re(−c_m/λ_m(u)) et ne dépend pas de Δ(u).
+(3) Pour une entrée constante, la limite de la sortie du réseau ne dépend de u qu'à travers les
+Re λ(u). Un réglage qui ne déplace que les Δ la laisse inchangée.
+(4) Le résidu continu w_m(u) = −c_m/λ_m(u) vérifie w λ = −c. Pour un mode réel, déplacer le pôle
+d'un facteur e^{ε} multiplie son gain continu par e^{−ε}.
+Hypothèses : H1 `cond="poles"`, ZOH ou FOH [mathématique ; lecture du code, énoncé 1] ;
+H2 noyaux infinis [mathématique ; le code tronque à la longueur du segment] ; H3 formules
+fermées exactes [mathématique ; le code s'en écarte par `pole` (Re z ≥ −80 ; exact en ZOH, écart
+d'ordre e^{−80} en FOH), `phi2` en série et l'arrondi float32/complex64]
+Portée : (2) et (3) portent sur la fréquence nulle seulement : ailleurs, Δ change la réponse du
+canal. (3) ne vaut que si les modes s'éteignent dans le segment, et ne dit rien de l'audio, qui
+n'a pas de composante continue. En temps discret, c·b(λ, Δ) et K[0] varient avec δ et ε. (1) dit
+par quoi passe u, pas ce qui est appris.
+Objet : `src/fssr_nam/models/ssm_wavenet.py` @ 2d49ac7 ; correspondance dans la preuve
+Preuve : `theory/T5_poles_arm.md` (1 par lecture du code ; 2 par T1, énoncé 1 ; 3 par
+récurrence sur les blocs ; 4 immédiat)
+Vérifications : symbolique `theory/t5_check.py` (gain −c/λ et dérivée nulle en Δ, en ZOH et en
+FOH ; mode réel). Numérique `theory/t5_check.py` : vrai `SSMWaveNet(cond="poles")` en float64,
+3 blocs × 4 canaux × 3 modes, paramètres et têtes tirés au hasard, ZOH et FOH, 3 graines.
+- N1 : deux réglages donnent des sorties distinctes (écart de 0,09 à 0,25), mais le second,
+  évalué avec les décalages du premier, donne exactement la sortie du premier.
+- N2 : somme du noyau + D contre la forme fermée, écart relatif ≤ 4,6·10⁻¹³. Avec Δ seul
+  déplacé, ≤ 8,3·10⁻¹⁶ en ZOH et ≤ 5,9·10⁻¹³ en FOH. Avec les pôles seuls déplacés, écart
+  ≥ 8·10⁻².
+- N3 : dernier échantillon de la réponse à une constante, 2¹⁵ échantillons. Avec Δ seul
+  déplacé, écart ≤ 7,2·10⁻¹⁵. Avec les pôles seuls, ≥ 2,1·10⁻². Le même déplacement de Δ seul
+  change la réponse au bruit d'au moins 1,5·10⁻³.
+Relecture : à faire.
 Utilité : « conditionner les pôles » ne teste pas seul « déplacer les coupures »
-(`demo/param/predictions_poles.md`, verdict G2.2) ; l'analyse C de `predictions_fast_modes.md`
-mesure par quelle voie passent les boutons
-Historique : 2026-10-02 — → E
+(`demo/param/predictions_poles.md`, verdict G2.2). Le bras couple le gain continu de chaque mode
+à son pôle (4). Il ne peut changer aucun gain continu de canal par Δ seul (2). Un gain réglable
+à basse fréquence passe donc par ε ou par les non-linéarités en aval. L'analyse C de
+`predictions_fast_modes.md` mesure par quelle voie passent les boutons.
+Rétrodictions : aucune mesurée.
+Prédictions nouvelles : aucune. L'énoncé est structurel, des identités du code. Il dit comment
+lire une mesure du bras D (toute variation de gain continu d'un canal entre réglages se lit dans
+ε), il ne prédit pas de résultat d'entraînement.
+Historique : 2026-10-02 — → E ; 2026-10-02 : énoncé précisé en quatre points, preuve et
+contrôles écrits (E, relecture en attente)
