@@ -92,6 +92,14 @@ section Setup) :
   divise la variance par quatre sans coût de calcul ». **À joindre obligatoirement** : fixer n'est
   pas choisir — la partition figée donne une moyenne géométrique de 0,0831 contre 0,068 pour les
   partitions tirées.
+  **Correction du 2026-10-02** (relecture critique, vérifiée) : les six runs du pilote E portent
+  `"deterministic": false` (`demo/nablafx_bench/splitfix_seed42.json` à `47`). Leur 0,191 contient
+  donc le non-déterminisme GPU, et ne peut pas isoler l'initialisation. La comparaison au plancher
+  n'a d'ailleurs pas de force : intervalles à 95 % de [0,12 ; 0,47] (5 ddl) pour 0,191 et de
+  [0,10 ; 0,67] (3 ddl) pour 0,18. « L'initialisation des poids ne contribue plus rien de
+  mesurable » n'est pas établi ; la formulation autorisée garde « pour l'essentiel un effet du
+  tirage des données » comme lecture du pilote, sans exclure une contribution de l'initialisation
+  du même ordre.
 - **L'ordonnanceur ne la porte pas** (`pilot_F_threshold.md`, `plateau_simulation.md`). Le seuil de
   plateau du protocole est 44 à 88 fois sous le bruit qu'il observe et sa marge de déclenchement
   vaut souvent moins d'une fluctuation — mais le corriger ne marche pas : remonter le seuil laisse

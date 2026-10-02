@@ -195,6 +195,12 @@ ESR de test par réglage non vu (étiquette corrigée) :
 Descriptif, sans seuil : l'interaction du plan 2×2 est nette. La tête additive aide sous « pôles »
 et nuit sous FiLM.
 
+*Correction du 2026-10-02* : cette interaction ne survit pas au retrait du décalage propre à chaque
+run. Si l'on retranche de chaque bras sa médiane de d sur les réglages vus, l'excès « non vus moins
+vus » vaut +0,16 (B), +0,37 (C) et +0,21 (D) (`poles_verdict_925.json`) : les trois bras font mieux
+que A sur les non vus relativement aux vus, et sous « pôles » l'additif ne gagne pas plus que le
+joint. Une run par cellule ; l'interaction brute peut n'être qu'un effet de run.
+
 **Règle d'arrêt et G2.2** : aucun bras « pôles » n'est arrêté (médianes −0,44 et +0,35, au-dessus
 de −ln 2). D est le meilleur, et C en est à plus de ln 1,15 : seul D passe. Le FiLM additif n'est
 pas retenu. **G2.2 : bras A et D, partitions 736 et 688.**

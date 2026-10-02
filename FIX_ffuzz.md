@@ -165,6 +165,13 @@ dans un sous-processus. Contrôle du test lui-même : une copie dont la sonde r�
 au lieu de 4 échoue. Le test ne change rien aux
 runs, qui ont tourné au code a0a4a4f, dont `_load` est le même.
 
+**Correction d'une prémisse de la section 1 (2026-10-02).** La section 1 dit la MR-STFT « aveugle à
+la phase, donc à la latence ». C'est inexact : sur les cibles de test F-Fuzz, un retard de 4
+échantillons coûte 0,06 à 0,07 en MR-STFT, linéairement en d. Le retard est visible, mais faible
+devant la MR-STFT de test des modèles (0,18 pour SSM et 0,29 pour S4 en moyenne, jusqu'à 0,40 selon le
+réglage). L'invariant de la section 1 et son issue ne changent
+pas.
+
 **Incertitudes restantes.**
 
 - Une graine et une partition (925) par architecture. Le rapport 2,10 entre architectures

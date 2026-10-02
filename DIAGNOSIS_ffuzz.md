@@ -179,6 +179,12 @@ les deux architectures : l'écart est uniforme, ce qui explique la coïncidence 
 dont la MR-STFT diffère d'un facteur 1,7. La MR-STFT, aveugle à la phase, ne voit pas un retard
 pur ; l'ESR le voit entièrement.
 
+*Correction du 2026-10-02* : la MR-STFT n'est pas aveugle au retard. Sur les cibles de test F-Fuzz
+décalées d'elles-mêmes, elle vaut 0,06 à 0,07 pour 4 échantillons, linéairement en d (0,016 à
+0,020 par échantillon), contre une MR-STFT de test des modèles de 0,18 (SSM) et 0,29 (S4) en moyenne, jusqu'à 0,40 selon le réglage. Le retard lui est donc
+visible mais faible devant ce plancher, alors qu'il porte toute l'ESR : 2(1 − ρ_cible(4)) reproduit
+le plancher par réglage (0,117 en F000, 0,188 en F100).
+
 **Mécanisme.** Les cibles F-Fuzz rendues portent une latence de 4 échantillons par rapport aux
 entrées `DRY-with-markers`, probablement la latence de traitement du plugin, non vérifiée dans sa
 documentation. Un modèle causal pourrait la reproduire en retardant sa sortie. Mais ni une somme

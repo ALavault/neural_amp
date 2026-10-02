@@ -54,6 +54,9 @@ moins — et c'est ce que ce pilote mesure.**
   architectures par les fumées `gate0_*` du 2026-09-22.
 - `--seed 42` partout : l'initialisation n'est pas le facteur étudié, et le pilote E a montré qu'à
   chaîne de données fixée elle ne contribue plus rien de mesurable.
+  *Correction du 2026-10-02* : le pilote E a tourné en mode non déterministe, il ne montre donc pas cela
+  (`paper/RESULTS_SSM_SEEDS.md`, correction du même jour). Le choix de `--seed 42` reste valable
+  comme conditionnement ; r₅ se lit à initialisation fixée.
 
 Six runs, environ 12 heures.
 
@@ -270,3 +273,12 @@ et la réserve écrite plus haut ne se confirme pas.
 - Les quatre nouvelles runs ont tourné au code a0a4a4f et sous le pilote NVIDIA 595.84. Le
   pilote a changé le 2026-09-28 à 21:46 (595.91.07) ; une porte au bit sous le nouveau pilote
   précède les runs suivantes (`scripts/product_chain_after_reboot.sh`).
+
+### Correction de lecture du 2026-10-02
+
+Le libellé pré-enregistré (« appariement soutenu ») reste exact : r₅ ≤ 0,25. Sa lecture comme
+couplage fort entre architectures ne l'est pas. Sur les cinq partitions, les log ESR ont des
+écarts-types de 0,067 (SSM-WaveNet) et 0,043 (S4-TF-L-16), et une corrélation de 0,31 (intervalle
+de Fisher à 95 % de −0,79 à 0,94). Sans corrélation, r₅ vaudrait 0,056 ; l'appariement ne retire
+donc qu'environ 28 % de la variance. r₅ est petit surtout parce que chaque bras disperse peu à
+initialisation fixe ; un couplage fort entre bras n'est pas démontré à n = 5.

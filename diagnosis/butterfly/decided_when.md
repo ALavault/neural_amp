@@ -92,6 +92,11 @@ validation → test ajoute ensuite un facteur 2 environ au-delà de celui qu'imp
 - L'effet papillon n'est pas créé par le passage validation → test : au-delà du facteur 2 imposé
   par les définitions, ce passage ajoute environ ×2 dans les deux bras. Ce que font les décisions,
   c'est dilater l'écart en amont, sur la quantité même qu'elles observent.
+- *Précision du 2026-10-02* : le facteur 2 « par définition » est une borne basse. Il suppose que
+  l'erreur change d'échelle sans changer de forme. Sur les métriques de test journalisées, la pente
+  de log ESR contre log L1 vaut 2,29 (pilote C, bras fixe, 16 runs), 2,51 (bras décide, 16) et 2,82
+  (pilote A, enfants décide de la fourche 100, 5) : l'erreur se concentre quand elle grandit,
+  puisque log ESR = 2 log L1 + log(MSE/MAE²) − log E[y²].
 
 ## Ce que cela ne permet pas de conclure
 

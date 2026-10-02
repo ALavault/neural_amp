@@ -5,6 +5,14 @@ Lecture seule, journaux existants. Script : `diagnosis/butterfly/plateau_margin.
 segments : ils sont fixes à l'intérieur d'un run, donc leur tirage s'annule dans la détection de
 plateau. Restait la fluctuation d'une époque à la suivante.
 
+> **Correction du 2026-10-02** (relecture critique, recalcul vérifié sur les mêmes journaux) : la
+> fluctuation ci-dessous est une médiane sur tout le run, dominée par les époques tardives à petit
+> pas. Prise sur les 40 époques qui précèdent chaque division, elle vaut 3,7 à 6,8 % autour des
+> premières divisions : le seuil de 10⁻⁴ est 370 à 680 fois sous le bruit local, pas 44 à 88. En
+> fluctuations locales, les marges des quinze divisions valent 0,00 à 0,54, sauf une à 1,18 ; le
+> « +4,80 » de k0 devient +0,54. Presque toutes les décisions sont donc fragiles. Les époques du
+> tableau sont comptées depuis la fourche (époque 100), pas en absolu.
+
 ## Hypothèse testée
 
 `ReduceLROnPlateau` divise le pas d'apprentissage après 20 époques sans amélioration de plus de
