@@ -85,6 +85,39 @@
     }
    ]
   },
+  "g2_poles_additive_s744": {
+   "step": 15000,
+   "modes": 512,
+   "fast_any": 4,
+   "fast_all": 1,
+   "switched": 2,
+   "past_30": [
+    {
+     "block": 0,
+     "channel": 0,
+     "mode": 2,
+     "s_max": 42.7,
+     "s_min": 0.7,
+     "abs_C": 1.82
+    },
+    {
+     "block": 7,
+     "channel": 11,
+     "mode": 0,
+     "s_max": 35.5,
+     "s_min": 29.16,
+     "abs_C": 0.111
+    }
+   ]
+  },
+  "g2_poles_additive_s369": {
+   "step": 15000,
+   "modes": 512,
+   "fast_any": 4,
+   "fast_all": 0,
+   "switched": 2,
+   "past_30": []
+  },
   "g2_poles_joint_s925": {
    "step": 15000,
    "modes": 512,
@@ -119,6 +152,22 @@
    "past_30": []
   },
   "g2_film_joint_s688": {
+   "step": 15000,
+   "modes": 512,
+   "fast_any": 0,
+   "fast_all": 0,
+   "switched": 0,
+   "past_30": []
+  },
+  "g2_film_joint_s744": {
+   "step": 15000,
+   "modes": 512,
+   "fast_any": 0,
+   "fast_all": 0,
+   "switched": 0,
+   "past_30": []
+  },
+  "g2_film_joint_s369": {
    "step": 15000,
    "modes": 512,
    "fast_any": 0,

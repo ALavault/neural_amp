@@ -397,3 +397,80 @@ reste tel qu'il est écrit plus haut ; il n'est pas réécrit.
 apparié de 0,048 vaut pour deux architectures sur Big Muff, pas pour ces bras sur Marshall.
 Durée attendue : environ 27 h de GPU (A environ 4,7 h et D environ 8,7 h par partition, d'après
 les runs existantes), sans compter les attentes du GPU partagé.
+
+## Verdict de l'élargissement (2026-10-02, cinq partitions, `poles_verdict.py --splits 925 736 688 744 369`)
+
+Sortie : `poles_verdict_925_736_688_744_369.json`. Bras A et D aux partitions 925, 736, 688, 744 et
+369 ; à 688, D est `g2_poles_additive_s688_r2`. Les seuils et la règle du témoin sont ceux écrits
+avant les runs ; cette section les applique.
+
+**Portes.**
+- Les deux portes au bit de la file sont franchies : chemin « pôles » 366 valeurs, chemin FiLM 348,
+  aucun écart, 300 pas atteints.
+- Les quatre nouvelles runs passent la porte de run : ESR finies, une seule bascule de polarité
+  chacune, à l'époque 0, 15 000 pas.
+- Les entrées des partitions 925, 736 et 688 sont identiques au bit au verdict à trois partitions.
+- Incident d'exécution : la file a été tuée à 17:00:55 le 30/09 (`demo/RUNS.jsonl`). D à 744 a
+  continué orphelin, sans relance, et A et D à 369 sont partis d'une continuation, mêmes drapeaux et
+  même runner.
+- Hétérogénéité déclarée du plancher des pôles : en fin d'entraînement, les nouveaux D n'ont aucun
+  mode sous le plancher (s maximal 42,7 à 744 ; aucun au-delà de 30 à 369, `pole_speed.json`). Un
+  passage sous −80 pendant l'entraînement n'est pas exclu.
+
+d est la moyenne sur les cinq partitions de ln(ESR_A / ESR_D) par réglage non vu, et sd son
+écart-type apparié entre partitions (4 ddl) :
+
+| réglage | d moyen | sd |
+|---|---|---|
+| B000_M000_T100 | +0,206 | 0,423 |
+| B000_M100_T000 | +0,047 | 1,097 |
+| B000_M100_T100 | +0,998 | 0,490 |
+| B010_M030_T070 (interpolation) | +0,227 | 0,349 |
+| B030_M070_T010 (étiquette corrigée) | +0,366 | 0,165 |
+| B065_M085_T035 | +0,099 | 0,354 |
+| **B100_M000_T000 (extrême)** | **+0,728** | 0,330 |
+| B100_M000_T100 | −0,007 | 0,282 |
+| B100_M100_T000 | +0,060 | 0,287 |
+
+| | D pôles additif, cinq partitions | indistinct |
+|---|---|---|
+| H1, extrême (d) | **soutenue** (+0,73 ≥ ln 1,5) | non (sd 0,33) |
+| H2, médiane des non vus (d) | **non inférieur** (+0,21) | **oui** (sd typique 0,35) |
+| H3, MR-STFT (d) | intermédiaire (+0,04) | non |
+| H4, extrême / interpolation | intermédiaire (2,97 ; A aux mêmes partitions : 4,51, seuil de soutien 2,70) | — |
+| H5, médiane des vus (d) | **non inférieur** (+0,19) | **oui** |
+| H6, pôles figés / mobiles | se sert des pôles (×9,4) | — |
+
+**Règle du témoin « résidus », écart déclaré avant les runs : le témoin ne s'ouvre pas.** H1 est
+soutenue sans mention « indistinct », mais H2 la porte encore. La règle stricte exigeait les deux
+sans cette mention.
+
+**Descriptif, par partition.**
+
+| partition | médiane de d | ESR moyenne des non vus, A / D | modes commutés de D |
+|---|---|---|---|
+| 925 | +0,35 | 0,062 / 0,042 | 4 |
+| 736 | +0,37 | 0,125 / 0,058 | 1 |
+| 688 | −0,09 | 0,078 / 0,069 | 0 |
+| 744 | −0,02 | 0,056 / 0,046 | 2 |
+| 369 | +0,57 | 0,093 / 0,049 | 2 |
+
+- D a une ESR moyenne des non vus plus basse que A aux cinq partitions. En médiane de d, l'avantage
+  ne tient qu'à trois partitions sur cinq.
+- L'effet le plus net et le plus stable porte sur la combinaison extrême (H1). L'avantage en
+  médiane, qui a motivé G2, reste du même ordre que l'écart entre partitions.
+- Les modes commutés ne suivent pas la médiane de d (2 à 744, où d ≈ 0). Lecture post hoc, tirée
+  d'une relecture critique sur les checkpoints et non consignée ailleurs : ces modes semblent
+  commandés surtout par le bouton Gain, qui vaut 5 sur tous les réglages de test. Si c'est le cas,
+  ils n'expliquent pas les écarts d'un réglage non vu à l'autre, mais ils peuvent encore contribuer
+  à la sortie et à l'avantage global de D.
+
+### Ce qui ne peut pas être conclu
+
+- Une seule graine d'initialisation. L'écart-type entre partitions (0,35 en médiane) est celui de
+  ces deux bras sur le Marshall.
+- Les réglages non vus sont joués sur un autre DI que l'entraînement : généralisation de réglage et
+  de matériau restent mêlées.
+- Le bras « pôles » garde C et D indépendants des boutons : tout gain réglable y passe par des modes
+  rapides, et tout déplacement de zéro par un déplacement de pôles. « Conditionner les pôles » ne
+  teste donc pas, à lui seul, « déplacer les fréquences de coupure ».
