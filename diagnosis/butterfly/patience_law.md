@@ -77,3 +77,32 @@ est déclarée non calculable comme spécifiée.
 Une architecture, un appareil, une configuration de l'ordonnanceur. La tendance est un ajustement
 paramétrique choisi d'avance : une loi qui ne couvre pas peut venir de la tendance et non du
 bruit.
+
+## Résultats (2026-10-02, `patience_law.json`)
+
+**Porte de rejeu : franchie.** Avec un décalage de convention d'une époque, le rejeu reproduit
+l'époque observée de première division pour **21 runs sur 21**. Sans décalage, il n'en reproduit
+aucune.
+
+**Étape 1 : bruit indépendant.** VR(10) médian **0,165** (de 0,106 à 0,630 selon la run) ; 20 runs
+sur 21 sont sous 0,3. Le modèle retenu est « tendance + bruit indépendant ». Le modèle cumulatif
+n'est pas simulé.
+
+**Étape 2, couverture : intermédiaire.** 12 runs sur 21 (0,57) ont leur époque observée dans
+[q10 ; q90] : 10 sur 16 pour le pilote C, 2 sur 5 pour les enfants. Le seuil de soutien (0,60)
+n'est pas atteint, celui de réfutation (0,40) non plus.
+
+**Indépendance au seuil : soutenue.** La médiane des 21 médianes prédites bouge de 0 époque avec
+θ = 10⁻³ et d'une époque avec θ = 10⁻⁵, contre un critère de 5.
+
+**Descriptif, hors critère.** Les écarts sont tous du même côté : les 9 runs non couvertes divisent
+**plus tard** que prévu (au-dessus de q90), aucune plus tôt. Exemples : enfant k0, observé 113
+contre [23 ; 90] ; k4, 114 contre [27 ; 100]. Les intervalles prédits ont une largeur médiane de
+73 à 77 époques. Le modèle à bruit indépendant fait donc diviser trop tôt. Deux lectures, non
+départagées : une tendance extrapolée trop plate près du plateau, ou des fluctuations qui, sans
+être cumulatives au sens de VR(10), ont plus de mémoire que du bruit blanc à l'échelle des 21
+époques de la patience.
+
+**Ce qui se dit.** Le seuil θ = 10⁻⁴ ne joue aucun rôle, et c'est maintenant une prédiction tenue
+du modèle de premier passage, pas seulement une observation de marge. La forme précise de la loi
+n'est que partiellement capturée par une tendance quadratique plus un bruit indépendant.
