@@ -322,11 +322,55 @@ def ffuzz() -> list[dict]:
     return out
 
 
+@torch.no_grad()
+def vs100r_rates() -> list[dict]:
+    """predictions_192k.md, seed 42 only: the model trained at 48 kHz against the one
+    trained at 192 kHz, whose output is decimated by resample_poly(., 1, 4), the
+    decimation that made the 48 kHz real reference. Same takes and window rule as
+    vs100r(). Listening only: one seed supports no ranking."""
+    model48 = ev.load("vs100r_gc_film_joint_s925_r2")
+    model192 = ev.load("vs100r192_film_s42")
+    chosen = [t for t in ev.takes() if t["split"] == "test" and not t["low_signal"]]
+    chosen.sort(key=lambda t: (t["gain_contour"][0], t["order"]))
+    out = []
+    for take in [chosen[0], chosen[len(chosen) // 2], chosen[-1]]:
+        loop, fx = ev.audio(take)
+        controls = torch.tensor([v / 10 for v in take["gain_contour"]])
+        y48 = resample_poly(fx, 1, 4)
+        m48 = ev.run(model48, resample_poly(loop, 1, 4), controls)
+        m192 = resample_poly(ev.run(model192, loop, controls), 1, 4)
+        window = 6 * RATE
+        starts = range(RATE // 2, len(y48) - window - RATE // 10, RATE)
+        a = max(starts, key=lambda s: float((y48[s : s + window] ** 2).mean()))
+        cut = slice(a, a + window)
+        real, a48, b192 = y48[cut], m48[cut], m192[cut]
+        g, c = take["gain_contour"]
+        out.append(
+            {
+                "label": f"Prise {take['order']} : gain {g:g}, contour {c:g}",
+                "window_s": [a / RATE, (a + window) / RATE],
+                **write_group(
+                    f"vs100r_rates_take{take['order']}",
+                    {
+                        "real": real,
+                        "model48": a48,
+                        "model192": b192,
+                        "residual_48": real - a48,
+                        "residual_192": real - b192,
+                    },
+                ),
+            }
+        )
+        print("vs100r_rates", take["order"], out[-1]["esr"], flush=True)
+    return out
+
+
 def main() -> None:
     torch.set_num_threads(16)
     AUDIO.mkdir(parents=True, exist_ok=True)
     result = {
         "vs100r": vs100r(),
+        "vs100r_rates": vs100r_rates(),
         "marshall": marshall(),
         "rate": rate_transfer(),
         "ffuzz": ffuzz(),
