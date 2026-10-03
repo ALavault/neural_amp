@@ -25,7 +25,11 @@ ROOT = HERE.parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import product_vs100r_eval as ev  # noqa: E402
 
+# Optional arguments: A48 run, B192 run, output name (default: the seed-42 pair).
 RUNS = {"A48": "vs100r_gc_film_joint_s925_r2", "B192": "vs100r192_film_s42"}
+OUTPUT = "measures.json"
+if len(sys.argv) == 4:
+    RUNS, OUTPUT = {"A48": sys.argv[1], "B192": sys.argv[2]}, sys.argv[3]
 UP, CHUNK = 4, 144_000
 NEIGHBOURS = {
     "true (2,5 ; 7,5)": (0.25, 0.75),
@@ -61,9 +65,7 @@ def shift(x: np.ndarray, delay: float) -> np.ndarray:
 
 
 def oracle_delay(y: np.ndarray, r: np.ndarray) -> tuple[float, float]:
-    best = min(
-        (esr(ev.scored(shift(y, d)), r), d) for d in np.arange(-2, 2.0001, 0.05)
-    )
+    best = min((esr(ev.scored(shift(y, d)), r), d) for d in np.arange(-2, 2.0001, 0.05))
     return best
 
 
@@ -158,9 +160,7 @@ def main() -> None:
     result["ultrasonic_share_B192_take3"] = ultrasonic_share(
         ev.scored(y192, 192_000), ev.scored(fx, 192_000)
     )
-    (HERE / "measures.json").write_text(
-        json.dumps(result, indent=1, ensure_ascii=False) + "\n"
-    )
+    (HERE / OUTPUT).write_text(json.dumps(result, indent=1, ensure_ascii=False) + "\n")
     print(json.dumps(result["val_fall_12k_to_14k"]))
 
 

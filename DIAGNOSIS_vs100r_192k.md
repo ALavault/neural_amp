@@ -195,3 +195,21 @@ Première version des sections 4 à 6 (commit 5a8a223) corrigée :
   9,4 sur 6 prises (pas sur la prise 2), quasi-égalité sur la prise 2, minimum de répétabilité
   0,0002, contour au gain 5 en médiane, parts H4 exactes.
 - Le « plancher des données » n'est plus présenté comme établi.
+
+## Mise à jour du 2026-10-03, graine 43 (`measures_s43.json`, `eval_192k.json`)
+
+- **H2 soutenue** au critère écrit d'avance. À la prise 16, ln(B/A) passe de +1,16 (graine 42 :
+  A48 0,110, B192 0,351) à −1,12 (graine 43 : A48 0,385, B192 0,125), soit une variation de
+  2,28 > 0,8. L'écart de la prise 16 dépend du run, pas de la fréquence d'entraînement. La
+  contribution retenue au §5 pour la prise 16 (erreur de niveau de B192) est donc propre au run
+  de graine 42.
+- Les quatre modèles prédisent mieux la cible de la prise 16 avec les commandes (2,5 ; 5) qu'avec
+  les vraies (2,5 ; 7,5) : A48 0,110 → 0,093 et 0,385 → 0,101 ; B192 0,351 → 0,059 et 0,125 →
+  0,056. Le contour 7,5 à gain 2,5 est mal prédit par tous les runs, à des degrés différents.
+  Cela ne tranche pas entre la généralisation du conditionnement et une position réelle des
+  boutons proche du contour 5.
+- Alignement, retrouvé à la graine 43 : retard oracle médian hors prise 16 de 0,80 échantillon
+  pour A48 contre 0,10 pour B192 (graine 42 : 0,85 et 0,15). Après compensation, A48 est
+  meilleur sur 6 prises sur 8 (graine 42 : 7 sur 8).
+- Descriptif, sans lecture pré-inscrite (2 graines sur 3) : moyennes des ln ESR A48 −3,58 et
+  −3,51, B192 −3,84 et −4,19. Les deux runs A48 sont très proches entre eux (écart 0,07).
