@@ -102,66 +102,96 @@ physiques. Rang bas : elle n'explique pas un effet concentré sur un réglage.
 ## 4. Mesures et verdict
 
 Scripts et sorties : `diagnosis/vs100r_192k/measures.py` → `measures.json` ; mesures nées en
-cours de route (§6) : `real_contour.py`, `bigmuff_lead.py`.
+cours de route (§6) : `real_contour.py`, `bigmuff_lead.py`. Sections 4 à 6 corrigées le
+2026-10-03 après relecture Codex (lecture seule), voir la fin du document.
 
 | | mesure | chiffre | verdict |
 |---|---|---|---|
-| H1a | gain oracle, prise 16 | A48 −1,85 dB, ESR 0,110 → 0,057 ; B192 −3,56 dB, 0,351 → 0,127 | soutenue en partie : le niveau explique une part, pas tout (0,127 > 0,15 manqué de peu dans le bon sens) |
-| H1b | prise 16 avec les commandes voisines | B192 : vraies 0,351, (2,5 ; 5) **0,059**, (5 ; 7,5) 1,32 ; A48 : 0,110, 0,093, 1,27 | **soutenue** : avec le contour 5, B192 est 6 fois meilleur ; A48 l'est aussi, de 16 % seulement |
-| H2 | graines 43 et 44 | en cours | **indécidable** à ce jour |
-| H3 | baisse relative de la validation, pas 12–13 k contre ≥ 14 k | A48 0,64 %, B192 0,28 % | **réfutée** : B192 n'est pas moins convergé |
-| H4 | part de la MR-STFT de B192 au-dessus de 24 kHz | terme log-magnitude : 74–75 % (prise 16), 90–91 % (prise 3) ; numérateur de convergence spectrale : 10⁻⁵ | **soutenue** comme fait ; son effet sur l'écart n'est pas mesuré |
-| H5 | morceaux de 0,75 s remis à zéro contre lecture continue, prise 16 | B192 0,3516 contre 0,3506 ; morceaux pires ou égaux sur les 8 prises | **réfutée** |
-| H6 | retard oracle (±2 échantillons) | prise 16 : A48 +1,45 → 0,091, B192 +0,85 → 0,343, ln(B/A) 1,32 | **réfutée pour la prise 16** ; voir ci-dessous pour les autres prises |
-| H7 | — | non faite | rang bas, voir §6 |
+| H1a | gain oracle, prise 16 | A48 −1,85 dB, ESR 0,110 → 0,057 ; B192 −3,56 dB, 0,351 → 0,127 | **soutenue** : 0,127 < 0,15 ; un gain scalaire retire 64 % de l'ESR de B192, sans dire d'où vient l'erreur de niveau |
+| H1b | prise 16 avec les commandes voisines | B192 : vraies 0,351, (2,5 ; 5) 0,059, (5 ; 7,5) 1,32 ; A48 : 0,110, 0,093, 1,27 | **réfutée telle qu'écrite** : A48 s'améliore aussi (−16 %). Observé : B192 est beaucoup plus sensible au contour (facteur 6) |
+| H2 | graines 43 et 44 ; critère écrit : ln(B/A) de la prise 16 varie de plus de 0,8 | en cours | **indécidable** à ce jour |
+| H3 | perte de validation moyenne, pas 12–13 k contre ≥ 14 k | baisse A48 0,64 %, B192 0,28 % | **réfutée telle qu'écrite** ; deux moyennes de fenêtres ne prouvent pas une convergence suffisante |
+| H4 | part de la MR-STFT de B192 au-dessus de 24 kHz, 2 prises | terme log-magnitude : 74,2–75,4 % (prise 16), 90,4–90,7 % (prise 3) ; numérateur de convergence spectrale : 4·10⁻⁶ à 10⁻⁴ | **soutenue** sur ces deux prises, pour ce terme de la perte ; ni la perte totale ni le gradient ne sont mesurés |
+| H5 | morceaux de 0,75 s remis à zéro contre lecture continue | prise 16 : B192 0,3516 contre 0,3506 ; morceaux pires ou égaux sur les 8 prises | **réfutée** pour l'inférence ; un effet des remises à zéro pendant l'entraînement n'est pas exclu |
+| H6 | retard oracle (±2 échantillons, pas de 0,05) | prise 16 : A48 +1,45 → 0,091, B192 +0,85 → 0,343, ln(B/A) 1,32 | **réfutée pour la prise 16** |
+| H7 | — | non faite | non testée |
 
-Lecture de H6 sur les 7 autres prises : A48 a un retard oracle de +0,75 à +1,45 échantillon
-(médiane 0,95 ; prise 2 : +0,25). Compensé, son ESR baisse de 2 à 9 fois (prise 3 : 0,022 →
-0,0024 ; prise 30 : 0,052 → 0,0056). B192 a un retard médian de 0,2 échantillon et gagne moins
-à la compensation. Après compensation des deux, A48 est meilleur sur 7 prises sur 8, la 8ᵉ (prise
-2) étant à égalité.
+Retard oracle sur les 7 autres prises (descriptif) : A48 de +0,25 à +1,35 échantillon (médiane
+0,85) ; B192 médiane 0,15. Compensé, l'ESR de A48 baisse d'un facteur 2 à 9,4 sur 6 prises
+(prise 3 : 0,022 → 0,0024 ; prise 30 : 0,052 → 0,0056), et de 2 % seulement sur la prise 2.
+Après compensation des deux bras, A48 est meilleur sur 7 prises sur 8 ; sur la prise 2, B192 reste
+à peine meilleur (0,0669 contre 0,0670). Ce retard est choisi sur la cible de test de chaque
+prise : il montre la sensibilité du classement à l'alignement, pas une correction utilisable. Les
+gains et retards oracles ne s'additionnent pas.
 
 ## 5. Contribution retenue
 
-**Prise 16 : le modèle à 192 kHz invente un effet du contour à gain 2,5 (H1).**
+**Prise 16 : une erreur de niveau du modèle à 192 kHz (H1a).**
 - Prédicat : l'écart se concentre sur la seule prise de test dont le couple gain–contour est
   absent de l'entraînement. À gain 2,5, l'entraînement n'a que les contours 2,5 et 5 (1 et 2
-  prises), donc le contour 7,5 est une extrapolation dans cette tranche.
-- Mécanisme : dans l'ampli réel, passer du contour 5 à 7,5 ne change presque rien. La sortie
-  réelle de la prise 16 est à 0,010 en ESR de celle de la prise 26 (contour 5), dans la
-  répétabilité de deux prises au même réglage. Au gain 5, l'écart entre contour 5 et 7,5 vaut
-  0,015. Le FiLM de B192 prolonge au contraire la forte variation vue entre les contours 2,5 et 5
-  (0,26 à 0,88). Celui de A48 la prolonge à peine.
-- Prédiction qu'un correctif devra tenir : ramener l'ESR de la prise 16 sous 0,06, le niveau
-  obtenu avec les commandes (2,5 ; 5), sans dégrader les autres prises de plus de 10 %.
-- Réserve : une seule prise, une seule graine par bras. Ce comportement peut être propre au run
-  (H2) plutôt qu'à la fréquence.
+  prises).
+- Ce qui est établi : B192 est trop fort de 3,6 dB sur cette prise, contre 1,9 dB pour A48. Un
+  gain scalaire retire 64 % de son ESR. Avec les commandes (2,5 ; 5), il prédit mieux la cible
+  qu'avec (2,5 ; 7,5), d'un facteur 6 ; A48, de 16 %.
+- Non établi : le mécanisme. Restent concurrents : la généralisation du conditionnement dans une
+  zone sans données, une position réelle des boutons différente de la position notée, la
+  variabilité des captures et l'effet propre du run (H2). La sortie réelle de la prise 16 est
+  proche de celle de la prise 26, notée contour 5 (ESR 0,010, alignement oracle entier) ; cela
+  décrit deux captures, pas une loi physique du contour.
+- Prédiction qu'un correctif devra tenir, à confirmer sur d'autres données que ce test inspecté :
+  ESR de la prise 16 sous 0,06 sans dégrader les autres prises de plus de 10 %.
 
-**Autres prises : l'avantage apparent de B192 est un avantage d'alignement (H6).**
-- Prédicat : sur 7 prises sur 8, la sortie de A48 est en avance d'environ un échantillon sur le
-  réel. Cette avance fait l'essentiel de son ESR, et B192 n'en a pas, ou peu.
-- Mécanisme supposé : un décalage temporel fractionnaire dans la capture VS100R, que le modèle à
-  48 kHz ne sait pas reproduire et que le modèle à 192 kHz approche (environ 4 échantillons à
-  192 kHz). L'avance du ZOH (T1) est écartée comme explication générale : les modèles ZOH du
-  Big Muff entraînés à 48 kHz n'ont pas d'avance (retards médians −0,07 à −0,17 échantillon,
-  comme les FOH ; `bigmuff_lead.json`).
-- Prédiction qu'un correctif devra tenir : avancer les cibles VS100R du décalage mesuré, puis
-  réentraîner A48, donne un retard oracle médian sous 0,2 échantillon et une ESR sous 0,01 sur au
-  moins 6 prises sur 8.
+**Autres prises : le classement entre les bras dépend de l'alignement temporel (H6, descriptif).**
+- Établi : sans compensation, B192 est meilleur sur 5 prises ; avec un retard oracle par prise,
+  A48 l'est sur 7. La sortie de A48 a un retard oracle médian de 0,85 échantillon, celle de B192
+  de 0,15.
+- Non établi : l'origine de ce décalage. Un retard oracle peut absorber une erreur de phase
+  propre au modèle ou au réglage. Les candidats restent un décalage de capture entre les deux
+  entrées de l'interface et une contribution du ZOH. Les modèles ZOH du Big Muff entraînés à
+  48 kHz n'ont pas d'avance (médianes −0,07 à −0,17, comme les FOH ; `bigmuff_lead.json`). Cela
+  réfute une avance générale de tout ZOH à 48 kHz, pas une contribution du ZOH sur la VS100R.
+  L'instrument diffère en outre : découpe puis décalage circulaire pour le Big Muff, décalage
+  puis découpe pour la VS100R.
+- Prédiction qu'un correctif devra tenir, avec un décalage fixé hors du test (sur l'entraînement
+  ou par la mesure Zen Go) : avancer les cibles VS100R de ce décalage puis réentraîner A48 donne
+  un retard oracle médian sous 0,2 échantillon et une ESR sous 0,01 sur au moins 6 prises sur 8.
 
 ## 6. Non expliqué et à tester
 
-- L'écart moyen entre les bras (−0,26 en ln ESR) est dans la dispersion entre graines ; H2 se
-  tranche avec les graines 43 et 44.
-- H4 : l'ultrason pèse 75 à 90 % du terme log-magnitude de B192. Son effet sur la sortie dans la
-  bande n'est pas mesuré ; il faudrait un bras à perte limitée à 24 kHz, autre expérience.
-- H7 non faite : elle n'explique pas un écart concentré sur un réglage.
+- Bilan des prédictions du §3 : tenues H1a et H4 (sur deux prises, un terme) ; réfutées telles
+  qu'écrites H1b, H3, H5, H6 (prise 16) ; indécidable H2 ; non testée H7.
+- L'écart moyen entre les bras (−0,26 en ln ESR) est dans la dispersion entre graines connue
+  ailleurs ; H2 se tranche avec les graines 43 et 44, au critère écrit (variation de plus de 0,8
+  sur la prise 16).
+- H4 : l'effet de l'ultrason sur la sortie dans la bande n'est pas mesuré ; il faudrait un bras à
+  perte limitée à 24 kHz, autre expérience.
+- H7 non testée : un effet de la discrétisation dépendant du régime pourrait se concentrer sur un
+  réglage, donc la concentration ne l'élimine pas.
 - **À tester, né pendant les mesures :**
-  - Le décalage entre l'entrée bouclée et l'envoi de la Zen Go. Mesure :
-    `demo/capture/valvestate/INTER_INPUT_TEST.md`, prises de l'utilisateur. Prédiction : un
-    retard de l'envoi d'environ 20 µs (0,95 échantillon à 48 kHz).
-  - La répétabilité des réglages. Deux prises au même couple nominal diffèrent de 0,006 à 0,41
-    en ESR (médiane 0,008 sur 115 paires ; trois prises à (2,5 ; 5) : 0,006, 0,071, 0,13). C'est
-    un plancher des données : les potentiomètres sont réglés à la main, et à gain faible un petit
-    écart de position change beaucoup la sortie. A48 réaligné (0,002 à 0,010) est déjà à ce
-    plancher. Mesure : l'ordre chronologique des prises et la position réelle des boutons.
+  - Le décalage entre l'entrée bouclée et l'envoi de la Zen Go, par une mesure indépendante de
+    l'oracle (`demo/capture/valvestate/INTER_INPUT_TEST.md`, prises de l'utilisateur). Prédiction :
+    un retard de l'envoi d'environ 18 à 20 µs (0,85 à 0,95 échantillon à 48 kHz).
+  - Le même instrument de retard (même découpe, même décalage, avec prolongement plutôt que
+    décalage circulaire) appliqué aux bras ZOH et FOH sur la VS100R et sur le Big Muff.
+  - La répétabilité des captures et des réglages. Deux prises au même couple nominal diffèrent
+    de 0,0002 à 0,41 en ESR (médiane 0,008, 115 paires non indépendantes ; trois prises à
+    (2,5 ; 5) : 0,006, 0,071, 0,13). Au gain 5, contour 5 contre 7,5 : médiane 0,015 (0,010 à
+    0,215). Cette dispersion mélange réglages, captures et alignements ; l'attribuer aux
+    potentiomètres réglés à la main reste une hypothèse, et ce n'est pas une borne inférieure de
+    l'erreur du modèle. Mesure : vérifier les entrées capturées, l'ordre des prises et la
+    position réelle des boutons.
+  - Les seuils 0,06, 10 % et 0,01 sur 6 prises sur 8 viennent du test déjà inspecté : ils
+    demandent une confirmation sur des données indépendantes.
+
+## Corrections du 2026-10-03 (relecture Codex, lecture seule)
+
+Première version des sections 4 à 6 (commit 5a8a223) corrigée :
+- H1a était noté « soutenue en partie » avec « 0,127 > 0,15 » : c'est faux, 0,127 < 0,15.
+- H1b était noté « soutenue », alors qu'A48 s'améliore aussi : réfutée telle qu'écrite.
+- « Invente un effet du contour » et « l'avantage apparent de B192 est un avantage d'alignement »
+  dépassaient les mesures : ramenés à ce qui est établi.
+- L'élimination du ZOH par le Big Muff était trop large, et l'instrument n'est pas le même.
+- Chiffres corrigés : médianes de retard hors prise 16 (0,85 et 0,15, maximum 1,35), facteur 2 à
+  9,4 sur 6 prises (pas sur la prise 2), quasi-égalité sur la prise 2, minimum de répétabilité
+  0,0002, contour au gain 5 en médiane, parts H4 exactes.
+- Le « plancher des données » n'est plus présenté comme établi.
