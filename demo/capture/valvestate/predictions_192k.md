@@ -118,3 +118,41 @@ calendrier. Écouter la graine 42 seule ne permet aucun classement.
   de 48 kHz pour B192. Comme l'ESR de test du banc à 192 kHz, elle n'est pas lue.
 - Les segments de test du banc font 240 000 échantillons à 192 kHz (1,25 s). Sans effet sur
   l'évaluation pré-inscrite, faite à 48 kHz par `eval_192k.py`.
+
+## Résultats (2026-10-04, `eval_192k.py`, `eval_192k.json`)
+
+Six runs, tous à 15 000 pas sans échec (file `demo/runs/vs100r_192k_queue.log`, porte au bit du
+chemin A48 franchie : 372 valeurs, 0 écart). Chaque B192 a rejoué les pas de division de son
+jumeau (graine 42 : 7 830 et 10 701 ; 43 : 11 484 et 14 355 ; 44 : 6 438 et 14 181).
+
+| run | bras | s = moyenne des ln ESR (8 prises) | \|e\| au tiers d'octave de 16 kHz | moyenne de \|e\| sur 1–16 kHz |
+|---|---|---|---|---|
+| vs100r_gc_film_joint_s925_r2 | A48 | −3,580 | 0,53 dB | 0,26 dB |
+| vs100r48_film_s43 | A48 | −3,506 | 0,64 dB | 0,48 dB |
+| vs100r48_film_s44 | A48 | −3,559 | 0,34 dB | 0,17 dB |
+| vs100r192_film_s42 | B192 | −3,841 | 0,26 dB | 0,19 dB |
+| vs100r192_film_s43 | B192 | −4,190 | 0,55 dB | 0,30 dB |
+| vs100r192_film_s44 | B192 | −3,881 | 0,18 dB | 0,21 dB |
+
+**M1 : « B192 plus proche ».** d = −0,422 ; σ = 0,138 ; seuils −ln 1,5 = −0,405 et
+−2 σ √(2/3) = −0,225, tous deux franchis. En ESR, le modèle entraîné à 192 kHz puis décimé est plus
+proche du réel, d'un facteur 0,66 environ en moyenne géométrique.
+
+**M2 : « non tranché ».** La moyenne de |e| à 16 kHz est plus basse de 0,17 dB pour B192 (seuil
+0,5 dB). B192 est plus proche à 16 kHz pour les 3 graines, mais d'un écart moyen trop petit pour la règle.
+
+**Descriptif, sans lecture.**
+- Par prise, ln(B/A) est négatif pour les trois graines sur les prises 3, 14, 30, 33 et 36, et
+  change de signe selon la graine sur les prises 2, 16 et 17. À la prise 16, le couple non vu, il
+  vaut +1,16, −1,12 et −0,45.
+- Sinus à 997 Hz : part d'énergie hors grille harmonique de −38,7 à −41,8 dB pour A48 et de −46,0
+  à −47,8 dB pour B192. Les fenêtres 0,5–1,5 s et 0,9–1,9 s donnent les mêmes valeurs à 0,01 dB
+  près : le réseau est établi.
+
+**À lire avec le diagnostic (`DIAGNOSIS_vs100r_192k.md`).** La lecture M1 est tenue telle qu'elle
+était écrite, sur l'ESR brute. Le diagnostic montre que cette ESR est très sensible à l'alignement
+temporel : la sortie de A48 a un retard oracle médian d'environ 0,8 échantillon, celle de B192
+d'environ 0,1, et avec un retard oracle par prise A48 repasse devant sur la plupart des prises. Ce
+retard est choisi sur la cible de test : il n'est pas une correction utilisable, et l'origine du
+décalage (capture ou modèle) n'est pas établie. M1 ne dit donc pas que B192 reproduit mieux le
+timbre de l'ampli ; il dit qu'à la sortie, sans correction, il est plus proche en ESR.
