@@ -139,3 +139,27 @@ Excès médian de D₂ (modèle − appareil, dB), 3 modèles A48, toutes les pr
   symétrique, à gain faible.
 - L'hypothèse « annulation réglée pour les réglages fréquents » est donc écartée ; la prise 16
   ressortait parce qu'elle est à gain 2,5, pas parce que son couple n'était pas vu.
+
+### Résultats de l'antisymétrisation (`antisym.json`)
+
+| modèle | Δ moyenne ln ESR (impair − tel quel) | D₂/D₁ tel quel → impair (sinus −10 dBFS, prise 17) |
+|---|---|---|
+| A48 s42 | −0,028 | −30,9 → −52,9 dB |
+| A48 s43 | +0,003 | −30,1 → −46,0 dB |
+| A48 s44 | −0,021 | −29,6 → −48,5 dB |
+| B192 s42 | −0,054 | −35,5 → −81,3 dB |
+| B192 s43 | −0,116 | −35,5 → −76,6 dB |
+| B192 s44 | −0,074 | −31,1 → −57,4 dB |
+
+Appareil, même sinus : −34,5 dB.
+
+- **Lecture préinscrite : « n'aide pas »**, de justesse. Médiane −0,041, au-dessus du seuil de
+  −0,05 ; 5 modèles sur 6 baissent, ce qui tient.
+- **Descriptif** : le gain est presque nul pour A48 (0 à 3 % d'ESR) et de 5 à 11 % pour B192
+  (jusqu'à 27 % sur une prise). Sur la guitare de test, la partie paire des modèles pèse −25 à
+  −39 dB de leur partie impaire : la retirer change peu l'ESR, même si elle est surtout parasite.
+- **Conséquence** : pour l'ESR, l'excès d'harmoniques paires est un contributeur mineur ; son
+  intérêt est perceptif (une 2ᵉ harmonique que l'ampli n'a pas, surtout à gain faible) et
+  d'empreinte. Le contrôle montre que l'antisymétrisation fait bien ce qu'elle doit (D₂ au
+  plancher), au prix d'une inférence doublée ; elle retire aussi la petite partie paire réelle
+  de l'appareil (−34,5 dB sur ce sinus).
