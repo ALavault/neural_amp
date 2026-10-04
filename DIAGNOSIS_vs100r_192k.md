@@ -213,3 +213,24 @@ Première version des sections 4 à 6 (commit 5a8a223) corrigée :
   meilleur sur 6 prises sur 8 (graine 42 : 7 sur 8).
 - Descriptif, sans lecture pré-inscrite (2 graines sur 3) : moyennes des ln ESR A48 −3,58 et
   −3,51, B192 −3,84 et −4,19. Les deux runs A48 sont très proches entre eux (écart 0,07).
+
+## Mise à jour du 2026-10-04, graine 44 et bilan sur trois graines (`measures_s44.json`, `eval_192k.json`)
+
+- **H2, verdict final : soutenue.** À la prise 16, ln(B/A) vaut +1,16 (graine 42), −1,12 (43) et
+  −0,45 (44 : A48 0,169, B192 0,108). L'écart de cette prise dépend du run ; il ne départage pas
+  les fréquences d'entraînement.
+- Les six modèles prédisent mieux la cible de la prise 16 avec les commandes (2,5 ; 5) qu'avec
+  les vraies (2,5 ; 7,5). Graine 44 : A48 0,169 → 0,094, B192 0,108 → 0,061. Comme à la mise à
+  jour précédente, cela ne tranche pas entre généralisation du conditionnement et position réelle
+  des boutons.
+- **Alignement, graine 44** : retard oracle médian hors prise 16 de 0,80 échantillon pour A48 et
+  de 0,05 pour B192. Après compensation, A48 est meilleur sur 7 prises sur 8 (la prise 16
+  exceptée : 0,146 contre 0,104).
+- **Sur les trois graines** : retards médians hors prise 16 de 0,85, 0,80 et 0,80 pour A48, et de
+  0,15, 0,10 et 0,05 pour B192. Après compensation, A48 est meilleur sur 7, 6 et 7 prises sur 8.
+  La lecture pré-inscrite M1 (« B192 plus proche » en ESR brute, d −0,422,
+  `predictions_192k.md`) est donc à lire comme un avantage d'alignement, pas de timbre. L'origine
+  du décalage d'environ 0,8 échantillon reste à établir hors oracle (test Zen Go, §6).
+- H3 ne se relit pas sur ces graines : leurs calendriers placent une division du taux dans la
+  fenêtre de mesure (graine 44 : pas 14 181), si bien que la baisse de la validation (A48 3,7 %,
+  B192 6,9 %) suit cette division plutôt que la convergence.
