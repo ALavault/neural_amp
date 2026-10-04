@@ -99,17 +99,20 @@
  ],
  "vs100r_rates": [
   {
-   "label": "Prise 16 : gain 2.5, contour 7.5",
+   "seed": 42,
+   "run48": "vs100r_gc_film_joint_s925_r2",
+   "run192": "vs100r192_film_s42",
+   "label": "Graine 42, prise 16 : gain 2.5, contour 7.5",
    "window_s": [
     4.5,
     10.5
    ],
    "files": {
-    "real": "audio/results_vs100r_rates_take16_real.wav",
-    "model48": "audio/results_vs100r_rates_take16_model48.wav",
-    "model192": "audio/results_vs100r_rates_take16_model192.wav",
-    "residual_48": "audio/results_vs100r_rates_take16_residual_48.wav",
-    "residual_192": "audio/results_vs100r_rates_take16_residual_192.wav"
+    "real": "audio/results_vs100r_rates_s42_take16_real.wav",
+    "model48": "audio/results_vs100r_rates_s42_take16_model48.wav",
+    "model192": "audio/results_vs100r_rates_s42_take16_model192.wav",
+    "residual_48": "audio/results_vs100r_rates_s42_take16_residual_48.wav",
+    "residual_192": "audio/results_vs100r_rates_s42_take16_residual_192.wav"
    },
    "ref": "real",
    "esr": {
@@ -146,17 +149,20 @@
    }
   },
   {
-   "label": "Prise 17 : gain 5, contour 0",
+   "seed": 42,
+   "run48": "vs100r_gc_film_joint_s925_r2",
+   "run192": "vs100r192_film_s42",
+   "label": "Graine 42, prise 17 : gain 5, contour 0",
    "window_s": [
     4.5,
     10.5
    ],
    "files": {
-    "real": "audio/results_vs100r_rates_take17_real.wav",
-    "model48": "audio/results_vs100r_rates_take17_model48.wav",
-    "model192": "audio/results_vs100r_rates_take17_model192.wav",
-    "residual_48": "audio/results_vs100r_rates_take17_residual_48.wav",
-    "residual_192": "audio/results_vs100r_rates_take17_residual_192.wav"
+    "real": "audio/results_vs100r_rates_s42_take17_real.wav",
+    "model48": "audio/results_vs100r_rates_s42_take17_model48.wav",
+    "model192": "audio/results_vs100r_rates_s42_take17_model192.wav",
+    "residual_48": "audio/results_vs100r_rates_s42_take17_residual_48.wav",
+    "residual_192": "audio/results_vs100r_rates_s42_take17_residual_192.wav"
    },
    "ref": "real",
    "esr": {
@@ -193,17 +199,20 @@
    }
   },
   {
-   "label": "Prise 30 : gain 10, contour 5",
+   "seed": 42,
+   "run48": "vs100r_gc_film_joint_s925_r2",
+   "run192": "vs100r192_film_s42",
+   "label": "Graine 42, prise 30 : gain 10, contour 5",
    "window_s": [
     4.5,
     10.5
    ],
    "files": {
-    "real": "audio/results_vs100r_rates_take30_real.wav",
-    "model48": "audio/results_vs100r_rates_take30_model48.wav",
-    "model192": "audio/results_vs100r_rates_take30_model192.wav",
-    "residual_48": "audio/results_vs100r_rates_take30_residual_48.wav",
-    "residual_192": "audio/results_vs100r_rates_take30_residual_192.wav"
+    "real": "audio/results_vs100r_rates_s42_take30_real.wav",
+    "model48": "audio/results_vs100r_rates_s42_take30_model48.wav",
+    "model192": "audio/results_vs100r_rates_s42_take30_model192.wav",
+    "residual_48": "audio/results_vs100r_rates_s42_take30_residual_48.wav",
+    "residual_192": "audio/results_vs100r_rates_s42_take30_residual_192.wav"
    },
    "ref": "real",
    "esr": {
@@ -237,6 +246,306 @@
    "residual_db": {
     "residual_48": -17.068969426882152,
     "residual_192": -18.948815710255047
+   }
+  },
+  {
+   "seed": 43,
+   "run48": "vs100r48_film_s43",
+   "run192": "vs100r192_film_s43",
+   "label": "Graine 43, prise 16 : gain 2.5, contour 7.5",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "files": {
+    "real": "audio/results_vs100r_rates_s43_take16_real.wav",
+    "model48": "audio/results_vs100r_rates_s43_take16_model48.wav",
+    "model192": "audio/results_vs100r_rates_s43_take16_model192.wav",
+    "residual_48": "audio/results_vs100r_rates_s43_take16_residual_48.wav",
+    "residual_192": "audio/results_vs100r_rates_s43_take16_residual_192.wav"
+   },
+   "ref": "real",
+   "esr": {
+    "model48": 0.30328669530961333,
+    "model192": 0.10737878320753826
+   },
+   "octaves": {
+    "model48": [
+     1.1,
+     2.5,
+     2.44,
+     4.61,
+     6.56,
+     9.28,
+     9.36,
+     7.76,
+     5.45
+    ],
+    "model192": [
+     0.98,
+     1.87,
+     1.71,
+     2.82,
+     3.4,
+     5.25,
+     5.25,
+     3.67,
+     1.87
+    ]
+   },
+   "residual_db": {
+    "residual_48": -5.181466497279183,
+    "residual_192": -9.690814553845112
+   }
+  },
+  {
+   "seed": 43,
+   "run48": "vs100r48_film_s43",
+   "run192": "vs100r192_film_s43",
+   "label": "Graine 43, prise 17 : gain 5, contour 0",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "files": {
+    "real": "audio/results_vs100r_rates_s43_take17_real.wav",
+    "model48": "audio/results_vs100r_rates_s43_take17_model48.wav",
+    "model192": "audio/results_vs100r_rates_s43_take17_model192.wav",
+    "residual_48": "audio/results_vs100r_rates_s43_take17_residual_48.wav",
+    "residual_192": "audio/results_vs100r_rates_s43_take17_residual_192.wav"
+   },
+   "ref": "real",
+   "esr": {
+    "model48": 0.003325501691161009,
+    "model192": 0.00412264344391208
+   },
+   "octaves": {
+    "model48": [
+     0.05,
+     0.11,
+     0.05,
+     0.02,
+     -0.09,
+     -0.13,
+     -0.3,
+     -0.11,
+     0.61
+    ],
+    "model192": [
+     0.34,
+     0.07,
+     -0.02,
+     -0.07,
+     -0.24,
+     -0.16,
+     -0.14,
+     0.6,
+     1.38
+    ]
+   },
+   "residual_db": {
+    "residual_48": -24.781427297743033,
+    "residual_192": -23.84823519786671
+   }
+  },
+  {
+   "seed": 43,
+   "run48": "vs100r48_film_s43",
+   "run192": "vs100r192_film_s43",
+   "label": "Graine 43, prise 30 : gain 10, contour 5",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "files": {
+    "real": "audio/results_vs100r_rates_s43_take30_real.wav",
+    "model48": "audio/results_vs100r_rates_s43_take30_model48.wav",
+    "model192": "audio/results_vs100r_rates_s43_take30_model192.wav",
+    "residual_48": "audio/results_vs100r_rates_s43_take30_residual_48.wav",
+    "residual_192": "audio/results_vs100r_rates_s43_take30_residual_192.wav"
+   },
+   "ref": "real",
+   "esr": {
+    "model48": 0.015271591083815888,
+    "model192": 0.014351958551120186
+   },
+   "octaves": {
+    "model48": [
+     -0.16,
+     -0.19,
+     0.01,
+     0.18,
+     0.34,
+     0.1,
+     0.02,
+     0.08,
+     0.38
+    ],
+    "model192": [
+     -0.07,
+     -0.08,
+     0.15,
+     0.06,
+     0.11,
+     -0.14,
+     -0.26,
+     -0.11,
+     0.32
+    ]
+   },
+   "residual_db": {
+    "residual_48": -18.161156905879146,
+    "residual_192": -18.430886809789524
+   }
+  },
+  {
+   "seed": 44,
+   "run48": "vs100r48_film_s44",
+   "run192": "vs100r192_film_s44",
+   "label": "Graine 44, prise 16 : gain 2.5, contour 7.5",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "files": {
+    "real": "audio/results_vs100r_rates_s44_take16_real.wav",
+    "model48": "audio/results_vs100r_rates_s44_take16_model48.wav",
+    "model192": "audio/results_vs100r_rates_s44_take16_model192.wav",
+    "residual_48": "audio/results_vs100r_rates_s44_take16_residual_48.wav",
+    "residual_192": "audio/results_vs100r_rates_s44_take16_residual_192.wav"
+   },
+   "ref": "real",
+   "esr": {
+    "model48": 0.13884423821131311,
+    "model192": 0.08660407822765111
+   },
+   "octaves": {
+    "model48": [
+     0.94,
+     1.99,
+     1.84,
+     2.98,
+     3.93,
+     6.16,
+     5.95,
+     4.75,
+     3.25
+    ],
+    "model192": [
+     -0.52,
+     1.39,
+     1.16,
+     3.17,
+     4.35,
+     5.18,
+     4.37,
+     2.23,
+     1.35
+    ]
+   },
+   "residual_db": {
+    "residual_48": -8.5747213745477,
+    "residual_192": -10.624616554940618
+   }
+  },
+  {
+   "seed": 44,
+   "run48": "vs100r48_film_s44",
+   "run192": "vs100r192_film_s44",
+   "label": "Graine 44, prise 17 : gain 5, contour 0",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "files": {
+    "real": "audio/results_vs100r_rates_s44_take17_real.wav",
+    "model48": "audio/results_vs100r_rates_s44_take17_model48.wav",
+    "model192": "audio/results_vs100r_rates_s44_take17_model192.wav",
+    "residual_48": "audio/results_vs100r_rates_s44_take17_residual_48.wav",
+    "residual_192": "audio/results_vs100r_rates_s44_take17_residual_192.wav"
+   },
+   "ref": "real",
+   "esr": {
+    "model48": 0.0024226199603217774,
+    "model192": 0.009562899699819138
+   },
+   "octaves": {
+    "model48": [
+     -0.06,
+     0.03,
+     -0.06,
+     -0.14,
+     -0.24,
+     -0.28,
+     -0.2,
+     0.2,
+     0.79
+    ],
+    "model192": [
+     -0.25,
+     0.14,
+     0.03,
+     -0.19,
+     -0.45,
+     -0.76,
+     -0.87,
+     -0.3,
+     3.88
+    ]
+   },
+   "residual_db": {
+    "residual_48": -26.157142227454365,
+    "residual_192": -20.19410502776092
+   }
+  },
+  {
+   "seed": 44,
+   "run48": "vs100r48_film_s44",
+   "run192": "vs100r192_film_s44",
+   "label": "Graine 44, prise 30 : gain 10, contour 5",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "files": {
+    "real": "audio/results_vs100r_rates_s44_take30_real.wav",
+    "model48": "audio/results_vs100r_rates_s44_take30_model48.wav",
+    "model192": "audio/results_vs100r_rates_s44_take30_model192.wav",
+    "residual_48": "audio/results_vs100r_rates_s44_take30_residual_48.wav",
+    "residual_192": "audio/results_vs100r_rates_s44_take30_residual_192.wav"
+   },
+   "ref": "real",
+   "esr": {
+    "model48": 0.019373337825111445,
+    "model192": 0.020394813751021396
+   },
+   "octaves": {
+    "model48": [
+     -0.45,
+     -0.36,
+     -0.12,
+     -0.11,
+     0.03,
+     -0.12,
+     -0.15,
+     0.02,
+     0.39
+    ],
+    "model192": [
+     -0.2,
+     -0.06,
+     0.08,
+     0.66,
+     0.34,
+     -0.38,
+     -0.97,
+     -1.18,
+     -0.77
+    ]
+   },
+   "residual_db": {
+    "residual_48": -17.127955503797796,
+    "residual_192": -16.904803371641602
    }
   }
  ],

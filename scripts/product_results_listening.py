@@ -28,6 +28,7 @@ import importlib.util
 import json
 import math
 import statistics
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -322,52 +323,72 @@ def ffuzz() -> list[dict]:
     return out
 
 
+RATE_PAIRS = [
+    (42, "vs100r_gc_film_joint_s925_r2", "vs100r192_film_s42"),
+    (43, "vs100r48_film_s43", "vs100r192_film_s43"),
+    (44, "vs100r48_film_s44", "vs100r192_film_s44"),
+]
+
+
 @torch.no_grad()
 def vs100r_rates() -> list[dict]:
-    """predictions_192k.md, seed 42 only: the model trained at 48 kHz against the one
-    trained at 192 kHz, whose output is decimated by resample_poly(., 1, 4), the
+    """predictions_192k.md, seeds 42, 43 and 44: the model trained at 48 kHz against the
+    one trained at 192 kHz, whose output is decimated by resample_poly(., 1, 4), the
     decimation that made the 48 kHz real reference. Same takes and window rule as
-    vs100r(). Listening only: one seed supports no ranking."""
-    model48 = ev.load("vs100r_gc_film_joint_s925_r2")
-    model192 = ev.load("vs100r192_film_s42")
+    vs100r(). Listening only; the readings are in eval_192k.json."""
     chosen = [t for t in ev.takes() if t["split"] == "test" and not t["low_signal"]]
     chosen.sort(key=lambda t: (t["gain_contour"][0], t["order"]))
+    picks = [chosen[0], chosen[len(chosen) // 2], chosen[-1]]
+    audio = {t["order"]: ev.audio(t) for t in picks}
     out = []
-    for take in [chosen[0], chosen[len(chosen) // 2], chosen[-1]]:
-        loop, fx = ev.audio(take)
-        controls = torch.tensor([v / 10 for v in take["gain_contour"]])
-        y48 = resample_poly(fx, 1, 4)
-        m48 = ev.run(model48, resample_poly(loop, 1, 4), controls)
-        m192 = resample_poly(ev.run(model192, loop, controls), 1, 4)
-        window = 6 * RATE
-        starts = range(RATE // 2, len(y48) - window - RATE // 10, RATE)
-        a = max(starts, key=lambda s: float((y48[s : s + window] ** 2).mean()))
-        cut = slice(a, a + window)
-        real, a48, b192 = y48[cut], m48[cut], m192[cut]
-        g, c = take["gain_contour"]
-        out.append(
-            {
-                "label": f"Prise {take['order']} : gain {g:g}, contour {c:g}",
-                "window_s": [a / RATE, (a + window) / RATE],
-                **write_group(
-                    f"vs100r_rates_take{take['order']}",
-                    {
-                        "real": real,
-                        "model48": a48,
-                        "model192": b192,
-                        "residual_48": real - a48,
-                        "residual_192": real - b192,
-                    },
-                ),
-            }
-        )
-        print("vs100r_rates", take["order"], out[-1]["esr"], flush=True)
+    for seed, run48, run192 in RATE_PAIRS:
+        model48, model192 = ev.load(run48), ev.load(run192)
+        for take in picks:
+            loop, fx = audio[take["order"]]
+            controls = torch.tensor([v / 10 for v in take["gain_contour"]])
+            y48 = resample_poly(fx, 1, 4)
+            m48 = ev.run(model48, resample_poly(loop, 1, 4), controls)
+            m192 = resample_poly(ev.run(model192, loop, controls), 1, 4)
+            window = 6 * RATE
+            starts = range(RATE // 2, len(y48) - window - RATE // 10, RATE)
+            a = max(starts, key=lambda s: float((y48[s : s + window] ** 2).mean()))
+            cut = slice(a, a + window)
+            real, a48, b192 = y48[cut], m48[cut], m192[cut]
+            g, c = take["gain_contour"]
+            out.append(
+                {
+                    "seed": seed,
+                    "run48": run48,
+                    "run192": run192,
+                    "label": f"Graine {seed}, prise {take['order']} : gain {g:g}, "
+                    f"contour {c:g}",
+                    "window_s": [a / RATE, (a + window) / RATE],
+                    **write_group(
+                        f"vs100r_rates_s{seed}_take{take['order']}",
+                        {
+                            "real": real,
+                            "model48": a48,
+                            "model192": b192,
+                            "residual_48": real - a48,
+                            "residual_192": real - b192,
+                        },
+                    ),
+                }
+            )
+            print("vs100r_rates", seed, take["order"], out[-1]["esr"], flush=True)
     return out
 
 
 def main() -> None:
     torch.set_num_threads(16)
     AUDIO.mkdir(parents=True, exist_ok=True)
+    path = ROOT / "demo/listening/results.json"
+    if "--only-rates" in sys.argv:
+        # Recompute the 48 against 192 kHz section only, keep the others as written.
+        result = json.loads(path.read_text())
+        result["vs100r_rates"] = vs100r_rates()
+        path.write_text(json.dumps(result, indent=1, ensure_ascii=False) + "\n")
+        return
     result = {
         "vs100r": vs100r(),
         "vs100r_rates": vs100r_rates(),
@@ -375,7 +396,6 @@ def main() -> None:
         "rate": rate_transfer(),
         "ffuzz": ffuzz(),
     }
-    path = ROOT / "demo/listening/results.json"
     path.write_text(json.dumps(result, indent=1, ensure_ascii=False) + "\n")
     print(statistics.median(r["esr"]["model"] for r in result["vs100r"]))
 

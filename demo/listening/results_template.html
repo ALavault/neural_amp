@@ -392,11 +392,11 @@ root.append(Device({
 root.append(Device({
   eyebrow: "predictions_192k.md · fréquence d'entraînement",
   title: "VS100R entraînée à 48 ou à 192 kHz",
-  intro: "Deux modèles identiques sauf la fréquence d'entraînement. Le premier a appris sur la capture décimée à 48 kHz. Le second a appris sur la capture à 192 kHz, avec la même initialisation en secondes, une perte à la même résolution en Hz et le même calendrier de taux d'apprentissage ; sa sortie est ensuite décimée à 48 kHz. Les deux sont joués contre le même réel décimé. Une seule graine pour l'instant (42) : cette écoute ne classe rien. Les graines 43 et 44 des deux bras sont en cours.",
-  meta: ["48 kHz : vs100r_gc_film_joint_s925_r2", "192 kHz : vs100r192_film_s42", "mêmes prises et fenêtres que plus haut"],
+  intro: "Deux modèles identiques sauf la fréquence d'entraînement. Le premier a appris sur la capture décimée à 48 kHz. Le second a appris sur la capture à 192 kHz, avec la même initialisation en secondes, une perte à la même résolution en Hz et le même calendrier de taux d'apprentissage ; sa sortie est ensuite décimée à 48 kHz. Les deux sont joués contre le même réel décimé. Trois graines par bras (42, 43, 44), mêmes prises et fenêtres pour chacune. L'écoute ne classe rien : les lectures pré-inscrites sont dans predictions_192k.md, le diagnostic des écarts dans DIAGNOSIS_vs100r_192k.md.",
+  meta: ["48 kHz : vs100r_gc_film_joint_s925_r2, vs100r48_film_s43, vs100r48_film_s44", "192 kHz : vs100r192_film_s42, vs100r192_film_s43, vs100r192_film_s44", "mêmes prises et fenêtres que plus haut"],
   strips: DATA.vs100r_rates.map(r => Strip({
     title: r.label,
-    knob: `${fmt(r.window_s[0], 1)}–${fmt(r.window_s[1], 1)} s`,
+    knob: `${r.run48} · ${r.run192} · ${fmt(r.window_s[0], 1)}–${fmt(r.window_s[1], 1)} s`,
     tracks: [
       { label: "Réel", src: r.files.real },
       { label: "Entraîné à 48 kHz", src: r.files.model48, tag: `ESR ${fmt(r.esr.model48)}` },
