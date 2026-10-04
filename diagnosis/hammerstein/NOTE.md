@@ -73,10 +73,14 @@ D₂/D₁ en dB (énergie, 200 Hz–8 kHz), médiane sur les canaux de chaque si
 
 ## Ce que cela suggère
 
-- **Supposé** : dépendre d'une annulation entre canaux rend cette propriété fragile, ce qui
-  expliquerait la variation de l'excès d'une graine et d'une prise à l'autre (D₂ de +2,6 à
-  +20 dB selon la prise, graine 42 à −20 dBFS). Mesure qui la départagerait : la même analyse sur
-  les graines 43 et 44, et la corrélation entre l'excès en sortie et le D₂ interne.
+- **Établi** : l'excès de D₂ dépend surtout de la prise, donc du réglage, et peu de la graine.
+  À −20 dBFS, il va de +5,1 à +26,2 dB selon la prise pour la graine 42, avec le même profil pour
+  les graines 43 et 44 : la prise 16 est la plus forte pour les trois (+26 à +30 dB), la prise 30
+  la plus faible (+0,3 à +5,6 dB).
+- **Supposé** : l'annulation par la dernière couche 1×1 est réglée pour les réglages fréquents
+  à l'entraînement et moins bien ailleurs. La prise 16, la plus en excès, est aussi la seule à un
+  couple gain–contour non vu. Mesure qui la départagerait : l'excès de D₂ en fonction du nombre
+  de prises d'entraînement au même couple, sur toutes les prises (y compris celles d'entraînement).
 - **Supposé** : une porte symétrique (impaire) n'aurait rien à annuler. Mesure qui la
   départagerait : un entraînement avec une porte impaire, sur le même protocole. C'est un
   changement de modèle, à préinscrire.
