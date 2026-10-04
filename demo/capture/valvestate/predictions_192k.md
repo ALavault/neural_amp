@@ -121,8 +121,9 @@ calendrier. Écouter la graine 42 seule ne permet aucun classement.
 
 ## Résultats (2026-10-04, `eval_192k.py`, `eval_192k.json`)
 
-Six runs, tous à 15 000 pas sans échec (file `demo/runs/vs100r_192k_queue.log`, porte au bit du
-chemin A48 franchie : 372 valeurs, 0 écart). Chaque B192 a rejoué les pas de division de son
+Six runs à 15 000 pas (`global_step` des six rapports du banc). La file
+(`demo/runs/vs100r_192k_queue.log`) a produit sans échec les cinq nouveaux, A48 graine 42 étant
+antérieur ; porte au bit du chemin A48 franchie : 372 valeurs, 0 écart. Chaque B192 a rejoué les pas de division de son
 jumeau (graine 42 : 7 830 et 10 701 ; 43 : 11 484 et 14 355 ; 44 : 6 438 et 14 181).
 
 | run | bras | s = moyenne des ln ESR (8 prises) | \|e\| au tiers d'octave de 16 kHz | moyenne de \|e\| sur 1–16 kHz |
@@ -146,8 +147,9 @@ proche du réel, d'un facteur 0,66 environ en moyenne géométrique.
   change de signe selon la graine sur les prises 2, 16 et 17. À la prise 16, le couple non vu, il
   vaut +1,16, −1,12 et −0,45.
 - Sinus à 997 Hz : part d'énergie hors grille harmonique de −38,7 à −41,8 dB pour A48 et de −46,0
-  à −47,8 dB pour B192. Les fenêtres 0,5–1,5 s et 0,9–1,9 s donnent les mêmes valeurs à 0,01 dB
-  près : le réseau est établi.
+  à −47,8 dB pour B192. Entre les fenêtres 0,5–1,5 s et 0,9–1,9 s, cet indicateur varie de
+  0,004 dB au plus : il est stable, ce qui ne démontre pas à lui seul l'établissement complet du
+  réseau.
 
 **À lire avec le diagnostic (`DIAGNOSIS_vs100r_192k.md`).** La lecture M1 est tenue telle qu'elle
 était écrite, sur l'ESR brute. Le diagnostic montre que cette ESR est très sensible à l'alignement

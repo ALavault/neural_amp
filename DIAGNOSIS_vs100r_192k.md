@@ -229,8 +229,14 @@ Première version des sections 4 à 6 (commit 5a8a223) corrigée :
 - **Sur les trois graines** : retards médians hors prise 16 de 0,85, 0,80 et 0,80 pour A48, et de
   0,15, 0,10 et 0,05 pour B192. Après compensation, A48 est meilleur sur 7, 6 et 7 prises sur 8.
   La lecture pré-inscrite M1 (« B192 plus proche » en ESR brute, d −0,422,
-  `predictions_192k.md`) est donc à lire comme un avantage d'alignement, pas de timbre. L'origine
-  du décalage d'environ 0,8 échantillon reste à établir hors oracle (test Zen Go, §6).
-- H3 ne se relit pas sur ces graines : leurs calendriers placent une division du taux dans la
-  fenêtre de mesure (graine 44 : pas 14 181), si bien que la baisse de la validation (A48 3,7 %,
-  B192 6,9 %) suit cette division plutôt que la convergence.
+  `predictions_192k.md`) est sensible à l'alignement ; ces mesures ne permettent pas de conclure à
+  un meilleur timbre. L'origine du décalage d'environ 0,8 échantillon reste à établir hors oracle
+  (test Zen Go, §6).
+- H3 sur ces graines : leurs calendriers placent une division du taux dans la fenêtre de mesure
+  (graine 43 : pas 14 355 ; graine 44 : pas 14 181). Le changement de taux empêche d'isoler une
+  tendance à taux constant ; ces baisses ne permettent pas d'attribuer un degré de convergence.
+  Convention du calcul (`measures.py`) : (moyenne 12 000–12 999 − moyenne ≥ 14 000) / moyenne
+  ≥ 14 000, soit A48 3,7 % et B192 6,9 % à la graine 44 (3,5 % et 6,4 % rapportés au niveau
+  initial). Descriptivement, le rapport des baisses B/A vaut 0,51 (graine 43) et 1,87 (graine 44),
+  sous le facteur 3 de la prédiction, et B192 est meilleur en ESR brute sur 8 et 6 prises sur 8 ;
+  H3 reste réfutée telle qu'écrite.
