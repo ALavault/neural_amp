@@ -335,7 +335,8 @@ def vs100r_rates() -> list[dict]:
     """predictions_192k.md, seeds 42, 43 and 44: the model trained at 48 kHz against the
     one trained at 192 kHz, whose output is decimated by resample_poly(., 1, 4), the
     decimation that made the 48 kHz real reference. Same takes and window rule as
-    vs100r(). Listening only; the readings are in eval_192k.json."""
+    vs100r(). Both models are level-matched to the real excerpt (RMS) and their
+    original offsets recorded. Listening only; the readings are in eval_192k.json."""
     chosen = [t for t in ev.takes() if t["split"] == "test" and not t["low_signal"]]
     chosen.sort(key=lambda t: (t["gain_contour"][0], t["order"]))
     picks = [chosen[0], chosen[len(chosen) // 2], chosen[-1]]
@@ -354,12 +355,22 @@ def vs100r_rates() -> list[dict]:
             a = max(starts, key=lambda s: float((y48[s : s + window] ** 2).mean()))
             cut = slice(a, a + window)
             real, a48, b192 = y48[cut], m48[cut], m192[cut]
+            # Level-matched to the real excerpt (RMS), so a louder model is not
+            # heard as a different one; the original offsets are kept for display.
+            rms = lambda v: float(np.sqrt(np.mean(v**2)))  # noqa: E731
+            offsets = {
+                "model48": 20 * math.log10(rms(a48) / rms(real)),
+                "model192": 20 * math.log10(rms(b192) / rms(real)),
+            }
+            a48 = a48 * rms(real) / rms(a48)
+            b192 = b192 * rms(real) / rms(b192)
             g, c = take["gain_contour"]
             out.append(
                 {
                     "seed": seed,
                     "run48": run48,
                     "run192": run192,
+                    "level_offset_db": offsets,
                     "label": f"Graine {seed}, prise {take['order']} : gain {g:g}, "
                     f"contour {c:g}",
                     "window_s": [a / RATE, (a + window) / RATE],

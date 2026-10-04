@@ -516,19 +516,19 @@ if (DATA.vs100r_gain25) root.append(Device({
 root.append(Device({
   eyebrow: "predictions_192k.md · fréquence d'entraînement",
   title: "VS100R entraînée à 48 ou à 192 kHz",
-  intro: "Deux modèles identiques sauf la fréquence d'entraînement. Le premier a appris sur la capture décimée à 48 kHz. Le second a appris sur la capture à 192 kHz, avec la même initialisation en secondes, une perte à la même résolution en Hz et le même calendrier de taux d'apprentissage ; sa sortie est ensuite décimée à 48 kHz. Les deux sont joués contre le même réel décimé. Trois graines par bras (42, 43, 44), mêmes prises et fenêtres pour chacune. L'écoute ne classe rien : les lectures pré-inscrites sont dans predictions_192k.md, le diagnostic des écarts dans DIAGNOSIS_vs100r_192k.md.",
+  intro: "Deux modèles identiques sauf la fréquence d'entraînement. Le premier a appris sur la capture décimée à 48 kHz. Le second a appris sur la capture à 192 kHz, avec la même initialisation en secondes, une perte à la même résolution en Hz et le même calendrier de taux d'apprentissage ; sa sortie est ensuite décimée à 48 kHz. Les deux sont joués contre le même réel décimé, chacun égalisé au niveau efficace du réel sur l'extrait (écart d'origine affiché, masqué en mode aveugle), pour qu'une différence de niveau ne se fasse pas passer pour une différence de son. Les résidus sont ceux des versions égalisées. Trois graines par bras (42, 43, 44), mêmes prises et fenêtres pour chacune. L'écoute ne classe rien : les lectures pré-inscrites sont dans predictions_192k.md, le diagnostic des écarts dans DIAGNOSIS_vs100r_192k.md.",
   meta: ["48 kHz : vs100r_gc_film_joint_s925_r2, vs100r48_film_s43, vs100r48_film_s44", "192 kHz : vs100r192_film_s42, vs100r192_film_s43, vs100r192_film_s44", "mêmes prises et fenêtres que plus haut"],
   strips: DATA.vs100r_rates.map(r => Strip({
     title: r.label,
     knob: `${r.run48} · ${r.run192} · ${fmt(r.window_s[0], 1)}–${fmt(r.window_s[1], 1)} s`,
     tracks: [
       { label: "Réel", src: r.files.real },
-      { label: "Entraîné à 48 kHz", src: r.files.model48, tag: `ESR ${fmt(r.esr.model48)}` },
-      { label: "Entraîné à 192 kHz", src: r.files.model192, tag: `ESR ${fmt(r.esr.model192)}` },
+      { label: "Entraîné à 48 kHz", src: r.files.model48, tag: `${dB(r.level_offset_db.model48)} d'origine` },
+      { label: "Entraîné à 192 kHz", src: r.files.model192, tag: `${dB(r.level_offset_db.model192)} d'origine` },
       { label: "Résidu 48 kHz", src: r.files.residual_48, residual: true, tag: dB(r.residual_db.residual_48) },
       { label: "Résidu 192 kHz", src: r.files.residual_192, residual: true, tag: dB(r.residual_db.residual_192) },
     ],
-    readout: [["ESR 48 kHz", fmt(r.esr.model48)], ["ESR 192 kHz", fmt(r.esr.model192)]],
+    readout: [["écart de niveau d'origine, 48 kHz", dB(r.level_offset_db.model48)], ["192 kHz", dB(r.level_offset_db.model192)], ["ESR après égalisation, 48 kHz", fmt(r.esr.model48)], ["192 kHz", fmt(r.esr.model192)]],
     chart: [{ label: "48 kHz", values: r.octaves.model48 }, { label: "192 kHz", values: r.octaves.model192 }],
   })),
 }));
