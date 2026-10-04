@@ -93,3 +93,17 @@ D₂/D₁ en dB (énergie, 200 Hz–8 kHz), médiane sur les canaux de chaque si
   file.
 - Aucune analyse par fréquence fine ni par réglage au-delà des médianes.
 - L'analyse interne ne porte que sur un modèle et une prise.
+
+## Excès de 2ᵉ harmonique : réglages fréquents ou gain ? (prédictions écrites avant la mesure, 2026-10-04)
+
+Mesure : `d2_vs_familiarity.py`, toutes les prises hors faible signal (entraînement comprises :
+les sinus glissants n'ont jamais servi à l'entraînement), 3 niveaux, les 3 modèles A48. Excès =
+niveau de D₂ du modèle moins celui de l'appareil, médiane sur 200 Hz–8 kHz.
+- **Familiarité** : l'annulation est réglée pour les couples fréquents. Prédiction : au gain 5,
+  l'excès médian du couple (5 ; 5), 15 prises d'entraînement, est inférieur d'au moins 5 dB à
+  celui des couples (5 ; x) à 1 prise.
+- **Gain** : l'excès suit surtout le gain, car l'appareil distord peu à gain faible et le plancher
+  de 2ᵉ harmonique du modèle y ressort. Prédiction : à gain fixé, pas d'écart de plus de 3 dB entre
+  (5 ; 5) et les (5 ; x) ; et une corrélation de Spearman entre gain et excès inférieure à −0,5.
+- Les deux peuvent tenir à la fois ; si aucune ne tient, l'excès dépend d'autre chose (contour,
+  prise).
