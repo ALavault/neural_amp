@@ -107,3 +107,14 @@ niveau de D₂ du modèle moins celui de l'appareil, médiane sur 200 Hz–8 kHz
   (5 ; 5) et les (5 ; x) ; et une corrélation de Spearman entre gain et excès inférieure à −0,5.
 - Les deux peuvent tenir à la fois ; si aucune ne tient, l'excès dépend d'autre chose (contour,
   prise).
+
+## Antisymétrisation à l'inférence (candidat 1 ; prédictions écrites avant la mesure, 2026-10-04)
+
+Mesure : `antisym.py`. Pour les 6 modèles existants (A48 et B192, graines 42 à 44), sur les 8
+prises de test (région notée, 48 kHz) : ESR de f(x) et de y_impair = (f(x) − f(−x))/2. Contrôle :
+D₂ de y_impair sur le sinus glissant de −10 dBFS de la prise 17, qui doit être au plancher.
+- Si la partie paire du modèle n'est qu'un artefact, l'ESR baisse pour la plupart des prises et des
+  modèles. Lecture : « l'antisymétrisation aide » si la médiane sur modèles de la variation de
+  la moyenne des ln ESR est ≤ −0,05 et que 5 modèles sur 6 baissent.
+- Si la partie paire porte aussi une partie utile (asymétrie réelle de l'ampli, composante
+  continue), l'ESR monte ou ne bouge pas.
