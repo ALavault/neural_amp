@@ -118,3 +118,24 @@ D₂ de y_impair sur le sinus glissant de −10 dBFS de la prise 17, qui doit ê
   la moyenne des ln ESR est ≤ −0,05 et que 5 modèles sur 6 baissent.
 - Si la partie paire porte aussi une partie utile (asymétrie réelle de l'ampli, composante
   continue), l'ESR monte ou ne bouge pas.
+
+### Résultats familiarité contre gain (`d2_vs_familiarity.json`)
+
+Excès médian de D₂ (modèle − appareil, dB), 3 modèles A48, toutes les prises hors faible signal.
+
+| niveau | gain 2,5 | gain 5 | gain 7,5 | gain 10 | (5 ; 5), 15 prises | autres (5 ; x), 1 prise | Spearman gain–excès |
+|---|---|---|---|---|---|---|---|
+| −20 dBFS | 16,2 | 9,8 | 12,2 | 2,8 | 8,9 | 11,4 | −0,43 |
+| −10 dBFS | 23,7 | 2,1 | 6,1 | 5,5 | 1,6 | 2,5 | −0,29 |
+| −3 dBFS | 24,3 | 4,9 | 4,5 | 4,1 | 4,9 | 3,9 | −0,15 |
+
+- **Familiarité : non soutenue** (écart (5 ; 5) contre (5 ; x) de 2,5, 0,9 et −1,0 dB, sous les
+  5 dB prédits, et de signe opposé à −3 dBFS).
+- **Gain : en partie.** Pas d'écart de plus de 3 dB à gain fixé (tenu), mais le Spearman n'atteint
+  pas −0,5 (non tenu) : la relation n'est pas monotone, l'excès se concentre au gain 2,5.
+- **Lecture (établie sur ces niveaux)** : D₂/D₁ de l'appareil vaut −58 à −68 dB au gain 2,5,
+  contre −34 à −55 dB aux autres gains ; celui des modèles reste vers −30 à −40 dB partout. Les
+  modèles ont un plancher de 2ᵉ harmonique qui ne suit pas l'appareil quand il devient plus
+  symétrique, à gain faible.
+- L'hypothèse « annulation réglée pour les réglages fréquents » est donc écartée ; la prise 16
+  ressortait parce qu'elle est à gain 2,5, pas parce que son couple n'était pas vu.
