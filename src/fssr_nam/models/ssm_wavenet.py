@@ -70,6 +70,25 @@ def foh_late(dt: Tensor, z: Tensor) -> Tensor:
     return torch.where(fast, dt / quick**2, dt * torch.exp(slow) * phi2(-slow))
 
 
+def fft_size(n: int, kind: str) -> int:
+    """FFT length for a linear convolution of n samples: the next power of 2 ("pow2",
+    the trained runs' bits), or the next 2-3-5-smooth number ("fast": 288000 instead of
+    524288 for n = 287999, which cuFFT handles with mixed radices)."""
+    if n < 1 or kind not in ("pow2", "fast"):
+        raise ValueError(f"fft_size({n}, {kind!r})")
+    if kind == "pow2":
+        return 1 << (n - 1).bit_length()
+    m = n
+    while True:
+        rest = m
+        for p in (2, 3, 5):
+            while rest % p == 0:
+                rest //= p
+        if rest == 1:
+            return m
+        m += 1
+
+
 class DiagonalSSMLayer(nn.Module):
     """One diagonal SSM: complex state, real I/O, FFT convolution in training.
 
@@ -83,6 +102,12 @@ class DiagonalSSMLayer(nn.Module):
     rescale with dt; FOH has none (demo/sr_transfer/FIX_foh.md). Same parameters and
     initialisation as "zoh".
     """
+
+    # "pow2" keeps the trained runs' bits; "fast" is a smaller FFT for the same linear
+    # convolution (scripts/product_nablafx_bench.py --fft-size). A class attribute, like
+    # GatedSSMBlock.checkpoint_kernels: it applies to every layer of the process, built
+    # before or after it is set, and is not saved in checkpoints.
+    fft_size = "pow2"
 
     def __init__(
         self,
@@ -198,9 +223,7 @@ class DiagonalSSMLayer(nn.Module):
             kernel = self._kernel(length).unsqueeze(0)
         else:
             kernel = self._shifted_kernel(length, shift)
-        fft_length = 1
-        while fft_length < length + length - 1:
-            fft_length *= 2
+        fft_length = fft_size(length + length - 1, self.fft_size)
         x_f = torch.fft.rfft(x, n=fft_length, dim=-1)
         k_f = torch.fft.rfft(kernel, n=fft_length, dim=-1)
         y = torch.fft.irfft(x_f * k_f, n=fft_length, dim=-1)[..., :length]

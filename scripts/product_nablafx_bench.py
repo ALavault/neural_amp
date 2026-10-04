@@ -58,7 +58,7 @@ from nablafx.evaluation.flexible_loss import FlexibleLoss  # noqa: E402
 from nablafx.evaluation.registry import EvaluationRegistry  # noqa: E402
 from nablafx.processors import S4  # noqa: E402
 
-from fssr_nam.models.ssm_wavenet import SSMWaveNet  # noqa: E402
+from fssr_nam.models.ssm_wavenet import DiagonalSSMLayer, SSMWaveNet  # noqa: E402
 from fssr_nam.product.data import advance  # noqa: E402
 
 DATA = ROOT / "datasets/raw/external/tone_twist_bigmuff/extracted"
@@ -452,6 +452,19 @@ def parse_args() -> argparse.Namespace:
         " detector altogether (pilot C)",
     )
     parser.add_argument(
+        "--fft-size",
+        choices=["pow2", "fast"],
+        default="pow2",
+        help="SSM convolution FFT length: next power of 2 (the trained runs' bits) or"
+        " next 2-3-5-smooth length (288000 instead of 524288 for 144000 samples)",
+    )
+    parser.add_argument(
+        "--no-tf32",
+        action="store_true",
+        help="full float32 matmuls and cuDNN convolutions (TF32 off); with TF32 the"
+        " SSM gradients are ~20 %% off float64 (demo/fft_size/NOTE.md)",
+    )
+    parser.add_argument(
         "--lr-halving-steps",
         type=int,
         nargs="+",
@@ -733,7 +746,9 @@ def main() -> None:
         os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
         torch.nn.functional.pad = _reflect_pad_by_slicing
     pl.seed_everything(args.seed, workers=True)
-    torch.set_float32_matmul_precision("high")
+    torch.set_float32_matmul_precision("highest" if args.no_tf32 else "high")
+    if args.no_tf32:
+        torch.backends.cudnn.allow_tf32 = False
     torch.use_deterministic_algorithms(
         args.deterministic, warn_only=not args.deterministic
     )
@@ -748,6 +763,7 @@ def main() -> None:
         args.mrstft_weight if args.mrstft_weight is not None else mrstft_weight
     )
 
+    DiagonalSSMLayer.fft_size = args.fft_size
     processor = build_processor(args)
     rate = device_rate(args.device)
     mrstft_params = at_rate(processor, rate)
@@ -898,6 +914,8 @@ def main() -> None:
         "plateau_threshold": args.plateau_threshold,
         "lr_halvings": args.lr_halvings,
         "lr_halving_steps": args.lr_halving_steps,
+        "fft_size": args.fft_size,
+        "no_tf32": args.no_tf32,
         "sample_rate": rate,
         "no_early_stopping": args.no_early_stopping,
         "split_seed": args.split_seed,
