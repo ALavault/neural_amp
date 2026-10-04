@@ -145,6 +145,21 @@ def write_group(name: str, tracks: dict[str, np.ndarray], ref: str = "real") -> 
     }
 
 
+def rms(x: np.ndarray) -> float:
+    return float(np.sqrt(np.mean(x**2)))
+
+
+def level_match(tracks: dict[str, np.ndarray], keys: list[str], ref: str) -> dict:
+    """Scale each of `keys` in place to the RMS of tracks[ref], so a louder model is
+    not heard as a different one; return the original offsets (dB) for display.
+    Residuals are to be built from the matched tracks afterwards."""
+    offsets = {}
+    for k in keys:
+        offsets[k] = 20 * math.log10(rms(tracks[k]) / rms(tracks[ref]))
+        tracks[k] = tracks[k] * rms(tracks[ref]) / rms(tracks[k])
+    return offsets
+
+
 def excerpt(x: np.ndarray) -> np.ndarray:
     return x[RATE // 2 : RATE * 9 // 2]
 
@@ -164,16 +179,17 @@ def vs100r() -> list[dict]:
         window = 6 * RATE
         starts = range(RATE // 2, len(y48) - window - RATE // 10, RATE)
         a = max(starts, key=lambda s: float((y48[s : s + window] ** 2).mean()))
-        real, mod = y48[a : a + window], m48[a : a + window]
+        tracks = {"real": y48[a : a + window], "model": m48[a : a + window]}
+        offsets = level_match(tracks, ["model"], "real")
+        tracks["residual"] = tracks["real"] - tracks["model"]
         g, c = take["gain_contour"]
         name = f"vs100r_take{take['order']}"
         out.append(
             {
                 "label": f"Prise {take['order']} : gain {g:g}, contour {c:g}",
                 "window_s": [a / RATE, (a + window) / RATE],
-                **write_group(
-                    name, {"real": real, "model": mod, "residual": real - mod}
-                ),
+                "level_offset_db": offsets,
+                **write_group(name, tracks),
             }
         )
         print(name, out[-1]["esr"], flush=True)
@@ -198,9 +214,14 @@ def marshall() -> list[dict]:
     for rule, setting in picks:
         i = loudest(dataset, setting)
         x, y, c = dataset[i]
-        real = excerpt(y[0].double().numpy())
-        ya = excerpt(render(arm_a, x, c))
-        yd = excerpt(render(arm_d, x, c))
+        tracks = {
+            "real": excerpt(y[0].double().numpy()),
+            "film": excerpt(render(arm_a, x, c)),
+            "poles": excerpt(render(arm_d, x, c)),
+        }
+        offsets = level_match(tracks, ["film", "poles"], "real")
+        for k in ("film", "poles"):
+            tracks[f"residual_{k}"] = tracks["real"] - tracks[k]
         b, m, t, g = (int(setting[k + 1 : k + 4]) / 10 for k in (0, 5, 10, 15))
         out.append(
             {
@@ -208,16 +229,8 @@ def marshall() -> list[dict]:
                 "rule": rule,
                 "setting": setting,
                 "recorded_esr": {"film": esr_a[setting], "poles": esr_d[setting]},
-                **write_group(
-                    f"marshall_{setting}",
-                    {
-                        "real": real,
-                        "film": ya,
-                        "poles": yd,
-                        "residual_film": real - ya,
-                        "residual_poles": real - yd,
-                    },
-                ),
+                "level_offset_db": offsets,
+                **write_group(f"marshall_{setting}", tracks),
             }
         )
         print(setting, out[-1]["esr"], flush=True)
@@ -232,8 +245,8 @@ def rate_transfer() -> dict:
     data = bench.data_module("test")
     data.setup("test")
     dataset = data.test_dataset
-    rms = [float(dataset[i][1].pow(2).mean()) for i in range(len(dataset))]
-    picks = sorted(range(len(dataset)), key=lambda i: -rms[i])[:2]
+    power = [float(dataset[i][1].pow(2).mean()) for i in range(len(dataset))]
+    picks = sorted(range(len(dataset)), key=lambda i: -power[i])[:2]
     x48 = torch.stack([dataset[i][0] for i in picks])
     kappa = json.loads((ROOT / "demo/sr_transfer/kappa.json").read_text())["bigmuff"]
     out = {"segments": picks, "models": {}}
@@ -254,24 +267,31 @@ def rate_transfer() -> dict:
         back = floor.hq(y192, 192_000, RATE)
         rows = []
         for k, i in enumerate(picks):
-            ref = excerpt(y48[k, 0].double().numpy())
-            moved = excerpt(back[k, 0].double().numpy())
             tracks = {
                 "real": excerpt(dataset[i][1][0].double().numpy()),
-                "model48": ref,
-                "model192": moved,
+                "model48": excerpt(y48[k, 0].double().numpy()),
+                "model192": excerpt(back[k, 0].double().numpy()),
                 "control": excerpt(control[k, 0].double().numpy()),
-                "residual": ref - moved,
             }
-            row = {"segment": i}
+            # The 192 kHz model and the control are matched to the raw 48 kHz output
+            # (their offsets are the transfer's level error), then all three share the
+            # gain that matches the 48 kHz model to the real.
+            raw192 = rms(tracks["model192"])
+            offsets = level_match(tracks, ["model192", "control"], "model48")
+            gain = rms(tracks["real"]) / rms(tracks["model48"])
+            offsets["model48"] = -20 * math.log10(gain)
+            for key in ("model48", "model192", "control"):
+                tracks[key] = tracks[key] * gain
+            ref = tracks["model48"]
+            tracks["residual"] = ref - tracks["model192"]
+            row = {"segment": i, "level_offset_db": offsets}
             if kind == "zoh":
                 delay = kappa[run_id]["192000"]["delay_median"]
                 full = back[k, 0].double().numpy()
                 spectrum = np.fft.rfft(full)
                 phase = np.exp(2j * np.pi * np.fft.rfftfreq(len(full)) * delay)
-                tracks["residual_compensated"] = ref - excerpt(
-                    np.fft.irfft(spectrum * phase, len(full))
-                )
+                shifted = excerpt(np.fft.irfft(spectrum * phase, len(full)))
+                tracks["residual_compensated"] = ref - shifted * rms(ref) / raw192
                 row["delay_samples"] = delay
             rows.append(
                 {**row, **write_group(f"rate_{kind}_seg{i}", tracks, "model48")}
@@ -295,11 +315,18 @@ def ffuzz() -> list[dict]:
     for setting in ("F000_V100", "F070_V100", "F100_V100"):
         i = loudest(dataset, setting)
         x, y, c = dataset[i]
-        real = excerpt(y[0].double().numpy())
-        yb = excerpt(render(before, x, c))
         # The after model learnt the target 4 samples early; delay it back.
         ya_full = render(after, x, c)
-        ya = excerpt(np.concatenate([np.zeros(FFUZZ_ADVANCE), ya_full])[: len(ya_full)])
+        tracks = {
+            "real": excerpt(y[0].double().numpy()),
+            "before": excerpt(render(before, x, c)),
+            "after": excerpt(
+                np.concatenate([np.zeros(FFUZZ_ADVANCE), ya_full])[: len(ya_full)]
+            ),
+        }
+        offsets = level_match(tracks, ["before", "after"], "real")
+        for k in ("before", "after"):
+            tracks[f"residual_{k}"] = tracks["real"] - tracks[k]
         fuzz = int(setting[1:4]) / 10
         out.append(
             {
@@ -307,16 +334,8 @@ def ffuzz() -> list[dict]:
                 + (" (réglage non vu)" if setting == "F070_V100" else ""),
                 "setting": setting,
                 "recorded_esr": {"before": esr_b[setting], "after": esr_a[setting]},
-                **write_group(
-                    f"ffuzz_{setting}",
-                    {
-                        "real": real,
-                        "before": yb,
-                        "after": ya,
-                        "residual_before": real - yb,
-                        "residual_after": real - ya,
-                    },
-                ),
+                "level_offset_db": offsets,
+                **write_group(f"ffuzz_{setting}", tracks),
             }
         )
         print(setting, out[-1]["esr"], flush=True)
@@ -354,16 +373,10 @@ def vs100r_rates() -> list[dict]:
             starts = range(RATE // 2, len(y48) - window - RATE // 10, RATE)
             a = max(starts, key=lambda s: float((y48[s : s + window] ** 2).mean()))
             cut = slice(a, a + window)
-            real, a48, b192 = y48[cut], m48[cut], m192[cut]
-            # Level-matched to the real excerpt (RMS), so a louder model is not
-            # heard as a different one; the original offsets are kept for display.
-            rms = lambda v: float(np.sqrt(np.mean(v**2)))  # noqa: E731
-            offsets = {
-                "model48": 20 * math.log10(rms(a48) / rms(real)),
-                "model192": 20 * math.log10(rms(b192) / rms(real)),
-            }
-            a48 = a48 * rms(real) / rms(a48)
-            b192 = b192 * rms(real) / rms(b192)
+            tracks = {"real": y48[cut], "model48": m48[cut], "model192": m192[cut]}
+            offsets = level_match(tracks, ["model48", "model192"], "real")
+            tracks["residual_48"] = tracks["real"] - tracks["model48"]
+            tracks["residual_192"] = tracks["real"] - tracks["model192"]
             g, c = take["gain_contour"]
             out.append(
                 {
@@ -374,16 +387,7 @@ def vs100r_rates() -> list[dict]:
                     "label": f"Graine {seed}, prise {take['order']} : gain {g:g}, "
                     f"contour {c:g}",
                     "window_s": [a / RATE, (a + window) / RATE],
-                    **write_group(
-                        f"vs100r_rates_s{seed}_take{take['order']}",
-                        {
-                            "real": real,
-                            "model48": a48,
-                            "model192": b192,
-                            "residual_48": real - a48,
-                            "residual_192": real - b192,
-                        },
-                    ),
+                    **write_group(f"vs100r_rates_s{seed}_take{take['order']}", tracks),
                 }
             )
             print("vs100r_rates", seed, take["order"], out[-1]["esr"], flush=True)
@@ -412,18 +416,26 @@ def vs100r_gain25() -> list[dict]:
         starts = range(RATE // 2, len(y48) - window - RATE // 10, RATE)
         a = max(starts, key=lambda s: float((y48[s : s + window] ** 2).mean()))
         cut = slice(a, a + window)
+        # One gain for both, matching the model to the real: the odd track stays the
+        # exact odd part of the played model, and its level differs by < 0.01 dB.
+        real, scale = y48[cut], rms(y48[cut]) / rms(plus[cut])
+        offsets = {
+            k: 20 * math.log10(rms(v[cut]) / rms(real))
+            for k, v in (("model", plus), ("odd", odd))
+        }
         g, c = take["gain_contour"]
         out.append(
             {
                 "label": f"Prise {take['order']} : gain {g:g}, contour {c:g}",
                 "window_s": [a / RATE, (a + window) / RATE],
+                "level_offset_db": offsets,
                 **write_group(
                     f"vs100r_g25_take{take['order']}",
                     {
-                        "real": y48[cut],
-                        "model": plus[cut],
-                        "odd": odd[cut],
-                        "residual_even": plus[cut] - odd[cut],
+                        "real": real,
+                        "model": plus[cut] * scale,
+                        "odd": odd[cut] * scale,
+                        "residual_even": (plus[cut] - odd[cut]) * scale,
                     },
                 ),
             }
@@ -450,6 +462,7 @@ def main() -> None:
     result = {
         "vs100r": vs100r(),
         "vs100r_rates": vs100r_rates(),
+        "vs100r_gain25": vs100r_gain25(),
         "marshall": marshall(),
         "rate": rate_transfer(),
         "ffuzz": ffuzz(),
