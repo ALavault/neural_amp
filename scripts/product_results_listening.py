@@ -379,10 +379,57 @@ def vs100r_rates() -> list[dict]:
     return out
 
 
+@torch.no_grad()
+def vs100r_gain25() -> list[dict]:
+    """Blind ABX at gain 2.5 (diagnosis/hammerstein/NOTE.md): the 48 kHz model as is
+    against its odd part (f(x) - f(-x)) / 2, which has no even harmonics, with the real
+    amp as reference. Every non-low-signal take at gain 2.5, di_test (audio never
+    trained on), 6 s window of highest real RMS as in vs100r()."""
+    model = ev.load("vs100r_gc_film_joint_s925_r2")
+    takes = [
+        t for t in ev.takes() if t["gain_contour"][0] == 2.5 and not t["low_signal"]
+    ]
+    out = []
+    for take in sorted(takes, key=lambda t: t["order"]):
+        loop, fx = ev.audio(take)
+        controls = torch.tensor([v / 10 for v in take["gain_contour"]])
+        y48 = resample_poly(fx, 1, 4)
+        x48 = resample_poly(loop, 1, 4)
+        plus, minus = ev.run(model, x48, controls), ev.run(model, -x48, controls)
+        odd = (plus - minus) / 2
+        window = 6 * RATE
+        starts = range(RATE // 2, len(y48) - window - RATE // 10, RATE)
+        a = max(starts, key=lambda s: float((y48[s : s + window] ** 2).mean()))
+        cut = slice(a, a + window)
+        g, c = take["gain_contour"]
+        out.append(
+            {
+                "label": f"Prise {take['order']} : gain {g:g}, contour {c:g}",
+                "window_s": [a / RATE, (a + window) / RATE],
+                **write_group(
+                    f"vs100r_g25_take{take['order']}",
+                    {
+                        "real": y48[cut],
+                        "model": plus[cut],
+                        "odd": odd[cut],
+                        "residual_even": plus[cut] - odd[cut],
+                    },
+                ),
+            }
+        )
+        print("vs100r_gain25", take["order"], out[-1]["esr"], flush=True)
+    return out
+
+
 def main() -> None:
     torch.set_num_threads(16)
     AUDIO.mkdir(parents=True, exist_ok=True)
     path = ROOT / "demo/listening/results.json"
+    if "--only-gain25" in sys.argv:
+        result = json.loads(path.read_text())
+        result["vs100r_gain25"] = vs100r_gain25()
+        path.write_text(json.dumps(result, indent=1, ensure_ascii=False) + "\n")
+        return
     if "--only-rates" in sys.argv:
         # Recompute the 48 against 192 kHz section only, keep the others as written.
         result = json.loads(path.read_text())

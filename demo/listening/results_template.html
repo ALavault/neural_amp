@@ -99,6 +99,12 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--brass); out
 .seek { flex: 1 1 12rem; min-width: 0; accent-color: var(--brass); }
 .time { font: 0.8rem/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 5.5rem; }
 .blind { display: inline-flex; gap: 0.4rem; align-items: center; font-size: 0.85rem; color: var(--muted); cursor: pointer; }
+.abx-row { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+.abx-score { font: 0.85rem/1.5 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.abx-score b { color: var(--ink); }
+.abx-answer { font: 600 0.88rem/1.2 var(--body); background: var(--brass-soft); color: var(--ink); border: 1px solid var(--brass); border-radius: 3px; padding: 0.5rem 0.75rem; cursor: pointer; }
+.abx-answer:disabled { opacity: 0.45; cursor: default; }
+.abx-feedback { font-size: 0.85rem; color: var(--muted); min-height: 1.3em; }
 .reveal {
   font: 600 0.8rem/1 var(--body); background: none; border: 1px solid var(--line); border-radius: 3px;
   color: var(--ink); padding: 0.4rem 0.6rem; cursor: pointer;
@@ -357,6 +363,108 @@ function Strip({ title, rule, knob, tracks, readout, note, chart }) {
   return node;
 }
 
+// Blind ABX between two tracks (A, B shuffled per strip; X drawn per trial), with a
+// labelled reference. Nothing tells A from B before "Révéler".
+function binomTail(k, n) {
+  let p = 0;
+  for (let i = k; i <= n; i++) {
+    let c = 1;
+    for (let j = 0; j < i; j++) c = c * (n - j) / (j + 1);
+    p += c / 2 ** n;
+  }
+  return p;
+}
+
+function ABX({ title, knob, reference, one, two, extra }) {
+  const id = ++stripId;
+  const pick = (seed => () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; })(
+    Math.floor(Math.random() * 2147483646) + 1);
+  const pair = pick() < 0.5 ? [one, two] : [two, one];
+  const srcs = { R: reference.src, A: pair[0].src, B: pair[1].src, E: extra ? extra.src : null };
+  let xIs = pick() < 0.5 ? "A" : "B";
+  const audios = {};
+  for (const [k, v] of Object.entries(srcs)) if (v) { const a = new Audio(); a.preload = "none"; a.loop = true; a.src = v; audios[k] = a; }
+  let current = "R", playing = false, position = 0, token = 0;
+  let trials = 0, correct = 0, prefA = 0, prefB = 0, answered = false, revealed = false;
+  const srcOf = k => (k === "X" ? audios[xIs] : audios[k]);
+  const pauseAll = () => Object.values(audios).forEach(a => a.pause());
+  function start(k) {
+    const mine = ++token, a = srcOf(k);
+    const go = () => { if (mine !== token || !playing) return; try { a.currentTime = position; } catch (e) {} a.play().catch(() => { if (mine === token) setPlaying(false); }); };
+    a.preload = "auto";
+    if (a.readyState >= 1) go(); else { a.addEventListener("loadedmetadata", go, { once: true }); a.load(); }
+  }
+  function select(k) {
+    const from = srcOf(current);
+    if (from.readyState >= 1) position = from.currentTime || position;
+    token++; pauseAll(); current = k;
+    if (playing) start(k);
+    buttons.forEach((b, kk) => b.setAttribute("aria-pressed", String(kk === k)));
+  }
+  const play = el("button", { class: "play", type: "button", "aria-label": "Lire" });
+  play.innerHTML = ICON_PLAY;
+  function setPlaying(on) { playing = on; play.innerHTML = on ? ICON_PAUSE : ICON_PLAY; play.setAttribute("aria-label", on ? "Pause" : "Lire"); }
+  play.addEventListener("click", () => {
+    if (playing) { api.stop(); return; }
+    strips.forEach(s => s !== api && s.stop());
+    setPlaying(true); start(current);
+  });
+  Object.values(audios).forEach(a => a.addEventListener("timeupdate", () => { if (a === srcOf(current)) position = a.currentTime; }));
+  const buttons = new Map();
+  const trackRow = el("div", { class: "tracks", role: "group", "aria-label": "Pistes" });
+  for (const [k, label] of [["R", "Réel (référence)"], ["A", "A"], ["B", "B"], ["X", "X"]]) {
+    const b = el("button", { class: "track", type: "button", "aria-pressed": String(k === "R") }, el("span", { class: "label", text: label }));
+    b.addEventListener("click", () => select(k));
+    trackRow.append(b); buttons.set(k, b);
+  }
+  const extraBtn = extra ? el("button", { class: "track residual", type: "button", "aria-pressed": "false" }, el("span", { class: "label", text: extra.label })) : null;
+  if (extraBtn) { extraBtn.hidden = true; extraBtn.addEventListener("click", () => select("E")); trackRow.append(extraBtn); buttons.set("E", extraBtn); }
+  const score = el("p", { class: "abx-score" });
+  const feedback = el("p", { class: "abx-feedback" });
+  const ansA = el("button", { class: "abx-answer", type: "button", text: "X = A" });
+  const ansB = el("button", { class: "abx-answer", type: "button", text: "X = B" });
+  const next = el("button", { class: "reveal", type: "button", text: "Nouvel essai" });
+  const prefRow = el("div", { class: "abx-row" }, el("span", { class: "rule", text: "Le plus proche du réel :" }));
+  const pA = el("button", { class: "reveal", type: "button", text: "A" }), pB = el("button", { class: "reveal", type: "button", text: "B" });
+  prefRow.append(pA, pB);
+  const reveal = el("button", { class: "reveal", type: "button", text: "Révéler" });
+  const revealText = el("p", { class: "note" }); revealText.hidden = true;
+  function render() {
+    const p = trials ? binomTail(correct, trials) : 1;
+    score.innerHTML = `Essais <b>${trials}</b> · justes <b>${correct}</b> · probabilité au hasard <b>${trials ? p.toLocaleString("fr-FR", { maximumSignificantDigits: 2 }) : "—"}</b> · préférence A <b>${prefA}</b>, B <b>${prefB}</b>`;
+    ansA.disabled = ansB.disabled = answered || revealed;
+  }
+  function answer(k) {
+    trials++; if (k === xIs) correct++; answered = true;
+    feedback.textContent = k === xIs ? "Juste." : "Faux.";
+    render();
+  }
+  ansA.addEventListener("click", () => answer("A"));
+  ansB.addEventListener("click", () => answer("B"));
+  next.addEventListener("click", () => {
+    xIs = pick() < 0.5 ? "A" : "B"; answered = false; feedback.textContent = "Nouvel essai : X a été retiré au sort.";
+    if (current === "X") select("R");
+    render();
+  });
+  pA.addEventListener("click", () => { prefA++; render(); });
+  pB.addEventListener("click", () => { prefB++; render(); });
+  reveal.addEventListener("click", () => {
+    revealed = true; reveal.hidden = true;
+    revealText.textContent = `A = ${pair[0].label} · B = ${pair[1].label}. ${pair[0].tag ? pair[0].label + " : " + pair[0].tag + " ; " : ""}${pair[1].tag ? pair[1].label + " : " + pair[1].tag : ""}`;
+    revealText.hidden = false; if (extraBtn) extraBtn.hidden = false; render();
+  });
+  render();
+  const node = el("article", { class: "strip" },
+    el("div", { class: "strip-head" }, el("span", { class: "strip-title", text: title }), knob ? el("span", { class: "knob", text: knob }) : null),
+    trackRow,
+    el("div", { class: "transport" }, play),
+    el("div", { class: "abx-row" }, ansA, ansB, next, reveal),
+    feedback, prefRow, score, revealText);
+  const api = { node, stop() { token++; pauseAll(); setPlaying(false); } };
+  strips.push(api);
+  return node;
+}
+
 function Device({ eyebrow, title, intro, meta, strips: items }) {
   const metaBox = el("div", { class: "meta" });
   meta.forEach(m => metaBox.append(el("span", { text: m })));
@@ -385,6 +493,22 @@ root.append(Device({
     ],
     readout: [["ESR de l'extrait", fmt(r.esr.model)], ["résidu", dB(r.residual_db.residual)]],
     chart: [{ label: "Modèle", values: r.octaves.model }],
+  })),
+}));
+
+// Gain 2.5: blind ABX, model as is against its odd part
+if (DATA.vs100r_gain25) root.append(Device({
+  eyebrow: "diagnosis/hammerstein · harmoniques paires",
+  title: "VS100R au gain 2,5 : écoute ABX",
+  intro: "Au gain 2,5, l'ampli est presque parfaitement symétrique (2ᵉ harmonique 59 à 68 dB sous le fondamental), alors que le modèle en produit vers −30 à −40 dB. A et B sont le modèle tel quel et sa partie impaire (f(x) − f(−x))/2, qui n'a aucune harmonique paire, tirés au sort par tranche. Écoute A, B et X, puis réponds : X a été retiré au sort entre A et B. Refais plusieurs essais (Nouvel essai) avant de juger : sur 10 essais, 8 justes ou plus arrivent au hasard dans environ 5 % des cas, 9 ou plus dans 1 %. La partie paire retirée est à −30 à −34 dB sous le réel.",
+  meta: ["modèle : vs100r_gc_film_joint_s925_r2", "toutes les prises au gain 2,5 hors faible signal", "fenêtre de 6 s au plus fort niveau du réel, audio jamais entendu à l'entraînement"],
+  strips: DATA.vs100r_gain25.map(r => ABX({
+    title: r.label,
+    knob: `${fmt(r.window_s[0], 1)}–${fmt(r.window_s[1], 1)} s`,
+    reference: { src: r.files.real },
+    one: { label: "modèle tel quel", src: r.files.model, tag: `ESR ${fmt(r.esr.model)}` },
+    two: { label: "partie impaire", src: r.files.odd, tag: `ESR ${fmt(r.esr.odd)}` },
+    extra: { label: "Partie paire retirée", src: r.files.residual_even },
   })),
 }));
 

@@ -1079,5 +1079,232 @@
     "residual_after": -31.01579250355409
    }
   }
+ ],
+ "vs100r_gain25": [
+  {
+   "label": "Prise 5 : gain 2.5, contour 5",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "files": {
+    "real": "audio/results_vs100r_g25_take5_real.wav",
+    "model": "audio/results_vs100r_g25_take5_model.wav",
+    "odd": "audio/results_vs100r_g25_take5_odd.wav",
+    "residual_even": "audio/results_vs100r_g25_take5_residual_even.wav"
+   },
+   "ref": "real",
+   "esr": {
+    "model": 0.009321826135562636,
+    "odd": 0.008511907221359692
+   },
+   "octaves": {
+    "model": [
+     -0.73,
+     -0.44,
+     -0.52,
+     -1.05,
+     -0.96,
+     -1.13,
+     -0.92,
+     -1.02,
+     -0.63
+    ],
+    "odd": [
+     -0.99,
+     -0.46,
+     -0.51,
+     -1.02,
+     -0.96,
+     -1.16,
+     -0.98,
+     -1.03,
+     -0.63
+    ]
+   },
+   "residual_db": {
+    "residual_even": -33.09900705156887
+   }
+  },
+  {
+   "label": "Prise 16 : gain 2.5, contour 7.5",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "files": {
+    "real": "audio/results_vs100r_g25_take16_real.wav",
+    "model": "audio/results_vs100r_g25_take16_model.wav",
+    "odd": "audio/results_vs100r_g25_take16_odd.wav",
+    "residual_even": "audio/results_vs100r_g25_take16_residual_even.wav"
+   },
+   "ref": "real",
+   "esr": {
+    "model": 0.0944640456145833,
+    "odd": 0.0938251515569644
+   },
+   "octaves": {
+    "model": [
+     0.66,
+     1.63,
+     1.57,
+     2.24,
+     2.76,
+     4.59,
+     4.47,
+     3.22,
+     2.4
+    ],
+    "odd": [
+     0.41,
+     1.61,
+     1.58,
+     2.29,
+     2.75,
+     4.56,
+     4.39,
+     3.21,
+     2.4
+    ]
+   },
+   "residual_db": {
+    "residual_even": -30.316729175052636
+   }
+  },
+  {
+   "label": "Prise 26 : gain 2.5, contour 5",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "files": {
+    "real": "audio/results_vs100r_g25_take26_real.wav",
+    "model": "audio/results_vs100r_g25_take26_model.wav",
+    "odd": "audio/results_vs100r_g25_take26_odd.wav",
+    "residual_even": "audio/results_vs100r_g25_take26_residual_even.wav"
+   },
+   "ref": "real",
+   "esr": {
+    "model": 0.0814106262880223,
+    "odd": 0.08136109177451806
+   },
+   "octaves": {
+    "model": [
+     0.13,
+     1.12,
+     1.23,
+     1.97,
+     2.58,
+     3.74,
+     3.6,
+     2.74,
+     2.4
+    ],
+    "odd": [
+     -0.13,
+     1.1,
+     1.23,
+     1.99,
+     2.58,
+     3.7,
+     3.54,
+     2.73,
+     2.4
+    ]
+   },
+   "residual_db": {
+    "residual_even": -31.42812057044548
+   }
+  },
+  {
+   "label": "Prise 32 : gain 2.5, contour 2.5",
+   "window_s": [
+    15.5,
+    21.5
+   ],
+   "files": {
+    "real": "audio/results_vs100r_g25_take32_real.wav",
+    "model": "audio/results_vs100r_g25_take32_model.wav",
+    "odd": "audio/results_vs100r_g25_take32_odd.wav",
+    "residual_even": "audio/results_vs100r_g25_take32_residual_even.wav"
+   },
+   "ref": "real",
+   "esr": {
+    "model": 0.00674555468552212,
+    "odd": 0.0059906460604318215
+   },
+   "octaves": {
+    "model": [
+     -0.9,
+     -0.22,
+     -0.1,
+     -0.39,
+     -0.37,
+     -0.22,
+     0.12,
+     0.24,
+     0.05
+    ],
+    "odd": [
+     -1.01,
+     -0.24,
+     -0.09,
+     -0.36,
+     -0.34,
+     -0.23,
+     0.09,
+     0.2,
+     0.04
+    ]
+   },
+   "residual_db": {
+    "residual_even": -33.833416347751694
+   }
+  },
+  {
+   "label": "Prise 36 : gain 2.5, contour 5",
+   "window_s": [
+    4.5,
+    10.5
+   ],
+   "files": {
+    "real": "audio/results_vs100r_g25_take36_real.wav",
+    "model": "audio/results_vs100r_g25_take36_model.wav",
+    "odd": "audio/results_vs100r_g25_take36_odd.wav",
+    "residual_even": "audio/results_vs100r_g25_take36_residual_even.wav"
+   },
+   "ref": "real",
+   "esr": {
+    "model": 0.012665103085867453,
+    "odd": 0.012607475433252566
+   },
+   "octaves": {
+    "model": [
+     -1.43,
+     -0.67,
+     -0.56,
+     -1.04,
+     -0.71,
+     -0.84,
+     -0.48,
+     -0.55,
+     -0.24
+    ],
+    "odd": [
+     -1.69,
+     -0.68,
+     -0.55,
+     -1.02,
+     -0.7,
+     -0.87,
+     -0.54,
+     -0.56,
+     -0.24
+    ]
+   },
+   "residual_db": {
+    "residual_even": -33.24344622728585
+   }
+  }
  ]
 }
