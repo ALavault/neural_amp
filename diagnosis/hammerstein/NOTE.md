@@ -183,3 +183,31 @@ Contrôle : les valeurs A48 et B192 doivent être reproduites à l'identique.
   médian de D₂ de C est inférieur d'au moins 3 dB à celui de A48 aux trois niveaux.
 - Entre les deux, ou C plus haut de plus de 3 dB : non tranché, ou autre cause.
 - Descriptif : écart absolu de D₁, D₃, D₅ de C face à A48.
+
+### Résultats du bras C (`vs100r_hammerstein.json`, `arm_summary.py`)
+
+Contrôle tenu : A48, B192 et l'appareil sont reproduits au bit près (écart maximal 0 dB sur
+144 entrées ; répétabilité identique).
+
+| niveau | bras | D₁ | D₂ | D₃ | D₄ | D₅ | D₂ signé |
+|---|---|---|---|---|---|---|---|
+| −20 dBFS | A48 | 0,21 | 12,5 | 0,28 | 12,8 | 0,36 | +12,3 |
+| −20 dBFS | C | 0,24 | 13,8 | 0,29 | 12,4 | 0,29 | +13,8 |
+| −10 dBFS | A48 | 0,25 | 4,6 | 0,34 | 5,1 | 0,44 | +5,0 |
+| −10 dBFS | C | 0,22 | 3,8 | 0,36 | 4,5 | 0,42 | +3,0 |
+| −3 dBFS | A48 | 0,27 | 5,0 | 0,41 | 4,7 | 0,52 | +4,7 |
+| −3 dBFS | C | 0,35 | 5,6 | 0,48 | 5,4 | 0,74 | +5,1 |
+
+- **Structure : soutenue (établi).** L'écart signé de D₂ de C diffère de celui de A48 de +1,4,
+  −1,9 et +0,4 dB (−20, −10, −3 dBFS, calculé avant arrondi), sous les 3 dB. La prise 16 reste la plus en excès à
+  −20 dBFS pour les trois graines de C (+29,4, +27,3, +23,8 dB ; suivante +19,1 à +22,0).
+- **Annulation imprécise par le gradient TF32 : prédiction non tenue (établi).** C n'est
+  inférieur de 3 dB à aucun niveau, et il est plus haut à −20 dBFS.
+- **Descriptif** : les harmoniques impaires de C sont au niveau de A48 (0,2 à 0,5 dB ; D₅ à
+  −3 dBFS 0,74 contre 0,52 dB). Le profil par prise à −20 dBFS est le même que pour A48 et B192
+  (prise 16 la plus haute, prise 30 la plus basse, −0,6 à +2,1 dB).
+- **Conséquence (supposé au-delà de la mesure)** : changer ensemble la longueur de FFT et le
+  TF32 ne réduit pas l'excès de D₂ des 3 dB prédits ; un effet plus petit de la précision n'est
+  pas exclu (−1,9 dB à −10 dBFS), et C ne sépare pas FFT et TF32. L'explication par la porte
+  `tanh·sigmoid` et son plancher de 2ᵉ harmonique reste soutenue, sans être établie
+  causalement ; une porte impaire (à préinscrire) reste la mesure qui départagerait.
