@@ -336,6 +336,34 @@ def record_sampler(datamodule, epochs: list[int]) -> RecordingSampler:
     return holder
 
 
+def keep_segments_per_take(datamodule, count: int | None) -> None:
+    """After nablafx's split (drawn inside fit), keep in the training subset only the
+    segments at `count` evenly spaced positions of their file, the same positions in
+    every file. No random draw: the split, hence validation, is the full run's. None
+    leaves the datamodule untouched."""
+    if count is None:
+        return
+    setup = datamodule.setup
+
+    def wrapped(stage=None):
+        setup(stage)
+        if getattr(datamodule, "train_dataset", None) is None:
+            return
+        samples = datamodule.trainval_dataset.samples
+        length = datamodule.sample_length
+
+        def kept(index: int) -> bool:
+            sample = samples[index]
+            total = sample["frames"] // length
+            positions = {k * total // count for k in range(count)}
+            return sample["offset"] // length in positions
+
+        subset = datamodule.train_dataset
+        subset.indices = [i for i in subset.indices if kept(i)]
+
+    datamodule.setup = wrapped
+
+
 class FixedSchedule(pl.Callback):
     """Halve the learning rate at fixed epochs, in place of the plateau detector."""
 
@@ -546,6 +574,14 @@ def parse_args() -> argparse.Namespace:
         default=0,
         help="F-Fuzz only: read every target this many samples earlier, compensating"
         " the latency of its renders (DIAGNOSIS_ffuzz.md, FIX_ffuzz.md)",
+    )
+    parser.add_argument(
+        "--train-segments-per-take",
+        type=int,
+        default=None,
+        help="train on this many evenly spaced segments of each file, at the same"
+        " positions in every file, after the split (validation unchanged;"
+        " demo/train_length/predictions.md)",
     )
     parser.add_argument(
         "--log-sampler-epochs",
@@ -847,6 +883,7 @@ def main() -> None:
         pl.seed_everything(args.split_seed, workers=True)
     resume_from = str(last) if args.resume and last.exists() else None
     trainval = data_module("trainval", args.batch_size, args.device)
+    keep_segments_per_take(trainval, args.train_segments_per_take)
     sampler = (
         None
         if args.log_sampler_epochs is None
@@ -920,6 +957,8 @@ def main() -> None:
         "no_early_stopping": args.no_early_stopping,
         "split_seed": args.split_seed,
         "val_indices": val_indices,
+        "train_segments_per_take": args.train_segments_per_take,
+        "train_segments": len(trainval.train_dataset),
         # Training order at the requested epochs, as indices of the trainval dataset.
         "sampler_order": (
             None
