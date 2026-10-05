@@ -89,8 +89,8 @@ D₂/D₁ en dB (énergie, 200 Hz–8 kHz), médiane sur les canaux de chaque si
 
 ## Non fait
 
-- Le bras C (FFT de 288 000 points sans TF32) n'existait pas encore : à ajouter à la fin de sa
-  file.
+- Le bras C (FFT de 288 000 points sans TF32) n'existait pas encore : ajouté le 2026-10-05,
+  section en fin de note.
 - Aucune analyse par fréquence fine ni par réglage au-delà des médianes.
 - L'analyse interne ne porte que sur un modèle et une prise.
 
@@ -163,3 +163,23 @@ Appareil, même sinus : −34,5 dB.
   d'empreinte. Le contrôle montre que l'antisymétrisation fait bien ce qu'elle doit (D₂ au
   plancher), au prix d'une inférence doublée ; elle retire aussi la petite partie paire réelle
   de l'appareil (−34,5 dB sur ce sinus).
+
+## Bras C : précision numérique et excès d'harmoniques paires (prédictions écrites avant la mesure, 2026-10-05)
+
+Bras C : `vs100r48fast_film_s42`, `_s43`, `_s44` (`demo/fft_size/predictions_fast_notf32.md`).
+Même architecture, mêmes données, même initialisation et même ordre des lots que A48 à graine
+égale, même calendrier de taux d'apprentissage ; seules changent la longueur de FFT et l'absence
+de TF32, dont le gradient est bien plus proche du float64 (0,47 % contre 21 %,
+`demo/fft_size/NOTE.md`). Mesure : `vs100r_hammerstein.py` relancé avec les trois bras, résumé
+par `arm_summary.py` (agrégation du tableau ci-dessus, vérifiée sur A48 et B192 avant la mesure).
+Contrôle : les valeurs A48 et B192 doivent être reproduites à l'identique.
+
+- **Structure** : l'excès vient de la porte `tanh·sigmoid` elle-même et de la façon dont
+  l'apprentissage s'en accommode, pas de la précision du gradient. Prédiction : l'écart signé
+  médian de D₂ de C est à moins de 3 dB de celui de A48 aux trois niveaux (+12,3, +5,0, +4,7 dB),
+  et la prise 16 reste la plus en excès à −20 dBFS pour chacune des trois graines de C.
+- **Annulation imprécise** : la dernière couche 1×1 annule mal les harmoniques paires parce que
+  le gradient en TF32 est trop bruité pour régler une annulation fine. Prédiction : l'écart signé
+  médian de D₂ de C est inférieur d'au moins 3 dB à celui de A48 aux trois niveaux.
+- Entre les deux, ou C plus haut de plus de 3 dB : non tranché, ou autre cause.
+- Descriptif : écart absolu de D₁, D₃, D₅ de C face à A48.
