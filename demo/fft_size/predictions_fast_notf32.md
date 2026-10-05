@@ -71,3 +71,36 @@ changent pas.
   par facteur pour les séparer.
 - Avec 3 paires, seuls des effets nets ressortent ; l'appariement réduit le bruit sans
   l'annuler (la précision numérique fait diverger les trajectoires au fil de l'entraînement).
+
+## Résultats (2026-10-05, après les six runs)
+
+File terminée le 2026-10-05 à 04:21 (porte au bit passée, trois runs C en exit 0, 15 000 pas
+chacun, inscrits dans `demo/RUNS.jsonl`). Évaluation : `eval_fast.py` au commit 1e4b455,
+sortie `eval_fast.json`.
+
+**M1 : non tranché.** d = −0,008 ; d₄₂ = +0,065, d₄₃ = −0,171, d₄₄ = +0,082. La moyenne est dans
+la zone « équivalent » (|d| ≤ 0,05), mais d₄₃ dépasse la borne de 0,15 par graine ; les signes
+sont mélangés, donc ni « meilleur » ni « moins bon ».
+
+| graine | s(A) | s(C) | d_i | pic A (Gio) | pic C (Gio) | min A | min C |
+|---|---|---|---|---|---|---|---|
+| 42 | −3,580 | −3,515 | +0,065 | 20,36 | 15,81 | 291 | 255 |
+| 43 | −3,506 | −3,677 | −0,171 | 20,36 | 15,81 | 300 | 238 |
+| 44 | −3,559 | −3,477 | +0,082 | 20,36 | 15,81 | 340 | 333 |
+
+**M2 (descriptif).** |e| à 16 kHz, moyenne C − moyenne A : −0,02 dB (A 0,34 à 0,64 dB ; C 0,45 à
+0,55 dB).
+
+**Temps et mémoire (descriptif).** Pic réservé −4,55 Gio sur chaque paire. Durée −12 %, −21 %,
+−2 % (GPU partagé : durées bruitées).
+
+**Règle d'adoption : remplie.** M1 n'est pas « C moins bon » et le pic de C est inférieur de
+4,55 Gio (seuil 2 Gio) : `--fft-size fast --no-tf32` devient le réglage des nouveaux prototypes.
+Les runs existants et le chemin par défaut du code (porte au bit) ne changent pas.
+
+**Lecture hors préinscription (post hoc, descriptive).** Les écarts par graine viennent
+presque entièrement de la prise 16 (gain 2,5, contour 7,5, le seul couple absent de
+l'entraînement), où ln ESR(C) − ln ESR(A) vaut +0,76, −1,70 et +0,61 selon la graine. Sans
+cette prise, d_i = −0,035, +0,048, +0,007. Cela rejoint DIAGNOSIS_vs100r_192k.md : sur ce
+couple, l'erreur varie fortement d'un run à l'autre, quel que soit le bras. Cette lecture ne
+change pas le verdict M1.
