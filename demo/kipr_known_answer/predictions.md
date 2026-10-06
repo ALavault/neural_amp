@@ -133,3 +133,32 @@ d'alignement.
 - Puis les mêmes lectures que la première passe : instrument, validité niveau par niveau
   (témoin : H2 et H3 ; cible symétrique : H3), plancher si E ≥ +15 dB, aucun si E ≤ +5 dB.
 - Sortie : `known_answer_r2.json`.
+
+## Résultats de la reprise r2 (2026-10-06, six runs, exit 0)
+
+Lecture `known_answer.py measure --tag r2`, sortie `known_answer_r2.json`. Instrument conforme.
+
+**Verdict préinscrit : aucune lecture (alignement).** Quatre runs sur six passent la porte
+(décalage 0 ou 1 échantillon, ESR de `test_noise` 0,15 à 0,30) : l'avance de 196 a corrigé le
+retard. Deux échouent : `kipr_sym_s43_r2` (décalage trouvé 10, ESR 3,6) et `kipr_asym_s42_r2`
+(5, ESR 3,7).
+
+**Cause des deux échecs (établi, après la lecture)** : leur sortie est de polarité inversée. La
+corrélation avec la cible à décalage 0 vaut −0,81 et −0,87 ; une fois la sortie négativée, l'ESR
+tombe à 0,37 et 0,25. La MR-STFT ne voit pas le signe, et l'entraîneur de ce banc n'a pas la garde
+de polarité du banc VS100R. La recherche du décalage maximise la corrélation signée, d'où des
+décalages fictifs.
+
+**Descriptif, sans interprétation** : les rapports d'harmoniques ne dépendent pas du signe.
+L'excès de H2/H1 vaut, en médiane des graines :
+- cible symétrique : +9,5, +29,1 et +41,8 dB à −24, −12 et −6 dBFS ;
+- témoin : +3,0, +5,7 et +9,6 dB.
+
+Même avec l'alignement corrigé, la validité échouerait : le témoin dépasse +5 dB à −12 et
+−6 dBFS, et l'écart de H3 de la cible symétrique vaut −3,2 dB à −6 dBFS (seuil 3). La lecture
+« plancher » de r2 ne pourrait donc pas être faite non plus.
+
+**Conséquence pour les bras `odd` et `grey`** (non encore entraînés) : leur préinscription ajoute,
+avant tout entraînement, une normalisation de polarité à la mesure. Le signe de la sortie est
+celui de sa corrélation avec la cible sur les segments `train_noise`, puis viennent la porte
+d'alignement et les lectures.

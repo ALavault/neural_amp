@@ -68,3 +68,13 @@ paramètres) ; exp(d) est le champ `esr_ratio`.
   d'architecture.
 - Rien à l'écoute.
 - Avec 3 graines, seuls des effets nets ressortent.
+
+## Amendement avant tout entraînement (2026-10-06, après la lecture de r2)
+
+La reprise r2 est sans lecture : deux runs sur six sont de polarité inversée
+(`demo/kipr_known_answer/predictions.md`, résultats r2). Pour les runs KIPR de cette piste, la
+mesure (`known_answer.py measure`) prend pour la sortie le signe de sa corrélation avec la cible
+sur les segments `train_noise`, jamais sur `test_noise`. Ensuite seulement viennent la porte
+d'alignement et les lectures, inchangées. L'entraînement ne change pas. r2 n'ayant pas de lecture
+valide, la comparaison KIPR à r2 sera descriptive (règle déjà écrite). Les lectures VS100R ne
+changent pas : le banc VS100R a sa garde de polarité.

@@ -71,6 +71,12 @@ def model_args() -> dict:
     return {**MODEL, **MODEL_TAGS.get(TAG, {})}
 
 
+# Rounds whose measured output takes the polarity of its correlation with the target
+# on the train_noise segments (the trainer has no polarity guard and the MR-STFT is
+# sign-blind; two r2 runs came out inverted). Harmonic ratios do not depend on it.
+POLARITY_NORMALIZED = {"odd", "grey"}
+
+
 def run_name(name: str, seed: int) -> str:
     return f"kipr_{name}_s{seed}" + (f"_{TAG}" if TAG else "")
 
@@ -334,7 +340,18 @@ def measure() -> None:
                 print(f"{run_id}: absent")
                 continue
             out = run_model(run_id, x)
-            entry = {"config": config, "seed": seed, "tones": {}, "test_esr": {}}
+            train = [seg[f"train_noise_{lv}"][1:] for lv in (-36, -24, -12, -6)]
+            inner = sum(float(np.dot(out[a:b], y[a:b])) for a, b in train)
+            sign = -1.0 if inner < 0 and TAG in POLARITY_NORMALIZED else 1.0
+            out = sign * out
+            entry = {
+                "config": config,
+                "seed": seed,
+                "tones": {},
+                "test_esr": {},
+                "train_inner_sign": 1 if inner >= 0 else -1,
+                "polarity_applied": sign,
+            }
             for key, t in target.items():
                 f0, level = (int(v) for v in key.split("_"))
                 m = ratios(out, seg, f0, level)
