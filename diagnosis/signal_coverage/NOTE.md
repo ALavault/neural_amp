@@ -62,8 +62,8 @@ Ces hypothèses ne s'excluent pas. Lecture : chacune « soutenue », « contrair
 | O3, désaccord des graines | intermédiaire | ρ = 0,52 (A48), 0,27 (C) |
 
 - **O1 (établi) : sens opposé à H_niveau.** L'erreur est la plus forte aux niveaux d'entrée les
-  plus fréquents en entraînement : −35 à −25 dBFS (ESR 0,030 à 0,038, contre 47 % des trames
-  d'entraînement). Elle est plus faible aux niveaux rares : 0,014 à 0,036 sous −40 dBFS, 0,008 à
+  plus fréquents en entraînement : −35 à −25 dBFS (ESR 0,030 à 0,038, contre 43,9 % de toutes les
+  trames d'entraînement ; 47,9 % avant correction du dénominateur, relecture Codex). Elle est plus faible aux niveaux rares : 0,014 à 0,036 sous −40 dBFS, 0,008 à
   0,010 de −20 à −10 dBFS. Les six modèles ont le même profil (ρ de +0,37 à +0,59).
 - **O2 (établi) : sens opposé à H_mémoire.** À niveau courant moyen, l'erreur est environ quatre
   fois plus faible dans les 50–200 ms qui suivent une trame forte (ESR ≈ 0,010) que plus d'une
@@ -107,16 +107,24 @@ Le bruit est `fx_noise_fullband_dbfs` et la part cohérente `coherent_share`
 
 ### Résultat du test du bruit (`noise_share.json`)
 
-- **H_bruit : contraire (établi).** Dans les classes où l'ESR dépasse 0,02, le plancher de bruit en
-  explique 1,3 % en médiane (0,7 et 1,8 % selon le modèle). Même aux cibles les plus faibles
-  (−65 à −55 dBFS), il n'en explique que 4 à 17 %.
+- **H_bruit : contraire (établi pour cette estimation, approximative).** Dans les classes où l'ESR
+  dépasse 0,02, le plancher estimé vaut 1,3 % de l'ESR en médiane (0,7 et 1,8 % selon le modèle),
+  et 4 à 17 % aux cibles les plus faibles (−65 à −55 dBFS). L'estimation mêle deux bandes : bruit
+  pleine bande mesuré à 192 kHz, part cohérente calculée entre 100 Hz et 10 kHz (relecture Codex).
+  Le bruit au-dessus de 24 kHz, retiré par la décimation, la gonfle plutôt. Et la part non cohérente
+  n'est « imprévisible » que linéairement depuis le bouclage. L'écart au seuil (×40) laisse le sens
+  du verdict hors de doute, pas sa valeur.
 - **L'erreur relative monte fortement quand la cible faiblit (établi).** ESR par classe de niveau
   de cible, modèle A48 graine 42 : 0,015 à −20 dBFS, 0,041 à −25, 0,11 à −40, 0,78 à −60,
   2,2 à −65 dBFS. Le bras C (graine 42) est environ deux fois moins bon que A48 sur les trames
   faibles : 0,34 contre 0,14 à −50 dBFS, 5,0 contre 2,2 à −65. Il est équivalent au-dessus de
   −30 dBFS.
-- **O2 n'est pas un effet de niveau de cible (établi)** : les trames moyennes à 50–200 ms d'un fort
-  et celles à plus d'une seconde ont la même puissance moyenne de cible (écart 0,1 dB).
+- **O2 et le niveau de cible** : les trames moyennes à 50–200 ms d'un fort et celles à plus d'une
+  seconde ont la même puissance moyenne de cible (écart 0,1 dB, établi). Mais leurs distributions
+  diffèrent : 7,1 % des trames proches ont une cible sous −30 dBFS, contre 1,1 % des lointaines
+  (relecture Codex). L'égalité des moyennes n'exclut donc pas un effet de niveau. Supposé : comme les
+  cibles faibles ont l'erreur relative la plus forte, cet écart de distribution irait plutôt contre
+  le sens observé (trames proches meilleures).
 
 **À tester** (nés de cette mesure) :
 - l'erreur propre du modèle à sortie faible : énergie de sa sortie sur la section `silence` de la
@@ -153,16 +161,19 @@ Bruit de l'appareil, même section : −67 dBFS (médiane des prises).
 
 - **Q1 : intermédiaire (établi).** Rapports C / A48 de 2,5, 0,8 et 3,6 selon la graine : C est nettement
   moins bon à faible niveau pour deux graines sur trois, meilleur pour la graine 43.
-- **Q2 : intermédiaire (établi)**, médiane 0,27. Le partage est net entre bras : le décalage continu
-  explique 2 à 18 % de l'erreur faible de A48, mais 36 à 68 % de celle de C. Sur une entrée presque
-  nulle, les trois modèles C sortent 12 à 16 dB au-dessus du bruit de l'appareil. Pour A48, seule la
-  graine 42 le dépasse (de 7 dB).
-- **Supposé** : le bras C (FFT de 288 000 sans TF32, adopté pour les nouveaux prototypes) apprend un
-  décalage continu de sortie que A48 n'apprend pas ou peu. Ni la lecture P, dominée par les trames
+- **Q2 : intermédiaire (établi)**, médiane 0,27. L'indicateur Q2 compare N × b² (b, l'écart moyen
+  sur toute la prise) à l'erreur des trames faibles. Il vaut 0,02 à 0,18 pour A48 et 0,36 à 0,68
+  pour C. Ce n'est pas la part d'erreur qu'enlèverait la soustraction de b : celle-ci retire
+  2b·Σe − N b², qui ne coïncide que si l'erreur moyenne des trames faibles vaut b (relecture Codex).
+  Établi : sur une entrée presque nulle, les trois modèles C sortent 12 à 16 dB au-dessus du bruit de
+  l'appareil ; pour A48, seule la graine 42 le dépasse (de 7 dB). La nature de cette sortie au repos
+  (composante continue ou autre) n'est pas mesurée.
+- **Supposé** : le bras C (FFT de 288 000 sans TF32, adopté pour les nouveaux prototypes) apprend une
+  sortie au repos (probablement un décalage continu) que A48 n'apprend pas ou peu. Ni la lecture P, dominée par les trames
   fortes, ni l'oreille (une composante continue ne s'entend pas) ne le voient. Le cas de graine 42 A48
   montre que A48 n'en est pas exempt ; trois graines par bras ne permettent pas d'attribuer l'écart au
   réglage plutôt qu'au hasard.
-- **Lien avec la piste impaire** : le modèle impair n'a aucun biais et ne peut donc pas avoir de
+- **Lien avec la piste impaire** : le modèle impair n'a aucun biais et ne peut donc pas sortir de
   décalage continu à entrée nulle. Sa comparaison au bras C, préinscrite et inchangée, inclura cet
   avantage ; la lecture des trames faibles sera à faire en descriptif quand ses runs existeront.
 - **À tester** : retirer la moyenne de sortie (ou un passe-haut très bas) des modèles existants et
@@ -191,13 +202,16 @@ couple non vu exclu, 35 prises).
 - **D1 : contraire (établi).** Sans composante continue, C reste moins bon que A48 à faible niveau pour
   les graines 42 et 44 (rapports 2,1 et 1,8). L'écart se réduit mais ne disparaît pas : le décalage
   continu n'est qu'une partie de l'histoire.
-- **D2 : contraire (établi).** Le passe-haut améliore la lecture P de C de 0,05 en moyenne (de 0,025 à
-  0,076 selon la graine). Celle de A48 bouge de 0,006 au plus. L'écart P entre C et A48 passe de
-  +0,012 à −0,039 : sans son décalage continu, C serait légèrement meilleur que A48 sur P. La lecture P
-  n'est donc pas insensible au décalage, contrairement à ce que je supposais.
+- **D2 : contraire (établi pour la lecture filtrée).** Le passe-haut, appliqué à la sortie et à la
+  cible, améliore la lecture P de C de 0,05 en moyenne (de 0,025 à 0,076 selon la graine). Celle de
+  A48 bouge de 0,006 au plus. L'écart P entre C et A48 passe de +0,012 à −0,039. Ce passe-haut retire
+  aussi des basses fréquences non nulles : ni la soustraction d'un décalage constant ni un filtrage
+  de la seule sortie contre la cible d'origine n'ont été mesurés (relecture Codex). On ne peut donc
+  pas dire que C serait meilleur « sans son décalage continu », seulement qu'il l'est sur cette
+  lecture filtrée.
 - **Conséquences (supposé)** :
   - un passe-haut de sortie très bas (ou une sortie sans biais) est un correctif candidat simple
     pour le réglage des nouveaux prototypes, à préinscrire ;
-  - le modèle impair n'a pas de composante continue par construction ; sa comparaison au bras C en
-    tiendra compte (descriptif).
+  - le modèle impair n'a pas de composante continue à entrée nulle. Avec une asymétrie apprise
+    (β ≠ 0), il peut en produire une sur de l'audio : à mesurer sur ses runs, en descriptif.
   - Ce qui reste de l'écart à faible niveau (graines 42 et 44) n'est pas expliqué ici.

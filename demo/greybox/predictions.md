@@ -93,3 +93,13 @@ Lecture `known_answer.py measure --tag grey`, sortie `known_answer_grey.json`.
   mêmes : la préinscription ne l'avait pas prévu ; les « trois graines » sont un seul run. La cible
   symétrique n'est pas suivie (décalage 6 à 7, ESR 1,7 à 1,8), la cible asymétrique l'est (décalage
   0, ESR 0,17 à 0,25).
+
+## Note de provenance (2026-10-06, correction de routage transmise par Codex ; règles inchangées)
+
+La place des filtres du premier ordre avant la courbe, dans cette boîte grise, reprend la
+proposition d'apprentissage de l'archive KIPR V2. Ce n'est pas un routage établi du moteur. La
+trace d'exécution transmise le 2026-10-06 place les filtres du premier ordre observés
+(descripteurs 7193, 7226, 727f) **après** la saturation, sur un tampon temporaire ; une adresse
+réutilisée ne prouve pas une connexion. Seuls sont validés, chacun à part : l'enveloppe avec les
+conversions R/G ×4 puis ×16, et le fragment courbe → G inverse → deux biquads. La boîte grise
+préinscrite n'est pas modifiée ; ses résultats ne diront rien du routage du moteur.

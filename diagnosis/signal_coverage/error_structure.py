@@ -51,7 +51,8 @@ def training_density() -> np.ndarray:
         ]
     )
     counts = np.histogram(levels, bins=EDGES)[0]
-    return counts / counts.sum()
+    # Share of ALL training frames (NOTE.md), not only of those inside the classes.
+    return counts / len(levels)
 
 
 def since_last_loud(levels: np.ndarray, loud: float) -> np.ndarray:
