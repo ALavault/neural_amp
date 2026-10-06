@@ -52,3 +52,37 @@ Ces hypothèses ne s'excluent pas. Lecture : chacune « soutenue », « contrair
   même modèle, donc ce biais est commun, mais il peut écraser les différences.
 - La guitare lie niveau, attaque et décroissance : O2 ne contrôle que le niveau courant, pas le
   contenu spectral.
+
+## Résultats (`error_structure.json`, 6 modèles, 35 prises)
+
+| | lecture préinscrite | valeur (médiane des modèles) |
+|---|---|---|
+| O1, niveau rare | intermédiaire | ρ = +0,45 (seuil de H_niveau : ≤ −0,5) |
+| O2, mémoire après un fort | intermédiaire | rapport 0,24 (seuil de H_mémoire : ≥ 1,5) |
+| O3, désaccord des graines | intermédiaire | ρ = 0,52 (A48), 0,27 (C) |
+
+- **O1 (établi) : sens opposé à H_niveau.** L'erreur est la plus forte aux niveaux d'entrée les
+  plus fréquents en entraînement : −35 à −25 dBFS (ESR 0,030 à 0,038, contre 47 % des trames
+  d'entraînement). Elle est plus faible aux niveaux rares : 0,014 à 0,036 sous −40 dBFS, 0,008 à
+  0,010 de −20 à −10 dBFS. Les six modèles ont le même profil (ρ de +0,37 à +0,59).
+- **O2 (établi) : sens opposé à H_mémoire.** À niveau courant moyen, l'erreur est environ quatre
+  fois plus faible dans les 50–200 ms qui suivent une trame forte (ESR ≈ 0,010) que plus d'une
+  seconde après (≈ 0,045). Rapport de 0,22 à 0,27 sur les six modèles.
+- **O3 (établi)** : le désaccord des graines prédit l'erreur modérément pour A48 (0,52), faiblement
+  pour C (0,27). Aucun des deux bras n'atteint 0,5 avec l'autre.
+- Les règles préinscrites classent O1 et O2 en « intermédiaire » : elles ne prévoyaient pas
+  d'inversion de signe. Le classement est rapporté tel quel ; l'inversion est le fait marquant.
+
+**Supposé, non mesuré ici.** Une explication commune possible à O1 et O2 : la part du bruit propre
+de l'ampli, imprévisible, dans l'énergie de la cible. Le bruit de la cible pèse plus là où la
+sortie est faible pour un niveau d'entrée donné, loin de tout événement fort. Autre piste, non
+exclusive : les niveaux moyens tombent dans le coude de saturation, où la forme exacte de la courbe
+compte le plus. Mesures qui départageraient, **à tester** :
+- ESR par classe de niveau de la cible, comparée à la part du bruit mesuré de l'appareil
+  (`demo/capture/valvestate/noise.json`) ;
+- la même lecture O1 sur les sinus glissants à trois niveaux, sans bruit de jeu.
+
+**Conséquence pour la campagne (supposé)** : rien ne désigne les niveaux rares ni la mémoire
+après un fort comme le manque principal. La section « niveaux » de la source au micro (extrait de
+−22 dBFS environ, à −12, −6 et +6 dB) couvre déjà la zone −35 à −16 dBFS où l'erreur se concentre.
+Les salves de récupération restent utiles comme contrôle, pas comme priorité.
