@@ -249,3 +249,46 @@ Descriptif, sans seuil : la même chose aux blocs 1 à 7 (leur entrée contient 
 paires des blocs précédents) et sur la prise 16 ; et les mêmes variantes appliquées à toute la
 chaîne sans réentraînement, avec D2/D1 de sortie et ESR sur di_test. Ce modèle a été entraîné
 avec la porte V0 : une variante globale le met hors de son régime d'entraînement.
+
+### Résultats des sources dans la porte (`gate_sources.json`)
+
+Bloc 0, D2/D1 de la sortie de la porte, médiane sur 18 cas (3 modèles A48 × prises 17 et 36 ×
+3 niveaux) :
+
+| variante | D2/D1 (dB) | Δ face à V0 (dB) |
+|---|---|---|
+| V0, telle quelle | −24,4 | 0 |
+| V1, sans produit | −37,6 | −11,0 |
+| V2, sans décalage | −23,7 | +0,5 |
+| V3, ni l'un ni l'autre | −78,6 | −55,9 |
+
+- **Contrôle tenu (établi, sur ces sinus glissants)** : la médiane de D2/D1 de V3 tombe à
+  −78,6 dB, au plancher de l'instrument (−78 dB sur `input_conv`). Cela ne prouve pas que le
+  bloc 0 soit impair. Le biais d'`input_conv` attaque le SSM depuis un état nul, et le centrage
+  par la moyenne temporelle ne retire pas ce transitoire. Pour une entrée nulle (commandes 0,5 ;
+  0,5), la sortie V3 du bloc 0 vaut au plus 0,18, 0,10 et 0,44 selon la graine sur 2 048
+  échantillons, et encore 0,003 à 0,005 après 0,5 s (relecture Codex, vérifié). Ce qui est
+  établi : sur ces sinus glissants, retirer les deux sources ramène la 2ᵉ harmonique de la porte
+  au plancher de mesure.
+- **Verdict préinscrit : « produit » (établi)**. Δ(V1) = −11,0 dB (seuil −10) et
+  |Δ(V2)| = 0,5 dB (seuil 3). Il passe de justesse et dépend du modèle : Δ(V1) vaut −11,0, −22,4
+  et −5,3 dB pour les graines 42, 43 et 44. La graine 44 ne passerait pas seule.
+- **Lecture descriptive : les deux sources sont présentes (établi)**. Sans le produit, il reste
+  −37,6 dB, dus au décalage de a dans tanh(a₀ + ã). Seul le retrait des deux à la fois ramène
+  au plancher, 41 dB plus bas que V1. Retirer les décalages seuls ne change rien (V2), parce que
+  le produit domine. Le classement à seuil fixé d'avance ne rend pas cette interaction : « produit »
+  désigne la source dominante, pas la seule.
+- Prise 16 (descriptif) : même profil (Δ V1 −10,7, V2 +0,8, V3 −54,6 dB).
+- Blocs 1 à 7 (descriptif) : V3 reste le plus bas partout (−37 à −17 dB), mais leurs entrées
+  portent déjà les harmoniques paires des blocs précédents, donc pas de plancher attendu.
+- Variantes sur tout le réseau, sans réentraînement (descriptif) : sur les prises 17 et 36,
+  l'ESR de di_test passe de 0,006–0,022 à 0,21–31. La 2ᵉ harmonique de sortie (−10 dBFS) ne
+  baisse nulle part de plus de 1,7 dB. Elle monte le plus souvent, jusqu'à −8 dB avec V2 et V3. Ces modèles ont appris avec la porte V0 et compensent ses harmoniques plus loin :
+  changer la porte sans réentraîner ne dit rien de ce que donnerait une porte impaire entraînée.
+- **Conséquence (supposé)** : une porte sans harmonique paire doit retirer les deux sources. Le
+  produit doit passer par une branche paire en x : une enveloppe de |b̃|, où b̃ est lui-même
+  impair en x. Ni b₀ ni état ou transitoire non impair avant la valeur absolue, car
+  |b₀ + b̃| ≠ |b₀ − b̃| (relecture Codex). Aucun décalage ne doit entrer dans la courbe impaire,
+  y compris par la réponse transitoire d'un biais en amont. L'asymétrie, si l'appareil en a,
+  passe par un paramètre explicite (gains selon le signe, comme dans le moteur KIPR). C'est la
+  forme à préinscrire si on l'entraîne.
