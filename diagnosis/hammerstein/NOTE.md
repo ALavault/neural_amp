@@ -211,3 +211,41 @@ Contrôle tenu : A48, B192 et l'appareil sont reproduits au bit près (écart ma
   pas exclu (−1,9 dB à −10 dBFS), et C ne sépare pas FFT et TF32. L'explication par la porte
   `tanh·sigmoid` et son plancher de 2ᵉ harmonique reste soutenue, sans être établie
   causalement ; une porte impaire (à préinscrire) reste la mesure qui départagerait.
+
+## Sources des harmoniques paires dans la porte (prédictions écrites avant la mesure, 2026-10-06)
+
+Idée tirée de la structure du moteur KIPR (`datasets/raw/external/kipr/`, V2) : un gain
+multiplicatif piloté par une enveloppe de |x| (fonction paire du signal) multiplié par une
+courbe impaire donne un bloc impair, donc sans harmonique paire. Notre porte
+`tanh(a)·sigmoid(b)` s'écarte de ce cas de deux façons, qu'on peut séparer. On écrit a = a₀ + ã,
+où a₀ est la partie constante (biais du 1×1, décalage FiLM, composante continue) et ã la partie
+audio ; de même pour b.
+- **Produit** : sigmoid(b̃) = 1/2 + une partie impaire en x. Son produit avec tanh(ã), impair,
+  donne un terme pair, même sans décalage.
+- **Décalages** : tanh(a₀ + ã) et sigmoid(b₀ + b̃) ne sont plus impairs dès que a₀ ≠ 0.
+
+Mesure : `gate_sources.py`. Modèles A48 (graines 42, 43, 44) ; prises 17 (gain 5) et 36
+(gain 2,5, couple vu) ; sinus glissants à −20, −10 et −3 dBFS. On enregistre a et b à chaque
+porte (instrumentation de `gate_harmonics.py`), puis on recalcule localement la sortie de la
+porte en quatre variantes, sans rien propager :
+- V0 : la porte telle quelle ;
+- V1 : sigmoid(b) remplacé par sigmoid(moyenne temporelle de b), par canal (sans produit) ;
+- V2 : tanh(a − moyenne de a)·sigmoid(b − moyenne de b) (sans décalage) ;
+- V3 : tanh(a − moyenne de a)·sigmoid(moyenne de b) (ni l'un ni l'autre).
+
+Lecture primaire au **bloc 0**, dont l'entrée est linéaire en x : D2/D1 de la sortie de la porte
+(médiane sur les canaux), écart Δ(V) = D2/D1(V) − D2/D1(V0), médiane sur les 18 cas
+(3 modèles × 2 prises × 3 niveaux).
+- **Contrôle** : V3 au bloc 0 ≤ −60 dB (médiane ; plancher de l'instrument vers −78 dB, mesuré
+  sur `input_conv`). Sinon, aucune lecture : le bloc 0 n'est pas impair comme supposé, ou
+  l'instrument ne suffit pas.
+- **Produit** : Δ(V1) ≤ −10 dB et |Δ(V2)| < 3 dB.
+- **Décalages** : Δ(V2) ≤ −10 dB et |Δ(V1)| < 3 dB.
+- **Les deux** : Δ(V1) ≤ −10 dB et Δ(V2) ≤ −10 dB.
+- Sinon (seul V3 descend, par exemple) : les deux sources se compensent ou interagissent ;
+  rapporté tel quel.
+
+Descriptif, sans seuil : la même chose aux blocs 1 à 7 (leur entrée contient déjà les harmoniques
+paires des blocs précédents) et sur la prise 16 ; et les mêmes variantes appliquées à toute la
+chaîne sans réentraînement, avec D2/D1 de sortie et ESR sur di_test. Ce modèle a été entraîné
+avec la porte V0 : une variante globale le met hors de son régime d'entraînement.
