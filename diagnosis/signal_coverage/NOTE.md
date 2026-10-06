@@ -104,3 +104,22 @@ Le bruit est `fx_noise_fullband_dbfs` et la part cohérente `coherent_share`
 - **Contraire** : ESR_bruit sous un dixième de l'ESR dans ces classes.
 - Complément pour O2 (descriptif) : écart de niveau moyen de la cible entre les trames moyennes à
   50–200 ms d'un fort et celles à plus d'une seconde.
+
+### Résultat du test du bruit (`noise_share.json`)
+
+- **H_bruit : contraire (établi).** Dans les classes où l'ESR dépasse 0,02, le plancher de bruit en
+  explique 1,3 % en médiane (0,7 et 1,8 % selon le modèle). Même aux cibles les plus faibles
+  (−65 à −55 dBFS), il n'en explique que 4 à 17 %.
+- **L'erreur relative monte fortement quand la cible faiblit (établi).** ESR par classe de niveau
+  de cible, modèle A48 graine 42 : 0,015 à −20 dBFS, 0,041 à −25, 0,11 à −40, 0,78 à −60,
+  2,2 à −65 dBFS. Le bras C (graine 42) est environ deux fois moins bon que A48 sur les trames
+  faibles : 0,34 contre 0,14 à −50 dBFS, 5,0 contre 2,2 à −65. Il est équivalent au-dessus de
+  −30 dBFS.
+- **O2 n'est pas un effet de niveau de cible (établi)** : les trames moyennes à 50–200 ms d'un fort
+  et celles à plus d'une seconde ont la même puissance moyenne de cible (écart 0,1 dB).
+
+**À tester** (nés de cette mesure) :
+- l'erreur propre du modèle à sortie faible : énergie de sa sortie sur la section `silence` de la
+  source, face au bruit de l'appareil, et son spectre (résidu continu, ronflement, souffle) ;
+- pourquoi le bras C est moins bon à faible niveau. L'entraînement sans TF32 et à la FFT de 288 000
+  a changé quelque chose que l'ESR globale (dominée par les trames fortes) ne voyait pas.
