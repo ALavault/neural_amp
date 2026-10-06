@@ -113,3 +113,23 @@ porte dans cet état.
 **Pour une reprise** (non lancée ; sa préinscription reste à écrire) : cible avancée de 198, et
 porte préalable sur l'alignement : décalage du modèle à la cible au plus 2 échantillons et ESR de
 `test_noise` sous 1. Sinon, aucune lecture.
+
+## Reprise r2 : préinscription (2026-10-06, avant tout entraînement r2)
+
+Seul le retard change ; les règles de lecture de la première passe restent, plus une porte
+d'alignement.
+- **Avance de la cible : 196 échantillons** pour les deux configurations. C'est un étalonnage
+  du paramètre de nuisance, tiré de la première passe, et non un résultat. Les quatre runs qui
+  suivaient la cible (corrélation 0,86 à 0,90) avaient 14 échantillons d'avance à tous les
+  niveaux, soit 182 + 14. Les deux autres (corrélation 0,24 et 0,48) ne disent rien. Le pic de
+  corrélation entrée → cible (198, estimation KIPR) contient aussi le retard des filtres : avancer
+  de 198 risquerait une cible non causale de 2 échantillons. L'estimation linéaire de la réponse
+  impulsionnelle est inutilisable : la cible est saturée dès −36 dBFS.
+- Runs : `kipr_{sym,asym}_s{42,43,44}_r2`, `known_answer.py --tag r2`, tout le reste identique.
+- **Porte d'alignement, par run, sur les quatre segments `test_noise`** : décalage de la sortie à
+  la cible au plus 2 échantillons (recherche sur ±60) et ESR sous 1, à chaque niveau. Si un seul
+  des six runs échoue, aucune lecture (« alignement »), et les chiffres sont rapportés sans
+  interprétation.
+- Puis les mêmes lectures que la première passe : instrument, validité niveau par niveau
+  (témoin : H2 et H3 ; cible symétrique : H3), plancher si E ≥ +15 dB, aucun si E ≤ +5 dB.
+- Sortie : `known_answer_r2.json`.

@@ -35,7 +35,12 @@ from fssr_nam.models.ssm_wavenet import DiagonalSSMLayer  # noqa: E402
 
 DATA = ROOT / "datasets/raw/external/kipr/extracted/measurements"
 RATE = 44_100
-ADVANCE = 198 - 16
+# Target advance per round: 198 - 16 in the first (the models did not learn the 16
+# samples left); 196 in r2: the four first-round runs that followed the target
+# (correlation 0.86 to 0.90) were 14 samples early at every level, so 182 + 14, which
+# keeps the target causal (KIPR's correlation peak, 198, includes filter delay).
+ADVANCES = {"": 198 - 16, "r2": 196}
+TAG = ""
 CONFIGS = {"sym": "v1_lead_amp", "asym": "v2_lead_bias_16383"}
 LEVELS = (-24, -12, -6)
 STEPS, HALVINGS = 3000, (1800, 2400)
@@ -54,11 +59,16 @@ MODEL = {
 }
 
 
+def run_name(name: str, seed: int) -> str:
+    return f"kipr_{name}_s{seed}" + (f"_{TAG}" if TAG else "")
+
+
 def sequences(config: str) -> tuple[np.ndarray, np.ndarray]:
-    """Full input and left output, the output advanced by ADVANCE samples."""
+    """Full input and left output, the output advanced by this round's advance."""
+    advance = ADVANCES[TAG]
     x = np.fromfile(DATA / "input.f32", dtype="<f4").astype(np.float64)
     y = np.fromfile(DATA / f"{config}.f32", dtype="<f4").reshape(-1, 2)[:, 0]
-    y = np.concatenate([y[ADVANCE:], np.zeros(ADVANCE)]).astype(np.float64)
+    y = np.concatenate([y[advance:], np.zeros(advance)]).astype(np.float64)
     return x, y
 
 
@@ -155,7 +165,7 @@ def batch(config: str, prefix: str, device: str) -> tuple[torch.Tensor, ...]:
 
 def train(name: str, seed: int, steps: int, smoke: bool = False) -> None:
     config = CONFIGS[name]
-    run_id = f"kipr_{name}_s{seed}"
+    run_id = run_name(name, seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
     torch.nn.functional.pad = bench._reflect_pad_by_slicing
@@ -208,7 +218,8 @@ def train(name: str, seed: int, steps: int, smoke: bool = False) -> None:
         "seed": seed,
         "steps": steps,
         "halvings": HALVINGS,
-        "advance": ADVANCE,
+        "advance": ADVANCES[TAG],
+        "tag": TAG,
         "model": MODEL,
         "device": device,
         "final_loss": history[-1][1],
@@ -247,9 +258,13 @@ def verdicts(result: dict) -> dict:
     if len(readings) == 2:
         asym, sym = readings["asym"], readings["sym"]
         valid = result["instrument_gap_db"] <= 1.0
+        aligned = TAG == "" or all(r["aligned"] for r in result["runs"].values())
         control = asym["h2_ok"] and asym["h3_ok"] and sym["h3_ok"]
+        readings["aligned"] = aligned
         if not valid:
             verdict = "aucune lecture (instrument)"
+        elif not aligned:
+            verdict = "aucune lecture (alignement)"
         elif not control:
             verdict = "non concluant (témoin positif ou H3 de la cible symétrique)"
         elif sym["e_primary"] >= 15:
@@ -275,6 +290,16 @@ def run_model(run_id: str, x: np.ndarray) -> np.ndarray:
     return model(signal, torch.zeros(1, 0))[0, 0].double().numpy()
 
 
+def lag(out: np.ndarray, target: np.ndarray, most: int = 60) -> int:
+    """Shift L in [-most, most] maximising the correlation of out[n] with
+    target[n + L]; positive: the target comes later than the model."""
+    core = out[most:-most]
+    return max(
+        range(-most, most + 1),
+        key=lambda s: float(np.dot(core, target[most + s : len(target) - most + s])),
+    )
+
+
 def esr(pred: np.ndarray, ref: np.ndarray) -> float:
     return float(((ref - pred) ** 2).sum() / (ref**2).sum())
 
@@ -292,7 +317,7 @@ def measure() -> None:
         }
         result["targets"][config] = target
         for seed in (42, 43, 44):
-            run_id = f"kipr_{name}_s{seed}"
+            run_id = run_name(name, seed)
             if not (bench.RUNS_DIR / run_id / "record.json").exists():
                 print(f"{run_id}: absent")
                 continue
@@ -306,14 +331,20 @@ def measure() -> None:
                     "e_h3_db": m["h3_db"] - t["h3_db"],
                     "model_h2_db": m["h2_db"],
                 }
+            entry["lag"] = {}
             for level in (-36, -24, -12, -6):
                 _, a, b = seg[f"test_noise_{level}"]
                 entry["test_esr"][str(level)] = esr(out[a:b], y[a:b])
+                entry["lag"][str(level)] = lag(out[a:b], y[a:b])
+            entry["aligned"] = all(
+                abs(entry["lag"][lv]) <= 2 and entry["test_esr"][lv] < 1
+                for lv in entry["lag"]
+            )
             result["runs"][run_id] = entry
     readings = verdicts(result)
     result["readings"] = readings
     print(json.dumps(readings, indent=1, ensure_ascii=False))
-    (HERE / "known_answer.json").write_text(
+    (HERE / f"known_answer{'_' + TAG if TAG else ''}.json").write_text(
         json.dumps(result, indent=1, ensure_ascii=False) + "\n"
     )
 
@@ -325,7 +356,10 @@ def main() -> None:
     parser.add_argument("seed", nargs="?", type=int)
     parser.add_argument("--steps", type=int, default=STEPS)
     parser.add_argument("--smoke", action="store_true", help="no record, no checkpoint")
+    parser.add_argument("--tag", choices=list(ADVANCES), default="")
     args = parser.parse_args()
+    global TAG
+    TAG = args.tag
     if args.action == "instrument":
         instrument()
     elif args.action == "train":
