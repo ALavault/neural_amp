@@ -140,7 +140,7 @@ Lecture `known_answer.py measure --tag r2`, sortie `known_answer_r2.json`. Instr
 
 **Verdict préinscrit : aucune lecture (alignement).** Quatre runs sur six passent la porte
 (décalage 0 ou 1 échantillon, ESR de `test_noise` 0,15 à 0,30) : l'avance de 196 a corrigé le
-retard. Deux échouent : `kipr_sym_s43_r2` (décalage trouvé 10, ESR 3,6) et `kipr_asym_s42_r2`
+retard. Deux échouent : `kipr_sym_s43_r2` (décalage trouvé 10 à 11, ESR 3,6) et `kipr_asym_s42_r2`
 (5, ESR 3,7).
 
 **Cause des deux échecs (établi, après la lecture)** : leur sortie est de polarité inversée. La
