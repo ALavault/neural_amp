@@ -137,3 +137,34 @@ que `noise_share.py`. Trames faibles : niveau de cible sous −40 dBFS.
   moins d'un dixième.
 - Descriptif : puissance de la sortie de chaque modèle sur la section `silence` (entrée quasi
   nulle), face au bruit de l'appareil (`noise.json`).
+
+### Résultats des trames faibles (`quiet_frames.json`)
+
+| modèle | ESR des trames faibles | part du décalage continu | sortie sur le silence (dBFS) |
+|---|---|---|---|
+| A48 s42 | 0,15 | 18 % | −60 |
+| A48 s43 | 0,29 | 2 % | −70 |
+| A48 s44 | 0,17 | 2 % | −71 |
+| C s42 | 0,38 | 36 % | −55 |
+| C s43 | 0,23 | 68 % | −54 |
+| C s44 | 0,60 | 55 % | −51 |
+
+Bruit de l'appareil, même section : −67 dBFS (médiane des prises).
+
+- **Q1 : intermédiaire (établi).** Rapports C / A48 de 2,5, 0,8 et 3,6 selon la graine : C est nettement
+  moins bon à faible niveau pour deux graines sur trois, meilleur pour la graine 43.
+- **Q2 : intermédiaire (établi)**, médiane 0,27. Le partage est net entre bras : le décalage continu
+  explique 2 à 18 % de l'erreur faible de A48, mais 36 à 68 % de celle de C. Sur une entrée presque
+  nulle, les trois modèles C sortent 12 à 16 dB au-dessus du bruit de l'appareil. Pour A48, seule la
+  graine 42 le dépasse (de 7 dB).
+- **Supposé** : le bras C (FFT de 288 000 sans TF32, adopté pour les nouveaux prototypes) apprend un
+  décalage continu de sortie que A48 n'apprend pas ou peu. Ni la lecture P, dominée par les trames
+  fortes, ni l'oreille (une composante continue ne s'entend pas) ne le voient. Le cas de graine 42 A48
+  montre que A48 n'en est pas exempt ; trois graines par bras ne permettent pas d'attribuer l'écart au
+  réglage plutôt qu'au hasard.
+- **Lien avec la piste impaire** : le modèle impair n'a aucun biais et ne peut donc pas avoir de
+  décalage continu à entrée nulle. Sa comparaison au bras C, préinscrite et inchangée, inclura cet
+  avantage ; la lecture des trames faibles sera à faire en descriptif quand ses runs existeront.
+- **À tester** : retirer la moyenne de sortie (ou un passe-haut très bas) des modèles existants et
+  relire l'ESR des trames faibles et la lecture P. Si l'écart C / A48 disparaît, le décalage est
+  toute l'histoire ; le correctif serait alors un passe-haut de sortie, à préinscrire.

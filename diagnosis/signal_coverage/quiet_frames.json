@@ -1,0 +1,56 @@
+{
+ "runs": {
+  "vs100r_gc_film_joint_s925_r2": {
+   "arm": "A48",
+   "quiet_esr": 0.15254194579251906,
+   "dc_share_of_quiet_error": 0.184472250518072,
+   "silence_output_dbfs_median": -59.68031497405285,
+   "device_noise_dbfs_median": -66.96
+  },
+  "vs100r48_film_s43": {
+   "arm": "A48",
+   "quiet_esr": 0.28958859148350546,
+   "dc_share_of_quiet_error": 0.017422613961405983,
+   "silence_output_dbfs_median": -69.92369380661603,
+   "device_noise_dbfs_median": -66.96
+  },
+  "vs100r48_film_s44": {
+   "arm": "A48",
+   "quiet_esr": 0.1679399325030537,
+   "dc_share_of_quiet_error": 0.023458500404324536,
+   "silence_output_dbfs_median": -70.68097230657214,
+   "device_noise_dbfs_median": -66.96
+  },
+  "vs100r48fast_film_s42": {
+   "arm": "C",
+   "quiet_esr": 0.3761336475017181,
+   "dc_share_of_quiet_error": 0.36289765526377765,
+   "silence_output_dbfs_median": -55.45616275843856,
+   "device_noise_dbfs_median": -66.96
+  },
+  "vs100r48fast_film_s43": {
+   "arm": "C",
+   "quiet_esr": 0.22704376273182936,
+   "dc_share_of_quiet_error": 0.6780251503325425,
+   "silence_output_dbfs_median": -54.21958642339347,
+   "device_noise_dbfs_median": -66.96
+  },
+  "vs100r48fast_film_s44": {
+   "arm": "C",
+   "quiet_esr": 0.5982179235625185,
+   "dc_share_of_quiet_error": 0.5545809690932183,
+   "silence_output_dbfs_median": -51.16604848447743,
+   "device_noise_dbfs_median": -66.96
+  }
+ },
+ "reading": {
+  "q1_ratios_c_over_a48": [
+   2.465771926190838,
+   0.7840217792031404,
+   3.5620945813565865
+  ],
+  "Q1": "interm\u00e9diaire",
+  "q2_median_dc_share": 0.2736849528909248,
+  "Q2": "interm\u00e9diaire"
+ }
+}
