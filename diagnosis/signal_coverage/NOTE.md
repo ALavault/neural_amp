@@ -123,3 +123,17 @@ Le bruit est `fx_noise_fullband_dbfs` et la part cohérente `coherent_share`
   source, face au bruit de l'appareil, et son spectre (résidu continu, ronflement, souffle) ;
 - pourquoi le bras C est moins bon à faible niveau. L'entraînement sans TF32 et à la FFT de 288 000
   a changé quelque chose que l'ESR globale (dominée par les trames fortes) ne voyait pas.
+
+## Trames faibles : bras C face à A48, et part d'une composante continue (prédictions écrites avant la mesure, 2026-10-06)
+
+Mesure : `quiet_frames.py`, les 6 modèles (A48 et C, graines 42, 43 et 44), mêmes prises et trames
+que `noise_share.py`. Trames faibles : niveau de cible sous −40 dBFS.
+- **Q1, bras C moins bon à faible niveau** : ESR des trames faibles, rapport C / A48 par graine.
+  Soutenue si le rapport vaut au moins 1,5 pour les trois graines ; contraire s'il est entre 0,67
+  et 1,5 pour au moins deux graines.
+- **Q2, composante continue** : écart de moyenne (sortie − cible) par prise, sur la région notée.
+  Son énergie par trame, longueur de trame × écart², est rapportée à l'énergie d'erreur des trames
+  faibles. Soutenue si elle en explique au moins la moitié (médiane des modèles) ; contraire si
+  moins d'un dixième.
+- Descriptif : puissance de la sortie de chaque modèle sur la section `silence` (entrée quasi
+  nulle), face au bruit de l'appareil (`noise.json`).
