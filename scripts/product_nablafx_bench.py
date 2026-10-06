@@ -58,6 +58,7 @@ from nablafx.evaluation.flexible_loss import FlexibleLoss  # noqa: E402
 from nablafx.evaluation.registry import EvaluationRegistry  # noqa: E402
 from nablafx.processors import S4  # noqa: E402
 
+from fssr_nam.models.greybox import GreyBoxAmp  # noqa: E402
 from fssr_nam.models.ssm_wavenet import DiagonalSSMLayer, SSMWaveNet  # noqa: E402
 from fssr_nam.product.data import advance  # noqa: E402
 
@@ -441,7 +442,8 @@ class PolarityGuard(pl.Callback):
         )
         state = trainer.optimizers[0].state
         with torch.no_grad():
-            for parameter in (layer.weight, layer.bias):
+            # act_type 'odd' has no bias there.
+            for parameter in (p for p in (layer.weight, layer.bias) if p is not None):
                 parameter.neg_()
                 if "exp_avg" in state.get(parameter, {}):
                     state[parameter]["exp_avg"].neg_()
@@ -454,7 +456,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--model",
         required=True,
-        choices=["s4-tf-l-16", "s4-l-16", "ssm-wavenet", "s4-param"],
+        choices=["s4-tf-l-16", "s4-l-16", "ssm-wavenet", "s4-param", "greybox"],
     )
     parser.add_argument(
         "--device",
@@ -537,8 +539,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--head-act",
         default="relu",
-        choices=["relu", "leaky"],
-        help="SSM-WaveNet output head: leaky keeps a gradient once every skip sum < 0",
+        choices=["relu", "leaky", "tanh"],
+        help="SSM-WaveNet output head: leaky keeps a gradient once every skip sum < 0;"
+        " tanh is odd (needed by --act-type odd)",
+    )
+    parser.add_argument(
+        "--act-type",
+        default="gated",
+        choices=["gated", "odd"],
+        help="SSM-WaveNet gate: gated tanh * sigmoid, or odd (OddGate, no bias,"
+        " explicit asymmetry; demo/odd_gate/predictions.md)",
     )
     parser.add_argument(
         "--cond-hidden",
@@ -613,7 +623,10 @@ def build_processor(args: argparse.Namespace) -> torch.nn.Module:
             cond_head=getattr(args, "cond_head", "joint"),
             cond_hidden=tuple(getattr(args, "cond_hidden", (32,))),
             head_act=getattr(args, "head_act", "relu"),
+            act_type=getattr(args, "act_type", "gated"),
         )
+    if args.model == "greybox":
+        return GreyBoxAmp(num_controls=controls)
     if args.model == "s4-param":
         # cfg/model/s4-param/model_bb-param_s4-f-b8-s32-c16.yaml: static FiLM (MLP).
         return S4(
@@ -983,6 +996,7 @@ def main() -> None:
                 "cond_head": args.cond_head,
                 "cond_hidden": args.cond_hidden,
                 "head_act": args.head_act,
+                "act_type": args.act_type,
             }
             if args.model == "ssm-wavenet"
             else None

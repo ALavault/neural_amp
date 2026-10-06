@@ -39,7 +39,7 @@ RATE = 44_100
 # samples left); 196 in r2: the four first-round runs that followed the target
 # (correlation 0.86 to 0.90) were 14 samples early at every level, so 182 + 14, which
 # keeps the target causal (KIPR's correlation peak, 198, includes filter delay).
-ADVANCES = {"": 198 - 16, "r2": 196}
+ADVANCES = {"": 198 - 16, "r2": 196, "odd": 196, "grey": 196}
 TAG = ""
 CONFIGS = {"sym": "v1_lead_amp", "asym": "v2_lead_bias_16383"}
 LEVELS = (-24, -12, -6)
@@ -57,6 +57,18 @@ MODEL = {
     "cond_hidden": (32,),
     "head_act": "leaky",
 }
+
+
+# Model per round: the r2 SSM-WaveNet, its odd gate (demo/odd_gate/predictions.md)
+# or the grey box (demo/greybox/predictions.md).
+MODEL_TAGS = {
+    "odd": {"act_type": "odd", "head_act": "tanh"},
+    "grey": {"model": "greybox"},
+}
+
+
+def model_args() -> dict:
+    return {**MODEL, **MODEL_TAGS.get(TAG, {})}
 
 
 def run_name(name: str, seed: int) -> str:
@@ -136,7 +148,7 @@ def instrument() -> float:
 
 def processor_and_loss():
     DiagonalSSMLayer.fft_size = "fast"
-    processor = bench.build_processor(argparse.Namespace(**MODEL))
+    processor = bench.build_processor(argparse.Namespace(**model_args()))
     loss = bench.FlexibleLoss(
         losses=[
             {"name": "l1_loss", "weight": 0.5, "alias": "l1"},
@@ -220,7 +232,7 @@ def train(name: str, seed: int, steps: int, smoke: bool = False) -> None:
         "halvings": HALVINGS,
         "advance": ADVANCES[TAG],
         "tag": TAG,
-        "model": MODEL,
+        "model": model_args(),
         "device": device,
         "final_loss": history[-1][1],
         "loss_history": history,

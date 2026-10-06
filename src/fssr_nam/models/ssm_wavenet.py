@@ -428,13 +428,83 @@ class SineGate(nn.Module):
         return x + torch.sin(self.w.unsqueeze(0) * x)
 
 
+class OddGate(nn.Module):
+    """Gate whose block is odd in its input when the asymmetry is zero
+    (diagnosis/hammerstein/NOTE.md, sources of the gate's even harmonics).
+
+    tanh(a) * sigmoid(c + s + w * e), where e is a one-pole low-pass of |b| from a zero
+    state: an even function of the signal, so the product with the odd tanh(a) is odd.
+    No constant enters a or b (the FiLM shift of a is not applied; the one of b, s,
+    enters after the envelope). The asymmetry is explicit: positive outputs scaled by
+    exp(beta), negative ones by exp(-beta), beta = learned per channel + the FiLM shift
+    slot of a; beta = 0 keeps the block odd. The envelope's time constant is per sample
+    (2 ms at 48 kHz at initialisation): unlike the SSM poles it is not rescaled with
+    the sample rate. All parameters start at constants, so no random draw is consumed.
+    """
+
+    def __init__(self, channels: int) -> None:
+        super().__init__()
+        alpha = 1 - math.exp(-1 / (48_000 * 0.002))
+        self.alpha_logit = nn.Parameter(
+            torch.full((channels, 1), math.log(alpha / (1 - alpha)))
+        )
+        self.weight = nn.Parameter(torch.zeros(channels, 1))
+        self.bias = nn.Parameter(torch.zeros(channels, 1))
+        self.asymmetry = nn.Parameter(torch.zeros(channels, 1))
+        self._e: Tensor | None = None
+
+    def _gain(self, e: Tensor, shift_b: Tensor | float) -> Tensor:
+        return torch.sigmoid(self.bias + shift_b + self.weight * e)
+
+    @staticmethod
+    def _asymmetric(y: Tensor, beta: Tensor) -> Tensor:
+        return y * torch.where(y >= 0, torch.exp(beta), torch.exp(-beta))
+
+    def forward(
+        self, a: Tensor, b: Tensor, beta_film: Tensor | float, shift_b: Tensor | float
+    ) -> Tensor:
+        """a, b: (batch, channels, length); FiLM terms (batch, channels, 1) or 0."""
+        length = a.shape[-1]
+        alpha = torch.sigmoid(self.alpha_logit)
+        n = torch.arange(length, device=a.device, dtype=a.dtype)
+        # log(1 - alpha) as logsigmoid(-logit): finite even where alpha rounds to 1.
+        log_retain = nn.functional.logsigmoid(-self.alpha_logit)
+        kernel = alpha * torch.exp(n * log_retain)  # (channels, length)
+        fft_length = fft_size(2 * length - 1, DiagonalSSMLayer.fft_size)
+        b_f = torch.fft.rfft(b.abs(), n=fft_length)
+        k_f = torch.fft.rfft(kernel, n=fft_length)
+        e = torch.fft.irfft(b_f * k_f, n=fft_length)[..., :length]
+        y = torch.tanh(a) * self._gain(e, shift_b)
+        return self._asymmetric(y, self.asymmetry + beta_film)
+
+    def reset_state(self) -> None:
+        self._e = None
+
+    def step(
+        self, a: Tensor, b: Tensor, beta_film: Tensor | float, shift_b: Tensor | float
+    ) -> Tensor:
+        """Single sample: a, b (batch, channels); FiLM terms (batch, channels) or 0."""
+        alpha = torch.sigmoid(self.alpha_logit[:, 0])
+        retain = torch.exp(nn.functional.logsigmoid(-self.alpha_logit[:, 0]))
+        if self._e is None:
+            self._e = torch.zeros_like(b)
+        self._e = retain * self._e + alpha * b.abs()
+        gain = torch.sigmoid(self.bias[:, 0] + shift_b + self.weight[:, 0] * self._e)
+        y = torch.tanh(a) * gain
+        beta = self.asymmetry[:, 0] + beta_film
+        return y * torch.where(y >= 0, torch.exp(beta), torch.exp(-beta))
+
+
 class GatedSSMBlock(nn.Module):
     """One WaveNet-style block with a DSSM instead of a dilated convolution.
 
     Input -> DSSM -> [tanh branch, sigmoid branch] -> 1x1 conv -> residual + skip
 
     With act_type="sine", the gated activation is replaced by x + sin(w*x),
-    which can model asymmetric distortion curves.
+    which can model asymmetric distortion curves. With act_type="odd", the gate is
+    OddGate and the block's 1x1 convolutions have no bias (removed after they are
+    built, so the random draws are those of the gated block): the block is odd in its
+    input while OddGate's asymmetry is zero.
     """
 
     def __init__(
@@ -460,6 +530,10 @@ class GatedSSMBlock(nn.Module):
             self.pre_gate = nn.Conv1d(channels, 2 * channels, 1)
         self.res_conv = nn.Conv1d(channels, channels, 1)
         self.skip_conv = nn.Conv1d(channels, channels, 1)
+        if act_type == "odd":
+            for conv in (self.pre_gate, self.res_conv, self.skip_conv):
+                conv.register_parameter("bias", None)
+            self.odd_gate = OddGate(channels)
 
     # Per-example kernels are (batch, channels, state_dim, length) complex before the
     # sum over modes; recomputing them in the backward pass keeps one block's alive.
@@ -484,6 +558,15 @@ class GatedSSMBlock(nn.Module):
             h = self.ssm(x, shift)
         if self.act_type == "sine":
             h = self.activation(self.pre_act(h))
+        elif self.act_type == "odd":
+            h = self.pre_gate(h)
+            beta, shift_b = 0.0, 0.0
+            if film is not None:
+                scale, shift = film.unsqueeze(-1).chunk(2, dim=1)
+                h = (1 + scale) * h
+                beta, shift_b = shift.chunk(2, dim=1)
+            gate_a, gate_b = h.chunk(2, dim=1)
+            h = self.odd_gate(gate_a, gate_b, beta, shift_b)
         else:
             h = self.pre_gate(h)
             if film is not None:
@@ -495,8 +578,26 @@ class GatedSSMBlock(nn.Module):
         residual = self.res_conv(h) + x
         return residual, skip
 
+    def step(self, x: Tensor, film: Tensor | None = None) -> tuple[Tensor, Tensor]:
+        """Single-sample odd block: x (batch, channels) -> (residual, skip)."""
+        if self.act_type != "odd":
+            raise ValueError("step is implemented for act_type='odd' only")
+        h = nn.functional.linear(self.ssm.step(x), self.pre_gate.weight[..., 0])
+        beta, shift_b = 0.0, 0.0
+        if film is not None:
+            scale, shift = film.chunk(2, dim=1)
+            h = (1 + scale) * h
+            beta, shift_b = shift.chunk(2, dim=1)
+        gate_a, gate_b = h.chunk(2, dim=1)
+        h = self.odd_gate.step(gate_a, gate_b, beta, shift_b)
+        skip = nn.functional.linear(h, self.skip_conv.weight[..., 0])
+        residual = nn.functional.linear(h, self.res_conv.weight[..., 0]) + x
+        return residual, skip
+
     def reset_state(self) -> None:
         self.ssm.reset_state()
+        if self.act_type == "odd":
+            self.odd_gate.reset_state()
 
 
 def head_activation(name: str) -> nn.Module:
@@ -505,6 +606,8 @@ def head_activation(name: str) -> nn.Module:
         return nn.ReLU()
     if name == "leaky":
         return nn.LeakyReLU(0.01)
+    if name == "tanh":
+        return nn.Tanh()
     raise ValueError(f"unknown head_act: {name}")
 
 
@@ -514,8 +617,10 @@ class SSMWaveNet(nn.Module):
     The model takes (batch, 1, length) and returns (batch, 1, length).
 
     Args:
-        act_type: "gated" (tanh * sigmoid, the WaveNet default) or "sine"
-            (x + sin(w*x), learnable asymmetric distortion).
+        act_type: "gated" (tanh * sigmoid, the WaveNet default), "sine"
+            (x + sin(w*x), learnable asymmetric distortion) or "odd" (OddGate: every
+            block, and with head_act "tanh" the whole network, is odd in its input
+            while the explicit asymmetries are zero; no bias anywhere).
         output_act: "tanh" (bounded, safe but compresses amplifying devices),
             "softsign" (bounded, gentler saturation), or "none" (unbounded,
             lets the model reproduce gain > 1 but needs a lower lr).
@@ -535,10 +640,11 @@ class SSMWaveNet(nn.Module):
             entry); "additive", one hidden layer per knob (widths: cond_hidden, one
             entry per knob) into a shared output layer, so the head is a sum of
             functions of one knob each.
-        head_act: activation of the output head, "relu" (default) or "leaky"
-            (LeakyReLU, slope 0.01). A ReLU head closes for good once every skip
-            sum is negative, and no gradient then reaches the trunk; "leaky" keeps
-            one. It has no parameters, so initialisation draws are unchanged.
+        head_act: activation of the output head, "relu" (default), "leaky"
+            (LeakyReLU, slope 0.01) or "tanh" (odd; required by act_type "odd"). A
+            ReLU head closes for good once every skip sum is negative, and no gradient
+            then reaches the trunk; "leaky" keeps one. It has no parameters, so
+            initialisation draws are unchanged.
     """
 
     def __init__(
@@ -564,7 +670,7 @@ class SSMWaveNet(nn.Module):
         self.film_net: nn.Module | None = None
         self.pole_net: nn.Module | None = None
         if num_controls > 0:
-            if cond == "film" and act_type != "gated":
+            if cond == "film" and act_type not in ("gated", "odd"):
                 raise ValueError("controls need act_type='gated'")
             if cond == "poles" and discretization not in ("zoh", "foh"):
                 raise ValueError("pole conditioning needs 'zoh' or 'foh'")
@@ -622,6 +728,18 @@ class SSMWaveNet(nn.Module):
             nn.Conv1d(channels, output_channels, 1),
             final_act,
         )
+        self._remove_biases(act_type, head_act)
+
+    def _remove_biases(self, act_type: str, head_act: str) -> None:
+        """act_type 'odd': no constant may enter, so the input and head 1x1 layers
+        lose their bias, after they are built, so the draws are the gated model's.
+        Other act_types: nothing."""
+        if act_type != "odd":
+            return
+        if head_act != "tanh":
+            raise ValueError("act_type 'odd' needs the odd head_act 'tanh'")
+        for conv in (self.input_conv, self.output_net[1], self.output_net[3]):
+            conv.register_parameter("bias", None)
 
     def forward(self, x: Tensor, controls: Tensor | None = None) -> Tensor:
         """x: (batch, 1, length), controls: (batch, num_controls) -> like x."""

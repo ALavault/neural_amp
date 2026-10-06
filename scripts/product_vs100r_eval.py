@@ -60,10 +60,11 @@ DRY_SSM = {
 
 
 def load(run_id: str | None) -> BlackBoxModel:
-    ssm = DRY_SSM
+    ssm, model = DRY_SSM, "ssm-wavenet"
     if run_id:
-        ssm = json.loads((bench.RESULTS_DIR / f"{run_id}.json").read_text())["ssm"]
-    args = argparse.Namespace(model="ssm-wavenet", device="vs100r", **ssm)
+        record = json.loads((bench.RESULTS_DIR / f"{run_id}.json").read_text())
+        ssm, model = record["ssm"] or {}, record["model"]
+    args = argparse.Namespace(model=model, device="vs100r", **ssm)
     processor = bench.build_processor(args)
     if run_id:
         path = bench.RUNS_DIR / f"nablafx_{run_id}/checkpoints/last.ckpt"

@@ -45,6 +45,9 @@ RUNS = {
     "A48": ["vs100r_gc_film_joint_s925_r2", "vs100r48_film_s43", "vs100r48_film_s44"],
     "B192": ["vs100r192_film_s42", "vs100r192_film_s43", "vs100r192_film_s44"],
     "C": ["vs100r48fast_film_s42", "vs100r48fast_film_s43", "vs100r48fast_film_s44"],
+    # demo/odd_gate and demo/greybox (absent records are skipped).
+    "ODD": ["vs100r48odd_film_s42", "vs100r48odd_film_s43", "vs100r48odd_film_s44"],
+    "GREY": ["vs100r48grey_s42", "vs100r48grey_s43", "vs100r48grey_s44"],
 }
 CENTRES = [1000 * 2 ** (k / 3) for k in range(-10, 13)]  # 100 Hz to 16 kHz
 
