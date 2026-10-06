@@ -1,0 +1,70 @@
+# Boîte grise façon KIPR contre SSM-WaveNet : préinscription
+
+Voie produit (D-PRODUCT-001), aucune revendication scientifique. **Écrit le 2026-10-06, avant tout
+entraînement de cette piste.** Les règles ci-dessous ne changent plus après les chiffres.
+
+## Question
+
+Que rapportent les 28 000 paramètres de SSM-WaveNet sur la VS100R, face à un modèle structuré de
+quelques centaines de paramètres de traitement ? Ce modèle reprend la structure du moteur DSP
+KIPR : filtres, gain d'enveloppe, courbe impaire entre gains selon le signe. Et ce modèle
+structuré reproduit-il les cibles KIPR, issues de sa propre famille ?
+
+**Décision que la mesure change** : faire ou non de la boîte grise la ligne de base des prochaines
+comparaisons. Si elle est équivalente, un modèle de cette taille suffit, et la boîte noire doit
+justifier son coût.
+
+## Modèle (`src/fssr_nam/models/greybox.py`, `GreyBoxAmp`)
+
+Écrit pour ce dépôt, sans code de l'archive KIPR (GPL-3).
+- Chaîne : FIR d'entrée (32 coefficients), puis quatre branches. Chaque branche : filtre du
+  premier ordre, gain d'attaque compressé par une enveloppe de |u|, coupe-pic algébrique impair
+  x/(1+|x|^q)^(1/q) entre des gains e^±β selon le signe, filtre du premier ordre. Ensuite, mélange
+  des branches et FIR de sortie.
+- Les boutons pilotent les coefficients par une tête (2 → 32 → 40) dont la dernière couche part
+  de zéro.
+- Taille : 1 524 paramètres avec boutons, dont 1 416 dans la tête ; 108 sans boutons.
+- Aucun biais : le modèle est impair quand les β sont nuls. Contrôles :
+  `tests/numerical/test_greybox.py` (fini, gradients, imparité, zéro → zéro, asymétrie,
+  causalité, boutons, entier/pas à pas, remise à zéro).
+- Coefficients structurels sans décroissance des poids (`_optim`, `--honor-optim`).
+
+## Bras
+
+- **VS100R** : `vs100r48grey_s42`, `_s43`, `_s44`, `--model greybox`, mêmes drapeaux que le
+  bras C. Le lr reste 0,01 comme pour C, avec les pas de division du jumeau A. Référence : le bras C
+  `vs100r48fast_film_s*`, par graine.
+- **KIPR** : `kipr_{sym,asym}_s{42,43,44}_grey`, `known_answer.py --tag grey`, protocole r2.
+  Référence : `kipr_*_r2`.
+
+Avant les runs VS100R : la même porte au bit du chemin par défaut que la piste impaire (même
+file), puis un smoke de 100 pas de la boîte grise. Après chaque run : validation identique à
+celle du bras C.
+
+## Lectures (script `demo/odd_gate/evaluate.py --arm grey`, commité avec ce texte)
+
+**ESR VS100R** : lecture P (voir `demo/odd_gate/predictions.md`), d_i = s(GREY) − s(C).
+« Acceptable » si d ≤ +0,10 et chaque d_i ≤ +0,25.
+
+**Verdict de la piste** : « boîte grise équivalente au bras C (ESR) » si l'ESR est acceptable ;
+sinon « boîte grise moins bonne que le bras C (ESR) ». On rapporte avec : exp(d), le rapport moyen
+d'ESR, et l'étiquette meilleur / moins bon / équivalent / non tranché.
+
+**2ᵉ harmonique VS100R**, même lecture R1 que la piste impaire (« réduit », « inchangé »,
+« partiel »). Rapportée à côté du verdict, sans le modifier ; |D3| est descriptif.
+
+**KIPR** (`known_answer.py measure --tag grey`) : mêmes portes et même lecture que r2. Comparaison
+à r2 : « réduit » si E_sym(grey) ≤ E_sym(r2) − 10 dB, seulement si les deux lectures sont valides
+(sinon, comme pour la piste impaire). Rapportée à côté du verdict.
+
+**Descriptif, sans seuil** : les mêmes que la piste impaire (|D3|, prises 16 et 36, nombre de
+paramètres) ; exp(d) est le champ `esr_ratio`.
+
+**Attente, non seuil** : la boîte grise moins bonne en ESR d'au moins 0,5 en ln (ESR × 1,6).
+
+## Ce qui ne pourra pas être conclu
+
+- Rien sur la forme optimale de la boîte grise : une seule structure est testée, sans recherche
+  d'architecture.
+- Rien à l'écoute.
+- Avec 3 graines, seuls des effets nets ressortent.
