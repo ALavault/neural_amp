@@ -78,3 +78,18 @@ sur les segments `train_noise`, jamais sur `test_noise`. Ensuite seulement vienn
 d'alignement et les lectures, inchangées. L'entraînement ne change pas. r2 n'ayant pas de lecture
 valide, la comparaison KIPR à r2 sera descriptive (règle déjà écrite). Les lectures VS100R ne
 changent pas : le banc VS100R a sa garde de polarité.
+
+## Résultats KIPR (2026-10-06, six runs, exit 0 ; lecture intermédiaire, VS100R en attente)
+
+Lecture `known_answer.py measure --tag grey`, sortie `known_answer_grey.json`.
+
+**Verdict KIPR préinscrit : aucune lecture (alignement).** Comparaison à r2 : descriptive (r2 sans lecture valide).
+
+- `sym` : excès de H2/H1 (médiane des graines) +15.5 dB à -24 dBFS, +28.3 dB à -12 dBFS, +34.9 dB à -6 dBFS ; écart de H3/H1 -3.1, -3.1, -3.1 dB.
+- `asym` : excès de H2/H1 (médiane des graines) +3.8 dB à -24 dBFS, +5.0 dB à -12 dBFS, +4.7 dB à -6 dBFS ; écart de H3/H1 -1.1, -0.6, -0.2 dB.
+- Alignement à −12 dBFS (décalage, ESR, polarité appliquée) : `kipr_sym_s42_grey` 6, 1.69, +1 ; `kipr_sym_s43_grey` 6, 1.69, +1 ; `kipr_sym_s44_grey` 6, 1.69, +1 ; `kipr_asym_s42_grey` 0, 0.24, +1 ; `kipr_asym_s43_grey` 0, 0.24, +1 ; `kipr_asym_s44_grey` 0, 0.24, +1.
+- **Descriptif** : les trois graines donnent des runs identiques au bit près. Sans bouton, la boîte
+  grise n'a aucun tirage aléatoire (paramètres initialisés à des constantes) et les données sont les
+  mêmes : la préinscription ne l'avait pas prévu ; les « trois graines » sont un seul run. La cible
+  symétrique n'est pas suivie (décalage 6 à 7, ESR 1,7 à 1,8), la cible asymétrique l'est (décalage
+  0, ESR 0,17 à 0,25).

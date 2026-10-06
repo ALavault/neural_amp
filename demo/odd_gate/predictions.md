@@ -91,3 +91,19 @@ sur les segments `train_noise`, jamais sur `test_noise`. Ensuite seulement vienn
 d'alignement et les lectures, inchangées. L'entraînement ne change pas. r2 n'ayant pas de lecture
 valide, la comparaison KIPR à r2 sera descriptive (règle déjà écrite). Les lectures VS100R ne
 changent pas : le banc VS100R a sa garde de polarité.
+
+## Résultats KIPR (2026-10-06, six runs, exit 0 ; lecture intermédiaire, VS100R en attente)
+
+Lecture `known_answer.py measure --tag odd`, sortie `known_answer_odd.json`.
+
+**Verdict KIPR préinscrit : non concluant (témoin positif ou H3 de la cible symétrique).** Comparaison à r2 : descriptive (r2 sans lecture valide).
+
+- `sym` : excès de H2/H1 (médiane des graines) +1.2 dB à -24 dBFS, +37.4 dB à -12 dBFS, +46.9 dB à -6 dBFS ; écart de H3/H1 -0.2, +0.3, -2.4 dB.
+- `asym` : excès de H2/H1 (médiane des graines) +1.2 dB à -24 dBFS, +5.6 dB à -12 dBFS, +9.5 dB à -6 dBFS ; écart de H3/H1 -0.2, -0.2, -0.7 dB.
+- Alignement à −12 dBFS (décalage, ESR, polarité appliquée) : `kipr_sym_s42_odd` 0, 0.22, +1 ; `kipr_sym_s43_odd` 0, 0.22, +1 ; `kipr_sym_s44_odd` 0, 0.24, +1 ; `kipr_asym_s42_odd` 0, 0.2, +1 ; `kipr_asym_s43_odd` 0, 0.21, +1 ; `kipr_asym_s44_odd` 0, 0.18, +1.
+- **Descriptif, sans interprétation de verdict** : la porte impaire n'empêche pas l'excès sur la cible
+  dite symétrique (+37 et +47 dB). Le modèle est exactement impair à β nul, il a donc appris une
+  asymétrie par β. Or cette cible n'est symétrique qu'en forte saturation : son H2/H1 sur les sons
+  vaut −12 dB à −60 dBFS, −23 à −48 et −35 à −36 dBFS (`metrics.json` KIPR). Un modèle entraîné sur
+  du bruit à quatre niveaux y apprend une asymétrie dépendante du niveau. La prémisse du banc
+  (« cible symétrique ») ne vaut que pour les sons de −24 à −6 dBFS.
