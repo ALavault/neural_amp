@@ -5,7 +5,7 @@
 # free-memory wait. A failure is written to demo/RUNS.jsonl and stops the queue.
 RUNNER=${1:?usage: product_kipr_queue.sh <runner path>}
 source "${RUNNER}/scripts/product_queue_lib.sh"
-GPU_FREE_MIB=${GPU_FREE_MIB:-6000}
+GPU_FREE_MIB=6000  # after the lib, which sets its own default
 for seed in 42 43 44; do
   for config in sym asym; do
     run="kipr_${config}_s${seed}"

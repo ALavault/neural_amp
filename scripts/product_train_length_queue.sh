@@ -9,7 +9,7 @@
 # A failure stops the queue.
 RUNNER=${1:?usage: product_train_length_queue.sh <runner path>}
 source "${RUNNER}/scripts/product_queue_lib.sh"
-GPU_FREE_MIB=${GPU_FREE_MIB:-21000}
+GPU_FREE_MIB=21000  # after the lib, which sets its own default
 COMMON="--model ssm-wavenet --device vs100r --discretization zoh --honor-optim"
 COMMON="${COMMON} --deterministic --split-seed 925 --l1-weight 0.5 --mrstft-weight 0.5"
 COMMON="${COMMON} --cond film --cond-head joint --cond-hidden 32 --head-act leaky"
