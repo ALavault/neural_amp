@@ -180,3 +180,24 @@ couple non vu exclu, 35 prises).
   Contraire : il reste au-dessus de 1,5 pour au moins deux graines.
 - **D2** : l'écart de lecture P entre C et A48 (moyenne des trois graines) change de moins de 0,02,
   car P est dominée par les trames fortes. Contraire : il change de plus de 0,05.
+
+### Résultats sans composante continue (`dc_removed.json`)
+
+| | rapport C / A48, trames faibles (graines 42, 43, 44) | écart P (C − A48, moyenne) |
+|---|---|---|
+| brut | 2,47 ; 0,78 ; 3,56 | +0,012 |
+| passe-haut | 2,10 ; 0,34 ; 1,83 | −0,039 |
+
+- **D1 : contraire (établi).** Sans composante continue, C reste moins bon que A48 à faible niveau pour
+  les graines 42 et 44 (rapports 2,1 et 1,8). L'écart se réduit mais ne disparaît pas : le décalage
+  continu n'est qu'une partie de l'histoire.
+- **D2 : contraire (établi).** Le passe-haut améliore la lecture P de C de 0,05 en moyenne (de 0,025 à
+  0,076 selon la graine). Celle de A48 bouge de 0,006 au plus. L'écart P entre C et A48 passe de
+  +0,012 à −0,039 : sans son décalage continu, C serait légèrement meilleur que A48 sur P. La lecture P
+  n'est donc pas insensible au décalage, contrairement à ce que je supposais.
+- **Conséquences (supposé)** :
+  - un passe-haut de sortie très bas (ou une sortie sans biais) est un correctif candidat simple
+    pour le réglage des nouveaux prototypes, à préinscrire ;
+  - le modèle impair n'a pas de composante continue par construction ; sa comparaison au bras C en
+    tiendra compte (descriptif).
+  - Ce qui reste de l'écart à faible niveau (graines 42 et 44) n'est pas expliqué ici.
