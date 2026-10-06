@@ -1,0 +1,109 @@
+{
+ "sample_rate": 192000,
+ "sections": [
+  {
+   "section": "pad_start",
+   "start": 0,
+   "samples": 576000
+  },
+  {
+   "section": "markers_start",
+   "start": 576000,
+   "samples": 288768
+  },
+  {
+   "section": "silence",
+   "start": 864768,
+   "samples": 960000
+  },
+  {
+   "section": "pink_noise_-30dBFS_rms",
+   "start": 1920768,
+   "samples": 960000
+  },
+  {
+   "section": "sweep_-20dBFS",
+   "start": 2976768,
+   "samples": 960000
+  },
+  {
+   "section": "sweep_-10dBFS",
+   "start": 4032768,
+   "samples": 960000
+  },
+  {
+   "section": "sweep_-3dBFS",
+   "start": 5088768,
+   "samples": 960000
+  },
+  {
+   "section": "di_train",
+   "start": 6144768,
+   "samples": 23040000
+  },
+  {
+   "section": "di_validation",
+   "start": 29184768,
+   "samples": 5760000
+  },
+  {
+   "section": "di_test",
+   "start": 34944768,
+   "samples": 5760000
+  },
+  {
+   "section": "polarity_plus",
+   "start": 40896768,
+   "samples": 1920000
+  },
+  {
+   "section": "polarity_minus",
+   "start": 42912768,
+   "samples": 1920000
+  },
+  {
+   "section": "level_-12dB",
+   "start": 44928768,
+   "samples": 1920000
+  },
+  {
+   "section": "level_-6dB",
+   "start": 46944768,
+   "samples": 1920000
+  },
+  {
+   "section": "level_+6dB",
+   "start": 48960768,
+   "samples": 1920000
+  },
+  {
+   "section": "bursts_plucks",
+   "start": 50976768,
+   "samples": 1920000
+  },
+  {
+   "section": "bursts_recovery",
+   "start": 52992768,
+   "samples": 4833600
+  },
+  {
+   "section": "markers_end",
+   "start": 57826368,
+   "samples": 288768
+  },
+  {
+   "section": "pad_end",
+   "start": 58115136,
+   "samples": 1152000
+  }
+ ],
+ "file": "datasets/raw/internal/valvestate_vs100r_mic/reamp_valvestate_mic_192k.wav",
+ "sha256": "8ee5f7e171fab628de2269e35fac87821f881bc68908c1aeac5e5a5f096f09ca",
+ "seconds": 308.683,
+ "di_source": "ToneTwist AFx DRY-with-markers (Zenodo 10455730, CC BY-NC 4.0)",
+ "excerpt": {
+  "file": "idmt-gtr4-ib",
+  "start_s": 190,
+  "seconds": 10
+ }
+}
