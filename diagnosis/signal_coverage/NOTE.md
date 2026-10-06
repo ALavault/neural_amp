@@ -168,3 +168,15 @@ Bruit de l'appareil, même section : −67 dBFS (médiane des prises).
 - **À tester** : retirer la moyenne de sortie (ou un passe-haut très bas) des modèles existants et
   relire l'ESR des trames faibles et la lecture P. Si l'écart C / A48 disparaît, le décalage est
   toute l'histoire ; le correctif serait alors un passe-haut de sortie, à préinscrire.
+
+## Sans composante continue (prédictions écrites avant la mesure, 2026-10-06)
+
+Mesure : `dc_removed.py`, les 6 modèles. Un même passe-haut causal à un pôle (R = 0,9995, coupure
+vers 3,8 Hz à 48 kHz) est appliqué à la sortie et à la cible, avant la région notée. On relit
+l'ESR des trames faibles (cible sous −40 dBFS) et la lecture P (moyenne par couple des ln ESR,
+couple non vu exclu, 35 prises).
+- **D1** : sans composante continue, le rapport C / A48 des trames faibles revient entre 0,67 et 1,5
+  pour au moins deux graines sur trois. L'écart de C à faible niveau est alors son décalage continu.
+  Contraire : il reste au-dessus de 1,5 pour au moins deux graines.
+- **D2** : l'écart de lecture P entre C et A48 (moyenne des trois graines) change de moins de 0,02,
+  car P est dominée par les trames fortes. Contraire : il change de plus de 0,05.
