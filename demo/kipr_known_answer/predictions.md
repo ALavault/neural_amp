@@ -78,3 +78,38 @@ E et l'écart de H3 à 300 Hz et 3 kHz.
   dit que la porte peut le produire, pas qu'il est la seule cause sur la VS100R.
 - Une absence de plancher n'innocente pas la porte sur la VS100R ; elle reporte la question sur
   les données et le conditionnement.
+
+## Résultats (2026-10-06, six runs, exit 0)
+
+Instrument : écart maximal 0,0007 dB avec les valeurs KIPR. Lecture par `known_answer.py measure`,
+sortie `known_answer.json`.
+
+**Verdict préinscrit : non concluant.** Le témoin positif échoue sur H2 à −6 dBFS (E médian +6,8 dB
+pour un seuil de 5) ; il passe à −12 dBFS (+4,7 dB) et sur H3 aux deux niveaux (écarts sous 0,1 dB).
+
+| | E (H2/H1 modèle − cible), médiane des graines | | | écart H3/H1 |
+|---|---|---|---|---|
+| | −24 dBFS | −12 dBFS | −6 dBFS | −12 / −6 dBFS |
+| `v1_lead_amp` (symétrique) | +12,0 | +36,8 | +46,7 | −0,4 / −0,9 |
+| `v2_lead_bias_16383` (témoin) | +0,3 | +4,7 | +6,8 | −0,1 / +0,1 |
+
+**Défaut du protocole, trouvé après la lecture (établi).** L'ESR des segments `test_noise` vaut
+environ 2 pour les six runs, à tous les niveaux : la sortie ne suit pas la forme d'onde de la cible.
+Par corrélation croisée sur `test_noise` (graine 42) :
+- entrée → cible brute : pic à 198 échantillons, comme l'estimation KIPR ;
+- sortie du modèle → cible avancée de 182 : le modèle est en avance de 15 échantillons (symétrique,
+  corrélation 0,84 à 0,86) et de 18 (témoin, 0,47 à 0,49).
+
+Le modèle n'a pas appris les 16 échantillons de retard pur laissés par l'avance de 198 − 16. C'est
+le piège déjà documenté pour F-Fuzz (`DIAGNOSIS_ffuzz.md` : ces modèles n'apprennent pas la latence
+de la cible). Il fallait avancer la cible de toute la latence. Avec une cible décalée, la perte L1
+pousse vers une sortie lissée ; seule la MR-STFT, peu sensible au retard, guide la forme spectrale.
+
+**Ce que cela interdit.** L'écart entre la cible symétrique (+37 et +47 dB) et le témoin (+5 et
++7 dB) est rapporté sans interprétation : il peut venir de la porte, ou d'un apprentissage gêné
+par le retard qui touche différemment les deux cibles. Le banc ne tranche pas la question de la
+porte dans cet état.
+
+**Pour une reprise** (non lancée ; sa préinscription reste à écrire) : cible avancée de 198, et
+porte préalable sur l'alignement : décalage du modèle à la cible au plus 2 échantillons et ESR de
+`test_noise` sous 1. Sinon, aucune lecture.
