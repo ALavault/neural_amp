@@ -86,3 +86,21 @@ compte le plus. Mesures qui départageraient, **à tester** :
 après un fort comme le manque principal. La section « niveaux » de la source au micro (extrait de
 −22 dBFS environ, à −12, −6 et +6 dB) couvre déjà la zone −35 à −16 dBFS où l'erreur se concentre.
 Les salves de récupération restent utiles comme contrôle, pas comme priorité.
+
+## Test du bruit de l'appareil (prédiction écrite avant la mesure, 2026-10-06)
+
+Mesure : `noise_share.py`, modèles `vs100r_gc_film_joint_s925_r2` et `vs100r48fast_film_s42`, mêmes
+prises et trames. Les trames sont classées par niveau de la **cible** (classes de 5 dB). Pour
+chaque classe, on compare l'ESR observée à un plancher de bruit, qu'aucun modèle nourri du
+bouclage ne peut prédire :
+
+ESR_bruit = (1 − part cohérente) × puissance de bruit de la prise / puissance moyenne de la cible
+dans la classe.
+
+Le bruit est `fx_noise_fullband_dbfs` et la part cohérente `coherent_share`
+(`demo/capture/valvestate/noise.json`, par prise).
+- **H_bruit** : dans les classes où l'ESR dépasse 0,02, ESR_bruit vaut au moins la moitié de l'ESR
+  (médiane des classes). Le bruit explique alors l'essentiel de l'erreur là où elle est forte.
+- **Contraire** : ESR_bruit sous un dixième de l'ESR dans ces classes.
+- Complément pour O2 (descriptif) : écart de niveau moyen de la cible entre les trames moyennes à
+  50–200 ms d'un fort et celles à plus d'une seconde.
