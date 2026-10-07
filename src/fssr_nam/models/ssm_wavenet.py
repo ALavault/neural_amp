@@ -566,7 +566,15 @@ class GatedSSMBlock(nn.Module):
                 h = (1 + scale) * h
                 beta, shift_b = shift.chunk(2, dim=1)
             gate_a, gate_b = h.chunk(2, dim=1)
-            h = self.odd_gate(gate_a, gate_b, beta, shift_b)
+            # The envelope's FFT buffers made the odd model keep 1.7x the gated model's
+            # activations (VS100R smoke out of GPU memory, 2026-10-07): recomputed in
+            # the backward pass instead, same values.
+            if torch.is_grad_enabled():
+                h = torch.utils.checkpoint.checkpoint(
+                    self.odd_gate, gate_a, gate_b, beta, shift_b, use_reentrant=False
+                )
+            else:
+                h = self.odd_gate(gate_a, gate_b, beta, shift_b)
         else:
             h = self.pre_gate(h)
             if film is not None:

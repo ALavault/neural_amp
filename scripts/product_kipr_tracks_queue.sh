@@ -32,7 +32,10 @@ print(' '.join(map(str, steps)))" "$1"
 }
 
 GPU_FREE_MIB=21000  # after the lib, which sets its own default
-gate=repro_gate_vs100r48_kiprtracks
+# RETRY (e.g. _r2) suffixes the gate and smoke ids of a relaunch, so that no run id is
+# reused (2026-10-07: the first odd smoke ran out of GPU memory before the gate
+# recomputation fix); the VS100R run ids are unchanged, none of them had started.
+gate=repro_gate_vs100r48_kiprtracks${RETRY:-}
 wait_gpu
 echo "=== ${gate}: start $(date '+%a %d %H:%M')"
 .venv/bin/python3 scripts/product_nablafx_bench.py --run-id "${gate}" --no-record \
@@ -60,7 +63,7 @@ EOF
 for arm in odd grey; do
   flags=${ODD}
   [ "${arm}" = grey ] && flags=${GREY}
-  smoke="smoke_kiprtracks_${arm}"
+  smoke="smoke_kiprtracks_${arm}${RETRY:-}"
   wait_gpu
   .venv/bin/python3 scripts/product_nablafx_bench.py --run-id "${smoke}" --no-record \
     ${flags} ${COMMON} --seed 42 --max-steps 100 > "demo/runs/${smoke}.log" 2>&1 \

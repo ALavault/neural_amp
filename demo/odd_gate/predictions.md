@@ -107,3 +107,15 @@ Lecture `known_answer.py measure --tag odd`, sortie `known_answer_odd.json`.
   vaut −12 dB à −60 dBFS, −23 à −48 et −35 à −36 dBFS (`metrics.json` KIPR). Un modèle entraîné sur
   du bruit à quatre niveaux y apprend une asymétrie dépendante du niveau. La prémisse du banc
   (« cible symétrique ») ne vaut que pour les sons de −24 à −6 dBFS.
+
+## Note d'exécution (2026-10-07, avant tout run VS100R de la piste)
+
+Le smoke VS100R `smoke_kiprtracks_odd` est sorti en mémoire GPU épuisée (23,3 Gio sur 23,4, le
+processus seul ; échec inscrit dans `demo/RUNS.jsonl`). Cause mesurée sur CPU (tenseurs gardés pour
+la rétropropagation, même configuration, longueur réduite) : les tampons FFT de l'enveloppe gardent
+1,71 fois la mémoire du bras C. Correctif : la porte impaire est recalculée pendant la
+rétropropagation (`torch.utils.checkpoint`), ce qui ramène le rapport à 0,99. Sortie et 110
+gradients identiques au bit avec et sans recalcul (float64, CPU). Le modèle, ses paramètres, les
+drapeaux, les graines et les lectures ne changent pas ; les runs KIPR déjà faits ne sont pas
+touchés. La file des pistes est relancée avec des identifiants de porte et de smoke suffixés `_r2` ;
+les identifiants des runs VS100R préinscrits restent ceux de ce texte.
