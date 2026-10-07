@@ -1,0 +1,83 @@
+{
+ "sample_rate": 192000,
+ "sections": [
+  {
+   "section": "pad_start",
+   "start": 0,
+   "samples": 576000
+  },
+  {
+   "section": "markers_start",
+   "start": 576000,
+   "samples": 288768
+  },
+  {
+   "section": "silence",
+   "start": 864768,
+   "samples": 384000
+  },
+  {
+   "section": "sweep_-20dBFS",
+   "start": 1344768,
+   "samples": 960000
+  },
+  {
+   "section": "sweep_-10dBFS",
+   "start": 2400768,
+   "samples": 960000
+  },
+  {
+   "section": "sweep_-3dBFS",
+   "start": 3456768,
+   "samples": 960000
+  },
+  {
+   "section": "two_tone_mod_-20dBFS",
+   "start": 4512768,
+   "samples": 384000
+  },
+  {
+   "section": "two_tone_mod_-10dBFS",
+   "start": 4992768,
+   "samples": 384000
+  },
+  {
+   "section": "two_tone_mod_-3dBFS",
+   "start": 5472768,
+   "samples": 384000
+  },
+  {
+   "section": "two_tone_diff_-20dBFS",
+   "start": 5952768,
+   "samples": 384000
+  },
+  {
+   "section": "two_tone_diff_-10dBFS",
+   "start": 6432768,
+   "samples": 384000
+  },
+  {
+   "section": "two_tone_diff_-3dBFS",
+   "start": 6912768,
+   "samples": 384000
+  },
+  {
+   "section": "bursts_plucks",
+   "start": 7392768,
+   "samples": 1920000
+  },
+  {
+   "section": "markers_end",
+   "start": 9408768,
+   "samples": 288768
+  },
+  {
+   "section": "pad_end",
+   "start": 9697536,
+   "samples": 1152000
+  }
+ ],
+ "file": "datasets/raw/internal/valvestate_vs100r_mic/reamp_valvestate_mic_probe_192k.wav",
+ "sha256": "a56b1e82053f75e9ed01c183e1366b4a50a67fccc2330be2b0c8002ce4d9a067",
+ "seconds": 56.508
+}

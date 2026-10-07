@@ -12,13 +12,23 @@ markers, three groups of sections for offline tests (not training by default):
 - bursts: decaying 110 Hz and 440 Hz tones ("plucks", 2 ms attack) at five envelope
   amplitudes, then pairs of
   a loud 110 Hz burst and a quiet 1 kHz probe after a gap of 5 ms to 2 s, with the probe
-  alone as reference (recovery after a loud event: bias shift, blocking).
+  alone as reference (recovery after a loud event: bias shift, blocking);
+- two tones (added 2026-10-07, after the existing sections, which keep their positions),
+  2 s each at combined peaks of -20, -10 and -3 dBFS, as the sweeps: 100 Hz + 2 kHz at
+  4:1 (modulation of a high tone by a low one: cone excursion, power supply), and
+  1000 + 1100 Hz at 1:1 (difference tone at 100 Hz, even order; 900 and 1200 Hz, odd
+  order). Every frequency fits a whole number of cycles in 1 s at 192 kHz.
 
-Writes datasets/raw/internal/valvestate_vs100r_mic/reamp_valvestate_mic_192k.wav (not
-committed: ToneTwist DI material, CC BY-NC) and demo/capture/valvestate_mic/layout.json.
-The processing scripts of the first capture (product_valvestate_passes.py, _qc.py,
-_dataset.py, product_vs100r_eval.py) read its layout and paths: takes recorded with this
-source need them pointed at this layout (closing markers at 301.2 s, not 212.0 s).
+A second, short source (about 1 min) repeats the sweeps, the two tones and the plucks
+for the cold / hot / warm takes of the session sheet: same markers and pre-roll, so the
+first capture's alignment applies.
+
+Writes datasets/raw/internal/valvestate_vs100r_mic/reamp_valvestate_mic_192k.wav and
+reamp_valvestate_mic_probe_192k.wav (not committed: ToneTwist DI material, CC BY-NC),
+demo/capture/valvestate_mic/layout.json and layout_probe.json. The processing scripts of
+the first capture (product_valvestate_passes.py, _qc.py, _dataset.py,
+product_vs100r_eval.py) read its layout and paths: takes recorded with these sources
+need them pointed at these layouts (closing markers no longer at 212.0 s).
 """
 
 from __future__ import annotations
@@ -43,6 +53,9 @@ EXCERPT = ("idmt-gtr4-ib", 190, 10)  # file, start (s), length (s)
 LEVELS_DB = (-12, -6, 6)
 PLUCK_AMPLITUDES_DBFS = (-30, -20, -12, -6, -3)
 GAPS_MS = (5, 20, 50, 100, 200, 500, 1000, 2000)
+SWEEP_LEVELS_DBFS = (-20, -10, -3)  # as in the first source
+# (name, low Hz, high Hz, low share of the combined peak)
+TWO_TONES = (("mod", 100, 2000, 0.8), ("diff", 1000, 1100, 0.5))
 
 
 def excerpt() -> np.ndarray:
@@ -77,6 +90,28 @@ def silence(seconds: float) -> np.ndarray:
     return np.zeros(int(seconds * RATE))
 
 
+def plucks() -> np.ndarray:
+    parts = []
+    for hz in (110, 440):
+        for peak in PLUCK_AMPLITUDES_DBFS:
+            parts += [pluck(hz, peak), silence(0.4)]
+    return np.concatenate(parts)
+
+
+def two_tone_sections() -> list[tuple[str, np.ndarray]]:
+    """Two summed tones, 2 s; the shares of the combined peak add up to 1."""
+    sections = []
+    for name, low, high, share in TWO_TONES:
+        for level in SWEEP_LEVELS_DBFS:
+            x = tone(low, 2.0, level + 20 * np.log10(share))
+            x += tone(high, 2.0, level + 20 * np.log10(1 - share))
+            sections += [
+                ("gap", silence(session.GAP_S)),
+                (f"two_tone_{name}_{level}dBFS", x),
+            ]
+    return sections
+
+
 def extra_sections() -> list[tuple[str, np.ndarray]]:
     x = excerpt()
     gap = silence(session.GAP_S)
@@ -84,17 +119,45 @@ def extra_sections() -> list[tuple[str, np.ndarray]]:
     sections += [("polarity_plus", x), ("gap", gap), ("polarity_minus", -x)]
     for level in LEVELS_DB:
         sections += [("gap", gap), (f"level_{level:+d}dB", x * 10 ** (level / 20))]
-    plucks = []
-    for hz in (110, 440):
-        for peak in PLUCK_AMPLITUDES_DBFS:
-            plucks += [pluck(hz, peak), silence(0.4)]
-    sections += [("gap", gap), ("bursts_plucks", np.concatenate(plucks))]
+    sections += [("gap", gap), ("bursts_plucks", plucks())]
     probe = tone(1000, 0.1, -30)
     recovery = [silence(2.0), probe]
     for ms in GAPS_MS:
         recovery += [silence(2.0), tone(110, 0.3, -3), silence(ms / 1000), probe]
     sections += [("gap", gap), ("bursts_recovery", np.concatenate(recovery))]
-    return sections
+    return sections + two_tone_sections()
+
+
+def assemble(sections: list[tuple[str, np.ndarray]]) -> tuple[np.ndarray, dict]:
+    parts, out, position = [], [], 0
+    for name, x in sections:
+        if name != "gap":
+            out.append({"section": name, "start": position, "samples": len(x)})
+        parts.append(x)
+        position += len(x)
+    signal = np.concatenate(parts)
+    assert np.max(np.abs(signal)) < 1.0
+    return signal.astype(np.float32), {"sample_rate": RATE, "sections": out}
+
+
+def build_probe() -> tuple[np.ndarray, dict]:
+    """The short source of the cold / hot / warm takes: same pre-roll and markers as
+    the main source, a short silence, the sweeps, the two tones, the plucks."""
+    gap = silence(session.GAP_S)
+    sections = [
+        ("pad_start", np.zeros(session.PAD_START_S * RATE)),
+        ("markers_start", session.markers()),
+        ("silence", silence(2.0)),
+    ]
+    for level in SWEEP_LEVELS_DBFS:
+        sections += [("gap", gap), (f"sweep_{level}dBFS", session.sweep(5, level))]
+    sections += two_tone_sections()
+    sections += [("gap", gap), ("bursts_plucks", plucks()), ("gap", gap)]
+    sections += [
+        ("markers_end", session.markers()),
+        ("pad_end", np.zeros(session.PAD_END_S * RATE)),
+    ]
+    return assemble(sections)
 
 
 def build() -> tuple[np.ndarray, dict]:
@@ -141,28 +204,46 @@ def check_against_first_capture(signal: np.ndarray, layout: dict) -> float:
     return worst
 
 
-def main() -> None:
-    signal, layout = build()
-    worst = check_against_first_capture(signal, layout)
+def write(signal: np.ndarray, layout: dict, stem: str, sheet: str, extra: dict) -> dict:
     detected = session.self_check(signal)
     assert detected == 777, f"self-check found the blip at {detected}, not 777"
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
-    path = AUDIO_DIR / f"reamp_valvestate_mic_{RATE // 1000}k.wav"
+    path = AUDIO_DIR / f"{stem}_{RATE // 1000}k.wav"
     sf.write(path, signal, RATE, subtype="PCM_24")
     layout |= {
         "file": str(path.relative_to(ROOT)),
         "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
         "seconds": round(len(signal) / RATE, 3),
-        "di_source": "ToneTwist AFx DRY-with-markers (Zenodo 10455730, CC BY-NC 4.0)",
-        "excerpt": {"file": EXCERPT[0], "start_s": EXCERPT[1], "seconds": EXCERPT[2]},
-    }
+    } | extra
     SHEET_DIR.mkdir(parents=True, exist_ok=True)
-    (SHEET_DIR / "layout.json").write_text(json.dumps(layout, indent=1) + "\n")
+    (SHEET_DIR / sheet).write_text(json.dumps(layout, indent=1) + "\n")
     print(
         f"{path.name}: {layout['seconds']} s, peak {np.abs(signal).max():.3f}, "
-        f"first sections identical to the first source (max diff {worst:.1e}), "
         f"first blip found at sample {detected}"
     )
+    return layout
+
+
+def main() -> None:
+    signal, layout = build()
+    worst = check_against_first_capture(signal, layout)
+    print(f"first sections identical to the first source (max diff {worst:.1e})")
+    write(
+        signal,
+        layout,
+        "reamp_valvestate_mic",
+        "layout.json",
+        {
+            "di_source": "ToneTwist AFx DRY-with-markers (Zenodo 10455730, "
+            "CC BY-NC 4.0)",
+            "excerpt": {
+                "file": EXCERPT[0],
+                "start_s": EXCERPT[1],
+                "seconds": EXCERPT[2],
+            },
+        },
+    )
+    write(*build_probe(), "reamp_valvestate_mic_probe", "layout_probe.json", {})
 
 
 if __name__ == "__main__":

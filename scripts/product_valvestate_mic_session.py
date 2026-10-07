@@ -7,7 +7,11 @@ microphone, bass, middle and treble act on the target (the September FX send was
 before the tone stack). Fifteen training settings (centre three times for drift, gain,
 contour and each tone knob one at a time, two more at gain 2.5, one combination) and
 five test settings never trained on: September's take 16 setting, recorded twice, and
-the four gain-contour pairs September never recorded.
+the four gain-contour pairs September never recorded. Added 2026-10-07: three takes of
+the short probe source at the centre setting: cold (first take, amp just switched on),
+warm (after the last centre take, valve at equilibrium), then hot (right after a repeat
+of the loudest setting), to separate thermal drift (valve, speaker, power amp) from the
+settings. The repeat is also a second take of a test setting.
 
 Writes demo/capture/valvestate_mic/settings.csv and SESSION.md.
 """
@@ -74,29 +78,42 @@ def settings() -> list[dict]:
     first.insert(rng.randrange(1, len(first)), repeat)
     second.insert(rng.randrange(1, len(second)), repeat)
     ordered = [anchor, *first, anchor, *second, anchor]
+    # Probe takes (short source, centre), added after the draw, so the order of the
+    # other takes is unchanged: cold first; warm, a repeat of the loudest setting and
+    # hot at the end, with the valve at equilibrium for both warm and hot.
+    ordered = [
+        ("probe_cold", CENTER, "probe"),
+        *ordered,
+        ("probe_warm", CENTER, "probe"),
+        ("loud_repeat", setting(10, 10), "test"),
+        ("probe_hot", CENTER, "probe"),
+    ]
     out = []
     for i, (block, s, split) in enumerate(ordered, 1):
         name = session.name(s)
+        probe = split == "probe"
         out.append(
             {
                 "order": i,
                 "block": block,
                 "split": split,
+                "source": "probe" if probe else "main",
                 "setting": name,
                 "in_september": name in september,
                 **s,
-                "file": f"{name}.vs100r_mic_{i:02d}.wav",
+                "file": f"{name}.vs100r_mic_{i:02d}{'_probe' if probe else ''}.wav",
             }
         )
     return out
 
 
-def sheet(rows: list[dict], layout: dict) -> str:
+def sheet(rows: list[dict], layout: dict, probe: dict) -> str:
     rate = layout["sample_rate"] // 1000
     loudest = next(
         r["order"] for r in rows if r["setting"] == "G100_C100_B050_M050_T050"
     )
-    takes = len(rows)
+    takes = sum(r["source"] == "main" for r in rows)
+    probes = {r["block"]: r["order"] for r in rows if r["source"] == "probe"}
     lines = [
         "# Séance de capture au micro : Marshall Valvestate VS100R",
         "",
@@ -104,16 +121,22 @@ def sheet(rows: list[dict], layout: dict) -> str:
         f"{SEED}) ; ne pas éditer à la main, relancer le script.",
         "",
         f"{takes} prises de {layout['seconds'] / 60:.1f} min sur "
-        f"{len({r['setting'] for r in rows})} réglages, environ 3 h avec les "
-        "changements de réglage et l'installation.",
+        f"{len({r['setting'] for r in rows})} réglages, plus {len(probes)} prises de "
+        "la "
+        f"sonde courte ({probe['seconds'] / 60:.1f} min) à froid, tiède et à chaud ; "
+        "environ 3 h 20 avec les changements de réglage et l'installation.",
         "",
         "## Chaîne",
         "",
         f"- Source : `{layout['file']}`, {layout['seconds']} s, {rate} kHz, 24 bits, "
         f"sha256 `{layout['sha256'][:16]}…`. Sections et positions : "
         "`demo/capture/valvestate_mic/layout.json`. Les 212 premières secondes sont la "
-        "source de septembre, identique ; suivent la polarité, les niveaux et les "
-        "salves.",
+        "source de septembre, identique ; suivent la polarité, les niveaux, les "
+        "salves et les deux sons (100 Hz + 2 kHz à 4:1, 1000 + 1100 Hz, à -20, -10 et "
+        "-3 dBFS).",
+        f"- Sonde courte : `{probe['file']}`, {probe['seconds']} s, sha256 "
+        f"`{probe['sha256'][:16]}…` (`layout_probe.json`) : mêmes marqueurs, silence, "
+        "balayages, deux sons et pincements de la source principale.",
         f"- Interface : Antelope Zen Go Synergy Core, **{rate} kHz**, 24 bits, taille "
         "de tampon fixe pour toute la séance. **Tous les effets Synergy Core et le "
         "monitoring direct coupés** sur les entrées enregistrées.",
@@ -148,7 +171,31 @@ def sheet(rows: list[dict], layout: dict) -> str:
         "- Si le micro ou l'ampli bouge pendant la séance : le noter, remettre en "
         "place sur les marques, et refaire une prise centre avant de continuer.",
         "",
-        "## Test des deux entrées, avant de régler les niveaux (5 min)",
+        "## Froid, chaud, tiède : la sonde courte",
+        "",
+        "La sonde, au réglage centre, trois fois : à froid (prise "
+        f"{probes['probe_cold']}), tiède en fin de séance (prise "
+        f"{probes['probe_warm']}, lampe à l'équilibre), puis à chaud (prise "
+        f"{probes['probe_hot']}) juste après une reprise du réglage le plus fort "
+        f"(prise {probes['probe_hot'] - 1}). Froid face à tiède : la chauffe de "
+        "l'ampli ; tiède "
+        "face à chaud : l'échauffement du haut-parleur et de l'ampli de puissance par "
+        "un passage fort.",
+        "",
+        "- **Ampli éteint depuis au moins 2 h** avant la séance. Noter la température "
+        "de "
+        "la pièce.",
+        "- Le test des deux entrées et le niveau d'entrée de l'ampli se font **ampli "
+        "éteint** : ils ne passent pas par l'ampli (mesurer à la sortie de la boîte).",
+        "- **Allumer l'ampli et noter l'heure.** Après 2 min (chauffe minimale de la "
+        "lampe), régler le gain du micro (15 s de jeu fort au plus), puis enregistrer "
+        f"**aussitôt** la prise {probes['probe_cold']}.",
+        f"- Prises {probes['probe_warm']} à {probes['probe_hot']} **enchaînées sans "
+        f"pause** ; après la prise {probes['probe_hot'] - 1} (gain 10, contour 10), "
+        "remettre le centre en moins d'une minute.",
+        "- Noter l'heure de début de chaque prise de sonde dans le tableau.",
+        "",
+        "## Test des deux entrées, avant de régler les niveaux (5 min, ampli éteint)",
         "",
         "Les trois prises A, B et C de `demo/capture/valvestate/INTER_INPUT_TEST.md` "
         "(un signal partagé sur les deux entrées en mode ligne), jamais faites depuis "
@@ -162,11 +209,11 @@ def sheet(rows: list[dict], layout: dict) -> str:
         "septembre si on les retrouve (0 dBFS de la source vers 0 dBu à l'entrée de "
         "l'ampli, méthode dans `demo/capture/valvestate/SESSION.md`) ; sinon les "
         "régler ainsi et les noter.",
-        "- **Gain du micro**, avant la première prise : ampli au réglage probablement "
-        f"le plus fort du plan (gain 10, contour 10, celui de la prise {loudest}), "
-        "jouer la section « niveau +6 dB » de la source (255 à 265 s) : crêtes de "
-        "l'entrée 2 vers -10 dBFS, jamais d'écrêtage. **Ne plus toucher à aucun "
-        "niveau ni volume** ensuite.",
+        "- **Gain du micro**, ampli allumé depuis 2 min, juste avant la première "
+        "prise : ampli au réglage probablement le plus fort du plan (gain 10, contour "
+        f"10, celui de la prise {loudest}), jouer la section « niveau +6 dB » de la "
+        "source (255 à 265 s), 15 s au plus : crêtes de l'entrée 2 vers -10 dBFS, "
+        "jamais d'écrêtage. **Ne plus toucher à aucun niveau ni volume** ensuite.",
         "",
         "Valeurs fixes, à noter une fois :",
         "",
@@ -182,6 +229,8 @@ def sheet(rows: list[dict], layout: dict) -> str:
         "| Volume moniteur de la Zen Go (dB) | |",
         "| Gains et modes des deux entrées | |",
         "| Taille de tampon | |",
+        "| Ampli éteint depuis (h), heure de mise sous tension | |",
+        "| Température de la pièce, début et fin | |",
         "",
         "## Prises, dans cet ordre",
         "",
@@ -190,16 +239,18 @@ def sheet(rows: list[dict], layout: dict) -> str:
         "fichier comme dans la dernière colonne (suffixe de voie : `_loop`, `_mic`). "
         "Noter toute prise refaite.",
         "",
-        "| # | fait | gain | contour | grave | médium | aigu | rôle | en sept. | "
-        "fichier |",
-        "|---|---|---|---|---|---|---|---|---|---|",
+        "| # | fait | source | gain | contour | grave | médium | aigu | rôle | "
+        "en sept. | fichier | heure |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in rows:
+        source = "sonde" if r["source"] == "probe" else "principale"
         lines.append(
-            f"| {r['order']} | ☐ | {session.knob(r['G'])} | {session.knob(r['C'])} | "
-            f"{session.knob(r['B'])} | {session.knob(r['M'])} | "
-            f"{session.knob(r['T'])} | {r['block'].replace('_', ' ')} ({r['split']}) | "
-            f"{'oui' if r['in_september'] else ''} | `{r['file']}` |"
+            f"| {r['order']} | ☐ | {source} | {session.knob(r['G'])} | "
+            f"{session.knob(r['C'])} | {session.knob(r['B'])} | "
+            f"{session.knob(r['M'])} | {session.knob(r['T'])} | "
+            f"{r['block'].replace('_', ' ')} ({r['split']}) | "
+            f"{'oui' if r['in_september'] else ''} | `{r['file']}` | |"
         )
     lines += [
         "",
@@ -207,7 +258,10 @@ def sheet(rows: list[dict], layout: dict) -> str:
         "trois fois pour la dérive. *sept take16* : le réglage de la prise 16 de "
         "septembre, deux fois, pour savoir si cette prise était représentative. "
         "*unseen pair* : couples gain-contour jamais enregistrés. « en sept. » : le "
-        "même réglage existe dans la capture de septembre (départ de boucle).",
+        "même réglage existe dans la capture de septembre (départ de boucle). *probe "
+        "cold / warm / hot* : la sonde courte, voir plus haut ; *loud repeat* : "
+        "seconde "
+        "prise du réglage le plus fort, juste avant la sonde chaude.",
         "",
         "## Après la séance",
         "",
@@ -221,13 +275,15 @@ def sheet(rows: list[dict], layout: dict) -> str:
 
 def main() -> None:
     layout = json.loads((SHEET_DIR / "layout.json").read_text())
+    probe = json.loads((SHEET_DIR / "layout_probe.json").read_text())
     rows = settings()
-    fields = ["order", "block", "split", "setting", "in_september", *KNOBS, "file"]
+    fields = ["order", "block", "split", "source", "setting", "in_september", *KNOBS]
+    fields.append("file")
     with (SHEET_DIR / "settings.csv").open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
-    (SHEET_DIR / "SESSION.md").write_text(sheet(rows, layout), encoding="utf-8")
+    (SHEET_DIR / "SESSION.md").write_text(sheet(rows, layout, probe), encoding="utf-8")
     print(
         f"{len(rows)} prises, {len({r['setting'] for r in rows})} réglages, "
         f"{sum(r['in_september'] for r in rows)} prises à un réglage de septembre"

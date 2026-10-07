@@ -87,19 +87,49 @@
    "samples": 4833600
   },
   {
+   "section": "two_tone_mod_-20dBFS",
+   "start": 57922368,
+   "samples": 384000
+  },
+  {
+   "section": "two_tone_mod_-10dBFS",
+   "start": 58402368,
+   "samples": 384000
+  },
+  {
+   "section": "two_tone_mod_-3dBFS",
+   "start": 58882368,
+   "samples": 384000
+  },
+  {
+   "section": "two_tone_diff_-20dBFS",
+   "start": 59362368,
+   "samples": 384000
+  },
+  {
+   "section": "two_tone_diff_-10dBFS",
+   "start": 59842368,
+   "samples": 384000
+  },
+  {
+   "section": "two_tone_diff_-3dBFS",
+   "start": 60322368,
+   "samples": 384000
+  },
+  {
    "section": "markers_end",
-   "start": 57826368,
+   "start": 60706368,
    "samples": 288768
   },
   {
    "section": "pad_end",
-   "start": 58115136,
+   "start": 60995136,
    "samples": 1152000
   }
  ],
  "file": "datasets/raw/internal/valvestate_vs100r_mic/reamp_valvestate_mic_192k.wav",
- "sha256": "8ee5f7e171fab628de2269e35fac87821f881bc68908c1aeac5e5a5f096f09ca",
- "seconds": 308.683,
+ "sha256": "1564b1b29e7e222bc950e2b34b27cc82c99a7e6d5d6b72c0c2c97b85408b39e4",
+ "seconds": 323.683,
  "di_source": "ToneTwist AFx DRY-with-markers (Zenodo 10455730, CC BY-NC 4.0)",
  "excerpt": {
   "file": "idmt-gtr4-ib",
