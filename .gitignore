@@ -8,7 +8,10 @@ build/
 dist/
 
 # Raw or downloaded datasets never belong in Git.
-datasets/raw/
+# datasets/raw and datasets/amp_capture are symlinks to /bigdata2/lavaulta/neural_amp_data
+# since 2026-10-07 (no trailing slash, so the links are ignored too).
+datasets/raw
+datasets/amp_capture
 datasets/downloads/
 datasets/cache/
 
