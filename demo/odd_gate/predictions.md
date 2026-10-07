@@ -112,10 +112,13 @@ Lecture `known_answer.py measure --tag odd`, sortie `known_answer_odd.json`.
 
 Le smoke VS100R `smoke_kiprtracks_odd` est sorti en mémoire GPU épuisée (23,3 Gio sur 23,4, le
 processus seul ; échec inscrit dans `demo/RUNS.jsonl`). Cause mesurée sur CPU (tenseurs gardés pour
-la rétropropagation, même configuration, longueur réduite) : les tampons FFT de l'enveloppe gardent
-1,71 fois la mémoire du bras C. Correctif : la porte impaire est recalculée pendant la
-rétropropagation (`torch.utils.checkpoint`), ce qui ramène le rapport à 0,99. Sortie et 110
-gradients identiques au bit avec et sans recalcul (float64, CPU). Le modèle, ses paramètres, les
+la rétropropagation, drapeaux de la file dont `--discretization zoh`, lot de 2 et 0,5 s au lieu de la
+taille réelle) : les tampons FFT de l'enveloppe gardent 1,71 fois la mémoire du bras C. Correctif :
+la porte impaire est recalculée pendant la rétropropagation (`torch.utils.checkpoint`), ce qui
+ramène le rapport à 0,99 ; c'est une estimation CPU, le smoke GPU `_r2` la confirmera ou non.
+Sortie et 102 gradients de paramètres identiques au bit avec et sans recalcul (float64, CPU, mêmes
+drapeaux dont `zoh` ; une première vérification en discrétisation par défaut donnait 110 sur 110).
+La parité au bit sur GPU n'est pas vérifiée (relecture Codex). Le modèle, ses paramètres, les
 drapeaux, les graines et les lectures ne changent pas ; les runs KIPR déjà faits ne sont pas
 touchés. La file des pistes est relancée avec des identifiants de porte et de smoke suffixés `_r2` ;
 les identifiants des runs VS100R préinscrits restent ceux de ce texte.
