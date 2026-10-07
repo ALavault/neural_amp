@@ -34,7 +34,8 @@ print(" ".join(steps))
 EOF
 }
 
-gate=repro_gate_vs100r48_trainlen_r2
+# GATE_ID: a later relaunch takes a new gate id (r3 after the second reschedule).
+gate=${GATE_ID:-repro_gate_vs100r48_trainlen_r2}
 wait_gpu
 echo "=== ${gate}: start $(date '+%a %d %H:%M')"
 .venv/bin/python3 scripts/product_nablafx_bench.py --run-id "${gate}" --no-record \
@@ -81,6 +82,10 @@ for pair in "43 vs100r48_film_s43" "44 vs100r48_film_s44"; do
   steps=$(halving_steps "${twin}")
   for count in 10 20; do
     run="vs100r48len${count}_film_s${seed}"
+    if [ -f "demo/nablafx_bench/${run}.json" ]; then  # done and checked by an earlier queue
+      echo "=== ${run}: done, skipped"
+      continue
+    fi
     expected=$([ "${count}" = 10 ] && echo 280 || echo 564)
     echo "=== ${run}: halvings of ${twin} at steps [${steps}]"
     run_once "${run}" ${COMMON} ${FAST} --seed "${seed}" \
