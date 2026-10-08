@@ -1,0 +1,3567 @@
+{
+ "glued": {
+  "glued_samples": 72323136,
+  "glued_seconds": 376.683,
+  "expected_samples": 72323136,
+  "probe_head_identical_0_53s": true,
+  "full_identical_after_probe_end": true,
+  "overlap_s": 3.508,
+  "probe_in_overlap_all_zero": true,
+  "overlap_equals_full": true,
+  "overlap_equals_sum": true
+ },
+ "pairs": {
+  "1044": {
+   "format": {
+    "loopback": {
+     "rate": 192000,
+     "channels": 1,
+     "subtype": "PCM_24",
+     "frames": 72491008,
+     "seconds": 377.55733333333336
+    },
+    "mic": {
+     "rate": 192000,
+     "channels": 1,
+     "subtype": "PCM_24",
+     "frames": 72491008,
+     "seconds": 377.55733333333336
+    }
+   },
+   "same_length": true,
+   "reference": false,
+   "offset_samples": -1293,
+   "offset_s": -0.006734375,
+   "markers": {
+    "probe_start": {
+     "time_s": 3.0,
+     "lag_samples": -0.22836090855666324,
+     "corr": 0.99893783143751
+    },
+    "probe_end": {
+     "time_s": 49.004,
+     "lag_samples": -0.22831177677501618,
+     "corr": 0.9989384928011866
+    },
+    "full_start": {
+     "time_s": 56.0,
+     "lag_samples": -0.22833228235975586,
+     "corr": 0.99893805654847
+    },
+    "full_end": {
+     "time_s": 369.179,
+     "lag_samples": 191.77172141826497,
+     "corr": 0.998937182291313
+    }
+   },
+   "relative_lag_windows": 186,
+   "slips": [
+    {
+     "samples": 192,
+     "glued_time_s": 293.843734375,
+     "recording_start": 56416704,
+     "recording_end": 56417664,
+     "recording_start_s": 293.837,
+     "disturbed_samples": 960,
+     "disturbed_ms": 5.0,
+     "glued_samples_between_matches": 768,
+     "window_samples": 32,
+     "loopback_rms_dbfs": -48.65070681657522,
+     "reference_loopback_rms_dbfs": -34.05370284626744,
+     "loopback_exact_zeros": 0,
+     "mic_rms_dbfs": -28.451120378958468,
+     "mic_rms_dbfs_previous_0.1s": -27.160159448005594,
+     "mic_exact_zeros": 0
+    }
+   ],
+   "drift_ppm_excluding_slips": 1.170972473312318e-06,
+   "margin_before_s": -0.006734375,
+   "margin_after_s": 0.8800677083333334,
+   "stimulus_truncated_start": true,
+   "stimulus_truncated_end": false,
+   "cut_at_start_is_silence": true,
+   "loopback_gain_db": -2.603393038155347,
+   "loopback_gain_sign": 1,
+   "loopback_residual_db": -14.555817297273808,
+   "sections": {
+    "probe.pad_start": null,
+    "probe.markers_start": {
+     "loopback": {
+      "peak_dbfs": -7.197574208685241,
+      "rms_dbfs": -40.13001534191179,
+      "samples_at_full_scale": 0,
+      "dc": -4.618665606364713e-06
+     },
+     "mic": {
+      "peak_dbfs": -27.260269480269415,
+      "rms_dbfs": -45.121818489651574,
+      "samples_at_full_scale": 0,
+      "dc": 2.151946347299303e-05
+     }
+    },
+    "probe.silence": {
+     "loopback": {
+      "peak_dbfs": -84.08717226575682,
+      "rms_dbfs": -99.8775453863077,
+      "samples_at_full_scale": 0,
+      "dc": -4.590140345195929e-06
+     },
+     "mic": {
+      "peak_dbfs": -39.481021990525626,
+      "rms_dbfs": -47.755691955858964,
+      "samples_at_full_scale": 0,
+      "dc": 2.941468730568886e-06
+     }
+    },
+    "probe.sweep_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.318647403989115,
+      "rms_dbfs": -25.533634920027822,
+      "samples_at_full_scale": 0,
+      "dc": -4.61225559314092e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.558406467098827,
+      "rms_dbfs": -25.589017088971133,
+      "samples_at_full_scale": 0,
+      "dc": 3.4314852207899093e-06
+     }
+    },
+    "probe.sweep_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.327082632304764,
+      "rms_dbfs": -15.535469231180965,
+      "samples_at_full_scale": 0,
+      "dc": -4.6126694728930795e-06
+     },
+     "mic": {
+      "peak_dbfs": -11.035337167705602,
+      "rms_dbfs": -24.230361173791582,
+      "samples_at_full_scale": 0,
+      "dc": 1.887115091085434e-06
+     }
+    },
+    "probe.sweep_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.351145640488748,
+      "rms_dbfs": -8.555504212348469,
+      "samples_at_full_scale": 0,
+      "dc": -4.6537887305021286e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.371134526278155,
+      "rms_dbfs": -23.611032670127386,
+      "samples_at_full_scale": 0,
+      "dc": 1.1896245181560516e-06
+     }
+    },
+    "probe.two_tone_mod_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -21.947234500283304,
+      "rms_dbfs": -27.088153742239378,
+      "samples_at_full_scale": 0,
+      "dc": -4.227980754027764e-05
+     },
+     "mic": {
+      "peak_dbfs": -24.25696936744312,
+      "rms_dbfs": -32.34048009737196,
+      "samples_at_full_scale": 0,
+      "dc": 7.711980491876602e-06
+     }
+    },
+    "probe.two_tone_mod_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -11.944586000458449,
+      "rms_dbfs": -17.0939837810495,
+      "samples_at_full_scale": 0,
+      "dc": -0.00012355268622438114
+     },
+     "mic": {
+      "peak_dbfs": -23.342049444879986,
+      "rms_dbfs": -30.88730244483115,
+      "samples_at_full_scale": 0,
+      "dc": 3.282842009017865e-05
+     }
+    },
+    "probe.two_tone_mod_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -4.965848407934224,
+      "rms_dbfs": -10.117822515880583,
+      "samples_at_full_scale": 0,
+      "dc": -0.0002702709212899208
+     },
+     "mic": {
+      "peak_dbfs": -21.09115924712811,
+      "rms_dbfs": -27.955581155815498,
+      "samples_at_full_scale": 0,
+      "dc": 4.241686469564835e-05
+     }
+    },
+    "probe.two_tone_diff_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.330149135199978,
+      "rms_dbfs": -28.356396725275296,
+      "samples_at_full_scale": 0,
+      "dc": -4.325894949336847e-06
+     },
+     "mic": {
+      "peak_dbfs": -27.37897675476053,
+      "rms_dbfs": -37.24126398227306,
+      "samples_at_full_scale": 0,
+      "dc": -9.604304408033689e-07
+     }
+    },
+    "probe.two_tone_diff_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.34955351056437,
+      "rms_dbfs": -18.36257406992411,
+      "samples_at_full_scale": 0,
+      "dc": -3.765052805344264e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.835227441688446,
+      "rms_dbfs": -36.2907286129378,
+      "samples_at_full_scale": 0,
+      "dc": 1.392649176220099e-06
+     }
+    },
+    "probe.two_tone_diff_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.372745518442523,
+      "rms_dbfs": -11.385490032550095,
+      "samples_at_full_scale": 0,
+      "dc": -2.691825230916341e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.34202224676884,
+      "rms_dbfs": -36.83434337023088,
+      "samples_at_full_scale": 0,
+      "dc": -3.613343462347984e-06
+     }
+    },
+    "probe.bursts_plucks": {
+     "loopback": {
+      "peak_dbfs": -5.107975490047794,
+      "rms_dbfs": -24.40487073863254,
+      "samples_at_full_scale": 0,
+      "dc": -4.6145560840765635e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.463231744779959,
+      "rms_dbfs": -26.69341420741009,
+      "samples_at_full_scale": 0,
+      "dc": 7.613419493039449e-06
+     }
+    },
+    "probe.markers_end": {
+     "loopback": {
+      "peak_dbfs": -7.196912615869616,
+      "rms_dbfs": -40.130367541666025,
+      "samples_at_full_scale": 0,
+      "dc": -4.617580714642156e-06
+     },
+     "mic": {
+      "peak_dbfs": -27.765560857504372,
+      "rms_dbfs": -44.93414652528947,
+      "samples_at_full_scale": 0,
+      "dc": 3.608163563428935e-05
+     }
+    },
+    "probe.pad_end": {
+     "loopback": {
+      "peak_dbfs": -7.198963954824825,
+      "rms_dbfs": -49.150308347399616,
+      "samples_at_full_scale": 0,
+      "dc": -4.9758340335554545e-06
+     },
+     "mic": {
+      "peak_dbfs": -27.708986071424686,
+      "rms_dbfs": -47.65021821686485,
+      "samples_at_full_scale": 0,
+      "dc": 1.0678426259093815e-05
+     }
+    },
+    "full.pad_start": {
+     "loopback": {
+      "peak_dbfs": -83.82592280897198,
+      "rms_dbfs": -99.88087483917286,
+      "samples_at_full_scale": 0,
+      "dc": -4.601252575715383e-06
+     },
+     "mic": {
+      "peak_dbfs": -39.181158157658196,
+      "rms_dbfs": -47.69445642083517,
+      "samples_at_full_scale": 0,
+      "dc": 8.222143683168623e-06
+     }
+    },
+    "full.markers_start": {
+     "loopback": {
+      "peak_dbfs": -7.198963954824825,
+      "rms_dbfs": -40.13094069700997,
+      "samples_at_full_scale": 0,
+      "dc": -4.5998872370056226e-06
+     },
+     "mic": {
+      "peak_dbfs": -27.708986071424686,
+      "rms_dbfs": -45.184017377676355,
+      "samples_at_full_scale": 0,
+      "dc": 1.924198181929846e-05
+     }
+    },
+    "full.silence": {
+     "loopback": {
+      "peak_dbfs": -83.72994515133661,
+      "rms_dbfs": -99.88205359410564,
+      "samples_at_full_scale": 0,
+      "dc": -4.604740316669146e-06
+     },
+     "mic": {
+      "peak_dbfs": -40.12169249457013,
+      "rms_dbfs": -47.86214642673082,
+      "samples_at_full_scale": 0,
+      "dc": 5.706596995393435e-06
+     }
+    },
+    "full.pink_noise_-30dBFS_rms": {
+     "loopback": {
+      "peak_dbfs": -18.763319582096862,
+      "rms_dbfs": -32.538229152243204,
+      "samples_at_full_scale": 0,
+      "dc": -1.2657877430319786e-05
+     },
+     "mic": {
+      "peak_dbfs": -20.358365958271392,
+      "rms_dbfs": -32.928032063001915,
+      "samples_at_full_scale": 0,
+      "dc": 4.303143297632536e-06
+     }
+    },
+    "full.sweep_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.31912070415174,
+      "rms_dbfs": -25.533962875966143,
+      "samples_at_full_scale": 0,
+      "dc": -4.612358535329501e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.581409711285454,
+      "rms_dbfs": -25.622815895114552,
+      "samples_at_full_scale": 0,
+      "dc": 4.128554215033849e-07
+     }
+    },
+    "full.sweep_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.327112594755114,
+      "rms_dbfs": -15.53558617193573,
+      "samples_at_full_scale": 0,
+      "dc": -4.614141210913658e-06
+     },
+     "mic": {
+      "peak_dbfs": -11.068963351386966,
+      "rms_dbfs": -24.253392046796392,
+      "samples_at_full_scale": 0,
+      "dc": 6.930604080359141e-06
+     }
+    },
+    "full.sweep_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.351858891604583,
+      "rms_dbfs": -8.556135702324713,
+      "samples_at_full_scale": 0,
+      "dc": -4.6534715841213864e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.426757688528674,
+      "rms_dbfs": -23.62462266182842,
+      "samples_at_full_scale": 0,
+      "dc": 6.852913772066434e-06
+     }
+    },
+    "full.di_train": {
+     "loopback": {
+      "peak_dbfs": -3.8630909683412797,
+      "rms_dbfs": -22.483000515104933,
+      "samples_at_full_scale": 0,
+      "dc": -5.866426896924774e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.358058997416542,
+      "rms_dbfs": -27.602866840139736,
+      "samples_at_full_scale": 0,
+      "dc": 4.832587810233235e-06
+     }
+    },
+    "full.di_validation": {
+     "loopback": {
+      "peak_dbfs": -5.379117484828756,
+      "rms_dbfs": -24.22930951316758,
+      "samples_at_full_scale": 0,
+      "dc": 1.2783180508348678e-07
+     },
+     "mic": {
+      "peak_dbfs": -13.08038288738864,
+      "rms_dbfs": -27.735252691815035,
+      "samples_at_full_scale": 0,
+      "dc": 8.697888669040468e-06
+     }
+    },
+    "full.di_test": {
+     "loopback": {
+      "peak_dbfs": -3.69486527663643,
+      "rms_dbfs": -22.334064880574275,
+      "samples_at_full_scale": 0,
+      "dc": -4.566359002557066e-06
+     },
+     "mic": {
+      "peak_dbfs": -13.630446099229347,
+      "rms_dbfs": -26.08100513342609,
+      "samples_at_full_scale": 0,
+      "dc": 5.452942910293738e-06
+     }
+    },
+    "full.polarity_plus": {
+     "loopback": {
+      "peak_dbfs": -9.94843433283625,
+      "rms_dbfs": -24.64353510054297,
+      "samples_at_full_scale": 0,
+      "dc": -2.348385751247406e-08
+     },
+     "mic": {
+      "peak_dbfs": -15.19220400927855,
+      "rms_dbfs": -27.097828542363686,
+      "samples_at_full_scale": 0,
+      "dc": 1.6750125835339228e-06
+     }
+    },
+    "full.polarity_minus": {
+     "loopback": {
+      "peak_dbfs": -9.94969083962767,
+      "rms_dbfs": -24.643162037606096,
+      "samples_at_full_scale": 0,
+      "dc": -9.210064386328061e-06
+     },
+     "mic": {
+      "peak_dbfs": -15.157128517114092,
+      "rms_dbfs": -27.029421477626467,
+      "samples_at_full_scale": 0,
+      "dc": 8.393211103975772e-06
+     }
+    },
+    "full.level_-12dB": {
+     "loopback": {
+      "peak_dbfs": -21.93713434139226,
+      "rms_dbfs": -36.64011350567068,
+      "samples_at_full_scale": 0,
+      "dc": -3.3119752382238708e-06
+     },
+     "mic": {
+      "peak_dbfs": -17.291977944232286,
+      "rms_dbfs": -29.148202875758088,
+      "samples_at_full_scale": 0,
+      "dc": -3.2304671282569568e-06
+     }
+    },
+    "full.level_-6dB": {
+     "loopback": {
+      "peak_dbfs": -15.935105758728476,
+      "rms_dbfs": -30.639330817640136,
+      "samples_at_full_scale": 0,
+      "dc": -2.3128182937701544e-06
+     },
+     "mic": {
+      "peak_dbfs": -16.119233510740642,
+      "rms_dbfs": -27.43500895850669,
+      "samples_at_full_scale": 0,
+      "dc": -2.501632273197174e-06
+     }
+    },
+    "full.level_+6dB": {
+     "loopback": {
+      "peak_dbfs": -3.9566103414419045,
+      "rms_dbfs": -18.661897071664168,
+      "samples_at_full_scale": 0,
+      "dc": 4.603639617562294e-06
+     },
+     "mic": {
+      "peak_dbfs": -15.17235564892939,
+      "rms_dbfs": -27.176021951934885,
+      "samples_at_full_scale": 0,
+      "dc": 1.2857988476753235e-06
+     }
+    },
+    "full.bursts_plucks": {
+     "loopback": {
+      "peak_dbfs": -5.108307347427628,
+      "rms_dbfs": -24.405971856566637,
+      "samples_at_full_scale": 0,
+      "dc": -4.6058700109521545e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.65385780864623,
+      "rms_dbfs": -26.720015553992738,
+      "samples_at_full_scale": 0,
+      "dc": 7.3949188614885015e-06
+     }
+    },
+    "full.bursts_recovery": {
+     "loopback": {
+      "peak_dbfs": -4.85750952816895,
+      "rms_dbfs": -18.656436240326883,
+      "samples_at_full_scale": 0,
+      "dc": -4.6183625640004174e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.457707239098756,
+      "rms_dbfs": -27.41951201233305,
+      "samples_at_full_scale": 0,
+      "dc": 6.442639023529224e-06
+     }
+    },
+    "full.two_tone_mod_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -21.947117892986945,
+      "rms_dbfs": -27.08833503089093,
+      "samples_at_full_scale": 0,
+      "dc": -4.22645832101504e-05
+     },
+     "mic": {
+      "peak_dbfs": -24.469938181973777,
+      "rms_dbfs": -32.05788915072759,
+      "samples_at_full_scale": 0,
+      "dc": 1.5282584664722283e-05
+     }
+    },
+    "full.two_tone_mod_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -11.945970538905131,
+      "rms_dbfs": -17.094632917548644,
+      "samples_at_full_scale": 0,
+      "dc": -0.00012355036474764346
+     },
+     "mic": {
+      "peak_dbfs": -23.24609786743377,
+      "rms_dbfs": -30.8906863475932,
+      "samples_at_full_scale": 0,
+      "dc": 2.6532742815713087e-05
+     }
+    },
+    "full.two_tone_mod_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -4.965652164245447,
+      "rms_dbfs": -10.11874576722832,
+      "samples_at_full_scale": 0,
+      "dc": -0.0002701588136454423
+     },
+     "mic": {
+      "peak_dbfs": -21.299181155183888,
+      "rms_dbfs": -28.35259320349258,
+      "samples_at_full_scale": 0,
+      "dc": 6.084952472398678e-05
+     }
+    },
+    "full.two_tone_diff_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.337979021116432,
+      "rms_dbfs": -28.356912823118577,
+      "samples_at_full_scale": 0,
+      "dc": -4.326074073712031e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.64693977074225,
+      "rms_dbfs": -36.903553960466404,
+      "samples_at_full_scale": 0,
+      "dc": 3.0387906978527704e-06
+     }
+    },
+    "full.two_tone_diff_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.34856653762898,
+      "rms_dbfs": -18.3629342759861,
+      "samples_at_full_scale": 0,
+      "dc": -3.7203822284936905e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.578902951626297,
+      "rms_dbfs": -35.85219468737012,
+      "samples_at_full_scale": 0,
+      "dc": -2.8978449602921803e-06
+     }
+    },
+    "full.two_tone_diff_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.373587411329547,
+      "rms_dbfs": -11.386851556440227,
+      "samples_at_full_scale": 0,
+      "dc": -2.6953400423129398e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.343956513598457,
+      "rms_dbfs": -36.60396155195957,
+      "samples_at_full_scale": 0,
+      "dc": -7.86902941763401e-06
+     }
+    },
+    "full.markers_end": {
+     "loopback": {
+      "peak_dbfs": -7.199288893417383,
+      "rms_dbfs": -40.13201316292195,
+      "samples_at_full_scale": 0,
+      "dc": -7.17226293677768e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.817763652121926,
+      "rms_dbfs": -44.17294175127546,
+      "samples_at_full_scale": 0,
+      "dc": 1.2756331083992272e-05
+     }
+    },
+    "full.pad_end": {
+     "loopback": {
+      "peak_dbfs": -84.86708773714008,
+      "rms_dbfs": -99.90934453245069,
+      "samples_at_full_scale": 0,
+      "dc": -4.607052956190374e-06
+     },
+     "mic": {
+      "peak_dbfs": -39.80314118893455,
+      "rms_dbfs": -47.974945493021195,
+      "samples_at_full_scale": 0,
+      "dc": 5.423392479618391e-06
+     }
+    }
+   },
+   "whole": {
+    "loopback": {
+     "peak_dbfs": -3.69486527663643,
+     "rms_dbfs": -19.607632732158667,
+     "samples_at_full_scale": 0,
+     "dc": -4.612883410734597e-06
+    },
+    "mic": {
+     "peak_dbfs": -10.371134526278155,
+     "rms_dbfs": -27.731116174296954,
+     "samples_at_full_scale": 0,
+     "dc": 5.355348858190558e-06
+    }
+   },
+   "quiet": {
+    "probe.silence": {
+     "start_s": 4.497265625,
+     "seconds": 2.0,
+     "loopback": {
+      "rms_dbfs": -99.8775453863077,
+      "below_200Hz_dbfs": -125.71034447991363,
+      "strongest_bin_hz": 20581.0546875,
+      "50Hz_over_floor_db": 6.991964355325665,
+      "100Hz_over_floor_db": 1.624562468902451,
+      "150Hz_over_floor_db": 4.034040912124704
+     },
+     "mic": {
+      "rms_dbfs": -47.755691955858964,
+      "below_200Hz_dbfs": -47.88177525788802,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 71.94206238683239,
+      "100Hz_over_floor_db": 68.15506822429624,
+      "150Hz_over_floor_db": 64.56220538357337
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -47.19926438995999,
+      "at_s": 1.15,
+      "above_threshold": false
+     }
+    },
+    "full.silence": {
+     "start_s": 57.497265625,
+     "seconds": 5.0,
+     "loopback": {
+      "rms_dbfs": -99.88205359410564,
+      "below_200Hz_dbfs": -125.31137167411066,
+      "strongest_bin_hz": 20578.125,
+      "50Hz_over_floor_db": 3.4460880809909162,
+      "100Hz_over_floor_db": 3.0020195077280247,
+      "150Hz_over_floor_db": 4.266618181040146
+     },
+     "mic": {
+      "rms_dbfs": -47.86214642673082,
+      "below_200Hz_dbfs": -47.99948768674162,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 71.2890349770669,
+      "100Hz_over_floor_db": 67.48085758026392,
+      "150Hz_over_floor_db": 63.886381963890926
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -47.23114549137465,
+      "at_s": 1.7,
+      "above_threshold": false
+     }
+    }
+   },
+   "mic_noise_floor_error_db": {
+    "probe.sweep_-20dBFS": -22.219575933354854,
+    "probe.sweep_-10dBFS": -23.578231848534404,
+    "probe.sweep_-3dBFS": -24.1975603521986,
+    "probe.two_tone_mod_-20dBFS": -15.468112924954028,
+    "probe.two_tone_mod_-10dBFS": -16.921290577494837,
+    "probe.two_tone_mod_-3dBFS": -19.85301186651049,
+    "probe.two_tone_diff_-20dBFS": -10.567329040052925,
+    "probe.two_tone_diff_-10dBFS": -11.517864409388189,
+    "probe.two_tone_diff_-3dBFS": -10.974249652095104,
+    "probe.bursts_plucks": -21.115178814915897,
+    "full.pink_noise_-30dBFS_rms": -14.880560959324072,
+    "full.sweep_-20dBFS": -22.185777127211434,
+    "full.sweep_-10dBFS": -23.555200975529594,
+    "full.sweep_-3dBFS": -24.183970360497568,
+    "full.di_train": -20.20572618218625,
+    "full.di_validation": -20.073340330510952,
+    "full.di_test": -21.727587888899897,
+    "full.polarity_plus": -20.7107644799623,
+    "full.polarity_minus": -20.77917154469952,
+    "full.level_-12dB": -18.6603901465679,
+    "full.level_-6dB": -20.373584063819298,
+    "full.level_+6dB": -20.6325710703911,
+    "full.bursts_plucks": -21.08857746833325,
+    "full.bursts_recovery": -20.389081009992935,
+    "full.two_tone_mod_-20dBFS": -15.750703871598397,
+    "full.two_tone_mod_-10dBFS": -16.917906674732787,
+    "full.two_tone_mod_-3dBFS": -19.455999818833405,
+    "full.two_tone_diff_-20dBFS": -10.905039061859583,
+    "full.two_tone_diff_-10dBFS": -11.956398334955864,
+    "full.two_tone_diff_-3dBFS": -11.204631470366415
+   },
+   "zero_runs_in_sounding_sections": {
+    "loopback": [],
+    "mic": []
+   },
+   "mic_ir": {
+    "probe.sweep_-20dBFS": {
+     "main_lag_samples": 132,
+     "main_lag_ms": 0.6875,
+     "main_tap": -0.020688749230986014,
+     "polarity": -1,
+     "onset_samples": 90,
+     "zero_lag_tap": -0.0005502838428972029,
+     "zero_lag_over_main_db": -31.5029494807427,
+     "zero_lag_energy_share_db": -42.82099249817449,
+     "coherence_200Hz_5kHz": 0.8550883845442493,
+     "coherence_25_90kHz": 0.01869862926082742
+    },
+    "full.pink_noise_-30dBFS_rms": {
+     "main_lag_samples": 133,
+     "main_lag_ms": 0.6927083333333334,
+     "main_tap": -0.05348670394782197,
+     "polarity": -1,
+     "onset_samples": 89,
+     "zero_lag_tap": 0.00019060984004575483,
+     "zero_lag_over_main_db": -48.96201037901227,
+     "zero_lag_energy_share_db": -61.724216810725366,
+     "coherence_200Hz_5kHz": 0.8168654027295589,
+     "coherence_25_90kHz": 0.0185906374870089
+    },
+    "full.sweep_-20dBFS": {
+     "main_lag_samples": 131,
+     "main_lag_ms": 0.6822916666666666,
+     "main_tap": -0.021438367773264355,
+     "polarity": -1,
+     "onset_samples": 92,
+     "zero_lag_tap": 0.0001511611541695024,
+     "zero_lag_over_main_db": -43.035030353624414,
+     "zero_lag_energy_share_db": -54.479509050111766,
+     "coherence_200Hz_5kHz": 0.8547488316369274,
+     "coherence_25_90kHz": 0.019092285580901435
+    },
+    "full.di_train": {
+     "main_lag_samples": 131,
+     "main_lag_ms": 0.6822916666666666,
+     "main_tap": -0.01433380172367707,
+     "polarity": -1,
+     "onset_samples": 0,
+     "zero_lag_tap": -0.003151901640687729,
+     "zero_lag_over_main_db": -13.15577472774293,
+     "zero_lag_energy_share_db": -27.438965704793837,
+     "coherence_200Hz_5kHz": 0.13994801878772697,
+     "coherence_25_90kHz": 0.0031856394587550406
+    },
+    "full.di_test": {
+     "main_lag_samples": 132,
+     "main_lag_ms": 0.6875,
+     "main_tap": -0.02632214113650229,
+     "polarity": -1,
+     "onset_samples": 90,
+     "zero_lag_tap": -0.002719565570090192,
+     "zero_lag_over_main_db": -19.716433582001816,
+     "zero_lag_energy_share_db": -29.048088255769894,
+     "coherence_200Hz_5kHz": 0.14464672435116982,
+     "coherence_25_90kHz": 0.003069775459622639
+    },
+    "full.level_-12dB": {
+     "main_lag_samples": 132,
+     "main_lag_ms": 0.6875,
+     "main_tap": -0.0694465933774141,
+     "polarity": -1,
+     "onset_samples": 88,
+     "zero_lag_tap": 0.006339243850645795,
+     "zero_lag_over_main_db": -20.79226977507136,
+     "zero_lag_energy_share_db": -30.8392985317699,
+     "coherence_200Hz_5kHz": 0.21850631304662566,
+     "coherence_25_90kHz": 0.009133865064721556
+    }
+   },
+   "common_disturbance_25_90kHz": {
+    "median_coherence": 0.011547583660713255,
+    "max_coherence": 0.025240265767674335,
+    "seconds_above_0.3": 0,
+    "median_mic_dbfs": -98.87257731736106,
+    "stretches_recording_s": []
+   },
+   "repeatability": {
+    "sweep_-20dBFS": {
+     "mic_rms_full_minus_probe_db": -0.03379880614341957,
+     "loopback_rms_full_minus_probe_db": -0.00032795593832091186
+    },
+    "sweep_-10dBFS": {
+     "mic_rms_full_minus_probe_db": -0.023030873004810104,
+     "loopback_rms_full_minus_probe_db": -0.00011694075476498256
+    },
+    "sweep_-3dBFS": {
+     "mic_rms_full_minus_probe_db": -0.013589991701032034,
+     "loopback_rms_full_minus_probe_db": -0.0006314899762447368
+    },
+    "two_tone_mod_-20dBFS": {
+     "mic_rms_full_minus_probe_db": 0.282590946644369,
+     "loopback_rms_full_minus_probe_db": -0.00018128865155375706
+    },
+    "two_tone_mod_-10dBFS": {
+     "mic_rms_full_minus_probe_db": -0.0033839027620494733,
+     "loopback_rms_full_minus_probe_db": -0.0006491364991454418
+    },
+    "two_tone_mod_-3dBFS": {
+     "mic_rms_full_minus_probe_db": -0.39701204767708376,
+     "loopback_rms_full_minus_probe_db": -0.0009232513477375193
+    },
+    "two_tone_diff_-20dBFS": {
+     "mic_rms_full_minus_probe_db": 0.3377100218066573,
+     "loopback_rms_full_minus_probe_db": -0.0005160978432812158
+    },
+    "two_tone_diff_-10dBFS": {
+     "mic_rms_full_minus_probe_db": 0.43853392556767545,
+     "loopback_rms_full_minus_probe_db": -0.0003602060619876113
+    },
+    "two_tone_diff_-3dBFS": {
+     "mic_rms_full_minus_probe_db": 0.23038181827131154,
+     "loopback_rms_full_minus_probe_db": -0.0013615238901323323
+    }
+   }
+  },
+  "1057": {
+   "format": {
+    "loopback": {
+     "rate": 192000,
+     "channels": 1,
+     "subtype": "PCM_24",
+     "frames": 77527040,
+     "seconds": 403.7866666666667
+    },
+    "mic": {
+     "rate": 192000,
+     "channels": 1,
+     "subtype": "PCM_24",
+     "frames": 77527040,
+     "seconds": 403.7866666666667
+    }
+   },
+   "same_length": true,
+   "reference": false,
+   "offset_samples": 1534899,
+   "offset_s": 7.994265625,
+   "markers": {
+    "probe_start": {
+     "time_s": 3.0,
+     "lag_samples": -0.22848920480438664,
+     "corr": 0.998936596492723
+    },
+    "probe_end": {
+     "time_s": 49.004,
+     "lag_samples": -0.228253890985416,
+     "corr": 0.9989380033230714
+    },
+    "full_start": {
+     "time_s": 56.0,
+     "lag_samples": -0.2280467331579853,
+     "corr": 0.9989384320456896
+    },
+    "full_end": {
+     "time_s": 369.179,
+     "lag_samples": 767.7717519163392,
+     "corr": 0.9989355857689677
+    }
+   },
+   "relative_lag_windows": 174,
+   "slips": [
+    {
+     "samples": 768,
+     "glued_time_s": 302.22998958333335,
+     "recording_start": 59563057,
+     "recording_end": 59565073,
+     "recording_start_s": 310.2242552083333,
+     "disturbed_samples": 2016,
+     "disturbed_ms": 10.5,
+     "glued_samples_between_matches": 1248,
+     "window_samples": 32,
+     "loopback_rms_dbfs": -53.95520849874819,
+     "reference_loopback_rms_dbfs": -31.354042415148065,
+     "loopback_exact_zeros": 0,
+     "mic_rms_dbfs": -25.29307673109766,
+     "mic_rms_dbfs_previous_0.1s": -24.900561892091492,
+     "mic_exact_zeros": 0
+    }
+   ],
+   "drift_ppm_excluding_slips": 3.429577582944724e-06,
+   "margin_before_s": 7.994265625,
+   "margin_after_s": 19.105401041666667,
+   "stimulus_truncated_start": false,
+   "stimulus_truncated_end": false,
+   "loopback_gain_db": -2.6067044505837393,
+   "loopback_gain_sign": 1,
+   "loopback_residual_db": -14.547639610360669,
+   "sections": {
+    "probe.pad_start": {
+     "loopback": {
+      "peak_dbfs": -84.1872028105267,
+      "rms_dbfs": -99.83073517746001,
+      "samples_at_full_scale": 0,
+      "dc": -4.6122409403324125e-06
+     },
+     "mic": {
+      "peak_dbfs": -15.178314905651781,
+      "rms_dbfs": -32.28597888557603,
+      "samples_at_full_scale": 0,
+      "dc": -4.020771011710167e-06
+     }
+    },
+    "probe.markers_start": {
+     "loopback": {
+      "peak_dbfs": -7.1999672715558685,
+      "rms_dbfs": -40.13411498163642,
+      "samples_at_full_scale": 0,
+      "dc": -4.599488452605322e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.484258830094056,
+      "rms_dbfs": -44.25215861936274,
+      "samples_at_full_scale": 0,
+      "dc": 2.0189521213372547e-05
+     }
+    },
+    "probe.silence": {
+     "loopback": {
+      "peak_dbfs": -83.89050221157595,
+      "rms_dbfs": -99.88419805785222,
+      "samples_at_full_scale": 0,
+      "dc": -4.609578909973304e-06
+     },
+     "mic": {
+      "peak_dbfs": -39.296597991315615,
+      "rms_dbfs": -47.82565316251106,
+      "samples_at_full_scale": 0,
+      "dc": 8.284775540232658e-06
+     }
+    },
+    "probe.sweep_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.321176478407754,
+      "rms_dbfs": -25.536067975939325,
+      "samples_at_full_scale": 0,
+      "dc": -4.61555781463782e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.411346384117177,
+      "rms_dbfs": -23.66180169843301,
+      "samples_at_full_scale": 0,
+      "dc": 6.668477381269137e-06
+     }
+    },
+    "probe.sweep_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.330892972919811,
+      "rms_dbfs": -15.53864545832996,
+      "samples_at_full_scale": 0,
+      "dc": -4.621351882815361e-06
+     },
+     "mic": {
+      "peak_dbfs": -9.880379951305853,
+      "rms_dbfs": -23.27842950228526,
+      "samples_at_full_scale": 0,
+      "dc": 7.626728713512421e-06
+     }
+    },
+    "probe.sweep_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.355362725354231,
+      "rms_dbfs": -8.559415143337555,
+      "samples_at_full_scale": 0,
+      "dc": -4.657366499304771e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.11114110094302,
+      "rms_dbfs": -23.438315346015507,
+      "samples_at_full_scale": 0,
+      "dc": 1.651898150642713e-06
+     }
+    },
+    "probe.two_tone_mod_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -21.95081121769297,
+      "rms_dbfs": -27.08964825574003,
+      "samples_at_full_scale": 0,
+      "dc": -4.225686844438314e-05
+     },
+     "mic": {
+      "peak_dbfs": -22.498023726406366,
+      "rms_dbfs": -29.043861973436805,
+      "samples_at_full_scale": 0,
+      "dc": 4.402471613138914e-05
+     }
+    },
+    "probe.two_tone_mod_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -11.94740036792024,
+      "rms_dbfs": -17.09634274979703,
+      "samples_at_full_scale": 0,
+      "dc": -0.00012353916466236115
+     },
+     "mic": {
+      "peak_dbfs": -21.246252569922564,
+      "rms_dbfs": -27.89697521230185,
+      "samples_at_full_scale": 0,
+      "dc": 5.961621180176735e-05
+     }
+    },
+    "probe.two_tone_mod_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -4.967447867618867,
+      "rms_dbfs": -10.12091674278823,
+      "samples_at_full_scale": 0,
+      "dc": -0.00027013208841284114
+     },
+     "mic": {
+      "peak_dbfs": -20.86046385870048,
+      "rms_dbfs": -26.975218027470284,
+      "samples_at_full_scale": 0,
+      "dc": 6.471019083013137e-05
+     }
+    },
+    "probe.two_tone_diff_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.336488360505516,
+      "rms_dbfs": -28.358158817166178,
+      "samples_at_full_scale": 0,
+      "dc": -4.306863993406296e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.14216640303873,
+      "rms_dbfs": -35.82951050640371,
+      "samples_at_full_scale": 0,
+      "dc": -8.62607111533483e-06
+     }
+    },
+    "probe.two_tone_diff_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.350313126975458,
+      "rms_dbfs": -18.364682062346894,
+      "samples_at_full_scale": 0,
+      "dc": -3.715029296775659e-06
+     },
+     "mic": {
+      "peak_dbfs": -27.301354346853888,
+      "rms_dbfs": -38.39932914557789,
+      "samples_at_full_scale": 0,
+      "dc": -2.2404566407203675e-06
+     }
+    },
+    "probe.two_tone_diff_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.375479084771654,
+      "rms_dbfs": -11.389040187214462,
+      "samples_at_full_scale": 0,
+      "dc": -2.7243799219528833e-06
+     },
+     "mic": {
+      "peak_dbfs": -27.75703340818908,
+      "rms_dbfs": -38.99440672558348,
+      "samples_at_full_scale": 0,
+      "dc": -3.6168461665511133e-06
+     }
+    },
+    "probe.bursts_plucks": {
+     "loopback": {
+      "peak_dbfs": -5.109866128129383,
+      "rms_dbfs": -24.40765941544909,
+      "samples_at_full_scale": 0,
+      "dc": -4.606036096811294e-06
+     },
+     "mic": {
+      "peak_dbfs": -13.093402737225311,
+      "rms_dbfs": -23.81153592654161,
+      "samples_at_full_scale": 0,
+      "dc": 4.374817572534085e-06
+     }
+    },
+    "probe.markers_end": {
+     "loopback": {
+      "peak_dbfs": -7.2023206581530275,
+      "rms_dbfs": -40.13469724497277,
+      "samples_at_full_scale": 0,
+      "dc": -4.6091319345836096e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.95440660338671,
+      "rms_dbfs": -44.163884543725075,
+      "samples_at_full_scale": 0,
+      "dc": 2.394890592677902e-05
+     }
+    },
+    "probe.pad_end": {
+     "loopback": {
+      "peak_dbfs": -7.201457043042128,
+      "rms_dbfs": -49.15329387293998,
+      "samples_at_full_scale": 0,
+      "dc": -4.956638337009483e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.324152302470324,
+      "rms_dbfs": -47.75064796651152,
+      "samples_at_full_scale": 0,
+      "dc": 1.3232799453867806e-05
+     }
+    },
+    "full.pad_start": {
+     "loopback": {
+      "peak_dbfs": -85.27547400403435,
+      "rms_dbfs": -99.89812479450629,
+      "samples_at_full_scale": 0,
+      "dc": -4.5964504695600935e-06
+     },
+     "mic": {
+      "peak_dbfs": -40.353134128065975,
+      "rms_dbfs": -48.0553137561569,
+      "samples_at_full_scale": 0,
+      "dc": 4.970482033159997e-06
+     }
+    },
+    "full.markers_start": {
+     "loopback": {
+      "peak_dbfs": -7.201457043042128,
+      "rms_dbfs": -40.13399008365656,
+      "samples_at_full_scale": 0,
+      "dc": -4.61215873295111e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.272528523439036,
+      "rms_dbfs": -44.23838112394556,
+      "samples_at_full_scale": 0,
+      "dc": 2.3576349650793676e-05
+     }
+    },
+    "full.silence": {
+     "loopback": {
+      "peak_dbfs": -84.72321878113867,
+      "rms_dbfs": -99.88770242942032,
+      "samples_at_full_scale": 0,
+      "dc": -4.6078573912382124e-06
+     },
+     "mic": {
+      "peak_dbfs": -40.2537370652952,
+      "rms_dbfs": -48.11635534014918,
+      "samples_at_full_scale": 0,
+      "dc": 3.3771714816490807e-06
+     }
+    },
+    "full.pink_noise_-30dBFS_rms": {
+     "loopback": {
+      "peak_dbfs": -18.763157938371933,
+      "rms_dbfs": -32.540078775876154,
+      "samples_at_full_scale": 0,
+      "dc": -1.2650385374824206e-05
+     },
+     "mic": {
+      "peak_dbfs": -19.013468133215905,
+      "rms_dbfs": -31.900666900235628,
+      "samples_at_full_scale": 0,
+      "dc": 1.325037715335687e-05
+     }
+    },
+    "full.sweep_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.32150111882533,
+      "rms_dbfs": -25.535459753287792,
+      "samples_at_full_scale": 0,
+      "dc": -4.613684862852096e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.282388072929567,
+      "rms_dbfs": -23.65144245267759,
+      "samples_at_full_scale": 0,
+      "dc": 7.002449532349904e-06
+     }
+    },
+    "full.sweep_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.33059750471103,
+      "rms_dbfs": -15.538293823740839,
+      "samples_at_full_scale": 0,
+      "dc": -4.629211872816086e-06
+     },
+     "mic": {
+      "peak_dbfs": -9.89498660930732,
+      "rms_dbfs": -23.278308626625652,
+      "samples_at_full_scale": 0,
+      "dc": 5.0617483754952746e-06
+     }
+    },
+    "full.sweep_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.355439453455731,
+      "rms_dbfs": -8.559510012371288,
+      "samples_at_full_scale": 0,
+      "dc": -4.638811200857162e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.056969345435355,
+      "rms_dbfs": -23.44136025039535,
+      "samples_at_full_scale": 0,
+      "dc": 1.4184318482875825e-06
+     }
+    },
+    "full.di_train": {
+     "loopback": {
+      "peak_dbfs": -3.86725484125942,
+      "rms_dbfs": -22.485678974579333,
+      "samples_at_full_scale": 0,
+      "dc": -5.8662865621348225e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.803052153122493,
+      "rms_dbfs": -25.83204432180512,
+      "samples_at_full_scale": 0,
+      "dc": 5.17861849317948e-06
+     }
+    },
+    "full.di_validation": {
+     "loopback": {
+      "peak_dbfs": -5.382228256016315,
+      "rms_dbfs": -24.231731578225006,
+      "samples_at_full_scale": 0,
+      "dc": 1.217617756790585e-07
+     },
+     "mic": {
+      "peak_dbfs": -11.681339228350032,
+      "rms_dbfs": -25.844057145935622,
+      "samples_at_full_scale": 0,
+      "dc": 9.093258364333047e-06
+     }
+    },
+    "full.di_test": {
+     "loopback": {
+      "peak_dbfs": -3.6964846949681385,
+      "rms_dbfs": -22.336102219000566,
+      "samples_at_full_scale": 0,
+      "dc": -4.567783222430282e-06
+     },
+     "mic": {
+      "peak_dbfs": -11.479496023176994,
+      "rms_dbfs": -23.90807450524681,
+      "samples_at_full_scale": 0,
+      "dc": 3.55381334407462e-06
+     }
+    },
+    "full.polarity_plus": {
+     "loopback": {
+      "peak_dbfs": -9.95178433621833,
+      "rms_dbfs": -24.64528406235447,
+      "samples_at_full_scale": 0,
+      "dc": -2.693869173526764e-08
+     },
+     "mic": {
+      "peak_dbfs": -13.834853914277868,
+      "rms_dbfs": -26.547195272352777,
+      "samples_at_full_scale": 0,
+      "dc": -4.0200391163428625e-06
+     }
+    },
+    "full.polarity_minus": {
+     "loopback": {
+      "peak_dbfs": -9.952197885892664,
+      "rms_dbfs": -24.645475585113722,
+      "samples_at_full_scale": 0,
+      "dc": -9.213538902501265e-06
+     },
+     "mic": {
+      "peak_dbfs": -13.918248509218412,
+      "rms_dbfs": -26.43303004877631,
+      "samples_at_full_scale": 0,
+      "dc": 1.2465661950409412e-05
+     }
+    },
+    "full.level_-12dB": {
+     "loopback": {
+      "peak_dbfs": -21.937639070497355,
+      "rms_dbfs": -36.64107711351588,
+      "samples_at_full_scale": 0,
+      "dc": -3.4590716163317362e-06
+     },
+     "mic": {
+      "peak_dbfs": -14.437757927260115,
+      "rms_dbfs": -26.35095791718083,
+      "samples_at_full_scale": 0,
+      "dc": 5.422904839118322e-06
+     }
+    },
+    "full.level_-6dB": {
+     "loopback": {
+      "peak_dbfs": -15.93548835547372,
+      "rms_dbfs": -30.641363170950704,
+      "samples_at_full_scale": 0,
+      "dc": 2.297151026626428e-06
+     },
+     "mic": {
+      "peak_dbfs": -13.997474860522953,
+      "rms_dbfs": -26.45070843388445,
+      "samples_at_full_scale": 0,
+      "dc": 8.15284475684166e-06
+     }
+    },
+    "full.level_+6dB": {
+     "loopback": {
+      "peak_dbfs": -3.9603994551043997,
+      "rms_dbfs": -18.664503720001203,
+      "samples_at_full_scale": 0,
+      "dc": 4.59039577593406e-06
+     },
+     "mic": {
+      "peak_dbfs": -14.397735934585716,
+      "rms_dbfs": -26.674857870990884,
+      "samples_at_full_scale": 0,
+      "dc": -1.2641482676068942e-06
+     }
+    },
+    "full.bursts_plucks": {
+     "loopback": {
+      "peak_dbfs": -5.110722084832652,
+      "rms_dbfs": -24.40866346581863,
+      "samples_at_full_scale": 0,
+      "dc": -4.609466157853603e-06
+     },
+     "mic": {
+      "peak_dbfs": -13.040766202065635,
+      "rms_dbfs": -23.801754302504232,
+      "samples_at_full_scale": 0,
+      "dc": 3.15819817284743e-06
+     }
+    },
+    "full.bursts_recovery": {
+     "loopback": {
+      "peak_dbfs": -4.859714208244088,
+      "rms_dbfs": -18.659242377452138,
+      "samples_at_full_scale": 0,
+      "dc": -4.616843099351041e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.81795817707064,
+      "rms_dbfs": -27.207266516081155,
+      "samples_at_full_scale": 0,
+      "dc": 5.949981947167746e-06
+     }
+    },
+    "full.two_tone_mod_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -21.95397447028682,
+      "rms_dbfs": -27.09021579964141,
+      "samples_at_full_scale": 0,
+      "dc": -4.224588132152955e-05
+     },
+     "mic": {
+      "peak_dbfs": -22.294961275647253,
+      "rms_dbfs": -29.42207045363553,
+      "samples_at_full_scale": 0,
+      "dc": 3.686950759341319e-05
+     }
+    },
+    "full.two_tone_mod_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -11.94667518166912,
+      "rms_dbfs": -17.096768209617444,
+      "samples_at_full_scale": 0,
+      "dc": -0.00012353066386034092
+     },
+     "mic": {
+      "peak_dbfs": -21.43342569056057,
+      "rms_dbfs": -27.85347640800488,
+      "samples_at_full_scale": 0,
+      "dc": 5.981883965432644e-05
+     }
+    },
+    "full.two_tone_mod_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -4.967471715003066,
+      "rms_dbfs": -10.121372381608815,
+      "samples_at_full_scale": 0,
+      "dc": -0.00027011064750452835
+     },
+     "mic": {
+      "peak_dbfs": -20.53133325696722,
+      "rms_dbfs": -26.646285824003925,
+      "samples_at_full_scale": 0,
+      "dc": 4.951232299208641e-05
+     }
+    },
+    "full.two_tone_diff_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.3361631594576,
+      "rms_dbfs": -28.358856595733638,
+      "samples_at_full_scale": 0,
+      "dc": -4.281190223991871e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.87981735962519,
+      "rms_dbfs": -35.789226662539626,
+      "samples_at_full_scale": 0,
+      "dc": -1.2005455791950226e-05
+     }
+    },
+    "full.two_tone_diff_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.35091829267538,
+      "rms_dbfs": -18.36572839353617,
+      "samples_at_full_scale": 0,
+      "dc": -3.757188096642494e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.434118342576966,
+      "rms_dbfs": -37.12713226468378,
+      "samples_at_full_scale": 0,
+      "dc": -9.776072576642036e-06
+     }
+    },
+    "full.two_tone_diff_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.376763504399174,
+      "rms_dbfs": -11.390207963764203,
+      "samples_at_full_scale": 0,
+      "dc": -2.658288925886154e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.413661881463145,
+      "rms_dbfs": -38.58874943697187,
+      "samples_at_full_scale": 0,
+      "dc": 9.327319761117299e-07
+     }
+    },
+    "full.markers_end": {
+     "loopback": {
+      "peak_dbfs": -7.201253014648917,
+      "rms_dbfs": -40.13530912603264,
+      "samples_at_full_scale": 0,
+      "dc": -7.224211829271934e-06
+     },
+     "mic": {
+      "peak_dbfs": -24.92448780005846,
+      "rms_dbfs": -43.33054289216511,
+      "samples_at_full_scale": 0,
+      "dc": 9.972199216379342e-06
+     }
+    },
+    "full.pad_end": {
+     "loopback": {
+      "peak_dbfs": -65.54572348096995,
+      "rms_dbfs": -99.48634045450066,
+      "samples_at_full_scale": 0,
+      "dc": -4.575493952466382e-06
+     },
+     "mic": {
+      "peak_dbfs": -40.91094832686479,
+      "rms_dbfs": -48.25912478457299,
+      "samples_at_full_scale": 0,
+      "dc": 8.236294094887044e-06
+     }
+    }
+   },
+   "whole": {
+    "loopback": {
+     "peak_dbfs": -3.6964846949681385,
+     "rms_dbfs": -19.90235781418779,
+     "samples_at_full_scale": 0,
+     "dc": -4.612780380917814e-06
+    },
+    "mic": {
+     "peak_dbfs": -5.409321899729667,
+     "rms_dbfs": -26.39341647583055,
+     "samples_at_full_scale": 0,
+     "dc": 5.440363209493377e-06
+    }
+   },
+   "quiet": {
+    "margin_before": {
+     "start_s": 0.0,
+     "seconds": 7.494265625,
+     "loopback": {
+      "rms_dbfs": -99.86929732502873,
+      "below_200Hz_dbfs": -124.7916117946373,
+      "strongest_bin_hz": 20583.984375,
+      "50Hz_over_floor_db": 5.756166591676937,
+      "100Hz_over_floor_db": 1.6946521039053488,
+      "150Hz_over_floor_db": 4.909394166991584
+     },
+     "mic": {
+      "rms_dbfs": -47.83225121521416,
+      "below_200Hz_dbfs": -47.99052971942259,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 66.1244020232173,
+      "100Hz_over_floor_db": 62.41277563847062,
+      "150Hz_over_floor_db": 56.55286436734117
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -46.00506778516746,
+      "at_s": 6.95,
+      "above_threshold": false
+     }
+    },
+    "margin_after": {
+     "start_s": 385.181265625,
+     "seconds": 18.605401041666667,
+     "loopback": {
+      "rms_dbfs": -99.8890580914472,
+      "below_200Hz_dbfs": -125.02114195712682,
+      "strongest_bin_hz": 20583.984375,
+      "50Hz_over_floor_db": 4.596159190136315,
+      "100Hz_over_floor_db": 1.923520170894918,
+      "150Hz_over_floor_db": 3.6842969089110076
+     },
+     "mic": {
+      "rms_dbfs": -35.083017299690326,
+      "below_200Hz_dbfs": -35.56174750904499,
+      "strongest_bin_hz": 38.0859375,
+      "50Hz_over_floor_db": 58.3185950637698,
+      "100Hz_over_floor_db": 54.27267845993187,
+      "150Hz_over_floor_db": 47.95127750292124
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -13.675345994849774,
+      "at_s": 12.525,
+      "above_threshold": true
+     }
+    },
+    "probe.silence": {
+     "start_s": 12.498265625,
+     "seconds": 2.0,
+     "loopback": {
+      "rms_dbfs": -99.88419805785222,
+      "below_200Hz_dbfs": -125.49396025996032,
+      "strongest_bin_hz": 20583.984375,
+      "50Hz_over_floor_db": 5.165650315548201,
+      "100Hz_over_floor_db": 2.22262903474746,
+      "150Hz_over_floor_db": 4.777281921970724
+     },
+     "mic": {
+      "rms_dbfs": -47.82565316251106,
+      "below_200Hz_dbfs": -47.874468595323386,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 71.8274338239528,
+      "100Hz_over_floor_db": 67.55253971676441,
+      "150Hz_over_floor_db": 62.26112642832176
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -46.310825126576056,
+      "at_s": 0.425,
+      "above_threshold": false
+     }
+    },
+    "full.silence": {
+     "start_s": 65.498265625,
+     "seconds": 5.0,
+     "loopback": {
+      "rms_dbfs": -99.88770242942032,
+      "below_200Hz_dbfs": -125.6250821737168,
+      "strongest_bin_hz": 20583.984375,
+      "50Hz_over_floor_db": 4.420162394147033,
+      "100Hz_over_floor_db": 1.2937582688560891,
+      "150Hz_over_floor_db": 3.012453394994796
+     },
+     "mic": {
+      "rms_dbfs": -48.11635534014918,
+      "below_200Hz_dbfs": -48.2682016445878,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 71.5100477059165,
+      "100Hz_over_floor_db": 67.52777766428486,
+      "150Hz_over_floor_db": 61.98526335885158
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -47.31841574822552,
+      "at_s": 3.025,
+      "above_threshold": false
+     }
+    }
+   },
+   "mic_noise_floor_error_db": {
+    "probe.sweep_-20dBFS": -24.30677067810592,
+    "probe.sweep_-10dBFS": -24.69014287425367,
+    "probe.sweep_-3dBFS": -24.530257030523423,
+    "probe.two_tone_mod_-20dBFS": -18.924710403102125,
+    "probe.two_tone_mod_-10dBFS": -20.07159716423708,
+    "probe.two_tone_mod_-3dBFS": -20.993354349068646,
+    "probe.two_tone_diff_-20dBFS": -12.139061870135222,
+    "probe.two_tone_diff_-10dBFS": -9.569243230961042,
+    "probe.two_tone_diff_-3dBFS": -8.974165650955449,
+    "probe.bursts_plucks": -24.15703644999732,
+    "full.pink_noise_-30dBFS_rms": -16.067905476303302,
+    "full.sweep_-20dBFS": -24.31712992386134,
+    "full.sweep_-10dBFS": -24.690263749913278,
+    "full.sweep_-3dBFS": -24.52721212614358,
+    "full.di_train": -22.13652805473381,
+    "full.di_validation": -22.124515230603308,
+    "full.di_test": -24.06049787129212,
+    "full.polarity_plus": -21.421377104186153,
+    "full.polarity_minus": -21.53554232776262,
+    "full.level_-12dB": -21.6176144593581,
+    "full.level_-6dB": -21.51786394265448,
+    "full.level_+6dB": -21.293714505548046,
+    "full.bursts_plucks": -24.166818074034698,
+    "full.bursts_recovery": -20.761305860457774,
+    "full.two_tone_mod_-20dBFS": -18.5465019229034,
+    "full.two_tone_mod_-10dBFS": -20.11509596853405,
+    "full.two_tone_mod_-3dBFS": -21.322286552535004,
+    "full.two_tone_diff_-20dBFS": -12.179345713999304,
+    "full.two_tone_diff_-10dBFS": -10.84144011185515,
+    "full.two_tone_diff_-3dBFS": -9.379822939567063
+   },
+   "zero_runs_in_sounding_sections": {
+    "loopback": [],
+    "mic": []
+   },
+   "mic_ir": {
+    "probe.sweep_-20dBFS": {
+     "main_lag_samples": 132,
+     "main_lag_ms": 0.6875,
+     "main_tap": -0.01831082783745392,
+     "polarity": -1,
+     "onset_samples": 89,
+     "zero_lag_tap": 0.0008171915208549515,
+     "zero_lag_over_main_db": -27.00768255107083,
+     "zero_lag_energy_share_db": -39.94105032612868,
+     "coherence_200Hz_5kHz": 0.8116101006862934,
+     "coherence_25_90kHz": 0.018718125741779904
+    },
+    "full.pink_noise_-30dBFS_rms": {
+     "main_lag_samples": 135,
+     "main_lag_ms": 0.703125,
+     "main_tap": -0.03318558272947096,
+     "polarity": -1,
+     "onset_samples": 89,
+     "zero_lag_tap": 0.0006085840153458663,
+     "zero_lag_over_main_db": -34.73257813690715,
+     "zero_lag_energy_share_db": -44.498512977143186,
+     "coherence_200Hz_5kHz": 0.6603477622252301,
+     "coherence_25_90kHz": 0.01865592088627318
+    },
+    "full.sweep_-20dBFS": {
+     "main_lag_samples": 132,
+     "main_lag_ms": 0.6875,
+     "main_tap": -0.01736900566356553,
+     "polarity": -1,
+     "onset_samples": 90,
+     "zero_lag_tap": -0.0006388251710622043,
+     "zero_lag_over_main_db": -28.68785873708064,
+     "zero_lag_energy_share_db": -41.631335620922094,
+     "coherence_200Hz_5kHz": 0.8120766211021997,
+     "coherence_25_90kHz": 0.01851040499036013
+    },
+    "full.di_train": {
+     "main_lag_samples": 134,
+     "main_lag_ms": 0.6979166666666666,
+     "main_tap": -0.009885816912758512,
+     "polarity": -1,
+     "onset_samples": 11,
+     "zero_lag_tap": -0.001166276110231246,
+     "zero_lag_over_main_db": -18.564223665331944,
+     "zero_lag_energy_share_db": -33.94041011835375,
+     "coherence_200Hz_5kHz": 0.10708538925622822,
+     "coherence_25_90kHz": 0.003129356796616982
+    },
+    "full.di_test": {
+     "main_lag_samples": 133,
+     "main_lag_ms": 0.6927083333333334,
+     "main_tap": -0.013580188094278326,
+     "polarity": -1,
+     "onset_samples": 93,
+     "zero_lag_tap": -0.0005566452368995479,
+     "zero_lag_over_main_db": -27.746545759831307,
+     "zero_lag_energy_share_db": -43.329261415038054,
+     "coherence_200Hz_5kHz": 0.088033444822166,
+     "coherence_25_90kHz": 0.0030358268814707585
+    },
+    "full.level_-12dB": {
+     "main_lag_samples": 110,
+     "main_lag_ms": 0.5729166666666666,
+     "main_tap": 0.03917363399480843,
+     "polarity": 1,
+     "onset_samples": 0,
+     "zero_lag_tap": -0.01661155433892841,
+     "zero_lag_over_main_db": -7.451671803014136,
+     "zero_lag_energy_share_db": -24.64412356631754,
+     "coherence_200Hz_5kHz": 0.11566138043682192,
+     "coherence_25_90kHz": 0.009214797081927373
+    }
+   },
+   "common_disturbance_25_90kHz": {
+    "median_coherence": 0.011559530163080046,
+    "max_coherence": 0.020350454909336495,
+    "seconds_above_0.3": 0,
+    "median_mic_dbfs": -98.89620569067056,
+    "stretches_recording_s": []
+   },
+   "repeatability": {
+    "sweep_-20dBFS": {
+     "mic_rms_full_minus_probe_db": 0.010359245755420687,
+     "loopback_rms_full_minus_probe_db": 0.0006082226515324862
+    },
+    "sweep_-10dBFS": {
+     "mic_rms_full_minus_probe_db": 0.00012087565960783309,
+     "loopback_rms_full_minus_probe_db": 0.0003516345891210193
+    },
+    "sweep_-3dBFS": {
+     "mic_rms_full_minus_probe_db": -0.0030449043798412845,
+     "loopback_rms_full_minus_probe_db": -9.486903373279176e-05
+    },
+    "two_tone_mod_-20dBFS": {
+     "mic_rms_full_minus_probe_db": -0.378208480198726,
+     "loopback_rms_full_minus_probe_db": -0.0005675439013792527
+    },
+    "two_tone_mod_-10dBFS": {
+     "mic_rms_full_minus_probe_db": 0.04349880429696995,
+     "loopback_rms_full_minus_probe_db": -0.00042545982041275465
+    },
+    "two_tone_mod_-3dBFS": {
+     "mic_rms_full_minus_probe_db": 0.32893220346635843,
+     "loopback_rms_full_minus_probe_db": -0.0004556388205845252
+    },
+    "two_tone_diff_-20dBFS": {
+     "mic_rms_full_minus_probe_db": 0.04028384386408135,
+     "loopback_rms_full_minus_probe_db": -0.0006977785674600057
+    },
+    "two_tone_diff_-10dBFS": {
+     "mic_rms_full_minus_probe_db": 1.272196880894107,
+     "loopback_rms_full_minus_probe_db": -0.0010463311892756622
+    },
+    "two_tone_diff_-3dBFS": {
+     "mic_rms_full_minus_probe_db": 0.4056572886116143,
+     "loopback_rms_full_minus_probe_db": -0.0011677765497406511
+    }
+   }
+  },
+  "1105": {
+   "format": {
+    "loopback": {
+     "rate": 192000,
+     "channels": 1,
+     "subtype": "PCM_24",
+     "frames": 74166272,
+     "seconds": 386.28266666666667
+    },
+    "mic": {
+     "rate": 192000,
+     "channels": 1,
+     "subtype": "PCM_24",
+     "frames": 74166272,
+     "seconds": 386.28266666666667
+    }
+   },
+   "same_length": true,
+   "reference": true,
+   "offset_samples": 1536051,
+   "offset_s": 8.000265625,
+   "markers": {
+    "probe_start": {
+     "time_s": 3.0,
+     "lag_samples": -0.2286834488685051,
+     "corr": 0.9989333539561528
+    },
+    "probe_end": {
+     "time_s": 49.004,
+     "lag_samples": -0.2288554723618934,
+     "corr": 0.9988940590568313
+    },
+    "full_start": {
+     "time_s": 56.0,
+     "lag_samples": -0.22853907539550308,
+     "corr": 0.9989033586219551
+    },
+    "full_end": {
+     "time_s": 369.179,
+     "lag_samples": -0.22809589071041012,
+     "corr": 0.9989359538832093
+    }
+   },
+   "relative_lag_windows": 0,
+   "slips": [],
+   "drift_ppm_excluding_slips": 8.357111522173886e-06,
+   "margin_before_s": 8.000265625,
+   "margin_after_s": 1.5994010416666666,
+   "stimulus_truncated_start": false,
+   "stimulus_truncated_end": false,
+   "loopback_gain_db": -2.608276446180071,
+   "loopback_gain_sign": 1,
+   "loopback_residual_db": -14.537673138499603,
+   "sections": {
+    "probe.pad_start": {
+     "loopback": {
+      "peak_dbfs": -72.20489059690307,
+      "rms_dbfs": -89.38235138818123,
+      "samples_at_full_scale": 0,
+      "dc": -4.579889484577709e-06
+     },
+     "mic": {
+      "peak_dbfs": -40.209074516038335,
+      "rms_dbfs": -46.849539466414704,
+      "samples_at_full_scale": 0,
+      "dc": 2.2764775074190564e-06
+     }
+    },
+    "probe.markers_start": {
+     "loopback": {
+      "peak_dbfs": -7.201060852754191,
+      "rms_dbfs": -40.13607847473857,
+      "samples_at_full_scale": 0,
+      "dc": -4.377227659660874e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.76619425733485,
+      "rms_dbfs": -43.64707802109241,
+      "samples_at_full_scale": 0,
+      "dc": 2.3533840307054367e-05
+     }
+    },
+    "probe.silence": {
+     "loopback": {
+      "peak_dbfs": -70.72600147865677,
+      "rms_dbfs": -92.01024247115225,
+      "samples_at_full_scale": 0,
+      "dc": -4.6767073993881544e-06
+     },
+     "mic": {
+      "peak_dbfs": -39.964152633831624,
+      "rms_dbfs": -47.015531985952904,
+      "samples_at_full_scale": 0,
+      "dc": 4.1246538360913593e-07
+     }
+    },
+    "probe.sweep_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.315348542134803,
+      "rms_dbfs": -25.537313610624125,
+      "samples_at_full_scale": 0,
+      "dc": -4.624113564689954e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.463918938925058,
+      "rms_dbfs": -23.83625189611533,
+      "samples_at_full_scale": 0,
+      "dc": -1.0656341910362243e-07
+     }
+    },
+    "probe.sweep_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.330773071565343,
+      "rms_dbfs": -15.539816442386275,
+      "samples_at_full_scale": 0,
+      "dc": -4.603535061081251e-06
+     },
+     "mic": {
+      "peak_dbfs": -9.499816888549363,
+      "rms_dbfs": -22.88704228006608,
+      "samples_at_full_scale": 0,
+      "dc": 1.107458770275116e-06
+     }
+    },
+    "probe.sweep_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.356874393813262,
+      "rms_dbfs": -8.560703677101355,
+      "samples_at_full_scale": 0,
+      "dc": -4.652687907218933e-06
+     },
+     "mic": {
+      "peak_dbfs": -9.463716686010429,
+      "rms_dbfs": -22.941313056583258,
+      "samples_at_full_scale": 0,
+      "dc": -5.673020705580711e-06
+     }
+    },
+    "probe.two_tone_mod_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -21.95059087006473,
+      "rms_dbfs": -27.090580909019792,
+      "samples_at_full_scale": 0,
+      "dc": -4.2248249985277656e-05
+     },
+     "mic": {
+      "peak_dbfs": -23.989100075620815,
+      "rms_dbfs": -30.918553562640547,
+      "samples_at_full_scale": 0,
+      "dc": 2.4520768783986567e-05
+     }
+    },
+    "probe.two_tone_mod_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -11.94771176590832,
+      "rms_dbfs": -17.097459302171792,
+      "samples_at_full_scale": 0,
+      "dc": -0.00012351111291597288
+     },
+     "mic": {
+      "peak_dbfs": -21.474200251115263,
+      "rms_dbfs": -28.33947937641071,
+      "samples_at_full_scale": 0,
+      "dc": 6.26611514016986e-05
+     }
+    },
+    "probe.two_tone_mod_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -4.968568765459365,
+      "rms_dbfs": -10.122435045202467,
+      "samples_at_full_scale": 0,
+      "dc": -0.00027007216960191725
+     },
+     "mic": {
+      "peak_dbfs": -21.11586088872608,
+      "rms_dbfs": -27.040093176781728,
+      "samples_at_full_scale": 0,
+      "dc": 6.299961761881908e-05
+     }
+    },
+    "probe.two_tone_diff_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.338643125031105,
+      "rms_dbfs": -28.359670704895755,
+      "samples_at_full_scale": 0,
+      "dc": -4.2983833700418475e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.89008883430788,
+      "rms_dbfs": -37.09341623383272,
+      "samples_at_full_scale": 0,
+      "dc": 5.772740890582403e-07
+     }
+    },
+    "probe.two_tone_diff_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.352004263084165,
+      "rms_dbfs": -18.366615141038153,
+      "samples_at_full_scale": 0,
+      "dc": -4.48923713217179e-06
+     },
+     "mic": {
+      "peak_dbfs": -27.43107250343566,
+      "rms_dbfs": -38.243935153175315,
+      "samples_at_full_scale": 0,
+      "dc": -1.8228664994239807e-06
+     }
+    },
+    "probe.two_tone_diff_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.3776230948744494,
+      "rms_dbfs": -11.390992356740423,
+      "samples_at_full_scale": 0,
+      "dc": -2.7052676305174828e-06
+     },
+     "mic": {
+      "peak_dbfs": -27.700865750213225,
+      "rms_dbfs": -38.83172254089069,
+      "samples_at_full_scale": 0,
+      "dc": -2.4520512670278547e-07
+     }
+    },
+    "probe.bursts_plucks": {
+     "loopback": {
+      "peak_dbfs": -5.110248407736602,
+      "rms_dbfs": -24.4092238559045,
+      "samples_at_full_scale": 0,
+      "dc": -4.6100997055570286e-06
+     },
+     "mic": {
+      "peak_dbfs": -11.904864416930486,
+      "rms_dbfs": -24.325264897130076,
+      "samples_at_full_scale": 0,
+      "dc": 4.2536869645118715e-06
+     }
+    },
+    "probe.markers_end": {
+     "loopback": {
+      "peak_dbfs": -7.202270831870221,
+      "rms_dbfs": -40.13515985890888,
+      "samples_at_full_scale": 0,
+      "dc": -4.026810110196577e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.25337877085058,
+      "rms_dbfs": -42.85968200387313,
+      "samples_at_full_scale": 0,
+      "dc": 1.898913393259471e-05
+     }
+    },
+    "probe.pad_end": {
+     "loopback": {
+      "peak_dbfs": -7.2067041168310055,
+      "rms_dbfs": -49.14815239129738,
+      "samples_at_full_scale": 0,
+      "dc": -5.056837366686927e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.579670584123427,
+      "rms_dbfs": -44.75348832895008,
+      "samples_at_full_scale": 0,
+      "dc": 1.7019268228775926e-05
+     }
+    },
+    "full.pad_start": {
+     "loopback": {
+      "peak_dbfs": -63.59890043358212,
+      "rms_dbfs": -77.10605733332297,
+      "samples_at_full_scale": 0,
+      "dc": -4.448261111974716e-06
+     },
+     "mic": {
+      "peak_dbfs": -31.695270146219606,
+      "rms_dbfs": -44.85146975854737,
+      "samples_at_full_scale": 0,
+      "dc": 5.744322513540586e-06
+     }
+    },
+    "full.markers_start": {
+     "loopback": {
+      "peak_dbfs": -7.202538948094379,
+      "rms_dbfs": -40.135083819704214,
+      "samples_at_full_scale": 0,
+      "dc": -3.663955111030146e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.579670584123427,
+      "rms_dbfs": -42.86617503299765,
+      "samples_at_full_scale": 0,
+      "dc": 3.4569689990780874e-05
+     }
+    },
+    "full.silence": {
+     "loopback": {
+      "peak_dbfs": -64.27483767521613,
+      "rms_dbfs": -85.97126837719797,
+      "samples_at_full_scale": 0,
+      "dc": -4.6445661534865695e-06
+     },
+     "mic": {
+      "peak_dbfs": -36.74546233355982,
+      "rms_dbfs": -46.470706252027334,
+      "samples_at_full_scale": 0,
+      "dc": 6.916322434941928e-06
+     }
+    },
+    "full.pink_noise_-30dBFS_rms": {
+     "loopback": {
+      "peak_dbfs": -18.767038218269274,
+      "rms_dbfs": -32.541755924287415,
+      "samples_at_full_scale": 0,
+      "dc": -1.2644710391759872e-05
+     },
+     "mic": {
+      "peak_dbfs": -20.496870997581617,
+      "rms_dbfs": -33.162255227665625,
+      "samples_at_full_scale": 0,
+      "dc": 1.0416089122494061e-05
+     }
+    },
+    "full.sweep_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.32338156658653,
+      "rms_dbfs": -25.537183652611336,
+      "samples_at_full_scale": 0,
+      "dc": -4.610033830006918e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.36443581517721,
+      "rms_dbfs": -23.802911627517975,
+      "samples_at_full_scale": 0,
+      "dc": 2.6192265252272287e-06
+     }
+    },
+    "full.sweep_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.331826547220697,
+      "rms_dbfs": -15.540088220462245,
+      "samples_at_full_scale": 0,
+      "dc": -4.618948077162107e-06
+     },
+     "mic": {
+      "peak_dbfs": -9.3153006036383,
+      "rms_dbfs": -22.867390537701354,
+      "samples_at_full_scale": 0,
+      "dc": 3.715244432290395e-06
+     }
+    },
+    "full.sweep_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.356857127079042,
+      "rms_dbfs": -8.561056686669378,
+      "samples_at_full_scale": 0,
+      "dc": -4.660433779160182e-06
+     },
+     "mic": {
+      "peak_dbfs": -9.47035602694391,
+      "rms_dbfs": -22.92768957770292,
+      "samples_at_full_scale": 0,
+      "dc": 6.395379702250163e-07
+     }
+    },
+    "full.di_train": {
+     "loopback": {
+      "peak_dbfs": -3.8685446409983677,
+      "rms_dbfs": -22.486673502937112,
+      "samples_at_full_scale": 0,
+      "dc": -5.864121216452784e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.65170690911162,
+      "rms_dbfs": -26.32753527158506,
+      "samples_at_full_scale": 0,
+      "dc": 4.7748985338128275e-06
+     }
+    },
+    "full.di_validation": {
+     "loopback": {
+      "peak_dbfs": -5.382838228621959,
+      "rms_dbfs": -24.232678941070155,
+      "samples_at_full_scale": 0,
+      "dc": 1.1827883621056875e-07
+     },
+     "mic": {
+      "peak_dbfs": -11.760207908718725,
+      "rms_dbfs": -26.35495028257519,
+      "samples_at_full_scale": 0,
+      "dc": 9.360283261371983e-06
+     }
+    },
+    "full.di_test": {
+     "loopback": {
+      "peak_dbfs": -3.6972881779593507,
+      "rms_dbfs": -22.33716214988268,
+      "samples_at_full_scale": 0,
+      "dc": -4.569497580329577e-06
+     },
+     "mic": {
+      "peak_dbfs": -11.85493140109935,
+      "rms_dbfs": -24.480250793071146,
+      "samples_at_full_scale": 0,
+      "dc": 4.886621112624804e-06
+     }
+    },
+    "full.polarity_plus": {
+     "loopback": {
+      "peak_dbfs": -9.951657344600575,
+      "rms_dbfs": -24.645989362654074,
+      "samples_at_full_scale": 0,
+      "dc": -2.015127489964167e-08
+     },
+     "mic": {
+      "peak_dbfs": -13.790242738186414,
+      "rms_dbfs": -26.50848351275235,
+      "samples_at_full_scale": 0,
+      "dc": -1.6696895783146223e-06
+     }
+    },
+    "full.polarity_minus": {
+     "loopback": {
+      "peak_dbfs": -9.954562335331742,
+      "rms_dbfs": -24.646015060168203,
+      "samples_at_full_scale": 0,
+      "dc": -9.211639190713564e-06
+     },
+     "mic": {
+      "peak_dbfs": -13.701606662241836,
+      "rms_dbfs": -26.417833334102284,
+      "samples_at_full_scale": 0,
+      "dc": 8.52701695015033e-06
+     }
+    },
+    "full.level_-12dB": {
+     "loopback": {
+      "peak_dbfs": -21.93735434790909,
+      "rms_dbfs": -36.64169074898457,
+      "samples_at_full_scale": 0,
+      "dc": -3.4611639256278673e-06
+     },
+     "mic": {
+      "peak_dbfs": -14.864152278085005,
+      "rms_dbfs": -26.357514925583402,
+      "samples_at_full_scale": 0,
+      "dc": 2.9181359335780143e-06
+     }
+    },
+    "full.level_-6dB": {
+     "loopback": {
+      "peak_dbfs": -15.937038368953935,
+      "rms_dbfs": -30.64156506193751,
+      "samples_at_full_scale": 0,
+      "dc": -2.3126997674504915e-06
+     },
+     "mic": {
+      "peak_dbfs": -14.110763652445055,
+      "rms_dbfs": -26.3530431168838,
+      "samples_at_full_scale": 0,
+      "dc": 2.568797580897808e-06
+     }
+    },
+    "full.level_+6dB": {
+     "loopback": {
+      "peak_dbfs": -3.9622635869526257,
+      "rms_dbfs": -18.665523119111928,
+      "samples_at_full_scale": 0,
+      "dc": 4.579318066438039e-06
+     },
+     "mic": {
+      "peak_dbfs": -13.968998087648606,
+      "rms_dbfs": -26.720486478833287,
+      "samples_at_full_scale": 0,
+      "dc": -5.2694053078691166e-06
+     }
+    },
+    "full.bursts_plucks": {
+     "loopback": {
+      "peak_dbfs": -5.1103584327903375,
+      "rms_dbfs": -24.40931871002549,
+      "samples_at_full_scale": 0,
+      "dc": -4.6086462214589115e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.221907626519481,
+      "rms_dbfs": -24.33097364909218,
+      "samples_at_full_scale": 0,
+      "dc": 2.817255755265554e-06
+     }
+    },
+    "full.bursts_recovery": {
+     "loopback": {
+      "peak_dbfs": -4.860187100766381,
+      "rms_dbfs": -18.66030457173878,
+      "samples_at_full_scale": 0,
+      "dc": -4.6205292500553045e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.16753477243217,
+      "rms_dbfs": -26.865646094199693,
+      "samples_at_full_scale": 0,
+      "dc": 5.301819612986992e-06
+     }
+    },
+    "full.two_tone_mod_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -21.951187117725194,
+      "rms_dbfs": -27.090592146256448,
+      "samples_at_full_scale": 0,
+      "dc": -4.224805285533269e-05
+     },
+     "mic": {
+      "peak_dbfs": -23.798589224742848,
+      "rms_dbfs": -30.609690223864483,
+      "samples_at_full_scale": 0,
+      "dc": 4.103579434255759e-05
+     }
+    },
+    "full.two_tone_mod_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -11.948228055592086,
+      "rms_dbfs": -17.09767144485803,
+      "samples_at_full_scale": 0,
+      "dc": -0.00012350407366951306
+     },
+     "mic": {
+      "peak_dbfs": -21.845438496754124,
+      "rms_dbfs": -28.239614051935224,
+      "samples_at_full_scale": 0,
+      "dc": 5.7341710974772774e-05
+     }
+    },
+    "full.two_tone_mod_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -4.96782759913108,
+      "rms_dbfs": -10.12217517842235,
+      "samples_at_full_scale": 0,
+      "dc": -0.0002700551583742102
+     },
+     "mic": {
+      "peak_dbfs": -20.686295883838547,
+      "rms_dbfs": -27.11884545506797,
+      "samples_at_full_scale": 0,
+      "dc": 6.4262711443007e-05
+     }
+    },
+    "full.two_tone_diff_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.336176709258176,
+      "rms_dbfs": -28.359583612716403,
+      "samples_at_full_scale": 0,
+      "dc": -4.319992537299792e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.52551122326627,
+      "rms_dbfs": -36.59919564520783,
+      "samples_at_full_scale": 0,
+      "dc": -1.6954869342346985e-05
+     }
+    },
+    "full.two_tone_diff_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.351974214645644,
+      "rms_dbfs": -18.36670715631928,
+      "samples_at_full_scale": 0,
+      "dc": -3.7431713814536732e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.417213996955965,
+      "rms_dbfs": -37.276150187535336,
+      "samples_at_full_scale": 0,
+      "dc": 5.308288459976514e-06
+     }
+    },
+    "full.two_tone_diff_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.3791463365854595,
+      "rms_dbfs": -11.39123540822001,
+      "samples_at_full_scale": 0,
+      "dc": -2.718599202732245e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.783803865650533,
+      "rms_dbfs": -38.08427422487321,
+      "samples_at_full_scale": 0,
+      "dc": 7.801251485943794e-07
+     }
+    },
+    "full.markers_end": {
+     "loopback": {
+      "peak_dbfs": -7.203390805883768,
+      "rms_dbfs": -40.13616861362869,
+      "samples_at_full_scale": 0,
+      "dc": -7.146262276442127e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.792852869996082,
+      "rms_dbfs": -43.28907800506016,
+      "samples_at_full_scale": 0,
+      "dc": 4.502860845746935e-06
+     }
+    },
+    "full.pad_end": {
+     "loopback": {
+      "peak_dbfs": -69.36167575379402,
+      "rms_dbfs": -99.79738749989777,
+      "samples_at_full_scale": 0,
+      "dc": -4.590293806460169e-06
+     },
+     "mic": {
+      "peak_dbfs": -37.98309954024668,
+      "rms_dbfs": -46.99735784074559,
+      "samples_at_full_scale": 0,
+      "dc": 3.4235077392723826e-06
+     }
+    }
+   },
+   "whole": {
+    "loopback": {
+     "peak_dbfs": -3.6972881779593507,
+     "rms_dbfs": -19.711123862225776,
+     "samples_at_full_scale": 0,
+     "dc": -4.609799671197764e-06
+    },
+    "mic": {
+     "peak_dbfs": -9.3153006036383,
+     "rms_dbfs": -26.515310137780602,
+     "samples_at_full_scale": 0,
+     "dc": 5.35689599395618e-06
+    }
+   },
+   "quiet": {
+    "margin_before": {
+     "start_s": 0.0,
+     "seconds": 7.500265625,
+     "loopback": {
+      "rms_dbfs": -77.42079824188652,
+      "below_200Hz_dbfs": -78.50455235223663,
+      "strongest_bin_hz": 26.3671875,
+      "50Hz_over_floor_db": 40.890661415604086,
+      "100Hz_over_floor_db": 26.185571452032846,
+      "150Hz_over_floor_db": 33.09252951593799
+     },
+     "mic": {
+      "rms_dbfs": -46.11285717646594,
+      "below_200Hz_dbfs": -46.206636775073456,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 66.46528760899398,
+      "100Hz_over_floor_db": 61.96341292817097,
+      "150Hz_over_floor_db": 56.65566738319307
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -43.56421491731933,
+      "at_s": 4.2,
+      "above_threshold": false
+     }
+    },
+    "margin_after": {
+     "start_s": 385.183265625,
+     "seconds": 1.0994010416666666,
+     "loopback": {
+      "rms_dbfs": -99.8997406860697,
+      "below_200Hz_dbfs": -125.53077252749048,
+      "strongest_bin_hz": 20586.9140625,
+      "50Hz_over_floor_db": 3.2518074496117215,
+      "100Hz_over_floor_db": 0.7833594592530103,
+      "150Hz_over_floor_db": 2.7493999342353206
+     },
+     "mic": {
+      "rms_dbfs": -47.07191751444344,
+      "below_200Hz_dbfs": -47.190123891688636,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 69.98564298286574,
+      "100Hz_over_floor_db": 65.48469254094647,
+      "150Hz_over_floor_db": 60.50302096623237
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -46.6698641288622,
+      "at_s": 0.375,
+      "above_threshold": false
+     }
+    },
+    "probe.silence": {
+     "start_s": 12.504265625,
+     "seconds": 2.0,
+     "loopback": {
+      "rms_dbfs": -92.01024247115225,
+      "below_200Hz_dbfs": -95.30016028674271,
+      "strongest_bin_hz": 26.3671875,
+      "50Hz_over_floor_db": 34.925176910886954,
+      "100Hz_over_floor_db": 31.979530170653668,
+      "150Hz_over_floor_db": 31.652648938141184
+     },
+     "mic": {
+      "rms_dbfs": -47.015531985952904,
+      "below_200Hz_dbfs": -47.10889395960727,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 73.6114849397033,
+      "100Hz_over_floor_db": 69.29738433076683,
+      "150Hz_over_floor_db": 64.51331167248448
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -46.30263309109331,
+      "at_s": 0.25,
+      "above_threshold": false
+     }
+    },
+    "full.silence": {
+     "start_s": 65.504265625,
+     "seconds": 5.0,
+     "loopback": {
+      "rms_dbfs": -85.97126837719797,
+      "below_200Hz_dbfs": -87.3668857556703,
+      "strongest_bin_hz": 26.3671875,
+      "50Hz_over_floor_db": 44.148378577619305,
+      "100Hz_over_floor_db": 27.058879818842843,
+      "150Hz_over_floor_db": 35.056397180169185
+     },
+     "mic": {
+      "rms_dbfs": -46.470706252027334,
+      "below_200Hz_dbfs": -46.669551389029635,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 57.35085530766369,
+      "100Hz_over_floor_db": 52.08315085690189,
+      "150Hz_over_floor_db": 46.69193660526233
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -44.318956427862716,
+      "at_s": 1.05,
+      "above_threshold": false
+     }
+    }
+   },
+   "mic_noise_floor_error_db": {
+    "probe.sweep_-20dBFS": -22.898329219043248,
+    "probe.sweep_-10dBFS": -23.847538835092497,
+    "probe.sweep_-3dBFS": -23.79326805857532,
+    "probe.two_tone_mod_-20dBFS": -15.81602755251803,
+    "probe.two_tone_mod_-10dBFS": -18.395101738747865,
+    "probe.two_tone_mod_-3dBFS": -19.69448793837685,
+    "probe.two_tone_diff_-20dBFS": -9.641164881325857,
+    "probe.two_tone_diff_-10dBFS": -8.490645961983262,
+    "probe.two_tone_diff_-3dBFS": -7.9028585742678885,
+    "probe.bursts_plucks": -22.4093162180285,
+    "full.pink_noise_-30dBFS_rms": -13.572325887492951,
+    "full.sweep_-20dBFS": -22.9316694876406,
+    "full.sweep_-10dBFS": -23.867190577457222,
+    "full.sweep_-3dBFS": -23.806891537455655,
+    "full.di_train": -20.407045843573517,
+    "full.di_validation": -20.379630832583388,
+    "full.di_test": -22.25433032208743,
+    "full.polarity_plus": -20.226097602406227,
+    "full.polarity_minus": -20.316747781056293,
+    "full.level_-12dB": -20.377066189575174,
+    "full.level_-6dB": -20.381537998274776,
+    "full.level_+6dB": -20.01409463632529,
+    "full.bursts_plucks": -22.403607466066397,
+    "full.bursts_recovery": -19.868935020958883,
+    "full.two_tone_mod_-20dBFS": -16.124890891294093,
+    "full.two_tone_mod_-10dBFS": -18.494967063223353,
+    "full.two_tone_mod_-3dBFS": -19.615735660090607,
+    "full.two_tone_diff_-20dBFS": -10.135385469950748,
+    "full.two_tone_diff_-10dBFS": -9.45843092762324,
+    "full.two_tone_diff_-3dBFS": -8.650306890285364
+   },
+   "zero_runs_in_sounding_sections": {
+    "loopback": [],
+    "mic": []
+   },
+   "mic_ir": {
+    "probe.sweep_-20dBFS": {
+     "main_lag_samples": 134,
+     "main_lag_ms": 0.6979166666666666,
+     "main_tap": -0.012410084561026203,
+     "polarity": -1,
+     "onset_samples": 89,
+     "zero_lag_tap": -0.0022073733418514234,
+     "zero_lag_over_main_db": -14.99797894830806,
+     "zero_lag_energy_share_db": -29.419498584388137,
+     "coherence_200Hz_5kHz": 0.8295268864866169,
+     "coherence_25_90kHz": 0.11299827666382123
+    },
+    "full.pink_noise_-30dBFS_rms": {
+     "main_lag_samples": 135,
+     "main_lag_ms": 0.703125,
+     "main_tap": -0.027331455546755968,
+     "polarity": -1,
+     "onset_samples": 88,
+     "zero_lag_tap": 0.0003635394718921607,
+     "zero_lag_over_main_db": -37.52222377666739,
+     "zero_lag_energy_share_db": -47.89769213049236,
+     "coherence_200Hz_5kHz": 0.714026661341272,
+     "coherence_25_90kHz": 0.05414280120663654
+    },
+    "full.sweep_-20dBFS": {
+     "main_lag_samples": 132,
+     "main_lag_ms": 0.6875,
+     "main_tap": -0.012983242251151005,
+     "polarity": -1,
+     "onset_samples": 89,
+     "zero_lag_tap": -0.0005825076106953301,
+     "zero_lag_over_main_db": -26.96163113197578,
+     "zero_lag_energy_share_db": -41.58465894542333,
+     "coherence_200Hz_5kHz": 0.8301347606449011,
+     "coherence_25_90kHz": 0.01857605580594679
+    },
+    "full.di_train": {
+     "main_lag_samples": 114,
+     "main_lag_ms": 0.59375,
+     "main_tap": 0.008255733974338623,
+     "polarity": 1,
+     "onset_samples": 4,
+     "zero_lag_tap": -0.004150584189611201,
+     "zero_lag_over_main_db": -5.97292925499481,
+     "zero_lag_energy_share_db": -23.73217234813947,
+     "coherence_200Hz_5kHz": 0.11657652254984548,
+     "coherence_25_90kHz": 0.003106138304864437
+    },
+    "full.di_test": {
+     "main_lag_samples": 117,
+     "main_lag_ms": 0.609375,
+     "main_tap": 0.011876901969850117,
+     "polarity": 1,
+     "onset_samples": 87,
+     "zero_lag_tap": -0.0010234987309572998,
+     "zero_lag_over_main_db": -21.29231726742939,
+     "zero_lag_energy_share_db": -32.51675084880273,
+     "coherence_200Hz_5kHz": 0.1048875789254463,
+     "coherence_25_90kHz": 0.0031024015182306366
+    },
+    "full.level_-12dB": {
+     "main_lag_samples": 135,
+     "main_lag_ms": 0.703125,
+     "main_tap": -0.02970511608400625,
+     "polarity": -1,
+     "onset_samples": 6,
+     "zero_lag_tap": 0.0066168036845380696,
+     "zero_lag_over_main_db": -13.043660084679743,
+     "zero_lag_energy_share_db": -30.03609791318093,
+     "coherence_200Hz_5kHz": 0.1450163850958494,
+     "coherence_25_90kHz": 0.00939830795901519
+    }
+   },
+   "common_disturbance_25_90kHz": {
+    "median_coherence": 0.011671103767919794,
+    "max_coherence": 0.8878741517988676,
+    "seconds_above_0.3": 23,
+    "median_mic_dbfs": -98.86033458280214,
+    "stretches_recording_s": [
+     {
+      "start_s": 0.0,
+      "end_s": 11.0,
+      "max_coherence": 0.8830804057443951,
+      "max_loopback_dbfs": -84.67146907864347,
+      "max_mic_dbfs": -79.02496022416932
+     },
+     {
+      "start_s": 51.0,
+      "end_s": 57.0,
+      "max_coherence": 0.846783835294073,
+      "max_loopback_dbfs": -86.11241348725699,
+      "max_mic_dbfs": -77.84153340563294
+     },
+     {
+      "start_s": 59.0,
+      "end_s": 64.0,
+      "max_coherence": 0.8878741517988676,
+      "max_loopback_dbfs": -86.28085267134159,
+      "max_mic_dbfs": -78.86749468200995
+     },
+     {
+      "start_s": 66.0,
+      "end_s": 67.0,
+      "max_coherence": 0.6600299667145139,
+      "max_loopback_dbfs": -94.02588466267517,
+      "max_mic_dbfs": -84.2058662412669
+     }
+    ]
+   },
+   "repeatability": {
+    "sweep_-20dBFS": {
+     "mic_rms_full_minus_probe_db": 0.03334026859735317,
+     "loopback_rms_full_minus_probe_db": 0.00012995801278847807
+    },
+    "sweep_-10dBFS": {
+     "mic_rms_full_minus_probe_db": 0.019651742364725777,
+     "loopback_rms_full_minus_probe_db": -0.00027177807596956427
+    },
+    "sweep_-3dBFS": {
+     "mic_rms_full_minus_probe_db": 0.013623478880337103,
+     "loopback_rms_full_minus_probe_db": -0.0003530095680233103
+    },
+    "two_tone_mod_-20dBFS": {
+     "mic_rms_full_minus_probe_db": 0.30886333877606376,
+     "loopback_rms_full_minus_probe_db": -1.1237236655858851e-05
+    },
+    "two_tone_mod_-10dBFS": {
+     "mic_rms_full_minus_probe_db": 0.09986532447548768,
+     "loopback_rms_full_minus_probe_db": -0.00021214268623737098
+    },
+    "two_tone_mod_-3dBFS": {
+     "mic_rms_full_minus_probe_db": -0.07875227828624176,
+     "loopback_rms_full_minus_probe_db": 0.00025986678011769015
+    },
+    "two_tone_diff_-20dBFS": {
+     "mic_rms_full_minus_probe_db": 0.4942205886248914,
+     "loopback_rms_full_minus_probe_db": 8.70921793527657e-05
+    },
+    "two_tone_diff_-10dBFS": {
+     "mic_rms_full_minus_probe_db": 0.9677849656399786,
+     "loopback_rms_full_minus_probe_db": -9.201528112612323e-05
+    },
+    "two_tone_diff_-3dBFS": {
+     "mic_rms_full_minus_probe_db": 0.7474483160174756,
+     "loopback_rms_full_minus_probe_db": -0.00024305147958791906
+    }
+   }
+  },
+  "1133": {
+   "format": {
+    "loopback": {
+     "rate": 192000,
+     "channels": 1,
+     "subtype": "PCM_24",
+     "frames": 74084352,
+     "seconds": 385.856
+    },
+    "mic": {
+     "rate": 192000,
+     "channels": 1,
+     "subtype": "PCM_24",
+     "frames": 74084352,
+     "seconds": 385.856
+    }
+   },
+   "same_length": true,
+   "reference": false,
+   "offset_samples": 1536051,
+   "offset_s": 8.000265625,
+   "markers": {
+    "probe_start": {
+     "time_s": 3.0,
+     "lag_samples": -0.2287121934596664,
+     "corr": 0.9989335859116676
+    },
+    "probe_end": {
+     "time_s": 49.004,
+     "lag_samples": -0.228178002454441,
+     "corr": 0.9989356139259556
+    },
+    "full_start": {
+     "time_s": 56.0,
+     "lag_samples": -0.2282857797067476,
+     "corr": 0.998936055870488
+    },
+    "full_end": {
+     "time_s": 369.179,
+     "lag_samples": -0.2287475636685612,
+     "corr": 0.9989338550227229
+    }
+   },
+   "relative_lag_windows": 186,
+   "slips": [],
+   "drift_ppm_excluding_slips": -5.030868454874121e-07,
+   "margin_before_s": 8.000265625,
+   "margin_after_s": 1.172734375,
+   "stimulus_truncated_start": false,
+   "stimulus_truncated_end": false,
+   "loopback_gain_db": -2.610697369672466,
+   "loopback_gain_sign": 1,
+   "loopback_residual_db": -14.530694891710212,
+   "sections": {
+    "probe.pad_start": {
+     "loopback": {
+      "peak_dbfs": -84.75896323338608,
+      "rms_dbfs": -99.84879202028077,
+      "samples_at_full_scale": 0,
+      "dc": -4.608233148852984e-06
+     },
+     "mic": {
+      "peak_dbfs": -40.4263418201847,
+      "rms_dbfs": -48.59013305826659,
+      "samples_at_full_scale": 0,
+      "dc": 2.7091863254706063e-07
+     }
+    },
+    "probe.markers_start": {
+     "loopback": {
+      "peak_dbfs": -7.202980290168643,
+      "rms_dbfs": -40.13823778077442,
+      "samples_at_full_scale": 0,
+      "dc": -4.6042916166814086e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.667329061629836,
+      "rms_dbfs": -44.670576297929394,
+      "samples_at_full_scale": 0,
+      "dc": 1.3383096315178042e-05
+     }
+    },
+    "probe.silence": {
+     "loopback": {
+      "peak_dbfs": -83.38683129121097,
+      "rms_dbfs": -99.85954043011233,
+      "samples_at_full_scale": 0,
+      "dc": -4.5989680414398514e-06
+     },
+     "mic": {
+      "peak_dbfs": -41.38889206410898,
+      "rms_dbfs": -48.65561136078293,
+      "samples_at_full_scale": 0,
+      "dc": 7.035148950914542e-06
+     }
+    },
+    "probe.sweep_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.323246268983503,
+      "rms_dbfs": -25.538864262573245,
+      "samples_at_full_scale": 0,
+      "dc": -4.6162394185860956e-06
+     },
+     "mic": {
+      "peak_dbfs": -11.248407845625412,
+      "rms_dbfs": -24.574594530109017,
+      "samples_at_full_scale": 0,
+      "dc": 2.752254654963811e-06
+     }
+    },
+    "probe.sweep_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.333261363881633,
+      "rms_dbfs": -15.541880215558027,
+      "samples_at_full_scale": 0,
+      "dc": -4.621678218245506e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.289240432367016,
+      "rms_dbfs": -23.686865742806916,
+      "samples_at_full_scale": 0,
+      "dc": 5.8083051194747285e-06
+     }
+    },
+    "probe.sweep_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.359322780498134,
+      "rms_dbfs": -8.563184342175099,
+      "samples_at_full_scale": 0,
+      "dc": -4.6476468443870545e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.39625368096933,
+      "rms_dbfs": -23.77361324268466,
+      "samples_at_full_scale": 0,
+      "dc": 3.5300283382336297e-06
+     }
+    },
+    "probe.two_tone_mod_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -21.95003354513161,
+      "rms_dbfs": -27.091615051580547,
+      "samples_at_full_scale": 0,
+      "dc": -4.2235701965789e-05
+     },
+     "mic": {
+      "peak_dbfs": -23.101405915513425,
+      "rms_dbfs": -30.492003372068197,
+      "samples_at_full_scale": 0,
+      "dc": 2.7892348356544972e-05
+     }
+    },
+    "probe.two_tone_mod_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -11.949678748000316,
+      "rms_dbfs": -17.099390637916617,
+      "samples_at_full_scale": 0,
+      "dc": -0.00012350213807076215
+     },
+     "mic": {
+      "peak_dbfs": -21.400210896552522,
+      "rms_dbfs": -28.23875085785827,
+      "samples_at_full_scale": 0,
+      "dc": 5.1920239192744093e-05
+     }
+    },
+    "probe.two_tone_mod_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -4.972361811762235,
+      "rms_dbfs": -10.124809206566567,
+      "samples_at_full_scale": 0,
+      "dc": -0.0002700216056158145
+     },
+     "mic": {
+      "peak_dbfs": -20.822658390216834,
+      "rms_dbfs": -27.21558253833502,
+      "samples_at_full_scale": 0,
+      "dc": 5.246435819814603e-05
+     }
+    },
+    "probe.two_tone_diff_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.337911258265724,
+      "rms_dbfs": -28.36104808858191,
+      "samples_at_full_scale": 0,
+      "dc": -4.330045854051908e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.392193299299937,
+      "rms_dbfs": -35.703188189897794,
+      "samples_at_full_scale": 0,
+      "dc": -6.661721505224705e-06
+     }
+    },
+    "probe.two_tone_diff_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.355816965413064,
+      "rms_dbfs": -18.3684354671586,
+      "samples_at_full_scale": 0,
+      "dc": -3.744377754628658e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.011720297270937,
+      "rms_dbfs": -35.76916718953639,
+      "samples_at_full_scale": 0,
+      "dc": -5.242253343264262e-07
+     }
+    },
+    "probe.two_tone_diff_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.380208147893745,
+      "rms_dbfs": -11.393384439128704,
+      "samples_at_full_scale": 0,
+      "dc": -2.7385782450437544e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.48536772119533,
+      "rms_dbfs": -35.92180823084703,
+      "samples_at_full_scale": 0,
+      "dc": 4.084189732869466e-06
+     }
+    },
+    "probe.bursts_plucks": {
+     "loopback": {
+      "peak_dbfs": -5.113960191731639,
+      "rms_dbfs": -24.411382854432524,
+      "samples_at_full_scale": 0,
+      "dc": -4.615197082360586e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.950648772678953,
+      "rms_dbfs": -25.097118937128432,
+      "samples_at_full_scale": 0,
+      "dc": 5.749925474325816e-06
+     }
+    },
+    "probe.markers_end": {
+     "loopback": {
+      "peak_dbfs": -7.2038511760650685,
+      "rms_dbfs": -40.13872303261253,
+      "samples_at_full_scale": 0,
+      "dc": -4.582257746514065e-06
+     },
+     "mic": {
+      "peak_dbfs": -27.133717934694744,
+      "rms_dbfs": -44.96063891647793,
+      "samples_at_full_scale": 0,
+      "dc": 2.4060388046138465e-05
+     }
+    },
+    "probe.pad_end": {
+     "loopback": {
+      "peak_dbfs": -7.206936760642423,
+      "rms_dbfs": -49.15827560390004,
+      "samples_at_full_scale": 0,
+      "dc": -4.943189107709461e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.584974586341595,
+      "rms_dbfs": -48.27237034198355,
+      "samples_at_full_scale": 0,
+      "dc": 1.0484227289756138e-05
+     }
+    },
+    "full.pad_start": {
+     "loopback": {
+      "peak_dbfs": -85.7040128663386,
+      "rms_dbfs": -99.87650940325432,
+      "samples_at_full_scale": 0,
+      "dc": -4.606849824388822e-06
+     },
+     "mic": {
+      "peak_dbfs": -41.175037085225995,
+      "rms_dbfs": -48.4396570648416,
+      "samples_at_full_scale": 0,
+      "dc": 7.1880374517705705e-06
+     }
+    },
+    "full.markers_start": {
+     "loopback": {
+      "peak_dbfs": -7.202828427999592,
+      "rms_dbfs": -40.13864530755596,
+      "samples_at_full_scale": 0,
+      "dc": -4.604448075571382e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.181927497746244,
+      "rms_dbfs": -45.039647452127994,
+      "samples_at_full_scale": 0,
+      "dc": -2.621337424646667e-06
+     }
+    },
+    "full.silence": {
+     "loopback": {
+      "peak_dbfs": -84.9765751906751,
+      "rms_dbfs": -99.88934125742205,
+      "samples_at_full_scale": 0,
+      "dc": -4.602242757876714e-06
+     },
+     "mic": {
+      "peak_dbfs": -40.50642587151864,
+      "rms_dbfs": -48.447907111664634,
+      "samples_at_full_scale": 0,
+      "dc": 5.491993948817253e-06
+     }
+    },
+    "full.pink_noise_-30dBFS_rms": {
+     "loopback": {
+      "peak_dbfs": -18.766984313620537,
+      "rms_dbfs": -32.542691345898064,
+      "samples_at_full_scale": 0,
+      "dc": -1.2661942839622498e-05
+     },
+     "mic": {
+      "peak_dbfs": -18.86277779956344,
+      "rms_dbfs": -32.15467031303093,
+      "samples_at_full_scale": 0,
+      "dc": 1.1477110162377357e-05
+     }
+    },
+    "full.sweep_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.323787472041026,
+      "rms_dbfs": -25.538296654265938,
+      "samples_at_full_scale": 0,
+      "dc": -4.611045494675636e-06
+     },
+     "mic": {
+      "peak_dbfs": -11.276307043004273,
+      "rms_dbfs": -24.548877923953142,
+      "samples_at_full_scale": 0,
+      "dc": 1.8537279218435287e-06
+     }
+    },
+    "full.sweep_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.333839640589906,
+      "rms_dbfs": -15.541768531715157,
+      "samples_at_full_scale": 0,
+      "dc": -4.614523177345594e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.237334591253678,
+      "rms_dbfs": -23.683321268519837,
+      "samples_at_full_scale": 0,
+      "dc": 4.30300347507e-06
+     }
+    },
+    "full.sweep_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.359069467109815,
+      "rms_dbfs": -8.563055436717713,
+      "samples_at_full_scale": 0,
+      "dc": -4.664881899952889e-06
+     },
+     "mic": {
+      "peak_dbfs": -10.25685021623745,
+      "rms_dbfs": -23.78184728963955,
+      "samples_at_full_scale": 0,
+      "dc": -1.2530406316121418e-06
+     }
+    },
+    "full.di_train": {
+     "loopback": {
+      "peak_dbfs": -3.8727790518419702,
+      "rms_dbfs": -22.488748517406876,
+      "samples_at_full_scale": 0,
+      "dc": -5.862640796436204e-06
+     },
+     "mic": {
+      "peak_dbfs": -11.719087516086235,
+      "rms_dbfs": -26.87494117798329,
+      "samples_at_full_scale": 0,
+      "dc": 4.7488332260400056e-06
+     }
+    },
+    "full.di_validation": {
+     "loopback": {
+      "peak_dbfs": -5.3849821314908395,
+      "rms_dbfs": -24.23462863709855,
+      "samples_at_full_scale": 0,
+      "dc": 1.1317740297979779e-07
+     },
+     "mic": {
+      "peak_dbfs": -12.387353022455773,
+      "rms_dbfs": -26.958703525641216,
+      "samples_at_full_scale": 0,
+      "dc": 1.0313187746538056e-05
+     }
+    },
+    "full.di_test": {
+     "loopback": {
+      "peak_dbfs": -3.6968127352586837,
+      "rms_dbfs": -22.33900359369155,
+      "samples_at_full_scale": 0,
+      "dc": -4.567733820941713e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.656778298332615,
+      "rms_dbfs": -25.127847888840698,
+      "samples_at_full_scale": 0,
+      "dc": 3.5119437509112887e-06
+     }
+    },
+    "full.polarity_plus": {
+     "loopback": {
+      "peak_dbfs": -9.954917384007834,
+      "rms_dbfs": -24.647780257913183,
+      "samples_at_full_scale": 0,
+      "dc": -3.5083356002966566e-08
+     },
+     "mic": {
+      "peak_dbfs": -14.877048149210808,
+      "rms_dbfs": -27.15583350823102,
+      "samples_at_full_scale": 0,
+      "dc": 5.75864315032959e-07
+     }
+    },
+    "full.polarity_minus": {
+     "loopback": {
+      "peak_dbfs": -9.956526685658485,
+      "rms_dbfs": -24.648089388757516,
+      "samples_at_full_scale": 0,
+      "dc": -9.20204563687245e-06
+     },
+     "mic": {
+      "peak_dbfs": -14.949286404601182,
+      "rms_dbfs": -27.06838311386607,
+      "samples_at_full_scale": 0,
+      "dc": 1.3289874916275343e-05
+     }
+    },
+    "full.level_-12dB": {
+     "loopback": {
+      "peak_dbfs": -21.938881605569975,
+      "rms_dbfs": -36.64351094789196,
+      "samples_at_full_scale": 0,
+      "dc": -3.46017312258482e-06
+     },
+     "mic": {
+      "peak_dbfs": -15.458466642136315,
+      "rms_dbfs": -27.179016316674222,
+      "samples_at_full_scale": 0,
+      "dc": -1.3098722944657009e-06
+     }
+    },
+    "full.level_-6dB": {
+     "loopback": {
+      "peak_dbfs": -15.940398762113663,
+      "rms_dbfs": -30.643116526242235,
+      "samples_at_full_scale": 0,
+      "dc": -2.313327168424924e-06
+     },
+     "mic": {
+      "peak_dbfs": -14.975142910589703,
+      "rms_dbfs": -27.09311346989784,
+      "samples_at_full_scale": 0,
+      "dc": 1.388584884504477e-06
+     }
+    },
+    "full.level_+6dB": {
+     "loopback": {
+      "peak_dbfs": -3.9641934910597447,
+      "rms_dbfs": -18.667922789435703,
+      "samples_at_full_scale": 0,
+      "dc": 4.580048285424709e-06
+     },
+     "mic": {
+      "peak_dbfs": -15.029757682231203,
+      "rms_dbfs": -27.305091237463493,
+      "samples_at_full_scale": 0,
+      "dc": -2.7359964326024055e-06
+     }
+    },
+    "full.bursts_plucks": {
+     "loopback": {
+      "peak_dbfs": -5.113710202693873,
+      "rms_dbfs": -24.411583646072895,
+      "samples_at_full_scale": 0,
+      "dc": -4.612603224813938e-06
+     },
+     "mic": {
+      "peak_dbfs": -13.05119079039871,
+      "rms_dbfs": -25.08280349110343,
+      "samples_at_full_scale": 0,
+      "dc": 1.7802389959494274e-06
+     }
+    },
+    "full.bursts_recovery": {
+     "loopback": {
+      "peak_dbfs": -4.861943007465325,
+      "rms_dbfs": -18.662685850632915,
+      "samples_at_full_scale": 0,
+      "dc": -4.617403483635461e-06
+     },
+     "mic": {
+      "peak_dbfs": -12.898360272404988,
+      "rms_dbfs": -27.712839917150376,
+      "samples_at_full_scale": 0,
+      "dc": 7.030192647932066e-06
+     }
+    },
+    "full.two_tone_mod_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -21.95085010314881,
+      "rms_dbfs": -27.09201356879236,
+      "samples_at_full_scale": 0,
+      "dc": -4.22297694409887e-05
+     },
+     "mic": {
+      "peak_dbfs": -23.268606156460724,
+      "rms_dbfs": -30.482369357489784,
+      "samples_at_full_scale": 0,
+      "dc": 1.9976236547032992e-05
+     }
+    },
+    "full.two_tone_mod_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -11.948760767591583,
+      "rms_dbfs": -17.099475114741267,
+      "samples_at_full_scale": 0,
+      "dc": -0.00012351818382740022
+     },
+     "mic": {
+      "peak_dbfs": -21.613131142072028,
+      "rms_dbfs": -28.546507122703805,
+      "samples_at_full_scale": 0,
+      "dc": 4.624661461760601e-05
+     }
+    },
+    "full.two_tone_mod_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -4.968482537412875,
+      "rms_dbfs": -10.124421493673847,
+      "samples_at_full_scale": 0,
+      "dc": -0.0002699935877074798
+     },
+     "mic": {
+      "peak_dbfs": -20.95351943682789,
+      "rms_dbfs": -27.745778463273453,
+      "samples_at_full_scale": 0,
+      "dc": 6.027814404418071e-05
+     }
+    },
+    "full.two_tone_diff_-20dBFS": {
+     "loopback": {
+      "peak_dbfs": -22.33826363086243,
+      "rms_dbfs": -28.360976514764218,
+      "samples_at_full_scale": 0,
+      "dc": -4.313819420834382e-06
+     },
+     "mic": {
+      "peak_dbfs": -24.78847369638551,
+      "rms_dbfs": -35.218330766541776,
+      "samples_at_full_scale": 0,
+      "dc": 3.9809605106711385e-05
+     }
+    },
+    "full.two_tone_diff_-10dBFS": {
+     "loopback": {
+      "peak_dbfs": -12.354344067821433,
+      "rms_dbfs": -18.368626165402326,
+      "samples_at_full_scale": 0,
+      "dc": -3.725797248383363e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.0768466609621,
+      "rms_dbfs": -35.88121444207211,
+      "samples_at_full_scale": 0,
+      "dc": -1.5560158838828406e-05
+     }
+    },
+    "full.two_tone_diff_-3dBFS": {
+     "loopback": {
+      "peak_dbfs": -5.381658730361137,
+      "rms_dbfs": -11.394073905554718,
+      "samples_at_full_scale": 0,
+      "dc": -2.7278978377580643e-06
+     },
+     "mic": {
+      "peak_dbfs": -25.73509801591416,
+      "rms_dbfs": -36.28789940475755,
+      "samples_at_full_scale": 0,
+      "dc": 7.701487590869268e-06
+     }
+    },
+    "full.markers_end": {
+     "loopback": {
+      "peak_dbfs": -7.203609122721595,
+      "rms_dbfs": -40.13903889866416,
+      "samples_at_full_scale": 0,
+      "dc": -7.0977740564403385e-06
+     },
+     "mic": {
+      "peak_dbfs": -26.477511574915347,
+      "rms_dbfs": -44.079346847650456,
+      "samples_at_full_scale": 0,
+      "dc": -8.903674992686468e-07
+     }
+    },
+    "full.pad_end": {
+     "loopback": {
+      "peak_dbfs": -69.3040627294672,
+      "rms_dbfs": -99.81349302668782,
+      "samples_at_full_scale": 0,
+      "dc": -4.603317110902733e-06
+     },
+     "mic": {
+      "peak_dbfs": -39.81418156696739,
+      "rms_dbfs": -48.39717192869158,
+      "samples_at_full_scale": 0,
+      "dc": 3.787672664556238e-06
+     }
+    }
+   },
+   "whole": {
+    "loopback": {
+     "peak_dbfs": -3.6968127352586837,
+     "rms_dbfs": -19.70850799572037,
+     "samples_at_full_scale": 0,
+     "dc": -4.612543543086734e-06
+    },
+    "mic": {
+     "peak_dbfs": -10.237334591253678,
+     "rms_dbfs": -27.15164919104283,
+     "samples_at_full_scale": 0,
+     "dc": 5.445441808104091e-06
+    }
+   },
+   "quiet": {
+    "margin_before": {
+     "start_s": 0.0,
+     "seconds": 7.500265625,
+     "loopback": {
+      "rms_dbfs": -99.88797058728605,
+      "below_200Hz_dbfs": -125.22558794913394,
+      "strongest_bin_hz": 20586.9140625,
+      "50Hz_over_floor_db": 4.6383922325095694,
+      "100Hz_over_floor_db": 2.938119225563622,
+      "150Hz_over_floor_db": 3.1767351613921377
+     },
+     "mic": {
+      "rms_dbfs": -48.49471963387077,
+      "below_200Hz_dbfs": -48.67125512194083,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 70.51040641650134,
+      "100Hz_over_floor_db": 65.8835628787518,
+      "150Hz_over_floor_db": 61.776977160283586
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -47.67216486745131,
+      "at_s": 5.8,
+      "above_threshold": false
+     }
+    },
+    "margin_after": {
+     "start_s": 385.183265625,
+     "seconds": 0.672734375,
+     "loopback": {
+      "rms_dbfs": -99.90723552705354,
+      "below_200Hz_dbfs": -126.02983864583189,
+      "strongest_bin_hz": 20589.84375,
+      "50Hz_over_floor_db": 6.948501699789671,
+      "100Hz_over_floor_db": 3.4693596730763048,
+      "150Hz_over_floor_db": 5.95740056397905
+     },
+     "mic": {
+      "rms_dbfs": -48.19637986623253,
+      "below_200Hz_dbfs": -48.45907152922624,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 71.71628798557138,
+      "100Hz_over_floor_db": 66.78903668622543,
+      "150Hz_over_floor_db": 62.97122378007853
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -47.62232515065969,
+      "at_s": 0.2,
+      "above_threshold": false
+     }
+    },
+    "probe.silence": {
+     "start_s": 12.504265625,
+     "seconds": 2.0,
+     "loopback": {
+      "rms_dbfs": -99.85954043011233,
+      "below_200Hz_dbfs": -121.00281181231175,
+      "strongest_bin_hz": 20586.9140625,
+      "50Hz_over_floor_db": 8.461585463614638,
+      "100Hz_over_floor_db": 8.186810481640338,
+      "150Hz_over_floor_db": 6.0238259542952886
+     },
+     "mic": {
+      "rms_dbfs": -48.65561136078293,
+      "below_200Hz_dbfs": -48.852451031525455,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 71.08339579386342,
+      "100Hz_over_floor_db": 66.42995915901892,
+      "150Hz_over_floor_db": 62.54039731299055
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -48.15705612039632,
+      "at_s": 1.8,
+      "above_threshold": false
+     }
+    },
+    "full.silence": {
+     "start_s": 65.504265625,
+     "seconds": 5.0,
+     "loopback": {
+      "rms_dbfs": -99.88934125742205,
+      "below_200Hz_dbfs": -125.24934501808013,
+      "strongest_bin_hz": 20589.84375,
+      "50Hz_over_floor_db": 4.0997577757194605,
+      "100Hz_over_floor_db": 1.962192522482611,
+      "150Hz_over_floor_db": 3.9544551431817587
+     },
+     "mic": {
+      "rms_dbfs": -48.447907111664634,
+      "below_200Hz_dbfs": -48.62884768706638,
+      "strongest_bin_hz": 49.8046875,
+      "50Hz_over_floor_db": 71.18498340894104,
+      "100Hz_over_floor_db": 66.41230178850888,
+      "150Hz_over_floor_db": 62.51520664032223
+     },
+     "mic_event": {
+      "loudest_0.1s_dbfs": -47.55850741487681,
+      "at_s": 1.925,
+      "above_threshold": false
+     }
+    }
+   },
+   "mic_noise_floor_error_db": {
+    "probe.sweep_-20dBFS": -23.975923125055907,
+    "probe.sweep_-10dBFS": -24.86365191235801,
+    "probe.sweep_-3dBFS": -24.776904412480263,
+    "probe.two_tone_mod_-20dBFS": -18.058514283096727,
+    "probe.two_tone_mod_-10dBFS": -20.311766797306653,
+    "probe.two_tone_mod_-3dBFS": -21.334935116829904,
+    "probe.two_tone_diff_-20dBFS": -12.84732946526713,
+    "probe.two_tone_diff_-10dBFS": -12.781350465628535,
+    "probe.two_tone_diff_-3dBFS": -12.628709424317897,
+    "probe.bursts_plucks": -23.453398718036492,
+    "full.pink_noise_-30dBFS_rms": -16.395847342133997,
+    "full.sweep_-20dBFS": -24.00163973121178,
+    "full.sweep_-10dBFS": -24.867196386645087,
+    "full.sweep_-3dBFS": -24.768670365525374,
+    "full.di_train": -21.675576477181636,
+    "full.di_validation": -21.59181412952371,
+    "full.di_test": -23.422669766324226,
+    "full.polarity_plus": -21.394684146933905,
+    "full.polarity_minus": -21.482134541298855,
+    "full.level_-12dB": -21.371501338490702,
+    "full.level_-6dB": -21.457404185267084,
+    "full.level_+6dB": -21.24542641770143,
+    "full.bursts_plucks": -23.467714164061494,
+    "full.bursts_recovery": -20.83767773801455,
+    "full.two_tone_mod_-20dBFS": -18.06814829767514,
+    "full.two_tone_mod_-10dBFS": -20.00401053246112,
+    "full.two_tone_mod_-3dBFS": -20.80473919189147,
+    "full.two_tone_diff_-20dBFS": -13.332186888623148,
+    "full.two_tone_diff_-10dBFS": -12.669303213092817,
+    "full.two_tone_diff_-3dBFS": -12.262618250407371
+   },
+   "zero_runs_in_sounding_sections": {
+    "loopback": [],
+    "mic": []
+   },
+   "mic_ir": {
+    "probe.sweep_-20dBFS": {
+     "main_lag_samples": 131,
+     "main_lag_ms": 0.6822916666666666,
+     "main_tap": -0.019553927721895778,
+     "polarity": -1,
+     "onset_samples": 90,
+     "zero_lag_tap": -0.0005041406620067017,
+     "zero_lag_over_main_db": -31.773645564194737,
+     "zero_lag_energy_share_db": -43.85379157683265,
+     "coherence_200Hz_5kHz": 0.8362258843602636,
+     "coherence_25_90kHz": 0.018393834356221123
+    },
+    "full.pink_noise_-30dBFS_rms": {
+     "main_lag_samples": 136,
+     "main_lag_ms": 0.7083333333333334,
+     "main_tap": -0.04383519794076728,
+     "polarity": -1,
+     "onset_samples": 88,
+     "zero_lag_tap": 0.0005184151529616651,
+     "zero_lag_over_main_db": -38.54290569534425,
+     "zero_lag_energy_share_db": -48.014329189650184,
+     "coherence_200Hz_5kHz": 0.7244048999925015,
+     "coherence_25_90kHz": 0.018661266215519848
+    },
+    "full.sweep_-20dBFS": {
+     "main_lag_samples": 132,
+     "main_lag_ms": 0.6875,
+     "main_tap": -0.020278402353192358,
+     "polarity": -1,
+     "onset_samples": 91,
+     "zero_lag_tap": -0.00045079145819827026,
+     "zero_lag_over_main_db": -33.0611611520003,
+     "zero_lag_energy_share_db": -45.42134901611219,
+     "coherence_200Hz_5kHz": 0.8360989006291125,
+     "coherence_25_90kHz": 0.018499384345362316
+    },
+    "full.di_train": {
+     "main_lag_samples": 132,
+     "main_lag_ms": 0.6875,
+     "main_tap": -0.012076946547957098,
+     "polarity": -1,
+     "onset_samples": 3,
+     "zero_lag_tap": -0.005460534303027381,
+     "zero_lag_over_main_db": -6.894440089054868,
+     "zero_lag_energy_share_db": -23.46549009178441,
+     "coherence_200Hz_5kHz": 0.11702504861142303,
+     "coherence_25_90kHz": 0.0031453163273392907
+    },
+    "full.di_test": {
+     "main_lag_samples": 133,
+     "main_lag_ms": 0.6927083333333334,
+     "main_tap": -0.0185516984095141,
+     "polarity": -1,
+     "onset_samples": 87,
+     "zero_lag_tap": -0.0015019565716131748,
+     "zero_lag_over_main_db": -21.834526000863306,
+     "zero_lag_energy_share_db": -31.714186537449187,
+     "coherence_200Hz_5kHz": 0.10725457396158904,
+     "coherence_25_90kHz": 0.0031075344647974765
+    },
+    "full.level_-12dB": {
+     "main_lag_samples": 136,
+     "main_lag_ms": 0.7083333333333334,
+     "main_tap": -0.048930745000809,
+     "polarity": -1,
+     "onset_samples": 7,
+     "zero_lag_tap": 0.010843401817007915,
+     "zero_lag_over_main_db": -13.088325535347494,
+     "zero_lag_energy_share_db": -28.418515766341713,
+     "coherence_200Hz_5kHz": 0.14608310877166994,
+     "coherence_25_90kHz": 0.009139031799931738
+    }
+   },
+   "common_disturbance_25_90kHz": {
+    "median_coherence": 0.011504866865383653,
+    "max_coherence": 0.023958851986990222,
+    "seconds_above_0.3": 0,
+    "median_mic_dbfs": -98.89086588302521,
+    "stretches_recording_s": []
+   },
+   "repeatability": {
+    "sweep_-20dBFS": {
+     "mic_rms_full_minus_probe_db": 0.0257166061558749,
+     "loopback_rms_full_minus_probe_db": 0.0005676083073069549
+    },
+    "sweep_-10dBFS": {
+     "mic_rms_full_minus_probe_db": 0.003544474287078714,
+     "loopback_rms_full_minus_probe_db": 0.00011168384287074673
+    },
+    "sweep_-3dBFS": {
+     "mic_rms_full_minus_probe_db": -0.008234046954889607,
+     "loopback_rms_full_minus_probe_db": 0.00012890545738564185
+    },
+    "two_tone_mod_-20dBFS": {
+     "mic_rms_full_minus_probe_db": 0.009634014578413286,
+     "loopback_rms_full_minus_probe_db": -0.0003985172118134983
+    },
+    "two_tone_mod_-10dBFS": {
+     "mic_rms_full_minus_probe_db": -0.3077562648455334,
+     "loopback_rms_full_minus_probe_db": -8.447682465018147e-05
+    },
+    "two_tone_mod_-3dBFS": {
+     "mic_rms_full_minus_probe_db": -0.5301959249384325,
+     "loopback_rms_full_minus_probe_db": 0.0003877128927207707
+    },
+    "two_tone_diff_-20dBFS": {
+     "mic_rms_full_minus_probe_db": 0.48485742335601856,
+     "loopback_rms_full_minus_probe_db": 7.157381769218318e-05
+    },
+    "two_tone_diff_-10dBFS": {
+     "mic_rms_full_minus_probe_db": -0.11204725253571723,
+     "loopback_rms_full_minus_probe_db": -0.00019069824372408561
+    },
+    "two_tone_diff_-3dBFS": {
+     "mic_rms_full_minus_probe_db": -0.3660911739105259,
+     "loopback_rms_full_minus_probe_db": -0.0006894664260137517
+    }
+   }
+  }
+ },
+ "reference_pair": "1105"
+}
