@@ -103,3 +103,27 @@ trace d'exécution transmise le 2026-10-06 place les filtres du premier ordre ob
 réutilisée ne prouve pas une connexion. Seuls sont validés, chacun à part : l'enveloppe avec les
 conversions R/G ×4 puis ×16, et le fragment courbe → G inverse → deux biquads. La boîte grise
 préinscrite n'est pas modifiée ; ses résultats ne diront rien du routage du moteur.
+
+## Précisions avant l'évaluation (2026-10-08, relecture Codex de la piste ; règles et script inchangés)
+
+Écrites avant toute lecture VS100R du bras GREY ; `evaluate.py` est inchangé depuis `f6cf3a2`.
+
+- **Comparaison KIPR à r2.** La règle préinscrite donne la priorité au bras : la lecture KIPR de
+  GREY n'étant pas valide (« aucune lecture (alignement) »), la comparaison vaut **« aucune
+  lecture (bras) »**. L'amendement et la lecture intermédiaire du 2026-10-06 écrivaient à tort
+  « descriptive ». Le JSON KIPR de GREY porte aussi des contrôles hors seuil (H3 de la cible
+  symétrique, H2 de la cible asymétrique à −12 dBFS).
+- **Deux sens d'« équivalent ».** Le verdict « boîte grise équivalente au bras C (ESR) » suit
+  l'acceptabilité (d ≤ +0,10 et chaque d_i ≤ +0,25). L'étiquette descriptive « équivalent » de la
+  lecture P est plus étroite (|d| ≤ 0,05 et chaque |d_i| ≤ 0,15). Les deux sont rapportés tels
+  quels.
+- **Bandes de la 2ᵉ harmonique.** Comme pour la piste impaire : centres de 250 Hz à 8 kHz, le
+  centre 198,4 Hz étant exclu par le script préinscrit.
+- **Tests.** La parité par blocs testée compare l'appel entier et le pas à pas (`step`), seule API
+  de flux du modèle ; `forward` repart toujours de l'état nul. Un test ajouté vérifie que la remise
+  à zéro efface aussi les historiques FIR : FIR aléatoires, 100 échantillons avant la remise à zéro,
+  et contre-épreuve sans remise à zéro.
+- **Contrôles avant lecture**, affichés avec les résultats :
+  - chaque run du bras compte 15 000 pas ;
+  - le JSON Hammerstein régénéré contient les 24 cas attendus, identifiés par run et par prise ;
+  - les valeurs lues sont finies.

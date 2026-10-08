@@ -131,6 +131,32 @@ def test_random_fir_on_a_buffer_shorter_than_the_taps() -> None:
     torch.testing.assert_close(steps, whole, rtol=0, atol=1e-12)
 
 
+def test_reset_clears_the_fir_histories() -> None:
+    """Random FIRs (32 taps) and 100 samples streamed before a reset: what follows
+    equals a fresh run, while without the reset the first signal still shows."""
+    amp = model(beta=0.2)
+    generator = torch.Generator().manual_seed(5)
+    with torch.no_grad():
+        for fir in (amp.pre_fir, amp.post_fir):
+            fir.copy_(torch.randn(fir.shape, generator=generator, dtype=fir.dtype))
+    first, second = signal(6)[..., :100], signal(7)[..., :100]
+
+    def stream(x: torch.Tensor) -> torch.Tensor:
+        return torch.stack([amp.step(x[..., n], CONTROLS) for n in range(100)], -1)
+
+    with torch.no_grad():
+        fresh = amp(second, CONTROLS)
+        amp.reset_states()
+        stream(first)
+        kept = stream(second)
+        amp.reset_states()
+        stream(first)
+        amp.reset_states()
+        after = stream(second)
+    torch.testing.assert_close(after, fresh, rtol=0, atol=1e-12)
+    assert (kept - fresh).abs().max() > 1e-6
+
+
 def test_saturated_envelope_stays_finite() -> None:
     """Envelope logits where float32 rounds alpha to 1: still finite."""
     torch.manual_seed(0)

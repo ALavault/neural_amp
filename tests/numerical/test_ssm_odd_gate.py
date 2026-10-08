@@ -4,7 +4,9 @@ whole and sample by sample, reset, and the same random draws as the gated model.
 
 from __future__ import annotations
 
+import pytest
 import torch
+import torch.utils.checkpoint
 
 from fssr_nam.models.ssm_wavenet import GatedSSMBlock, SSMWaveNet
 
@@ -203,6 +205,40 @@ def test_same_draws_as_the_gated_model() -> None:
         for k in odd
         if k.endswith("bias") and "film_net" not in k and "odd_gate" not in k
     ]
+
+
+def test_recomputed_gate_gives_the_same_gradients(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The odd gate is recomputed in the backward pass (activation memory): every
+    parameter gradient equals that of a plain backward pass, bit for bit (CPU,
+    float64)."""
+    generator = torch.Generator().manual_seed(5)
+    x = torch.randn(2, 1, LENGTH, generator=generator, dtype=torch.float64)
+    controls = torch.tensor([[0.2, 0.7], [0.9, 0.1]], dtype=torch.float64)
+
+    def gradients() -> dict[str, torch.Tensor]:
+        model = odd_model()
+        model(x, controls).square().mean().backward()
+        return {k: p.grad for k, p in model.named_parameters() if p.grad is not None}
+
+    calls: list[int] = []
+    checkpoint = torch.utils.checkpoint.checkpoint
+
+    def counted(*args, **kwargs):
+        calls.append(1)
+        return checkpoint(*args, **kwargs)
+
+    monkeypatch.setattr(torch.utils.checkpoint, "checkpoint", counted)
+    recomputed = gradients()
+    assert len(calls) == 3  # one per block
+    monkeypatch.setattr(
+        torch.utils.checkpoint, "checkpoint", lambda f, *args, **kwargs: f(*args)
+    )
+    plain = gradients()
+    assert plain.keys() == recomputed.keys() and len(plain) > 20
+    for k in plain:
+        assert torch.equal(recomputed[k], plain[k]), k
 
 
 def test_saturated_envelope_stays_finite() -> None:

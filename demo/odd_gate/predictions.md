@@ -122,3 +122,25 @@ La parité au bit sur GPU n'est pas vérifiée (relecture Codex). Le modèle, se
 drapeaux, les graines et les lectures ne changent pas ; les runs KIPR déjà faits ne sont pas
 touchés. La file des pistes est relancée avec des identifiants de porte et de smoke suffixés `_r2` ;
 les identifiants des runs VS100R préinscrits restent ceux de ce texte.
+
+## Précisions avant l'évaluation (2026-10-08, relecture Codex de la piste ; règles et script inchangés)
+
+Écrites avant toute lecture VS100R du bras ODD ; `evaluate.py` est inchangé depuis `f6cf3a2`.
+
+- **Comparaison KIPR à r2.** La règle préinscrite donne la priorité au bras : la lecture KIPR de
+  ODD n'étant pas valide (« non concluant »), la comparaison vaut **« aucune lecture (bras) »**.
+  L'amendement et la lecture intermédiaire du 2026-10-06 écrivaient à tort « descriptive » ; le
+  script applique la règle dans l'ordre préinscrit et aucun écart de −10 dB ne sera calculé.
+- **Bandes de R1.** Le script préinscrit retient les centres de tiers d'octave ≥ 200 Hz et
+  ≤ 8 kHz, soit de **250 Hz à 8 kHz** ; le centre 198,4 Hz (bande nominale de 200 Hz) est exclu.
+  C'est cette règle qui s'applique.
+- **|D3| descriptif.** C'est la médiane, sur les cas, de la valeur absolue de la médiane par
+  bandes de l'écart D3 signé. Des écarts de signes opposés entre bandes peuvent donc se compenser.
+- **Tests.** La parité par blocs testée compare l'appel entier et le pas à pas (`step`), seule API
+  de flux du bloc et de la porte. Un test ajouté vérifie que le recalcul de la porte donne des
+  gradients identiques au bit à ceux d'une rétropropagation ordinaire (CPU, float64). La parité
+  sur GPU reste non vérifiée.
+- **Contrôles avant lecture**, affichés avec les résultats :
+  - chaque run du bras compte 15 000 pas ;
+  - le JSON Hammerstein régénéré contient les 24 cas attendus, identifiés par run et par prise ;
+  - les valeurs lues sont finies.
