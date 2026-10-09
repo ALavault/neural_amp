@@ -179,6 +179,41 @@ def redundancy(rows: list[dict]) -> dict:
     return out
 
 
+def profiles(rows: list[dict]) -> dict:
+    """What each metric emphasises beyond the raw difference: per cell, log(score /
+    floor) - log(d_audio / its floor); Spearman between metrics on these profiles, and
+    for each pair the defects where their profiles differ most. Added to the
+    preregistered reading because the plain redundancy is dominated by severity."""
+    detect = defaultdict(dict)
+    for r in rows:
+        cell = (r["family"], r["level_db"], r["defect"], r["severity"])
+        detect[r["metric"]][cell] = math.log(max(r["detection_ratio"], 1e-300))
+    audio = detect.pop("d_audio")
+    profile = {
+        m: {c: v - audio[c] for c, v in cells.items() if c in audio}
+        for m, cells in detect.items()
+    }
+    out = {}
+    for a, b in combinations(sorted(profile), 2):
+        shared = sorted(set(profile[a]) & set(profile[b]))
+        if len(shared) <= 5:
+            continue
+        offset = statistics.median(profile[a][c] - profile[b][c] for c in shared)
+        gap = defaultdict(list)  # centred: a constant floor offset is not a difference
+        for c in shared:
+            gap[c[2]].append(profile[a][c] - profile[b][c] - offset)
+        by_defect = {d: statistics.median(v) for d, v in gap.items()}
+        top = sorted(by_defect, key=lambda d: -abs(by_defect[d]))[:3]
+        rho = spearmanr(
+            [profile[a][c] for c in shared], [profile[b][c] for c in shared]
+        )
+        out[f"{a}|{b}"] = {
+            "spearman": float(rho.statistic),
+            "separating_defects": {d: round(by_defect[d], 2) for d in top},
+        }
+    return out
+
+
 def probe_quality(raw: list[dict]) -> dict:
     out = {}
     for metric in ("fir", "hammerstein_3", "hammerstein_5"):
@@ -238,6 +273,7 @@ def main() -> None:
         "monotonicity": monotonicity(grouped(with_audio(raw))),
         "blind_spots": blind_spots(rows),
         "redundancy_spearman": redundancy(rows),
+        "profiles_beyond_d_audio": profiles(rows),
         "probe_quality": probe_quality(raw),
         "dependence": dependence(rows),
         "families": sorted({r["family"] for r in raw}),
