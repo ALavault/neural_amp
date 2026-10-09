@@ -378,3 +378,21 @@ défauts.
 la DI ne sont pas datés ; une détection depuis l'enveloppe d'entrée serait fragile) ; `bursts_recovery`
 n'existe que sur une prise micro aux réglages connus. Attente écrite d'avance : aucune lecture
 réelle ne sera présentée comme validation.
+
+## Résultat E2 et seconde relecture Codex (2026-10-09)
+
+- **E2** : les quatre critères préinscrits sont remplis aux trois niveaux (`dynamics_verdict.json`).
+  Le contrôle interne, d'abord codé à la seule sévérité 200 ms, est étendu à toutes les
+  sévérités comme préinscrit (relevé par Codex) ; il passe encore (attaque / relâchement de 0,06
+  à 0,09). Co-répondant fort : l'écho.
+- **Garde d'intégrité des sinus glissants réécrite.** La version par quarts pouvait manquer un
+  glissement (absorbé dans un quart) et en inventer un (borne de recherche ±256 atteinte par un
+  décalage global de 72). Nouvelle garde : alignement global (±4 096), retards par fenêtres de
+  0,25 s à partir de 200 Hz, pas comparé au profil modal de la séance, seuil de 12 échantillons
+  (demi-quantum). Validée sur des glissements insérés (2,0 / 3,5 / 4,6 s détectés ; décalage global
+  non signalé). Zones aveugles : < 200 Hz et ~0,15 dernières secondes. Seule la prise 20 à
+  −3 dBFS reste signalée.
+- **Contrôles JVM** désormais archivés (`gap_checks_jvm_causes.json`, `gap_checks_jvm_parallel.json`) ;
+  formulation corrigée : les résidus sont des rapports RMS (√ESR), non des parts d'énergie.
+- **−3 dBFS** : le glissement est un facteur établi ; une contribution de la saturation n'est pas
+  exclue.
