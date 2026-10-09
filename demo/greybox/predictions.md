@@ -127,3 +127,65 @@ préinscrite n'est pas modifiée ; ses résultats ne diront rien du routage du m
   - chaque run du bras compte 15 000 pas ;
   - le JSON Hammerstein régénéré contient les 24 cas attendus, identifiés par run et par prise ;
   - les valeurs lues sont finies.
+
+## Résultats (2026-10-09, trois runs VS100R et six runs KIPR complets)
+
+**Runs.**
+- VS100R : `vs100r48grey_s{42,43,44}`, 15 000 pas sur 15 000, sortie 0, contrôle face au bras C
+  `ok` (`demo/RUNS.jsonl`, fiches `demo/nablafx_bench/`).
+- La porte au bit du chemin par défaut (`repro_gate_vs100r48_kiprtracks_r3`, 372 valeurs,
+  0 écart) est passée avant le premier run.
+- KIPR : `kipr_{sym,asym}_s{42,43,44}_grey`, 3 000 pas chacun.
+
+**Commandes**, sur CPU, après le dernier run :
+`diagnosis/hammerstein/vs100r_hammerstein.py`, puis
+`demo/kipr_known_answer/known_answer.py measure --tag grey`, puis
+`demo/odd_gate/evaluate.py --arm grey`. Sortie : `demo/greybox/evaluation.json`.
+
+**Contrôles avant lecture** (précisions du 2026-10-08) :
+- 24 cas Hammerstein par niveau pour GREY et pour C : 3 runs attendus × 8 prises de test,
+  identifiants exacts, aucune valeur non finie dans les bandes de 250 Hz à 8 kHz.
+- Les 216 modèles déjà mesurés sont reproduits à l'identique.
+- `known_answer_grey.json` est identique à celui du 2026-10-06.
+- Toutes les valeurs lues sont finies.
+
+**Verdict préinscrit de la piste : boîte grise moins bonne que le bras C (ESR).**
+
+**ESR VS100R : non acceptable, étiquette « moins bon ».** s = moyenne des ln ESR par couple.
+
+| Graine | s(C) | s(GREY) | d_i |
+|---|---|---|---|
+| 42 | −3,952 | −1,552 | +2,400 |
+| 43 | −3,967 | −0,832 | +3,135 |
+| 44 | −3,929 | −1,717 | +2,212 |
+
+- d = +2,582, soit un rapport moyen d'ESR exp(d) = 13,2.
+- L'attente préinscrite (au moins +0,5 en ln, ESR × 1,6) est largement dépassée.
+
+**2ᵉ harmonique VS100R : « partiel »**, rapportée sans modifier le verdict. Écart signé de D2 à
+l'appareil, en dB.
+
+| Niveau | C | GREY | Δ = GREY − C |
+|---|---|---|---|
+| −20 dBFS | +12,72 | +20,76 | +8,05 |
+| −10 dBFS | +2,77 | +2,97 | +0,20 |
+| −3 dBFS | +4,83 | +3,37 | −1,45 |
+
+**KIPR : comparaison à r2 « aucune lecture (bras) ».** La lecture du bras reste « aucune lecture
+(alignement) », de même que celle de r2.
+
+**Descriptif, sans seuil :**
+- |D3| médian, C puis GREY : 0,17 et 0,87 dB à −20 dBFS, 0,22 et 0,80 à −10, 0,31 et 0,95 à −3.
+- Prises au gain 2,5, écart de ln ESR GREY − C par graine 42, 43, 44 :
+  - prise 16 : +0,88, +2,05, −0,32 ;
+  - prise 36 : +2,51, +2,89, +2,06.
+- Écart de D2 à −10 dBFS, médiane des graines, C puis GREY : prise 16, +28,1 et +32,3 dB ;
+  prise 36, +17,7 et +24,2 dB.
+- Paramètres : C 28 321, GREY 1 524, soit 18,6 fois moins.
+
+**Ce que cela ne dit pas** (liste préinscrite) :
+- rien sur la forme optimale d'une boîte grise : une seule structure a été testée ;
+- rien à l'écoute ;
+- rien sur le routage du moteur KIPR (note de provenance).
+
+Résultat de la voie produit, sans portée scientifique.

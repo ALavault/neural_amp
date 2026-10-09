@@ -144,3 +144,70 @@ les identifiants des runs VS100R préinscrits restent ceux de ce texte.
   - chaque run du bras compte 15 000 pas ;
   - le JSON Hammerstein régénéré contient les 24 cas attendus, identifiés par run et par prise ;
   - les valeurs lues sont finies.
+
+## Résultats (2026-10-09, trois runs VS100R et six runs KIPR complets)
+
+**Runs.**
+- VS100R : `vs100r48odd_film_s{42,43,44}`, 15 000 pas sur 15 000, sortie 0, contrôle face au bras
+  C `ok` (`demo/RUNS.jsonl`, fiches `demo/nablafx_bench/`).
+- La porte au bit du chemin par défaut (`repro_gate_vs100r48_kiprtracks_r3`, 372 valeurs,
+  0 écart) est passée avant le premier run.
+- KIPR : `kipr_{sym,asym}_s{42,43,44}_odd`, 3 000 pas chacun.
+
+**Commandes**, sur CPU, après le dernier run :
+`diagnosis/hammerstein/vs100r_hammerstein.py`, puis
+`demo/kipr_known_answer/known_answer.py measure --tag odd`, puis
+`demo/odd_gate/evaluate.py --arm odd`. Sortie : `evaluation.json`.
+
+**Contrôles avant lecture** (précisions du 2026-10-08) :
+- 24 cas Hammerstein par niveau pour ODD et pour C : 3 runs attendus × 8 prises de test,
+  identifiants exacts, aucune valeur non finie dans les bandes de 250 Hz à 8 kHz.
+- Les 216 modèles déjà mesurés (C, A48, B192) sont reproduits à l'identique.
+- `known_answer_odd.json` est identique à celui du 2026-10-06.
+- Toutes les valeurs lues sont finies.
+- Instrument : C vaut +12,72 dB à −20 dBFS, comme le « pour mémoire » préinscrit (+12,7 dB).
+
+**Verdict préinscrit de la piste : porte impaire non retenue (harmoniques paires non réduites).**
+
+**R2, ESR VS100R : acceptable, étiquette « meilleur ».** s = moyenne des ln ESR par couple.
+
+| Graine | s(C) | s(ODD) | d_i |
+|---|---|---|---|
+| 42 | −3,952 | −5,649 | −1,697 |
+| 43 | −3,967 | −4,165 | −0,198 |
+| 44 | −3,929 | −4,208 | −0,279 |
+
+- d = −0,725, soit un rapport moyen d'ESR exp(d) = 0,48.
+- Les trois d_i sont négatifs, donc d ≤ +0,10 et chaque d_i ≤ +0,25.
+- La graine 42 pèse pour l'essentiel de d ; sans elle, les écarts sont de −0,20 et −0,28.
+
+**R1, 2ᵉ harmonique VS100R : « partiel ».** Écart signé de D2 à l'appareil, en dB.
+
+| Niveau | C | ODD | Δ = ODD − C |
+|---|---|---|---|
+| −20 dBFS | +12,72 | +4,94 | −7,77 |
+| −10 dBFS | +2,77 | +0,47 | −2,30 |
+| −3 dBFS | +4,83 | −0,79 | −5,61 |
+
+Δ est négatif aux trois niveaux mais n'atteint −6 dB qu'à −20 dBFS ; « réduit » exigeait
+Δ ≤ −6 dB aux trois.
+
+**KIPR : comparaison à r2 « aucune lecture (bras) ».** La lecture du bras reste « non concluant
+(témoin positif ou H3 de la cible symétrique) », celle de r2 « aucune lecture (alignement) ».
+
+**Descriptif, sans seuil :**
+- |D3| médian, C puis ODD : 0,17 et 0,23 dB à −20 dBFS, 0,22 et 0,37 à −10, 0,31 et 0,45 à −3.
+- Prises au gain 2,5, écart de ln ESR ODD − C par graine 42, 43, 44 :
+  - prise 16 : −0,64, +0,96, −0,81 ;
+  - prise 36 : −0,41, −0,03, −0,06.
+- Écart de D2 à −10 dBFS, médiane des graines, C puis ODD : prise 16, +28,1 et +14,4 dB ;
+  prise 36, +17,7 et +7,3 dB.
+- Paramètres : C 28 321, ODD 28 288.
+
+**Ce que cela ne dit pas** (liste préinscrite) :
+- rien sur un autre appareil ni à l'écoute ;
+- rien sur la porte seule, puisque la tête et les biais changent avec elle ;
+- avec 3 graines, seuls des effets nets ressortent : l'écart d'ESR est net en signe, beaucoup
+  moins en taille.
+
+Résultat de la voie produit, sans portée scientifique.
