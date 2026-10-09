@@ -142,6 +142,11 @@ def nesting(case: dict, chosen: dict) -> dict:
 
 def main() -> None:
     cases = conditions()
+    if sys.argv[1:] == ["wh"]:  # recompute the Wiener-Hammerstein entry only
+        result = json.loads((HERE / "dev_select_v2.json").read_text())
+        result["wiener_hammerstein"] = wiener_hammerstein(cases)
+        (HERE / "dev_select_v2.json").write_text(json.dumps(result, indent=1) + "\n")
+        return
     result = {f"volterra_laguerre_{o}": choose_volterra(o, cases) for o in (2, 3)}
     result["wiener_hammerstein"] = wiener_hammerstein(cases)
     reference = next(c for c in cases if c["family"] == "noise" and c["seed"] == 100)

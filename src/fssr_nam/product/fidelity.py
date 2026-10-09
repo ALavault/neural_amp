@@ -124,6 +124,9 @@ def fits(
     fit can come from cache_dir. With x_eval (the input actually recorded with
     y_eval), the evaluated fit uses it instead of x."""
     gap = memory(protocol.probe)
+    if isinstance(protocol.probe, WienerHammerstein) and len(protocol.estimation) > 1:
+        # phi(0) may be non-zero: zeros between segments do not reset h_out's state
+        raise ValueError("Wiener-Hammerstein: one estimation segment only")
 
     def part(signals: dict) -> np.ndarray:
         return joined([signals[name] for name in protocol.estimation], gap)
@@ -306,6 +309,12 @@ def analyze_sweep_pair(
         ev, _ = harmonic_signature(x_eval, y_eval, fs, sweep, protocol)
     band = (ref.freqs >= protocol.band_hz[0]) & (ref.freqs <= protocol.band_hz[1])
     scale = rms(np.abs(ref.d[0][band]))
+    if not scale > 0:
+        return {
+            "protocol": protocol.version(),
+            "status": "non mesurable : la référence n'a pas de réponse au fondamental",
+            "total_complex_rel": float("nan"),
+        }
     floor = 10 ** (protocol.floor_db / 20) * np.abs(ref.d[0][band]).max()
     orders = {
         f"order_{k + 1}": order_deviation(ref.d[k][band], ev.d[k][band], scale, floor)

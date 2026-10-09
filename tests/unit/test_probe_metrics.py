@@ -330,3 +330,31 @@ def test_cancelling_branches_are_flagged_on_noise_only_differences() -> None:
     _, louder = segments(lambda v: 1.05 * np.tanh(2 * v))
     clean = analyze_pair(x, y_ref, louder, FS, protocol)
     assert not any("se compensent" in w for w in clean["warnings"])
+
+
+def test_wh_alternating_fit_never_raises_its_cost() -> None:
+    """Each refit (h_out, phi) and each accepted Gauss-Newton step on h_in may only
+    lower the cost; renormalising h_in must not undo a step."""
+    from fssr_nam.product.probes import fit_wh
+
+    x, y = segments(wh_system)
+    for state in fit_wh(small_wh(), x["A"], y["A"]).states:
+        history = np.array(state.history)
+        assert np.all(np.diff(history) <= 1e-9 * history[:-1])
+
+
+def test_unmeasurable_cases_are_refused_or_reported() -> None:
+    from fssr_nam.product.defect_bench import synchronized_sweep
+    from fssr_nam.product.fidelity import HarmonicProtocol, analyze_sweep_pair
+
+    sweep_x, sweep = synchronized_sweep(1.0, FS)
+    silent = analyze_sweep_pair(
+        sweep_x, np.zeros_like(sweep_x), sweep_x, FS, sweep, HarmonicProtocol()
+    )
+    assert silent["status"].startswith("non mesurable")
+    with pytest.raises(ValueError):
+        fit(Probe(degree=1, taps=64), noise(1, 32), noise(2, 32))
+    x, y = segments(wh_system)
+    two = Protocol(probe=small_wh(), estimation=("A", "B"), reading=("B",))
+    with pytest.raises(ValueError):
+        analyze_pair(x, y, y, FS, two)

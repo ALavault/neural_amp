@@ -309,3 +309,27 @@ Résultat de `dev_select_v2.py` (`dev_select_v2.json`), règles appliquées tell
 
 Étalonnage v2 : mêmes graines de test, toutes les familles et niveaux sauf la DI, lue au niveau
 médian seulement (coût). WH : bruit coloré à −20 dBFS, graines 200–202, 1 s, comme développé.
+
+## Relecture Codex de la campagne (2026-10-09) et correctifs
+
+Relecture en lecture seule de a51da63..fa99355. Points vérifiés et retenus :
+- **Wiener–Hammerstein** : la renormalisation de h_in recalculait l'échelle de u et annulait le
+  pas de Gauss–Newton accepté ; h_out était ajusté sur tout le support de convolution, les autres
+  étapes sur les échantillons retenus. Corrigés (u invariant à la renormalisation ; h_out sur les
+  échantillons retenus ; pente d'extrapolation de la spline exacte). Test : le coût ne remonte
+  jamais. **Les résultats WH antérieurs (dev v2 et `calibration_test_wh_noise.csv`) sont
+  recalculés ; les anciens restent dans l'historique git.**
+- **Profils** : lue en amplitude, l'ESR est identique à d_audio ; sa corrélation de profil avec
+  les sondes (ρ ≈ 0) n'était que du bruit d'arrondi. Retirée de cette lecture.
+- **Figure VS100R** : l'ESR n'y était pas lue en amplitude ; les points à entrée non commune
+  n'étaient pas distingués. Corrigé (points creux).
+- **Sinus glissants de test identiques à ceux du développement** (durée tirée de graine % 3 :
+  graines de test 200, 201, 202 = développement 102, 100, 101). Le développement n'a lu que la
+  référence statique, mais la lecture sur sinus glissant ne vaut pas généralisation à des
+  réalisations nouvelles. Limite rapportée, non corrigée après coup.
+- **AUC des paires réelles** : les comparaisons directes (ESR, MR-STFT) doivent exclure les
+  sections à entrée non commune ; recalculées ainsi dans le rapport.
+- Cas limites : référence harmonique silencieuse → « non mesurable » ; WH à plusieurs segments
+  d'estimation refusé (φ(0) ≠ 0 entretient h_out pendant les zéros) ; estimation plus courte que
+  le FIR refusée.
+- Chiffres du brouillon de rapport antérieurs à la DI : régénérés dans la version finale.

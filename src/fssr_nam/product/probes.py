@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 
 import numpy as np
 from scipy.fft import irfft, next_fast_len, rfft
@@ -74,6 +74,8 @@ def _spectra(signals: list, size: int) -> list:
 def normal_equations(probe: Probe, u: list, y: np.ndarray | None):
     """Gram matrix and, if y is given, Phi^T y for branch signals u."""
     n, m = len(u[0]), probe.taps
+    if n < m:
+        raise ValueError(f"estimation data ({n} samples) shorter than {m} taps")
     size = next_fast_len(n + m)
     spectra = _spectra(u, size)
     lag = np.subtract.outer(np.arange(m), np.arange(m)) % size  # i - j
@@ -281,8 +283,9 @@ class WhState:
     h_in: np.ndarray
     coef: np.ndarray
     h_out: np.ndarray
-    scale: float  # RMS of h_in * x on the estimation data
+    scale: float  # u = h_in * x / scale: RMS units of the first h_in on the fit data
     cost: float = np.inf
+    history: list = field(default_factory=list)  # cost after each refit and each step
 
 
 @dataclass
@@ -298,10 +301,8 @@ def _spline_basis(u: np.ndarray, probe: WienerHammerstein) -> np.ndarray:
     inner = np.linspace(-probe.span, probe.span, probe.knots)
     t = np.r_[[inner[0]] * 3, inner, [inner[-1]] * 3]
     edges = np.array([inner[0], inner[-1]])
-    step = 1e-6 * probe.span
-    at_edge = BSpline.design_matrix(edges, t, 3).toarray()
-    inside = BSpline.design_matrix(edges + np.array([step, -step]), t, 3).toarray()
-    slope = (at_edge - inside) / np.array([[-step], [step]])
+    count = len(t) - 4
+    slope = BSpline(t, np.eye(count), 3).derivative()(edges)  # exact basis slopes
     design = BSpline.design_matrix(np.clip(u, *edges), t, 3).toarray()
     low, high = u < edges[0], u > edges[1]
     design[low] += (u[low] - edges[0])[:, None] * slope[0]
@@ -325,9 +326,11 @@ def _ridge_solve(gram: np.ndarray, rhs: np.ndarray, ridge: float) -> np.ndarray:
 
 
 def _fit_h_out(state, probe, v, y, keep) -> None:
-    lagged = Probe(degree=1, taps=probe.taps_out, dc=False)
-    gram, rhs = normal_equations(lagged, [v], y)
-    state.h_out = _ridge_solve(gram, rhs, probe.ridge)
+    """h_out by ridge least squares on the same kept samples as every other step."""
+    columns = np.column_stack(
+        [np.r_[np.zeros(m), v[: len(v) - m]] for m in range(probe.taps_out)]
+    )[keep]
+    state.h_out = _ridge_solve(columns.T @ columns, columns.T @ y[keep], probe.ridge)
 
 
 def _fit_phi(state, probe, design, y, keep) -> None:
@@ -363,26 +366,32 @@ def _step_h_in(state, probe, x, y, keep, damping: float) -> float:
     return damping
 
 
-def _normalize(state: WhState, x: np.ndarray) -> None:
-    """Unit-norm h_in, scale = RMS(h_in * x): removes the h_in / phi gain ambiguity
-    before phi is refitted (the output changes only through the refit)."""
-    state.h_in = state.h_in / np.linalg.norm(state.h_in)
-    state.scale = float(np.sqrt(np.mean(_causal(x, state.h_in) ** 2))) or 1.0
+def _normalize(state: WhState) -> None:
+    """Unit-norm h_in with the scale divided by the same norm: u = h_in * x / scale,
+    hence the rendered output, is unchanged (a gain step of h_in is kept)."""
+    norm = float(np.linalg.norm(state.h_in))
+    state.h_in, state.scale = state.h_in / norm, state.scale / norm
 
 
 def _fit_start(probe, x, y, rng) -> WhState:
     keep = slice(memory(probe), None)
     h_in = np.r_[1.0, 0.1 * rng.standard_normal(probe.taps_in - 1)]
     grid = np.linspace(-probe.span, probe.span, probe.knots + 2)
-    state = WhState(h_in, grid * (1 + 0.1 * rng.standard_normal(len(grid))), None, 1.0)
+    h_in = h_in / np.linalg.norm(h_in)
+    scale = float(np.sqrt(np.mean(_causal(x, h_in) ** 2))) or 1.0  # spline in RMS units
+    state = WhState(
+        h_in, grid * (1 + 0.1 * rng.standard_normal(len(grid))), None, scale
+    )
     damping = 1e-2
     for _ in range(probe.iterations):
-        _normalize(state, x)
+        _normalize(state)
         design = _spline_basis(_causal(x, state.h_in) / state.scale, probe)
         _fit_h_out(state, probe, design @ state.coef, y, keep)
         _fit_phi(state, probe, design, y, keep)
         state.cost = float(np.mean((y - wh_render(state, probe, x))[keep] ** 2))
+        state.history.append(state.cost)
         damping = _step_h_in(state, probe, x, y, keep, damping)
+        state.history.append(state.cost)
     return state
 
 

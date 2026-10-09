@@ -184,7 +184,10 @@ def real_vs100r() -> None:
     path = HERE / "real_pairs_vs100r.csv"
     if not path.exists():
         return
-    rows = [r for r in csv.DictReader(path.open()) if r["metric"] != "excluded"]
+    rows = list(csv.DictReader(path.open()))
+    for r in rows:  # read the ESR in amplitude, as in summarize.py
+        if r["metric"] == "esr":
+            r["score"] = str(float(r["score"]) ** 0.5)
     segment = {"harmonic": "sweep_-10dBFS"}
     scores = defaultdict(lambda: defaultdict(list))
     for r in rows:
@@ -192,26 +195,30 @@ def real_vs100r() -> None:
             segment["harmonic"] if r["metric"].startswith("harmonic") else "di_test"
         )
         if r["segment"] == wanted and r["metric"] in METRICS:
-            scores[r["metric"]][r["kind"]].append(float(r["score"]))
+            common = r.get("input_common", "True") != "False"
+            scores[r["metric"]][r["kind"]].append((float(r["score"]), common))
     metrics = [m for m in METRICS if m in scores]
     kinds = ["repeat", "negative_control", "positive"]
     fig, ax = plt.subplots(figsize=(8.5, 4))
     style(ax)
     for k, kind in enumerate(kinds):
         for i, metric in enumerate(metrics):
-            floor = statistics.median(scores[metric]["repeat"])
-            values = [v / floor for v in scores[metric][kind]]
-            ax.scatter(
-                i + 0.22 * (k - 1) + np.zeros(len(values)),
-                values,
-                s=36,
-                color=SERIES[k],
-                marker=MARKERS[k],
-                edgecolor="white",
-                linewidth=0.8,
-                label=kind if i == 0 else None,
-                zorder=3,
-            )
+            floor = statistics.median(v for v, _ in scores[metric]["repeat"])
+            for common in (True, False):  # hollow: input not common (acquisition)
+                values = [v / floor for v, c in scores[metric][kind] if c is common]
+                ax.scatter(
+                    i + 0.22 * (k - 1) + np.zeros(len(values)),
+                    values,
+                    s=36,
+                    facecolor=SERIES[k] if common else "none",
+                    edgecolor=SERIES[k] if not common else "white",
+                    marker=MARKERS[k],
+                    linewidth=0.8 if common else 1.4,
+                    label=(kind if common else f"{kind} (entrée non commune)")
+                    if i == 0 and values
+                    else None,
+                    zorder=3,
+                )
     for threshold in (3, 10):
         ax.axhline(threshold, color=MUTED, linewidth=0.8, linestyle="--")
     ax.set_yscale("log")

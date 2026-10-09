@@ -189,6 +189,7 @@ def profiles(rows: list[dict]) -> dict:
         cell = (r["family"], r["level_db"], r["defect"], r["severity"])
         detect[r["metric"]][cell] = math.log(max(r["detection_ratio"], 1e-300))
     audio = detect.pop("d_audio")
+    detect.pop("esr", None)  # read in amplitude, the ESR IS d_audio: its profile is 0
     profile = {
         m: {c: v - audio[c] for c, v in cells.items() if c in audio}
         for m, cells in detect.items()
