@@ -1,0 +1,461 @@
+{
+ "synthetic": {
+  "kind": "synthetic DSP reference and known-defect variants (defect_bench.py)",
+  "rate_hz": 48000,
+  "families": {
+   "noise": {
+    "level_kind": "rms",
+    "levels_db": [
+     -30.0,
+     -20.0,
+     -12.0
+    ],
+    "estimation_seeds": "s (dev 100-102, test 200-202)",
+    "reading_seeds": "s + 50"
+   },
+   "multisine": {
+    "level_kind": "rms",
+    "levels_db": [
+     -30.0,
+     -20.0,
+     -12.0
+    ],
+    "estimation_seeds": "s (dev 100-102, test 200-202)",
+    "reading_seeds": "s + 50"
+   },
+   "sweep": {
+    "level_kind": "peak",
+    "levels_db": [
+     -20.0,
+     -10.0,
+     -3.0
+    ],
+    "estimation_seeds": "s (dev 100-102, test 200-202)",
+    "reading_seeds": "s + 50"
+   },
+   "two_tone": {
+    "level_kind": "peak",
+    "levels_db": [
+     -20.0,
+     -10.0,
+     -3.0
+    ],
+    "estimation_seeds": "s (dev 100-102, test 200-202)",
+    "reading_seeds": "s + 50"
+   },
+   "plucks": {
+    "level_kind": "peak",
+    "levels_db": [
+     -20.0,
+     -10.0,
+     -3.0
+    ],
+    "estimation_seeds": "s (dev 100-102, test 200-202)",
+    "reading_seeds": "s + 50"
+   }
+  },
+  "di": {
+   "source": "datasets/raw/internal/valvestate_vs100r/reamp_valvestate_192k.wav",
+   "sha256": "7a0409353eae8bbfd0167f958852cb62ecf5d3f01967dcc6a5bb47d3fef95e1e",
+   "estimation": {
+    "section": "di_train",
+    "start": 6144768,
+    "samples": 23040000,
+    "rate": 192000
+   },
+   "reading": {
+    "section": "di_test",
+    "start": 34944768,
+    "samples": 5760000,
+    "rate": 192000
+   },
+   "independent_sources": true,
+   "note": "di_train: idmt-gtr2, idmt-gtr4-sg, nam, prvt-gtr, yt-bass; di_test: idmt-bass, idmt-gtr4-ib (files never in di_train)"
+  },
+  "two_tone_note": "tone pair from seed % 50: shared by A (s) and B (s + 50)"
+ },
+ "vs100r": {
+  "kind": "VS100R FX send, own recording 2026-09-26 (raw audio not committed)",
+  "media": "datasets/amp_capture/Media",
+  "analysis_rate_hz": 48000,
+  "estimation": {
+   "section": "di_train",
+   "start": 6144768,
+   "samples": 23040000,
+   "rate": 192000
+  },
+  "reading": [
+   {
+    "section": "di_test",
+    "start": 34944768,
+    "samples": 5760000,
+    "rate": 192000
+   },
+   {
+    "section": "pink_noise_-30dBFS_rms",
+    "start": 1920768,
+    "samples": 960000,
+    "rate": 192000
+   }
+  ],
+  "harmonic": [
+   {
+    "start": 2976768,
+    "samples": 960000,
+    "rate": 192000,
+    "section": "sweep_-20dBFS"
+   },
+   {
+    "start": 4032768,
+    "samples": 960000,
+    "rate": 192000,
+    "section": "sweep_-10dBFS"
+   },
+   {
+    "start": 5088768,
+    "samples": 960000,
+    "rate": 192000,
+    "section": "sweep_-3dBFS"
+   }
+  ],
+  "independent_sources": true,
+  "takes": [
+   {
+    "order": 1,
+    "setting": "G050_C050_B050_M050_T050",
+    "loopback": "02-Looopbck-260926_1426.wav",
+    "pass_start": 770092,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 2,
+    "setting": "G075_C025_B075_M025_T050",
+    "loopback": "02-Looopbck-260926_1433.wav",
+    "pass_start": 770067,
+    "slipped": true,
+    "low_signal": false
+   },
+   {
+    "order": 3,
+    "setting": "G050_C100_B000_M100_T000",
+    "loopback": "02-Looopbck-260926_1439.wav",
+    "pass_start": 770091,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 4,
+    "setting": "G050_C050_B100_M050_T050",
+    "loopback": "02-Looopbck-260926_1624.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 5,
+    "setting": "G025_C050_B050_M050_T075",
+    "loopback": "02-Looopbck-260926_1635.wav",
+    "pass_start": 770068,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 6,
+    "setting": "G000_C025_B050_M050_T100",
+    "loopback": "02-Looopbck-260926_1639.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": true
+   },
+   {
+    "order": 7,
+    "setting": "G000_C050_B050_M050_T050",
+    "loopback": "02-Looopbck-260926_1644.wav",
+    "pass_start": 770067,
+    "slipped": true,
+    "low_signal": true
+   },
+   {
+    "order": 8,
+    "setting": "G100_C000_B050_M075_T075",
+    "loopback": "02-Looopbck-260926_1649.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 9,
+    "setting": "G100_C050_B050_M050_T050",
+    "loopback": "02-Looopbck-260926_1654.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 10,
+    "setting": "G000_C050_B025_M100_T075",
+    "loopback": "02-Looopbck-260926_1659.wav",
+    "pass_start": 770067,
+    "slipped": true,
+    "low_signal": true
+   },
+   {
+    "order": 11,
+    "setting": "G050_C050_B075_M050_T050",
+    "loopback": "02-Looopbck-260926_1707.wav",
+    "pass_start": 770067,
+    "slipped": true,
+    "low_signal": false
+   },
+   {
+    "order": 12,
+    "setting": "G050_C050_B050_M050_T000",
+    "loopback": "02-Looopbck-260926_1722.wav",
+    "pass_start": 770068,
+    "slipped": true,
+    "low_signal": false
+   },
+   {
+    "order": 13,
+    "setting": "G050_C050_B000_M050_T050",
+    "loopback": "02-Looopbck-260926_1726.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 14,
+    "setting": "G050_C075_B075_M025_T025",
+    "loopback": "02-Looopbck-260926_1731.wav",
+    "pass_start": 770068,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 15,
+    "setting": "G050_C050_B050_M000_T050",
+    "loopback": "02-Looopbck-260926_1738.wav",
+    "pass_start": 770067,
+    "slipped": true,
+    "low_signal": false
+   },
+   {
+    "order": 16,
+    "setting": "G025_C075_B025_M075_T075",
+    "loopback": "02-Looopbck-260926_1745.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 17,
+    "setting": "G050_C000_B100_M000_T100",
+    "loopback": "02-Looopbck-260926_1750.wav",
+    "pass_start": 770067,
+    "slipped": true,
+    "low_signal": false
+   },
+   {
+    "order": 18,
+    "setting": "G050_C025_B050_M050_T050",
+    "loopback": "02-Looopbck-260926_1758.wav",
+    "pass_start": 770068,
+    "slipped": true,
+    "low_signal": false
+   },
+   {
+    "order": 19,
+    "setting": "G050_C050_B050_M075_T050",
+    "loopback": "02-Looopbck-260926_1833.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 20,
+    "setting": "G050_C050_B050_M050_T050",
+    "loopback": "02-Looopbck-260926_1839.wav",
+    "pass_start": 770091,
+    "slipped": true,
+    "low_signal": false
+   },
+   {
+    "order": 21,
+    "setting": "G050_C050_B050_M050_T075",
+    "loopback": "02-Looopbck-260926_1846.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 22,
+    "setting": "G050_C075_B050_M050_T050",
+    "loopback": "02-Looopbck-260926_1900.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 23,
+    "setting": "G050_C050_B050_M050_T100",
+    "loopback": "02-Looopbck-260926_1906.wav",
+    "pass_start": 770067,
+    "slipped": true,
+    "low_signal": false
+   },
+   {
+    "order": 24,
+    "setting": "G050_C050_B050_M050_T025",
+    "loopback": "02-Looopbck-260926_1910.wav",
+    "pass_start": 770068,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 25,
+    "setting": "G050_C050_B025_M050_T050",
+    "loopback": "02-Looopbck-260926_1915.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 26,
+    "setting": "G025_C050_B050_M050_T050",
+    "loopback": "02-Looopbck-260926_1919.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 27,
+    "setting": "G000_C000_B050_M050_T100",
+    "loopback": "02-Looopbck-260926_1924.wav",
+    "pass_start": 770067,
+    "slipped": true,
+    "low_signal": true
+   },
+   {
+    "order": 28,
+    "setting": "G050_C050_B050_M025_T050",
+    "loopback": "02-Looopbck-260926_1928.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 29,
+    "setting": "G075_C025_B050_M100_T000",
+    "loopback": "02-Looopbck-260926_1933.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 30,
+    "setting": "G100_C050_B100_M100_T000",
+    "loopback": "02-Looopbck-260926_1937.wav",
+    "pass_start": 770068,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 31,
+    "setting": "G050_C000_B050_M050_T050",
+    "loopback": "02-Looopbck-260926_1942.wav",
+    "pass_start": 770068,
+    "slipped": true,
+    "low_signal": false
+   },
+   {
+    "order": 32,
+    "setting": "G025_C025_B000_M025_T050",
+    "loopback": "02-Looopbck-260926_1946.wav",
+    "pass_start": 770068,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 33,
+    "setting": "G075_C025_B025_M075_T025",
+    "loopback": "02-Looopbck-260926_1954.wav",
+    "pass_start": 770068,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 34,
+    "setting": "G050_C050_B050_M100_T050",
+    "loopback": "02-Looopbck-260926_2006.wav",
+    "pass_start": 770068,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 35,
+    "setting": "G075_C100_B025_M000_T025",
+    "loopback": "02-Looopbck-260926_2011.wav",
+    "pass_start": 770068,
+    "slipped": true,
+    "low_signal": false
+   },
+   {
+    "order": 36,
+    "setting": "G025_C050_B000_M000_T100",
+    "loopback": "02-Looopbck-260926_2015.wav",
+    "pass_start": 770068,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 37,
+    "setting": "G050_C100_B050_M050_T050",
+    "loopback": "02-Looopbck-260926_2022.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   },
+   {
+    "order": 38,
+    "setting": "G075_C050_B050_M050_T050",
+    "loopback": "02-Looopbck-260926_2027.wav",
+    "pass_start": 770068,
+    "slipped": true,
+    "low_signal": false
+   },
+   {
+    "order": 39,
+    "setting": "G050_C050_B050_M050_T050",
+    "loopback": "02-Looopbck-260926_2031.wav",
+    "pass_start": 770067,
+    "slipped": false,
+    "low_signal": false
+   }
+  ]
+ },
+ "jvm410h": {
+  "kind": "Marshall JVM410H OD1, ToneTwist AFx (CC BY-NC 4.0)",
+  "dry": "datasets/raw/external/tone_twist_param/extracted/Marshall-JVM410H-ChOD1-trimmed/DRY/trainval/trainval.input.wav",
+  "sha256": "5aebea12d2c95c7849bd2aa47777c56f5f14a7c4f0681a655a3c955240de9ff2",
+  "rate_hz": 44100,
+  "estimation_s": [
+   0,
+   150
+  ],
+  "reading_s": [
+   215,
+   300
+  ],
+  "independent_sources": false,
+  "note": "two disjoint segments of one input file whose source boundaries are not documented: A/B independence NOT established"
+ },
+ "not_measurable": [
+  "BLA in the strict sense on real data (no periodic multisine, no repeats)",
+  "synchronized-sweep harmonic phase on VS100R (sweeps not synchronized)",
+  "levels other than the three sweep levels; stepped sines",
+  "day-to-day repeatability; cold / warm / hot takes; volt calibration",
+  "content above 20 kHz (sweeps) or 24 kHz (DI)",
+  "VS100R output after the tone stack"
+ ]
+}
