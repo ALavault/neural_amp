@@ -76,7 +76,7 @@ def middle_level(rows: list[dict], family: str) -> float:
 
 def detection_map(rows: list[dict], family: str) -> None:
     level = middle_level(rows, family)
-    strongest = defaultdict(float)
+    strongest = defaultdict(lambda: -math.inf)
     for r in rows:
         strongest[r["defect"]] = max(strongest[r["defect"]], r["severity"])
     picked = [

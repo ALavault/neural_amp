@@ -66,7 +66,23 @@ def label(ratio: float) -> str:
     return "non détecté" if ratio < MISSED else "limite"
 
 
-def table(cells: dict) -> list[dict]:
+def shares(raw: list[dict]) -> dict:
+    """(metric, family, level, defect, severity) -> median over seeds of the captured
+    share d_probe / d_audio and of the unrepresented share, for the probes."""
+    out = defaultdict(lambda: ([], []))
+    for r in raw:
+        audio = float(r.get("d_audio_norm") or 0.0)
+        if not r.get("unrepresented") or audio <= 0:
+            continue
+        key = (r["metric"], r["family"], r["level_db"], r["defect"], r["severity"])
+        out[key][0].append(r["score"] / audio)
+        out[key][1].append(float(r["unrepresented"]) / audio)
+    return {
+        k: (statistics.median(a), statistics.median(b)) for k, (a, b) in out.items()
+    }
+
+
+def table(cells: dict, captured: dict | None = None) -> list[dict]:
     floors = {
         k[:3]: statistics.median(v.values())
         for k, v in cells.items()
@@ -93,6 +109,8 @@ def table(cells: dict) -> list[dict]:
                 "detection_ratio": ratio,
                 "reading": label(ratio),
                 "log_sd_seeds": statistics.stdev(logs) if len(logs) > 1 else 0.0,
+                "captured_share": (captured or {}).get(key, (None, None))[0],
+                "unrepresented_share": (captured or {}).get(key, (None, None))[1],
             }
         )
     return out
@@ -119,7 +137,7 @@ def monotonicity(cells: dict) -> dict:
 def blind_spots(rows: list[dict]) -> list[dict]:
     """At the strongest severity of each defect (for noise: its loudest level), the
     metrics that miss a difference that d_audio detects."""
-    strongest = defaultdict(float)
+    strongest = defaultdict(lambda: -math.inf)
     for r in rows:
         strongest[r["defect"]] = max(strongest[r["defect"]], r["severity"])
     top = defaultdict(dict)
@@ -211,7 +229,7 @@ def dependence(rows: list[dict]) -> dict:
 
 def main() -> None:
     raw = load()
-    rows = table(grouped(with_audio(raw)))
+    rows = table(grouped(with_audio(raw)), shares(raw))
     with (HERE / "table_test.csv").open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
         writer.writeheader()
