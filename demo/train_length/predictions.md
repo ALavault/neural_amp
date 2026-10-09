@@ -205,6 +205,10 @@ tourné sur CPU et sa sortie est `eval_train_length.json`. Contrôle de cohéren
 - **Prise 16, descriptif, `last`** : L10 −0,052 ; +0,544 ; −0,954. L20 −0,996 ; +1,089 ;
   −0,836. Les |d_i| atteignent environ 1 et changent de signe selon la graine, comme au test
   FFT.
+- **M1 et prise 16, descriptif, `best`** :
+  - M1 : L10 d = −0,010 (+0,096 ; +0,166 ; −0,291) ; L20 d = +0,015 (−0,125 ; +0,290 ;
+    −0,122).
+  - Prise 16 : L10 +0,272 ; +0,485 ; −0,944. L20 −0,879 ; +0,897 ; −1,030.
 - **Règle de décision appliquée à P** : L10 est acceptable en `last`, donc la partie
   d'entraînement du fichier de campagne prendrait 30 s.
 
@@ -214,8 +218,9 @@ La règle a été figée en 6f62341, avant P ; la co-lecture a été exécutée 
 `coreading_delay.py` (63b5e90, relu par Codex) et la sortie `eval_train_length_aligned.json`.
 
 **Écart d'instrument : l'inférence tourne sur GPU** (fp32, sans TF32), alors que P tourne sur
-CPU. Contrôle de parité sur C graine 42, prises 1 et 2 : l'écart de ln ESR est d'au plus 6e-6, et
-l'écart maximal de sortie de 5e-6.
+CPU. Contrôle de parité (`parity_gpu_cpu.py`, sortie `parity_gpu_cpu.json`) : sans retard, sur
+les neuf runs et les 35 prises, la ln ESR du chemin GPU s'écarte de celle de P d'au plus 1,9e-5.
+Un d_i peut donc bouger d'au plus 3,9e-5.
 
 **Contrôles de l'instrument** : tous passés.
 - Effet de bord : 8,6e-13, pour une borne de 1,0e-5.
@@ -232,8 +237,8 @@ l'écart maximal de sortie de 5e-6.
 
 - **L10 : « moins bon »** (d = +0,348, les trois d_i > 0) ; **non acceptable**.
 - **L20 : « non tranché »** (d = −0,074, signes mélangés) ; **non acceptable**. d₄₂ = +0,254
-  dépasse la borne par graine de 0,25 de 0,004. La parité CPU–GPU (≤ 6e-6) n'explique pas cet
-  écart.
+  dépasse la borne par graine de 0,25 de 0,004, soit environ cent fois l'effet possible du
+  device (3,9e-5).
 - **Le calage abaisse s en moyenne de** 1,58 (C), 1,11 (L10) et 1,69 (L20) : l'ESR est divisée
   par environ 4,9, 3,0 et 5,4.
 - **Le retard dépend du bras** : 0,80 à 0,85 pour L10, contre 0,95 à 1,05 pour C et L20.
@@ -263,17 +268,21 @@ change aucune étiquette.
 - **L10** : d = +0,358 (+0,359 ; +0,617 ; +0,097), les trois d_i > 0.
 - **L20** : d = −0,031 (+0,275 ; −0,137 ; −0,229).
 
-**Conséquence.** L'inversion de L10 ne dépend pas de la section sur laquelle τ est estimé. Une
-fois le retard sous-échantillon retiré, l'ESR de L10 sur `di_test` est plus haute que celle de C,
-d'environ exp(0,35) ≈ 1,4 fois en moyenne géométrique. Son avantage en ESR brute
-accompagne un retard plus proche de zéro (0,75 à 0,85 contre 0,95 à 1,05). Ce test n'établit pas
-de cause.
+**Conséquence.** L'inversion de L10 persiste avec les deux sections d'estimation examinées. Le
+contrôle n'est pas une évaluation indépendante : `di_test` sert à ajuster τ puis à noter. Après
+calage, l'ESR de L10 sur `di_test` est plus haute que celle de C, d'environ exp(0,36) ≈ 1,4 fois
+en moyenne géométrique. Son avantage en ESR brute accompagne un τ plus petit : 0,75 à 0,85 pour
+L10, contre 1,00 à 1,05 pour C dans ce contrôle. Le calage peut compenser un retard pur comme une
+erreur de phase du modèle. Ce test ne change aucune étiquette préinscrite et n'établit pas de
+cause.
 
 ### Ce qui reste à trancher (utilisateur)
 
-**Si l'ESR brute reste la mesure des futurs modèles VS100R**, avec le retard sous-échantillon en
-place, la lecture P s'applique : 30 s (L10).
+**La règle préinscrite suit P** : 30 s (L10), dans le périmètre testé.
 
-**Si le retard est retiré**, par exemple par le réentraînement à cible avancée, la co-lecture
-prédit mieux la qualité. Ni L10 ni L20 n'y est alors acceptable, et la partie d'entraînement
-reste à 150 s.
+**Si l'utilisateur retient l'ESR après calage**, L10 et L20 ne sont pas acceptables dans la
+co-lecture. Celle-ci ne porte que sur `last` : le repli sur `best` de la règle initiale n'y a pas
+d'équivalent. Garder 150 s serait alors une décision de l'utilisateur, hors règle.
+
+**L'effet d'un réentraînement à cible avancée sur cette comparaison reste inconnu** : il n'a pas
+été mesuré.
