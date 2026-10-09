@@ -131,10 +131,10 @@ préinscrite n'est pas modifiée ; ses résultats ne diront rien du routage du m
 ## Résultats (2026-10-09, trois runs VS100R et six runs KIPR complets)
 
 **Runs.**
-- VS100R : `vs100r48grey_s{42,43,44}`, 15 000 pas sur 15 000, sortie 0, contrôle face au bras C
-  `ok` (`demo/RUNS.jsonl`, fiches `demo/nablafx_bench/`).
+- VS100R : `vs100r48grey_s{42,43,44}`, 15 000 pas sur 15 000, contrôle face au bras C
+  `ok` (`demo/RUNS.jsonl`, fiches `demo/nablafx_bench/`), sortie 0 (`demo/runs/kipr_tracks_queue.log`).
 - La porte au bit du chemin par défaut (`repro_gate_vs100r48_kiprtracks_r3`, 372 valeurs,
-  0 écart) est passée avant le premier run.
+  0 écart) est passée avant le premier run VS100R (2026-10-08, 03:44).
 - KIPR : `kipr_{sym,asym}_s{42,43,44}_grey`, 3 000 pas chacun.
 
 **Commandes**, sur CPU, après le dernier run :
@@ -145,7 +145,7 @@ préinscrite n'est pas modifiée ; ses résultats ne diront rien du routage du m
 **Contrôles avant lecture** (précisions du 2026-10-08) :
 - 24 cas Hammerstein par niveau pour GREY et pour C : 3 runs attendus × 8 prises de test,
   identifiants exacts, aucune valeur non finie dans les bandes de 250 Hz à 8 kHz.
-- Les 216 modèles déjà mesurés sont reproduits à l'identique.
+- Les 216 cas déjà mesurés (C, A48, B192 : 9 modèles × 8 prises × 3 niveaux) sont reproduits à l'identique.
 - `known_answer_grey.json` est identique à celui du 2026-10-06.
 - Toutes les valeurs lues sont finies.
 
@@ -159,7 +159,7 @@ préinscrite n'est pas modifiée ; ses résultats ne diront rien du routage du m
 | 43 | −3,967 | −0,832 | +3,135 |
 | 44 | −3,929 | −1,717 | +2,212 |
 
-- d = +2,582, soit un rapport moyen d'ESR exp(d) = 13,2.
+- d = +2,582, soit un rapport géométrique moyen d'ESR exp(d) = 13,2.
 - L'attente préinscrite (au moins +0,5 en ln, ESR × 1,6) est largement dépassée.
 
 **2ᵉ harmonique VS100R : « partiel »**, rapportée sans modifier le verdict. Écart signé de D2 à
@@ -186,6 +186,8 @@ l'appareil, en dB.
 **Ce que cela ne dit pas** (liste préinscrite) :
 - rien sur la forme optimale d'une boîte grise : une seule structure a été testée ;
 - rien à l'écoute ;
-- rien sur le routage du moteur KIPR (note de provenance).
+- avec 3 graines, seuls des effets nets ressortent ; l'écart d'ESR l'est.
+
+S'y ajoute, d'après la note de provenance : rien sur le routage du moteur KIPR.
 
 Résultat de la voie produit, sans portée scientifique.
