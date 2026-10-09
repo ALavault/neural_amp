@@ -80,3 +80,12 @@ target_link_libraries(FssrAmpOfflineRender PRIVATE
   juce::juce_recommended_config_flags
   juce::juce_recommended_warning_flags
 )
+
+# Shared native engine for the plugin and its offline harness; IEEE arithmetic.
+add_library(ssm_plugin_native STATIC "${REPO_ROOT}/cpp/src/ssm_wavenet_native.cpp")
+set_target_properties(ssm_plugin_native PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_include_directories(ssm_plugin_native PUBLIC "${REPO_ROOT}/cpp/include"
+  PRIVATE "${NAM_CORE_ROOT}/Dependencies/nlohmann")
+target_compile_options(ssm_plugin_native PRIVATE "$<$<CONFIG:Release>:-O3>")
+target_link_libraries(FssrAmpDemo PRIVATE ssm_plugin_native)
+target_link_libraries(FssrAmpOfflineRender PRIVATE ssm_plugin_native)

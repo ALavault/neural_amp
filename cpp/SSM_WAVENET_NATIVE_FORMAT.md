@@ -101,3 +101,89 @@ its FFT forward from a zero state), on a 2 s noise-and-sweep input:
 
 If float32 state cannot meet `1e-5` on slow modes, the engine may keep `s` in float64;
 both costs are then reported.
+
+## Version 2: FiLM controls
+
+`ssm-wavenet-native-v2` sets `version: 2`. The v1 layout and contract above remain
+unchanged, including byte-for-byte export for unconditioned ReLU models. V2 uses
+all the same audio weights, ZOH-to-FOH export and FOH recurrence. It requires:
+
+```json
+"architecture": {
+  "num_blocks": 8, "channels": 16, "state_dim": 4,
+  "act_type": "gated", "output_act": "tanh", "discretization": "foh",
+  "num_controls": 2, "cond": "film", "cond_head": "joint",
+  "cond_hidden": [32], "head_act": "leaky"
+}
+```
+
+The additional root object `film_net` contains `linear1` and `linear2`, each
+with `weight[out][in]` and `bias[out]`. Dimensions are respectively
+`[32, num_controls]` and `[num_blocks * 4 * channels, 32]`. Its evaluation is
+`linear2(relu(linear1(controls)))`. Only this joint MLP is supported; additive
+heads, pole conditioning and `act_type: odd` are rejected explicitly.
+
+Controls are finite normalized values in `[0,1]`; `set_controls(span)` rejects
+invalid dimensions or values before changing anything. At load they default to
+`0.5`. VS100R's order is **Gain, Contour**, with physical settings divided by 10.
+The native engine does not infer knob names from weights; consumers must know
+this order. For each block, the corresponding `4C` values are `scale[2C]` then
+`shift[2C]`. Immediately after `pre_gate`, before tanh/sigmoid:
+
+```
+v = (1 + scale) * v + shift
+```
+
+The engine computes the MLP only when `set_controls` receives changed values,
+never within `process`. This call allocates no memory and preserves the SSM
+state and previous input. `reset` clears audio history but retains controls.
+Calls on one instance must be serialized by the caller. Audio blocks can be
+split at any control event without resetting; events affect that sample onward.
+
+Both output-head activations use `head_act`: `relu` or `leaky`, where
+`leaky(x) = x` for `x >= 0`, otherwise `0.01 * x`, exactly the slope in
+`head_activation`. The MLP hidden activation always remains ReLU. Other output
+head activations are rejected. The final `output_act` is unchanged from v1.
+
+The numerical v2 tests use float64 PyTorch FFT SSMs and apply FiLM at its event
+sample between layers, preserving history across events. Acceptance is maximum
+absolute error `<= 3e-6` for the small synthetic fixtures and `<= 1e-5`
+(the v1 contract) for the trained VS100R checkpoint. This accounts for float32
+native weights, coefficients, state and accumulated arithmetic versus float64
+reference arithmetic and amplification of intermediate rounding by trained
+weights. The VS100R noise/control-change case exceeds 3e-6, so that stricter
+threshold is not claimed for this checkpoint. It is a tested tolerance, not a bound for arbitrary
+weights or arbitrarily long signals. Reset and irregular-block parity are
+bitwise; prefix rendering verifies causality.
+
+### Product plugin
+
+The JUCE plugin accepts `.nam` via the existing NAM A2 path, or v2 `.json` with
+two controls and a 48 kHz training rate. Gain and Contour are automatable 0–10
+parameters, normalized by `/10`. A 20 ms linear ramp runs at a 1 kHz control
+rate (48 audio samples per tick), with tick phase retained across host blocks.
+This avoids an MLP evaluation per audio sample even during automation; held
+controls do not reevaluate the MLP. The engine itself accepts instantaneous
+events; smoothing belongs to the plugin.
+
+The v2 plugin **requires exactly 48 kHz**. Loading at another host rate returns
+an error. If the host changes rate after loading, model processing produces
+silence and the editor reports suspension until 48 kHz is restored. There is
+no plugin resampler. NAM's existing rate behavior is unchanged.
+
+Export (CPU only; output is ignored by Git):
+
+```sh
+export CUDA_VISIBLE_DEVICES="" TMPDIR=/fastdata/lavaulta/tmp
+mkdir -p build/vs100r_native
+uv run python scripts/product_ssm_export.py --run-id vs100r48fast_film_s42 \
+  --out build/vs100r_native/vs100r48fast_film_s42.json
+```
+
+`ssm_wavenet_block_runner MODEL INPUT.f32 OUTPUT.f32 BLOCKS 48000 CONTROLS.json`
+accepts a strictly increasing event list beginning at sample zero, e.g.
+`[{"sample":0,"controls":[0.5,0.5]},{"sample":2107,"controls":[1,0]}]`.
+`ssm_wavenet_benchmark MODEL [GAIN CONTOUR]` takes normalized values; its
+existing stimulus, warmup and timings are unchanged and measure held controls.
+The offline plugin renderer takes optional `[channels [gain contour [sample_rate]]]`
+after the block size; its knobs use the physical 0–10 scale.

@@ -30,6 +30,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout makeLayout()
   parameters.push_back(std::make_unique<juce::AudioParameterChoice>(
     juce::ParameterID{"source", 1}, "Source",
     juce::StringArray{"Entree", "A: modele", "B: reel"}, 0));
+  for (const auto& entry : {std::pair{"gain", "Gain"}, std::pair{"contour", "Contour"}})
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
+      juce::ParameterID{entry.first, 1}, entry.second,
+      NormalisableRange<float>{0.0f, 10.0f}, 5.0f));
   return {parameters.begin(), parameters.end()};
 }
 } // namespace
@@ -51,6 +55,13 @@ void FssrAmpProcessor::prepareToPlay(double sampleRate, int maximumBlockSize)
   const juce::SpinLock::ScopedLockType lock(modelLock);
   if (model != nullptr)
     model->Reset(sampleRate, maximumBlockSize);
+  if (ssmModel != nullptr) ssmModel->reset();
+  // Control rate is 1 kHz at the required 48 kHz audio rate, with a 20 ms ramp.
+  gainControl.reset(1000.0, 0.02);
+  contourControl.reset(1000.0, 0.02);
+  gainControl.setCurrentAndTargetValue(parameters.getRawParameterValue("gain")->load() / 10.0f);
+  contourControl.setCurrentAndTargetValue(parameters.getRawParameterValue("contour")->load() / 10.0f);
+  controlCountdown = 0;
   referencePosition = 0;
 }
 
@@ -67,6 +78,30 @@ bool FssrAmpProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 
 juce::String FssrAmpProcessor::loadModel(const juce::File& file)
 {
+  if (file.hasFileExtension("json"))
+  {
+    try
+    {
+      auto loaded = std::make_unique<fssr::ssm::Model>(
+        std::filesystem::path(file.getFullPathName().toStdString()));
+      if (loaded->num_controls() != 2 || loaded->trained_sample_rate() != 48000.0)
+        return "modele v2 attendu: Gain, Contour, entrainement a 48000 Hz";
+      const juce::SpinLock::ScopedLockType lock(modelLock);
+      if (currentSampleRate.load() != 48000.0)
+        return "modele v2 refuse: l'hote doit fonctionner a 48000 Hz";
+      ssmModel = std::move(loaded);
+      model.reset();
+      nativeLoaded.store(true);
+      modelSampleRate.store(48000.0);
+      controlCountdown = 0;
+      modelName = file.getFileNameWithoutExtension();
+      return {};
+    }
+    catch (const std::exception& error)
+    {
+      return juce::String("modele v2 illisible: ") + error.what();
+    }
+  }
   std::unique_ptr<nam::DSP> loaded;
   try
   {
@@ -85,6 +120,8 @@ juce::String FssrAmpProcessor::loadModel(const juce::File& file)
   {
     const juce::SpinLock::ScopedLockType lock(modelLock);
     model = std::move(loaded);
+    ssmModel.reset();
+    nativeLoaded.store(false);
   }
   modelName = file.getFileNameWithoutExtension();
   return {};
@@ -92,6 +129,8 @@ juce::String FssrAmpProcessor::loadModel(const juce::File& file)
 
 juce::String FssrAmpProcessor::sampleRateWarning() const
 {
+  if (nativeLoaded.load() && currentSampleRate.load() != 48000.0)
+    return "ATTENTION modele v2 suspendu: l'hote doit fonctionner a 48000 Hz";
   const double expected = modelSampleRate.load();
   if (expected <= 0.0 || std::abs(expected - currentSampleRate.load()) < 1.0)
     return {};
@@ -173,9 +212,39 @@ void FssrAmpProcessor::processMono(juce::AudioBuffer<float>& buffer, juce::MidiB
     }
   }
 
-  if (bypass || model == nullptr)
+  if (ssmModel != nullptr && currentSampleRate.load() != 48000.0)
+  {
+    buffer.clear();
+    return;
+  }
+  if (bypass || (model == nullptr && ssmModel == nullptr))
   {
     buffer.applyGain(inputGain * outputGain);
+    return;
+  }
+
+  if (ssmModel != nullptr)
+  {
+    gainControl.setTargetValue(parameters.getRawParameterValue("gain")->load() / 10.0f);
+    contourControl.setTargetValue(parameters.getRawParameterValue("contour")->load() / 10.0f);
+    buffer.applyGain(inputGain);
+    int position = 0;
+    while (position < samples)
+    {
+      if (controlCountdown == 0)
+      {
+        // float32 smoothing can overshoot [0, 1] by an ulp; set_controls throws outside it.
+        const float controls[] = {std::clamp(gainControl.getNextValue(), 0.0f, 1.0f),
+                                  std::clamp(contourControl.getNextValue(), 0.0f, 1.0f)};
+        ssmModel->set_controls(controls);
+        controlCountdown = 48;
+      }
+      const int count = std::min(controlCountdown, samples - position);
+      ssmModel->process(channel + position, channel + position, count);
+      position += count;
+      controlCountdown -= count;
+    }
+    buffer.applyGain(outputGain);
     return;
   }
 

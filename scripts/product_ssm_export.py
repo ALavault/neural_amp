@@ -1,4 +1,4 @@
-"""Export unconditioned, gated SSM-WaveNet to the native v1 FOH format."""
+"""Export gated SSM-WaveNet to native FOH (v1 unconditioned, v2 FiLM)."""
 
 from __future__ import annotations
 
@@ -14,16 +14,51 @@ from fssr_nam.models.ssm_wavenet import SSMWaveNet, zoh_to_foh
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def export_model(model: SSMWaveNet, out: Path, *, source: dict | None = None) -> Path:
-    """Export a CPU copy; preserve the caller's parameters and discretization."""
-    if model.num_controls or model.film_net is not None or model.pole_net is not None:
-        raise ValueError("native v1 does not support knob conditioning")
+def validate_model(model: SSMWaveNet) -> None:
+    """Refuse architectures that cannot be represented without changing behavior."""
     if not model.blocks or any(b.act_type != "gated" for b in model.blocks):
-        raise ValueError("native v1 requires gated blocks")
+        raise ValueError("native format requires gated blocks; odd is unsupported")
+    v2 = model.num_controls > 0
+    if model.pole_net is not None or (v2 and model.cond != "film"):
+        raise ValueError("native format does not support pole heads")
+    head = model.output_net[0]
+    if type(head) not in (nn.ReLU, nn.LeakyReLU) or type(
+        model.output_net[2]
+    ) is not type(head):
+        raise ValueError("native head_act must be relu or leaky")
+    if isinstance(head, nn.LeakyReLU) and (
+        head.negative_slope != 0.01 or model.output_net[2].negative_slope != 0.01
+    ):
+        raise ValueError("native leaky head requires slope 0.01")
+    if not v2 and not isinstance(head, nn.ReLU):
+        raise ValueError("native v1 requires a ReLU head")
+    if v2:
+        net = model.film_net
+        if not (
+            isinstance(net, nn.Sequential)
+            and len(net) == 3
+            and isinstance(net[0], nn.Linear)
+            and type(net[1]) is nn.ReLU
+            and isinstance(net[2], nn.Linear)
+            and net[0].in_features == model.num_controls
+            and net[0].out_features == net[2].in_features == 32
+            and net[2].out_features
+            == len(model.blocks) * 4 * model.blocks[0].ssm.channels
+        ):
+            raise ValueError(
+                "native v2 requires FiLM cond_head joint, cond_hidden [32]"
+            )
     if any(b.ssm.discretization not in ("zoh", "foh") for b in model.blocks):
         raise ValueError("native v1 requires zoh or foh discretization")
     if model.input_conv.in_channels != 1 or model.output_net[3].out_channels != 1:
         raise ValueError("native v1 requires mono input and output")
+
+
+def export_model(model: SSMWaveNet, out: Path, *, source: dict | None = None) -> Path:
+    """Export a CPU copy; preserve the caller's parameters and discretization."""
+    validate_model(model)
+    v2 = model.num_controls > 0
+    head = model.output_net[0]
     model = copy.deepcopy(model).cpu().eval()
     zoh_to_foh(model)
 
@@ -79,6 +114,26 @@ def export_model(model: SSMWaveNet, out: Path, *, source: dict | None = None) ->
             "conv2": conv(model.output_net[3]),
         },
     }
+    if v2:
+        payload["format"] = "ssm-wavenet-native-v2"
+        payload["version"] = 2
+        payload["architecture"].update(
+            num_controls=model.num_controls,
+            cond="film",
+            cond_head="joint",
+            cond_hidden=[32],
+            head_act="leaky" if isinstance(head, nn.LeakyReLU) else "relu",
+        )
+        payload["film_net"] = {
+            name: {
+                "weight": layer.weight.detach().tolist(),
+                "bias": layer.bias.detach().tolist(),
+            }
+            for name, layer in (
+                ("linear1", model.film_net[0]),
+                ("linear2", model.film_net[2]),
+            )
+        }
     out.write_text(json.dumps(payload, indent=2, allow_nan=False) + "\n")
     return out
 
@@ -97,16 +152,16 @@ def main() -> None:
         raise ValueError("record must be ssm-wavenet")
     if ssm.get("discretization") not in ("zoh", "foh"):
         raise ValueError("record must use zoh or foh")
-    if ssm.get("num_controls", 0) or record.get("num_controls", 0):
-        raise ValueError("native v1 does not support knob conditioning")
-    from product_nablafx_bench import DEVICES
-    from product_sr_transfer import load_model
+    if record.get("device") == "vs100r":
+        if args.checkpoint != "last":
+            raise ValueError("VS100R export currently requires --checkpoint last")
+        from product_vs100r_eval import load
 
-    device = ssm.get("device", record.get("device", "bigmuff"))
-    if DEVICES.get(device, {}).get("params"):
-        raise ValueError("native v1 does not support knob conditioning")
+        wrapper = load(args.run_id)
+    else:
+        from product_sr_transfer import load_model
 
-    wrapper, record = load_model(args.run_id, args.checkpoint)
+        wrapper, record = load_model(args.run_id, args.checkpoint)
     model = next(m for m in wrapper.modules() if isinstance(m, SSMWaveNet))
     export_model(
         model,

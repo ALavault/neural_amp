@@ -7,8 +7,10 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include "NAM/dsp.h"
+#include "ssm_wavenet_native.hpp"
+#include <juce_dsp/juce_dsp.h>
 
-/// Demo amp: one NAM model, gain staging, and A/B against a reference capture.
+/// Demo amp: a NAM or FiLM SSM model, gain staging, and A/B against a reference capture.
 class FssrAmpProcessor : public juce::AudioProcessor
 {
 public:
@@ -34,7 +36,7 @@ public:
   void getStateInformation(juce::MemoryBlock&) override {}
   void setStateInformation(const void*, int) override {}
 
-  /// Load a `.nam` model. Returns an error message, or an empty string on success.
+  /// Load a `.nam` or native v2 `.json` model (Gain, Contour). Returns an error message, or an empty string on success.
   juce::String loadModel(const juce::File& file);
   /// Load a DI/target pair for blind A/B. Returns an error message, or empty.
   juce::String loadReference(const juce::File& dryFile, const juce::File& wetFile);
@@ -53,6 +55,10 @@ private:
   /// Audio-thread state, swapped in from the message thread under a spin lock.
   juce::SpinLock modelLock;
   std::unique_ptr<nam::DSP> model;
+  std::unique_ptr<fssr::ssm::Model> ssmModel;
+  std::atomic<bool> nativeLoaded{false};
+  juce::SmoothedValue<float> gainControl{0.5f}, contourControl{0.5f};
+  int controlCountdown{0};
   std::vector<double> inputScratch, outputScratch;
   juce::AudioBuffer<float> referenceDry, referenceWet;
   std::atomic<int> referencePosition{0};

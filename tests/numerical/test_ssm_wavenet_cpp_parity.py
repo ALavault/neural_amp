@@ -138,7 +138,7 @@ def test_export_converts_copy_and_refuses_unsupported(tmp_path: Path) -> None:
     assert model.blocks[0].ssm.discretization == "zoh"
     for kwargs in (
         {"discretization": "free"},
-        {"num_controls": 1},
+        {"num_controls": 1, "cond": "poles", "discretization": "zoh"},
         {"act_type": "sine"},
     ):
         with pytest.raises(ValueError):

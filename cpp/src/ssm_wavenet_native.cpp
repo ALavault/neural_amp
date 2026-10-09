@@ -48,7 +48,11 @@ Model::Model(const std::filesystem::path& path)
   json j;
   file >> j;
   const auto& arch = j.at("architecture");
-  if (j.at("format") != "ssm-wavenet-native-v1" || j.at("version") != 1 ||
+  if (arch.at("act_type") == "odd")
+    throw std::runtime_error("native format does not support act_type odd");
+  const bool v2 = j.at("format") == "ssm-wavenet-native-v2" && j.at("version") == 2;
+  const bool v1 = j.at("format") == "ssm-wavenet-native-v1" && j.at("version") == 1;
+  if ((!v1 && !v2) ||
       j.at("precision") != "float32" || j.at("latency_samples") != 0 ||
       arch.at("discretization") != "foh" || arch.at("act_type") != "gated")
     throw std::runtime_error("unsupported native SSM format");
@@ -72,6 +76,23 @@ Model::Model(const std::filesystem::path& path)
     c.bias.assign(b.begin(), b.end());
     return c;
   };
+  if (v2)
+  {
+    if (arch.at("cond") != "film" || arch.at("cond_head") != "joint" ||
+        arch.at("cond_hidden") != json::array({32}) || j.contains("pole_net"))
+      throw std::runtime_error("native v2 supports only FiLM joint [32]; pole heads unsupported");
+    const int controls = arch.at("num_controls").get<int>();
+    const auto activation = arch.at("head_act").get<std::string>();
+    if (controls <= 0 || (activation != "relu" && activation != "leaky"))
+      throw std::runtime_error("invalid v2 controls or head_act");
+    head_slope_ = activation == "leaky" ? 0.01f : 0.0f;
+    controls_.assign(controls, -1.0f);
+    film_hidden_.resize(32);
+    film_.resize(count * 4 * channels_);
+    film1_ = conv(j.at("film_net").at("linear1"), 32, controls);
+    film2_ = conv(j.at("film_net").at("linear2"), count * 4 * channels_, 32);
+    set_controls(std::vector<float>(controls, 0.5f));
+  }
   input_ = conv(j.at("input_conv"), channels_, 1, true);
   conv1_ = conv(j.at("output_net").at("conv1"), channels_, channels_);
   conv2_ = conv(j.at("output_net").at("conv2"), 1, channels_);
@@ -129,6 +150,20 @@ void Model::set_sample_rate(double fs)
         b.cb0_im[i] = static_cast<float>(cb0.imag());
       }
     }
+}
+
+void Model::set_controls(std::span<const float> controls)
+{
+  if (controls.size() != controls_.size())
+    throw std::runtime_error("invalid number of controls");
+  for (float value : controls)
+    if (!std::isfinite(value) || value < 0.0f || value > 1.0f)
+      throw std::runtime_error("controls must be finite and in [0,1]");
+  if (std::equal(controls.begin(), controls.end(), controls_.begin())) return;
+  std::copy(controls.begin(), controls.end(), controls_.begin());
+  film1_.apply(controls_, film_hidden_);
+  for (auto& value : film_hidden_) value = std::max(value, 0.0f);
+  film2_.apply(film_hidden_, film_);
 }
 
 void Model::reset()
@@ -190,6 +225,12 @@ void Model::process(const float* in, float* out, int n)
         b.previous[k] = h_[k];
       }
       b.gate.apply(y_, v_);
+      if (!film_.empty())
+      {
+        const auto offset = static_cast<std::size_t>(&b - blocks_.data()) * 4 * channels_;
+        for (int k = 0; k < 2 * channels_; ++k)
+          v_[k] = (1.0f + film_[offset + k]) * v_[k] + film_[offset + 2 * channels_ + k];
+      }
       for (int k = 0; k < channels_; ++k)
         g_[k] = std::tanh(v_[k]) / (1.0f + std::exp(-v_[channels_ + k]));
       b.skip.apply(g_, scratch_);
@@ -197,9 +238,9 @@ void Model::process(const float* in, float* out, int n)
       b.residual.apply(g_, scratch_);
       for (int k = 0; k < channels_; ++k) h_[k] += scratch_[k];
     }
-    for (auto& x : sum_) x = std::max(x, 0.0f);
+    for (auto& x : sum_) x = x >= 0.0f ? x : head_slope_ * x;
     conv1_.apply(sum_, scratch_);
-    for (auto& x : scratch_) x = std::max(x, 0.0f);
+    for (auto& x : scratch_) x = x >= 0.0f ? x : head_slope_ * x;
     conv2_.apply(scratch_, output_);
     float x = output_[0];
     if (output_act_ == "tanh") x = std::tanh(x);

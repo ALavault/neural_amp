@@ -23,13 +23,17 @@ private:
   void showStatus(const juce::String& text, bool isWarning);
 
   FssrAmpProcessor& processor;
-  juce::TextButton modelButton{"Charger un modele .nam"};
+  juce::TextButton modelButton{"Charger .nam / SSM v2 .json"};
   juce::TextButton referenceButton{"Charger DI + capture reelle"};
   juce::Label status;
   juce::Label inputLabel{{}, "Entree"};
   juce::Label outputLabel{{}, "Sortie"};
   juce::Slider input{juce::Slider::LinearHorizontal, juce::Slider::TextBoxRight};
   juce::Slider output{juce::Slider::LinearHorizontal, juce::Slider::TextBoxRight};
+  juce::Label gainLabel{{}, "Gain (SSM)"}, contourLabel{{}, "Contour (SSM)"};
+  juce::Slider gain{juce::Slider::LinearHorizontal, juce::Slider::TextBoxRight};
+  juce::Slider contour{juce::Slider::LinearHorizontal, juce::Slider::TextBoxRight};
+  std::unique_ptr<SliderAttachment> gainAttachment, contourAttachment;
   juce::ToggleButton bypass{"Bypass"};
   juce::ComboBox source;
   std::unique_ptr<SliderAttachment> inputAttachment, outputAttachment;

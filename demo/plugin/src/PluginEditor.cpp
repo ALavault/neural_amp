@@ -9,6 +9,10 @@ FssrAmpEditor::FssrAmpEditor(FssrAmpProcessor& owner)
   addAndMakeVisible(status);
   addAndMakeVisible(input);
   addAndMakeVisible(output);
+  addAndMakeVisible(gain);
+  addAndMakeVisible(contour);
+  addAndMakeVisible(gainLabel);
+  addAndMakeVisible(contourLabel);
   addAndMakeVisible(bypass);
   addAndMakeVisible(source);
 
@@ -23,11 +27,13 @@ FssrAmpEditor::FssrAmpEditor(FssrAmpProcessor& owner)
   auto& state = processor.parameters;
   inputAttachment = std::make_unique<SliderAttachment>(state, "input_db", input);
   outputAttachment = std::make_unique<SliderAttachment>(state, "output_db", output);
+  gainAttachment = std::make_unique<SliderAttachment>(state, "gain", gain);
+  contourAttachment = std::make_unique<SliderAttachment>(state, "contour", contour);
   bypassAttachment = std::make_unique<ButtonAttachment>(state, "bypass", bypass);
   sourceAttachment = std::make_unique<ComboAttachment>(state, "source", source);
 
 
-  setSize(560, 340);
+  setSize(560, 420);
   startTimerHz(2);
 }
 
@@ -49,7 +55,7 @@ void FssrAmpEditor::timerCallback()
 
 void FssrAmpEditor::chooseModel()
 {
-  chooser = std::make_unique<juce::FileChooser>("Modele NAM", juce::File{}, "*.nam");
+  chooser = std::make_unique<juce::FileChooser>("Modele NAM / SSM v2", juce::File{}, "*.nam;*.json");
   chooser->launchAsync(juce::FileBrowserComponent::openMode
                          | juce::FileBrowserComponent::canSelectFiles,
                        [this](const juce::FileChooser& result) {
@@ -130,5 +136,11 @@ void FssrAmpEditor::resized()
     slider->setBounds(row);
     area.removeFromTop(6);
   }
+  auto gainRow = area.removeFromTop(40);
+  gainLabel.setBounds(gainRow.removeFromLeft(110));
+  gain.setBounds(gainRow);
+  auto contourRow = area.removeFromTop(40);
+  contourLabel.setBounds(contourRow.removeFromLeft(110));
+  contour.setBounds(contourRow);
   bypass.setBounds(area.removeFromTop(30));
 }

@@ -24,9 +24,9 @@ double percentile(const std::vector<double>& sorted, double fraction)
 
 int main(int argc, char** argv)
 {
-  if (argc != 2)
+  if (argc != 2 && argc != 4)
   {
-    std::cerr << "Usage: ssm_wavenet_benchmark MODEL\n";
+    std::cerr << "Usage: ssm_wavenet_benchmark MODEL [GAIN CONTOUR]\n";
     return 2;
   }
   try
@@ -37,6 +37,8 @@ int main(int argc, char** argv)
       const int seconds = 2;
       const int iterations = 5;
       fssr::ssm::Model model(argv[1]);
+      if (argc == 4)
+        model.set_controls(std::vector<float>{std::stof(argv[2]), std::stof(argv[3])});
       constexpr double sample_rate = 48000.0;
       const int total_samples = seconds * static_cast<int>(sample_rate);
       if (total_samples % block_size != 0)
