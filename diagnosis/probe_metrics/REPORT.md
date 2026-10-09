@@ -22,8 +22,8 @@ morts ?
 ## Contrôles mathématiques
 
 - **Borne** |d_audio − d_probe| ≤ r_ref + r_eval : aucune violation, sur toutes les lignes
-  d'étalonnage de chaque sonde (de 120 lignes pour WH à 1 920 pour FIR et Hammerstein) et sur
-  toutes les paires réelles.
+  d'étalonnage de chaque sonde (de 120 lignes pour WH à 1 920 pour FIR et Hammerstein), sur les
+  138 lignes de sonde des paires réelles VS100R et sur toutes celles de la JVM.
 - **Linéarité.** Pour les sondes linéaires en paramètres, fit(Δy) = Δθ et
   d_probe² = Δθᵀ G_B Δθ sont vérifiés numériquement (tests unitaires). Cela suppose que la
   normalisation et la régularisation ne dépendent que de x_A.
@@ -62,6 +62,10 @@ Comptes à sévérité maximale et niveau médian, sur toutes les familles (une 
 | MR-STFT | 8 | 7 | 63 |
 | IMD (deux tons) | 13 | 0 | 0 |
 | Signature harmonique totale (sinus glissant) | 12 | 1 | 0 |
+| Volterra–Laguerre 3 | 77 | 1 | 0 |
+| magnitude (existante, post hoc) | 61 | 7 | 10 |
+| phase (existante, post hoc) | 50 | 8 | 20 |
+| enveloppe (existante, post hoc) | 76 | 1 | 1 |
 
 **Le seuil seul ne départage pas les sondes.** Elles ne représentent pas le bruit blanc, donc
 leur plancher est très bas, et elles « détectent » presque tout. Ce qu'elles représentent
@@ -70,19 +74,20 @@ médian ; part non représentée entre parenthèses) :
 
 | Défaut | FIR | H3 | H5 | VL2 | VL3 |
 |---|---|---|---|---|---|
-| gain | 0,99 (0,10) | 1,00 (0,05) | 1,00 (0,05) | 0,98 (0,19) | 0,99 (0,08) |
-| coloration, préfiltre, redistribution à THD égal | 0,99 | 1,00 | 1,00 | 0,97–0,99 | 0,99–1,00 |
-| retard fractionnaire | 0,97 (0,18) | 1,00 (0,06) | 1,00 (0,05) | 0,97 (0,23) | 0,89 (0,45) |
-| passe-tout | 0,97 (0,18) | 1,00 (0,06) | 1,00 (0,05) | 0,97 (0,25) | 0,93 (0,36) |
-| relâchement d'enveloppe | 0,95 (0,22) | 0,97 (0,15) | 0,97 (0,15) | 0,95 (0,25) | 0,96 (0,21) |
-| cubique (après passe-haut) | 0,79 (0,60) | 0,99 (0,30) | 0,99 (0,30) | 0,79 (0,61) | 0,99 (0,12) |
-| quadratique (après passe-haut) | 0,64 (0,77) | 0,96 (0,42) | 0,96 (0,42) | 0,98 (0,17) | 0,98 (0,15) |
-| interaction u[n]·u[n−5] | 0,45 (0,90) | 0,85 (0,58) | 0,86 (0,57) | 0,97 (0,26) | 0,99 (0,12) |
-| terme u⁷ (au-delà du degré) | 0,35 (0,94) | 0,81 (0,72) | 0,98 (0,52) | 0,39 (0,95) | 0,97 (0,65) |
-| écho à 30 ms (au-delà de la mémoire) | 0,16 (0,99) | 0,19 (1,00) | 0,21 (1,00) | 0,11 (0,99) | 0,15 (0,99) |
-| bruit additif | 0,02 (1,00) | 0,06 (1,00) | 0,08 (1,00) | 0,01 (1,00) | 0,03 (1,00) |
+| gain | 0,99 (0,10) | 1,00 (0,05) | 1,00 (0,05) | 0,98 (0,20) | 0,99 (0,09) |
+| coloration, préfiltre, redistribution à THD égal | 0,99 | 1,00 | 1,00 | 0,96–0,99 | 0,99–1,00 |
+| retard fractionnaire | 0,97 (0,18) | 1,00 (0,06) | 1,00 (0,05) | 0,97 (0,23) | 0,92 (0,31) |
+| passe-tout | 0,97 (0,18) | 1,00 (0,06) | 1,00 (0,05) | 0,96 (0,24) | 0,93 (0,28) |
+| relâchement d'enveloppe | 0,95 (0,22) | 0,97 (0,15) | 0,97 (0,15) | 0,95 (0,27) | 0,94 (0,26) |
+| cubique (après passe-haut) | 0,79 (0,60) | 0,99 (0,30) | 0,99 (0,30) | 0,78 (0,62) | 0,98 (0,10) |
+| quadratique (après passe-haut) | 0,64 (0,77) | 0,96 (0,42) | 0,96 (0,42) | 0,98 (0,19) | 0,98 (0,11) |
+| interaction u[n]·u[n−5] | 0,45 (0,90) | 0,85 (0,58) | 0,86 (0,57) | 0,94 (0,28) | 0,99 (0,09) |
+| terme u⁷ (au-delà du degré) | 0,35 (0,94) | 0,81 (0,72) | 0,98 (0,52) | 0,36 (0,95) | 0,88 (0,64) |
+| écho à 30 ms (au-delà de la mémoire) | 0,16 (0,99) | 0,19 (1,00) | 0,21 (1,00) | 0,12 (0,99) | 0,17 (1,00) |
+| bruit additif | 0,02 (1,00) | 0,06 (1,00) | 0,08 (1,00) | 0,01 (1,00) | 0,02 (1,00) |
 
-VL2 et VL3 = Volterra–Laguerre d'ordre 2 et 3 ; la DI est comprise pour FIR et Hammerstein.
+VL2 et VL3 = Volterra–Laguerre d'ordre 2 et 3. Les six familles sont comprises, DI incluse
+(Volterra : DI au niveau médian seulement).
 Une part captée et une part non représentée ne s'additionnent pas : rien ne les rend
 orthogonales hors échantillon.
 
@@ -119,9 +124,15 @@ orthogonales hors échantillon.
 
 ### 3. L'extraction est-elle plus stable que les écarts recherchés ?
 
-Oui, sauf pour Wiener–Hammerstein. Entre graines indépendantes, l'écart-type du log du score a
-une médiane de 0,0016 à 0,007 pour toutes les métriques sauf l'IMD (0,026). La signature
-harmonique est quasi déterministe.
+Oui, sauf pour Wiener–Hammerstein et, dans une moindre mesure, pour l'IMD. On mesure
+l'écart-type, entre graines indépendantes, du log du score, puis sa médiane sur toutes les
+cellules :
+- 0,0016 (ESR) à 0,011 (enveloppe) pour toutes les métriques, sauf deux : l'IMD (0,026) et
+  WH (0,034) ;
+- quasi nulle pour la signature harmonique, puisque D_k est une propriété du système.
+
+Les 90e centiles vont de 0,07 à 0,26. La phase atteint 0,26 parce qu'elle est nulle pour un
+gain pur, et WH monte à 0,77.
 
 **Réserve.** Les sinus glissants de test sont bit à bit ceux du développement : la durée y est
 tirée de graine % 3 (voir `NOTE.md`). Sur cette famille, la stabilité ne vaut donc pas
