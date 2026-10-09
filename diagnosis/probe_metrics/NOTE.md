@@ -291,3 +291,21 @@ le score de sonde ne dépend plus de l'alignement entre prises (test
 (d_audio, borne, ESR, MR-STFT) restent sur l'entrée alignée à 192 kHz et sont marquées
 `input_common` seulement si le retard est le même aux deux bouts et le désaccord ≤ −40 dB.
 Signature harmonique : chaque sortie déconvoluée par sa propre entrée.
+
+## Protocole gelé v2 (Volterra–Laguerre, Wiener–Hammerstein) — 2026-10-09
+
+Résultat de `dev_select_v2.py` (`dev_select_v2.json`), règles appliquées telles qu'écrites :
+- **Volterra–Laguerre ordre 2** : 8 filtres, pôle 0,8, ridge 1e-4 ; capacité médiane 0,220.
+- **Volterra–Laguerre ordre 3** : 8 filtres, pôle 0,9, ridge 1e-4 ; capacité médiane 0,119.
+  Capacités moins bonnes que Hammerstein 5 (0,062) sur la référence statique : 8 filtres de
+  Laguerre couvrent moins de mémoire que 256 taps.
+- **Wiener–Hammerstein** : capacité médiane 0,187, dispersion médiane entre départs 0,090 (même
+  données) ; sous le seuil « peu fiable avant tout défaut » (0,5 × 0,187 = 0,094), de justesse.
+- **Emboîtement mesuré, absent dans les deux sens** (bruit coloré, graine 100, 32 768
+  échantillons, moindres carrés sans régularisation) : part de chaque colonne Hammerstein xᵏ
+  retardée hors de l'espan Volterra–Laguerre 3 de 0,13 (x, retard 0) à 0,96 (retard 255) ; part
+  médiane d'une colonne Volterra hors de l'espan Hammerstein 5 : 0,66 (max 0,94). Un écart de
+  score entre ces deux sondes ne se lit donc pas comme une différence de capacité.
+
+Étalonnage v2 : mêmes graines de test, toutes les familles et niveaux sauf la DI, lue au niveau
+médian seulement (coût). WH : bruit coloré à −20 dBFS, graines 200–202, 1 s, comme développé.
