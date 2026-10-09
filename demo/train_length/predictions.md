@@ -177,3 +177,103 @@ compte. Cette co-lecture le fait sans oracle sur le test, sans remplacer P.
   raison ; les paires de graines qui en dépendent ne sont pas lues.
 - **Retard du bras C.** Les τ des trois runs C sont rapportés sans seuil ; d'après
   `DIAGNOSIS_vs100r_192k.md`, on attend une valeur absolue proche de 0,8.
+
+## Résultats (2026-10-09, après les neuf runs)
+
+Évaluation lancée le 2026-10-09 sur le feu vert de l'utilisateur. Les six contrôles après run
+sont passés : `val_indices` est identique au bras C de même graine, avec 280 ou 564 segments
+d'entraînement (`demo/RUNS.jsonl`). `eval_train_length.py` n'a pas changé depuis 36d08bb ; il a
+tourné sur CPU et sa sortie est `eval_train_length.json`. Contrôle de cohérence : les M1 de C en
+`last` (−3,515 ; −3,677 ; −3,477) sont identiques aux s(C) du test FFT (`eval_fast.json`).
+
+### Lecture P (primaire, checkpoint `last`)
+
+| graine | s(C) | s(L10) | s(L20) | d_i L10 | d_i L20 |
+|---|---|---|---|---|---|
+| 42 | −3,952 | −4,043 | −3,849 | −0,091 | +0,104 |
+| 43 | −3,967 | −4,005 | −3,978 | −0,038 | −0,011 |
+| 44 | −3,929 | −4,154 | −3,905 | −0,225 | +0,024 |
+
+- **L10 : « meilleur »** (d = −0,118, les trois d_i < 0) ; acceptable.
+- **L20 : « équivalent »** (d = +0,039, tous les |d_i| ≤ 0,15) ; acceptable.
+- **`best`** :
+  - L10 non tranché (d = −0,029 ; +0,080, +0,082, −0,249) ;
+  - L20 non tranché (d = +0,076 ; +0,009, +0,201, +0,017) ;
+  - les deux sont acceptables.
+- **M1, descriptif, `last`** : L10 d = −0,078 (−0,040 ; +0,082 ; −0,275) ; L20 d = 0,000
+  (−0,066 ; +0,153 ; −0,086).
+- **Prise 16, descriptif, `last`** : L10 −0,052 ; +0,544 ; −0,954. L20 −0,996 ; +1,089 ;
+  −0,836. Les |d_i| atteignent environ 1 et changent de signe selon la graine, comme au test
+  FFT.
+- **Règle de décision appliquée à P** : L10 est acceptable en `last`, donc la partie
+  d'entraînement du fichier de campagne prendrait 30 s.
+
+### Co-lecture à retard compensé
+
+La règle a été figée en 6f62341, avant P ; la co-lecture a été exécutée après P. Le script est
+`coreading_delay.py` (63b5e90, relu par Codex) et la sortie `eval_train_length_aligned.json`.
+
+**Écart d'instrument : l'inférence tourne sur GPU** (fp32, sans TF32), alors que P tourne sur
+CPU. Contrôle de parité sur C graine 42, prises 1 et 2 : l'écart de ln ESR est d'au plus 6e-6, et
+l'écart maximal de sortie de 5e-6.
+
+**Contrôles de l'instrument** : tous passés.
+- Effet de bord : 8,6e-13, pour une borne de 1,0e-5.
+- Aucun τ sur un bord de grille.
+- τ de C : +1,00 ; +0,95 ; +1,05. On attendait environ 0,8 en valeur absolue. Mais
+  `DIAGNOSIS_vs100r_192k.md` utilisait un oracle par prise de test, et non un retard par run
+  estimé sur `di_validation`.
+
+| graine | τ C | τ L10 | τ L20 | s(C) | s(L10) | s(L20) | d_i L10 | d_i L20 |
+|---|---|---|---|---|---|---|---|---|
+| 42 | +1,00 | +0,85 | +1,00 | −5,517 | −5,158 | −5,263 | +0,359 | +0,254 |
+| 43 | +0,95 | +0,85 | +1,00 | −5,633 | −5,011 | −5,855 | +0,622 | −0,222 |
+| 44 | +1,05 | +0,80 | +1,05 | −5,436 | −5,371 | −5,688 | +0,064 | −0,252 |
+
+- **L10 : « moins bon »** (d = +0,348, les trois d_i > 0) ; **non acceptable**.
+- **L20 : « non tranché »** (d = −0,074, signes mélangés) ; **non acceptable**. d₄₂ = +0,254
+  dépasse la borne par graine de 0,25 de 0,004. La parité CPU–GPU (≤ 6e-6) n'explique pas cet
+  écart.
+- **Le calage abaisse s en moyenne de** 1,58 (C), 1,11 (L10) et 1,69 (L20) : l'ESR est divisée
+  par environ 4,9, 3,0 et 5,4.
+- **Le retard dépend du bras** : 0,80 à 0,85 pour L10, contre 0,95 à 1,05 pour C et L20.
+- **M1, descriptif** : L10 d = +0,187 (+0,222 ; +0,447 ; −0,108) ; L20 d = −0,077 (−0,046 ;
+  +0,075 ; −0,261).
+
+**Confrontation, selon la lecture fixée d'avance.**
+- Les deux lectures divergent pour les deux bras, sur l'étiquette comme sur l'acceptabilité.
+- L'écart est attribué au calage sous ce protocole, sans autre cause.
+- La règle de décision reste celle de P (30 s). La divergence sur l'acceptabilité est soumise à
+  l'utilisateur, qui tranche.
+
+### Contrôle post hoc, hors règle : τ estimé sur `di_test`
+
+**Motif.** La co-lecture estime τ sur `di_validation`. Pour C, cette section est presque
+entièrement entraînée ; pour L10 et L20, elle est en majorité non vue. Ici, τ est un retard
+commun par run, jamais par prise, estimé sur `di_test`, qu'aucun bras n'a vu. Script :
+`posthoc_test_delay.py` ; sortie : `eval_train_length_posthoc_test_tau.json`. Ce contrôle ne
+change aucune étiquette.
+
+**Retards obtenus** :
+- C : +1,00 ; +1,05 ; +1,05 ;
+- L10 : +0,85 ; +0,80 ; +0,75 ;
+- L20 : +0,95 ; +0,90 ; +1,10.
+
+**Lectures** :
+- **L10** : d = +0,358 (+0,359 ; +0,617 ; +0,097), les trois d_i > 0.
+- **L20** : d = −0,031 (+0,275 ; −0,137 ; −0,229).
+
+**Conséquence.** L'inversion de L10 ne dépend pas de la section sur laquelle τ est estimé. Une
+fois le retard sous-échantillon retiré, l'ESR de L10 sur `di_test` est plus haute que celle de C,
+d'environ exp(0,35) ≈ 1,4 fois en moyenne géométrique. Son avantage en ESR brute
+accompagne un retard plus proche de zéro (0,75 à 0,85 contre 0,95 à 1,05). Ce test n'établit pas
+de cause.
+
+### Ce qui reste à trancher (utilisateur)
+
+**Si l'ESR brute reste la mesure des futurs modèles VS100R**, avec le retard sous-échantillon en
+place, la lecture P s'applique : 30 s (L10).
+
+**Si le retard est retiré**, par exemple par le réentraînement à cible avancée, la co-lecture
+prédit mieux la qualité. Ni L10 ni L20 n'y est alors acceptable, et la partie d'entraînement
+reste à 150 s.
