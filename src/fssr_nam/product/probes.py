@@ -247,9 +247,155 @@ def volterra_contributions(result: VolterraFit, x: np.ndarray) -> dict:
     return out
 
 
+@dataclass(frozen=True)
+class WienerHammerstein:
+    """Wiener-Hammerstein analysis probe q = h_out * phi(h_in * x).
+
+    phi is a cubic B-spline on a fixed knot grid over [-span, span], in units of the
+    RMS of h_in * x on the estimation data, linear outside; no neural network. The
+    parametrisation is ambiguous (gain and delay move between h_in, phi and h_out):
+    parameters are never compared, only rendered outputs. Fit by alternating least
+    squares (h_out, then phi, both linear; then a damped Gauss-Newton step on h_in)
+    from `starts` random initialisations on the SAME data; their spread is kept."""
+
+    taps_in: int = 16
+    taps_out: int = 64
+    knots: int = 12
+    span: float = 4.0
+    starts: int = 4
+    iterations: int = 30
+    ridge: float = 1e-6
+    seed: int = 0
+
+    @property
+    def kind(self) -> str:
+        return "wiener_hammerstein"
+
+    def version(self) -> str:
+        text = json.dumps({"kind": self.kind, **asdict(self)}, sort_keys=True)
+        return f"{self.kind}-{hashlib.sha256(text.encode()).hexdigest()[:12]}"
+
+
+@dataclass
+class WhState:
+    h_in: np.ndarray
+    coef: np.ndarray
+    h_out: np.ndarray
+    scale: float  # RMS of h_in * x on the estimation data
+    cost: float = np.inf
+
+
+@dataclass
+class WienerHammersteinFit:
+    probe: WienerHammerstein
+    states: list  # one per start, lowest cost first
+
+
+def _spline_basis(u: np.ndarray, probe: WienerHammerstein) -> np.ndarray:
+    """(n, knots + 2) cubic B-spline design on [-span, span], linear extrapolation."""
+    from scipy.interpolate import BSpline
+
+    inner = np.linspace(-probe.span, probe.span, probe.knots)
+    t = np.r_[[inner[0]] * 3, inner, [inner[-1]] * 3]
+    edges = np.array([inner[0], inner[-1]])
+    step = 1e-6 * probe.span
+    at_edge = BSpline.design_matrix(edges, t, 3).toarray()
+    inside = BSpline.design_matrix(edges + np.array([step, -step]), t, 3).toarray()
+    slope = (at_edge - inside) / np.array([[-step], [step]])
+    design = BSpline.design_matrix(np.clip(u, *edges), t, 3).toarray()
+    low, high = u < edges[0], u > edges[1]
+    design[low] += (u[low] - edges[0])[:, None] * slope[0]
+    design[high] += (u[high] - edges[1])[:, None] * slope[1]
+    return design
+
+
+def _causal(signal: np.ndarray, h: np.ndarray) -> np.ndarray:
+    return fftconvolve(signal, h)[: len(signal)]
+
+
+def wh_render(state: WhState, probe: WienerHammerstein, x: np.ndarray) -> np.ndarray:
+    """Probe output on x, zero initial state."""
+    u = _causal(x, state.h_in) / state.scale
+    return _causal(_spline_basis(u, probe) @ state.coef, state.h_out)
+
+
+def _ridge_solve(gram: np.ndarray, rhs: np.ndarray, ridge: float) -> np.ndarray:
+    diagonal = np.diag(gram).mean() or 1.0
+    return solve(gram + ridge * diagonal * np.eye(len(gram)), rhs, assume_a="pos")
+
+
+def _fit_h_out(state, probe, v, y, keep) -> None:
+    lagged = Probe(degree=1, taps=probe.taps_out, dc=False)
+    gram, rhs = normal_equations(lagged, [v], y)
+    state.h_out = _ridge_solve(gram, rhs, probe.ridge)
+
+
+def _fit_phi(state, probe, design, y, keep) -> None:
+    columns = np.column_stack(
+        [_causal(design[:, j], state.h_out) for j in range(design.shape[1])]
+    )[keep]
+    state.coef = _ridge_solve(columns.T @ columns, columns.T @ y[keep], probe.ridge)
+
+
+def _step_h_in(state, probe, x, y, keep, damping: float) -> float:
+    """One damped Gauss-Newton step on h_in (scale held), accepted if it lowers the
+    cost; returns the new damping."""
+    u = _causal(x, state.h_in) / state.scale
+    delta = 1e-4
+    slope = (
+        _spline_basis(u + delta, probe) @ state.coef
+        - _spline_basis(u - delta, probe) @ state.coef
+    ) / (2 * delta)
+    residual = (y - wh_render(state, probe, x))[keep]
+    lagged = [np.r_[np.zeros(m), x[: len(x) - m]] for m in range(probe.taps_in)]
+    jac = np.column_stack(
+        [_causal(slope * column / state.scale, state.h_out) for column in lagged]
+    )[keep]
+    gram, rhs = jac.T @ jac, jac.T @ residual
+    for _ in range(8):
+        step = solve(gram + damping * np.diag(np.diag(gram) + 1e-300), rhs)
+        trial = WhState(state.h_in + step, state.coef, state.h_out, state.scale)
+        cost = float(np.mean((y - wh_render(trial, probe, x))[keep] ** 2))
+        if cost < state.cost:
+            state.h_in, state.cost = trial.h_in, cost
+            return damping / 3
+        damping *= 4
+    return damping
+
+
+def _normalize(state: WhState, x: np.ndarray) -> None:
+    """Unit-norm h_in, scale = RMS(h_in * x): removes the h_in / phi gain ambiguity
+    before phi is refitted (the output changes only through the refit)."""
+    state.h_in = state.h_in / np.linalg.norm(state.h_in)
+    state.scale = float(np.sqrt(np.mean(_causal(x, state.h_in) ** 2))) or 1.0
+
+
+def _fit_start(probe, x, y, rng) -> WhState:
+    keep = slice(memory(probe), None)
+    h_in = np.r_[1.0, 0.1 * rng.standard_normal(probe.taps_in - 1)]
+    grid = np.linspace(-probe.span, probe.span, probe.knots + 2)
+    state = WhState(h_in, grid * (1 + 0.1 * rng.standard_normal(len(grid))), None, 1.0)
+    damping = 1e-2
+    for _ in range(probe.iterations):
+        _normalize(state, x)
+        design = _spline_basis(_causal(x, state.h_in) / state.scale, probe)
+        _fit_h_out(state, probe, design @ state.coef, y, keep)
+        _fit_phi(state, probe, design, y, keep)
+        state.cost = float(np.mean((y - wh_render(state, probe, x))[keep] ** 2))
+        damping = _step_h_in(state, probe, x, y, keep, damping)
+    return state
+
+
+def fit_wh(probe: WienerHammerstein, x: np.ndarray, y: np.ndarray):
+    """Every start fitted on the same data; states sorted by final cost."""
+    rng = np.random.default_rng(probe.seed)
+    states = [_fit_start(probe, x, y, rng) for _ in range(probe.starts)]
+    return WienerHammersteinFit(probe, sorted(states, key=lambda s: s.cost))
+
+
 def memory(probe) -> int:
     """Samples after which the probe has forgotten its input (zero gap between
-    estimation segments): the FIR length, or the Laguerre bank's decay to 1e-9."""
+    estimation segments): the FIR lengths, or the Laguerre bank's decay to 1e-9."""
     if isinstance(probe, Probe):
         return probe.taps
     if isinstance(probe, WienerHammerstein):
@@ -272,103 +418,18 @@ def probe_contributions(result, x: np.ndarray) -> dict:
     if isinstance(result, VolterraFit):
         return volterra_contributions(result, x)
     if isinstance(result, WienerHammersteinFit):
-        best = wh_render(result.probe, result.starts[0], x, result.scale)
+        best = wh_render(result.states[0], result.probe, x)
         return {"wiener_hammerstein": best}
     return contributions(result, x)
 
 
-@dataclass(frozen=True)
-class WienerHammerstein:
-    """Wiener-Hammerstein analysis probe q = h_out * phi(h_in * x).
-
-    phi is a cubic B-spline on a fixed knot grid over [-span, span] (in units of the
-    RMS of h_in * x), linear outside; no neural network. The parametrisation is
-    ambiguous (gain and delay can move between h_in, phi and h_out): parameters are
-    never compared, only rendered outputs. Fit: nonlinear least squares from
-    `starts` random initialisations on the SAME data; their spread is reported."""
-
-    taps_in: int = 16
-    taps_out: int = 32
-    knots: int = 12
-    span: float = 4.0
-    starts: int = 4
-    decimate: int = 4  # fit on every n-th residual sample, to bound the cost
-    seed: int = 0
-
-    @property
-    def kind(self) -> str:
-        return "wiener_hammerstein"
-
-    def version(self) -> str:
-        text = json.dumps({"kind": self.kind, **asdict(self)}, sort_keys=True)
-        return f"{self.kind}-{hashlib.sha256(text.encode()).hexdigest()[:12]}"
-
-
-@dataclass
-class WienerHammersteinFit:
-    probe: WienerHammerstein
-    starts: list  # parameter vectors of every start, best first
-    costs: list  # final cost of every start, same order
-    scale: float  # RMS of x on the estimation data
-
-
-def _spline_basis(u: np.ndarray, probe: WienerHammerstein) -> np.ndarray:
-    """(n, knots + 4) cubic B-spline design on [-span, span], linear extrapolation."""
-    from scipy.interpolate import BSpline
-
-    inner = np.linspace(-probe.span, probe.span, probe.knots)
-    t = np.r_[[inner[0]] * 3, inner, [inner[-1]] * 3]
-    clipped = np.clip(u, inner[0], inner[-1])
-    design = BSpline.design_matrix(clipped, t, 3).toarray()
-    edge = BSpline.design_matrix(np.array([inner[0], inner[-1]]), t, 3).toarray()
-    slope = BSpline.design_matrix(
-        np.array([inner[0] + 1e-6, inner[-1] - 1e-6]), t, 3
-    ).toarray()
-    slope = (edge - slope) / np.array([[-1e-6], [1e-6]])
-    low, high = u < inner[0], u > inner[-1]
-    design[low] += (u[low] - inner[0])[:, None] * slope[0]
-    design[high] += (u[high] - inner[-1])[:, None] * slope[1]
-    return design
-
-
-def _wh_split(probe: WienerHammerstein, params: np.ndarray):
-    a, b = probe.taps_in, probe.taps_in + probe.knots + 2
-    return params[:a], params[a:b], params[b:]
-
-
-def wh_render(probe: WienerHammerstein, params: np.ndarray, x: np.ndarray, scale):
-    """Probe output on x for one parameter vector, zero initial state."""
-    h_in, coef, h_out = _wh_split(probe, params)
-    u = fftconvolve(x / scale, h_in)[: len(x)]
-    v = _spline_basis(u, probe) @ coef
-    return fftconvolve(v, h_out)[: len(x)]
-
-
-def _wh_start(probe: WienerHammerstein, rng) -> np.ndarray:
-    h_in = np.r_[1.0, 0.1 * rng.standard_normal(probe.taps_in - 1)]
-    grid = np.linspace(-probe.span, probe.span, probe.knots + 2)
-    coef = grid * (1 + 0.1 * rng.standard_normal(len(grid)))  # near identity phi
-    h_out = np.r_[1.0, 0.1 * rng.standard_normal(probe.taps_out - 1)]
-    return np.r_[h_in, coef, h_out]
-
-
-def fit_wh(probe: WienerHammerstein, x: np.ndarray, y: np.ndarray):
-    """Nonlinear least squares from every start; costs and parameters kept."""
-    from scipy.optimize import least_squares
-
-    scale = float(np.sqrt(np.mean(x**2))) or 1.0
-    rng = np.random.default_rng(probe.seed)
-    keep = slice(memory(probe), None, probe.decimate)
-    results = []
-    for _ in range(probe.starts):
-        solution = least_squares(
-            lambda p: (wh_render(probe, p, x, scale) - y)[keep],
-            _wh_start(probe, rng),
-            method="trf",
-            max_nfev=200,
-        )
-        results.append((float(solution.cost), solution.x))
-    results.sort(key=lambda item: item[0])
-    return WienerHammersteinFit(
-        probe, [p for _, p in results], [c for c, _ in results], scale
+def start_spread(result, x: np.ndarray) -> float:
+    """Largest RMS gap, on x, between the best start and any other start of the same
+    fit on the same data (0 for probes fitted in closed form)."""
+    if not isinstance(result, WienerHammersteinFit):
+        return 0.0
+    best = wh_render(result.states[0], result.probe, x)
+    return max(
+        float(np.sqrt(np.mean((wh_render(s, result.probe, x) - best) ** 2)))
+        for s in result.states
     )

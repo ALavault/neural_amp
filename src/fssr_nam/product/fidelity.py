@@ -29,9 +29,11 @@ from scipy.fft import rfft
 from fssr_nam.product.probes import (
     Probe,
     VolterraLaguerre,
+    WienerHammerstein,
     fit_probe,
     memory,
     probe_contributions,
+    start_spread,
 )
 
 OCTAVE_EDGES_HZ = (
@@ -52,7 +54,7 @@ OCTAVE_EDGES_HZ = (
 class Protocol:
     """Everything that defines a score; frozen on development data before test."""
 
-    probe: Probe | VolterraLaguerre
+    probe: Probe | VolterraLaguerre | WienerHammerstein
     estimation: tuple[str, ...]  # segment names used to fit (A)
     reading: tuple[str, ...]  # segment names the fits are rendered on (B)
     skip_s: float = 0.05  # unscored start of each reading segment (zero-state start)
@@ -133,6 +135,9 @@ def read_segment(protocol: Protocol, fitted, x, y_ref, y_eval, fs: float) -> dic
             "holds": abs(d_audio - d_probe) <= (r_ref + r_eval) * (1 + 1e-9) + 1e-15,
         },
         "by_branch": deviation(parts_ref, parts_eval, keep),
+        # same data, other starts (Wiener-Hammerstein only; 0 for closed-form fits)
+        "start_spread_ref": start_spread(fitted[0], x),
+        "start_spread_eval": start_spread(fitted[1], x),
         "by_band": {
             "edges_hz": list(protocol.edges_hz),
             "probe": band_rms(dq, fs, protocol.edges_hz),
@@ -152,6 +157,12 @@ def warnings_for(protocol: Protocol, name: str, reading: dict) -> list[str]:
                 f"{name}: la sonde laisse {share:.2f} de la sortie {side} "
                 "inexpliquée ; un faible score n'y garantit pas la fidélité"
             )
+    spread = max(reading["start_spread_ref"], reading["start_spread_eval"])
+    if spread > 0.5 * reading["d_probe"]:
+        out.append(
+            f"{name}: dispersion entre initialisations ({spread:.2e}) comparable "
+            "à l'écart mesuré : sonde peu fiable ici, pas de classement"
+        )
     if not reading["bound"]["holds"]:
         out.append(f"{name}: borne triangulaire violée (erreur de calcul)")
     return out

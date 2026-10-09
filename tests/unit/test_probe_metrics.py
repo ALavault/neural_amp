@@ -212,3 +212,75 @@ def test_volterra_fit_is_linear_in_the_output() -> None:
     b = fit_volterra(probe, x["A"], y_eval["A"])
     diff = fit_volterra(probe, x["A"], y_eval["A"] - y_ref["A"])
     np.testing.assert_allclose(b.theta - a.theta, diff.theta, rtol=1e-7, atol=1e-10)
+
+
+def wh_system(v: np.ndarray) -> np.ndarray:
+    from scipy.signal import lfilter
+
+    u = lfilter([1.0, -0.6], [1.0], v)
+    return lfilter([0.5, 0.3, 0.2], [1.0], np.tanh(3 * u + 0.2) - np.tanh(0.2))
+
+
+def small_wh():
+    from fssr_nam.product.probes import WienerHammerstein
+
+    return WienerHammerstein(taps_in=4, taps_out=8, starts=3, iterations=20)
+
+
+def test_wh_reparametrisations_render_identically() -> None:
+    """(h_in, phi(u)) -> (-h_in, phi(-u)) and (h_out, phi) -> (c h_out, phi / c) leave
+    the output unchanged while the parameters move far apart: parameters are never
+    compared, only renderings."""
+    from fssr_nam.product.probes import WhState, fit_wh, wh_render
+
+    x, y = segments(wh_system)
+    probe = small_wh()
+    best = fit_wh(probe, x["A"], y["A"]).states[0]
+    mirrored = WhState(-best.h_in, best.coef[::-1].copy(), best.h_out, best.scale)
+    rescaled = WhState(best.h_in, best.coef / 3.0, 3.0 * best.h_out, best.scale)
+    reference = wh_render(best, probe, x["B"])
+    for other in (mirrored, rescaled):
+        np.testing.assert_allclose(
+            wh_render(other, probe, x["B"]), reference, rtol=0, atol=1e-12
+        )
+    gap = np.linalg.norm(
+        np.r_[mirrored.h_in, mirrored.coef] - np.r_[best.h_in, best.coef]
+    )
+    assert gap > 0.5 * np.linalg.norm(np.r_[best.h_in, best.coef])
+
+
+def test_wh_starts_differ_more_in_parameters_than_in_output() -> None:
+    from fssr_nam.product.probes import fit_wh, wh_render
+
+    x, y = segments(wh_system)
+    probe = small_wh()
+    states = fit_wh(probe, x["A"], y["A"]).states
+    rms = np.sqrt(np.mean(y["B"] ** 2))
+
+    def params(s):
+        return np.r_[s.h_in, s.coef * s.scale, s.h_out]
+
+    render_gap = (
+        np.sqrt(
+            np.mean(
+                (
+                    wh_render(states[1], probe, x["B"])
+                    - wh_render(states[0], probe, x["B"])
+                )
+                ** 2
+            )
+        )
+        / rms
+    )
+    param_gap = np.linalg.norm(params(states[1]) - params(states[0])) / np.linalg.norm(
+        params(states[0])
+    )
+    assert param_gap > 10 * render_gap
+
+
+def test_wh_identity_scores_zero_and_reports_start_spread() -> None:
+    x, y = segments(wh_system)
+    reading = analyze(small_wh(), x, y, y)
+    assert reading["d_probe"] == 0.0
+    assert reading["start_spread_ref"] > 0.0
+    assert reading["bound"]["holds"]

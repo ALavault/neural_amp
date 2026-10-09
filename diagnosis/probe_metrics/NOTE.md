@@ -193,3 +193,23 @@ Hammerstein au-dessus de d_audio). Correction : la paire de fréquences dépend 
 commune à A (graine s) et B (s + 50) ; seules les phases sont indépendantes. Les hyperparamètres
 gelés ne changent pas (le développement n'utilisait pas les deux tons). L'essai est conservé
 (`calibration_smoke_two_tone_sweep.csv`) et ne compte pas dans les résultats.
+
+## Règles de développement v2 : Volterra–Laguerre et Wiener–Hammerstein (avant leurs chiffres)
+
+Mêmes conditions de développement que v1 (référence statique seule, bruit coloré et sinus
+glissant synchronisé, trois niveaux, graines 100–102, lecture sur graine + 50), même critère de
+capacité r_ref / RMS(y_ref) sur B.
+
+**Volterra–Laguerre**, ordres 2 et 3 = deux sondes distinctes. Grille : nombre de filtres
+{4, 8}, pôle {0,5 ; 0,8 ; 0,9 ; 0,95}, ridge 1e-6. Choix : la plus petite taille dont la meilleure
+médiane (sur les pôles) est à moins de 10 % de la meilleure médiane globale ; pour cette taille,
+le pôle de plus petite médiane. Puis ridge ∈ {1e-8, 1e-6, 1e-4, 1e-2} : le plus grand qui reste à
+moins de 1 % de la médiane au plus petit ridge. L'emboîtement avec Hammerstein est mesuré à part
+(part de chaque colonne d'une sonde hors de l'espan de l'autre, sur x_A), jamais supposé.
+
+**Wiener–Hammerstein** : structure fixée sans grille (h_in 16 taps, h_out 64, spline 12 nœuds
+sur ±4 RMS, 3 départs, 20 itérations, estimation et lecture de 1 s), à cause de son coût. Au
+développement, sur bruit coloré −20 dBFS RMS, graines 100–102 : on rapporte la capacité et la
+dispersion entre départs (même données). Aucun choix n'en dépend ; si la dispersion médiane
+dépasse la moitié de la part inexpliquée, la sonde est déclarée peu fiable dans cette
+configuration avant tout défaut.
