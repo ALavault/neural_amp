@@ -22,6 +22,9 @@ from scipy.stats import spearmanr
 
 HERE = Path(__file__).resolve().parent
 DETECTED, MISSED = 10.0, 3.0
+# energy ratios (squared errors), read in amplitude so that every score scales like an
+# RMS difference and one detection threshold means the same for all of them
+SQUARED = {"esr", "imd"}
 
 
 def load() -> list[dict]:
@@ -30,6 +33,8 @@ def load() -> list[dict]:
         rows += list(csv.DictReader(path.open()))
     for row in rows:
         row["score"] = float(row["normalized"] or row["value"])
+        if row["metric"] in SQUARED:
+            row["score"] = math.sqrt(max(row["score"], 0.0))
         row["severity"] = float(row["severity"])
         row["level_db"] = float(row["level_db"])
     return rows

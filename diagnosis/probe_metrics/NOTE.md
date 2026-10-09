@@ -267,3 +267,11 @@ préampli et haut-parleur. A et B sont deux segments disjoints du même fichier 
 frontières de sources documentées : l'indépendance A/B n'est pas établie et c'est écrit avec
 chaque chiffre. Pas de répétition : aucun plancher réel, seulement l'ordre des scores le long de
 chaque échelle (monotonie observée, non imposée).
+
+**Écart de lecture, avant les chiffres de test.** En essayant les figures sur l'essai court, il est
+apparu que l'ESR et l'erreur d'intermodulation sont des rapports d'énergie : leur rapport au
+plancher est le carré de celui d'une métrique en amplitude, et un même seuil (10) n'y voudrait pas
+dire la même chose. Elles sont lues en amplitude (racine carrée) dans `summarize.py`. Les sondes,
+d_audio et la signature harmonique sont déjà en amplitude ; la MR-STFT (convergence spectrale +
+écart de log-magnitude) n'a pas d'échelle commune avec les autres et reste telle quelle, ce qui
+est rapporté avec ses chiffres.
