@@ -103,9 +103,9 @@ def wiener_hammerstein(cases: list[dict]) -> dict:
     )
     return {
         "rows": rows,
-        "median_capacity": capacity,
-        "median_start_spread": spread,
-        "unreliable_before_defects": spread > 0.5 * capacity,
+        "median_capacity": float(capacity),
+        "median_start_spread": float(spread),
+        "unreliable_before_defects": bool(spread > 0.5 * capacity),
     }
 
 

@@ -33,7 +33,7 @@ from fssr_nam.product.fidelity import (
     analyze_pair,
     analyze_sweep_pair,
 )
-from fssr_nam.product.probes import Probe
+from fssr_nam.product.probes import Probe, VolterraLaguerre, WienerHammerstein
 
 HERE = Path(__file__).resolve().parent
 FS = 48_000.0
@@ -41,7 +41,22 @@ SECONDS = 4.0
 REPEAT_DB = -80.0  # noise of the "same system, measured twice" floor
 
 
-def frozen_probes() -> dict[str, Probe]:
+def frozen_probes(which: str = "v1") -> dict:
+    """v1: FIR, Hammerstein 3 and 5 (dev_select.json); v2: Volterra-Laguerre orders
+    2 and 3 (dev_select_v2.json); wh: the fixed Wiener-Hammerstein probe."""
+    if which == "wh":
+        return {"wiener_hammerstein": WienerHammerstein(starts=3, iterations=20)}
+    if which == "v2":
+        chosen = json.loads((HERE / "dev_select_v2.json").read_text())
+        return {
+            f"volterra_laguerre_{o}": VolterraLaguerre(
+                chosen[f"volterra_laguerre_{o}"]["size"],
+                chosen[f"volterra_laguerre_{o}"]["pole"],
+                o,
+                chosen[f"volterra_laguerre_{o}"]["ridge"],
+            )
+            for o in (2, 3)
+        }
     chosen = json.loads((HERE / "dev_select.json").read_text())
     degrees = {"fir": 1, "hammerstein_3": 3, "hammerstein_5": 5}
     return {
@@ -75,6 +90,8 @@ def probe_rows(probes, x, y_ref, y_eval) -> list[dict]:
                 / max(out["rms_ref"], protocol.floor),
                 "bound_holds": out["bound"]["holds"],
                 "d_audio_norm": out["d_audio_norm"],
+                "start_spread": max(out["start_spread_ref"], out["start_spread_eval"])
+                / max(out["rms_ref"], protocol.floor),
             }
         )
     return rows
@@ -126,11 +143,13 @@ def sweep_rows(level: float, seed: int, base, changed) -> list[dict]:
     return rows
 
 
-def condition(family: str, level: float, seed: int, probes) -> list[dict]:
+def condition(
+    family: str, level: float, seed: int, probes, seconds=SECONDS, baselines=True
+) -> list[dict]:
     x = {
-        "A": db.excitation(family, level, SECONDS, 0 if family == "di" else seed, FS),
+        "A": db.excitation(family, level, seconds, 0 if family == "di" else seed, FS),
         "B": db.excitation(
-            family, level, SECONDS, 1 if family == "di" else seed + 50, FS
+            family, level, seconds, 1 if family == "di" else seed + 50, FS
         ),
     }
     rows = []
@@ -138,8 +157,9 @@ def condition(family: str, level: float, seed: int, probes) -> list[dict]:
         y_ref = {k: db.apply(base, v, FS, seed=1) for k, v in x.items()}
         y_eval = {k: db.apply(changed, v, FS, seed=2) for k, v in x.items()}
         found = probe_rows(probes, x, y_ref, y_eval)
-        found += baseline_rows(family, x["B"], y_ref["B"], y_eval["B"], seed)
-        if family == "sweep":
+        if baselines:
+            found += baseline_rows(family, x["B"], y_ref["B"], y_eval["B"], seed)
+        if baselines and family == "sweep":
             found += sweep_rows(level, seed, base, changed)
         for row in found:
             row.update(
@@ -159,20 +179,25 @@ def main() -> None:
     parser.add_argument("--families", nargs="+", default=list(db.LEVEL_KIND))
     parser.add_argument("--seeds", nargs="+", type=int, default=[200, 201, 202])
     parser.add_argument("--levels", nargs="+", type=float, default=None)
+    parser.add_argument("--probes", default="v1", choices=["v1", "v2", "wh"])
+    parser.add_argument("--seconds", type=float, default=SECONDS)
     args = parser.parse_args()
-    probes = frozen_probes()
+    probes = frozen_probes(args.probes)
     rows = []
     for family in args.families:
         seeds = [0] if family == "di" else args.seeds
         for level in args.levels or db.LEVELS_DB[db.LEVEL_KIND[family]]:
             for seed in seeds:
                 start = time.time()
-                rows += condition(family, level, seed, probes)
+                rows += condition(
+                    family, level, seed, probes, args.seconds, args.probes == "v1"
+                )
                 print(
                     f"{family} {level} {seed}: {time.time() - start:.0f}s", flush=True
                 )
     fields = sorted({k for row in rows for k in row})
-    name = f"calibration_{args.phase}_{'_'.join(args.families)}.csv"
+    tag = "" if args.probes == "v1" else f"_{args.probes}"
+    name = f"calibration_{args.phase}{tag}_{'_'.join(args.families)}.csv"
     with (HERE / name).open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=fields)
         writer.writeheader()
