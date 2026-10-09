@@ -20,8 +20,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import pickle
 from dataclasses import asdict, dataclass, field
 from itertools import pairwise
+from pathlib import Path
 
 import numpy as np
 from scipy.fft import rfft
@@ -94,13 +96,33 @@ def band_rms(signal: np.ndarray, fs: float, edges_hz: tuple[float, ...]) -> list
     ]
 
 
-def fits(protocol: Protocol, x: dict, y_ref: dict, y_eval: dict):
-    """The probe fitted on the estimation segments, once per output."""
+def cached_fit(probe, x: np.ndarray, y: np.ndarray, cache_dir: Path | None):
+    """fit_probe, reused from cache_dir when the probe version and the exact estimation
+    data (x and y bytes) are unchanged: a reference signature is fitted once."""
+    if cache_dir is None:
+        return fit_probe(probe, x, y)
+    digest = hashlib.sha256(probe.version().encode())
+    digest.update(np.ascontiguousarray(x, np.float64).tobytes())
+    digest.update(np.ascontiguousarray(y, np.float64).tobytes())
+    path = Path(cache_dir) / f"{digest.hexdigest()}.pkl"
+    if path.exists():
+        return pickle.loads(path.read_bytes())
+    result = fit_probe(probe, x, y)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(pickle.dumps(result))
+    return result
+
+
+def fits(protocol: Protocol, x: dict, y_ref: dict, y_eval: dict, cache_dir=None):
+    """The probe fitted on the estimation segments, once per output; the reference
+    fit can come from cache_dir."""
     gap = memory(protocol.probe)
     xa = joined([x[name] for name in protocol.estimation], gap)
     ref = joined([y_ref[name] for name in protocol.estimation], gap)
     ev = joined([y_eval[name] for name in protocol.estimation], gap)
-    return fit_probe(protocol.probe, xa, ref), fit_probe(protocol.probe, xa, ev)
+    return cached_fit(protocol.probe, xa, ref, cache_dir), fit_probe(
+        protocol.probe, xa, ev
+    )
 
 
 def deviation(q_ref: dict, q_eval: dict, keep: slice) -> dict:
@@ -169,15 +191,22 @@ def warnings_for(protocol: Protocol, name: str, reading: dict) -> list[str]:
 
 
 def analyze_pair(
-    x: dict, y_ref: dict, y_eval: dict, fs: float, protocol: Protocol, metadata=None
+    x: dict,
+    y_ref: dict,
+    y_eval: dict,
+    fs: float,
+    protocol: Protocol,
+    metadata=None,
+    cache_dir: Path | None = None,
 ) -> dict:
     """Deviation scores of y_eval against y_ref for one probe protocol.
 
     x, y_ref, y_eval map segment names to arrays of equal length per segment; the
     protocol names which segments estimate (A) and which are read (B). metadata
-    (level, settings, session, calibration, initial state) is passed through.
+    (level, settings, session, calibration, initial state) is passed through. With
+    cache_dir, the reference signature is reused while its protocol and data hold.
     """
-    fitted = fits(protocol, x, y_ref, y_eval)
+    fitted = fits(protocol, x, y_ref, y_eval, cache_dir)
     readings, warnings = {}, []
     for name in protocol.reading:
         readings[name] = read_segment(

@@ -284,3 +284,16 @@ def test_wh_identity_scores_zero_and_reports_start_spread() -> None:
     assert reading["d_probe"] == 0.0
     assert reading["start_spread_ref"] > 0.0
     assert reading["bound"]["holds"]
+
+
+def test_reference_signature_is_cached_and_reused(tmp_path) -> None:
+    x, y_ref = segments(lambda v: v + 0.1 * v**3)
+    _, y_eval = segments(lambda v: v + 0.2 * v**3)
+    protocol = Protocol(probe=HAMMERSTEIN, estimation=("A",), reading=("B",))
+    first = analyze_pair(x, y_ref, y_eval, FS, protocol, cache_dir=tmp_path)
+    assert len(list(tmp_path.glob("*.pkl"))) == 1
+    again = analyze_pair(x, y_ref, y_eval, FS, protocol, cache_dir=tmp_path)
+    assert again["readings"] == first["readings"]
+    other = {k: 1.01 * v for k, v in y_ref.items()}
+    analyze_pair(x, other, y_eval, FS, protocol, cache_dir=tmp_path)
+    assert len(list(tmp_path.glob("*.pkl"))) == 2  # changed data, new signature
