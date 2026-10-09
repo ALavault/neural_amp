@@ -1,0 +1,79 @@
+{
+ "levels": {
+  "-12.0": {
+   "release": {
+    "60.0": 0.12233353803823777,
+    "100.0": 0.537309379725991,
+    "200.0": 1.2826489663525789
+   },
+   "floor": 7.551152598046265e-05,
+   "monotone": true,
+   "sensitive_60ms": true,
+   "worst_other": [
+    "coloration_db",
+    0.051433962842674916
+   ],
+   "specific": true,
+   "attack_of_release": 0.10950826514191603,
+   "control": true,
+   "co_responders": {
+    "prefilter_hz": 0.225928460967422,
+    "echo_beyond_memory": 0.8065887176854956
+   }
+  },
+  "-9.0": {
+   "release": {
+    "60.0": 0.1586184069099031,
+    "100.0": 0.6939759567073184,
+    "200.0": 1.64668214236942
+   },
+   "floor": 6.402758188393093e-05,
+   "monotone": true,
+   "sensitive_60ms": true,
+   "worst_other": [
+    "coloration_db",
+    0.05149093108545265
+   ],
+   "specific": true,
+   "attack_of_release": 0.12087869749410717,
+   "control": true,
+   "co_responders": {
+    "prefilter_hz": 0.24875705003760787,
+    "echo_beyond_memory": 0.7280195600798469
+   }
+  },
+  "-6.0": {
+   "release": {
+    "60.0": 0.20099941564499169,
+    "100.0": 0.8756401668379469,
+    "200.0": 2.0641329280016723
+   },
+   "floor": 5.3815545450481696e-05,
+   "monotone": true,
+   "sensitive_60ms": true,
+   "worst_other": [
+    "coloration_db",
+    0.05157968631765319
+   ],
+   "specific": true,
+   "attack_of_release": 0.12972883628839396,
+   "control": true,
+   "co_responders": {
+    "prefilter_hz": 0.2719210575911022,
+    "echo_beyond_memory": 0.6576844316156322
+   }
+  }
+ },
+ "criteria_met": {
+  "monotone": true,
+  "sensitive_60ms": true,
+  "specific": true,
+  "control": true
+ },
+ "counts": {
+  "monotone": 3,
+  "sensitive_60ms": 3,
+  "specific": 3,
+  "control": 3
+ }
+}
