@@ -241,3 +241,29 @@ Le coût de calcul est mesuré à part, sur une condition fixe, par métrique.
 
 Ces lectures disent ce que chaque métrique voit sur ce banc ; aucune validité perceptive n'en
 découle sans données d'écoute.
+
+## Paires réelles sans modèle neuronal (phase 6) — attentes avant les chiffres
+
+`real_pairs.py`, protocole gelé v1, 48 kHz pour la VS100R (44,1 kHz pour la JVM).
+
+VS100R, envoi FX : 3 répétitions du réglage central (prises 1, 20, 39), 12 contrôles négatifs
+(basses, médiums ou aigus déplacés seuls : l'envoi est pris avant l'étage de tonalité), 8
+changements réels (gain ou contour déplacé seul, dont gain 0 en faible signal). Chaque prise est
+appariée à la prise centrale la plus proche dans le temps. Entrée commune : le bouclage de la
+prise de référence ; la prise évaluée est décalée d'un bloc (bouclage ET envoi) par le retard
+entier qui aligne son bouclage, et le désaccord d'entrée restant est rapporté. Section exclue si
+ce retard change à l'intérieur (glissement). Plancher réel de chaque score : médiane des trois
+répétitions.
+
+Attentes (descriptives) :
+- contrôles négatifs au niveau des répétitions (rapport au plancher réel < 3) pour toutes les
+  métriques ; une métrique qui les « détecte » lit la dérive ou l'acquisition, pas l'ampli ;
+- changements de gain et de contour au-dessus du plancher réel (rapport ≥ 10) ;
+- le désaccord d'entrée entre prises fixe une limite : si sa contribution approche le plancher,
+  la borne et les scores de la paire sont signalés « entrée non commune ».
+
+JVM410H : échelles d'un seul bouton autour du centre (gain, basses, médiums, aigus), sorties
+préampli et haut-parleur. A et B sont deux segments disjoints du même fichier d'entrée sans
+frontières de sources documentées : l'indépendance A/B n'est pas établie et c'est écrit avec
+chaque chiffre. Pas de répétition : aucun plancher réel, seulement l'ordre des scores le long de
+chaque échelle (monotonie observée, non imposée).
