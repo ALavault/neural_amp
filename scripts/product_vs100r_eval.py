@@ -39,11 +39,8 @@ import product_sr_transfer as transfer  # noqa: E402
 from nablafx.core import BlackBoxModel  # noqa: E402
 
 from fssr_nam.models.ssm_wavenet import zoh_to_foh  # noqa: E402
+from fssr_nam.product.vs100r import LAYOUT, MEDIA, SHEET, audio  # noqa: E402
 
-SHEET = ROOT / "demo/capture/valvestate"
-MEDIA = ROOT / "datasets/amp_capture/Media"
-LAYOUT = json.loads((SHEET / "layout.json").read_text())
-SECTION = next(s for s in LAYOUT["sections"] if s["section"] == "di_test")
 SILENCE = next(s for s in LAYOUT["sections"] if s["section"] == "silence")
 CAPTURE = LAYOUT["sample_rate"]
 RATES = (96_000, 192_000)
@@ -103,19 +100,6 @@ def takes() -> list[dict]:
             }
         )
     return out
-
-
-def audio(take: dict) -> tuple[np.ndarray, np.ndarray]:
-    p = take["pass"]
-    a = p["start"] + SECTION["start"]
-    b = a + SECTION["samples"]
-    stamp = p["file"].removeprefix("02-Looopbck-")
-    loop = sf.read(MEDIA / p["file"], dtype="float64", start=a, stop=b)[0]
-    fx = sf.read(MEDIA / f"03-FX Out-{stamp}", dtype="float64", start=a, stop=b)[0]
-    for i in take["spikes"]:
-        if a < i < b - 1:
-            fx[i - a] = 0.5 * (fx[i - a - 1] + fx[i - a + 1])
-    return loop, fx
 
 
 @torch.no_grad()
