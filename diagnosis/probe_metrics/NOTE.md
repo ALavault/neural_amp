@@ -333,3 +333,48 @@ Relecture en lecture seule de a51da63..fa99355. Points vérifiés et retenus :
   d'estimation refusé (φ(0) ≠ 0 entretient h_out pendant les zéros) ; estimation plus courte que
   le FIR refusée.
 - Chiffres du brouillon de rapport antérieurs à la DI : régénérés dans la version finale.
+
+## Détecteur ad hoc de dynamique d'enveloppe (E2) — préinscription, 2026-10-09
+
+**Pourquoi.** Aucune métrique existante n'isole la dynamique. `envelope_error` réagit autant à
+un gain (R ≈ 1,4e4) qu'au relâchement (9,5e3). Sur DI réelle, toutes les sondes ne captent qu'environ
+0,6 d'un changement de relâchement. Conçu avec deux relectures du conseiller ; JVM : aucune
+dépendance à l'historique sur 0,5 s, le réel restera descriptif.
+
+**Excitation « sauts de niveau »** (`defect_bench`, famille `steps`). Bruit coloré par segments de
+1,2 s, alternance fort / faible (le faible 20 dB sous le fort, ±2 dB tirés par graine),
+44 segments : 22 sauts fort→faible (relâchement) et 21 sauts faible→fort (attaque, contrôle
+interne). Niveau du fort ∈ {−12, −9, −6} dBFS RMS, là où l'enveloppe de la chaîne dynamique
+réduit nettement le drive.
+
+**Indice** (`fssr_nam/product/dynamics.py`). Pour chaque saut :
+1. trajectoire de gain 20 log10(RMS_5ms(y) / RMS_5ms(x)) de 0 à 1,2 s ;
+2. **moyenne sur les sauts de même type**, puis soustraction de la valeur stabilisée (moyenne sur
+   1,0–1,2 s), ce qui retire les effets statiques ;
+3. indice = RMS sur 10 ms – 0,8 s de l'écart entre les trajectoires moyennes de y_eval et y_ref,
+   en dB, sans échelle. Fenêtre de score et fenêtre de stabilisation sont disjointes ;
+4. un indice « relâchement » (sauts fort→faible) et un indice « attaque » (faible→fort).
+
+**Banc.** Les 13 défauts sont appliqués comme variantes de la **chaîne dynamique** (sag 2,
+relâchement 50 ms) : la question est de savoir si l'indice réagit à des changements statiques d'un
+système qui a une dynamique. Plancher : même chaîne, deux bruits à −80 dB. Graines 100–102
+(contrôle d'implémentation seulement) puis 200–202 (lecture).
+
+**Co-répondants légitimes, déclarés d'avance** : le préfiltre (l'enveloppe suit u = passe-haut(x))
+et l'écho (énergie retardée après le saut). Ils sont exclus de la spécificité, mais rapportés.
+
+**Critères** (graines 200–202, médiane sur les graines, par niveau) :
+- **monotonie** : indice de relâchement strictement croissant de 50 (plancher) à 60, 100 et 200 ms,
+  à au moins 2 niveaux sur 3 ;
+- **sensibilité** : relâchement 60 ms ≥ 3 × l'indice du plancher, à au moins 2 niveaux sur 3 ;
+- **spécificité** : relâchement 200 ms ≥ 3 × le plus grand indice de relâchement des autres
+  défauts (co-répondants exclus) à leur sévérité maximale, à au moins 2 niveaux sur 3 ;
+- **contrôle interne** : indice d'attaque du défaut de relâchement ≤ 1/3 de son indice de
+  relâchement.
+Rapportés sans seuil : dispersion entre graines, réponses des co-répondants, indices de tous les
+défauts.
+
+**Réel (descriptif).** Pas de saut documenté sur l'envoi FX VS100R (les sauts de gain ToneTwist de
+la DI ne sont pas datés ; une détection depuis l'enveloppe d'entrée serait fragile) ; `bursts_recovery`
+n'existe que sur une prise micro aux réglages connus. Attente écrite d'avance : aucune lecture
+réelle ne sera présentée comme validation.
