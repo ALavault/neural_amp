@@ -176,10 +176,23 @@ Wiener–Hammerstein : voir la section dédiée.
 
 ## Wiener–Hammerstein
 
-**À compléter** avec l'étalonnage corrigé (relecture Codex : la renormalisation de h_in annulait
-le pas de Gauss–Newton ; h_out était ajusté sur une autre région que les autres étapes).
-Développement corrigé : capacité 0,186, dispersion médiane entre départs 0,092, sous le seuil
-« peu fiable avant défaut » (0,093) de justesse.
+Étalonnage corrigé après la relecture Codex : la renormalisation de h_in annulait le pas de
+Gauss–Newton, et h_out était ajusté sur une autre région que les autres étapes. Le coût ne
+remonte plus jamais (test). Conditions : bruit coloré à −20 dBFS, 1 s d'estimation et 1 s de
+lecture, 3 départs, graines 200 à 202.
+
+- **Développement.** Capacité 0,186 ; dispersion médiane entre départs, sur les mêmes données,
+  de 0,092 du RMS. C'est juste sous le seuil préinscrit de 0,093.
+- **Peu fiable dans 35 cellules sur 39** (règle préinscrite : dispersion > 0,5 × score). La
+  dispersion entre départs reste d'environ 0,087 du RMS de la sortie, quel que soit le défaut.
+  Elle ne passe sous l'écart mesuré que pour les plus gros (redistribution ≥ 0,3, préfiltre
+  ≥ 250 Hz). Répétabilité entre graines : médiane 0,034, 90e centile 0,77, la pire du banc.
+- **Le score paraît sage, mais c'est un effet du jumelage.** La part captée vaut 0,98 pour le
+  gain et 0,88 pour le cubique, parce que les ajustements de référence et d'évaluation partent
+  des mêmes initialisations et convergent vers des solutions jumelles. Ce jumelage masque la
+  non-unicité : deux minima locaux différents produiraient jusqu'à ~0,09 d'écart fictif.
+- **Coût** : 32 s pour 1 s d'estimation. Sonde écartée de l'ensemble minimal dans cette
+  configuration.
 
 ## Sorties réelles VS100R (envoi FX, 26/09, sans modèle neuronal)
 

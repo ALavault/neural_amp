@@ -1,0 +1,154 @@
+{
+ "repeat|sweep_-10dBFS": {
+  "order_1": {
+   "complex_rel": 0.017572611344286844,
+   "level_ref_db": 0.0
+  },
+  "order_2": {
+   "complex_rel": 0.0002452122756720593,
+   "level_ref_db": -34.66617775435414
+  },
+  "order_3": {
+   "complex_rel": 0.007064037251639877,
+   "level_ref_db": -10.019885214162121
+  },
+  "order_4": {
+   "complex_rel": 0.00044624414303156505,
+   "level_ref_db": -35.34784830436938
+  },
+  "order_5": {
+   "complex_rel": 0.00622137418173728,
+   "level_ref_db": -15.1116358216143
+  },
+  "order_6": {
+   "complex_rel": 0.0006535219232290591,
+   "level_ref_db": -36.71511260101288
+  },
+  "order_7": {
+   "complex_rel": 0.006396891396745038,
+   "level_ref_db": -18.8657392005924
+  },
+  "order_8": {
+   "complex_rel": 0.0008302483972677626,
+   "level_ref_db": -38.278698604629476
+  },
+  "order_9": {
+   "complex_rel": 0.006696020354813363,
+   "level_ref_db": -21.845753915562362
+  }
+ },
+ "repeat|sweep_-3dBFS": {
+  "order_1": {
+   "complex_rel": 0.027547755238722292,
+   "level_ref_db": 0.0
+  },
+  "order_2": {
+   "complex_rel": 0.011807011134896609,
+   "level_ref_db": -34.841346557843444
+  },
+  "order_3": {
+   "complex_rel": 0.20843017503368919,
+   "level_ref_db": -9.602025325791368
+  },
+  "order_4": {
+   "complex_rel": 0.01206871620286658,
+   "level_ref_db": -35.26255947214015
+  },
+  "order_5": {
+   "complex_rel": 0.12401716049320907,
+   "level_ref_db": -14.29439490067477
+  },
+  "order_6": {
+   "complex_rel": 0.010815521525796885,
+   "level_ref_db": -36.22540473775554
+  },
+  "order_7": {
+   "complex_rel": 0.08736645197201383,
+   "level_ref_db": -17.62966059842799
+  },
+  "order_8": {
+   "complex_rel": 0.011106096974684948,
+   "level_ref_db": -36.65755879519242
+  },
+  "order_9": {
+   "complex_rel": 0.06689806454084675,
+   "level_ref_db": -20.317271369054094
+  }
+ },
+ "gain_7.5|sweep_-10dBFS": {
+  "order_1": {
+   "complex_rel": 0.13413440442481273,
+   "level_ref_db": 0.0
+  },
+  "order_2": {
+   "complex_rel": 0.005734660260315703,
+   "level_ref_db": -34.591212075979946
+  },
+  "order_3": {
+   "complex_rel": 0.13152186169746896,
+   "level_ref_db": -10.024896849664756
+  },
+  "order_4": {
+   "complex_rel": 0.010648975536847845,
+   "level_ref_db": -35.305230977328115
+  },
+  "order_5": {
+   "complex_rel": 0.13288819206329713,
+   "level_ref_db": -15.116394673384107
+  },
+  "order_6": {
+   "complex_rel": 0.015102067009335907,
+   "level_ref_db": -36.71133502228693
+  },
+  "order_7": {
+   "complex_rel": 0.13266482909761293,
+   "level_ref_db": -18.857900586435004
+  },
+  "order_8": {
+   "complex_rel": 0.017812484171868953,
+   "level_ref_db": -38.305196110140194
+  },
+  "order_9": {
+   "complex_rel": 0.12324708035381644,
+   "level_ref_db": -21.815641475145192
+  }
+ },
+ "gain_7.5|sweep_-3dBFS": {
+  "order_1": {
+   "complex_rel": 0.06533612112097448,
+   "level_ref_db": 0.0
+  },
+  "order_2": {
+   "complex_rel": 0.0030355866742835733,
+   "level_ref_db": -34.90305859496792
+  },
+  "order_3": {
+   "complex_rel": 0.07141173901280325,
+   "level_ref_db": -9.72782840745121
+  },
+  "order_4": {
+   "complex_rel": 0.005217952160079309,
+   "level_ref_db": -35.6257385301077
+  },
+  "order_5": {
+   "complex_rel": 0.07990017680682626,
+   "level_ref_db": -14.419757761095477
+  },
+  "order_6": {
+   "complex_rel": 0.00869148635361767,
+   "level_ref_db": -36.52749592941674
+  },
+  "order_7": {
+   "complex_rel": 0.09186097041945981,
+   "level_ref_db": -17.756920955618135
+  },
+  "order_8": {
+   "complex_rel": 0.01251141542280219,
+   "level_ref_db": -37.443620198833614
+  },
+  "order_9": {
+   "complex_rel": 0.09761958346494211,
+   "level_ref_db": -20.44931158133646
+  }
+ }
+}

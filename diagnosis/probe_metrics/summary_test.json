@@ -1666,9 +1666,9 @@
   "d_audio|harmonic_total": 0.9713539618391628,
   "d_audio|imd": 0.983977835489764,
   "d_audio|mrstft": 0.6203369861922026,
-  "d_audio|volterra_laguerre_2": 0.9505886656621142,
-  "d_audio|volterra_laguerre_3": 0.960171071785337,
-  "d_audio|wiener_hammerstein": 0.9601214574898785,
+  "d_audio|volterra_laguerre_2": 0.949895471644079,
+  "d_audio|volterra_laguerre_3": 0.9594827202309385,
+  "d_audio|wiener_hammerstein": 0.9578947368421052,
   "esr|fir": 0.9518243345890707,
   "esr|hammerstein_3": 0.9595200498921432,
   "esr|hammerstein_5": 0.9624989866672882,
@@ -1680,9 +1680,9 @@
   "esr|harmonic_total": 0.971368626374087,
   "esr|imd": 0.983977835489764,
   "esr|mrstft": 0.6203250582790161,
-  "esr|volterra_laguerre_2": 0.9505666781584156,
-  "esr|volterra_laguerre_3": 0.9601661467028294,
-  "esr|wiener_hammerstein": 0.9601214574898785,
+  "esr|volterra_laguerre_2": 0.949867635120915,
+  "esr|volterra_laguerre_3": 0.9594772167143022,
+  "esr|wiener_hammerstein": 0.9578947368421052,
   "fir|hammerstein_3": 0.995641780610622,
   "fir|hammerstein_5": 0.994710668785299,
   "fir|harmonic_order_1": 0.8246430049974101,
@@ -1693,9 +1693,9 @@
   "fir|harmonic_total": 0.937898065308936,
   "fir|imd": 0.998374020291028,
   "fir|mrstft": 0.481227211837618,
-  "fir|volterra_laguerre_2": 0.9939311004578198,
-  "fir|volterra_laguerre_3": 0.9939785727386832,
-  "fir|wiener_hammerstein": 0.9933198380566802,
+  "fir|volterra_laguerre_2": 0.9937220397579949,
+  "fir|volterra_laguerre_3": 0.9937184837634275,
+  "fir|wiener_hammerstein": 0.9923076923076924,
   "hammerstein_3|hammerstein_5": 0.9997357866567267,
   "hammerstein_3|harmonic_order_1": 0.7906247482831468,
   "hammerstein_3|harmonic_order_2": 0.7929311094126991,
@@ -1705,9 +1705,9 @@
   "hammerstein_3|harmonic_total": 0.9337019886406209,
   "hammerstein_3|imd": 0.9978719896896401,
   "hammerstein_3|mrstft": 0.4965756240626726,
-  "hammerstein_3|volterra_laguerre_2": 0.9960009398552576,
-  "hammerstein_3|volterra_laguerre_3": 0.9977216302173056,
-  "hammerstein_3|wiener_hammerstein": 0.9943319838056679,
+  "hammerstein_3|volterra_laguerre_2": 0.9958936164958637,
+  "hammerstein_3|volterra_laguerre_3": 0.9977732065687122,
+  "hammerstein_3|wiener_hammerstein": 0.9929149797570851,
   "hammerstein_5|harmonic_order_1": 0.79161382535061,
   "hammerstein_5|harmonic_order_2": 0.7929685743829519,
   "hammerstein_5|harmonic_order_3": 0.7114597851009306,
@@ -1716,9 +1716,9 @@
   "hammerstein_5|harmonic_total": 0.9339492574442895,
   "hammerstein_5|imd": 0.9978345247193873,
   "hammerstein_5|mrstft": 0.502361053378397,
-  "hammerstein_5|volterra_laguerre_2": 0.9951038216384892,
-  "hammerstein_5|volterra_laguerre_3": 0.9975010519425874,
-  "hammerstein_5|wiener_hammerstein": 0.9971659919028341,
+  "hammerstein_5|volterra_laguerre_2": 0.9949824916656379,
+  "hammerstein_5|volterra_laguerre_3": 0.9975517471292753,
+  "hammerstein_5|wiener_hammerstein": 0.9965587044534414,
   "harmonic_order_1|harmonic_order_2": 0.4852621897200697,
   "harmonic_order_1|harmonic_order_3": 0.8872882991074535,
   "harmonic_order_1|harmonic_order_4": 0.7612334240625086,
@@ -1755,12 +1755,12 @@
   "imd|mrstft": 0.48804867448935246,
   "imd|volterra_laguerre_2": 0.9979319336420446,
   "imd|volterra_laguerre_3": 0.9978495107074884,
-  "mrstft|volterra_laguerre_2": 0.468359365166135,
-  "mrstft|volterra_laguerre_3": 0.49143011444895596,
-  "mrstft|wiener_hammerstein": 0.5939271255060729,
-  "volterra_laguerre_2|volterra_laguerre_3": 0.9974272661121043,
-  "volterra_laguerre_2|wiener_hammerstein": 0.9894736842105264,
-  "volterra_laguerre_3|wiener_hammerstein": 0.9931174089068826
+  "mrstft|volterra_laguerre_2": 0.46967191011235965,
+  "mrstft|volterra_laguerre_3": 0.49168203481911354,
+  "mrstft|wiener_hammerstein": 0.5965587044534414,
+  "volterra_laguerre_2|volterra_laguerre_3": 0.9973454500555624,
+  "volterra_laguerre_2|wiener_hammerstein": 0.9882591093117409,
+  "volterra_laguerre_3|wiener_hammerstein": 0.9921052631578947
  },
  "profiles_beyond_d_audio": {
   "fir|hammerstein_3": {
@@ -1844,27 +1844,27 @@
    }
   },
   "fir|volterra_laguerre_2": {
-   "spearman": 0.7246220334093403,
+   "spearman": 0.771374133664608,
    "separating_defects": {
     "cross_term": -0.61,
-    "noise_db": 0.57,
+    "noise_db": 0.56,
     "quadratic": -0.4
    }
   },
   "fir|volterra_laguerre_3": {
-   "spearman": 0.7044512384489547,
+   "spearman": 0.7511320379758022,
    "separating_defects": {
-    "cross_term": -0.63,
-    "echo_beyond_memory": -0.34,
+    "cross_term": -0.64,
+    "echo_beyond_memory": -0.32,
     "order_beyond_degree": -0.25
    }
   },
   "fir|wiener_hammerstein": {
    "spearman": 0.8032388663967611,
    "separating_defects": {
-    "noise_db": -2.43,
-    "echo_beyond_memory": -0.61,
-    "order_beyond_degree": -0.42
+    "noise_db": -2.49,
+    "echo_beyond_memory": -0.62,
+    "order_beyond_degree": -0.44
    }
   },
   "hammerstein_3|hammerstein_5": {
@@ -1940,26 +1940,26 @@
    }
   },
   "hammerstein_3|volterra_laguerre_2": {
-   "spearman": 0.8854762324197473,
+   "spearman": 0.9053684605688842,
    "separating_defects": {
-    "noise_db": 1.37,
-    "order_beyond_degree": 0.69,
-    "echo_beyond_memory": 0.49
+    "noise_db": 1.36,
+    "order_beyond_degree": 0.68,
+    "echo_beyond_memory": 0.47
    }
   },
   "hammerstein_3|volterra_laguerre_3": {
-   "spearman": 0.8409745754298719,
+   "spearman": 0.8671990163723314,
    "separating_defects": {
     "noise_db": 0.69,
-    "cross_term": -0.25,
+    "cross_term": -0.26,
     "echo_beyond_memory": -0.18
    }
   },
   "hammerstein_3|wiener_hammerstein": {
    "spearman": 0.9441295546558706,
    "separating_defects": {
-    "noise_db": -1.72,
-    "echo_beyond_memory": -0.35,
+    "noise_db": -1.78,
+    "echo_beyond_memory": -0.36,
     "quadratic": 0.08
    }
   },
@@ -2028,26 +2028,26 @@
    }
   },
   "hammerstein_5|volterra_laguerre_2": {
-   "spearman": 0.862328852906924,
+   "spearman": 0.8861557942006618,
    "separating_defects": {
-    "noise_db": 1.67,
-    "order_beyond_degree": 0.99,
+    "noise_db": 1.65,
+    "order_beyond_degree": 0.98,
     "echo_beyond_memory": 0.46
    }
   },
   "hammerstein_5|volterra_laguerre_3": {
-   "spearman": 0.8406887874618388,
+   "spearman": 0.8672921175685436,
    "separating_defects": {
-    "noise_db": 1.04,
-    "cross_term": -0.24,
-    "order_beyond_degree": 0.22
+    "noise_db": 1.03,
+    "cross_term": -0.25,
+    "order_beyond_degree": 0.21
    }
   },
   "hammerstein_5|wiener_hammerstein": {
-   "spearman": 0.9550607287449393,
+   "spearman": 0.9556680161943321,
    "separating_defects": {
-    "noise_db": -1.45,
-    "echo_beyond_memory": -0.12,
+    "noise_db": -1.51,
+    "echo_beyond_memory": -0.13,
     "quadratic": 0.08
    }
   },
@@ -2340,51 +2340,51 @@
    }
   },
   "mrstft|volterra_laguerre_2": {
-   "spearman": -0.5992830606674171,
+   "spearman": -0.5939005309297445,
    "separating_defects": {
-    "noise_db": 10.96,
-    "allpass": -2.82,
-    "delay_samples": -2.7
+    "noise_db": 11.27,
+    "order_beyond_degree": 2.61,
+    "delay_samples": -2.61
    }
   },
   "mrstft|volterra_laguerre_3": {
-   "spearman": -0.48339522836737364,
+   "spearman": -0.4884733237248219,
    "separating_defects": {
-    "noise_db": 10.64,
-    "allpass": -2.14,
-    "echo_beyond_memory": 2.06
+    "noise_db": 10.85,
+    "echo_beyond_memory": 2.18,
+    "allpass": -2.04
    }
   },
   "mrstft|wiener_hammerstein": {
-   "spearman": -0.5277327935222672,
+   "spearman": -0.5283400809716599,
    "separating_defects": {
-    "noise_db": 6.07,
-    "allpass": -3.33,
+    "noise_db": 6.0,
+    "allpass": -3.34,
     "delay_samples": -3.18
    }
   },
   "volterra_laguerre_2|volterra_laguerre_3": {
-   "spearman": 0.9185633239252404,
+   "spearman": 0.9316992583244754,
    "separating_defects": {
-    "noise_db": -0.38,
-    "order_beyond_degree": -0.38,
-    "delay_samples": 0.25
+    "noise_db": -0.41,
+    "order_beyond_degree": -0.41,
+    "delay_samples": 0.21
    }
   },
   "volterra_laguerre_2|wiener_hammerstein": {
-   "spearman": 0.6831983805668016,
+   "spearman": 0.6821862348178137,
    "separating_defects": {
-    "noise_db": -3.19,
-    "echo_beyond_memory": -0.63,
-    "order_beyond_degree": -0.42
+    "noise_db": -3.25,
+    "echo_beyond_memory": -0.64,
+    "order_beyond_degree": -0.44
    }
   },
   "volterra_laguerre_3|wiener_hammerstein": {
-   "spearman": 0.34939271255060733,
+   "spearman": 0.35242914979757084,
    "separating_defects": {
-    "noise_db": -2.55,
-    "order_beyond_degree": 0.28,
-    "cross_term": 0.25
+    "noise_db": -2.62,
+    "cross_term": 0.24,
+    "order_beyond_degree": 0.24
    }
   }
  },
@@ -3087,107 +3087,107 @@
   },
   "volterra_laguerre_2|allpass": {
    "level_ratio_median": 0.955491786398099,
-   "content_log_sd": 0.7544889152088098
+   "content_log_sd": 0.8541229967322019
   },
   "volterra_laguerre_2|coloration_db": {
    "level_ratio_median": 0.9568347471319756,
-   "content_log_sd": 0.4433524229814526
+   "content_log_sd": 0.5392484228875689
   },
   "volterra_laguerre_2|cross_term": {
    "level_ratio_median": 12.164930536977252,
-   "content_log_sd": 0.5763348095177862
+   "content_log_sd": 0.5626257688015764
   },
   "volterra_laguerre_2|cubic": {
    "level_ratio_median": 92.27669129944447,
-   "content_log_sd": 0.6890088114689644
+   "content_log_sd": 0.6871353779794162
   },
   "volterra_laguerre_2|delay_samples": {
    "level_ratio_median": 0.9555130403323857,
-   "content_log_sd": 0.7499221992956714
+   "content_log_sd": 0.8495468227196454
   },
   "volterra_laguerre_2|echo_beyond_memory": {
    "level_ratio_median": 2.6509021309096226,
-   "content_log_sd": 1.0051065440488252
+   "content_log_sd": 0.9222818476723968
   },
   "volterra_laguerre_2|gain": {
    "level_ratio_median": 0.9724461662538606,
-   "content_log_sd": 0.010557034385504746
+   "content_log_sd": 0.04446281076207851
   },
   "volterra_laguerre_2|noise_db": {
    "level_ratio_median": 1.0010741458599153,
-   "content_log_sd": 0.27274856658353624
+   "content_log_sd": 0.8460143866593589
   },
   "volterra_laguerre_2|order_beyond_degree": {
    "level_ratio_median": 248823.81610085163,
-   "content_log_sd": 1.3846821292773908
+   "content_log_sd": 1.7525308774526105
   },
   "volterra_laguerre_2|prefilter_hz": {
    "level_ratio_median": 0.9489966759121442,
-   "content_log_sd": 0.47095047144538915
+   "content_log_sd": 0.47347859171329426
   },
   "volterra_laguerre_2|quadratic": {
    "level_ratio_median": 12.089979793983662,
-   "content_log_sd": 0.4080563744966484
+   "content_log_sd": 0.37538421824168666
   },
   "volterra_laguerre_2|redistribution_bias": {
    "level_ratio_median": 0.5498401688025728,
-   "content_log_sd": 0.10987316287016932
+   "content_log_sd": 0.11308196450593098
   },
   "volterra_laguerre_2|release_ms": {
    "level_ratio_median": 3.2533642295600442,
-   "content_log_sd": 0.4462590616574215
+   "content_log_sd": 0.40761317986914253
   },
   "volterra_laguerre_3|allpass": {
    "level_ratio_median": 0.9614978704995518,
-   "content_log_sd": 0.669082531607163
+   "content_log_sd": 0.7615435731982476
   },
   "volterra_laguerre_3|coloration_db": {
    "level_ratio_median": 0.9587010488118881,
-   "content_log_sd": 0.43326947649687325
+   "content_log_sd": 0.5053208611937924
   },
   "volterra_laguerre_3|cross_term": {
    "level_ratio_median": 12.164930536977597,
-   "content_log_sd": 0.6582648967172579
+   "content_log_sd": 0.6683174354892281
   },
   "volterra_laguerre_3|cubic": {
    "level_ratio_median": 92.27669130133457,
-   "content_log_sd": 0.6045231177921759
+   "content_log_sd": 0.6641178794325123
   },
   "volterra_laguerre_3|delay_samples": {
    "level_ratio_median": 0.9607099186581264,
-   "content_log_sd": 0.6406757146802262
+   "content_log_sd": 0.7332904284135091
   },
   "volterra_laguerre_3|echo_beyond_memory": {
    "level_ratio_median": 1.4147287872901941,
-   "content_log_sd": 0.8988668857148753
+   "content_log_sd": 0.8239394044850302
   },
   "volterra_laguerre_3|gain": {
    "level_ratio_median": 0.9969195106693439,
-   "content_log_sd": 0.021381361927340355
+   "content_log_sd": 0.019519004694642312
   },
   "volterra_laguerre_3|noise_db": {
    "level_ratio_median": 1.0007325946473105,
-   "content_log_sd": 0.4329562260924184
+   "content_log_sd": 0.7385994353240876
   },
   "volterra_laguerre_3|order_beyond_degree": {
    "level_ratio_median": 248813.21710804885,
-   "content_log_sd": 1.1134659975938515
+   "content_log_sd": 1.7262236460780018
   },
   "volterra_laguerre_3|prefilter_hz": {
    "level_ratio_median": 0.9948953459032513,
-   "content_log_sd": 0.48977146551364187
+   "content_log_sd": 0.49738010996564586
   },
   "volterra_laguerre_3|quadratic": {
    "level_ratio_median": 12.144633802568869,
-   "content_log_sd": 0.4050712216668333
+   "content_log_sd": 0.3876726557867044
   },
   "volterra_laguerre_3|redistribution_bias": {
    "level_ratio_median": 0.5593943023029263,
-   "content_log_sd": 0.09040011498536207
+   "content_log_sd": 0.0829228455726368
   },
   "volterra_laguerre_3|release_ms": {
    "level_ratio_median": 3.2795545120370964,
-   "content_log_sd": 0.43531673293008155
+   "content_log_sd": 0.40608563097307826
   },
   "wiener_hammerstein|allpass": {
    "level_ratio_median": null,

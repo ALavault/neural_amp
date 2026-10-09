@@ -45,22 +45,22 @@
   "rows": [
    {
     "seed": 100,
-    "capacity": 0.18452752699921204,
-    "start_spread": 0.0900097976352657
+    "capacity": 0.18416198088900188,
+    "start_spread": 0.09280236406944861
    },
    {
     "seed": 101,
-    "capacity": 0.186761644912694,
-    "start_spread": 0.08561096166651275
+    "capacity": 0.186385539302642,
+    "start_spread": 0.08727581922503753
    },
    {
     "seed": 102,
-    "capacity": 0.1877339720258594,
-    "start_spread": 0.09181756406270977
+    "capacity": 0.18764969643853513,
+    "start_spread": 0.09247720935165187
    }
   ],
-  "median_capacity": 0.186761644912694,
-  "median_start_spread": 0.0900097976352657,
+  "median_capacity": 0.186385539302642,
+  "median_start_spread": 0.09247720935165187,
   "unreliable_before_defects": false
  },
  "nesting": {
