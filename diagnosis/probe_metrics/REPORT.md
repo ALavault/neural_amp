@@ -111,7 +111,7 @@ orthogonales hors échantillon.
   dépend du contenu : il est capté à ~0,5 sur des notes périodiques (plucks), où il ressemble à
   un filtre en peigne, et à ~0,2 sur la DI.
 - **Non-linéarité préfiltrée** : Hammerstein laisse 0,30 à 0,42 non représenté ; Volterra–Laguerre
-  3 seulement 0,12 à 0,15.
+  3 seulement 0,10 à 0,11.
 - **Interaction croisée** : Hammerstein l'attribue à l'ordre 2 quand l'excitation est corrélée
   sur 5 échantillons (bruit coloré, plucks). Sa décomposition par branche ne distingue alors
   pas « carré » et « produit retardé ».
