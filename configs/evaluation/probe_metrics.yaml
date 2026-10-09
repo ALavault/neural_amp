@@ -1,0 +1,49 @@
+schema_version: 1
+# Frozen protocol of the analysis-probe deviation scores (product lane, no scientific
+# claim). Source of truth for the values: diagnosis/probe_metrics/NOTE.md and
+# dev_select.json / dev_select_v2.json; code: src/fssr_nam/product/{probes,fidelity}.py.
+version: v1+v2
+sample_rate: 48000            # VS100R analysed at 48 kHz (decimated by 4); JVM at 44100
+reading:
+  skip_seconds: 0.05          # unscored start of each reading segment (zero state)
+  floor_rms: 1.0e-4           # reference RMS under which it counts as quasi silent
+  capacity_warning: 0.3       # r / RMS(y_ref) above which a low score is not fidelity
+  octave_edges_hz: [22, 44, 88, 177, 355, 710, 1420, 2840, 5680, 11360]
+probes:
+  fir:            {degree: 1, taps: 256, ridge: 1.0e-2, dc: true}
+  hammerstein_3:  {degree: 3, taps: 256, ridge: 1.0e-4, dc: true}
+  hammerstein_5:  {degree: 5, taps: 256, ridge: 1.0e-4, dc: true}
+  volterra_laguerre_2: {size: 8, pole: 0.8, order: 2, ridge: 1.0e-4, dc: true}
+  volterra_laguerre_3: {size: 8, pole: 0.9, order: 3, ridge: 1.0e-4, dc: true}
+  wiener_hammerstein:
+    taps_in: 16
+    taps_out: 64
+    knots: 12
+    span_rms: 4.0
+    starts: 3
+    iterations: 20
+    estimation_seconds: 1.0   # cost-bound; parameters never compared, only renderings
+harmonic_signature:
+  order: 5                    # harmonic ORDER k, not polynomial degree
+  nfft: 8192
+  band_hz: [100, 8000]
+  floor_db: -80.0             # re max |D_1| of the reference, common to both outputs
+calibration:
+  dev_seeds: [100, 101, 102]
+  test_seeds: [200, 201, 202]
+  reading_seed_offset: 50
+  repeat_floor_noise_db: -80.0
+  detected_ratio: 10.0
+  missed_ratio: 3.0
+  squared_metrics_read_in_amplitude: [esr, imd]
+real_pairs:
+  vs100r:
+    estimation: di_train
+    reading: [di_test, pink_noise_-30dBFS_rms]
+    harmonic: [sweep_-20dBFS, sweep_-10dBFS, sweep_-3dBFS]
+    own_input_fit: true       # each probe fitted on its own take's loopback
+    input_common_max_mismatch_db: -40.0
+  jvm410h:
+    estimation_seconds: [0, 150]
+    reading_seconds: [215, 300]
+    independent_sources: false
