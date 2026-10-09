@@ -55,6 +55,7 @@ SWEEPS = ("sweep_-20dBFS", "sweep_-10dBFS", "sweep_-3dBFS")
 READ = ("di_test", "pink_noise_-30dBFS_rms")
 SKIP = round(0.05 * FS)
 MAX_MISMATCH_DB = -40.0  # loopback difference between takes above which x is not common
+SLIP_SAMPLES = 12  # half a USB microframe slip (24 samples at 192 kHz)
 JVM = vs100r.ROOT / "datasets/raw/external/tone_twist_param/extracted"
 JVM = JVM / "Marshall-JVM410H-ChOD1-trimmed"
 CENTRE = {"G": 5.0, "C": 5.0, "B": 5.0, "M": 5.0, "T": 5.0}
@@ -131,6 +132,42 @@ def common_section(ref_take, eval_take, name: str) -> dict:
         "input_mismatch_db": mismatch_db,
         "common": first == last and mismatch_db <= MAX_MISMATCH_DB,
     }
+
+
+def sweep_profile(take: dict, name: str) -> np.ndarray:
+    """Lag of the take's loopback against the source, per quarter of a sweep section
+    (192 kHz); the converters' group delay makes it vary with frequency, so only its
+    differences between quarters are compared across takes."""
+    import soundfile as sf
+
+    from fssr_nam.product.defect_bench import DI_SOURCE
+
+    part = vs100r.section(name)
+    source = sf.read(
+        vs100r.ROOT / DI_SOURCE,
+        dtype="float64",
+        start=part["start"],
+        stop=part["start"] + part["samples"],
+    )[0]
+    loop = vs100r.audio(take, name)[0]
+    q = len(source) // 4
+    lags = [
+        lag(source[i * q : (i + 1) * q], loop[i * q : (i + 1) * q]) for i in range(4)
+    ]
+    return np.diff(lags)
+
+
+def sweep_integrity(takes: list[dict]) -> dict:
+    """{(order, section): intact}: a take's sweep is broken by a slip inside it when a
+    quarter-to-quarter lag step departs from the session's median step by at least
+    SLIP_SAMPLES (half a microframe quantum: set by the acquisition, not the data)."""
+    out = {}
+    for name in SWEEPS:
+        steps = {t["order"]: sweep_profile(t, name) for t in takes}
+        modal = np.median(np.array(list(steps.values())), axis=0)
+        for order, step in steps.items():
+            out[(order, name)] = bool(np.all(np.abs(step - modal) < SLIP_SAMPLES))
+    return out
 
 
 def probe_rows(sections: dict, meta: dict) -> list[dict]:
@@ -325,6 +362,12 @@ def main() -> None:
         rows += vs100r_rows()
     if which in ("all", "jvm"):
         rows += jvm_rows()
+    if which == "integrity":
+        takes = {t["order"]: t for p in vs100r_pairs() for t in (p["ref"], p["eval"])}
+        flags = sweep_integrity(list(takes.values()))
+        table = [{"order": o, "section": n, "intact": v} for (o, n), v in flags.items()]
+        (HERE / "sweep_integrity.json").write_text(json.dumps(table, indent=1) + "\n")
+        return
     fields = sorted({k for row in rows for k in row})
     with (HERE / f"real_pairs_{which}.csv").open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=fields)

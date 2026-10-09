@@ -119,12 +119,42 @@ def bound_rows() -> dict:
     return {m: {"violations": a, "rows": b} for m, (a, b) in out.items()}
 
 
+def broken_sweeps() -> set:
+    path = HERE / "sweep_integrity.json"
+    if not path.exists():
+        return set()
+    return {
+        (r["order"], r["section"])
+        for r in json.loads(path.read_text())
+        if not r["intact"]
+    }
+
+
+def measurable(row: dict, broken: set) -> bool:
+    """Harmonic rows whose sweep holds a slip in either take are not measurable."""
+    if not row["metric"].startswith("harmonic"):
+        return True
+    orders = (int(row["ref"].split("#")[1]), int(row["eval"].split("#")[1]))
+    return all((o, row["segment"]) not in broken for o in orders)
+
+
 def real_vs100r() -> dict:
-    rows = list(csv.DictReader((HERE / "real_pairs_vs100r.csv").open()))
+    broken = broken_sweeps()
+    rows = [
+        r
+        for r in csv.DictReader((HERE / "real_pairs_vs100r.csv").open())
+        if measurable(r, broken)
+    ]
     for r in rows:
         r["score"] = float(r["score"]) ** (0.5 if r["metric"] == "esr" else 1)
     out = {}
-    for seg in ("di_test", "pink_noise_-30dBFS_rms", "sweep_-10dBFS", "sweep_-3dBFS"):
+    for seg in (
+        "di_test",
+        "pink_noise_-30dBFS_rms",
+        "sweep_-20dBFS",
+        "sweep_-10dBFS",
+        "sweep_-3dBFS",
+    ):
         for m in (
             "fir",
             "hammerstein_3",
