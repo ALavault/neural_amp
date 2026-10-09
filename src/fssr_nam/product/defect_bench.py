@@ -68,11 +68,15 @@ DEFECTS = {
 THD_LEVEL_DB = -10.0  # peak level of the 1 kHz sine where redistribution keeps THD
 
 
-def variant(defect: str, severity: float) -> tuple[Chain, Chain]:
-    """(reference, variant) for one defect at one severity. The redistribution defect
-    changes the asymmetry and retunes the drive so that THD stays that of the
-    reference at THD_LEVEL_DB: the harmonics move between orders, not in total."""
-    base, name, _ = DEFECTS[defect]
+def variant(
+    defect: str, severity: float, base: Chain | None = None
+) -> tuple[Chain, Chain]:
+    """(reference, variant) for one defect at one severity, on the defect's own
+    reference chain or on `base`. The redistribution defect changes the asymmetry and
+    retunes the drive so that THD stays that of the reference at THD_LEVEL_DB: the
+    harmonics move between orders, not in total."""
+    own, name, _ = DEFECTS[defect]
+    base = own if base is None else base
     changed = replace(base, **{name: severity})
     if defect == "redistribution_bias":
         target = thd(base, THD_LEVEL_DB)
@@ -154,6 +158,7 @@ def apply(chain: Chain, x: np.ndarray, fs: float, seed: int = 0) -> np.ndarray:
 # separately; within a family, estimation and reading use different seeds, and the DI
 # uses different source recordings (di_train sources for A, di_test sources for B).
 LEVEL_KIND = {
+    "steps": "strong_rms",
     "noise": "rms",
     "multisine": "rms",
     "di": "rms",
@@ -161,7 +166,14 @@ LEVEL_KIND = {
     "two_tone": "peak",
     "plucks": "peak",
 }
-LEVELS_DB = {"rms": (-30.0, -20.0, -12.0), "peak": (-20.0, -10.0, -3.0)}
+LEVELS_DB = {
+    "rms": (-30.0, -20.0, -12.0),
+    "peak": (-20.0, -10.0, -3.0),
+    "strong_rms": (-12.0, -9.0, -6.0),  # level of the loud segments of "steps"
+}
+STEP_S = 1.2  # segment length of "steps": >= 5 x the longest release (200 ms)
+STEP_SEGMENTS = 44
+STEP_DROP_DB = 20.0
 DI_SOURCE = "datasets/raw/internal/valvestate_vs100r/reamp_valvestate_192k.wav"
 
 
@@ -230,11 +242,29 @@ def di_signal(part: str, fs: float) -> np.ndarray:
     return resample_poly(x, round(fs), RATE)
 
 
+def steps_signal(level_db: float, seed: int, fs: float):
+    """Coloured noise in STEP_SEGMENTS segments of STEP_S seconds, alternately loud
+    (level_db RMS) and quiet (STEP_DROP_DB lower), each level jittered by +-2 dB.
+    Returns the signal and the sample index of every segment start after the first."""
+    from fssr_nam.data.excitations import colored_noise
+
+    rng = np.random.default_rng(seed)
+    length = round(STEP_S * fs)
+    pieces = []
+    for i in range(STEP_SEGMENTS):
+        level = level_db - (STEP_DROP_DB if i % 2 else 0.0) + rng.uniform(-2.0, 2.0)
+        piece = colored_noise(round(fs), STEP_S, seed * 1000 + i).astype(np.float64)
+        pieces.append(at_level(piece[:length], level, "rms"))
+    return np.concatenate(pieces), np.arange(1, STEP_SEGMENTS) * length
+
+
 def excitation(family: str, level_db: float, seconds: float, seed: int, fs: float):
     """One excitation at an explicit level. For "di", seed 0 is the estimation part
     (di_train sources) and seed 1 the reading part (di_test sources)."""
     from fssr_nam.data.excitations import colored_noise, procedural_plucks
 
+    if family == "steps":
+        return steps_signal(level_db, seed, fs)[0]
     if family == "sweep":
         x = synchronized_sweep(seconds * (1 + 0.1 * (seed % 3)), fs)[0]
     elif family == "two_tone":
