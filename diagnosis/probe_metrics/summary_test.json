@@ -1,0 +1,2879 @@
+{
+ "monotonicity": {
+  "fir|gain": 1.0,
+  "hammerstein_3|gain": 1.0,
+  "hammerstein_5|gain": 1.0,
+  "esr|gain": 1.0,
+  "mrstft|gain": 1.0,
+  "fir|coloration_db": 1.0,
+  "hammerstein_3|coloration_db": 1.0,
+  "hammerstein_5|coloration_db": 1.0,
+  "esr|coloration_db": 1.0,
+  "mrstft|coloration_db": 1.0,
+  "fir|delay_samples": 1.0,
+  "hammerstein_3|delay_samples": 1.0,
+  "hammerstein_5|delay_samples": 1.0,
+  "esr|delay_samples": 1.0,
+  "mrstft|delay_samples": 1.0,
+  "fir|allpass": 1.0,
+  "hammerstein_3|allpass": 1.0,
+  "hammerstein_5|allpass": 1.0,
+  "esr|allpass": 1.0,
+  "mrstft|allpass": 1.0,
+  "fir|quadratic": 1.0,
+  "hammerstein_3|quadratic": 1.0,
+  "hammerstein_5|quadratic": 1.0,
+  "esr|quadratic": 1.0,
+  "mrstft|quadratic": 1.0,
+  "fir|cubic": 1.0,
+  "hammerstein_3|cubic": 1.0,
+  "hammerstein_5|cubic": 1.0,
+  "esr|cubic": 1.0,
+  "mrstft|cubic": 1.0,
+  "fir|redistribution_bias": 1.0,
+  "hammerstein_3|redistribution_bias": 1.0,
+  "hammerstein_5|redistribution_bias": 1.0,
+  "esr|redistribution_bias": 1.0,
+  "mrstft|redistribution_bias": 1.0,
+  "fir|prefilter_hz": 1.0,
+  "hammerstein_3|prefilter_hz": 1.0,
+  "hammerstein_5|prefilter_hz": 1.0,
+  "esr|prefilter_hz": 1.0,
+  "mrstft|prefilter_hz": 1.0,
+  "fir|cross_term": 1.0,
+  "hammerstein_3|cross_term": 1.0,
+  "hammerstein_5|cross_term": 1.0,
+  "esr|cross_term": 1.0,
+  "mrstft|cross_term": 1.0,
+  "fir|release_ms": 1.0,
+  "hammerstein_3|release_ms": 1.0,
+  "hammerstein_5|release_ms": 1.0,
+  "esr|release_ms": 1.0,
+  "mrstft|release_ms": 1.0,
+  "fir|noise_db": 1.0,
+  "hammerstein_3|noise_db": 1.0,
+  "hammerstein_5|noise_db": 1.0,
+  "esr|noise_db": 1.0,
+  "mrstft|noise_db": 1.0,
+  "fir|echo_beyond_memory": 1.0,
+  "hammerstein_3|echo_beyond_memory": 1.0,
+  "hammerstein_5|echo_beyond_memory": 1.0,
+  "esr|echo_beyond_memory": 1.0,
+  "mrstft|echo_beyond_memory": 1.0,
+  "fir|order_beyond_degree": 1.0,
+  "hammerstein_3|order_beyond_degree": 1.0,
+  "hammerstein_5|order_beyond_degree": 1.0,
+  "esr|order_beyond_degree": 1.0,
+  "mrstft|order_beyond_degree": 1.0,
+  "harmonic_total|gain": 1.0,
+  "harmonic_order_1|gain": 1.0,
+  "harmonic_order_2|gain": 1.0,
+  "harmonic_order_3|gain": 1.0,
+  "harmonic_order_4|gain": 1.0,
+  "harmonic_order_5|gain": 1.0,
+  "harmonic_total|coloration_db": 1.0,
+  "harmonic_order_1|coloration_db": 1.0,
+  "harmonic_order_2|coloration_db": 1.0,
+  "harmonic_order_3|coloration_db": 1.0,
+  "harmonic_order_4|coloration_db": 1.0,
+  "harmonic_order_5|coloration_db": 1.0,
+  "harmonic_total|delay_samples": 1.0,
+  "harmonic_order_1|delay_samples": 1.0,
+  "harmonic_order_2|delay_samples": 1.0,
+  "harmonic_order_3|delay_samples": 1.0,
+  "harmonic_order_4|delay_samples": 1.0,
+  "harmonic_order_5|delay_samples": 1.0,
+  "harmonic_total|allpass": 1.0,
+  "harmonic_order_1|allpass": 1.0,
+  "harmonic_order_2|allpass": 1.0,
+  "harmonic_order_3|allpass": 1.0,
+  "harmonic_order_4|allpass": 1.0,
+  "harmonic_order_5|allpass": 1.0,
+  "harmonic_total|quadratic": 1.0,
+  "harmonic_order_1|quadratic": 1.0,
+  "harmonic_order_2|quadratic": 1.0,
+  "harmonic_order_3|quadratic": 1.0,
+  "harmonic_order_4|quadratic": 1.0,
+  "harmonic_order_5|quadratic": 1.0,
+  "harmonic_total|cubic": 1.0,
+  "harmonic_order_1|cubic": 1.0,
+  "harmonic_order_2|cubic": 1.0,
+  "harmonic_order_3|cubic": 1.0,
+  "harmonic_order_4|cubic": 1.0,
+  "harmonic_order_5|cubic": 1.0,
+  "harmonic_total|redistribution_bias": 1.0,
+  "harmonic_order_1|redistribution_bias": 1.0,
+  "harmonic_order_2|redistribution_bias": 0.3333333333333333,
+  "harmonic_order_3|redistribution_bias": 1.0,
+  "harmonic_order_4|redistribution_bias": 0.6666666666666666,
+  "harmonic_order_5|redistribution_bias": 1.0,
+  "harmonic_total|prefilter_hz": 1.0,
+  "harmonic_order_1|prefilter_hz": 1.0,
+  "harmonic_order_2|prefilter_hz": 1.0,
+  "harmonic_order_3|prefilter_hz": 1.0,
+  "harmonic_order_4|prefilter_hz": 1.0,
+  "harmonic_order_5|prefilter_hz": 1.0,
+  "harmonic_total|cross_term": 1.0,
+  "harmonic_order_1|cross_term": 1.0,
+  "harmonic_order_2|cross_term": 1.0,
+  "harmonic_order_3|cross_term": 1.0,
+  "harmonic_order_4|cross_term": 1.0,
+  "harmonic_order_5|cross_term": 1.0,
+  "harmonic_total|release_ms": 1.0,
+  "harmonic_order_1|release_ms": 1.0,
+  "harmonic_order_2|release_ms": 1.0,
+  "harmonic_order_3|release_ms": 1.0,
+  "harmonic_order_4|release_ms": 1.0,
+  "harmonic_order_5|release_ms": 1.0,
+  "harmonic_total|noise_db": 1.0,
+  "harmonic_order_1|noise_db": 1.0,
+  "harmonic_order_2|noise_db": 1.0,
+  "harmonic_order_3|noise_db": 1.0,
+  "harmonic_order_4|noise_db": 1.0,
+  "harmonic_order_5|noise_db": 1.0,
+  "harmonic_total|echo_beyond_memory": 1.0,
+  "harmonic_order_1|echo_beyond_memory": 1.0,
+  "harmonic_order_2|echo_beyond_memory": 1.0,
+  "harmonic_order_3|echo_beyond_memory": 1.0,
+  "harmonic_order_4|echo_beyond_memory": 1.0,
+  "harmonic_order_5|echo_beyond_memory": 1.0,
+  "harmonic_total|order_beyond_degree": 1.0,
+  "harmonic_order_1|order_beyond_degree": 1.0,
+  "harmonic_order_2|order_beyond_degree": 1.0,
+  "harmonic_order_3|order_beyond_degree": 1.0,
+  "harmonic_order_4|order_beyond_degree": 1.0,
+  "harmonic_order_5|order_beyond_degree": 1.0,
+  "imd|gain": 1.0,
+  "imd|coloration_db": 1.0,
+  "imd|delay_samples": 1.0,
+  "imd|allpass": 1.0,
+  "imd|quadratic": 1.0,
+  "imd|cubic": 1.0,
+  "imd|redistribution_bias": 1.0,
+  "imd|prefilter_hz": 1.0,
+  "imd|cross_term": 1.0,
+  "imd|release_ms": 1.0,
+  "imd|noise_db": 1.0,
+  "imd|echo_beyond_memory": 1.0,
+  "imd|order_beyond_degree": 1.0,
+  "d_audio|gain": 1.0,
+  "d_audio|coloration_db": 1.0,
+  "d_audio|delay_samples": 1.0,
+  "d_audio|allpass": 1.0,
+  "d_audio|quadratic": 1.0,
+  "d_audio|cubic": 1.0,
+  "d_audio|redistribution_bias": 1.0,
+  "d_audio|prefilter_hz": 1.0,
+  "d_audio|cross_term": 1.0,
+  "d_audio|release_ms": 1.0,
+  "d_audio|noise_db": 1.0,
+  "d_audio|echo_beyond_memory": 1.0,
+  "d_audio|order_beyond_degree": 1.0
+ },
+ "blind_spots": [
+  {
+   "family": "di",
+   "level_db": -12.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.025988514687685472
+  },
+  {
+   "family": "di",
+   "level_db": -12.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.25849324809311586
+  },
+  {
+   "family": "di",
+   "level_db": -12.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.46946778612796597
+  },
+  {
+   "family": "di",
+   "level_db": -12.0,
+   "defect": "cubic",
+   "metric": "mrstft",
+   "detection_ratio": 0.2753561971980449
+  },
+  {
+   "family": "di",
+   "level_db": -12.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.07517493130805929
+  },
+  {
+   "family": "di",
+   "level_db": -12.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 0.9283443076318958
+  },
+  {
+   "family": "di",
+   "level_db": -12.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.33425837596084423
+  },
+  {
+   "family": "di",
+   "level_db": -12.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 2.2243248867873837
+  },
+  {
+   "family": "di",
+   "level_db": -12.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.31393352696623905
+  },
+  {
+   "family": "di",
+   "level_db": -12.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.6061794007013096
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.02310727165641237
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.24568130719000641
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.15545399383114905
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "cubic",
+   "metric": "mrstft",
+   "detection_ratio": 0.035944891300206915
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.0675967347341644
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 0.9067008012422856
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.33119946697508224
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "order_beyond_degree",
+   "metric": "mrstft",
+   "detection_ratio": 0.01492663113967032
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 2.043948193599529
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.10535953649378366
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.3576229129950218
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.021374864945990172
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.27712152588136935
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.05396083848878255
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.06444796116658418
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 1.0104792707755061
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.3731349111170049
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 2.3304093243937243
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.03693684205718678
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.17432906570959858
+  },
+  {
+   "family": "multisine",
+   "level_db": -12.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.113507043001033
+  },
+  {
+   "family": "multisine",
+   "level_db": -12.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 2.400819967561395
+  },
+  {
+   "family": "multisine",
+   "level_db": -12.0,
+   "defect": "cubic",
+   "metric": "mrstft",
+   "detection_ratio": 1.4125872128584676
+  },
+  {
+   "family": "multisine",
+   "level_db": -12.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.2925796274382803
+  },
+  {
+   "family": "multisine",
+   "level_db": -12.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 2.9361484667857654
+  },
+  {
+   "family": "multisine",
+   "level_db": -12.0,
+   "defect": "order_beyond_degree",
+   "metric": "mrstft",
+   "detection_ratio": 2.7785487437996026
+  },
+  {
+   "family": "multisine",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.08412018682945271
+  },
+  {
+   "family": "multisine",
+   "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.6919124563813391
+  },
+  {
+   "family": "multisine",
+   "level_db": -20.0,
+   "defect": "cubic",
+   "metric": "mrstft",
+   "detection_ratio": 0.15136181342110094
+  },
+  {
+   "family": "multisine",
+   "level_db": -20.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.2251750095595202
+  },
+  {
+   "family": "multisine",
+   "level_db": -20.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 2.1916450016254276
+  },
+  {
+   "family": "multisine",
+   "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.8880088149661521
+  },
+  {
+   "family": "multisine",
+   "level_db": -20.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 2.0553609841427622
+  },
+  {
+   "family": "multisine",
+   "level_db": -30.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.06694326917591564
+  },
+  {
+   "family": "multisine",
+   "level_db": -30.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.2619718099287665
+  },
+  {
+   "family": "multisine",
+   "level_db": -30.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.19642713904476009
+  },
+  {
+   "family": "multisine",
+   "level_db": -30.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 1.8661219635521598
+  },
+  {
+   "family": "multisine",
+   "level_db": -30.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 2.8272472202033776
+  },
+  {
+   "family": "multisine",
+   "level_db": -30.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.3319719031962638
+  },
+  {
+   "family": "multisine",
+   "level_db": -30.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.7262741296231794
+  },
+  {
+   "family": "noise",
+   "level_db": -12.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.06193256963590351
+  },
+  {
+   "family": "noise",
+   "level_db": -12.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 2.468918556611315
+  },
+  {
+   "family": "noise",
+   "level_db": -12.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 1.47379050409284
+  },
+  {
+   "family": "noise",
+   "level_db": -12.0,
+   "defect": "cubic",
+   "metric": "mrstft",
+   "detection_ratio": 0.564493877391311
+  },
+  {
+   "family": "noise",
+   "level_db": -12.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.17024011184067708
+  },
+  {
+   "family": "noise",
+   "level_db": -12.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 1.69871478466195
+  },
+  {
+   "family": "noise",
+   "level_db": -12.0,
+   "defect": "order_beyond_degree",
+   "metric": "mrstft",
+   "detection_ratio": 0.5717538721057275
+  },
+  {
+   "family": "noise",
+   "level_db": -12.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 1.1766095300698456
+  },
+  {
+   "family": "noise",
+   "level_db": -12.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 2.138237475128694
+  },
+  {
+   "family": "noise",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.06119410733844253
+  },
+  {
+   "family": "noise",
+   "level_db": -20.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 2.4758926008568114
+  },
+  {
+   "family": "noise",
+   "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.4682017849340464
+  },
+  {
+   "family": "noise",
+   "level_db": -20.0,
+   "defect": "cubic",
+   "metric": "mrstft",
+   "detection_ratio": 0.07196824488900772
+  },
+  {
+   "family": "noise",
+   "level_db": -20.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.16981683985231816
+  },
+  {
+   "family": "noise",
+   "level_db": -20.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 1.7302711016036012
+  },
+  {
+   "family": "noise",
+   "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.3733975080808078
+  },
+  {
+   "family": "noise",
+   "level_db": -20.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 1.3559072776867576
+  },
+  {
+   "family": "noise",
+   "level_db": -30.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.06609880888461137
+  },
+  {
+   "family": "noise",
+   "level_db": -30.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 2.8241528140110597
+  },
+  {
+   "family": "noise",
+   "level_db": -30.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.15564631420301853
+  },
+  {
+   "family": "noise",
+   "level_db": -30.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.18683063472621123
+  },
+  {
+   "family": "noise",
+   "level_db": -30.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 1.9586366663658936
+  },
+  {
+   "family": "noise",
+   "level_db": -30.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.12415709176830955
+  },
+  {
+   "family": "noise",
+   "level_db": -30.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.6298010742939895
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.012898138504129703
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.20798790296527167
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.06189270456884092
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.042461404218904965
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 1.0930692986341772
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.21275938870126052
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 1.7400682487407044
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.04215809663875984
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
+   "defect": "redistribution_bias",
+   "metric": "mrstft",
+   "detection_ratio": 2.6870839222841973
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.24497907608727215
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.012418363060283788
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.2526409309871973
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.035644255676834
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.041513435969140665
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 1.2163003222483546
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.2528581533808924
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 1.99820544427219
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.026644535562335526
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.11765879706252964
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.015438983179991211
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.19827427930398941
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.12851893759485264
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "cubic",
+   "metric": "mrstft",
+   "detection_ratio": 0.034896704174514195
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.04940607957993376
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 1.0656543744695939
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.2124192400070738
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "order_beyond_degree",
+   "metric": "mrstft",
+   "detection_ratio": 0.01850851671321389
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 1.816764971254132
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.09027889217089947
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "redistribution_bias",
+   "metric": "mrstft",
+   "detection_ratio": 2.734542722512814
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.3881402466410636
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.018891126071436445
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.4133363135405582
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_1",
+   "detection_ratio": 0.19619900103161578
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_3",
+   "detection_ratio": 0.027350607827188025
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_4",
+   "detection_ratio": 0.025445576397603396
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 0.026462485886769662
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.14204809111937516
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "cubic",
+   "metric": "harmonic_order_2",
+   "detection_ratio": 0.005492943509518632
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "cubic",
+   "metric": "harmonic_order_4",
+   "detection_ratio": 0.003863255288489501
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "cubic",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 0.00855330047843288
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "cubic",
+   "metric": "mrstft",
+   "detection_ratio": 0.02019828565385296
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.05642730931448129
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 0.8991767139695497
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.18814562977764296
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 1.2104220557951495
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_1",
+   "detection_ratio": 0.11497948479867189
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_3",
+   "detection_ratio": 0.01640512350853377
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_4",
+   "detection_ratio": 0.015318557790714182
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 0.01587613807705857
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.10342691866710639
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "redistribution_bias",
+   "metric": "mrstft",
+   "detection_ratio": 2.9779705688322675
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.1557495604035183
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 1.052184032849232
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.0128066439421192
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "coloration_db",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 2.130997245034645
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.4177697142172371
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_1",
+   "detection_ratio": 0.050055620845186194
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_3",
+   "detection_ratio": 0.00697791864045738
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_4",
+   "detection_ratio": 0.002811327680597069
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 0.0072149535806725834
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.050870926908204925
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.03946729462394859
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "echo_beyond_memory",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 1.5310556531177935
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 0.6570496936587048
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "gain",
+   "metric": "harmonic_order_4",
+   "detection_ratio": 1.7067455568798546
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "gain",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 0.46050653601854186
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.17188926889963205
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 1.0628302109359034
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_1",
+   "detection_ratio": 0.02933434658576921
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_3",
+   "detection_ratio": 0.004185414008073226
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_4",
+   "detection_ratio": 0.0016963510604165058
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 0.004379771190419421
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.03219469318646269
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "redistribution_bias",
+   "metric": "mrstft",
+   "detection_ratio": 2.2350188513906293
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "release_ms",
+   "metric": "harmonic_order_4",
+   "detection_ratio": 0.7518294815616509
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.0850598455499497
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.020845526171213588
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.4532483389385543
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_1",
+   "detection_ratio": 0.6998723454741773
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_3",
+   "detection_ratio": 0.09756286512321558
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_4",
+   "detection_ratio": 0.09447442051179133
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "cross_term",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 0.10665728596187914
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.46524750378059754
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "cubic",
+   "metric": "harmonic_order_2",
+   "detection_ratio": 0.043865913122977815
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "cubic",
+   "metric": "harmonic_order_4",
+   "detection_ratio": 0.03258213590678404
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "cubic",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 0.08305669506305458
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "cubic",
+   "metric": "mrstft",
+   "detection_ratio": 0.16239502945151457
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.06139288025245221
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 1.1616132578373897
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.23201733843285283
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "order_beyond_degree",
+   "metric": "harmonic_order_2",
+   "detection_ratio": 0.3415405077151773
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "order_beyond_degree",
+   "metric": "harmonic_order_4",
+   "detection_ratio": 0.029101751173348143
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "order_beyond_degree",
+   "metric": "mrstft",
+   "detection_ratio": 0.2386835252972806
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 1.6206256097249712
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_1",
+   "detection_ratio": 0.41014970149887275
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_3",
+   "detection_ratio": 0.0585190231349239
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_4",
+   "detection_ratio": 0.05693708064586304
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "quadratic",
+   "metric": "harmonic_order_5",
+   "detection_ratio": 0.0642071195997527
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.3737190540566222
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.2146877268509292
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.022377570235784072
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.49261907757007733
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.10874352083402022
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "cubic",
+   "metric": "mrstft",
+   "detection_ratio": 0.017768929303394156
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.06613263142694457
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 0.5506695642945872
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.19378624315748752
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 0.4857806577348733
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.09209949762818855
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.29942264304286803
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.014115137290815292
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.4881880589117313
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.043784250584939136
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.04697902025825075
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 0.5105663059620271
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.17511154227455025
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 0.3594323340207278
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.034346013742771846
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "redistribution_bias",
+   "metric": "mrstft",
+   "detection_ratio": 2.3810239239856905
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.16426346195814726
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "allpass",
+   "metric": "mrstft",
+   "detection_ratio": 0.0283278728683635
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "coloration_db",
+   "metric": "mrstft",
+   "detection_ratio": 0.5598733255036201
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "cross_term",
+   "metric": "mrstft",
+   "detection_ratio": 0.3551805657823961
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "cubic",
+   "metric": "mrstft",
+   "detection_ratio": 0.14045274125893387
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "delay_samples",
+   "metric": "mrstft",
+   "detection_ratio": 0.08078927488676536
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "echo_beyond_memory",
+   "metric": "mrstft",
+   "detection_ratio": 0.7143034267859836
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "gain",
+   "metric": "mrstft",
+   "detection_ratio": 0.2569781281018363
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "order_beyond_degree",
+   "metric": "mrstft",
+   "detection_ratio": 0.26777443521341243
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "prefilter_hz",
+   "metric": "mrstft",
+   "detection_ratio": 0.7667012741085719
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "quadratic",
+   "metric": "mrstft",
+   "detection_ratio": 0.3036700039906883
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "release_ms",
+   "metric": "mrstft",
+   "detection_ratio": 0.4333262829210886
+  }
+ ],
+ "redundancy_spearman": {
+  "d_audio|esr": 0.9999802015729466,
+  "d_audio|fir": 0.9518382913344988,
+  "d_audio|hammerstein_3": 0.9595401326188753,
+  "d_audio|hammerstein_5": 0.962517245733887,
+  "d_audio|harmonic_order_1": 0.8353449164418308,
+  "d_audio|harmonic_order_2": 0.829180294755143,
+  "d_audio|harmonic_order_3": 0.7448382057545251,
+  "d_audio|harmonic_order_4": 0.7189496203336708,
+  "d_audio|harmonic_order_5": 0.6109930951669682,
+  "d_audio|harmonic_total": 0.9713539618391628,
+  "d_audio|imd": 0.983977835489764,
+  "d_audio|mrstft": 0.6203369861922026,
+  "esr|fir": 0.9518243345890707,
+  "esr|hammerstein_3": 0.9595200498921432,
+  "esr|hammerstein_5": 0.9624989866672882,
+  "esr|harmonic_order_1": 0.83535430566292,
+  "esr|harmonic_order_2": 0.8292982655424173,
+  "esr|harmonic_order_3": 0.7449027764049121,
+  "esr|harmonic_order_4": 0.7190438726480506,
+  "esr|harmonic_order_5": 0.6110973738009496,
+  "esr|harmonic_total": 0.971368626374087,
+  "esr|imd": 0.983977835489764,
+  "esr|mrstft": 0.6203250582790161,
+  "fir|hammerstein_3": 0.995641780610622,
+  "fir|hammerstein_5": 0.994710668785299,
+  "fir|harmonic_order_1": 0.8246430049974101,
+  "fir|harmonic_order_2": 0.7596247508579478,
+  "fir|harmonic_order_3": 0.7347255316279279,
+  "fir|harmonic_order_4": 0.6547378201381707,
+  "fir|harmonic_order_5": 0.5663504623177329,
+  "fir|harmonic_total": 0.937898065308936,
+  "fir|imd": 0.998374020291028,
+  "fir|mrstft": 0.481227211837618,
+  "hammerstein_3|hammerstein_5": 0.9997357866567267,
+  "hammerstein_3|harmonic_order_1": 0.7906247482831468,
+  "hammerstein_3|harmonic_order_2": 0.7929311094126991,
+  "hammerstein_3|harmonic_order_3": 0.7098787633562618,
+  "hammerstein_3|harmonic_order_4": 0.6423668869606917,
+  "hammerstein_3|harmonic_order_5": 0.5542642629141752,
+  "hammerstein_3|harmonic_total": 0.9337019886406209,
+  "hammerstein_3|imd": 0.9978719896896401,
+  "hammerstein_3|mrstft": 0.4965756240626726,
+  "hammerstein_5|harmonic_order_1": 0.79161382535061,
+  "hammerstein_5|harmonic_order_2": 0.7929685743829519,
+  "hammerstein_5|harmonic_order_3": 0.7114597851009306,
+  "hammerstein_5|harmonic_order_4": 0.6445848131996583,
+  "hammerstein_5|harmonic_order_5": 0.5564672031650406,
+  "hammerstein_5|harmonic_total": 0.9339492574442895,
+  "hammerstein_5|imd": 0.9978345247193873,
+  "hammerstein_5|mrstft": 0.502361053378397,
+  "harmonic_order_1|harmonic_order_2": 0.4852621897200697,
+  "harmonic_order_1|harmonic_order_3": 0.8872882991074535,
+  "harmonic_order_1|harmonic_order_4": 0.7612334240625086,
+  "harmonic_order_1|harmonic_order_5": 0.7094417521662558,
+  "harmonic_order_1|harmonic_total": 0.897283971895301,
+  "harmonic_order_1|mrstft": 0.36552017398828907,
+  "harmonic_order_2|harmonic_order_3": 0.4377856703981776,
+  "harmonic_order_2|harmonic_order_4": 0.6073146607921592,
+  "harmonic_order_2|harmonic_order_5": 0.44696458811011697,
+  "harmonic_order_2|harmonic_total": 0.7677471564087577,
+  "harmonic_order_2|mrstft": 0.46783257654093413,
+  "harmonic_order_3|harmonic_order_4": 0.8470155404696608,
+  "harmonic_order_3|harmonic_order_5": 0.8842482279069069,
+  "harmonic_order_3|harmonic_total": 0.7893419652624795,
+  "harmonic_order_3|mrstft": 0.42198294594554087,
+  "harmonic_order_4|harmonic_order_5": 0.9086903744998425,
+  "harmonic_order_4|harmonic_total": 0.7158132146443075,
+  "harmonic_order_4|mrstft": 0.5923286726910337,
+  "harmonic_order_5|harmonic_total": 0.6313971436706679,
+  "harmonic_order_5|mrstft": 0.519054683870581,
+  "harmonic_total|mrstft": 0.40549086604025236,
+  "imd|mrstft": 0.48804867448935246
+ },
+ "profiles_beyond_d_audio": {
+  "esr|fir": {
+   "spearman": -0.126294588479363,
+   "separating_defects": {
+    "noise_db": 3.49,
+    "echo_beyond_memory": 0.77,
+    "gain": -0.53
+   }
+  },
+  "esr|hammerstein_3": {
+   "spearman": -0.07728085801153914,
+   "separating_defects": {
+    "noise_db": 2.83,
+    "echo_beyond_memory": 1.15,
+    "cross_term": 0.16
+   }
+  },
+  "esr|hammerstein_5": {
+   "spearman": -0.06825585827249088,
+   "separating_defects": {
+    "noise_db": 2.54,
+    "echo_beyond_memory": 1.12,
+    "cross_term": 0.16
+   }
+  },
+  "esr|harmonic_order_1": {
+   "spearman": 0.026753078092704316,
+   "separating_defects": {
+    "quadratic": 9.33,
+    "cross_term": 9.12,
+    "noise_db": 1.93
+   }
+  },
+  "esr|harmonic_order_2": {
+   "spearman": 0.013460222714506831,
+   "separating_defects": {
+    "cubic": 8.06,
+    "order_beyond_degree": 6.2,
+    "cross_term": -2.49
+   }
+  },
+  "esr|harmonic_order_3": {
+   "spearman": 0.04754191155166534,
+   "separating_defects": {
+    "quadratic": 9.36,
+    "cross_term": 9.16,
+    "order_beyond_degree": -1.36
+   }
+  },
+  "esr|harmonic_order_4": {
+   "spearman": -0.024759939211098467,
+   "separating_defects": {
+    "order_beyond_degree": 5.65,
+    "quadratic": 5.42,
+    "cubic": 5.4
+   }
+  },
+  "esr|harmonic_order_5": {
+   "spearman": -0.07927371207418231,
+   "separating_defects": {
+    "quadratic": 6.71,
+    "cross_term": 6.53,
+    "cubic": 5.88
+   }
+  },
+  "esr|harmonic_total": {
+   "spearman": 0.013092235088369063,
+   "separating_defects": {
+    "noise_db": 1.09,
+    "prefilter_hz": 0.76,
+    "quadratic": 0.61
+   }
+  },
+  "esr|imd": {
+   "spearman": -0.026792817842955896,
+   "separating_defects": {
+    "noise_db": 4.84,
+    "quadratic": 0.26,
+    "cross_term": 0.17
+   }
+  },
+  "esr|mrstft": {
+   "spearman": -0.005763013880406561,
+   "separating_defects": {
+    "noise_db": -6.99,
+    "allpass": 1.98,
+    "delay_samples": 1.94
+   }
+  },
+  "fir|hammerstein_3": {
+   "spearman": 0.9095734626139221,
+   "separating_defects": {
+    "noise_db": -0.65,
+    "cross_term": -0.43,
+    "order_beyond_degree": -0.29
+   }
+  },
+  "fir|hammerstein_5": {
+   "spearman": 0.8757734493083246,
+   "separating_defects": {
+    "noise_db": -0.96,
+    "cross_term": -0.45,
+    "order_beyond_degree": -0.3
+   }
+  },
+  "fir|harmonic_order_1": {
+   "spearman": 0.5699577762035688,
+   "separating_defects": {
+    "quadratic": 9.23,
+    "cross_term": 8.27,
+    "echo_beyond_memory": -2.13
+   }
+  },
+  "fir|harmonic_order_2": {
+   "spearman": -0.36965643852321856,
+   "separating_defects": {
+    "cubic": 8.25,
+    "order_beyond_degree": 6.29,
+    "noise_db": -4.29
+   }
+  },
+  "fir|harmonic_order_3": {
+   "spearman": -0.019429697540174772,
+   "separating_defects": {
+    "quadratic": 9.43,
+    "cross_term": 8.49,
+    "noise_db": -3.23
+   }
+  },
+  "fir|harmonic_order_4": {
+   "spearman": 0.005376263515627023,
+   "separating_defects": {
+    "order_beyond_degree": 6.82,
+    "cubic": 6.66,
+    "quadratic": 6.51
+   }
+  },
+  "fir|harmonic_order_5": {
+   "spearman": -0.09198825841379062,
+   "separating_defects": {
+    "quadratic": 6.83,
+    "cubic": 6.17,
+    "cross_term": 5.9
+   }
+  },
+  "fir|harmonic_total": {
+   "spearman": 0.5072159155091659,
+   "separating_defects": {
+    "noise_db": -2.22,
+    "echo_beyond_memory": -2.03,
+    "prefilter_hz": 0.85
+   }
+  },
+  "fir|imd": {
+   "spearman": 0.9816533353314728,
+   "separating_defects": {
+    "noise_db": -0.8,
+    "cross_term": -0.29,
+    "order_beyond_degree": -0.13
+   }
+  },
+  "fir|mrstft": {
+   "spearman": -0.5791536046486846,
+   "separating_defects": {
+    "noise_db": -11.12,
+    "allpass": 2.28,
+    "delay_samples": 2.27
+   }
+  },
+  "hammerstein_3|hammerstein_5": {
+   "spearman": 0.9764216374817919,
+   "separating_defects": {
+    "noise_db": -0.28,
+    "order_beyond_degree": -0.12,
+    "echo_beyond_memory": -0.04
+   }
+  },
+  "hammerstein_3|harmonic_order_1": {
+   "spearman": 0.6874507093476627,
+   "separating_defects": {
+    "quadratic": 9.33,
+    "cross_term": 8.81,
+    "echo_beyond_memory": -2.17
+   }
+  },
+  "hammerstein_3|harmonic_order_2": {
+   "spearman": -0.3185037681444115,
+   "separating_defects": {
+    "cubic": 8.27,
+    "order_beyond_degree": 6.39,
+    "noise_db": -3.63
+   }
+  },
+  "hammerstein_3|harmonic_order_3": {
+   "spearman": 0.013433291559776468,
+   "separating_defects": {
+    "quadratic": 9.56,
+    "cross_term": 9.06,
+    "noise_db": -2.58
+   }
+  },
+  "hammerstein_3|harmonic_order_4": {
+   "spearman": 0.030258753271231693,
+   "separating_defects": {
+    "order_beyond_degree": 6.92,
+    "cubic": 6.7,
+    "quadratic": 6.65
+   }
+  },
+  "hammerstein_3|harmonic_order_5": {
+   "spearman": -0.0795309368156491,
+   "separating_defects": {
+    "quadratic": 6.97,
+    "cross_term": 6.48,
+    "cubic": 6.21
+   }
+  },
+  "hammerstein_3|harmonic_total": {
+   "spearman": 0.6486500156977154,
+   "separating_defects": {
+    "echo_beyond_memory": -2.13,
+    "noise_db": -1.65,
+    "prefilter_hz": 0.81
+   }
+  },
+  "hammerstein_3|imd": {
+   "spearman": 0.46031882809134,
+   "separating_defects": {
+    "quadratic": 0.26,
+    "noise_db": 0.23,
+    "cross_term": 0.17
+   }
+  },
+  "hammerstein_3|mrstft": {
+   "spearman": -0.6144573404787607,
+   "separating_defects": {
+    "noise_db": -10.24,
+    "allpass": 2.43,
+    "delay_samples": 2.41
+   }
+  },
+  "hammerstein_5|harmonic_order_1": {
+   "spearman": 0.7163072473776996,
+   "separating_defects": {
+    "quadratic": 9.33,
+    "cross_term": 8.81,
+    "echo_beyond_memory": -2.17
+   }
+  },
+  "hammerstein_5|harmonic_order_2": {
+   "spearman": -0.29723016289665377,
+   "separating_defects": {
+    "cubic": 8.27,
+    "order_beyond_degree": 6.39,
+    "noise_db": -3.36
+   }
+  },
+  "hammerstein_5|harmonic_order_3": {
+   "spearman": 0.05454606762123703,
+   "separating_defects": {
+    "quadratic": 9.56,
+    "cross_term": 9.05,
+    "noise_db": -2.31
+   }
+  },
+  "hammerstein_5|harmonic_order_4": {
+   "spearman": 0.06841878500646273,
+   "separating_defects": {
+    "order_beyond_degree": 6.93,
+    "cubic": 6.7,
+    "quadratic": 6.65
+   }
+  },
+  "hammerstein_5|harmonic_order_5": {
+   "spearman": -0.05076887629239882,
+   "separating_defects": {
+    "quadratic": 6.97,
+    "cross_term": 6.48,
+    "cubic": 6.21
+   }
+  },
+  "hammerstein_5|harmonic_total": {
+   "spearman": 0.6782935136443616,
+   "separating_defects": {
+    "echo_beyond_memory": -2.13,
+    "noise_db": -1.38,
+    "prefilter_hz": 0.83
+   }
+  },
+  "hammerstein_5|imd": {
+   "spearman": 0.3508788361865996,
+   "separating_defects": {
+    "noise_db": 0.79,
+    "quadratic": 0.26,
+    "cross_term": 0.17
+   }
+  },
+  "hammerstein_5|mrstft": {
+   "spearman": -0.5828805568009269,
+   "separating_defects": {
+    "noise_db": -9.93,
+    "allpass": 2.45,
+    "delay_samples": 2.43
+   }
+  },
+  "harmonic_order_1|harmonic_order_2": {
+   "spearman": -0.5143270340378089,
+   "separating_defects": {
+    "quadratic": -11.63,
+    "cross_term": -11.6,
+    "cubic": 8.13
+   }
+  },
+  "harmonic_order_1|harmonic_order_3": {
+   "spearman": 0.3960675735924978,
+   "separating_defects": {
+    "noise_db": -1.96,
+    "order_beyond_degree": -1.32,
+    "prefilter_hz": -0.93
+   }
+  },
+  "harmonic_order_1|harmonic_order_4": {
+   "spearman": 0.03671247452575738,
+   "separating_defects": {
+    "order_beyond_degree": 7.49,
+    "cubic": 7.25,
+    "noise_db": -4.23
+   }
+  },
+  "harmonic_order_1|harmonic_order_5": {
+   "spearman": 0.1654549712126513,
+   "separating_defects": {
+    "cubic": 7.66,
+    "noise_db": -2.84,
+    "echo_beyond_memory": 1.97
+   }
+  },
+  "harmonic_order_1|harmonic_total": {
+   "spearman": 0.9448817570165376,
+   "separating_defects": {
+    "quadratic": -8.7,
+    "cross_term": -8.68,
+    "noise_db": -0.82
+   }
+  },
+  "harmonic_order_1|mrstft": {
+   "spearman": -0.5767508078985998,
+   "separating_defects": {
+    "quadratic": -9.0,
+    "noise_db": -9.0,
+    "cross_term": -8.77
+   }
+  },
+  "harmonic_order_2|harmonic_order_3": {
+   "spearman": -0.4102349873393398,
+   "separating_defects": {
+    "quadratic": 11.14,
+    "cross_term": 11.14,
+    "cubic": -9.4
+   }
+  },
+  "harmonic_order_2|harmonic_order_4": {
+   "spearman": 0.2636159619045346,
+   "separating_defects": {
+    "cross_term": 9.06,
+    "quadratic": 9.05,
+    "noise_db": -1.74
+   }
+  },
+  "harmonic_order_2|harmonic_order_5": {
+   "spearman": -0.119766289592405,
+   "separating_defects": {
+    "cross_term": 9.47,
+    "quadratic": 9.46,
+    "order_beyond_degree": -8.45
+   }
+  },
+  "harmonic_order_2|harmonic_total": {
+   "spearman": -0.41115070043123636,
+   "separating_defects": {
+    "cubic": -8.18,
+    "order_beyond_degree": -6.39,
+    "quadratic": 2.9
+   }
+  },
+  "harmonic_order_2|mrstft": {
+   "spearman": 0.15495023633630575,
+   "separating_defects": {
+    "cubic": -7.85,
+    "order_beyond_degree": -6.83,
+    "noise_db": -6.52
+   }
+  },
+  "harmonic_order_3|harmonic_order_4": {
+   "spearman": 0.2922386404692445,
+   "separating_defects": {
+    "order_beyond_degree": 8.85,
+    "cubic": 8.07,
+    "noise_db": -2.23
+   }
+  },
+  "harmonic_order_3|harmonic_order_5": {
+   "spearman": 0.7440153609031924,
+   "separating_defects": {
+    "cubic": 8.03,
+    "quadratic": -1.32,
+    "cross_term": -1.3
+   }
+  },
+  "harmonic_order_3|harmonic_total": {
+   "spearman": 0.30789260719265354,
+   "separating_defects": {
+    "quadratic": -8.71,
+    "cross_term": -8.71,
+    "order_beyond_degree": 1.2
+   }
+  },
+  "harmonic_order_3|mrstft": {
+   "spearman": 0.06665854915573326,
+   "separating_defects": {
+    "quadratic": -8.81,
+    "cross_term": -8.61,
+    "noise_db": -6.85
+   }
+  },
+  "harmonic_order_4|harmonic_order_5": {
+   "spearman": 0.6269474796341675,
+   "separating_defects": {
+    "order_beyond_degree": -9.63,
+    "cubic": -0.82,
+    "redistribution_bias": -0.48
+   }
+  },
+  "harmonic_order_4|harmonic_total": {
+   "spearman": -0.16016387486765446,
+   "separating_defects": {
+    "order_beyond_degree": -6.07,
+    "cubic": -5.74,
+    "cross_term": -5.05
+   }
+  },
+  "harmonic_order_4|mrstft": {
+   "spearman": 0.017185214047172416,
+   "separating_defects": {
+    "order_beyond_degree": -5.65,
+    "allpass": 5.36,
+    "delay_samples": 5.3
+   }
+  },
+  "harmonic_order_5|harmonic_total": {
+   "spearman": 0.04235486294748142,
+   "separating_defects": {
+    "cross_term": -6.0,
+    "quadratic": -5.99,
+    "cubic": -5.88
+   }
+  },
+  "harmonic_order_5|mrstft": {
+   "spearman": 0.24349233466708625,
+   "separating_defects": {
+    "quadratic": -5.9,
+    "cross_term": -5.78,
+    "cubic": -4.89
+   }
+  },
+  "harmonic_total|mrstft": {
+   "spearman": -0.5610698678074327,
+   "separating_defects": {
+    "noise_db": -8.24,
+    "allpass": 3.66,
+    "delay_samples": 3.6
+   }
+  },
+  "imd|mrstft": {
+   "spearman": -0.5666887085997829,
+   "separating_defects": {
+    "noise_db": -12.4,
+    "delay_samples": 2.03,
+    "allpass": 2.0
+   }
+  }
+ },
+ "probe_quality": {
+  "fir": {
+   "median_unrepresented": 0.0050193088546223764,
+   "median_r_ref": 0.1005395004343611,
+   "bound_violations": 0,
+   "rows": 1872
+  },
+  "hammerstein_3": {
+   "median_unrepresented": 0.001823068874592425,
+   "median_r_ref": 0.04457127744739301,
+   "bound_violations": 0,
+   "rows": 1872
+  },
+  "hammerstein_5": {
+   "median_unrepresented": 0.001299871362796898,
+   "median_r_ref": 0.02915467706483956,
+   "bound_violations": 0,
+   "rows": 1872
+  }
+ },
+ "dependence": {
+  "d_audio|allpass": {
+   "level_ratio_median": 1.0112943594349721,
+   "content_log_sd": 0.842807405735164
+  },
+  "d_audio|coloration_db": {
+   "level_ratio_median": 0.9916898356037848,
+   "content_log_sd": 0.5147674270654533
+  },
+  "d_audio|cross_term": {
+   "level_ratio_median": 12.251514604121068,
+   "content_log_sd": 0.43624248009498673
+  },
+  "d_audio|cubic": {
+   "level_ratio_median": 94.45308464604365,
+   "content_log_sd": 0.6493345715865231
+  },
+  "d_audio|delay_samples": {
+   "level_ratio_median": 1.011144004965413,
+   "content_log_sd": 0.8373711047758513
+  },
+  "d_audio|echo_beyond_memory": {
+   "level_ratio_median": 1.0000280388369227,
+   "content_log_sd": 0.000607313023022711
+  },
+  "d_audio|gain": {
+   "level_ratio_median": 1.0,
+   "content_log_sd": 1.8129866073473578e-16
+  },
+  "d_audio|noise_db": {
+   "level_ratio_median": 0.9999664927639886,
+   "content_log_sd": 0.0019897001374451495
+  },
+  "d_audio|order_beyond_degree": {
+   "level_ratio_median": 304203.84473972773,
+   "content_log_sd": 1.6335042181572275
+  },
+  "d_audio|prefilter_hz": {
+   "level_ratio_median": 0.999183176545291,
+   "content_log_sd": 0.5008019766890408
+  },
+  "d_audio|quadratic": {
+   "level_ratio_median": 12.266370091570195,
+   "content_log_sd": 0.395594822664566
+  },
+  "d_audio|redistribution_bias": {
+   "level_ratio_median": 0.6730674173848139,
+   "content_log_sd": 0.08525545804577798
+  },
+  "d_audio|release_ms": {
+   "level_ratio_median": 3.4453796829093832,
+   "content_log_sd": 0.4755611719078061
+  },
+  "esr|allpass": {
+   "level_ratio_median": 1.0112943594349726,
+   "content_log_sd": 0.8428074057351642
+  },
+  "esr|coloration_db": {
+   "level_ratio_median": 0.9916898356037851,
+   "content_log_sd": 0.5147674270654534
+  },
+  "esr|cross_term": {
+   "level_ratio_median": 12.251514604121073,
+   "content_log_sd": 0.4362424800949865
+  },
+  "esr|cubic": {
+   "level_ratio_median": 94.45308464604366,
+   "content_log_sd": 0.6493345715865233
+  },
+  "esr|delay_samples": {
+   "level_ratio_median": 1.0111440049654137,
+   "content_log_sd": 0.8373711047758515
+  },
+  "esr|echo_beyond_memory": {
+   "level_ratio_median": 1.0000280388369231,
+   "content_log_sd": 0.0006073130230226729
+  },
+  "esr|gain": {
+   "level_ratio_median": 1.0,
+   "content_log_sd": 8.308148362110449e-16
+  },
+  "esr|noise_db": {
+   "level_ratio_median": 0.9999664927639886,
+   "content_log_sd": 0.0019897001374449045
+  },
+  "esr|order_beyond_degree": {
+   "level_ratio_median": 304203.8447397278,
+   "content_log_sd": 1.6335042181572275
+  },
+  "esr|prefilter_hz": {
+   "level_ratio_median": 0.9991831765452913,
+   "content_log_sd": 0.5008019766890407
+  },
+  "esr|quadratic": {
+   "level_ratio_median": 12.266370091570199,
+   "content_log_sd": 0.395594822664566
+  },
+  "esr|redistribution_bias": {
+   "level_ratio_median": 0.6730674173848141,
+   "content_log_sd": 0.085255458045778
+  },
+  "esr|release_ms": {
+   "level_ratio_median": 3.445379682909385,
+   "content_log_sd": 0.4755611719078061
+  },
+  "fir|allpass": {
+   "level_ratio_median": 0.9240235689935308,
+   "content_log_sd": 0.8900409279352997
+  },
+  "fir|coloration_db": {
+   "level_ratio_median": 0.9228364927087833,
+   "content_log_sd": 0.5458275921321313
+  },
+  "fir|cross_term": {
+   "level_ratio_median": 12.280756607259281,
+   "content_log_sd": 1.054113613224828
+  },
+  "fir|cubic": {
+   "level_ratio_median": 94.20001962242088,
+   "content_log_sd": 0.7004860893567931
+  },
+  "fir|delay_samples": {
+   "level_ratio_median": 0.9236388137404847,
+   "content_log_sd": 0.8828527564546039
+  },
+  "fir|echo_beyond_memory": {
+   "level_ratio_median": 1.8237918794429788,
+   "content_log_sd": 0.9790859883625268
+  },
+  "fir|gain": {
+   "level_ratio_median": 0.9742899329592803,
+   "content_log_sd": 0.012884081758985455
+  },
+  "fir|noise_db": {
+   "level_ratio_median": 1.0007296516705724,
+   "content_log_sd": 1.1872644216239945
+  },
+  "fir|order_beyond_degree": {
+   "level_ratio_median": 304103.9443860044,
+   "content_log_sd": 1.787440293653633
+  },
+  "fir|prefilter_hz": {
+   "level_ratio_median": 0.9526918398680557,
+   "content_log_sd": 0.5020282837831671
+  },
+  "fir|quadratic": {
+   "level_ratio_median": 12.276664049945246,
+   "content_log_sd": 0.5443543490548859
+  },
+  "fir|redistribution_bias": {
+   "level_ratio_median": 0.49916122161658905,
+   "content_log_sd": 0.09771285092327707
+  },
+  "fir|release_ms": {
+   "level_ratio_median": 2.9134278719292355,
+   "content_log_sd": 0.40929238808691326
+  },
+  "hammerstein_3|allpass": {
+   "level_ratio_median": 0.9558637700737016,
+   "content_log_sd": 0.8564158388343348
+  },
+  "hammerstein_3|coloration_db": {
+   "level_ratio_median": 0.9524908853772586,
+   "content_log_sd": 0.5296389828352422
+  },
+  "hammerstein_3|cross_term": {
+   "level_ratio_median": 12.22524134236616,
+   "content_log_sd": 1.0133092635115184
+  },
+  "hammerstein_3|cubic": {
+   "level_ratio_median": 94.37247329961205,
+   "content_log_sd": 0.672976045018624
+  },
+  "hammerstein_3|delay_samples": {
+   "level_ratio_median": 0.9558362655897787,
+   "content_log_sd": 0.8510176106101862
+  },
+  "hammerstein_3|echo_beyond_memory": {
+   "level_ratio_median": 1.3659458634833352,
+   "content_log_sd": 0.8932579325239539
+  },
+  "hammerstein_3|gain": {
+   "level_ratio_median": 0.9907440026174246,
+   "content_log_sd": 0.014011680033750277
+  },
+  "hammerstein_3|noise_db": {
+   "level_ratio_median": 1.0017069509589804,
+   "content_log_sd": 1.0662823032280186
+  },
+  "hammerstein_3|order_beyond_degree": {
+   "level_ratio_median": 304104.29532853805,
+   "content_log_sd": 1.75538300227087
+  },
+  "hammerstein_3|prefilter_hz": {
+   "level_ratio_median": 0.9751162956078694,
+   "content_log_sd": 0.495576944739701
+  },
+  "hammerstein_3|quadratic": {
+   "level_ratio_median": 12.272941659782141,
+   "content_log_sd": 0.4541508003947286
+  },
+  "hammerstein_3|redistribution_bias": {
+   "level_ratio_median": 0.5886104503388148,
+   "content_log_sd": 0.08545234631323552
+  },
+  "hammerstein_3|release_ms": {
+   "level_ratio_median": 3.1262394684667085,
+   "content_log_sd": 0.4104023949755532
+  },
+  "hammerstein_5|allpass": {
+   "level_ratio_median": 0.9779544993569202,
+   "content_log_sd": 0.8528868261459208
+  },
+  "hammerstein_5|coloration_db": {
+   "level_ratio_median": 0.9823336517028385,
+   "content_log_sd": 0.5247435921844044
+  },
+  "hammerstein_5|cross_term": {
+   "level_ratio_median": 12.283090026985121,
+   "content_log_sd": 0.9180888950693505
+  },
+  "hammerstein_5|cubic": {
+   "level_ratio_median": 94.37247329926991,
+   "content_log_sd": 0.6684015053822878
+  },
+  "hammerstein_5|delay_samples": {
+   "level_ratio_median": 0.9783100865140744,
+   "content_log_sd": 0.847414005659188
+  },
+  "hammerstein_5|echo_beyond_memory": {
+   "level_ratio_median": 1.2183745139464688,
+   "content_log_sd": 0.8417097424725868
+  },
+  "hammerstein_5|gain": {
+   "level_ratio_median": 0.9945932789940364,
+   "content_log_sd": 0.012748637561765598
+  },
+  "hammerstein_5|noise_db": {
+   "level_ratio_median": 1.00041803110462,
+   "content_log_sd": 1.051729151154059
+  },
+  "hammerstein_5|order_beyond_degree": {
+   "level_ratio_median": 304113.45921760297,
+   "content_log_sd": 1.7286515119789938
+  },
+  "hammerstein_5|prefilter_hz": {
+   "level_ratio_median": 0.9771554137116444,
+   "content_log_sd": 0.495354668155466
+  },
+  "hammerstein_5|quadratic": {
+   "level_ratio_median": 12.272941659783061,
+   "content_log_sd": 0.44560206836715316
+  },
+  "hammerstein_5|redistribution_bias": {
+   "level_ratio_median": 0.6175193831580857,
+   "content_log_sd": 0.08522540694737882
+  },
+  "hammerstein_5|release_ms": {
+   "level_ratio_median": 3.166247894726489,
+   "content_log_sd": 0.41184303218858015
+  },
+  "harmonic_order_1|allpass": {
+   "level_ratio_median": 0.9928484733051022,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|coloration_db": {
+   "level_ratio_median": 0.9942382968349907,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|cross_term": {
+   "level_ratio_median": 15.68269435415594,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|cubic": {
+   "level_ratio_median": 111.02518790056244,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|delay_samples": {
+   "level_ratio_median": 0.9928560372983083,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|echo_beyond_memory": {
+   "level_ratio_median": 1.000006230998399,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|gain": {
+   "level_ratio_median": 1.0000000000000016,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|noise_db": {
+   "level_ratio_median": 1.1216429807427781,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|order_beyond_degree": {
+   "level_ratio_median": 278886.0672445665,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|prefilter_hz": {
+   "level_ratio_median": 0.9860653023288654,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|quadratic": {
+   "level_ratio_median": 15.682694354346213,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|redistribution_bias": {
+   "level_ratio_median": 0.2684166489715316,
+   "content_log_sd": null
+  },
+  "harmonic_order_1|release_ms": {
+   "level_ratio_median": 2.1373531970611124,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|allpass": {
+   "level_ratio_median": 1.6332506860831666,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|coloration_db": {
+   "level_ratio_median": 1.657344070944233,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|cross_term": {
+   "level_ratio_median": 15.682759649893072,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|cubic": {
+   "level_ratio_median": 111.02497359875824,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|delay_samples": {
+   "level_ratio_median": 1.6333567029908906,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|echo_beyond_memory": {
+   "level_ratio_median": 1.71275482976049,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|gain": {
+   "level_ratio_median": 1.7127902769551056,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|noise_db": {
+   "level_ratio_median": 1.1216704211798485,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|order_beyond_degree": {
+   "level_ratio_median": 278886.026186837,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|prefilter_hz": {
+   "level_ratio_median": 2.010555941471685,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|quadratic": {
+   "level_ratio_median": 15.682759562832391,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|redistribution_bias": {
+   "level_ratio_median": 18.729602075295542,
+   "content_log_sd": null
+  },
+  "harmonic_order_2|release_ms": {
+   "level_ratio_median": 3.6452068069314767,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|allpass": {
+   "level_ratio_median": 18.644118518498065,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|coloration_db": {
+   "level_ratio_median": 19.111566900699504,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|cross_term": {
+   "level_ratio_median": 15.682429424455949,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|cubic": {
+   "level_ratio_median": 111.02548086195559,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|delay_samples": {
+   "level_ratio_median": 18.64610954937111,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|echo_beyond_memory": {
+   "level_ratio_median": 19.363885618525554,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|gain": {
+   "level_ratio_median": 19.36386404138252,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|noise_db": {
+   "level_ratio_median": 1.1216429807427553,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|order_beyond_degree": {
+   "level_ratio_median": 278880.32215853326,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|prefilter_hz": {
+   "level_ratio_median": 21.171471012907702,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|quadratic": {
+   "level_ratio_median": 15.682429424311268,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|redistribution_bias": {
+   "level_ratio_median": 10.579768849421765,
+   "content_log_sd": null
+  },
+  "harmonic_order_3|release_ms": {
+   "level_ratio_median": 15.499027048026164,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|allpass": {
+   "level_ratio_median": 37.285640386612705,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|coloration_db": {
+   "level_ratio_median": 39.83029566675048,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|cross_term": {
+   "level_ratio_median": 37.11420741411183,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|cubic": {
+   "level_ratio_median": 267.47575574727915,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|delay_samples": {
+   "level_ratio_median": 37.31047000252545,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|echo_beyond_memory": {
+   "level_ratio_median": 40.21159866450715,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|gain": {
+   "level_ratio_median": 40.20801692151794,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|noise_db": {
+   "level_ratio_median": 1.106256809909287,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|order_beyond_degree": {
+   "level_ratio_median": 278310.28030684055,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|prefilter_hz": {
+   "level_ratio_median": 47.13474653124634,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|quadratic": {
+   "level_ratio_median": 37.06951325692349,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|redistribution_bias": {
+   "level_ratio_median": 21.971507885722936,
+   "content_log_sd": null
+  },
+  "harmonic_order_4|release_ms": {
+   "level_ratio_median": 36.56420344404486,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|allpass": {
+   "level_ratio_median": 420.4167683871596,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|coloration_db": {
+   "level_ratio_median": 368.75094643204227,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|cross_term": {
+   "level_ratio_median": 17.482669980461587,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|cubic": {
+   "level_ratio_median": 124.69767407378318,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|delay_samples": {
+   "level_ratio_median": 418.8438496800291,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|echo_beyond_memory": {
+   "level_ratio_median": 386.06151960260087,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|gain": {
+   "level_ratio_median": 386.32061356312306,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|noise_db": {
+   "level_ratio_median": 1.0328094370201988,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|order_beyond_degree": {
+   "level_ratio_median": 231328.10677957154,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|prefilter_hz": {
+   "level_ratio_median": 412.18138572673035,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|quadratic": {
+   "level_ratio_median": 17.33734284459179,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|redistribution_bias": {
+   "level_ratio_median": 277.6282583433562,
+   "content_log_sd": null
+  },
+  "harmonic_order_5|release_ms": {
+   "level_ratio_median": 7.678708756587888,
+   "content_log_sd": null
+  },
+  "harmonic_total|allpass": {
+   "level_ratio_median": 1.0204955411273628,
+   "content_log_sd": null
+  },
+  "harmonic_total|coloration_db": {
+   "level_ratio_median": 1.0211032758183245,
+   "content_log_sd": null
+  },
+  "harmonic_total|cross_term": {
+   "level_ratio_median": 15.6827598294756,
+   "content_log_sd": null
+  },
+  "harmonic_total|cubic": {
+   "level_ratio_median": 111.02536029497806,
+   "content_log_sd": null
+  },
+  "harmonic_total|delay_samples": {
+   "level_ratio_median": 1.02049958957388,
+   "content_log_sd": null
+  },
+  "harmonic_total|echo_beyond_memory": {
+   "level_ratio_median": 1.025609118767865,
+   "content_log_sd": null
+  },
+  "harmonic_total|gain": {
+   "level_ratio_median": 1.025602658326828,
+   "content_log_sd": null
+  },
+  "harmonic_total|noise_db": {
+   "level_ratio_median": 1.0974624706658749,
+   "content_log_sd": null
+  },
+  "harmonic_total|order_beyond_degree": {
+   "level_ratio_median": 277661.72596612613,
+   "content_log_sd": null
+  },
+  "harmonic_total|prefilter_hz": {
+   "level_ratio_median": 1.4678087615096849,
+   "content_log_sd": null
+  },
+  "harmonic_total|quadratic": {
+   "level_ratio_median": 15.682759426897015,
+   "content_log_sd": null
+  },
+  "harmonic_total|redistribution_bias": {
+   "level_ratio_median": 0.4169178822092261,
+   "content_log_sd": null
+  },
+  "harmonic_total|release_ms": {
+   "level_ratio_median": 2.246270568022568,
+   "content_log_sd": null
+  },
+  "imd|allpass": {
+   "level_ratio_median": 1.006793657378354,
+   "content_log_sd": null
+  },
+  "imd|coloration_db": {
+   "level_ratio_median": 1.0053144810935717,
+   "content_log_sd": null
+  },
+  "imd|cross_term": {
+   "level_ratio_median": 13.313784494838435,
+   "content_log_sd": null
+  },
+  "imd|cubic": {
+   "level_ratio_median": 94.25437607342569,
+   "content_log_sd": null
+  },
+  "imd|delay_samples": {
+   "level_ratio_median": 1.0067487645302806,
+   "content_log_sd": null
+  },
+  "imd|echo_beyond_memory": {
+   "level_ratio_median": 1.0000005499251854,
+   "content_log_sd": null
+  },
+  "imd|gain": {
+   "level_ratio_median": 1.0000000000065377,
+   "content_log_sd": null
+  },
+  "imd|noise_db": {
+   "level_ratio_median": 1.0240410435934464,
+   "content_log_sd": null
+  },
+  "imd|order_beyond_degree": {
+   "level_ratio_median": 236756.28821561,
+   "content_log_sd": null
+  },
+  "imd|prefilter_hz": {
+   "level_ratio_median": 1.0021638601131482,
+   "content_log_sd": null
+  },
+  "imd|quadratic": {
+   "level_ratio_median": 13.313784494838346,
+   "content_log_sd": null
+  },
+  "imd|redistribution_bias": {
+   "level_ratio_median": 0.47865899030342135,
+   "content_log_sd": null
+  },
+  "imd|release_ms": {
+   "level_ratio_median": 2.539210427778078,
+   "content_log_sd": null
+  },
+  "mrstft|allpass": {
+   "level_ratio_median": 1.387932865607973,
+   "content_log_sd": 0.3622814648720029
+  },
+  "mrstft|coloration_db": {
+   "level_ratio_median": 0.9987802043924359,
+   "content_log_sd": 0.4487791672088074
+  },
+  "mrstft|cross_term": {
+   "level_ratio_median": 7.770931316458264,
+   "content_log_sd": 0.34165471740152364
+  },
+  "mrstft|cubic": {
+   "level_ratio_median": 53.49700814583424,
+   "content_log_sd": 0.40676996884653716
+  },
+  "mrstft|delay_samples": {
+   "level_ratio_median": 1.5487888728604078,
+   "content_log_sd": 0.26560725673524826
+  },
+  "mrstft|echo_beyond_memory": {
+   "level_ratio_median": 1.1389196383044051,
+   "content_log_sd": 0.4287070532011181
+  },
+  "mrstft|gain": {
+   "level_ratio_median": 1.0954913338859664,
+   "content_log_sd": 0.13011353382220428
+  },
+  "mrstft|noise_db": {
+   "level_ratio_median": 1.0163464795503026,
+   "content_log_sd": 1.0601521596393417
+  },
+  "mrstft|order_beyond_degree": {
+   "level_ratio_median": 115846.58289035516,
+   "content_log_sd": 1.3215918321097955
+  },
+  "mrstft|prefilter_hz": {
+   "level_ratio_median": 1.3286597716858644,
+   "content_log_sd": 0.6884853410519286
+  },
+  "mrstft|quadratic": {
+   "level_ratio_median": 9.319409961656472,
+   "content_log_sd": 0.3699402760913693
+  },
+  "mrstft|redistribution_bias": {
+   "level_ratio_median": 1.0258677329939503,
+   "content_log_sd": 0.0981427981498641
+  },
+  "mrstft|release_ms": {
+   "level_ratio_median": 3.937734940203825,
+   "content_log_sd": 0.2209107862253872
+  }
+ },
+ "families": [
+  "di",
+  "multisine",
+  "noise",
+  "plucks",
+  "sweep",
+  "two_tone"
+ ]
+}
