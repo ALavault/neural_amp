@@ -238,11 +238,16 @@ des contrôles négatifs, mesurée par l'AUC avec un p exact unilatéral.
 - **À entrée commune, ESR et sondes séparent pareillement.** L'avantage apparent des sondes sur
   toutes les paires vient des sections à glissement. Sur le réel, leur intérêt est de rester
   utilisables malgré l'acquisition, pas de mieux séparer.
-- **À −3 dBFS, la signature harmonique ne sépare plus.** Aucun échantillon n'est écrêté à
-  l'acquisition (crêtes de −10 à −12 dBFS). Mais la crête de l'envoi ne monte que d'environ 1 dB
-  entre −20 et −3 dBFS : la saturation est profonde, et les contrôles négatifs y valent autant
-  que les répétitions. Hypothèse non vérifiée : la sonde de degré 5 ne représente plus cette
-  saturation, et les réglages y donnent des signatures voisines.
+- **À −3 dBFS, la signature harmonique ne sépare plus** (AUC 0,63) : la cause est un
+  **glissement d'acquisition** à l'intérieur du sinus glissant −3 dBFS de la prise 20, référence de
+  la plupart des paires (contrôle post hoc `gap_checks.py`). Ce n'est pas la saturation : entre
+  répétitions, l'écart d'ordre 3 passe de 0,007 (−10 dBFS) à 0,21 (−3 dBFS) avec la prise 20, alors
+  que l'écart entre réglages baisse seulement de 0,13 à 0,07–0,10. Le glissement se repère comme
+  un écart au profil commun des retards par quart du sinus glissant (saut de ~30 échantillons à
+  192 kHz ; aussi prise 38 à −20 dBFS). Sans les sections touchées, AUC 0,88 (p = 0,13, 4 contre
+  2 paires seulement). Ajuster sur l'entrée propre ne protège pas la signature harmonique : un
+  saut temporel casse la correspondance temps–fréquence du sinus exponentiel. Il faut un contrôle
+  d'intégrité du sinus glissant avant de lire D_k.
 - **Un contour ±2,5 reste dans l'étendue des contrôles négatifs** pour toutes les métriques.
 
 **Conséquence.** Un plancher fait de répétitions éloignées dans le temps surestime le bruit
