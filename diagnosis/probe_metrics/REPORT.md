@@ -298,10 +298,17 @@ des contrôles négatifs, mesurée par l'AUC avec un p exact unilatéral.
     échantillons à 192 kHz, soit un demi-quantum de glissement.
   - Validation : elle détecte des glissements de 24 échantillons insérés à 2,0, 3,5 et 4,6 s,
     sans signaler de décalage global.
-  - Zones aveugles : avant 200 Hz, où un glissement agit surtout comme un décalage global pour
-    la bande 100 Hz–8 kHz (seule la tranche 100–200 Hz est exposée), et dans les ~0,15
-    dernières secondes, au-delà de ~14 kHz, hors bande. Le saut de la prise 38 à −20 dBFS
-    tombe dans la première zone.
+  - Zones aveugles : avant 200 Hz, et dans les ~0,15 dernières secondes (au-delà de ~14 kHz).
+    Leur effet a été **mesuré** (`gap_checks_slip_harm.json`) en supprimant 24 échantillons du
+    bouclage et de l'envoi d'une prise intacte, comme le fait un vrai glissement :
+    - écart harmonique par ordre de 0,0005 à 0,0046 ;
+    - à comparer à l'écart entre répétitions 20–39 à −10 dBFS : 0,0071 (ordre 3) et 0,018
+      (ordre 1) ;
+    - au pire (glissement à 1,5 s, ~120 Hz), environ 60 % du plancher : sous lui, mais pas nul.
+  - L'anomalie de la prise 20 se situe, elle, en pleine bande : une discontinuité à 4,06 s, quand
+    le sinus glissant passe vers 5,6 kHz (saut d'échantillon de 0,23, plus du double de ce qu'un
+    sinus à cette fréquence autorise). La garde la signale. Le saut de la prise 38 à −20 dBFS,
+    en zone grave, est gardé.
 - **Un contour ±2,5 reste dans l'étendue des contrôles négatifs** pour toutes les métriques.
 
 **Métriques existantes sur le réel** (`real_extra_vs100r.csv`, post hoc, entrée commune

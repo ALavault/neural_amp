@@ -121,6 +121,7 @@ def main() -> None:
         "jvm_saturating": jvm_saturating,
         "jvm_causes": jvm_causes,
         "jvm_parallel": jvm_parallel,
+        "slip_harm": slip_harm,
     }[which]()
     (HERE / f"gap_checks_{which}.json").write_text(json.dumps(result, indent=1) + "\n")
     print(json.dumps(result, indent=1))
@@ -327,6 +328,63 @@ def jvm_parallel() -> dict:
         y = jvm_target(f"B050_M050_T050_{gain}")
         out[gain] = {f"pole_{p}": parallel_capacity(x, y, rate, p) for p in (0.8, 0.95)}
         print(gain, out[gain], flush=True)
+    return out
+
+
+def slip_harm() -> dict:
+    """Harm of a 24-sample slip in the guard's blind zones: delete 24 samples in the
+    loopback AND the FX send of intact take 39 (as real slips behave), at 1.0 and 1.5 s
+    (< 200 Hz) and 4.85 and 4.95 s (end); harmonic deviation per order against the
+    intact take, beside the 20-39 repeat. Also whether the guard flags each slip."""
+    import real_pairs as rp
+    from scipy.signal import resample_poly
+
+    from fssr_nam.product import vs100r
+    from fssr_nam.product.hammerstein import Sweep
+
+    sheet = {t["order"]: t for t in vs100r.sheet()}
+    sweep_def, protocol = Sweep(f0=20.0, f1=20_000.0, seconds=5.0), HarmonicProtocol()
+    out = {}
+    for name in ("sweep_-10dBFS", "sweep_-3dBFS"):
+        loop, fx = vs100r.audio(sheet[39], name)
+        source = rp.sweep_source(name)
+        base = rp.sweep_profile(source, loop)
+        x48, y48 = resample_poly(loop, 1, 4), resample_poly(fx, 1, 4)
+        repeat = common_section(sheet[20], sheet[39], name)
+        rows = {
+            "repeat_20_39": analyze_sweep_pair(
+                repeat["x"],
+                repeat["y_ref"],
+                repeat["y_eval"],
+                48_000.0,
+                sweep_def,
+                protocol,
+                repeat["x_eval"],
+            )
+        }
+        for t in (1.0, 1.5, 4.85, 4.95):
+            i = round(t * vs100r.RATE)
+            l2, f2 = (np.r_[v[:i], v[i + 24 :], np.zeros(24)] for v in (loop, fx))
+            step = np.max(np.abs(rp.sweep_profile(source, l2) - base))
+            result = analyze_sweep_pair(
+                x48,
+                y48,
+                resample_poly(f2, 1, 4),
+                48_000.0,
+                sweep_def,
+                protocol,
+                resample_poly(l2, 1, 4),
+            )
+            result["guard_flags"] = bool(step >= rp.SLIP_SAMPLES)
+            rows[f"slip_{t}s"] = result
+        out[name] = {
+            k: {
+                o: (v[o]["complex_rel"] if o.startswith("order_") else v[o])
+                for o in v
+                if o.startswith("order_") or o == "guard_flags"
+            }
+            for k, v in rows.items()
+        }
     return out
 
 
