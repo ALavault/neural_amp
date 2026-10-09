@@ -162,17 +162,24 @@ Wiener–Hammerstein : voir la section dédiée.
 
 ### 6. Ensemble minimal de métriques complémentaires
 
-- **FIR** : repère linéaire, très bon marché (0,1 s).
+- **ESR (ou d_audio)** : écart global. C'est la seule à voir ce qu'aucune sonde ne représente
+  (bruit, écho long).
+- **Magnitude et phase** (`metrics/spectral.py`, déjà dans le dépôt) : elles séparent le gain
+  et les non-linéarités statiques (magnitude) du retard et du passe-tout (phase). Elles
+  remplacent la MR-STFT et séparent les changements réels VS100R aussi bien que les sondes.
+- **FIR** : repère linéaire très bon marché (0,1 s), qui écarte le bruit de mesure.
 - **Hammerstein 3** : H5 lui est redondant ici. Il voit les non-linéarités statiques et garde la
   mémoire linéaire longue.
 - **Volterra–Laguerre 3** : il voit les non-linéarités préfiltrées et les interactions
-  temporelles que Hammerstein manque ; plus coûteux (6 s).
-- **Signature harmonique par ordre**, quand un sinus glissant est disponible : elle sépare les
-  défauts pairs et impairs.
-- **ESR (ou d_audio)** : elle voit ce qu'aucune sonde ne représente, bruit et écho long.
-- **La part non représentée** de chaque sonde, comme indicateur de couverture.
+  temporelles que Hammerstein manque. Plus coûteux (~2 min par minute d'audio).
+- **Signature harmonique par ordre**, si un sinus glissant intact est disponible : elle sépare
+  les défauts pairs et impairs.
+- **Dynamique d'enveloppe E2** (ad hoc), si des sauts de niveau sont disponibles : c'est la seule
+  métrique spécifique au relâchement (voir plus bas).
+- **La part non représentée** de chaque sonde, comme indicateur de couverture, et
+  l'avertissement de capacité.
 - **Écartés.** Wiener–Hammerstein : peu fiable ici et très coûteux. MR-STFT telle qu'implémentée :
-  aveugle à la phase et sensible au bruit.
+  aveugle à la phase et dominée par le bruit. `envelope_error` : sensible mais non spécifique.
 
 ## Wiener–Hammerstein
 
@@ -193,6 +200,45 @@ lecture, 3 départs, graines 200 à 202.
   non-unicité : deux minima locaux différents produiraient jusqu'à ~0,09 d'écart fictif.
 - **Coût** : 32 s pour 1 s d'estimation. Sonde écartée de l'ensemble minimal dans cette
   configuration.
+
+## Dynamique d'enveloppe : détecteur ad hoc E2
+
+`src/fssr_nam/product/dynamics.py`, préinscrit dans `NOTE.md` avant implémentation.
+Résultats : `dynamics_bench.csv` et `dynamics_verdict.json`.
+
+**Pourquoi un détecteur ad hoc.** Aucune métrique existante n'isole la dynamique.
+`envelope_error` réagit autant au gain (R ≈ 1,4e4) qu'au relâchement (9,5e3), et sur DI réelle
+les sondes ne captent que ~0,6 d'un changement de relâchement.
+
+**Principe.**
+1. On excite avec des **sauts de niveau** (bruit coloré, segments de 1,2 s, 22 sauts fort→faible
+   et 21 faible→fort).
+2. On calcule la trajectoire de gain à court terme après chaque saut, **moyennée sur les sauts**
+   de même type.
+3. On lui soustrait sa valeur stabilisée, ce qui retire tout effet statique.
+4. L'indice est le RMS, en dB, de l'écart entre ces trajectoires pour la référence et la sortie
+   évaluée, sur 10 ms–0,8 s.
+
+Les 13 défauts sont appliqués à la **chaîne dynamique**, pour que la spécificité soit réellement
+testée.
+
+**Verdict préinscrit : les quatre critères sont remplis aux trois niveaux (−12, −9, −6 dBFS).**
+
+| Critère | Résultat |
+|---|---|
+| Monotonie | relâchement 60 → 100 → 200 ms : 0,12 → 0,54 → 1,28 dB à −12 dBFS ; 0,20 → 0,88 → 2,06 dB à −6 dBFS |
+| Sensibilité | relâchement 60 ms ≫ 3 × le plancher (~6e-5 dB) |
+| Spécificité | le pire autre défaut (coloration, 0,05 dB) est 25 à 40 fois plus faible que le relâchement à 200 ms ; gain et polynômes ≈ 0 |
+| Contrôle interne | l'indice d'attaque du défaut de relâchement vaut 0,06 à 0,09 de son indice de relâchement, à toutes les sévérités |
+
+**Limites.**
+- **Co-répondants déclarés d'avance** : l'écho réagit fortement (0,66–0,81 dB) et le préfiltre
+  modérément (0,23–0,27 dB). L'indice n'est donc pas exclusif d'un écho.
+- **Excitation dédiée requise.** Le réel est seulement descriptif : les sauts de gain de la DI
+  ToneTwist ne sont pas datés, et `bursts_recovery` n'existe que sur une prise micro aux réglages
+  connus. Aucune validation sur matériel.
+- **Plancher trivial.** Moyennée sur les sauts, la référence bruitée à −80 dB est très basse. Le
+  critère de sensibilité ne dit donc rien de la tenue face à un plancher réel.
 
 ## Sorties réelles VS100R (envoi FX, 26/09, sans modèle neuronal)
 
@@ -238,17 +284,36 @@ des contrôles négatifs, mesurée par l'AUC avec un p exact unilatéral.
 - **À entrée commune, ESR et sondes séparent pareillement.** L'avantage apparent des sondes sur
   toutes les paires vient des sections à glissement. Sur le réel, leur intérêt est de rester
   utilisables malgré l'acquisition, pas de mieux séparer.
-- **À −3 dBFS, la signature harmonique ne sépare plus** (AUC 0,63) : la cause est un
-  **glissement d'acquisition** à l'intérieur du sinus glissant −3 dBFS de la prise 20, référence de
-  la plupart des paires (contrôle post hoc `gap_checks.py`). Ce n'est pas la saturation : entre
-  répétitions, l'écart d'ordre 3 passe de 0,007 (−10 dBFS) à 0,21 (−3 dBFS) avec la prise 20, alors
-  que l'écart entre réglages baisse seulement de 0,13 à 0,07–0,10. Le glissement se repère comme
-  un écart au profil commun des retards par quart du sinus glissant (saut de ~30 échantillons à
-  192 kHz ; aussi prise 38 à −20 dBFS). Sans les sections touchées, AUC 0,88 (p = 0,13, 4 contre
-  2 paires seulement). Ajuster sur l'entrée propre ne protège pas la signature harmonique : un
-  saut temporel casse la correspondance temps–fréquence du sinus exponentiel. Il faut un contrôle
-  d'intégrité du sinus glissant avant de lire D_k.
+- **À −3 dBFS, la signature harmonique ne sépare plus** (AUC 0,63). Un **glissement
+  d'acquisition** à l'intérieur du sinus glissant −3 dBFS de la prise 20 en est un facteur établi.
+  Cette prise sert de référence à la plupart des paires (contrôle post hoc `gap_checks.py`,
+  `gap_checks_sweep.json`). Entre répétitions, l'écart d'ordre 3 passe de 0,007 à −10 dBFS à 0,21
+  à −3 dBFS avec cette prise. L'écart entre réglages baisse aussi de 0,13 à 0,07–0,10 : une
+  contribution de la saturation n'est donc pas exclue. Sans la section touchée, AUC 0,88
+  (p = 0,13, 4 contre 2 paires seulement). Ajuster sur l'entrée propre ne protège pas la signature
+  harmonique : un saut temporel casse la correspondance temps–fréquence du sinus exponentiel.
+  D'où la **garde d'intégrité** (`real_pairs.py`).
+  - Fonctionnement : alignement global de la section, puis retards par fenêtres de 0,25 s
+    comparés au profil modal de la séance. Une section est rejetée dès qu'un pas dépasse 12
+    échantillons à 192 kHz, soit un demi-quantum de glissement.
+  - Validation : elle détecte des glissements de 24 échantillons insérés à 2,0, 3,5 et 4,6 s,
+    sans signaler de décalage global.
+  - Zones aveugles : avant 200 Hz, où un glissement agit surtout comme un décalage global pour
+    la bande 100 Hz–8 kHz (seule la tranche 100–200 Hz est exposée), et dans les ~0,15
+    dernières secondes, au-delà de ~14 kHz, hors bande. Le saut de la prise 38 à −20 dBFS
+    tombe dans la première zone.
 - **Un contour ±2,5 reste dans l'étendue des contrôles négatifs** pour toutes les métriques.
+
+**Métriques existantes sur le réel** (`real_extra_vs100r.csv`, post hoc, entrée commune
+seulement) : séparation des changements réels (gain 0 exclu) et des contrôles négatifs, en AUC.
+
+| Métrique | `di_test` (5 changements / 10 contrôles) | bruit rose (7 / 12) |
+|---|---|---|
+| magnitude | 0,98 (p = 7e-4) | 0,98 (p = 1e-4) |
+| phase | 0,94 (p = 0,002) | 1,00 (p < 1e-4) |
+| enveloppe | 0,94 (p = 0,002) | 0,90 (p = 0,001) |
+
+Sur `di_test`, une seule répétition est à entrée commune : le plancher n'y repose que sur elle.
 
 **Conséquence.** Un plancher fait de répétitions éloignées dans le temps surestime le bruit
 d'une comparaison rapprochée. Il faudrait des répétitions du centre intercalées entre les
@@ -269,6 +334,8 @@ plancher réel.
   signatures partielles. Causes possibles, non départagées : non-linéarité et mémoire réelles
   au-delà de la capacité gelée, A et B non indépendants, niveaux variables de la DI.
 - **Borne** : aucune violation.
+- **Métriques existantes** (`real_extra_jvm.csv`, post hoc) : magnitude, phase et enveloppe
+  croissent aussi strictement le long des 8 échelles de chaque sortie (ρ = +1).
 
 ## Coût de calcul
 
@@ -311,33 +378,43 @@ Le coût réel d'un usage dépend aussi de ce qu'il exige en données, qui limit
 | Usage | Ensemble proposé | Coût pour 1 min d'audio | Données nécessaires |
 |---|---|---|---|
 | Contrôle rapide, tri de nombreuses sorties pour une même entrée | ESR (amplitude) + magnitude + phase ; FIR si l'on veut écarter le bruit | < 5 s | entrée commune ; seuils fixés sur des répétitions et des défauts acceptables |
-| Diagnostic de la nature d'un écart | Hammerstein 3 + Volterra–Laguerre 3, avec part captée et part non représentée ; magnitude/phase ; signature harmonique si un sinus glissant existe | ~2 min | données d'estimation riches (DI, bruit) ; lecture indépendante ; capacité vérifiée sur la référence |
+| Diagnostic de la nature d'un écart | Hammerstein 3 + Volterra–Laguerre 3, avec part captée et part non représentée ; magnitude/phase ; signature harmonique si un sinus glissant existe ; E2 si des sauts de niveau existent | ~2 min | données d'estimation riches (DI, bruit) ; lecture indépendante ; capacité vérifiée sur la référence ; excitations dédiées (sinus glissant, sauts) |
 | Comparaison de captures réelles (prises, séances) | FIR/H3 ajustés sur l'entrée propre de chaque prise ; ESR seulement sur les sections à entrée commune ; garde d'intégrité des sinus glissants | ~5–10 s | bouclage de chaque prise ; **plancher apparié dans le temps** (répétitions intercalées : à capturer) |
 | Signature non linéaire contrôlée | signature harmonique par ordre (≤ 7 pour L ≈ 0,7 s) ; IMD | < 1 s par excitation | sinus glissant (idéalement synchronisé, T ≥ 5,9 s pour l'ordre 9) ; deux tons |
 | Écart structuré sous le bruit de mesure | FIR/H3 (moyennent sur l'estimation) | ~5 s | capacité de la sonde vérifiée sur la référence (sinon refus) |
 | À éviter | WH (peu fiable, ~40 min/min) ; MR-STFT de `spectral.py` (aveugle à la phase, dominée par le bruit) ; rapport de détection seul | — | — |
 
 **Limite décisive, mesurée sur la JVM410H.** Sur un canal à fort gain, aucune classe de sonde
-essayée n'explique plus de ~30 % de la sortie, même sur ses propres données (voir « Angles morts
-réels »). Dans ce cas, les sondes ne servent qu'à signaler leur propre insuffisance (avertissement
-de capacité), et l'ESR, la magnitude et la phase restent les seules lectures globales.
+essayée ne ramène le résidu sous ~0,6 du RMS de la sortie en lecture (ESR ≥ 0,35), ni même sous
+~0,59 en échantillon pour les sondes linéaires en paramètres. Voir « Angles morts réels ». Dans ce
+cas, les sondes ne servent qu'à signaler leur propre insuffisance (avertissement de capacité),
+et l'ESR, la magnitude, la phase et l'enveloppe restent les seules lectures globales. Elles sont
+toutes monotones le long des échelles JVM.
 
 ## Angles morts réels : ce qui les explique
 
 Contrôles post hoc (`gap_checks.py`, `gap_checks_*.json`) :
 - **VS100R, −3 dBFS : expliqué.** Un glissement d'acquisition dans le sinus glissant de la prise
   20 en est la cause (voir plus haut). Remède : la garde d'intégrité des sinus glissants.
-- **JVM410H : limite de capacité, cause restante non établie.**
-  - Hammerstein 5 laisse 0,71 de la sortie de *référence* inexpliqué au gain 5 (0,06 au gain 0),
-    0,74 même en échantillon.
-  - Rien ne fait mieux que ~0,6 en lecture : 1 024 taps (0,72), une base saturante en tanh
-    (0,67 ; 0,59 au gain 10), Volterra–Laguerre 3, un Wiener–Hammerstein parallèle à préfiltres
-    de Laguerre fixes (0,74–0,96). Un Wiener–Hammerstein ajusté sur 1 s descend à 0,39 en
-    échantillon mais remonte à 1,08 en lecture.
-  - Écartés : le bruit (silences de sortie à −28 dB contre −3 dB inexpliqué), la dynamique à
-    0,5 s (part inexpliquée de 0,67 après un passage plus fort contre 0,66 sans), la dérive
-    d'horloge (retard optimal 0 ± 1 échantillon sur 300 s), la séparation A/B (même résultat en
-    échantillon).
+- **JVM410H : limite de capacité, cause restante non établie** (`gap_checks_jvm*.json`).
+  Les résidus sont des rapports RMS (√ESR), pas des parts d'énergie.
+  - Hammerstein 5, sur la sortie de *référence* : résidu de 0,71 au gain 5 (ESR ≈ 0,50), contre
+    0,06 au gain 0. En échantillon : 0,74 sur 150 s, 0,65 sur 30 s.
+  - Aucune autre sonde ne fait mieux qu'environ 0,59 en lecture :
+    - 1 024 taps : 0,72 ;
+    - base saturante tanh : 0,67 au gain 5, 0,59 au gain 10 ;
+    - Volterra–Laguerre 3 : comparable ;
+    - Wiener–Hammerstein parallèle à préfiltres de Laguerre fixes : 0,59–0,66 en échantillon,
+      0,74–0,96 en lecture ;
+    - Wiener–Hammerstein ajusté sur 1 s : 0,39 en échantillon mais 1,08 en lecture
+      (surapprentissage).
+  - Écartés, par les mesures de `gap_checks_jvm_causes.json` :
+    - **bruit** : la sortie pendant les silences d'entrée est à −28 dB du RMS au gain 5 (−26 au
+      gain 0, où le résidu de 0,06 ≈ −24 dB s'y explique) ;
+    - **dynamique à 0,5 s** : à niveau d'entrée égal, le résidu vaut 0,67 après un passage plus fort
+      et 0,66 sans ;
+    - **dérive d'horloge** : le retard optimal reste à 0 ± 1 échantillon sur 300 s ;
+    - **séparation A/B** : le résultat est le même en échantillon.
   - Non testables avec ces données : le déterminisme de l'enregistrement (aucune répétition) et
     une cascade d'étages non linéaires.
 

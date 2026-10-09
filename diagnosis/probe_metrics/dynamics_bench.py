@@ -96,8 +96,14 @@ def per_level(cells: dict, level: float) -> dict:
         "sensitive_60ms": release[60.0] >= 3 * floor,
         "worst_other": [worst, others[worst]],
         "specific": release[200.0] >= 3 * others[worst],
-        "attack_of_release": cells[(level, "release_ms", 200.0)][1],
-        "control": cells[(level, "release_ms", 200.0)][1] <= release[200.0] / 3,
+        "attack_of_release": {
+            s: cells[(level, "release_ms", s)][1] for s in (60.0, 100.0, 200.0)
+        },
+        # every severity, as pre-registered (not only the strongest)
+        "control": all(
+            cells[(level, "release_ms", s)][1] <= release[s] / 3
+            for s in (60.0, 100.0, 200.0)
+        ),
         "co_responders": {
             d: max(v[0] for (lv, dd, _), v in cells.items() if lv == level and dd == d)
             for d in CO_RESPONDERS

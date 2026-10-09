@@ -112,7 +112,7 @@
  {
   "order": 38,
   "section": "sweep_-20dBFS",
-  "intact": false
+  "intact": true
  },
  {
   "order": 1,

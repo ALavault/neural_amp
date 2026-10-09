@@ -5,6 +5,11 @@
    "non détecté": 5,
    "limite": 1
   },
+  "envelope": {
+   "détecté": 76,
+   "limite": 1,
+   "non détecté": 1
+  },
   "esr": {
    "détecté": 72,
    "non détecté": 5,
@@ -54,10 +59,20 @@
   "imd": {
    "détecté": 13
   },
+  "magnitude": {
+   "non détecté": 10,
+   "détecté": 61,
+   "limite": 7
+  },
   "mrstft": {
    "non détecté": 63,
    "détecté": 8,
    "limite": 7
+  },
+  "phase": {
+   "détecté": 50,
+   "non détecté": 20,
+   "limite": 8
   },
   "volterra_laguerre_2": {
    "détecté": 77,
@@ -75,6 +90,7 @@
  "weakest_detected": {
   "allpass": {
    "d_audio": "4/6",
+   "envelope": "2/6",
    "esr": "4/6",
    "fir": "6/6",
    "hammerstein_3": "6/6",
@@ -86,13 +102,16 @@
    "harmonic_order_5": "0/1",
    "harmonic_total": "1/1",
    "imd": "1/1",
+   "magnitude": "0/6",
    "mrstft": "0/6",
+   "phase": "2/6",
    "volterra_laguerre_2": "6/6",
    "volterra_laguerre_3": "6/6",
    "wiener_hammerstein": "1/1"
   },
   "coloration_db": {
    "d_audio": "6/6",
+   "envelope": "6/6",
    "esr": "6/6",
    "fir": "6/6",
    "hammerstein_3": "6/6",
@@ -104,13 +123,16 @@
    "harmonic_order_5": "1/1",
    "harmonic_total": "1/1",
    "imd": "1/1",
+   "magnitude": "6/6",
    "mrstft": "0/6",
+   "phase": "6/6",
    "volterra_laguerre_2": "6/6",
    "volterra_laguerre_3": "6/6",
    "wiener_hammerstein": "1/1"
   },
   "cross_term": {
    "d_audio": "5/6",
+   "envelope": "6/6",
    "esr": "5/6",
    "fir": "6/6",
    "hammerstein_3": "6/6",
@@ -122,13 +144,16 @@
    "harmonic_order_5": "0/1",
    "harmonic_total": "1/1",
    "imd": "1/1",
+   "magnitude": "5/6",
    "mrstft": "0/6",
+   "phase": "0/6",
    "volterra_laguerre_2": "6/6",
    "volterra_laguerre_3": "6/6",
    "wiener_hammerstein": "1/1"
   },
   "cubic": {
    "d_audio": "0/6",
+   "envelope": "6/6",
    "esr": "0/6",
    "fir": "6/6",
    "hammerstein_3": "6/6",
@@ -140,13 +165,16 @@
    "harmonic_order_5": "0/1",
    "harmonic_total": "1/1",
    "imd": "1/1",
+   "magnitude": "0/6",
    "mrstft": "0/6",
+   "phase": "0/6",
    "volterra_laguerre_2": "6/6",
    "volterra_laguerre_3": "6/6",
    "wiener_hammerstein": "0/1"
   },
   "delay_samples": {
    "d_audio": "6/6",
+   "envelope": "6/6",
    "esr": "6/6",
    "fir": "6/6",
    "hammerstein_3": "6/6",
@@ -158,13 +186,16 @@
    "harmonic_order_5": "1/1",
    "harmonic_total": "1/1",
    "imd": "1/1",
+   "magnitude": "0/6",
    "mrstft": "0/6",
+   "phase": "4/6",
    "volterra_laguerre_2": "6/6",
    "volterra_laguerre_3": "6/6",
    "wiener_hammerstein": "1/1"
   },
   "echo_beyond_memory": {
    "d_audio": "6/6",
+   "envelope": "6/6",
    "esr": "6/6",
    "fir": "6/6",
    "hammerstein_3": "6/6",
@@ -176,13 +207,16 @@
    "harmonic_order_5": "0/1",
    "harmonic_total": "1/1",
    "imd": "1/1",
+   "magnitude": "6/6",
    "mrstft": "0/6",
+   "phase": "2/6",
    "volterra_laguerre_2": "6/6",
    "volterra_laguerre_3": "6/6",
    "wiener_hammerstein": "1/1"
   },
   "gain": {
    "d_audio": "6/6",
+   "envelope": "6/6",
    "esr": "6/6",
    "fir": "6/6",
    "hammerstein_3": "6/6",
@@ -194,13 +228,16 @@
    "harmonic_order_5": "0/1",
    "harmonic_total": "1/1",
    "imd": "1/1",
+   "magnitude": "6/6",
    "mrstft": "0/6",
+   "phase": "0/6",
    "volterra_laguerre_2": "6/6",
    "volterra_laguerre_3": "6/6",
    "wiener_hammerstein": "1/1"
   },
   "noise_db": {
    "d_audio": "0/6",
+   "envelope": "0/6",
    "esr": "0/6",
    "fir": "0/6",
    "hammerstein_3": "0/6",
@@ -212,13 +249,16 @@
    "harmonic_order_5": "0/1",
    "harmonic_total": "0/1",
    "imd": "0/1",
+   "magnitude": "0/6",
    "mrstft": "0/6",
+   "phase": "0/6",
    "volterra_laguerre_2": "0/6",
    "volterra_laguerre_3": "0/6",
    "wiener_hammerstein": "0/1"
   },
   "order_beyond_degree": {
    "d_audio": "0/6",
+   "envelope": "0/6",
    "esr": "0/6",
    "fir": "2/6",
    "hammerstein_3": "1/6",
@@ -230,13 +270,16 @@
    "harmonic_order_5": "0/1",
    "harmonic_total": "0/1",
    "imd": "0/1",
+   "magnitude": "0/6",
    "mrstft": "0/6",
+   "phase": "0/6",
    "volterra_laguerre_2": "1/6",
    "volterra_laguerre_3": "1/6",
    "wiener_hammerstein": "0/1"
   },
   "prefilter_hz": {
    "d_audio": "6/6",
+   "envelope": "6/6",
    "esr": "6/6",
    "fir": "6/6",
    "hammerstein_3": "6/6",
@@ -248,13 +291,16 @@
    "harmonic_order_5": "1/1",
    "harmonic_total": "1/1",
    "imd": "1/1",
+   "magnitude": "6/6",
    "mrstft": "0/6",
+   "phase": "6/6",
    "volterra_laguerre_2": "6/6",
    "volterra_laguerre_3": "6/6",
    "wiener_hammerstein": "1/1"
   },
   "quadratic": {
    "d_audio": "3/6",
+   "envelope": "6/6",
    "esr": "3/6",
    "fir": "6/6",
    "hammerstein_3": "6/6",
@@ -266,13 +312,16 @@
    "harmonic_order_5": "0/1",
    "harmonic_total": "1/1",
    "imd": "1/1",
+   "magnitude": "4/6",
    "mrstft": "0/6",
+   "phase": "0/6",
    "volterra_laguerre_2": "6/6",
    "volterra_laguerre_3": "6/6",
    "wiener_hammerstein": "1/1"
   },
   "redistribution_bias": {
    "d_audio": "6/6",
+   "envelope": "6/6",
    "esr": "6/6",
    "fir": "6/6",
    "hammerstein_3": "6/6",
@@ -284,13 +333,16 @@
    "harmonic_order_5": "1/1",
    "harmonic_total": "1/1",
    "imd": "1/1",
+   "magnitude": "6/6",
    "mrstft": "0/6",
+   "phase": "4/6",
    "volterra_laguerre_2": "6/6",
    "volterra_laguerre_3": "6/6",
    "wiener_hammerstein": "1/1"
   },
   "release_ms": {
    "d_audio": "6/6",
+   "envelope": "6/6",
    "esr": "6/6",
    "fir": "6/6",
    "hammerstein_3": "6/6",
@@ -302,7 +354,9 @@
    "harmonic_order_5": "0/1",
    "harmonic_total": "1/1",
    "imd": "1/1",
+   "magnitude": "6/6",
    "mrstft": "0/6",
+   "phase": "0/6",
    "volterra_laguerre_2": "6/6",
    "volterra_laguerre_3": "6/6",
    "wiener_hammerstein": "1/1"
@@ -731,6 +785,10 @@
    "median": 0.0016,
    "p90": 0.0706
   },
+  "envelope": {
+   "median": 0.0109,
+   "p90": 0.1038
+  },
   "esr": {
    "median": 0.0016,
    "p90": 0.0706
@@ -775,9 +833,17 @@
    "median": 0.0255,
    "p90": 0.3109
   },
+  "magnitude": {
+   "median": 0.0035,
+   "p90": 0.133
+  },
   "mrstft": {
    "median": 0.0043,
    "p90": 0.11
+  },
+  "phase": {
+   "median": 0.0094,
+   "p90": 0.2596
   },
   "volterra_laguerre_2": {
    "median": 0.0059,
@@ -1398,9 +1464,9 @@
    ]
   },
   "sweep_-20dBFS|harmonic_total|all": {
-   "auc": 0.986,
-   "p_exact": 0.00011,
-   "n_pos": 6,
+   "auc": 0.988,
+   "p_exact": 4e-05,
+   "n_pos": 7,
    "n_neg": 12,
    "repeats_over_floor": [
     1.16,
@@ -1413,15 +1479,16 @@
     0.59,
     1.31,
     1.55,
+    3.05,
     4.06,
     4.63,
     5.99
    ]
   },
   "sweep_-20dBFS|harmonic_total|common": {
-   "auc": 0.986,
-   "p_exact": 0.00011,
-   "n_pos": 6,
+   "auc": 0.988,
+   "p_exact": 4e-05,
+   "n_pos": 7,
    "n_neg": 12,
    "repeats_over_floor": [
     1.16,
@@ -1434,15 +1501,16 @@
     0.59,
     1.31,
     1.55,
+    3.05,
     4.06,
     4.63,
     5.99
    ]
   },
   "sweep_-20dBFS|harmonic_order_2|all": {
-   "auc": 0.986,
-   "p_exact": 0.00011,
-   "n_pos": 6,
+   "auc": 0.988,
+   "p_exact": 4e-05,
+   "n_pos": 7,
    "n_neg": 12,
    "repeats_over_floor": [
     1.0,
@@ -1457,13 +1525,14 @@
     1.38,
     5.46,
     5.78,
+    23.8,
     43.79
    ]
   },
   "sweep_-20dBFS|harmonic_order_2|common": {
-   "auc": 0.986,
-   "p_exact": 0.00011,
-   "n_pos": 6,
+   "auc": 0.988,
+   "p_exact": 4e-05,
+   "n_pos": 7,
    "n_neg": 12,
    "repeats_over_floor": [
     1.0,
@@ -1478,13 +1547,14 @@
     1.38,
     5.46,
     5.78,
+    23.8,
     43.79
    ]
   },
   "sweep_-20dBFS|harmonic_order_3|all": {
-   "auc": 0.972,
-   "p_exact": 0.00022,
-   "n_pos": 6,
+   "auc": 0.976,
+   "p_exact": 8e-05,
+   "n_pos": 7,
    "n_neg": 12,
    "repeats_over_floor": [
     1.19,
@@ -1498,14 +1568,15 @@
     1.4,
     1.57,
     5.24,
+    6.28,
     6.32,
     9.47
    ]
   },
   "sweep_-20dBFS|harmonic_order_3|common": {
-   "auc": 0.972,
-   "p_exact": 0.00022,
-   "n_pos": 6,
+   "auc": 0.976,
+   "p_exact": 8e-05,
+   "n_pos": 7,
    "n_neg": 12,
    "repeats_over_floor": [
     1.19,
@@ -1519,6 +1590,7 @@
     1.4,
     1.57,
     5.24,
+    6.28,
     6.32,
     9.47
    ]

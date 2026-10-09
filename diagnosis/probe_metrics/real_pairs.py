@@ -134,36 +134,49 @@ def common_section(ref_take, eval_take, name: str) -> dict:
     }
 
 
-def sweep_profile(take: dict, name: str) -> np.ndarray:
-    """Lag of the take's loopback against the source, per quarter of a sweep section
-    (192 kHz); the converters' group delay makes it vary with frequency, so only its
-    differences between quarters are compared across takes."""
+GUARD_WINDOW_S = 0.25
+GUARD_FROM_HZ = 200.0  # below, a lag cannot be read reliably in a 0.25 s window
+
+
+def sweep_source(name: str) -> np.ndarray:
     import soundfile as sf
 
     from fssr_nam.product.defect_bench import DI_SOURCE
 
     part = vs100r.section(name)
-    source = sf.read(
+    return sf.read(
         vs100r.ROOT / DI_SOURCE,
         dtype="float64",
         start=part["start"],
         stop=part["start"] + part["samples"],
     )[0]
-    loop = vs100r.audio(take, name)[0]
-    q = len(source) // 4
-    lags = [
-        lag(source[i * q : (i + 1) * q], loop[i * q : (i + 1) * q]) for i in range(4)
-    ]
+
+
+def sweep_profile(source: np.ndarray, loop: np.ndarray) -> np.ndarray:
+    """Steps between the lags of consecutive GUARD_WINDOW_S windows of a sweep, after
+    one global alignment over the whole section (wide search), from the time the
+    sweep passes GUARD_FROM_HZ. A slip of the loopback against the source appears as
+    one step of about its size; a constant offset does not appear at all."""
+    loop = shifted(loop, lag(source, loop, span=4096))
+    sweep = Sweep(f0=20.0, f1=20_000.0, seconds=5.0)
+    start = round(sweep.lag * np.log(GUARD_FROM_HZ / sweep.f0) * vs100r.RATE)
+    width = round(GUARD_WINDOW_S * vs100r.RATE)
+    starts = range(start, len(source) - width + 1, width)
+    lags = [lag(source[i : i + width], loop[i : i + width], span=64) for i in starts]
     return np.diff(lags)
 
 
 def sweep_integrity(takes: list[dict]) -> dict:
     """{(order, section): intact}: a take's sweep is broken by a slip inside it when a
-    quarter-to-quarter lag step departs from the session's median step by at least
-    SLIP_SAMPLES (half a microframe quantum: set by the acquisition, not the data)."""
+    window-to-window lag step departs from the session's median step by at least
+    SLIP_SAMPLES (half a microframe quantum: set by the acquisition, not the data).
+    Slips while the sweep is below GUARD_FROM_HZ are not detected."""
     out = {}
     for name in SWEEPS:
-        steps = {t["order"]: sweep_profile(t, name) for t in takes}
+        source = sweep_source(name)
+        steps = {
+            t["order"]: sweep_profile(source, vs100r.audio(t, name)[0]) for t in takes
+        }
         modal = np.median(np.array(list(steps.values())), axis=0)
         for order, step in steps.items():
             out[(order, name)] = bool(np.all(np.abs(step - modal) < SLIP_SAMPLES))

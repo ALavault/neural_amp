@@ -31,7 +31,7 @@ from fssr_nam.product.probes import Probe, fit, render
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from calibrate import frozen_probes  # noqa: E402
-from real_pairs import SWEEPS, common_section, jvm_audio  # noqa: E402
+from real_pairs import SWEEPS, common_section, jvm_audio, lag  # noqa: E402
 
 PAIRS = ("B050_M050_T050_G040", "B080_M050_T050_G050", "B050_M050_T020_G050")
 
@@ -115,7 +115,13 @@ def sweep() -> dict:
 
 def main() -> None:
     which = sys.argv[1]
-    result = {"jvm": jvm, "sweep": sweep, "jvm_saturating": jvm_saturating}[which]()
+    result = {
+        "jvm": jvm,
+        "sweep": sweep,
+        "jvm_saturating": jvm_saturating,
+        "jvm_causes": jvm_causes,
+        "jvm_parallel": jvm_parallel,
+    }[which]()
     (HERE / f"gap_checks_{which}.json").write_text(json.dumps(result, indent=1) + "\n")
     print(json.dumps(result, indent=1))
 
@@ -166,6 +172,161 @@ def jvm_saturating() -> dict:
             "saturating_basis": saturating_capacity(rate, x, y),
         }
         print(setting, out[setting], flush=True)
+    return out
+
+
+def jvm_input() -> tuple[np.ndarray, int]:
+    import soundfile as sf
+    from real_pairs import JVM
+
+    x, rate = sf.read(JVM / "DRY/trainval/trainval.input.wav", dtype="float64")
+    return x, rate
+
+
+def jvm_target(setting: str) -> np.ndarray:
+    import soundfile as sf
+    from real_pairs import JVM
+
+    path = JVM / f"PreampOut/trainval/{setting}/{setting}.trainval.target.wav"
+    return sf.read(path, dtype="float64")[0]
+
+
+def frame_rms(v: np.ndarray, frame: int) -> np.ndarray:
+    n = len(v) // frame
+    return np.sqrt(np.mean(v[: n * frame].reshape(n, frame) ** 2, axis=1))
+
+
+def residual_ratio(y: np.ndarray, q: np.ndarray, rate: int) -> float:
+    skip = round(0.05 * rate)
+    return float(np.sqrt(np.mean((y - q)[skip:] ** 2) / np.mean(y[skip:] ** 2)))
+
+
+def jvm_in_sample(x, y, rate) -> dict:
+    probe = frozen_probes("v1")["hammerstein_5"]
+    out = {}
+    for name, span in (("0-150 s", 150), ("0-30 s", 30)):
+        part = slice(0, span * rate)
+        out[name] = residual_ratio(
+            y[part], render(fit(probe, x[part], y[part]), x[part]), rate
+        )
+    return out
+
+
+def jvm_silence_floor(x, rate) -> dict:
+    frame = round(0.05 * rate)
+    quiet = frame_rms(x, frame) < 10 ** (-60 / 20)
+    out = {"quiet_frames": int(quiet.sum())}
+    for gain in ("G000", "G050", "G100"):
+        y = jvm_target(f"B050_M050_T050_{gain}")
+        level = np.median(frame_rms(y, frame)[quiet]) / np.sqrt(np.mean(y**2))
+        out[gain] = float(20 * np.log10(level))
+    return out
+
+
+def jvm_level_history(x, y, rate) -> dict:
+    a, b = slice(0, 150 * rate), slice(215 * rate, 300 * rate)
+    q = render(fit(frozen_probes("v1")["hammerstein_5"], x[a], y[a]), x[b])
+    frame = round(0.05 * rate)
+    xr, rr, yr = (frame_rms(v, frame) for v in (x[b], y[b] - q, y[b]))
+    level = 20 * np.log10(xr + 1e-12)
+    out = {}
+    for lo, hi in ((-90, -50), (-50, -40), (-40, -30), (-30, -20), (-20, 0)):
+        m = (level >= lo) & (level < hi)
+        out[f"{lo}..{hi} dBFS"] = {
+            "frames": int(m.sum()),
+            "residual_ratio": float(np.sqrt(np.sum(rr[m] ** 2) / np.sum(yr[m] ** 2))),
+        }
+    mid = (level >= -30) & (level < -20)
+    before = np.array(
+        [np.max(level[max(0, i - 10) : i]) if i else -99.0 for i in range(len(level))]
+    )
+    for name, cond in (
+        ("after_louder_6db", before > level + 6),
+        ("no_louder", before <= level + 6),
+    ):
+        m = mid & cond
+        out[name] = float(np.sqrt(np.sum(rr[m] ** 2) / np.sum(yr[m] ** 2)))
+    return out
+
+
+def jvm_drift(x, y, rate) -> dict:
+    """Best integer lag of y against the H5 rendering, 10 s windows over the file."""
+    q = render(
+        fit(frozen_probes("v1")["hammerstein_5"], x[: 150 * rate], y[: 150 * rate]), x
+    )
+    out = {}
+    for t0 in range(0, 300, 30):
+        w = slice(t0 * rate, (t0 + 10) * rate)
+        out[f"{t0}-{t0 + 10} s"] = lag(q[w], y[w], span=40)
+    return out
+
+
+def jvm_wiener_hammerstein(x, y, rate) -> dict:
+    from fssr_nam.product.probes import WienerHammerstein, fit_wh, wh_render
+
+    probe = WienerHammerstein(taps_in=32, taps_out=128, starts=3, iterations=25)
+    a, b = slice(30 * rate, 31 * rate), slice(230 * rate, 231 * rate)
+    state = fit_wh(probe, x[a], y[a]).states[0]
+    return {
+        "in_sample_1s": residual_ratio(y[a], wh_render(state, probe, x[a]), rate),
+        "reading_1s": residual_ratio(y[b], wh_render(state, probe, x[b]), rate),
+    }
+
+
+def jvm_causes() -> dict:
+    x, rate = jvm_input()
+    y = jvm_target("B050_M050_T050_G050")
+    out = {
+        "in_sample_h5": jvm_in_sample(x, y, rate),
+        "output_in_input_silence_db": jvm_silence_floor(x, rate),
+        "residual_by_level_and_history": jvm_level_history(x, y, rate),
+        "best_lag_samples_by_window": jvm_drift(x, y, rate),
+        "wiener_hammerstein": jvm_wiener_hammerstein(x, y, rate),
+    }
+    return out
+
+
+def parallel_capacity(x, y, rate, pole: float, gains=(1.0, 4.0, 16.0), taps=64) -> dict:
+    """Parallel Wiener-Hammerstein probe with FIXED input filters: branches x and
+    tanh(g z_j), z_j the 8 frozen Laguerre outputs (pole), each through a FIR; linear
+    in its parameters. A = 0-60 s, B = 215-245 s."""
+    from scipy.linalg import solve
+    from scipy.signal import fftconvolve
+
+    from fssr_nam.product.probes import laguerre, normal_equations, regularized
+
+    a, b = slice(0, 60 * rate), slice(215 * rate, 245 * rate)
+    scale = float(np.sqrt(np.mean(x[a] ** 2)))
+
+    def basis(v: np.ndarray) -> list:
+        z = laguerre(v / scale, 8, pole)
+        z = z / np.sqrt(np.mean(z**2, axis=0) + 1e-30)
+        return [v / scale] + [np.tanh(g * z[:, j]) for j in range(8) for g in gains]
+
+    ua = basis(x[a])
+    norms = [float(np.sqrt(np.mean(s**2))) for s in ua]
+    probe = Probe(degree=len(ua), taps=taps, ridge=1e-4)
+    gram, rhs = normal_equations(
+        probe, [s / n for s, n in zip(ua, norms, strict=True)], y[a]
+    )
+    theta = solve(regularized(probe, gram), rhs, assume_a="pos")
+    out = {}
+    for name, part in (("in_sample", a), ("reading", b)):
+        ub = [s / n for s, n in zip(basis(x[part]), norms, strict=True)]
+        q = np.full(len(ub[0]), theta[0])
+        for k, sig in enumerate(ub):
+            q += fftconvolve(sig, theta[1 + taps * k : 1 + taps * (k + 1)])[: len(sig)]
+        out[name] = residual_ratio(y[part], q, rate)
+    return out
+
+
+def jvm_parallel() -> dict:
+    x, rate = jvm_input()
+    out = {}
+    for gain in ("G050", "G100"):
+        y = jvm_target(f"B050_M050_T050_{gain}")
+        out[gain] = {f"pole_{p}": parallel_capacity(x, y, rate, p) for p in (0.8, 0.95)}
+        print(gain, out[gain], flush=True)
     return out
 
 
