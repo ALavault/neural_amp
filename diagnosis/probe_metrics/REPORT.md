@@ -3,8 +3,7 @@
 Voie produit, aucune revendication scientifique ni perceptive. Protocole, écarts et règles de
 lecture : `NOTE.md` (tout ce qui est préinscrit y est daté avant les chiffres). Tableau principal :
 `table_test.csv` (**métrique × défaut × sévérité × condition d'excitation**) ; synthèse :
-`summary_test.json` ; figures : `figures/`. **BROUILLON : sections DI, Volterra–Laguerre,
-Wiener–Hammerstein et sorties réelles en attente des passes en cours.**
+`summary_test.json` ; figures : `figures/`. **BROUILLON : DI, Volterra–Laguerre, Wiener–Hammerstein et JVM410H en attente.**
 
 ## Ce que recouvre chaque type de résultat
 
@@ -116,6 +115,51 @@ départs 0,09 du RMS de la sortie, comparable aux petits défauts (voir v2).
 À confirmer après v2 et le réel : FIR (repère linéaire), Hammerstein 3 (H5 redondant ici),
 signature harmonique par ordre sur sinus glissant, ESR (ou d_audio) pour ce que les sondes ne
 représentent pas, et la part non représentée de la sonde comme indicateur de couverture.
+
+## Sorties réelles VS100R (envoi FX, 26/09, sans modèle neuronal)
+
+`real_pairs_vs100r.csv`. Chaque sonde ajustée sur l'entrée de sa propre prise, lue sur le
+bouclage de la prise de référence ; A = `di_train`, B = `di_test` (sources indépendantes) et
+bruit rose ; signature harmonique sur les trois sinus glissants (non synchronisés).
+
+**Entrée.** Le bouclage diffère de −42 dB entre la prise 1 (début de séance) et les autres, de
+−60 à −70 dB entre prises ultérieures ; sept sections `di_test` contiennent un glissement
+(−16 à −24 dB) et sont marquées « entrée non commune » pour les comparaisons directes.
+
+**Lecture préinscrite** (plancher réel = médiane des trois répétitions du centre) :
+
+| Métrique (di_test) | répétitions | contrôles négatifs : médiane (max) | changements réels |
+|---|---|---|---|
+| FIR | 1,18 ; 1,00 ; 0,23 | 0,12 (1,26) | 0,6 à 2,9 ; gain 0 : 7,7 |
+| Hammerstein 3 | 1,17 ; 1,00 ; 0,23 | 0,13 (1,23) | 0,6 à 3,2 ; gain 0 : 7,7 |
+| Hammerstein 5 | 1,18 ; 1,00 ; 0,23 | 0,12 (1,22) | 0,7 à 3,5 ; gain 0 : 7,8 |
+| ESR (amplitude) | 1,20 ; 1,00 ; 0,31 | 0,26 (**3,73**) | 0,9 à 5,2 ; gain 0 : 7,2 |
+| MR-STFT | 1,21 ; 1,00 ; 0,63 | 0,57 (1,32) | 0,7 à 6,2 ; gain 0 : 15,6 |
+
+- **Contrôles négatifs** (basses, médiums, aigus, avant l'étage de tonalité) : sous 3 pour toutes
+  les sondes, comme attendu. L'ESR dépasse 3 sur une paire (aigus 10, prise 23) dont la section
+  contient un glissement d'acquisition : ESR 0,52 contre 0,009 pour Hammerstein 3 ajusté sur sa
+  propre entrée.
+- **Changements réels** : l'attente « ≥ 10 » n'est tenue par **aucune** métrique. Le plancher est
+  dominé par la dérive dans la séance : les deux répétitions avec la prise 1 (14 h 26) valent
+  ~5 fois la répétition 20–39 (2 h d'écart), alors que les contrôles négatifs sont appariés à la
+  prise centrale la plus proche dans le temps.
+
+**Lectures post hoc** (non préinscrites) :
+- Séparation changements réels (7, gain 0 exclu) / contrôles négatifs (12), AUC et p exact
+  unilatéral : sur `di_test`, FIR, H3, H5 0,98 (p = 0,0001), ESR 0,89 (p = 0,002), MR-STFT 0,93 ;
+  sur bruit rose, toutes 0,96–0,99 ; signature harmonique à −10 dBFS 0,99 (total, ordres 2 et 3).
+- À −3 dBFS, la signature harmonique ne sépare plus (AUC 0,44–0,63). Pas d'écrêtage à
+  l'acquisition (crêtes de l'envoi −10 à −12 dBFS) ; la crête ne monte que d'environ 1 dB entre
+  −20 et −3 dBFS : le canal sature profondément. Hypothèse non vérifiée : les réglages y donnent
+  des signatures voisines, noyées dans la variabilité entre répétitions.
+- Un contour ±2,5 reste dans l'étendue des contrôles négatifs pour toutes les métriques : à ce
+  niveau de dérive, un tel changement n'est pas distinguable sur une seule paire.
+
+**Conséquence pour la lecture des scores sur le réel** : un plancher fait de répétitions éloignées
+dans le temps surestime le bruit d'une comparaison rapprochée ; il faut un plancher apparié dans
+le temps (répétitions encadrant la prise évaluée), absent de cette séance. Mesurable seulement
+avec de nouvelles captures (répétitions du centre intercalées).
 
 ## Commandes de reproduction
 
