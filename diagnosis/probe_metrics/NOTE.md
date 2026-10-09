@@ -409,3 +409,7 @@ réelle ne sera présentée comme validation.
   seulement : 0,68–0,83 en lecture (au lieu de 0,74–0,96), conclusion inchangée.
 - Formulation « au pire environ 60 % du plancher » corrigée (l'ordre 2 atteignait 79 %) par la
   mesure sur grille, ordre par ordre.
+- Quatrième relecture Codex (c50cc50) : normalisation JVM correcte ; formulations corrigées (le
+  test de la garde est « max − min des écarts ≥ 12 », une fenêtre aberrante suffit ; glissement
+  non détecté à 4,74 s : 0,75 du plancher d'ordre 4 ; bornes « 0,6 à 100 fois » remplacées par le
+  maximum). Pas de changement de code.

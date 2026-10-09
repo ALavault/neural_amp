@@ -306,20 +306,23 @@ des contrôles négatifs, mesurée par l'AUC avec un p exact unilatéral.
   D'où la **garde d'intégrité** (`real_pairs.py`), réécrite après deux relectures Codex.
   - Fonctionnement : alignement global de la section (±4 096 échantillons), puis retards par
     fenêtres de 0,25 s à partir du passage du sinus glissant à 100 Hz. Une section est rejetée
-    dès qu'un décalage *persistant* entre deux fenêtres, par rapport au profil médian de la
-    séance, atteint 12 échantillons à 192 kHz (un demi-quantum de glissement). Un saut réparti
-    sur deux fenêtres est ainsi rattrapé.
+    dès que deux fenêtres quelconques s'écartent de 12 échantillons à 192 kHz (un demi-quantum de
+    glissement), par rapport au profil médian de la séance. Un saut réparti sur deux fenêtres est
+    ainsi rattrapé. En contrepartie, une seule fenêtre aberrante suffit à rejeter la section :
+    faux positif possible, mais aucun observé, ni sur la séance ni sous bruit ajouté jusqu'à un
+    RSB de 0 dB (contrôle Codex).
   - Validation sur des glissements de 24 échantillons insérés tous les 0,05 s : tous sont
     détectés entre ~1,3 et 4,7 s. Aucun décalage global (±72, 200 échantillons) n'est signalé, et
-    il n'y a aucun faux positif sur la séance : seules la prise 20 à −3 dBFS et la prise 38 à
-    −20 dBFS sont signalées.
+    seules la prise 20 à −3 dBFS et la prise 38 à −20 dBFS sont signalées sur la séance.
   - Effet **mesuré** des glissements non détectés (`gap_checks_slip_harm.json`, 24 échantillons
     supprimés du bouclage et de l'envoi d'une prise intacte, −10 dBFS, ordre par ordre, rapporté à
     la répétition 20–39 du même ordre) :
     - avant ~115 Hz (0,5 à 1,26 s) : au plus 0,39 du plancher ;
-    - dans les 0,25 dernières secondes (au-delà de ~14 kHz) : au plus 0,64 du plancher ;
-    - à titre de comparaison, les glissements détectés valent de 0,6 à 100 fois le plancher
-      (1,5 à 3,5 s).
+    - à la fin du balayage : au plus 0,64 du plancher aux positions de la grille, et 0,75 à
+      4,74 s (point ajouté par Codex) ;
+    - jamais au-dessus du plancher aux positions testées, sans que ce soit une borne générale ;
+    - à titre de comparaison, les glissements détectés montent jusqu'à 100 fois le plancher
+      (ordre 2 à 3,5 s), certains ordres restant à peine touchés.
   - L'anomalie de la prise 20 est en pleine bande : une discontinuité à 4,06 s, quand le sinus
     glissant passe vers 5,6 kHz, avec un saut d'échantillon de 0,23.
 - **Un contour ±2,5 reste dans l'étendue des contrôles négatifs** pour toutes les métriques.
