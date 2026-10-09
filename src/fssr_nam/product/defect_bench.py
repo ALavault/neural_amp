@@ -182,12 +182,19 @@ def synchronized_sweep(seconds: float, fs: float, f0=20.0, f1=20_000.0):
     return x, Sweep(f0=f0, f1=f1, seconds=duration)
 
 
-def two_tone_signal(seconds: float, fs: float, seed: int) -> np.ndarray:
-    rng = np.random.default_rng(seed)
+def two_tone_frequencies(seed: int) -> tuple[float, float]:
+    """Tone pair of a realization. It depends on seed % 50, so an estimation seed s and
+    its reading seed s + 50 share the pair: a probe is read only on the frequencies it
+    was fitted on. Phases are drawn from the full seed."""
+    rng = np.random.default_rng(seed % 50)
     f1 = rng.uniform(300.0, 1_500.0)
-    f2 = f1 * rng.uniform(1.08, 1.5)
+    return f1, f1 * rng.uniform(1.08, 1.5)
+
+
+def two_tone_signal(seconds: float, fs: float, seed: int) -> np.ndarray:
+    f1, f2 = two_tone_frequencies(seed)
     t = np.arange(round(seconds * fs)) / fs
-    phases = rng.uniform(0, 2 * np.pi, 2)
+    phases = np.random.default_rng(seed).uniform(0, 2 * np.pi, 2)
     return np.sin(2 * np.pi * f1 * t + phases[0]) + np.sin(
         2 * np.pi * f2 * t + phases[1]
     )

@@ -136,3 +136,239 @@ def contributions(result: Fit, x: np.ndarray) -> dict:
 def render(result: Fit, x: np.ndarray) -> np.ndarray:
     """Probe output on x: the sum of its contributions."""
     return np.sum(list(contributions(result, x).values()), axis=0)
+
+
+@dataclass(frozen=True)
+class VolterraLaguerre:
+    """Reduced Volterra probe on a common, frozen Laguerre basis.
+
+    z_i = L_i * x, i < size, with the discrete Laguerre filters of pole `pole`; the
+    output is c0 + sum a_i z_i + sum_{i<=j} a_ij z_i z_j (+ cubic terms if order 3),
+    so cross interactions between basis outputs are included. Coefficients from
+    different bases are not comparable: the basis is part of the protocol. A diagonal
+    Hammerstein kernel x^k[n - m] is in general NOT in the span of these products, so
+    this probe and the Hammerstein probe are not assumed to be nested."""
+
+    size: int = 8
+    pole: float = 0.8
+    order: int = 2
+    ridge: float = 1e-6
+    dc: bool = True
+
+    @property
+    def kind(self) -> str:
+        return f"volterra_laguerre_{self.order}"
+
+    def version(self) -> str:
+        text = json.dumps({"kind": self.kind, **asdict(self)}, sort_keys=True)
+        return f"{self.kind}-{hashlib.sha256(text.encode()).hexdigest()[:12]}"
+
+
+CHUNK = 65_536
+
+
+def laguerre(x: np.ndarray, size: int, pole: float) -> np.ndarray:
+    """(n, size) outputs of the discrete Laguerre filters, zero initial state."""
+    from scipy.signal import lfilter
+
+    out = np.empty((len(x), size))
+    out[:, 0] = lfilter([np.sqrt(1 - pole**2)], [1.0, -pole], x)
+    for i in range(1, size):
+        out[:, i] = lfilter([-pole, 1.0], [1.0, -pole], out[:, i - 1])
+    return out
+
+
+def monomials(size: int, order: int) -> list[tuple[int, ...]]:
+    """Index tuples i <= j <= ... of every product up to `order`, by order."""
+    from itertools import combinations_with_replacement
+
+    return [
+        terms
+        for degree in range(1, order + 1)
+        for terms in combinations_with_replacement(range(size), degree)
+    ]
+
+
+def volterra_features(z: np.ndarray, terms: list) -> np.ndarray:
+    return np.column_stack([np.prod(z[:, list(t)], axis=1) for t in terms])
+
+
+@dataclass
+class VolterraFit:
+    probe: VolterraLaguerre
+    scales: np.ndarray  # RMS of each product on x_A
+    theta: np.ndarray  # [dc] + one coefficient per product
+
+
+def _volterra_columns(probe: VolterraLaguerre, x: np.ndarray, scales=None):
+    terms = monomials(probe.size, probe.order)
+    z = laguerre(x, probe.size, probe.pole)
+    if scales is None:
+        sums = np.zeros(len(terms))
+        for start in range(0, len(x), CHUNK):
+            sums += np.sum(volterra_features(z[start : start + CHUNK], terms) ** 2, 0)
+        scales = np.maximum(np.sqrt(sums / len(x)), 1e-300)
+    return z, terms, scales
+
+
+def fit_volterra(probe: VolterraLaguerre, x: np.ndarray, y: np.ndarray) -> VolterraFit:
+    """Ridge fit with columns scaled by their RMS on x and a relative ridge: both
+    depend on x only, so theta is linear in y."""
+    z, terms, scales = _volterra_columns(probe, x)
+    width = len(terms) + probe.dc
+    gram, rhs = np.zeros((width, width)), np.zeros(width)
+    for start in range(0, len(x), CHUNK):
+        phi = volterra_features(z[start : start + CHUNK], terms) / scales
+        if probe.dc:
+            phi = np.hstack((np.ones((len(phi), 1)), phi))
+        gram += phi.T @ phi
+        rhs += phi.T @ y[start : start + CHUNK]
+    first = int(probe.dc)
+    diagonal = np.diag(gram)[first:]
+    gram[first:, first:] += probe.ridge * diagonal.mean() * np.eye(len(diagonal))
+    return VolterraFit(probe, scales, solve(gram, rhs, assume_a="pos"))
+
+
+def volterra_contributions(result: VolterraFit, x: np.ndarray) -> dict:
+    """Rendered output of the constant and of each order on x."""
+    probe = result.probe
+    z, terms, _ = _volterra_columns(probe, x, result.scales)
+    first = int(probe.dc)
+    out = {"dc": np.full(len(x), result.theta[0])} if probe.dc else {}
+    for degree in range(1, probe.order + 1):
+        pick = [i for i, t in enumerate(terms) if len(t) == degree]
+        q = np.empty(len(x))
+        for start in range(0, len(x), CHUNK):
+            phi = volterra_features(z[start : start + CHUNK], [terms[i] for i in pick])
+            q[start : start + CHUNK] = (phi / result.scales[pick]) @ result.theta[
+                first + np.array(pick)
+            ]
+        out[f"order_{degree}"] = q
+    return out
+
+
+def memory(probe) -> int:
+    """Samples after which the probe has forgotten its input (zero gap between
+    estimation segments): the FIR length, or the Laguerre bank's decay to 1e-9."""
+    if isinstance(probe, Probe):
+        return probe.taps
+    if isinstance(probe, WienerHammerstein):
+        return probe.taps_in + probe.taps_out
+    impulse = np.zeros(8_192)
+    impulse[0] = 1.0
+    bank = np.abs(laguerre(impulse, probe.size, probe.pole)).max(axis=1)
+    return int(np.nonzero(bank > 1e-9 * bank.max())[0][-1]) + 1
+
+
+def fit_probe(probe, x: np.ndarray, y: np.ndarray):
+    if isinstance(probe, VolterraLaguerre):
+        return fit_volterra(probe, x, y)
+    if isinstance(probe, WienerHammerstein):
+        return fit_wh(probe, x, y)
+    return fit(probe, x, y)
+
+
+def probe_contributions(result, x: np.ndarray) -> dict:
+    if isinstance(result, VolterraFit):
+        return volterra_contributions(result, x)
+    if isinstance(result, WienerHammersteinFit):
+        best = wh_render(result.probe, result.starts[0], x, result.scale)
+        return {"wiener_hammerstein": best}
+    return contributions(result, x)
+
+
+@dataclass(frozen=True)
+class WienerHammerstein:
+    """Wiener-Hammerstein analysis probe q = h_out * phi(h_in * x).
+
+    phi is a cubic B-spline on a fixed knot grid over [-span, span] (in units of the
+    RMS of h_in * x), linear outside; no neural network. The parametrisation is
+    ambiguous (gain and delay can move between h_in, phi and h_out): parameters are
+    never compared, only rendered outputs. Fit: nonlinear least squares from
+    `starts` random initialisations on the SAME data; their spread is reported."""
+
+    taps_in: int = 16
+    taps_out: int = 32
+    knots: int = 12
+    span: float = 4.0
+    starts: int = 4
+    decimate: int = 4  # fit on every n-th residual sample, to bound the cost
+    seed: int = 0
+
+    @property
+    def kind(self) -> str:
+        return "wiener_hammerstein"
+
+    def version(self) -> str:
+        text = json.dumps({"kind": self.kind, **asdict(self)}, sort_keys=True)
+        return f"{self.kind}-{hashlib.sha256(text.encode()).hexdigest()[:12]}"
+
+
+@dataclass
+class WienerHammersteinFit:
+    probe: WienerHammerstein
+    starts: list  # parameter vectors of every start, best first
+    costs: list  # final cost of every start, same order
+    scale: float  # RMS of x on the estimation data
+
+
+def _spline_basis(u: np.ndarray, probe: WienerHammerstein) -> np.ndarray:
+    """(n, knots + 4) cubic B-spline design on [-span, span], linear extrapolation."""
+    from scipy.interpolate import BSpline
+
+    inner = np.linspace(-probe.span, probe.span, probe.knots)
+    t = np.r_[[inner[0]] * 3, inner, [inner[-1]] * 3]
+    clipped = np.clip(u, inner[0], inner[-1])
+    design = BSpline.design_matrix(clipped, t, 3).toarray()
+    edge = BSpline.design_matrix(np.array([inner[0], inner[-1]]), t, 3).toarray()
+    slope = BSpline.design_matrix(
+        np.array([inner[0] + 1e-6, inner[-1] - 1e-6]), t, 3
+    ).toarray()
+    slope = (edge - slope) / np.array([[-1e-6], [1e-6]])
+    low, high = u < inner[0], u > inner[-1]
+    design[low] += (u[low] - inner[0])[:, None] * slope[0]
+    design[high] += (u[high] - inner[-1])[:, None] * slope[1]
+    return design
+
+
+def _wh_split(probe: WienerHammerstein, params: np.ndarray):
+    a, b = probe.taps_in, probe.taps_in + probe.knots + 2
+    return params[:a], params[a:b], params[b:]
+
+
+def wh_render(probe: WienerHammerstein, params: np.ndarray, x: np.ndarray, scale):
+    """Probe output on x for one parameter vector, zero initial state."""
+    h_in, coef, h_out = _wh_split(probe, params)
+    u = fftconvolve(x / scale, h_in)[: len(x)]
+    v = _spline_basis(u, probe) @ coef
+    return fftconvolve(v, h_out)[: len(x)]
+
+
+def _wh_start(probe: WienerHammerstein, rng) -> np.ndarray:
+    h_in = np.r_[1.0, 0.1 * rng.standard_normal(probe.taps_in - 1)]
+    grid = np.linspace(-probe.span, probe.span, probe.knots + 2)
+    coef = grid * (1 + 0.1 * rng.standard_normal(len(grid)))  # near identity phi
+    h_out = np.r_[1.0, 0.1 * rng.standard_normal(probe.taps_out - 1)]
+    return np.r_[h_in, coef, h_out]
+
+
+def fit_wh(probe: WienerHammerstein, x: np.ndarray, y: np.ndarray):
+    """Nonlinear least squares from every start; costs and parameters kept."""
+    from scipy.optimize import least_squares
+
+    scale = float(np.sqrt(np.mean(x**2))) or 1.0
+    rng = np.random.default_rng(probe.seed)
+    keep = slice(memory(probe), None, probe.decimate)
+    results = []
+    for _ in range(probe.starts):
+        solution = least_squares(
+            lambda p: (wh_render(probe, p, x, scale) - y)[keep],
+            _wh_start(probe, rng),
+            method="trf",
+            max_nfev=200,
+        )
+        results.append((float(solution.cost), solution.x))
+    results.sort(key=lambda item: item[0])
+    return WienerHammersteinFit(
+        probe, [p for _, p in results], [c for c, _ in results], scale
+    )

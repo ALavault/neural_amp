@@ -139,3 +139,76 @@ def test_band_rms_adds_up_to_total() -> None:
     below = band_rms(signal, FS, (0.0, *edges))[0]
     total = np.sqrt(np.mean(signal**2))
     assert np.sqrt(below**2 + sum(b**2 for b in bands)) == pytest.approx(total)
+
+
+def test_harmonic_signature_matches_trigonometry() -> None:
+    """For y = x + a3 x^3 driven by A sin, a change of a3 moves the fundamental by
+    (3/4) da3 A^2 and the third harmonic by da3 A^2 / 4 (relative to D_1 = 1); an added
+    a2 x^2 creates a second harmonic a2 A / 2, present only in the evaluated output."""
+    from fssr_nam.product.defect_bench import synchronized_sweep
+    from fssr_nam.product.fidelity import HarmonicProtocol, analyze_sweep_pair
+
+    sweep_x, sweep = synchronized_sweep(5.0, FS)
+    x = 0.3 * sweep_x
+    y_ref = x + 0.1 * x**3
+    protocol = HarmonicProtocol()
+    cubic = analyze_sweep_pair(x, y_ref, x + 0.2 * x**3, FS, sweep, protocol)
+    assert cubic["order_1"]["complex_rel"] == pytest.approx(0.75 * 0.1 * 0.09, rel=0.02)
+    assert cubic["order_3"]["complex_rel"] == pytest.approx(0.1 * 0.09 / 4, rel=0.02)
+    even = analyze_sweep_pair(x, y_ref, y_ref + 0.05 * x**2, FS, sweep, protocol)
+    assert even["order_2"]["complex_rel"] == pytest.approx(0.05 * 0.3 / 2, rel=0.02)
+    assert even["order_2"]["bins_only_eval"] > 0.9 * even["order_2"]["bins_observed"]
+    same = analyze_sweep_pair(x, y_ref, y_ref, FS, sweep, protocol)
+    assert same["total_complex_rel"] == 0.0
+
+
+def volterra_probe():
+    from fssr_nam.product.probes import VolterraLaguerre
+
+    return VolterraLaguerre(size=4, pole=0.5, order=2, ridge=1e-10)
+
+
+def in_basis(c12: float):
+    """A system exactly in the probe's span: z_0 + c12 z_1 z_2."""
+    from fssr_nam.product.probes import laguerre
+
+    def system(v: np.ndarray) -> np.ndarray:
+        z = laguerre(v, 4, 0.5)
+        return z[:, 0] + c12 * z[:, 1] * z[:, 2]
+
+    return system
+
+
+def test_volterra_separates_exactly_representable_systems() -> None:
+    from fssr_nam.product.probes import laguerre
+
+    x, y_ref = segments(in_basis(0.3))
+    _, y_eval = segments(in_basis(0.6))
+    reading = analyze(volterra_probe(), x, y_ref, y_eval)
+    z = laguerre(x["B"], 4, 0.5)
+    expected = 0.3 * np.sqrt(np.mean((z[:, 1] * z[:, 2]) ** 2))
+    assert abs(reading["r_eval"] - reading["r_ref"]) < 1e-6 * expected
+    assert reading["d_probe"] == pytest.approx(expected, rel=1e-4)
+    assert reading["by_branch"]["order_1"] < 1e-4 * expected
+
+
+def test_volterra_sees_a_cross_interaction_that_hammerstein_cannot() -> None:
+    x, y_ref = segments(in_basis(0.0))
+    _, y_eval = segments(in_basis(0.5))
+    volterra = analyze(volterra_probe(), x, y_ref, y_eval)
+    hammerstein = analyze(HAMMERSTEIN, x, y_ref, y_eval)
+    assert volterra["d_probe"] > 0.99 * volterra["d_audio"]
+    assert hammerstein["d_probe"] < 0.5 * hammerstein["d_audio"]
+    assert hammerstein["unrepresented"] > 0.5 * hammerstein["d_audio"]
+
+
+def test_volterra_fit_is_linear_in_the_output() -> None:
+    from fssr_nam.product.probes import fit_volterra
+
+    probe = volterra_probe()
+    x, y_ref = segments(lambda v: np.tanh(2 * v))
+    _, y_eval = segments(lambda v: np.tanh(2.3 * v))
+    a = fit_volterra(probe, x["A"], y_ref["A"])
+    b = fit_volterra(probe, x["A"], y_eval["A"])
+    diff = fit_volterra(probe, x["A"], y_eval["A"] - y_ref["A"])
+    np.testing.assert_allclose(b.theta - a.theta, diff.theta, rtol=1e-7, atol=1e-10)

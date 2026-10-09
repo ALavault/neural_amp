@@ -185,3 +185,11 @@ bruit indépendant à −80 dB.
 Test : graines 200–202 (lecture sur la graine + 50), toutes les familles, trois niveaux, tous
 les défauts aux trois sévérités. Volterra–Laguerre et Wiener–Hammerstein auront leur propre
 règle de développement, écrite avant leurs chiffres.
+
+**Écart au protocole, 2026-10-09, avant la passe de test.** Un essai sur la graine 200 (deux
+tons et sinus glissant, −10 dBFS) a montré que les deux tons d'estimation et de lecture
+n'avaient pas les mêmes fréquences : la sonde était lue hors de son domaine de validité (scores
+Hammerstein au-dessus de d_audio). Correction : la paire de fréquences dépend de graine % 50,
+commune à A (graine s) et B (s + 50) ; seules les phases sont indépendantes. Les hyperparamètres
+gelés ne changent pas (le développement n'utilisait pas les deux tons). L'essai est conservé
+(`calibration_smoke_two_tone_sweep.csv`) et ne compte pas dans les résultats.

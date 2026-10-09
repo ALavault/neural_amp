@@ -26,7 +26,13 @@ from itertools import pairwise
 import numpy as np
 from scipy.fft import rfft
 
-from fssr_nam.product.probes import Probe, contributions, fit
+from fssr_nam.product.probes import (
+    Probe,
+    VolterraLaguerre,
+    fit_probe,
+    memory,
+    probe_contributions,
+)
 
 OCTAVE_EDGES_HZ = (
     22.0,
@@ -46,7 +52,7 @@ OCTAVE_EDGES_HZ = (
 class Protocol:
     """Everything that defines a score; frozen on development data before test."""
 
-    probe: Probe
+    probe: Probe | VolterraLaguerre
     estimation: tuple[str, ...]  # segment names used to fit (A)
     reading: tuple[str, ...]  # segment names the fits are rendered on (B)
     skip_s: float = 0.05  # unscored start of each reading segment (zero-state start)
@@ -88,11 +94,11 @@ def band_rms(signal: np.ndarray, fs: float, edges_hz: tuple[float, ...]) -> list
 
 def fits(protocol: Protocol, x: dict, y_ref: dict, y_eval: dict):
     """The probe fitted on the estimation segments, once per output."""
-    gap = protocol.probe.taps
+    gap = memory(protocol.probe)
     xa = joined([x[name] for name in protocol.estimation], gap)
     ref = joined([y_ref[name] for name in protocol.estimation], gap)
     ev = joined([y_eval[name] for name in protocol.estimation], gap)
-    return fit(protocol.probe, xa, ref), fit(protocol.probe, xa, ev)
+    return fit_probe(protocol.probe, xa, ref), fit_probe(protocol.probe, xa, ev)
 
 
 def deviation(q_ref: dict, q_eval: dict, keep: slice) -> dict:
@@ -103,8 +109,8 @@ def deviation(q_ref: dict, q_eval: dict, keep: slice) -> dict:
 def read_segment(protocol: Protocol, fitted, x, y_ref, y_eval, fs: float) -> dict:
     """All readings on one reading segment."""
     keep = slice(round(protocol.skip_s * fs), None)
-    parts_ref = contributions(fitted[0], x)
-    parts_eval = contributions(fitted[1], x)
+    parts_ref = probe_contributions(fitted[0], x)
+    parts_eval = probe_contributions(fitted[1], x)
     q_ref, q_eval = sum(parts_ref.values()), sum(parts_eval.values())
     dq, dy = (q_eval - q_ref)[keep], (y_eval - y_ref)[keep]
     scale = rms(y_ref[keep])
@@ -175,3 +181,68 @@ def analyze_pair(
         "readings": readings,
         "warnings": warnings,
     }
+
+
+@dataclass(frozen=True)
+class HarmonicProtocol:
+    """Harmonic-response signature D_k from an exponential sweep (Farina; Novak).
+
+    Harmonic ORDER k (output component at k f) is not polynomial DEGREE n; the
+    Hammerstein filters G_n follow from D_k through the mixing matrix measured by
+    `product.hammerstein.calibration`. The score compares D_k, which are measured
+    directly; G_n are an identification on top of them."""
+
+    order: int = 5
+    nfft: int = 8192
+    band_hz: tuple[float, float] = (100.0, 8_000.0)
+    floor_db: float = -80.0  # re max |D_1| of the reference: common observability floor
+
+    def version(self) -> str:
+        text = json.dumps(asdict(self), sort_keys=True)
+        return f"harmonic-{hashlib.sha256(text.encode()).hexdigest()[:12]}"
+
+
+def harmonic_signature(x, y, fs: float, sweep, protocol: HarmonicProtocol, m=None):
+    """D_k (and G_n) of y driven by the sweep x; pass m to reuse a calibration."""
+    from fssr_nam.product.hammerstein import calibration, identify
+
+    if m is None:
+        m = calibration(x, lambda s: s, round(fs), sweep, protocol.order, protocol.nfft)
+    return identify(
+        y, x, lambda s: s, round(fs), sweep, protocol.order, protocol.nfft, m
+    ), m
+
+
+def order_deviation(a, b, scale: float, floor: float) -> dict:
+    """Complex and magnitude deviation of one harmonic response, on observable bins.
+    A component present only in the evaluated output is counted, never masked."""
+    observed = (np.abs(a) > floor) | (np.abs(b) > floor)
+    both = (np.abs(a) > floor) & (np.abs(b) > floor)
+    only_eval = int(np.sum((np.abs(b) > floor) & (np.abs(a) <= floor)))
+    only_ref = int(np.sum((np.abs(a) > floor) & (np.abs(b) <= floor)))
+    complex_dev = rms(np.abs(b - a)[observed]) / scale if observed.any() else 0.0
+    level = 20 * np.log10(np.abs(b[both]) / np.abs(a[both])) if both.any() else []
+    return {
+        "complex_rel": float(complex_dev),
+        "magnitude_db_rms": rms(np.asarray(level)) if len(level) else 0.0,
+        "level_ref_db": 20 * np.log10(max(rms(np.abs(a)), 1e-300) / scale),
+        "level_eval_db": 20 * np.log10(max(rms(np.abs(b)), 1e-300) / scale),
+        "bins_observed": int(observed.sum()),
+        "bins_only_eval": only_eval,
+        "bins_only_ref": only_ref,
+    }
+
+
+def analyze_sweep_pair(x, y_ref, y_eval, fs: float, sweep, protocol: HarmonicProtocol):
+    """Harmonic-response deviation of y_eval against y_ref for one sweep x."""
+    ref, m = harmonic_signature(x, y_ref, fs, sweep, protocol)
+    ev, _ = harmonic_signature(x, y_eval, fs, sweep, protocol, m)
+    band = (ref.freqs >= protocol.band_hz[0]) & (ref.freqs <= protocol.band_hz[1])
+    scale = rms(np.abs(ref.d[0][band]))
+    floor = 10 ** (protocol.floor_db / 20) * np.abs(ref.d[0][band]).max()
+    orders = {
+        f"order_{k + 1}": order_deviation(ref.d[k][band], ev.d[k][band], scale, floor)
+        for k in range(protocol.order)
+    }
+    total = float(np.sqrt(sum(v["complex_rel"] ** 2 for v in orders.values())))
+    return {"protocol": protocol.version(), "total_complex_rel": total, **orders}
