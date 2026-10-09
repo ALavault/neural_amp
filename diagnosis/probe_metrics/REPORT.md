@@ -292,23 +292,25 @@ des contrôles négatifs, mesurée par l'AUC avec un p exact unilatéral.
   contribution de la saturation n'est donc pas exclue. Sans la section touchée, AUC 0,88
   (p = 0,13, 4 contre 2 paires seulement). Ajuster sur l'entrée propre ne protège pas la signature
   harmonique : un saut temporel casse la correspondance temps–fréquence du sinus exponentiel.
-  D'où la **garde d'intégrité** (`real_pairs.py`).
-  - Fonctionnement : alignement global de la section, puis retards par fenêtres de 0,25 s
-    comparés au profil modal de la séance. Une section est rejetée dès qu'un pas dépasse 12
-    échantillons à 192 kHz, soit un demi-quantum de glissement.
-  - Validation : elle détecte des glissements de 24 échantillons insérés à 2,0, 3,5 et 4,6 s,
-    sans signaler de décalage global.
-  - Zones aveugles : avant 200 Hz, et dans les ~0,15 dernières secondes (au-delà de ~14 kHz).
-    Leur effet a été **mesuré** (`gap_checks_slip_harm.json`) en supprimant 24 échantillons du
-    bouclage et de l'envoi d'une prise intacte, comme le fait un vrai glissement :
-    - écart harmonique par ordre de 0,0005 à 0,0046 ;
-    - à comparer à l'écart entre répétitions 20–39 à −10 dBFS : 0,0071 (ordre 3) et 0,018
-      (ordre 1) ;
-    - au pire (glissement à 1,5 s, ~120 Hz), environ 60 % du plancher : sous lui, mais pas nul.
-  - L'anomalie de la prise 20 se situe, elle, en pleine bande : une discontinuité à 4,06 s, quand
-    le sinus glissant passe vers 5,6 kHz (saut d'échantillon de 0,23, plus du double de ce qu'un
-    sinus à cette fréquence autorise). La garde la signale. Le saut de la prise 38 à −20 dBFS,
-    en zone grave, est gardé.
+  D'où la **garde d'intégrité** (`real_pairs.py`), réécrite après deux relectures Codex.
+  - Fonctionnement : alignement global de la section (±4 096 échantillons), puis retards par
+    fenêtres de 0,25 s à partir du passage du sinus glissant à 100 Hz. Une section est rejetée
+    dès qu'un décalage *persistant* entre deux fenêtres, par rapport au profil médian de la
+    séance, atteint 12 échantillons à 192 kHz (un demi-quantum de glissement). Un saut réparti
+    sur deux fenêtres est ainsi rattrapé.
+  - Validation sur des glissements de 24 échantillons insérés tous les 0,05 s : tous sont
+    détectés entre ~1,3 et 4,7 s. Aucun décalage global (±72, 200 échantillons) n'est signalé, et
+    il n'y a aucun faux positif sur la séance : seules la prise 20 à −3 dBFS et la prise 38 à
+    −20 dBFS sont signalées.
+  - Effet **mesuré** des glissements non détectés (`gap_checks_slip_harm.json`, 24 échantillons
+    supprimés du bouclage et de l'envoi d'une prise intacte, −10 dBFS, ordre par ordre, rapporté à
+    la répétition 20–39 du même ordre) :
+    - avant ~115 Hz (0,5 à 1,26 s) : au plus 0,39 du plancher ;
+    - dans les 0,25 dernières secondes (au-delà de ~14 kHz) : au plus 0,64 du plancher ;
+    - à titre de comparaison, les glissements détectés valent de 0,6 à 100 fois le plancher
+      (1,5 à 3,5 s).
+  - L'anomalie de la prise 20 est en pleine bande : une discontinuité à 4,06 s, quand le sinus
+    glissant passe vers 5,6 kHz, avec un saut d'échantillon de 0,23.
 - **Un contour ±2,5 reste dans l'étendue des contrôles négatifs** pour toutes les métriques.
 
 **Métriques existantes sur le réel** (`real_extra_vs100r.csv`, post hoc, entrée commune
@@ -411,8 +413,8 @@ Contrôles post hoc (`gap_checks.py`, `gap_checks_*.json`) :
     - 1 024 taps : 0,72 ;
     - base saturante tanh : 0,67 au gain 5, 0,59 au gain 10 ;
     - Volterra–Laguerre 3 : comparable ;
-    - Wiener–Hammerstein parallèle à préfiltres de Laguerre fixes : 0,59–0,66 en échantillon,
-      0,74–0,96 en lecture ;
+    - Wiener–Hammerstein parallèle à préfiltres de Laguerre fixes (normalisation sur A seulement) :
+      0,59–0,66 en échantillon, 0,68–0,83 en lecture ;
     - Wiener–Hammerstein ajusté sur 1 s : 0,39 en échantillon mais 1,08 en lecture
       (surapprentissage).
   - Écartés, par les mesures de `gap_checks_jvm_causes.json` :

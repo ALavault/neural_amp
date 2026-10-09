@@ -299,9 +299,10 @@ def parallel_capacity(x, y, rate, pole: float, gains=(1.0, 4.0, 16.0), taps=64) 
     a, b = slice(0, 60 * rate), slice(215 * rate, 245 * rate)
     scale = float(np.sqrt(np.mean(x[a] ** 2)))
 
+    z_rms = np.sqrt(np.mean(laguerre(x[a] / scale, 8, pole) ** 2, axis=0)) + 1e-30
+
     def basis(v: np.ndarray) -> list:
-        z = laguerre(v / scale, 8, pole)
-        z = z / np.sqrt(np.mean(z**2, axis=0) + 1e-30)
+        z = laguerre(v / scale, 8, pole) / z_rms  # normalised on A only, as the probe
         return [v / scale] + [np.tanh(g * z[:, j]) for j in range(8) for g in gains]
 
     ua = basis(x[a])
@@ -332,10 +333,10 @@ def jvm_parallel() -> dict:
 
 
 def slip_harm() -> dict:
-    """Harm of a 24-sample slip in the guard's blind zones: delete 24 samples in the
-    loopback AND the FX send of intact take 39 (as real slips behave), at 1.0 and 1.5 s
-    (< 200 Hz) and 4.85 and 4.95 s (end); harmonic deviation per order against the
-    intact take, beside the 20-39 repeat. Also whether the guard flags each slip."""
+    """Harm of 24-sample slips the guard does not flag: delete 24 samples in the
+    loopback AND the FX send of intact take 39 (as real slips behave), on a grid of
+    times; for each, whether the guard flags it and the harmonic deviation per order
+    against the intact take, as a fraction of the 20-39 repeat at the same order."""
     import real_pairs as rp
     from scipy.signal import resample_poly
 
@@ -343,29 +344,32 @@ def slip_harm() -> dict:
     from fssr_nam.product.hammerstein import Sweep
 
     sheet = {t["order"]: t for t in vs100r.sheet()}
+    takes = {t["order"]: t for p in rp.vs100r_pairs() for t in (p["ref"], p["eval"])}
     sweep_def, protocol = Sweep(f0=20.0, f1=20_000.0, seconds=5.0), HarmonicProtocol()
     out = {}
-    for name in ("sweep_-10dBFS", "sweep_-3dBFS"):
-        loop, fx = vs100r.audio(sheet[39], name)
+    for name in ("sweep_-10dBFS",):
         source = rp.sweep_source(name)
-        base = rp.sweep_profile(source, loop)
+        lags = {
+            o: rp.sweep_profile(source, vs100r.audio(t, name)[0])
+            for o, t in takes.items()
+        }
+        modal = np.median(np.array(list(lags.values())), axis=0)
+        loop, fx = vs100r.audio(sheet[39], name)
         x48, y48 = resample_poly(loop, 1, 4), resample_poly(fx, 1, 4)
         repeat = common_section(sheet[20], sheet[39], name)
-        rows = {
-            "repeat_20_39": analyze_sweep_pair(
-                repeat["x"],
-                repeat["y_ref"],
-                repeat["y_eval"],
-                48_000.0,
-                sweep_def,
-                protocol,
-                repeat["x_eval"],
-            )
-        }
-        for t in (1.0, 1.5, 4.85, 4.95):
+        floor = analyze_sweep_pair(
+            repeat["x"],
+            repeat["y_ref"],
+            repeat["y_eval"],
+            48_000.0,
+            sweep_def,
+            protocol,
+            repeat["x_eval"],
+        )
+        rows = {}
+        for t in (0.5, 0.8, 1.0, 1.1, 1.21, 1.26, 1.5, 1.8, 2.5, 3.5, 4.76, 4.81, 4.9):
             i = round(t * vs100r.RATE)
             l2, f2 = (np.r_[v[:i], v[i + 24 :], np.zeros(24)] for v in (loop, fx))
-            step = np.max(np.abs(rp.sweep_profile(source, l2) - base))
             result = analyze_sweep_pair(
                 x48,
                 y48,
@@ -375,15 +379,22 @@ def slip_harm() -> dict:
                 protocol,
                 resample_poly(l2, 1, 4),
             )
-            result["guard_flags"] = bool(step >= rp.SLIP_SAMPLES)
-            rows[f"slip_{t}s"] = result
-        out[name] = {
-            k: {
-                o: (v[o]["complex_rel"] if o.startswith("order_") else v[o])
-                for o in v
-                if o.startswith("order_") or o == "guard_flags"
+            rows[f"{t}s"] = {
+                "guard_flags": rp.broken(rp.sweep_profile(source, l2), modal),
+                **{
+                    o: {
+                        "deviation": result[o]["complex_rel"],
+                        "of_repeat": result[o]["complex_rel"] / floor[o]["complex_rel"],
+                    }
+                    for o in result
+                    if o.startswith("order_")
+                },
             }
-            for k, v in rows.items()
+        out[name] = {
+            "repeat_20_39": {
+                o: floor[o]["complex_rel"] for o in floor if o.startswith("order_")
+            },
+            "slips": rows,
         }
     return out
 

@@ -1464,9 +1464,9 @@
    ]
   },
   "sweep_-20dBFS|harmonic_total|all": {
-   "auc": 0.988,
-   "p_exact": 4e-05,
-   "n_pos": 7,
+   "auc": 0.986,
+   "p_exact": 0.00011,
+   "n_pos": 6,
    "n_neg": 12,
    "repeats_over_floor": [
     1.16,
@@ -1479,16 +1479,15 @@
     0.59,
     1.31,
     1.55,
-    3.05,
     4.06,
     4.63,
     5.99
    ]
   },
   "sweep_-20dBFS|harmonic_total|common": {
-   "auc": 0.988,
-   "p_exact": 4e-05,
-   "n_pos": 7,
+   "auc": 0.986,
+   "p_exact": 0.00011,
+   "n_pos": 6,
    "n_neg": 12,
    "repeats_over_floor": [
     1.16,
@@ -1501,16 +1500,15 @@
     0.59,
     1.31,
     1.55,
-    3.05,
     4.06,
     4.63,
     5.99
    ]
   },
   "sweep_-20dBFS|harmonic_order_2|all": {
-   "auc": 0.988,
-   "p_exact": 4e-05,
-   "n_pos": 7,
+   "auc": 0.986,
+   "p_exact": 0.00011,
+   "n_pos": 6,
    "n_neg": 12,
    "repeats_over_floor": [
     1.0,
@@ -1525,14 +1523,13 @@
     1.38,
     5.46,
     5.78,
-    23.8,
     43.79
    ]
   },
   "sweep_-20dBFS|harmonic_order_2|common": {
-   "auc": 0.988,
-   "p_exact": 4e-05,
-   "n_pos": 7,
+   "auc": 0.986,
+   "p_exact": 0.00011,
+   "n_pos": 6,
    "n_neg": 12,
    "repeats_over_floor": [
     1.0,
@@ -1547,14 +1544,13 @@
     1.38,
     5.46,
     5.78,
-    23.8,
     43.79
    ]
   },
   "sweep_-20dBFS|harmonic_order_3|all": {
-   "auc": 0.976,
-   "p_exact": 8e-05,
-   "n_pos": 7,
+   "auc": 0.972,
+   "p_exact": 0.00022,
+   "n_pos": 6,
    "n_neg": 12,
    "repeats_over_floor": [
     1.19,
@@ -1568,15 +1564,14 @@
     1.4,
     1.57,
     5.24,
-    6.28,
     6.32,
     9.47
    ]
   },
   "sweep_-20dBFS|harmonic_order_3|common": {
-   "auc": 0.976,
-   "p_exact": 8e-05,
-   "n_pos": 7,
+   "auc": 0.972,
+   "p_exact": 0.00022,
+   "n_pos": 6,
    "n_neg": 12,
    "repeats_over_floor": [
     1.19,
@@ -1590,7 +1585,6 @@
     1.4,
     1.57,
     5.24,
-    6.28,
     6.32,
     9.47
    ]

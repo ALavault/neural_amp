@@ -135,7 +135,7 @@ def common_section(ref_take, eval_take, name: str) -> dict:
 
 
 GUARD_WINDOW_S = 0.25
-GUARD_FROM_HZ = 200.0  # below, a lag cannot be read reliably in a 0.25 s window
+GUARD_FROM_HZ = 100.0  # lower (60 Hz tested), lags in 0.25 s windows fail
 
 
 def sweep_source(name: str) -> np.ndarray:
@@ -153,33 +153,46 @@ def sweep_source(name: str) -> np.ndarray:
 
 
 def sweep_profile(source: np.ndarray, loop: np.ndarray) -> np.ndarray:
-    """Steps between the lags of consecutive GUARD_WINDOW_S windows of a sweep, after
-    one global alignment over the whole section (wide search), from the time the
-    sweep passes GUARD_FROM_HZ. A slip of the loopback against the source appears as
-    one step of about its size; a constant offset does not appear at all."""
+    """Lags of consecutive GUARD_WINDOW_S windows of a sweep, after one global
+    alignment over the whole section (wide search), from the time the sweep passes
+    GUARD_FROM_HZ. A slip of the loopback against the source shifts every later window
+    by about its size (possibly split over two windows); a constant offset is removed
+    by the global alignment."""
     loop = shifted(loop, lag(source, loop, span=4096))
     sweep = Sweep(f0=20.0, f1=20_000.0, seconds=5.0)
     start = round(sweep.lag * np.log(GUARD_FROM_HZ / sweep.f0) * vs100r.RATE)
     width = round(GUARD_WINDOW_S * vs100r.RATE)
     starts = range(start, len(source) - width + 1, width)
-    lags = [lag(source[i : i + width], loop[i : i + width], span=64) for i in starts]
-    return np.diff(lags)
+    return np.array(
+        [lag(source[i : i + width], loop[i : i + width], span=64) for i in starts]
+    )
+
+
+def broken(lags: np.ndarray, modal: np.ndarray) -> bool:
+    """A persistent shift: some later window departs from some earlier one, relative to
+    the session's median profile, by at least SLIP_SAMPLES (catches a slip whose step
+    is split over two windows)."""
+    deviation = lags - modal
+    return bool(
+        np.max(deviation[None, :] - deviation[:, None]) >= SLIP_SAMPLES
+        or np.max(deviation[:, None] - deviation[None, :]) >= SLIP_SAMPLES
+    )
 
 
 def sweep_integrity(takes: list[dict]) -> dict:
-    """{(order, section): intact}: a take's sweep is broken by a slip inside it when a
-    window-to-window lag step departs from the session's median step by at least
-    SLIP_SAMPLES (half a microframe quantum: set by the acquisition, not the data).
-    Slips while the sweep is below GUARD_FROM_HZ are not detected."""
+    """{(order, section): intact}: a take's sweep holds a slip when broken() finds a
+    persistent shift of at least SLIP_SAMPLES (half a microframe quantum: set by the
+    acquisition, not the data) against the session's median window lags. Slips while
+    the sweep is below GUARD_FROM_HZ are not detected."""
     out = {}
     for name in SWEEPS:
         source = sweep_source(name)
-        steps = {
+        lags = {
             t["order"]: sweep_profile(source, vs100r.audio(t, name)[0]) for t in takes
         }
-        modal = np.median(np.array(list(steps.values())), axis=0)
-        for order, step in steps.items():
-            out[(order, name)] = bool(np.all(np.abs(step - modal) < SLIP_SAMPLES))
+        modal = np.median(np.array(list(lags.values())), axis=0)
+        for order, profile in lags.items():
+            out[(order, name)] = not broken(profile, modal)
     return out
 
 
