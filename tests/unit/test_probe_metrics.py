@@ -316,3 +316,17 @@ def test_own_input_fit_removes_an_input_mismatch() -> None:
     assert reading["d_probe"] < 1e-3 * reading["d_audio"]
     same = analyze_pair(x, y_ref, y_ref, FS, protocol, x_eval=x)["readings"]["B"]
     assert same["d_probe"] == 0.0
+
+
+def test_cancelling_branches_are_flagged_on_noise_only_differences() -> None:
+    x, y_ref = segments(lambda v: np.tanh(2 * v))
+    rng = np.random.default_rng(3)
+    y_eval = {k: v + 1e-3 * rng.standard_normal(len(v)) for k, v in y_ref.items()}
+    protocol = Protocol(
+        probe=Probe(degree=5, taps=8), estimation=("A",), reading=("B",)
+    )
+    noisy = analyze_pair(x, y_ref, y_eval, FS, protocol)
+    assert any("se compensent" in w for w in noisy["warnings"])
+    _, louder = segments(lambda v: 1.05 * np.tanh(2 * v))
+    clean = analyze_pair(x, y_ref, louder, FS, protocol)
+    assert not any("se compensent" in w for w in clean["warnings"])

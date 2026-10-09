@@ -38,6 +38,10 @@ from fssr_nam.product.probes import (
     start_spread,
 )
 
+# Sum of branch deviations over the score above which the branches cancel each other:
+# chosen AFTER the known-defect calibration (linear and static defects 1.2-1.8, noise
+# and out-of-memory echo 3.7-8.7); exploratory, to be checked on other data.
+CANCELLING = 2.5
 OCTAVE_EDGES_HZ = (
     22.0,
     44.0,
@@ -184,6 +188,13 @@ def warnings_for(protocol: Protocol, name: str, reading: dict) -> list[str]:
                 f"{name}: la sonde laisse {share:.2f} de la sortie {side} "
                 "inexpliquée ; un faible score n'y garantit pas la fidélité"
             )
+    branches = sum(reading["by_branch"].values())
+    if len(reading["by_branch"]) > 1 and branches > CANCELLING * reading["d_probe"] > 0:
+        out.append(
+            f"{name}: contributions par branche qui se compensent "
+            f"({branches / reading['d_probe']:.1f} fois le score) : décomposition "
+            "non identifiable ici"
+        )
     spread = max(reading["start_spread_ref"], reading["start_spread_eval"])
     if spread > 0.5 * reading["d_probe"]:
         out.append(
