@@ -396,3 +396,16 @@ réelle ne sera présentée comme validation.
   formulation corrigée : les résidus sont des rapports RMS (√ESR), non des parts d'énergie.
 - **−3 dBFS** : le glissement est un facteur établi ; une contribution de la saturation n'est pas
   exclue.
+
+## Troisième relecture Codex (2026-10-09) et correctifs
+
+- La garde manquait encore un glissement en bande (1,8 s, ~240 Hz : saut réparti sur deux
+  fenêtres, écart 11 < 12, dégât 1,66 fois le plancher à l'ordre 5). Elle détecte désormais un
+  décalage *persistant* entre deux fenêtres quelconques, à partir de 100 Hz (60 Hz testé : les
+  retards ne s'y lisent plus). Grille de validation et dégât des glissements non détectés :
+  `gap_checks_slip_harm.json` (au plus 0,64 du plancher de chaque ordre). Prises signalées : 20
+  (−3 dBFS) et 38 (−20 dBFS).
+- La sonde JVM parallèle normalisait ses entrées séparément sur A et B ; normalisation sur A
+  seulement : 0,68–0,83 en lecture (au lieu de 0,74–0,96), conclusion inchangée.
+- Formulation « au pire environ 60 % du plancher » corrigée (l'ordre 2 atteignait 79 %) par la
+  mesure sur grille, ordre par ordre.
