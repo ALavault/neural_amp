@@ -3,7 +3,7 @@
 Voie produit, aucune revendication scientifique ni perceptive. Protocole, écarts et règles de
 lecture : `NOTE.md` (tout ce qui est préinscrit y est daté avant les chiffres). Tableau principal :
 `table_test.csv` (**métrique × défaut × sévérité × condition d'excitation**) ; synthèse :
-`summary_test.json` ; figures : `figures/`. **BROUILLON : DI, Volterra–Laguerre, Wiener–Hammerstein et JVM410H en attente.**
+`summary_test.json` ; figures : `figures/`. **BROUILLON : Volterra–Laguerre (bruit, multisinus, sinus glissant, deux tons, DI) en attente.**
 
 ## Ce que recouvre chaque type de résultat
 
@@ -160,6 +160,23 @@ bruit rose ; signature harmonique sur les trois sinus glissants (non synchronis�
 dans le temps surestime le bruit d'une comparaison rapprochée ; il faut un plancher apparié dans
 le temps (répétitions encadrant la prise évaluée), absent de cette séance. Mesurable seulement
 avec de nouvelles captures (répétitions du centre intercalées).
+
+## Sorties réelles JVM410H OD1 (ToneTwist, sans modèle neuronal)
+
+`real_pairs_jvm.csv`. Échelles d'un seul bouton autour de B5 M5 T5 G5 (gain 0 à 10 ; basses,
+médiums, aigus 0 à 10), sorties préampli et haut-parleur, entrée sèche commune. A = 0–150 s,
+B = 215–300 s du même fichier : **indépendance A/B non établie** (frontières de sources non
+documentées). Pas de répétition : aucun plancher réel.
+
+- **Monotonie observée** : sur chaque échelle et chaque côté du centre, toutes les métriques
+  (FIR, H3, H5, ESR, MR-STFT) croissent strictement avec la distance au centre (ρ = +1), aux deux
+  sorties. Non imposée, et peu discriminante entre métriques sur ce plan.
+- **Couverture** : Hammerstein 5 capte ~0,62 de l'écart (médiane), part non représentée ~0,75,
+  au préampli comme au haut-parleur. Sur cet ampli à lampes, les scores de sonde sont des
+  signatures partielles ; un faible score n'y vaudrait pas fidélité. Causes possibles non
+  départagées : non-linéarité et mémoire réelles hors de la capacité gelée (256 taps à
+  44,1 kHz, degré 5), A et B non indépendants, niveaux de la DI variables.
+- Borne : aucune violation.
 
 ## Commandes de reproduction
 
