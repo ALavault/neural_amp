@@ -275,3 +275,19 @@ dire la même chose. Elles sont lues en amplitude (racine carrée) dans `summari
 d_audio et la signature harmonique sont déjà en amplitude ; la MR-STFT (convergence spectrale +
 écart de log-magnitude) n'a pas d'échelle commune avec les autres et reste telle quelle, ce qui
 est rapporté avec ses chiffres.
+
+**Écart de procédure, paires réelles, avant tout score.** Premier passage (`real_pairs_vs100r.csv`
+initial, 2 paires sur 23 traitées, scores non lus) : 21 paires exclues pour « glissement ». Les
+retards et désaccords d'entrée seuls ont été examinés. Causes : retard entier estimé après
+décimation (les prises diffèrent de quelques échantillons à 192 kHz, d'où un décalage
+fractionnaire à 48 kHz et un désaccord de −6 dB) ; glissement « détecté » en comparant le premier
+et le dernier quart d'un sinus glissant, dont les contenus fréquentiels diffèrent. Même aligné à
+192 kHz, le bouclage diffère de −42 à −46 dB entre les prises 1 et 39 (même réglage, aucun
+décalage) : c'est un plancher de l'entrée réelle, à rapporter.
+Nouvelle procédure : chaque sonde est ajustée sur sa PROPRE entrée enregistrée (bouclage de sa
+prise, synchrone de son envoi) et les deux sont lues sur le bouclage de la prise de référence ;
+le score de sonde ne dépend plus de l'alignement entre prises (test
+`test_own_input_fit_removes_an_input_mismatch`). Les comparaisons directes d'enregistrements
+(d_audio, borne, ESR, MR-STFT) restent sur l'entrée alignée à 192 kHz et sont marquées
+`input_common` seulement si le retard est le même aux deux bouts et le désaccord ≤ −40 dB.
+Signature harmonique : chaque sortie déconvoluée par sa propre entrée.

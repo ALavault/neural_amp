@@ -113,15 +113,20 @@ def cached_fit(probe, x: np.ndarray, y: np.ndarray, cache_dir: Path | None):
     return result
 
 
-def fits(protocol: Protocol, x: dict, y_ref: dict, y_eval: dict, cache_dir=None):
+def fits(
+    protocol: Protocol, x: dict, y_ref: dict, y_eval: dict, cache_dir=None, x_eval=None
+):
     """The probe fitted on the estimation segments, once per output; the reference
-    fit can come from cache_dir."""
+    fit can come from cache_dir. With x_eval (the input actually recorded with
+    y_eval), the evaluated fit uses it instead of x."""
     gap = memory(protocol.probe)
-    xa = joined([x[name] for name in protocol.estimation], gap)
-    ref = joined([y_ref[name] for name in protocol.estimation], gap)
-    ev = joined([y_eval[name] for name in protocol.estimation], gap)
-    return cached_fit(protocol.probe, xa, ref, cache_dir), fit_probe(
-        protocol.probe, xa, ev
+
+    def part(signals: dict) -> np.ndarray:
+        return joined([signals[name] for name in protocol.estimation], gap)
+
+    xa_eval = part(x if x_eval is None else x_eval)
+    return cached_fit(protocol.probe, part(x), part(y_ref), cache_dir), fit_probe(
+        protocol.probe, xa_eval, part(y_eval)
     )
 
 
@@ -198,6 +203,7 @@ def analyze_pair(
     protocol: Protocol,
     metadata=None,
     cache_dir: Path | None = None,
+    x_eval: dict | None = None,
 ) -> dict:
     """Deviation scores of y_eval against y_ref for one probe protocol.
 
@@ -205,8 +211,12 @@ def analyze_pair(
     protocol names which segments estimate (A) and which are read (B). metadata
     (level, settings, session, calibration, initial state) is passed through. With
     cache_dir, the reference signature is reused while its protocol and data hold.
+    x_eval: the input recorded with y_eval when it is not exactly x (two takes of one
+    source). Each probe is then fitted on its own input and both are read on x; the
+    linear-equivalence identity no longer applies, and d_audio compares recordings
+    whose inputs differ by x_eval - x, to be reported with the score.
     """
-    fitted = fits(protocol, x, y_ref, y_eval, cache_dir)
+    fitted = fits(protocol, x, y_ref, y_eval, cache_dir, x_eval)
     readings, warnings = {}, []
     for name in protocol.reading:
         readings[name] = read_segment(
@@ -273,10 +283,16 @@ def order_deviation(a, b, scale: float, floor: float) -> dict:
     }
 
 
-def analyze_sweep_pair(x, y_ref, y_eval, fs: float, sweep, protocol: HarmonicProtocol):
-    """Harmonic-response deviation of y_eval against y_ref for one sweep x."""
+def analyze_sweep_pair(
+    x, y_ref, y_eval, fs: float, sweep, protocol: HarmonicProtocol, x_eval=None
+):
+    """Harmonic-response deviation of y_eval against y_ref for one sweep x; with
+    x_eval, the evaluated signature is deconvolved by its own recorded input."""
     ref, m = harmonic_signature(x, y_ref, fs, sweep, protocol)
-    ev, _ = harmonic_signature(x, y_eval, fs, sweep, protocol, m)
+    if x_eval is None:
+        ev, _ = harmonic_signature(x, y_eval, fs, sweep, protocol, m)
+    else:
+        ev, _ = harmonic_signature(x_eval, y_eval, fs, sweep, protocol)
     band = (ref.freqs >= protocol.band_hz[0]) & (ref.freqs <= protocol.band_hz[1])
     scale = rms(np.abs(ref.d[0][band]))
     floor = 10 ** (protocol.floor_db / 20) * np.abs(ref.d[0][band]).max()

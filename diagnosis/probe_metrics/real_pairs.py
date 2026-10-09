@@ -6,13 +6,16 @@ VS100R FX send (2026-09-26), analysed at 48 kHz (both tracks decimated by 4):
 - negative controls: one of bass / middle / treble moved from the centre. The FX send
   is taken before the tone stack, so these should look like repeats;
 - positive changes: gain or contour moved from the centre.
-Each knob take is paired with the centre take nearest in time. Common input: the
-reference take's loopback. The evaluated take's loopback and FX send are shifted
-TOGETHER by the integer lag that aligns its loopback to the reference loopback (a
-common acquisition correction; the input-output relation is untouched); the
-remaining input mismatch is reported, and a section whose lag changes inside it (a
-slip) is excluded. A = di_train, B = di_test (independent sources) and pink noise.
-Harmonic signature on the three sweeps (not synchronised: measured mixing matrix).
+Each knob take is paired with the centre take nearest in time. Each probe is fitted
+on its OWN recorded input (the take's loopback, in step with its FX send), and both
+are read on the reference take's loopback: the probe score does not depend on the
+alignment between takes. Direct comparisons of recordings (d_audio, the bound, ESR,
+MR-STFT) need a common input: the evaluated take is shifted (loopback and FX send
+together) by the integer lag at 192 kHz that aligns its loopback to the reference
+loopback, and a section is "input_common" only if that lag is the same at both ends
+and the remaining loopback difference is at most -40 dB. A = di_train, B = di_test
+(independent sources) and pink noise. Harmonic signature on the three sweeps (not
+synchronised: measured mixing matrix), each output deconvolved by its own input.
 
 Marshall JVM410H OD1 (ToneTwist, 44.1 kHz), one-knob ladders around the centre,
 PreampOut and SpeakerOut; common dry input. A = 0-150 s, B = 215-300 s of the same
@@ -51,6 +54,7 @@ FS = 48_000.0
 SWEEPS = ("sweep_-20dBFS", "sweep_-10dBFS", "sweep_-3dBFS")
 READ = ("di_test", "pink_noise_-30dBFS_rms")
 SKIP = round(0.05 * FS)
+MAX_MISMATCH_DB = -40.0  # loopback difference between takes above which x is not common
 JVM = vs100r.ROOT / "datasets/raw/external/tone_twist_param/extracted"
 JVM = JVM / "Marshall-JVM410H-ChOD1-trimmed"
 CENTRE = {"G": 5.0, "C": 5.0, "B": 5.0, "M": 5.0, "T": 5.0}
@@ -78,7 +82,7 @@ def vs100r_pairs() -> list[dict]:
     return pairs
 
 
-def lag(reference: np.ndarray, other: np.ndarray, span: int = 64) -> int:
+def lag(reference: np.ndarray, other: np.ndarray, span: int = 256) -> int:
     """Integer lag (samples) that best aligns `other` to `reference`."""
     c = correlate(other, reference, mode="full", method="fft")
     mid = len(reference) - 1
@@ -92,37 +96,52 @@ def shifted(signal: np.ndarray, k: int) -> np.ndarray:
     return np.r_[np.zeros(-k), signal[:k]]
 
 
+def lags_192k(loop_r: np.ndarray, loop_e: np.ndarray) -> tuple[int, int]:
+    """Lag at the capture rate (192 kHz, where takes differ by whole samples) on the
+    first and the last 10 s; a short section gives the same lag twice."""
+    piece = 10 * vs100r.RATE
+    if len(loop_r) <= 2 * piece:
+        k = lag(loop_r, loop_e)
+        return k, k
+    return lag(loop_r[:piece], loop_e[:piece]), lag(loop_r[-piece:], loop_e[-piece:])
+
+
 def common_section(ref_take, eval_take, name: str) -> dict:
-    loop_r, fx_r = (resample_poly(s, 1, 4) for s in vs100r.audio(ref_take, name))
-    loop_e, fx_e = (resample_poly(s, 1, 4) for s in vs100r.audio(eval_take, name))
-    quarter = len(loop_r) // 4
-    lags = [
-        lag(loop_r[:quarter], loop_e[:quarter]),
-        lag(loop_r[-quarter:], loop_e[-quarter:]),
-    ]
-    loop_e, fx_e = shifted(loop_e, lags[0]), shifted(fx_e, lags[0])
-    keep = slice(SKIP, len(loop_r) - abs(lags[0]) - SKIP)
+    """Both takes of one section with a common input: the evaluated take's loopback and
+    FX send shifted together, at 192 kHz, onto the reference loopback; decimated."""
+    loop_r, fx_r = vs100r.audio(ref_take, name)
+    loop_e, fx_e = vs100r.audio(eval_take, name)
+    first, last = lags_192k(loop_r, loop_e)
+    loop_e, fx_e = shifted(loop_e, first), shifted(fx_e, first)
+    loop_r, fx_r, loop_e, fx_e = (
+        resample_poly(v, 1, 4) for v in (loop_r, fx_r, loop_e, fx_e)
+    )
+    keep = slice(SKIP, len(loop_r) - abs(first) // 4 - SKIP)
     mismatch = np.sqrt(
         np.mean((loop_e - loop_r)[keep] ** 2) / np.mean(loop_r[keep] ** 2)
     )
+    mismatch_db = float(20 * np.log10(max(mismatch, 1e-12)))
     return {
         "x": loop_r,
+        "x_eval": loop_e,
         "y_ref": fx_r,
         "y_eval": fx_e,
-        "lag": lags[0],
-        "slip_inside": lags[0] != lags[1],
-        "input_mismatch_db": float(20 * np.log10(max(mismatch, 1e-12))),
+        "lag": first,
+        "slip_inside": first != last,
+        "input_mismatch_db": mismatch_db,
+        "common": first == last and mismatch_db <= MAX_MISMATCH_DB,
     }
 
 
 def probe_rows(sections: dict, meta: dict) -> list[dict]:
     x = {k: v["x"] for k, v in sections.items()}
+    x_eval = {k: v["x_eval"] for k, v in sections.items()}
     y_ref = {k: v["y_ref"] for k, v in sections.items()}
     y_eval = {k: v["y_eval"] for k, v in sections.items()}
     rows = []
     for metric, probe in frozen_probes().items():
         protocol = Protocol(probe=probe, estimation=("di_train",), reading=READ)
-        out = analyze_pair(x, y_ref, y_eval, FS, protocol)
+        out = analyze_pair(x, y_ref, y_eval, FS, protocol, x_eval=x_eval)
         for segment, reading in out["readings"].items():
             rows.append(
                 {
@@ -135,6 +154,7 @@ def probe_rows(sections: dict, meta: dict) -> list[dict]:
                     / max(reading["rms_ref"], protocol.floor),
                     "r_ref": reading["r_ref"] / max(reading["rms_ref"], protocol.floor),
                     "bound_holds": reading["bound"]["holds"],
+                    "input_common": sections[segment]["common"],
                 }
             )
     return rows
@@ -144,17 +164,18 @@ def baseline_rows(sections: dict, meta: dict) -> list[dict]:
     rows = []
     for segment in READ:
         ref, ev = (sections[segment][k][SKIP:] for k in ("y_ref", "y_eval"))
+        common = {"segment": segment, "input_common": sections[segment]["common"]}
         rows += [
             {
                 **meta,
+                **common,
                 "metric": "esr",
-                "segment": segment,
                 "score": error_to_signal_ratio(ev, ref),
             },
             {
                 **meta,
+                **common,
                 "metric": "mrstft",
-                "segment": segment,
                 "score": multi_resolution_stft_error(ev, ref),
             },
         ]
@@ -167,7 +188,7 @@ def sweep_rows(sections: dict, meta: dict) -> list[dict]:
     for name in SWEEPS:
         s = sections[name]
         out = analyze_sweep_pair(
-            s["x"], s["y_ref"], s["y_eval"], FS, sweep, HarmonicProtocol()
+            s["x"], s["y_ref"], s["y_eval"], FS, sweep, HarmonicProtocol(), s["x_eval"]
         )
         rows.append(
             {
@@ -205,12 +226,11 @@ def vs100r_rows() -> list[dict]:
             "eval": pair["eval"]["setting"] + f"#{pair['eval']['order']}",
             "low_signal": pair["eval"]["low_signal"] or pair["ref"]["low_signal"],
             "lags": json.dumps({n: s["lag"] for n, s in sections.items()}),
-            "input_mismatch_db": max(s["input_mismatch_db"] for s in sections.values()),
+            "input_mismatch_db": json.dumps(
+                {n: round(s["input_mismatch_db"], 1) for n, s in sections.items()}
+            ),
             "slip_inside": any(s["slip_inside"] for s in sections.values()),
         }
-        if meta["slip_inside"]:
-            rows.append({**meta, "metric": "excluded", "segment": "slip"})
-            continue
         rows += probe_rows(sections, meta) + baseline_rows(sections, meta)
         rows += sweep_rows(sections, meta)
         print(
