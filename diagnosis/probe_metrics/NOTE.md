@@ -156,3 +156,32 @@ n'est jamais ajusté sortie par sortie.
 - Bruit additif : petit score de sonde, grand d_audio (la sonde ne représente pas le bruit).
 - Défauts hors capacité : faible score, grande part non représentée ; un faible score n'y vaut
   pas fidélité.
+
+## Protocole gelé v1 (FIR, Hammerstein 3 et 5) — 2026-10-09
+
+Résultat de `dev_select.py` (`dev_select.json`), règle appliquée telle qu'écrite :
+
+| Sonde | taps | ridge | r_ref / RMS(y_ref), médiane dév. | conditionnement (médiane) |
+|---|---|---|---|---|
+| FIR | 256 | 1e-2 | 0,094 | 3,3e3 |
+| Hammerstein 3 | 256 | 1e-4 | 0,062 | 7,0e5 |
+| Hammerstein 5 | 256 | 1e-4 | 0,062 | 1,3e6 |
+
+Constats de développement, sans changer la règle :
+- **taps au bord de la grille.** La capacité s'améliore encore de 128 à 256 taps (0,13 → 0,094
+  pour le FIR) et continuerait sans doute au-delà : la référence a un passe-haut à 120 Hz dont la
+  réponse dépasse 256 échantillons (5,3 ms). La grille préinscrite s'arrête à 256 ; elle n'est
+  pas étendue après coup.
+- **Le degré 5 n'ajoute presque rien** sur ces excitations (0,0619 contre 0,0624) : le résidu de
+  la référence vient surtout de la mémoire tronquée, pas de l'ordre.
+- Dispersion entre graines de cette part : au plus 0,0009 (absolu).
+
+Restent fixés : durée non notée 0,05 s, plancher 1e-4, avertissement de capacité à 0,3,
+octaves de 22 Hz à 11,36 kHz et au-delà, signature harmonique (ordre 5, nfft 8192, 100 Hz–8 kHz,
+plancher −80 dB re max |D_1|), estimation et lecture de 4 s (DI : sections entières, A =
+`di_train`, B = `di_test`), plancher de répétition : même chaîne mesurée deux fois avec un
+bruit indépendant à −80 dB.
+
+Test : graines 200–202 (lecture sur la graine + 50), toutes les familles, trois niveaux, tous
+les défauts aux trois sévérités. Volterra–Laguerre et Wiener–Hammerstein auront leur propre
+règle de développement, écrite avant leurs chiffres.

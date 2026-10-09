@@ -1,0 +1,161 @@
+{
+ "fir": {
+  "taps": 256,
+  "ridge": 0.01,
+  "by_taps": {
+   "16": {
+    "median_ratio": 0.4725027681313517,
+    "median_condition": 7326.446228199562,
+    "max_seed_sd_of_ratio": 0.0054779275472653915
+   },
+   "32": {
+    "median_ratio": 0.3759951949247644,
+    "median_condition": 214614.4795472604,
+    "max_seed_sd_of_ratio": 0.00426617484875122
+   },
+   "64": {
+    "median_ratio": 0.24681137695828803,
+    "median_condition": 391905.92706090224,
+    "max_seed_sd_of_ratio": 0.0025413677884367236
+   },
+   "128": {
+    "median_ratio": 0.1307441880084049,
+    "median_condition": 598970.190414229,
+    "max_seed_sd_of_ratio": 0.0008420457088612717
+   },
+   "256": {
+    "median_ratio": 0.0940248074263223,
+    "median_condition": 809670.300135678,
+    "max_seed_sd_of_ratio": 0.0005859637675498683
+   }
+  },
+  "by_ridge": {
+   "1e-08": {
+    "median_ratio": 0.09402471845824618,
+    "median_condition": 835897.7579566326,
+    "max_seed_sd_of_ratio": 0.00058596920587359
+   },
+   "1e-06": {
+    "median_ratio": 0.0940248074263223,
+    "median_condition": 809670.300135678,
+    "max_seed_sd_of_ratio": 0.0005859637675498683
+   },
+   "0.0001": {
+    "median_ratio": 0.0940294395758223,
+    "median_condition": 196378.580718644,
+    "max_seed_sd_of_ratio": 0.0005854201233950052
+   },
+   "0.01": {
+    "median_ratio": 0.09433423717408804,
+    "median_condition": 3334.9392510554,
+    "max_seed_sd_of_ratio": 0.0005325333290915182
+   }
+  }
+ },
+ "hammerstein_3": {
+  "taps": 256,
+  "ridge": 0.0001,
+  "by_taps": {
+   "16": {
+    "median_ratio": 0.4632827211658542,
+    "median_condition": 14891.543553012703,
+    "max_seed_sd_of_ratio": 0.0054278210553295346
+   },
+   "32": {
+    "median_ratio": 0.3680411062594942,
+    "median_condition": 415950.7365595635,
+    "max_seed_sd_of_ratio": 0.004134851439952033
+   },
+   "64": {
+    "median_ratio": 0.23685928141106322,
+    "median_condition": 774885.9219372191,
+    "max_seed_sd_of_ratio": 0.0024140988712111583
+   },
+   "128": {
+    "median_ratio": 0.11058653563745395,
+    "median_condition": 1498327.809391314,
+    "max_seed_sd_of_ratio": 0.0009974232747154061
+   },
+   "256": {
+    "median_ratio": 0.06237674999721942,
+    "median_condition": 2867385.2106091385,
+    "max_seed_sd_of_ratio": 0.000582184487375814
+   }
+  },
+  "by_ridge": {
+   "1e-08": {
+    "median_ratio": 0.0623765999155403,
+    "median_condition": 2960286.500181222,
+    "max_seed_sd_of_ratio": 0.000582192096951221
+   },
+   "1e-06": {
+    "median_ratio": 0.06237674999721942,
+    "median_condition": 2867385.2106091385,
+    "max_seed_sd_of_ratio": 0.000582184487375814
+   },
+   "0.0001": {
+    "median_ratio": 0.06238495026270773,
+    "median_condition": 695947.6005086818,
+    "max_seed_sd_of_ratio": 0.000581421612869519
+   },
+   "0.01": {
+    "median_ratio": 0.06463759714807388,
+    "median_condition": 11609.553449610145,
+    "max_seed_sd_of_ratio": 0.0004942020763763379
+   }
+  }
+ },
+ "hammerstein_5": {
+  "taps": 256,
+  "ridge": 0.0001,
+  "by_taps": {
+   "16": {
+    "median_ratio": 0.4627709467808523,
+    "median_condition": 27379.01283210823,
+    "max_seed_sd_of_ratio": 0.005528817772573538
+   },
+   "32": {
+    "median_ratio": 0.3674403088727849,
+    "median_condition": 666088.7809814845,
+    "max_seed_sd_of_ratio": 0.0042685733103026815
+   },
+   "64": {
+    "median_ratio": 0.23687008304395113,
+    "median_condition": 1426865.10718044,
+    "max_seed_sd_of_ratio": 0.002570830604026701
+   },
+   "128": {
+    "median_ratio": 0.11038846239032746,
+    "median_condition": 2733659.168431329,
+    "max_seed_sd_of_ratio": 0.0011918242222925919
+   },
+   "256": {
+    "median_ratio": 0.061855793181165256,
+    "median_condition": 5171624.382685993,
+    "max_seed_sd_of_ratio": 0.0008861286215669814
+   }
+  },
+  "by_ridge": {
+   "1e-08": {
+    "median_ratio": 0.06185430129661189,
+    "median_condition": 5339088.744788349,
+    "max_seed_sd_of_ratio": 0.0008861409410051603
+   },
+   "1e-06": {
+    "median_ratio": 0.061855793181165256,
+    "median_condition": 5171624.382685993,
+    "max_seed_sd_of_ratio": 0.0008861286215669814
+   },
+   "0.0001": {
+    "median_ratio": 0.061885585160037365,
+    "median_condition": 1263631.393833887,
+    "max_seed_sd_of_ratio": 0.0008849279548177322
+   },
+   "0.01": {
+    "median_ratio": 0.06491927004290886,
+    "median_condition": 21633.27877096584,
+    "max_seed_sd_of_ratio": 0.0008922602017400312
+   }
+  }
+ }
+}
