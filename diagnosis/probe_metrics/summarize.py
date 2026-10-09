@@ -32,7 +32,7 @@ def load() -> list[dict]:
     for path in sorted(HERE.glob("calibration_test_*.csv")):
         rows += list(csv.DictReader(path.open()))
     for row in rows:
-        row["score"] = float(row["normalized"] or row["value"])
+        row["score"] = float(row.get("normalized") or row["value"])
         if row["metric"] in SQUARED:
             row["score"] = math.sqrt(max(row["score"], 0.0))
         row["severity"] = float(row["severity"])

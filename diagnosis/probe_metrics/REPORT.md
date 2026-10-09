@@ -286,6 +286,68 @@ Une paire, 4 s d'estimation et 4 s de lecture à 48 kHz, machine partagée (char
 | Volterra–Laguerre 2 / 3 | 1,4 / 6,1 s |
 | Wiener–Hammerstein | 32 s pour 1 s d'estimation |
 
+## Usages et coût
+
+**Coût en fonction de la durée.** Temps (s) d'une paire en fonction de T, la durée d'estimation
+et de lecture (A = B = T, 48 kHz), mesuré par `cost_scaling.py` sur une machine partagée
+(charge 10 à 17). L'exposant k est celui de la loi temps ∝ T^k entre la plus courte et la plus
+longue durée.
+
+| Métrique | T = 2 s | T = 8 s | T = 32 s | k | ordre de grandeur pour 1 min d'audio |
+|---|---|---|---|---|---|
+| ESR | 0,001 | 0,002 | 0,014 | 1,2 | < 0,1 s |
+| MR-STFT | 0,05 | 0,17 | 1,19 | 1,1 | ~2 s |
+| FIR (256 taps) | 0,06 | 0,24 | 0,95 | 1,0 | ~2 s |
+| Hammerstein 3 | 0,20 | 0,57 | 2,6 | 0,9 | ~5 s |
+| Hammerstein 5 | 0,34 | 1,0 | 5,4 | 1,0 | ~10 s |
+| Volterra–Laguerre 2 | 0,56 | 2,1 | 11,5 | 1,1 | ~20 s |
+| Volterra–Laguerre 3 | 6,1 | 33 | 62 | 0,8 | ~2 min |
+| Wiener–Hammerstein | 33 (1 s) | 69 (2 s) | 152 (4 s) | 1,1 | ~40 min |
+| Signature harmonique | ~0,8 par sinus glissant, quelle que soit la durée du programme | | | | |
+
+Les métriques existantes magnitude, phase et enveloppe sont bon marché (FFT ou boucle simple).
+Le coût réel d'un usage dépend aussi de ce qu'il exige en données, qui limite plus que le CPU.
+
+| Usage | Ensemble proposé | Coût pour 1 min d'audio | Données nécessaires |
+|---|---|---|---|
+| Contrôle rapide, tri de nombreuses sorties pour une même entrée | ESR (amplitude) + magnitude + phase ; FIR si l'on veut écarter le bruit | < 5 s | entrée commune ; seuils fixés sur des répétitions et des défauts acceptables |
+| Diagnostic de la nature d'un écart | Hammerstein 3 + Volterra–Laguerre 3, avec part captée et part non représentée ; magnitude/phase ; signature harmonique si un sinus glissant existe | ~2 min | données d'estimation riches (DI, bruit) ; lecture indépendante ; capacité vérifiée sur la référence |
+| Comparaison de captures réelles (prises, séances) | FIR/H3 ajustés sur l'entrée propre de chaque prise ; ESR seulement sur les sections à entrée commune ; garde d'intégrité des sinus glissants | ~5–10 s | bouclage de chaque prise ; **plancher apparié dans le temps** (répétitions intercalées : à capturer) |
+| Signature non linéaire contrôlée | signature harmonique par ordre (≤ 7 pour L ≈ 0,7 s) ; IMD | < 1 s par excitation | sinus glissant (idéalement synchronisé, T ≥ 5,9 s pour l'ordre 9) ; deux tons |
+| Écart structuré sous le bruit de mesure | FIR/H3 (moyennent sur l'estimation) | ~5 s | capacité de la sonde vérifiée sur la référence (sinon refus) |
+| À éviter | WH (peu fiable, ~40 min/min) ; MR-STFT de `spectral.py` (aveugle à la phase, dominée par le bruit) ; rapport de détection seul | — | — |
+
+**Limite décisive, mesurée sur la JVM410H.** Sur un canal à fort gain, aucune classe de sonde
+essayée n'explique plus de ~30 % de la sortie, même sur ses propres données (voir « Angles morts
+réels »). Dans ce cas, les sondes ne servent qu'à signaler leur propre insuffisance (avertissement
+de capacité), et l'ESR, la magnitude et la phase restent les seules lectures globales.
+
+## Angles morts réels : ce qui les explique
+
+Contrôles post hoc (`gap_checks.py`, `gap_checks_*.json`) :
+- **VS100R, −3 dBFS : expliqué.** Un glissement d'acquisition dans le sinus glissant de la prise
+  20 en est la cause (voir plus haut). Remède : la garde d'intégrité des sinus glissants.
+- **JVM410H : limite de capacité, cause restante non établie.**
+  - Hammerstein 5 laisse 0,71 de la sortie de *référence* inexpliqué au gain 5 (0,06 au gain 0),
+    0,74 même en échantillon.
+  - Rien ne fait mieux que ~0,6 en lecture : 1 024 taps (0,72), une base saturante en tanh
+    (0,67 ; 0,59 au gain 10), Volterra–Laguerre 3, un Wiener–Hammerstein parallèle à préfiltres
+    de Laguerre fixes (0,74–0,96). Un Wiener–Hammerstein ajusté sur 1 s descend à 0,39 en
+    échantillon mais remonte à 1,08 en lecture.
+  - Écartés : le bruit (silences de sortie à −28 dB contre −3 dB inexpliqué), la dynamique à
+    0,5 s (part inexpliquée de 0,67 après un passage plus fort contre 0,66 sans), la dérive
+    d'horloge (retard optimal 0 ± 1 échantillon sur 300 s), la séparation A/B (même résultat en
+    échantillon).
+  - Non testables avec ces données : le déterminisme de l'enregistrement (aucune répétition) et
+    une cascade d'étages non linéaires.
+
+**Métriques existantes face aux angles morts du banc** (`baselines_extra.py`, post hoc) :
+- **Magnitude et phase sont complémentaires.** La magnitude (`metrics/spectral.py`) est aveugle
+  au passe-tout et au retard (R = 1,6 et 5,5). La phase est exactement nulle pour un gain et
+  aveugle au cubique (1,5). Ensemble, elles remplacent la MR-STFT et en expliquent l'angle mort.
+- **L'enveloppe (`metrics/transient.py`) n'est pas spécifique** : sensible à tout (gain ×1,4e4,
+  relâchement ×9,5e3), elle n'isole pas la dynamique. Aucune métrique existante ne le fait.
+
 ## Commandes de reproduction
 
 ```sh

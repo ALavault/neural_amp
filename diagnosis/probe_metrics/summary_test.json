@@ -65,6 +65,45 @@
   "hammerstein_5|order_beyond_degree": 1.0,
   "esr|order_beyond_degree": 1.0,
   "mrstft|order_beyond_degree": 1.0,
+  "magnitude|gain": 1.0,
+  "phase|gain": 0.20833333333333334,
+  "envelope|gain": 1.0,
+  "magnitude|coloration_db": 1.0,
+  "phase|coloration_db": 1.0,
+  "envelope|coloration_db": 1.0,
+  "magnitude|delay_samples": 1.0,
+  "phase|delay_samples": 1.0,
+  "envelope|delay_samples": 0.625,
+  "magnitude|allpass": 1.0,
+  "phase|allpass": 1.0,
+  "envelope|allpass": 1.0,
+  "magnitude|quadratic": 1.0,
+  "phase|quadratic": 1.0,
+  "envelope|quadratic": 1.0,
+  "magnitude|cubic": 1.0,
+  "phase|cubic": 1.0,
+  "envelope|cubic": 1.0,
+  "magnitude|redistribution_bias": 1.0,
+  "phase|redistribution_bias": 1.0,
+  "envelope|redistribution_bias": 1.0,
+  "magnitude|prefilter_hz": 1.0,
+  "phase|prefilter_hz": 1.0,
+  "envelope|prefilter_hz": 1.0,
+  "magnitude|cross_term": 1.0,
+  "phase|cross_term": 1.0,
+  "envelope|cross_term": 1.0,
+  "magnitude|release_ms": 1.0,
+  "phase|release_ms": 1.0,
+  "envelope|release_ms": 1.0,
+  "magnitude|noise_db": 1.0,
+  "phase|noise_db": 1.0,
+  "envelope|noise_db": 1.0,
+  "magnitude|echo_beyond_memory": 1.0,
+  "phase|echo_beyond_memory": 1.0,
+  "envelope|echo_beyond_memory": 1.0,
+  "magnitude|order_beyond_degree": 1.0,
+  "phase|order_beyond_degree": 1.0,
+  "envelope|order_beyond_degree": 1.0,
   "harmonic_total|gain": 1.0,
   "harmonic_order_1|gain": 1.0,
   "harmonic_order_2|gain": 1.0,
@@ -214,6 +253,13 @@
    "family": "di",
    "level_db": -12.0,
    "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 0.9885820551327661
+  },
+  {
+   "family": "di",
+   "level_db": -12.0,
+   "defect": "allpass",
    "metric": "mrstft",
    "detection_ratio": 0.025988514687685472
   },
@@ -262,6 +308,13 @@
   {
    "family": "di",
    "level_db": -12.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.420628392860952e-12
+  },
+  {
+   "family": "di",
+   "level_db": -12.0,
    "defect": "prefilter_hz",
    "metric": "mrstft",
    "detection_ratio": 2.2243248867873837
@@ -279,6 +332,13 @@
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 0.6061794007013096
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 0.9861254997317425
   },
   {
    "family": "di",
@@ -311,6 +371,13 @@
   {
    "family": "di",
    "level_db": -20.0,
+   "defect": "cubic",
+   "metric": "phase",
+   "detection_ratio": 2.1299201807111547
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
    "defect": "delay_samples",
    "metric": "mrstft",
    "detection_ratio": 0.0675967347341644
@@ -332,9 +399,23 @@
   {
    "family": "di",
    "level_db": -20.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.3439834864621033e-12
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
    "defect": "order_beyond_degree",
    "metric": "mrstft",
    "detection_ratio": 0.01492663113967032
+  },
+  {
+   "family": "di",
+   "level_db": -20.0,
+   "defect": "order_beyond_degree",
+   "metric": "phase",
+   "detection_ratio": 0.6322508223566601
   },
   {
    "family": "di",
@@ -356,6 +437,13 @@
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 0.3576229129950218
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 1.0004244979617525
   },
   {
    "family": "di",
@@ -402,6 +490,13 @@
   {
    "family": "di",
    "level_db": -30.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.2953572630900182e-12
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
    "defect": "prefilter_hz",
    "metric": "mrstft",
    "detection_ratio": 2.3304093243937243
@@ -416,9 +511,23 @@
   {
    "family": "di",
    "level_db": -30.0,
+   "defect": "quadratic",
+   "metric": "phase",
+   "detection_ratio": 2.6103262179511613
+  },
+  {
+   "family": "di",
+   "level_db": -30.0,
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 0.17432906570959858
+  },
+  {
+   "family": "multisine",
+   "level_db": -12.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 1.8761626476553528
   },
   {
    "family": "multisine",
@@ -458,9 +567,23 @@
   {
    "family": "multisine",
    "level_db": -12.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 2.155205842513912e-12
+  },
+  {
+   "family": "multisine",
+   "level_db": -12.0,
    "defect": "order_beyond_degree",
    "metric": "mrstft",
    "detection_ratio": 2.7785487437996026
+  },
+  {
+   "family": "multisine",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 1.9086287007534124
   },
   {
    "family": "multisine",
@@ -500,6 +623,13 @@
   {
    "family": "multisine",
    "level_db": -20.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 2.123979364093447e-12
+  },
+  {
+   "family": "multisine",
+   "level_db": -20.0,
    "defect": "quadratic",
    "metric": "mrstft",
    "detection_ratio": 0.8880088149661521
@@ -510,6 +640,13 @@
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 2.0553609841427622
+  },
+  {
+   "family": "multisine",
+   "level_db": -30.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 1.9414478942801994
   },
   {
    "family": "multisine",
@@ -542,6 +679,13 @@
   {
    "family": "multisine",
    "level_db": -30.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 2.065155608982457e-12
+  },
+  {
+   "family": "multisine",
+   "level_db": -30.0,
    "defect": "prefilter_hz",
    "metric": "mrstft",
    "detection_ratio": 2.8272472202033776
@@ -559,6 +703,13 @@
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 0.7262741296231794
+  },
+  {
+   "family": "noise",
+   "level_db": -12.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 1.8330487097932209
   },
   {
    "family": "noise",
@@ -605,6 +756,13 @@
   {
    "family": "noise",
    "level_db": -12.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 2.0850779591653594e-12
+  },
+  {
+   "family": "noise",
+   "level_db": -12.0,
    "defect": "order_beyond_degree",
    "metric": "mrstft",
    "detection_ratio": 0.5717538721057275
@@ -622,6 +780,13 @@
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 2.138237475128694
+  },
+  {
+   "family": "noise",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 1.836146669488109
   },
   {
    "family": "noise",
@@ -668,6 +833,13 @@
   {
    "family": "noise",
    "level_db": -20.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 2.0720311780785036e-12
+  },
+  {
+   "family": "noise",
+   "level_db": -20.0,
    "defect": "quadratic",
    "metric": "mrstft",
    "detection_ratio": 0.3733975080808078
@@ -678,6 +850,13 @@
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 1.3559072776867576
+  },
+  {
+   "family": "noise",
+   "level_db": -30.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 1.8366962320068387
   },
   {
    "family": "noise",
@@ -717,6 +896,13 @@
   {
    "family": "noise",
    "level_db": -30.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 2.0604784324943844e-12
+  },
+  {
+   "family": "noise",
+   "level_db": -30.0,
    "defect": "quadratic",
    "metric": "mrstft",
    "detection_ratio": 0.12415709176830955
@@ -727,6 +913,13 @@
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 0.6298010742939895
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 1.32563163374644
   },
   {
    "family": "plucks",
@@ -773,6 +966,13 @@
   {
    "family": "plucks",
    "level_db": -10.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.3403752135819464e-12
+  },
+  {
+   "family": "plucks",
+   "level_db": -10.0,
    "defect": "prefilter_hz",
    "metric": "mrstft",
    "detection_ratio": 1.7400682487407044
@@ -802,6 +1002,13 @@
    "family": "plucks",
    "level_db": -20.0,
    "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 1.3501655460973596
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "allpass",
    "metric": "mrstft",
    "detection_ratio": 0.012418363060283788
   },
@@ -818,6 +1025,13 @@
    "defect": "cross_term",
    "metric": "mrstft",
    "detection_ratio": 0.035644255676834
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "phase",
+   "detection_ratio": 2.9964797961109664
   },
   {
    "family": "plucks",
@@ -843,6 +1057,13 @@
   {
    "family": "plucks",
    "level_db": -20.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.3199904828726345e-12
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
    "defect": "prefilter_hz",
    "metric": "mrstft",
    "detection_ratio": 1.99820544427219
@@ -857,9 +1078,30 @@
   {
    "family": "plucks",
    "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "phase",
+   "detection_ratio": 1.5572584124270028
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 0.11765879706252964
+  },
+  {
+   "family": "plucks",
+   "level_db": -20.0,
+   "defect": "release_ms",
+   "metric": "phase",
+   "detection_ratio": 2.5973146721192606
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 1.2888416121596296
   },
   {
    "family": "plucks",
@@ -913,9 +1155,23 @@
   {
    "family": "plucks",
    "level_db": -3.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.3646729896099055e-12
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
    "defect": "order_beyond_degree",
    "metric": "mrstft",
    "detection_ratio": 0.01850851671321389
+  },
+  {
+   "family": "plucks",
+   "level_db": -3.0,
+   "defect": "order_beyond_degree",
+   "metric": "phase",
+   "detection_ratio": 2.4897928881705282
   },
   {
    "family": "plucks",
@@ -944,6 +1200,13 @@
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 0.3881402466410636
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 2.63620457253038
   },
   {
    "family": "sweep",
@@ -1025,6 +1288,13 @@
   {
    "family": "sweep",
    "level_db": -10.0,
+   "defect": "cubic",
+   "metric": "phase",
+   "detection_ratio": 0.02731796301958438
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
    "defect": "delay_samples",
    "metric": "mrstft",
    "detection_ratio": 0.05642730931448129
@@ -1042,6 +1312,13 @@
    "defect": "gain",
    "metric": "mrstft",
    "detection_ratio": 0.18814562977764296
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.1545570642836112e-12
   },
   {
    "family": "sweep",
@@ -1088,6 +1365,13 @@
   {
    "family": "sweep",
    "level_db": -10.0,
+   "defect": "quadratic",
+   "metric": "phase",
+   "detection_ratio": 0.12529941013318974
+  },
+  {
+   "family": "sweep",
+   "level_db": -10.0,
    "defect": "redistribution_bias",
    "metric": "mrstft",
    "detection_ratio": 2.9779705688322675
@@ -1101,10 +1385,24 @@
   },
   {
    "family": "sweep",
+   "level_db": -10.0,
+   "defect": "release_ms",
+   "metric": "phase",
+   "detection_ratio": 0.7572881379698269
+  },
+  {
+   "family": "sweep",
    "level_db": -20.0,
    "defect": "allpass",
    "metric": "harmonic_order_5",
    "detection_ratio": 1.052184032849232
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 2.9209255877064706
   },
   {
    "family": "sweep",
@@ -1165,6 +1463,13 @@
   {
    "family": "sweep",
    "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "phase",
+   "detection_ratio": 1.8385122234919804
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
    "defect": "delay_samples",
    "metric": "mrstft",
    "detection_ratio": 0.03946729462394859
@@ -1203,6 +1508,13 @@
    "defect": "gain",
    "metric": "mrstft",
    "detection_ratio": 0.17188926889963205
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.0688323796203045e-12
   },
   {
    "family": "sweep",
@@ -1249,9 +1561,23 @@
   {
    "family": "sweep",
    "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "phase",
+   "detection_ratio": 0.02786347779520053
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
    "defect": "redistribution_bias",
    "metric": "mrstft",
    "detection_ratio": 2.2350188513906293
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "redistribution_bias",
+   "metric": "phase",
+   "detection_ratio": 0.4110808865739266
   },
   {
    "family": "sweep",
@@ -1266,6 +1592,20 @@
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 0.0850598455499497
+  },
+  {
+   "family": "sweep",
+   "level_db": -20.0,
+   "defect": "release_ms",
+   "metric": "phase",
+   "detection_ratio": 0.26330599710734104
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 2.350160788405577
   },
   {
    "family": "sweep",
@@ -1347,6 +1687,13 @@
   {
    "family": "sweep",
    "level_db": -3.0,
+   "defect": "cubic",
+   "metric": "phase",
+   "detection_ratio": 0.4515917289234123
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
    "defect": "delay_samples",
    "metric": "mrstft",
    "detection_ratio": 0.06139288025245221
@@ -1368,6 +1715,13 @@
   {
    "family": "sweep",
    "level_db": -3.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.2843874000987886e-12
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
    "defect": "order_beyond_degree",
    "metric": "harmonic_order_2",
    "detection_ratio": 0.3415405077151773
@@ -1385,6 +1739,13 @@
    "defect": "order_beyond_degree",
    "metric": "mrstft",
    "detection_ratio": 0.2386835252972806
+  },
+  {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "order_beyond_degree",
+   "metric": "phase",
+   "detection_ratio": 1.5961607530918223
   },
   {
    "family": "sweep",
@@ -1436,6 +1797,20 @@
    "detection_ratio": 0.2146877268509292
   },
   {
+   "family": "sweep",
+   "level_db": -3.0,
+   "defect": "release_ms",
+   "metric": "phase",
+   "detection_ratio": 1.3790487801314242
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 0.06081358596740318
+  },
+  {
    "family": "two_tone",
    "level_db": -10.0,
    "defect": "allpass",
@@ -1466,6 +1841,20 @@
   {
    "family": "two_tone",
    "level_db": -10.0,
+   "defect": "cubic",
+   "metric": "phase",
+   "detection_ratio": 0.010506447840580965
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "delay_samples",
+   "metric": "magnitude",
+   "detection_ratio": 0.2106148844034596
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
    "defect": "delay_samples",
    "metric": "mrstft",
    "detection_ratio": 0.06613263142694457
@@ -1487,6 +1876,13 @@
   {
    "family": "two_tone",
    "level_db": -10.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.1468167624627019e-12
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
    "defect": "prefilter_hz",
    "metric": "mrstft",
    "detection_ratio": 0.4857806577348733
@@ -1501,9 +1897,30 @@
   {
    "family": "two_tone",
    "level_db": -10.0,
+   "defect": "quadratic",
+   "metric": "phase",
+   "detection_ratio": 0.018028310857134994
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 0.29942264304286803
+  },
+  {
+   "family": "two_tone",
+   "level_db": -10.0,
+   "defect": "release_ms",
+   "metric": "phase",
+   "detection_ratio": 2.3518034040433604
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 0.02924795192595099
   },
   {
    "family": "two_tone",
@@ -1529,6 +1946,20 @@
   {
    "family": "two_tone",
    "level_db": -20.0,
+   "defect": "cross_term",
+   "metric": "phase",
+   "detection_ratio": 2.1852041746620814
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "delay_samples",
+   "metric": "magnitude",
+   "detection_ratio": 0.101066127214862
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
    "defect": "delay_samples",
    "metric": "mrstft",
    "detection_ratio": 0.04697902025825075
@@ -1550,6 +1981,20 @@
   {
    "family": "two_tone",
    "level_db": -20.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.1188431732705198e-12
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "noise_db",
+   "metric": "phase",
+   "detection_ratio": 2.7024497627227824
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
    "defect": "prefilter_hz",
    "metric": "mrstft",
    "detection_ratio": 0.3594323340207278
@@ -1564,6 +2009,13 @@
   {
    "family": "two_tone",
    "level_db": -20.0,
+   "defect": "quadratic",
+   "metric": "phase",
+   "detection_ratio": 0.0022342275403926365
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
    "defect": "redistribution_bias",
    "metric": "mrstft",
    "detection_ratio": 2.3810239239856905
@@ -1571,9 +2023,30 @@
   {
    "family": "two_tone",
    "level_db": -20.0,
+   "defect": "redistribution_bias",
+   "metric": "phase",
+   "detection_ratio": 1.1196425686301206
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
    "defect": "release_ms",
    "metric": "mrstft",
    "detection_ratio": 0.16426346195814726
+  },
+  {
+   "family": "two_tone",
+   "level_db": -20.0,
+   "defect": "release_ms",
+   "metric": "phase",
+   "detection_ratio": 0.9327382455904186
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "allpass",
+   "metric": "magnitude",
+   "detection_ratio": 0.08884480278627886
   },
   {
    "family": "two_tone",
@@ -1606,6 +2079,20 @@
   {
    "family": "two_tone",
    "level_db": -3.0,
+   "defect": "cubic",
+   "metric": "phase",
+   "detection_ratio": 0.25200459548983556
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "delay_samples",
+   "metric": "magnitude",
+   "detection_ratio": 0.30751650366485744
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
    "defect": "delay_samples",
    "metric": "mrstft",
    "detection_ratio": 0.08078927488676536
@@ -1627,9 +2114,23 @@
   {
    "family": "two_tone",
    "level_db": -3.0,
+   "defect": "gain",
+   "metric": "phase",
+   "detection_ratio": 1.2927694716804338e-12
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
    "defect": "order_beyond_degree",
    "metric": "mrstft",
    "detection_ratio": 0.26777443521341243
+  },
+  {
+   "family": "two_tone",
+   "level_db": -3.0,
+   "defect": "order_beyond_degree",
+   "metric": "phase",
+   "detection_ratio": 1.2121806315757375
   },
   {
    "family": "two_tone",
@@ -1654,6 +2155,7 @@
   }
  ],
  "redundancy_spearman": {
+  "d_audio|envelope": 0.8026770691796401,
   "d_audio|esr": 0.9999802015729466,
   "d_audio|fir": 0.9518382913344988,
   "d_audio|hammerstein_3": 0.9595401326188753,
@@ -1665,10 +2167,29 @@
   "d_audio|harmonic_order_5": 0.6109930951669682,
   "d_audio|harmonic_total": 0.9713539618391628,
   "d_audio|imd": 0.983977835489764,
+  "d_audio|magnitude": 0.7658687877927942,
   "d_audio|mrstft": 0.6203369861922026,
+  "d_audio|phase": 0.7409776308606673,
   "d_audio|volterra_laguerre_2": 0.949895471644079,
   "d_audio|volterra_laguerre_3": 0.9594827202309385,
   "d_audio|wiener_hammerstein": 0.9578947368421052,
+  "envelope|esr": 0.8026927832631694,
+  "envelope|fir": 0.790793432808599,
+  "envelope|hammerstein_3": 0.797412016948018,
+  "envelope|hammerstein_5": 0.798456244135349,
+  "envelope|harmonic_order_1": 0.5217980971515119,
+  "envelope|harmonic_order_2": 0.612357445788188,
+  "envelope|harmonic_order_3": 0.50825727944372,
+  "envelope|harmonic_order_4": 0.43373196061682323,
+  "envelope|harmonic_order_5": 0.38278709406704725,
+  "envelope|harmonic_total": 0.6809483133270392,
+  "envelope|imd": 0.7643078721395495,
+  "envelope|magnitude": 0.9529215320190617,
+  "envelope|mrstft": 0.6440371944538924,
+  "envelope|phase": 0.3587461684165641,
+  "envelope|volterra_laguerre_2": 0.7820159525867393,
+  "envelope|volterra_laguerre_3": 0.7945764662303988,
+  "envelope|wiener_hammerstein": 0.7874493927125507,
   "esr|fir": 0.9518243345890707,
   "esr|hammerstein_3": 0.9595200498921432,
   "esr|hammerstein_5": 0.9624989866672882,
@@ -1679,7 +2200,9 @@
   "esr|harmonic_order_5": 0.6110973738009496,
   "esr|harmonic_total": 0.971368626374087,
   "esr|imd": 0.983977835489764,
+  "esr|magnitude": 0.7658865058905456,
   "esr|mrstft": 0.6203250582790161,
+  "esr|phase": 0.7410150539119779,
   "esr|volterra_laguerre_2": 0.949867635120915,
   "esr|volterra_laguerre_3": 0.9594772167143022,
   "esr|wiener_hammerstein": 0.9578947368421052,
@@ -1692,7 +2215,9 @@
   "fir|harmonic_order_5": 0.5663504623177329,
   "fir|harmonic_total": 0.937898065308936,
   "fir|imd": 0.998374020291028,
+  "fir|magnitude": 0.6911259298825931,
   "fir|mrstft": 0.481227211837618,
+  "fir|phase": 0.656651933399437,
   "fir|volterra_laguerre_2": 0.9937220397579949,
   "fir|volterra_laguerre_3": 0.9937184837634275,
   "fir|wiener_hammerstein": 0.9923076923076924,
@@ -1704,7 +2229,9 @@
   "hammerstein_3|harmonic_order_5": 0.5542642629141752,
   "hammerstein_3|harmonic_total": 0.9337019886406209,
   "hammerstein_3|imd": 0.9978719896896401,
+  "hammerstein_3|magnitude": 0.7073129428411357,
   "hammerstein_3|mrstft": 0.4965756240626726,
+  "hammerstein_3|phase": 0.6718171618689674,
   "hammerstein_3|volterra_laguerre_2": 0.9958936164958637,
   "hammerstein_3|volterra_laguerre_3": 0.9977732065687122,
   "hammerstein_3|wiener_hammerstein": 0.9929149797570851,
@@ -1715,7 +2242,9 @@
   "hammerstein_5|harmonic_order_5": 0.5564672031650406,
   "hammerstein_5|harmonic_total": 0.9339492574442895,
   "hammerstein_5|imd": 0.9978345247193873,
+  "hammerstein_5|magnitude": 0.7110697881025982,
   "hammerstein_5|mrstft": 0.502361053378397,
+  "hammerstein_5|phase": 0.6759912609450862,
   "hammerstein_5|volterra_laguerre_2": 0.9949824916656379,
   "hammerstein_5|volterra_laguerre_3": 0.9975517471292753,
   "hammerstein_5|wiener_hammerstein": 0.9965587044534414,
@@ -1724,45 +2253,196 @@
   "harmonic_order_1|harmonic_order_4": 0.7612334240625086,
   "harmonic_order_1|harmonic_order_5": 0.7094417521662558,
   "harmonic_order_1|harmonic_total": 0.897283971895301,
+  "harmonic_order_1|magnitude": 0.4528249577121301,
   "harmonic_order_1|mrstft": 0.36552017398828907,
+  "harmonic_order_1|phase": 0.6177760377358726,
   "harmonic_order_1|volterra_laguerre_2": 0.7785422727431139,
   "harmonic_order_1|volterra_laguerre_3": 0.7749568683735599,
   "harmonic_order_2|harmonic_order_3": 0.4377856703981776,
   "harmonic_order_2|harmonic_order_4": 0.6073146607921592,
   "harmonic_order_2|harmonic_order_5": 0.44696458811011697,
   "harmonic_order_2|harmonic_total": 0.7677471564087577,
+  "harmonic_order_2|magnitude": 0.6176699785700369,
   "harmonic_order_2|mrstft": 0.46783257654093413,
+  "harmonic_order_2|phase": 0.6806261145828649,
   "harmonic_order_2|volterra_laguerre_2": 0.8020500831722338,
   "harmonic_order_2|volterra_laguerre_3": 0.8003791454989585,
   "harmonic_order_3|harmonic_order_4": 0.8470155404696608,
   "harmonic_order_3|harmonic_order_5": 0.8842482279069069,
   "harmonic_order_3|harmonic_total": 0.7893419652624795,
+  "harmonic_order_3|magnitude": 0.46275981956870327,
   "harmonic_order_3|mrstft": 0.42198294594554087,
+  "harmonic_order_3|phase": 0.5580931828740128,
   "harmonic_order_3|volterra_laguerre_2": 0.686965187549641,
   "harmonic_order_3|volterra_laguerre_3": 0.6943907446537486,
   "harmonic_order_4|harmonic_order_5": 0.9086903744998425,
   "harmonic_order_4|harmonic_total": 0.7158132146443075,
+  "harmonic_order_4|magnitude": 0.4431056961740772,
   "harmonic_order_4|mrstft": 0.5923286726910337,
+  "harmonic_order_4|phase": 0.6550225539120922,
   "harmonic_order_4|volterra_laguerre_2": 0.616538536468402,
   "harmonic_order_4|volterra_laguerre_3": 0.622570396679105,
   "harmonic_order_5|harmonic_total": 0.6313971436706679,
+  "harmonic_order_5|magnitude": 0.3847727374904464,
   "harmonic_order_5|mrstft": 0.519054683870581,
+  "harmonic_order_5|phase": 0.545512445863118,
   "harmonic_order_5|volterra_laguerre_2": 0.5266750588200032,
   "harmonic_order_5|volterra_laguerre_3": 0.5359888504248528,
+  "harmonic_total|magnitude": 0.6118254432105981,
   "harmonic_total|mrstft": 0.40549086604025236,
+  "harmonic_total|phase": 0.7088447301772841,
   "harmonic_total|volterra_laguerre_2": 0.9327428854021489,
   "harmonic_total|volterra_laguerre_3": 0.9291687272400304,
+  "imd|magnitude": 0.6750513270092463,
   "imd|mrstft": 0.48804867448935246,
+  "imd|phase": 0.663864286891756,
   "imd|volterra_laguerre_2": 0.9979319336420446,
   "imd|volterra_laguerre_3": 0.9978495107074884,
+  "magnitude|mrstft": 0.7772821652992836,
+  "magnitude|phase": 0.37389977663271456,
+  "magnitude|volterra_laguerre_2": 0.6803233979503642,
+  "magnitude|volterra_laguerre_3": 0.7008092357081123,
+  "magnitude|wiener_hammerstein": 0.7299595141700406,
+  "mrstft|phase": 0.3959620243875818,
   "mrstft|volterra_laguerre_2": 0.46967191011235965,
   "mrstft|volterra_laguerre_3": 0.49168203481911354,
   "mrstft|wiener_hammerstein": 0.5965587044534414,
+  "phase|volterra_laguerre_2": 0.6568993702926287,
+  "phase|volterra_laguerre_3": 0.6675607358933202,
+  "phase|wiener_hammerstein": 0.7374493927125507,
   "volterra_laguerre_2|volterra_laguerre_3": 0.9973454500555624,
   "volterra_laguerre_2|wiener_hammerstein": 0.9882591093117409,
   "volterra_laguerre_3|wiener_hammerstein": 0.9921052631578947
  },
  "profiles_beyond_d_audio": {
+  "envelope|fir": {
+   "spearman": 0.23473861747559943,
+   "separating_defects": {
+    "delay_samples": -4.64,
+    "allpass": -4.35,
+    "noise_db": 1.14
+   }
+  },
+  "envelope|hammerstein_3": {
+   "spearman": 0.17289270336155568,
+   "separating_defects": {
+    "delay_samples": -4.59,
+    "allpass": -3.93,
+    "gain": 0.81
+   }
+  },
+  "envelope|hammerstein_5": {
+   "spearman": 0.16087303070735315,
+   "separating_defects": {
+    "delay_samples": -4.52,
+    "allpass": -3.87,
+    "gain": 0.89
+   }
+  },
+  "envelope|harmonic_order_1": {
+   "spearman": -0.1943786716343856,
+   "separating_defects": {
+    "quadratic": 9.27,
+    "cross_term": 8.92,
+    "delay_samples": -5.2
+   }
+  },
+  "envelope|harmonic_order_2": {
+   "spearman": -0.36627190340966875,
+   "separating_defects": {
+    "cubic": 8.81,
+    "order_beyond_degree": 6.89,
+    "delay_samples": -4.01
+   }
+  },
+  "envelope|harmonic_order_3": {
+   "spearman": 0.038342225155281254,
+   "separating_defects": {
+    "quadratic": 9.89,
+    "cross_term": 9.56,
+    "delay_samples": -4.17
+   }
+  },
+  "envelope|harmonic_order_4": {
+   "spearman": -0.39828035142273766,
+   "separating_defects": {
+    "order_beyond_degree": 7.31,
+    "cubic": 7.12,
+    "quadratic": 7.02
+   }
+  },
+  "envelope|harmonic_order_5": {
+   "spearman": -0.18299424349685836,
+   "separating_defects": {
+    "quadratic": 7.32,
+    "cross_term": 7.0,
+    "cubic": 6.73
+   }
+  },
+  "envelope|harmonic_total": {
+   "spearman": -0.13490826531706654,
+   "separating_defects": {
+    "delay_samples": -5.02,
+    "allpass": -4.35,
+    "noise_db": -1.72
+   }
+  },
+  "envelope|imd": {
+   "spearman": 0.20158065005627027,
+   "separating_defects": {
+    "delay_samples": -5.57,
+    "allpass": -5.21,
+    "prefilter_hz": -2.08
+   }
+  },
+  "envelope|magnitude": {
+   "spearman": 0.6523193231044407,
+   "separating_defects": {
+    "noise_db": -2.9,
+    "allpass": 1.12,
+    "delay_samples": 0.96
+   }
+  },
+  "envelope|mrstft": {
+   "spearman": 0.28840796455649226,
+   "separating_defects": {
+    "noise_db": -8.77,
+    "gain": 1.73,
+    "delay_samples": -1.43
+   }
+  },
+  "envelope|phase": {
+   "spearman": -0.6177217018641835,
+   "separating_defects": {
+    "gain": 30.78,
+    "delay_samples": -4.89,
+    "allpass": -4.7
+   }
+  },
+  "envelope|volterra_laguerre_2": {
+   "spearman": 0.2151356022999285,
+   "separating_defects": {
+    "delay_samples": -4.6,
+    "allpass": -4.2,
+    "noise_db": 1.47
+   }
+  },
+  "envelope|volterra_laguerre_3": {
+   "spearman": 0.3014170996944227,
+   "separating_defects": {
+    "delay_samples": -4.34,
+    "allpass": -3.88,
+    "noise_db": 1.17
+   }
+  },
+  "envelope|wiener_hammerstein": {
+   "spearman": 0.06771597761594958,
+   "separating_defects": {
+    "delay_samples": -4.44,
+    "allpass": -4.33,
+    "noise_db": -1.66
+   }
+  },
   "fir|hammerstein_3": {
    "spearman": 0.9095734626139221,
    "separating_defects": {
@@ -1835,12 +2515,28 @@
     "order_beyond_degree": -0.13
    }
   },
+  "fir|magnitude": {
+   "spearman": 0.07471137773994123,
+   "separating_defects": {
+    "allpass": 5.65,
+    "delay_samples": 5.63,
+    "noise_db": -4.03
+   }
+  },
   "fir|mrstft": {
    "spearman": -0.5791536046486846,
    "separating_defects": {
     "noise_db": -11.12,
     "allpass": 2.28,
     "delay_samples": 2.27
+   }
+  },
+  "fir|phase": {
+   "spearman": -0.46705190640756256,
+   "separating_defects": {
+    "gain": 30.04,
+    "noise_db": -5.53,
+    "redistribution_bias": 2.28
    }
   },
   "fir|volterra_laguerre_2": {
@@ -1931,12 +2627,28 @@
     "cross_term": 0.17
    }
   },
+  "hammerstein_3|magnitude": {
+   "spearman": 0.11709462730206067,
+   "separating_defects": {
+    "allpass": 6.12,
+    "delay_samples": 6.1,
+    "noise_db": -2.97
+   }
+  },
   "hammerstein_3|mrstft": {
    "spearman": -0.6144573404787607,
    "separating_defects": {
     "noise_db": -10.24,
     "allpass": 2.43,
     "delay_samples": 2.41
+   }
+  },
+  "hammerstein_3|phase": {
+   "spearman": -0.4998796783423569,
+   "separating_defects": {
+    "gain": 30.16,
+    "noise_db": -4.49,
+    "redistribution_bias": 2.32
    }
   },
   "hammerstein_3|volterra_laguerre_2": {
@@ -2019,12 +2731,28 @@
     "cross_term": 0.17
    }
   },
+  "hammerstein_5|magnitude": {
+   "spearman": 0.1182534250599478,
+   "separating_defects": {
+    "allpass": 6.1,
+    "delay_samples": 6.08,
+    "noise_db": -2.68
+   }
+  },
   "hammerstein_5|mrstft": {
    "spearman": -0.5828805568009269,
    "separating_defects": {
     "noise_db": -9.93,
     "allpass": 2.45,
     "delay_samples": 2.43
+   }
+  },
+  "hammerstein_5|phase": {
+   "spearman": -0.5025746146021495,
+   "separating_defects": {
+    "gain": 30.07,
+    "noise_db": -4.17,
+    "redistribution_bias": 2.38
    }
   },
   "hammerstein_5|volterra_laguerre_2": {
@@ -2091,12 +2819,28 @@
     "noise_db": -0.82
    }
   },
+  "harmonic_order_1|magnitude": {
+   "spearman": -0.5609598009822157,
+   "separating_defects": {
+    "quadratic": -9.52,
+    "cross_term": -9.24,
+    "allpass": 6.48
+   }
+  },
   "harmonic_order_1|mrstft": {
    "spearman": -0.5767508078985998,
    "separating_defects": {
     "quadratic": -9.0,
     "noise_db": -9.0,
     "cross_term": -8.77
+   }
+  },
+  "harmonic_order_1|phase": {
+   "spearman": 0.1862670350930525,
+   "separating_defects": {
+    "gain": 29.51,
+    "cross_term": -8.44,
+    "quadratic": -4.74
    }
   },
   "harmonic_order_1|volterra_laguerre_2": {
@@ -2147,12 +2891,28 @@
     "quadratic": 2.9
    }
   },
+  "harmonic_order_2|magnitude": {
+   "spearman": 0.17528104200779965,
+   "separating_defects": {
+    "cubic": -8.44,
+    "order_beyond_degree": -6.58,
+    "allpass": 5.93
+   }
+  },
   "harmonic_order_2|mrstft": {
    "spearman": 0.15495023633630575,
    "separating_defects": {
     "cubic": -7.85,
     "order_beyond_degree": -6.83,
     "noise_db": -6.52
+   }
+  },
+  "harmonic_order_2|phase": {
+   "spearman": 0.34113929153648587,
+   "separating_defects": {
+    "gain": 29.19,
+    "quadratic": 6.93,
+    "redistribution_bias": 4.4
    }
   },
   "harmonic_order_2|volterra_laguerre_2": {
@@ -2195,12 +2955,28 @@
     "order_beyond_degree": 1.2
    }
   },
+  "harmonic_order_3|magnitude": {
+   "spearman": -0.3803517671726863,
+   "separating_defects": {
+    "quadratic": -9.89,
+    "cross_term": -9.64,
+    "allpass": 5.66
+   }
+  },
   "harmonic_order_3|mrstft": {
    "spearman": 0.06665854915573326,
    "separating_defects": {
     "quadratic": -8.81,
     "cross_term": -8.61,
     "noise_db": -6.85
+   }
+  },
+  "harmonic_order_3|phase": {
+   "spearman": 0.09141197958918253,
+   "separating_defects": {
+    "gain": 28.44,
+    "cross_term": -8.37,
+    "cubic": 5.53
    }
   },
   "harmonic_order_3|volterra_laguerre_2": {
@@ -2235,12 +3011,28 @@
     "cross_term": -5.05
    }
   },
+  "harmonic_order_4|magnitude": {
+   "spearman": -0.5729686695329305,
+   "separating_defects": {
+    "order_beyond_degree": -7.29,
+    "quadratic": -7.26,
+    "cubic": -7.04
+   }
+  },
   "harmonic_order_4|mrstft": {
    "spearman": 0.017185214047172416,
    "separating_defects": {
     "order_beyond_degree": -5.65,
     "allpass": 5.36,
     "delay_samples": 5.3
+   }
+  },
+  "harmonic_order_4|phase": {
+   "spearman": 0.6132914723958977,
+   "separating_defects": {
+    "gain": 28.82,
+    "cross_term": -6.23,
+    "order_beyond_degree": -3.91
    }
   },
   "harmonic_order_4|volterra_laguerre_2": {
@@ -2267,12 +3059,28 @@
     "cubic": -5.88
    }
   },
+  "harmonic_order_5|magnitude": {
+   "spearman": -0.42752132720102715,
+   "separating_defects": {
+    "quadratic": -7.87,
+    "cross_term": -7.62,
+    "cubic": -6.84
+   }
+  },
   "harmonic_order_5|mrstft": {
    "spearman": 0.24349233466708625,
    "separating_defects": {
     "quadratic": -5.9,
     "cross_term": -5.78,
     "cubic": -4.89
+   }
+  },
+  "harmonic_order_5|phase": {
+   "spearman": 0.36170930180281435,
+   "separating_defects": {
+    "gain": 28.25,
+    "cross_term": -6.88,
+    "order_beyond_degree": 4.77
    }
   },
   "harmonic_order_5|volterra_laguerre_2": {
@@ -2291,12 +3099,28 @@
     "noise_db": 6.49
    }
   },
+  "harmonic_total|magnitude": {
+   "spearman": -0.41190145687280894,
+   "separating_defects": {
+    "allpass": 6.46,
+    "delay_samples": 6.46,
+    "noise_db": -1.0
+   }
+  },
   "harmonic_total|mrstft": {
    "spearman": -0.5610698678074327,
    "separating_defects": {
     "noise_db": -8.24,
     "allpass": 3.66,
     "delay_samples": 3.6
+   }
+  },
+  "harmonic_total|phase": {
+   "spearman": 0.08368691496310415,
+   "separating_defects": {
+    "gain": 29.14,
+    "cubic": 4.32,
+    "quadratic": 3.61
    }
   },
   "harmonic_total|volterra_laguerre_2": {
@@ -2315,12 +3139,28 @@
     "prefilter_hz": -0.83
    }
   },
+  "imd|magnitude": {
+   "spearman": -0.32234292254692404,
+   "separating_defects": {
+    "delay_samples": 9.19,
+    "allpass": 9.19,
+    "noise_db": -4.81
+   }
+  },
   "imd|mrstft": {
    "spearman": -0.5666887085997829,
    "separating_defects": {
     "noise_db": -12.4,
     "delay_samples": 2.03,
     "allpass": 2.0
+   }
+  },
+  "imd|phase": {
+   "spearman": -0.0825017655401752,
+   "separating_defects": {
+    "gain": 29.24,
+    "noise_db": -5.99,
+    "quadratic": 5.73
    }
   },
   "imd|volterra_laguerre_2": {
@@ -2337,6 +3177,54 @@
     "quadratic": -0.26,
     "noise_db": -0.23,
     "cross_term": -0.17
+   }
+  },
+  "magnitude|mrstft": {
+   "spearman": 0.28282213756413505,
+   "separating_defects": {
+    "noise_db": -5.79,
+    "allpass": -2.66,
+    "delay_samples": -2.64
+   }
+  },
+  "magnitude|phase": {
+   "spearman": -0.7344439599105984,
+   "separating_defects": {
+    "gain": 30.26,
+    "allpass": -6.95,
+    "delay_samples": -6.94
+   }
+  },
+  "magnitude|volterra_laguerre_2": {
+   "spearman": 0.28443165065127035,
+   "separating_defects": {
+    "allpass": -5.94,
+    "delay_samples": -5.93,
+    "noise_db": 4.27
+   }
+  },
+  "magnitude|volterra_laguerre_3": {
+   "spearman": 0.3214693039876326,
+   "separating_defects": {
+    "allpass": -5.99,
+    "delay_samples": -5.95,
+    "noise_db": 3.86
+   }
+  },
+  "magnitude|wiener_hammerstein": {
+   "spearman": -0.018829723001868456,
+   "separating_defects": {
+    "allpass": -5.56,
+    "delay_samples": -5.55,
+    "echo_beyond_memory": 1.83
+   }
+  },
+  "mrstft|phase": {
+   "spearman": 0.15167838690625687,
+   "separating_defects": {
+    "gain": 29.42,
+    "noise_db": 4.95,
+    "delay_samples": -3.74
    }
   },
   "mrstft|volterra_laguerre_2": {
@@ -2361,6 +3249,30 @@
     "noise_db": 6.0,
     "allpass": -3.34,
     "delay_samples": -3.18
+   }
+  },
+  "phase|volterra_laguerre_2": {
+   "spearman": -0.592687146561304,
+   "separating_defects": {
+    "gain": -30.1,
+    "noise_db": 5.51,
+    "redistribution_bias": -2.26
+   }
+  },
+  "phase|volterra_laguerre_3": {
+   "spearman": -0.6465425194041551,
+   "separating_defects": {
+    "gain": -30.08,
+    "noise_db": 4.91,
+    "redistribution_bias": -2.35
+   }
+  },
+  "phase|wiener_hammerstein": {
+   "spearman": 0.015587044534412954,
+   "separating_defects": {
+    "gain": -30.99,
+    "echo_beyond_memory": 2.06,
+    "redistribution_bias": -1.9
    }
   },
   "volterra_laguerre_2|volterra_laguerre_3": {
@@ -2460,6 +3372,58 @@
   "d_audio|release_ms": {
    "level_ratio_median": 3.4453796829093832,
    "content_log_sd": 0.4755611719078061
+  },
+  "envelope|allpass": {
+   "level_ratio_median": 0.8454725695564453,
+   "content_log_sd": 0.9401167155574292
+  },
+  "envelope|coloration_db": {
+   "level_ratio_median": 0.984074225639627,
+   "content_log_sd": 0.9070058994059772
+  },
+  "envelope|cross_term": {
+   "level_ratio_median": 16.260619622570466,
+   "content_log_sd": 1.190100129379783
+  },
+  "envelope|cubic": {
+   "level_ratio_median": 71.60881882818562,
+   "content_log_sd": 0.5687694106390773
+  },
+  "envelope|delay_samples": {
+   "level_ratio_median": 0.8223981442890159,
+   "content_log_sd": 0.7673959190867273
+  },
+  "envelope|echo_beyond_memory": {
+   "level_ratio_median": 1.232119113233046,
+   "content_log_sd": 0.8231114227433738
+  },
+  "envelope|gain": {
+   "level_ratio_median": 1.0000000000052096,
+   "content_log_sd": 7.407188590475944e-13
+  },
+  "envelope|noise_db": {
+   "level_ratio_median": 1.1021432117350256,
+   "content_log_sd": 0.12284849937442291
+  },
+  "envelope|order_beyond_degree": {
+   "level_ratio_median": 201137.78566628072,
+   "content_log_sd": 1.5509290614438045
+  },
+  "envelope|prefilter_hz": {
+   "level_ratio_median": 0.6073566078811523,
+   "content_log_sd": 1.1295606934682703
+  },
+  "envelope|quadratic": {
+   "level_ratio_median": 27.412099328790536,
+   "content_log_sd": 0.7031956231241899
+  },
+  "envelope|redistribution_bias": {
+   "level_ratio_median": 0.43794593908592994,
+   "content_log_sd": 0.1619621154465758
+  },
+  "envelope|release_ms": {
+   "level_ratio_median": 3.2407636061906944,
+   "content_log_sd": 0.4276911054070686
   },
   "esr|allpass": {
    "level_ratio_median": 1.0112943594349726,
@@ -3033,6 +3997,58 @@
    "level_ratio_median": 2.539210427778078,
    "content_log_sd": null
   },
+  "magnitude|allpass": {
+   "level_ratio_median": 0.9845235060884738,
+   "content_log_sd": 1.328004724576275
+  },
+  "magnitude|coloration_db": {
+   "level_ratio_median": 0.9864532371434611,
+   "content_log_sd": 0.6773069669244607
+  },
+  "magnitude|cross_term": {
+   "level_ratio_median": 11.894380316122044,
+   "content_log_sd": 0.5399739934001911
+  },
+  "magnitude|cubic": {
+   "level_ratio_median": 90.51489415178527,
+   "content_log_sd": 0.6758123543696393
+  },
+  "magnitude|delay_samples": {
+   "level_ratio_median": 0.9843636563713813,
+   "content_log_sd": 1.3258763920910164
+  },
+  "magnitude|echo_beyond_memory": {
+   "level_ratio_median": 1.0091704634446748,
+   "content_log_sd": 0.07047939406331928
+  },
+  "magnitude|gain": {
+   "level_ratio_median": 1.0000000000005143,
+   "content_log_sd": 1.364252846451654e-13
+  },
+  "magnitude|noise_db": {
+   "level_ratio_median": 0.9653731043023295,
+   "content_log_sd": 0.10396608137113036
+  },
+  "magnitude|order_beyond_degree": {
+   "level_ratio_median": 298262.8069712003,
+   "content_log_sd": 1.7004114812068198
+  },
+  "magnitude|prefilter_hz": {
+   "level_ratio_median": 0.9031625421564553,
+   "content_log_sd": 1.0123048421758725
+  },
+  "magnitude|quadratic": {
+   "level_ratio_median": 11.950565572713835,
+   "content_log_sd": 0.45923668873051854
+  },
+  "magnitude|redistribution_bias": {
+   "level_ratio_median": 0.6438032446258743,
+   "content_log_sd": 0.08496994769268379
+  },
+  "magnitude|release_ms": {
+   "level_ratio_median": 3.4479963222829477,
+   "content_log_sd": 0.4701339567945565
+  },
   "mrstft|allpass": {
    "level_ratio_median": 1.387932865607973,
    "content_log_sd": 0.3622814648720029
@@ -3084,6 +4100,58 @@
   "mrstft|release_ms": {
    "level_ratio_median": 3.937734940203825,
    "content_log_sd": 0.2209107862253872
+  },
+  "phase|allpass": {
+   "level_ratio_median": 1.017177161472645,
+   "content_log_sd": 0.7343181446064359
+  },
+  "phase|coloration_db": {
+   "level_ratio_median": 0.9794421369556644,
+   "content_log_sd": 0.26253663116350745
+  },
+  "phase|cross_term": {
+   "level_ratio_median": 11.581988850261475,
+   "content_log_sd": 0.2239756145345721
+  },
+  "phase|cubic": {
+   "level_ratio_median": 98.4627745870333,
+   "content_log_sd": 1.832351022004578
+  },
+  "phase|delay_samples": {
+   "level_ratio_median": 1.0176373208825251,
+   "content_log_sd": 0.7316827661449674
+  },
+  "phase|echo_beyond_memory": {
+   "level_ratio_median": 0.9897036247802017,
+   "content_log_sd": 0.08034263754970992
+  },
+  "phase|gain": {
+   "level_ratio_median": 0.9215301177861709,
+   "content_log_sd": 0.6865602610592715
+  },
+  "phase|noise_db": {
+   "level_ratio_median": 1.0792137388596643,
+   "content_log_sd": 0.3447276680666139
+  },
+  "phase|order_beyond_degree": {
+   "level_ratio_median": 280293.2130807919,
+   "content_log_sd": 1.5258557946950089
+  },
+  "phase|prefilter_hz": {
+   "level_ratio_median": 1.2676381241311456,
+   "content_log_sd": 0.5044603336332071
+  },
+  "phase|quadratic": {
+   "level_ratio_median": 11.53630709800328,
+   "content_log_sd": 2.262920887859437
+  },
+  "phase|redistribution_bias": {
+   "level_ratio_median": 14.950459770282048,
+   "content_log_sd": 1.3421898925268596
+  },
+  "phase|release_ms": {
+   "level_ratio_median": 5.210167934712586,
+   "content_log_sd": 0.681773865803526
   },
   "volterra_laguerre_2|allpass": {
    "level_ratio_median": 0.955491786398099,

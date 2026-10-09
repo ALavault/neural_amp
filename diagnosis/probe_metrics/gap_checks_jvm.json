@@ -1,0 +1,51 @@
+{
+ "capacity_centre": {
+  "hammerstein_5": 0.7066451633117237,
+  "hammerstein_5_1024": 0.7163821121281666
+ },
+ "B050_M050_T050_G040": {
+  "hammerstein_5": {
+   "captured": 0.2589717769274391,
+   "unrepresented": 0.968661779989311
+  },
+  "hammerstein_5_1024": {
+   "captured": 0.2683933133544541,
+   "unrepresented": 0.9698490782704187
+  },
+  "volterra_laguerre_3": {
+   "captured": 0.25128713308252587,
+   "unrepresented": 0.9681332802490774
+  },
+  "coherence_x_diff_median_80_8k": 0.005291044483437507
+ },
+ "B080_M050_T050_G050": {
+  "hammerstein_5": {
+   "captured": 0.8693731181667391,
+   "unrepresented": 0.684552343641684
+  },
+  "hammerstein_5_1024": {
+   "captured": 0.9103476503940171,
+   "unrepresented": 0.7068862970558532
+  },
+  "volterra_laguerre_3": {
+   "captured": 0.850850589200185,
+   "unrepresented": 0.6815805662678774
+  },
+  "coherence_x_diff_median_80_8k": 0.003533511297850625
+ },
+ "B050_M050_T020_G050": {
+  "hammerstein_5": {
+   "captured": 0.538516274785808,
+   "unrepresented": 0.8362212397249487
+  },
+  "hammerstein_5_1024": {
+   "captured": 0.5579346392583638,
+   "unrepresented": 0.8394261140876267
+  },
+  "volterra_laguerre_3": {
+   "captured": 0.5273775757976497,
+   "unrepresented": 0.8259075502371935
+  },
+  "coherence_x_diff_median_80_8k": 0.07719280784335145
+ }
+}

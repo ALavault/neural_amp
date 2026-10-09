@@ -115,9 +115,58 @@ def sweep() -> dict:
 
 def main() -> None:
     which = sys.argv[1]
-    result = jvm() if which == "jvm" else sweep()
+    result = {"jvm": jvm, "sweep": sweep, "jvm_saturating": jvm_saturating}[which]()
     (HERE / f"gap_checks_{which}.json").write_text(json.dumps(result, indent=1) + "\n")
     print(json.dumps(result, indent=1))
+
+
+def saturating_capacity(rate: int, x: dict, y: dict, gains=(1.0, 3.0, 10.0, 30.0)):
+    """Capacity of a Hammerstein probe whose branches are x, x^2 and tanh(g x / s) for
+    several slopes g (s = RMS of x on A), each through a 256-tap FIR, ridge 1e-4: a
+    saturating basis instead of powers. Diagnostic only."""
+    from scipy.linalg import solve
+    from scipy.signal import fftconvolve
+
+    from fssr_nam.product.probes import normal_equations, regularized
+
+    scale = float(np.sqrt(np.mean(x["A"] ** 2)))
+
+    def basis(v: np.ndarray) -> list:
+        signals = [v / scale, (v / scale) ** 2] + [
+            np.tanh(g * v / scale) for g in gains
+        ]
+        return signals
+
+    probe = Probe(degree=len(gains) + 2, taps=256, ridge=1e-4)
+    ua = basis(x["A"])
+    norms = [float(np.sqrt(np.mean(s**2))) for s in ua]
+    ua = [s / n for s, n in zip(ua, norms, strict=True)]
+    gram, rhs = normal_equations(probe, ua, y["A"])
+    theta = solve(regularized(probe, gram), rhs, assume_a="pos")
+    ub = [s / n for s, n in zip(basis(x["B"]), norms, strict=True)]
+    q = np.full(len(x["B"]), theta[0])
+    for k, signal in enumerate(ub):
+        q += fftconvolve(signal, theta[1 + 256 * k : 1 + 256 * (k + 1)])[: len(signal)]
+    skip = round(0.05 * rate)
+    return float(
+        np.sqrt(np.mean((y["B"] - q)[skip:] ** 2) / np.mean(y["B"][skip:] ** 2))
+    )
+
+
+def jvm_saturating() -> dict:
+    out = {}
+    for setting in (
+        "B050_M050_T050_G050",
+        "B050_M050_T050_G000",
+        "B050_M050_T050_G100",
+    ):
+        rate, x, y = jvm_audio("PreampOut", setting)
+        out[setting] = {
+            "hammerstein_5": capacity(frozen_probes("v1")["hammerstein_5"], rate, x, y),
+            "saturating_basis": saturating_capacity(rate, x, y),
+        }
+        print(setting, out[setting], flush=True)
+    return out
 
 
 if __name__ == "__main__":
