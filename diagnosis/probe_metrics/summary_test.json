@@ -156,6 +156,45 @@
   "imd|noise_db": 1.0,
   "imd|echo_beyond_memory": 1.0,
   "imd|order_beyond_degree": 1.0,
+  "volterra_laguerre_2|gain": 1.0,
+  "volterra_laguerre_3|gain": 1.0,
+  "volterra_laguerre_2|coloration_db": 1.0,
+  "volterra_laguerre_3|coloration_db": 1.0,
+  "volterra_laguerre_2|delay_samples": 1.0,
+  "volterra_laguerre_3|delay_samples": 1.0,
+  "volterra_laguerre_2|allpass": 1.0,
+  "volterra_laguerre_3|allpass": 1.0,
+  "volterra_laguerre_2|quadratic": 1.0,
+  "volterra_laguerre_3|quadratic": 1.0,
+  "volterra_laguerre_2|cubic": 1.0,
+  "volterra_laguerre_3|cubic": 1.0,
+  "volterra_laguerre_2|redistribution_bias": 1.0,
+  "volterra_laguerre_3|redistribution_bias": 1.0,
+  "volterra_laguerre_2|prefilter_hz": 1.0,
+  "volterra_laguerre_3|prefilter_hz": 1.0,
+  "volterra_laguerre_2|cross_term": 1.0,
+  "volterra_laguerre_3|cross_term": 1.0,
+  "volterra_laguerre_2|release_ms": 1.0,
+  "volterra_laguerre_3|release_ms": 1.0,
+  "volterra_laguerre_2|noise_db": 1.0,
+  "volterra_laguerre_3|noise_db": 1.0,
+  "volterra_laguerre_2|echo_beyond_memory": 1.0,
+  "volterra_laguerre_3|echo_beyond_memory": 1.0,
+  "volterra_laguerre_2|order_beyond_degree": 1.0,
+  "volterra_laguerre_3|order_beyond_degree": 1.0,
+  "wiener_hammerstein|gain": 1.0,
+  "wiener_hammerstein|coloration_db": 1.0,
+  "wiener_hammerstein|delay_samples": 1.0,
+  "wiener_hammerstein|allpass": 1.0,
+  "wiener_hammerstein|quadratic": 1.0,
+  "wiener_hammerstein|cubic": 1.0,
+  "wiener_hammerstein|redistribution_bias": 1.0,
+  "wiener_hammerstein|prefilter_hz": 1.0,
+  "wiener_hammerstein|cross_term": 1.0,
+  "wiener_hammerstein|release_ms": 1.0,
+  "wiener_hammerstein|noise_db": 1.0,
+  "wiener_hammerstein|echo_beyond_memory": 1.0,
+  "wiener_hammerstein|order_beyond_degree": 1.0,
   "d_audio|gain": 1.0,
   "d_audio|coloration_db": 1.0,
   "d_audio|delay_samples": 1.0,
@@ -1627,6 +1666,9 @@
   "d_audio|harmonic_total": 0.9713539618391628,
   "d_audio|imd": 0.983977835489764,
   "d_audio|mrstft": 0.6203369861922026,
+  "d_audio|volterra_laguerre_2": 0.9505886656621142,
+  "d_audio|volterra_laguerre_3": 0.960171071785337,
+  "d_audio|wiener_hammerstein": 0.9601214574898785,
   "esr|fir": 0.9518243345890707,
   "esr|hammerstein_3": 0.9595200498921432,
   "esr|hammerstein_5": 0.9624989866672882,
@@ -1638,6 +1680,9 @@
   "esr|harmonic_total": 0.971368626374087,
   "esr|imd": 0.983977835489764,
   "esr|mrstft": 0.6203250582790161,
+  "esr|volterra_laguerre_2": 0.9505666781584156,
+  "esr|volterra_laguerre_3": 0.9601661467028294,
+  "esr|wiener_hammerstein": 0.9601214574898785,
   "fir|hammerstein_3": 0.995641780610622,
   "fir|hammerstein_5": 0.994710668785299,
   "fir|harmonic_order_1": 0.8246430049974101,
@@ -1648,6 +1693,9 @@
   "fir|harmonic_total": 0.937898065308936,
   "fir|imd": 0.998374020291028,
   "fir|mrstft": 0.481227211837618,
+  "fir|volterra_laguerre_2": 0.9939311004578198,
+  "fir|volterra_laguerre_3": 0.9939785727386832,
+  "fir|wiener_hammerstein": 0.9933198380566802,
   "hammerstein_3|hammerstein_5": 0.9997357866567267,
   "hammerstein_3|harmonic_order_1": 0.7906247482831468,
   "hammerstein_3|harmonic_order_2": 0.7929311094126991,
@@ -1657,6 +1705,9 @@
   "hammerstein_3|harmonic_total": 0.9337019886406209,
   "hammerstein_3|imd": 0.9978719896896401,
   "hammerstein_3|mrstft": 0.4965756240626726,
+  "hammerstein_3|volterra_laguerre_2": 0.9960009398552576,
+  "hammerstein_3|volterra_laguerre_3": 0.9977216302173056,
+  "hammerstein_3|wiener_hammerstein": 0.9943319838056679,
   "hammerstein_5|harmonic_order_1": 0.79161382535061,
   "hammerstein_5|harmonic_order_2": 0.7929685743829519,
   "hammerstein_5|harmonic_order_3": 0.7114597851009306,
@@ -1665,118 +1716,53 @@
   "hammerstein_5|harmonic_total": 0.9339492574442895,
   "hammerstein_5|imd": 0.9978345247193873,
   "hammerstein_5|mrstft": 0.502361053378397,
+  "hammerstein_5|volterra_laguerre_2": 0.9951038216384892,
+  "hammerstein_5|volterra_laguerre_3": 0.9975010519425874,
+  "hammerstein_5|wiener_hammerstein": 0.9971659919028341,
   "harmonic_order_1|harmonic_order_2": 0.4852621897200697,
   "harmonic_order_1|harmonic_order_3": 0.8872882991074535,
   "harmonic_order_1|harmonic_order_4": 0.7612334240625086,
   "harmonic_order_1|harmonic_order_5": 0.7094417521662558,
   "harmonic_order_1|harmonic_total": 0.897283971895301,
   "harmonic_order_1|mrstft": 0.36552017398828907,
+  "harmonic_order_1|volterra_laguerre_2": 0.7785422727431139,
+  "harmonic_order_1|volterra_laguerre_3": 0.7749568683735599,
   "harmonic_order_2|harmonic_order_3": 0.4377856703981776,
   "harmonic_order_2|harmonic_order_4": 0.6073146607921592,
   "harmonic_order_2|harmonic_order_5": 0.44696458811011697,
   "harmonic_order_2|harmonic_total": 0.7677471564087577,
   "harmonic_order_2|mrstft": 0.46783257654093413,
+  "harmonic_order_2|volterra_laguerre_2": 0.8020500831722338,
+  "harmonic_order_2|volterra_laguerre_3": 0.8003791454989585,
   "harmonic_order_3|harmonic_order_4": 0.8470155404696608,
   "harmonic_order_3|harmonic_order_5": 0.8842482279069069,
   "harmonic_order_3|harmonic_total": 0.7893419652624795,
   "harmonic_order_3|mrstft": 0.42198294594554087,
+  "harmonic_order_3|volterra_laguerre_2": 0.686965187549641,
+  "harmonic_order_3|volterra_laguerre_3": 0.6943907446537486,
   "harmonic_order_4|harmonic_order_5": 0.9086903744998425,
   "harmonic_order_4|harmonic_total": 0.7158132146443075,
   "harmonic_order_4|mrstft": 0.5923286726910337,
+  "harmonic_order_4|volterra_laguerre_2": 0.616538536468402,
+  "harmonic_order_4|volterra_laguerre_3": 0.622570396679105,
   "harmonic_order_5|harmonic_total": 0.6313971436706679,
   "harmonic_order_5|mrstft": 0.519054683870581,
+  "harmonic_order_5|volterra_laguerre_2": 0.5266750588200032,
+  "harmonic_order_5|volterra_laguerre_3": 0.5359888504248528,
   "harmonic_total|mrstft": 0.40549086604025236,
-  "imd|mrstft": 0.48804867448935246
+  "harmonic_total|volterra_laguerre_2": 0.9327428854021489,
+  "harmonic_total|volterra_laguerre_3": 0.9291687272400304,
+  "imd|mrstft": 0.48804867448935246,
+  "imd|volterra_laguerre_2": 0.9979319336420446,
+  "imd|volterra_laguerre_3": 0.9978495107074884,
+  "mrstft|volterra_laguerre_2": 0.468359365166135,
+  "mrstft|volterra_laguerre_3": 0.49143011444895596,
+  "mrstft|wiener_hammerstein": 0.5939271255060729,
+  "volterra_laguerre_2|volterra_laguerre_3": 0.9974272661121043,
+  "volterra_laguerre_2|wiener_hammerstein": 0.9894736842105264,
+  "volterra_laguerre_3|wiener_hammerstein": 0.9931174089068826
  },
  "profiles_beyond_d_audio": {
-  "esr|fir": {
-   "spearman": -0.126294588479363,
-   "separating_defects": {
-    "noise_db": 3.49,
-    "echo_beyond_memory": 0.77,
-    "gain": -0.53
-   }
-  },
-  "esr|hammerstein_3": {
-   "spearman": -0.07728085801153914,
-   "separating_defects": {
-    "noise_db": 2.83,
-    "echo_beyond_memory": 1.15,
-    "cross_term": 0.16
-   }
-  },
-  "esr|hammerstein_5": {
-   "spearman": -0.06825585827249088,
-   "separating_defects": {
-    "noise_db": 2.54,
-    "echo_beyond_memory": 1.12,
-    "cross_term": 0.16
-   }
-  },
-  "esr|harmonic_order_1": {
-   "spearman": 0.026753078092704316,
-   "separating_defects": {
-    "quadratic": 9.33,
-    "cross_term": 9.12,
-    "noise_db": 1.93
-   }
-  },
-  "esr|harmonic_order_2": {
-   "spearman": 0.013460222714506831,
-   "separating_defects": {
-    "cubic": 8.06,
-    "order_beyond_degree": 6.2,
-    "cross_term": -2.49
-   }
-  },
-  "esr|harmonic_order_3": {
-   "spearman": 0.04754191155166534,
-   "separating_defects": {
-    "quadratic": 9.36,
-    "cross_term": 9.16,
-    "order_beyond_degree": -1.36
-   }
-  },
-  "esr|harmonic_order_4": {
-   "spearman": -0.024759939211098467,
-   "separating_defects": {
-    "order_beyond_degree": 5.65,
-    "quadratic": 5.42,
-    "cubic": 5.4
-   }
-  },
-  "esr|harmonic_order_5": {
-   "spearman": -0.07927371207418231,
-   "separating_defects": {
-    "quadratic": 6.71,
-    "cross_term": 6.53,
-    "cubic": 5.88
-   }
-  },
-  "esr|harmonic_total": {
-   "spearman": 0.013092235088369063,
-   "separating_defects": {
-    "noise_db": 1.09,
-    "prefilter_hz": 0.76,
-    "quadratic": 0.61
-   }
-  },
-  "esr|imd": {
-   "spearman": -0.026792817842955896,
-   "separating_defects": {
-    "noise_db": 4.84,
-    "quadratic": 0.26,
-    "cross_term": 0.17
-   }
-  },
-  "esr|mrstft": {
-   "spearman": -0.005763013880406561,
-   "separating_defects": {
-    "noise_db": -6.99,
-    "allpass": 1.98,
-    "delay_samples": 1.94
-   }
-  },
   "fir|hammerstein_3": {
    "spearman": 0.9095734626139221,
    "separating_defects": {
@@ -1857,6 +1843,30 @@
     "delay_samples": 2.27
    }
   },
+  "fir|volterra_laguerre_2": {
+   "spearman": 0.7246220334093403,
+   "separating_defects": {
+    "cross_term": -0.61,
+    "noise_db": 0.57,
+    "quadratic": -0.4
+   }
+  },
+  "fir|volterra_laguerre_3": {
+   "spearman": 0.7044512384489547,
+   "separating_defects": {
+    "cross_term": -0.63,
+    "echo_beyond_memory": -0.34,
+    "order_beyond_degree": -0.25
+   }
+  },
+  "fir|wiener_hammerstein": {
+   "spearman": 0.8032388663967611,
+   "separating_defects": {
+    "noise_db": -2.43,
+    "echo_beyond_memory": -0.61,
+    "order_beyond_degree": -0.42
+   }
+  },
   "hammerstein_3|hammerstein_5": {
    "spearman": 0.9764216374817919,
    "separating_defects": {
@@ -1929,6 +1939,30 @@
     "delay_samples": 2.41
    }
   },
+  "hammerstein_3|volterra_laguerre_2": {
+   "spearman": 0.8854762324197473,
+   "separating_defects": {
+    "noise_db": 1.37,
+    "order_beyond_degree": 0.69,
+    "echo_beyond_memory": 0.49
+   }
+  },
+  "hammerstein_3|volterra_laguerre_3": {
+   "spearman": 0.8409745754298719,
+   "separating_defects": {
+    "noise_db": 0.69,
+    "cross_term": -0.25,
+    "echo_beyond_memory": -0.18
+   }
+  },
+  "hammerstein_3|wiener_hammerstein": {
+   "spearman": 0.9441295546558706,
+   "separating_defects": {
+    "noise_db": -1.72,
+    "echo_beyond_memory": -0.35,
+    "quadratic": 0.08
+   }
+  },
   "hammerstein_5|harmonic_order_1": {
    "spearman": 0.7163072473776996,
    "separating_defects": {
@@ -1993,6 +2027,30 @@
     "delay_samples": 2.43
    }
   },
+  "hammerstein_5|volterra_laguerre_2": {
+   "spearman": 0.862328852906924,
+   "separating_defects": {
+    "noise_db": 1.67,
+    "order_beyond_degree": 0.99,
+    "echo_beyond_memory": 0.46
+   }
+  },
+  "hammerstein_5|volterra_laguerre_3": {
+   "spearman": 0.8406887874618388,
+   "separating_defects": {
+    "noise_db": 1.04,
+    "cross_term": -0.24,
+    "order_beyond_degree": 0.22
+   }
+  },
+  "hammerstein_5|wiener_hammerstein": {
+   "spearman": 0.9550607287449393,
+   "separating_defects": {
+    "noise_db": -1.45,
+    "echo_beyond_memory": -0.12,
+    "quadratic": 0.08
+   }
+  },
   "harmonic_order_1|harmonic_order_2": {
    "spearman": -0.5143270340378089,
    "separating_defects": {
@@ -2041,6 +2099,22 @@
     "cross_term": -8.77
    }
   },
+  "harmonic_order_1|volterra_laguerre_2": {
+   "spearman": 0.3391710766928606,
+   "separating_defects": {
+    "quadratic": -9.44,
+    "cross_term": -9.15,
+    "noise_db": 2.47
+   }
+  },
+  "harmonic_order_1|volterra_laguerre_3": {
+   "spearman": 0.050986746597368134,
+   "separating_defects": {
+    "quadratic": -9.39,
+    "cross_term": -9.07,
+    "noise_db": 2.2
+   }
+  },
   "harmonic_order_2|harmonic_order_3": {
    "spearman": -0.4102349873393398,
    "separating_defects": {
@@ -2081,6 +2155,22 @@
     "noise_db": -6.52
    }
   },
+  "harmonic_order_2|volterra_laguerre_2": {
+   "spearman": -0.007403202935358097,
+   "separating_defects": {
+    "cubic": -8.29,
+    "order_beyond_degree": -6.33,
+    "noise_db": 5.24
+   }
+  },
+  "harmonic_order_2|volterra_laguerre_3": {
+   "spearman": -0.35140861301716225,
+   "separating_defects": {
+    "cubic": -8.28,
+    "order_beyond_degree": -6.39,
+    "noise_db": 4.98
+   }
+  },
   "harmonic_order_3|harmonic_order_4": {
    "spearman": 0.2922386404692445,
    "separating_defects": {
@@ -2113,6 +2203,22 @@
     "noise_db": -6.85
    }
   },
+  "harmonic_order_3|volterra_laguerre_2": {
+   "spearman": -0.3567049126893102,
+   "separating_defects": {
+    "quadratic": -9.68,
+    "cross_term": -9.42,
+    "noise_db": 4.19
+   }
+  },
+  "harmonic_order_3|volterra_laguerre_3": {
+   "spearman": -0.05187842458180296,
+   "separating_defects": {
+    "quadratic": -9.61,
+    "cross_term": -9.32,
+    "noise_db": 3.93
+   }
+  },
   "harmonic_order_4|harmonic_order_5": {
    "spearman": 0.6269474796341675,
    "separating_defects": {
@@ -2137,6 +2243,22 @@
     "delay_samples": 5.3
    }
   },
+  "harmonic_order_4|volterra_laguerre_2": {
+   "spearman": -0.32334952447554166,
+   "separating_defects": {
+    "noise_db": 7.26,
+    "order_beyond_degree": -6.84,
+    "quadratic": -6.74
+   }
+  },
+  "harmonic_order_4|volterra_laguerre_3": {
+   "spearman": -0.20216510468704393,
+   "separating_defects": {
+    "noise_db": 6.98,
+    "order_beyond_degree": -6.93,
+    "quadratic": -6.71
+   }
+  },
   "harmonic_order_5|harmonic_total": {
    "spearman": 0.04235486294748142,
    "separating_defects": {
@@ -2153,6 +2275,22 @@
     "cubic": -4.89
    }
   },
+  "harmonic_order_5|volterra_laguerre_2": {
+   "spearman": -0.5045857123589443,
+   "separating_defects": {
+    "quadratic": -7.05,
+    "cross_term": -6.8,
+    "noise_db": 6.78
+   }
+  },
+  "harmonic_order_5|volterra_laguerre_3": {
+   "spearman": -0.20960152257639106,
+   "separating_defects": {
+    "quadratic": -7.03,
+    "cross_term": -6.74,
+    "noise_db": 6.49
+   }
+  },
   "harmonic_total|mrstft": {
    "spearman": -0.5610698678074327,
    "separating_defects": {
@@ -2161,12 +2299,92 @@
     "delay_samples": 3.6
    }
   },
+  "harmonic_total|volterra_laguerre_2": {
+   "spearman": 0.43567999136989993,
+   "separating_defects": {
+    "noise_db": 3.27,
+    "echo_beyond_memory": 2.04,
+    "quadratic": -0.76
+   }
+  },
+  "harmonic_total|volterra_laguerre_3": {
+   "spearman": 0.019530818270253925,
+   "separating_defects": {
+    "noise_db": 3.0,
+    "echo_beyond_memory": 2.06,
+    "prefilter_hz": -0.83
+   }
+  },
   "imd|mrstft": {
    "spearman": -0.5666887085997829,
    "separating_defects": {
     "noise_db": -12.4,
     "delay_samples": 2.03,
     "allpass": 2.0
+   }
+  },
+  "imd|volterra_laguerre_2": {
+   "spearman": 0.3346939387190206,
+   "separating_defects": {
+    "quadratic": -0.31,
+    "cross_term": -0.22,
+    "order_beyond_degree": 0.15
+   }
+  },
+  "imd|volterra_laguerre_3": {
+   "spearman": 0.4812093737706761,
+   "separating_defects": {
+    "quadratic": -0.26,
+    "noise_db": -0.23,
+    "cross_term": -0.17
+   }
+  },
+  "mrstft|volterra_laguerre_2": {
+   "spearman": -0.5992830606674171,
+   "separating_defects": {
+    "noise_db": 10.96,
+    "allpass": -2.82,
+    "delay_samples": -2.7
+   }
+  },
+  "mrstft|volterra_laguerre_3": {
+   "spearman": -0.48339522836737364,
+   "separating_defects": {
+    "noise_db": 10.64,
+    "allpass": -2.14,
+    "echo_beyond_memory": 2.06
+   }
+  },
+  "mrstft|wiener_hammerstein": {
+   "spearman": -0.5277327935222672,
+   "separating_defects": {
+    "noise_db": 6.07,
+    "allpass": -3.33,
+    "delay_samples": -3.18
+   }
+  },
+  "volterra_laguerre_2|volterra_laguerre_3": {
+   "spearman": 0.9185633239252404,
+   "separating_defects": {
+    "noise_db": -0.38,
+    "order_beyond_degree": -0.38,
+    "delay_samples": 0.25
+   }
+  },
+  "volterra_laguerre_2|wiener_hammerstein": {
+   "spearman": 0.6831983805668016,
+   "separating_defects": {
+    "noise_db": -3.19,
+    "echo_beyond_memory": -0.63,
+    "order_beyond_degree": -0.42
+   }
+  },
+  "volterra_laguerre_3|wiener_hammerstein": {
+   "spearman": 0.34939271255060733,
+   "separating_defects": {
+    "noise_db": -2.55,
+    "order_beyond_degree": 0.28,
+    "cross_term": 0.25
    }
   }
  },
@@ -2866,6 +3084,162 @@
   "mrstft|release_ms": {
    "level_ratio_median": 3.937734940203825,
    "content_log_sd": 0.2209107862253872
+  },
+  "volterra_laguerre_2|allpass": {
+   "level_ratio_median": 0.955491786398099,
+   "content_log_sd": 0.7544889152088098
+  },
+  "volterra_laguerre_2|coloration_db": {
+   "level_ratio_median": 0.9568347471319756,
+   "content_log_sd": 0.4433524229814526
+  },
+  "volterra_laguerre_2|cross_term": {
+   "level_ratio_median": 12.164930536977252,
+   "content_log_sd": 0.5763348095177862
+  },
+  "volterra_laguerre_2|cubic": {
+   "level_ratio_median": 92.27669129944447,
+   "content_log_sd": 0.6890088114689644
+  },
+  "volterra_laguerre_2|delay_samples": {
+   "level_ratio_median": 0.9555130403323857,
+   "content_log_sd": 0.7499221992956714
+  },
+  "volterra_laguerre_2|echo_beyond_memory": {
+   "level_ratio_median": 2.6509021309096226,
+   "content_log_sd": 1.0051065440488252
+  },
+  "volterra_laguerre_2|gain": {
+   "level_ratio_median": 0.9724461662538606,
+   "content_log_sd": 0.010557034385504746
+  },
+  "volterra_laguerre_2|noise_db": {
+   "level_ratio_median": 1.0010741458599153,
+   "content_log_sd": 0.27274856658353624
+  },
+  "volterra_laguerre_2|order_beyond_degree": {
+   "level_ratio_median": 248823.81610085163,
+   "content_log_sd": 1.3846821292773908
+  },
+  "volterra_laguerre_2|prefilter_hz": {
+   "level_ratio_median": 0.9489966759121442,
+   "content_log_sd": 0.47095047144538915
+  },
+  "volterra_laguerre_2|quadratic": {
+   "level_ratio_median": 12.089979793983662,
+   "content_log_sd": 0.4080563744966484
+  },
+  "volterra_laguerre_2|redistribution_bias": {
+   "level_ratio_median": 0.5498401688025728,
+   "content_log_sd": 0.10987316287016932
+  },
+  "volterra_laguerre_2|release_ms": {
+   "level_ratio_median": 3.2533642295600442,
+   "content_log_sd": 0.4462590616574215
+  },
+  "volterra_laguerre_3|allpass": {
+   "level_ratio_median": 0.9614978704995518,
+   "content_log_sd": 0.669082531607163
+  },
+  "volterra_laguerre_3|coloration_db": {
+   "level_ratio_median": 0.9587010488118881,
+   "content_log_sd": 0.43326947649687325
+  },
+  "volterra_laguerre_3|cross_term": {
+   "level_ratio_median": 12.164930536977597,
+   "content_log_sd": 0.6582648967172579
+  },
+  "volterra_laguerre_3|cubic": {
+   "level_ratio_median": 92.27669130133457,
+   "content_log_sd": 0.6045231177921759
+  },
+  "volterra_laguerre_3|delay_samples": {
+   "level_ratio_median": 0.9607099186581264,
+   "content_log_sd": 0.6406757146802262
+  },
+  "volterra_laguerre_3|echo_beyond_memory": {
+   "level_ratio_median": 1.4147287872901941,
+   "content_log_sd": 0.8988668857148753
+  },
+  "volterra_laguerre_3|gain": {
+   "level_ratio_median": 0.9969195106693439,
+   "content_log_sd": 0.021381361927340355
+  },
+  "volterra_laguerre_3|noise_db": {
+   "level_ratio_median": 1.0007325946473105,
+   "content_log_sd": 0.4329562260924184
+  },
+  "volterra_laguerre_3|order_beyond_degree": {
+   "level_ratio_median": 248813.21710804885,
+   "content_log_sd": 1.1134659975938515
+  },
+  "volterra_laguerre_3|prefilter_hz": {
+   "level_ratio_median": 0.9948953459032513,
+   "content_log_sd": 0.48977146551364187
+  },
+  "volterra_laguerre_3|quadratic": {
+   "level_ratio_median": 12.144633802568869,
+   "content_log_sd": 0.4050712216668333
+  },
+  "volterra_laguerre_3|redistribution_bias": {
+   "level_ratio_median": 0.5593943023029263,
+   "content_log_sd": 0.09040011498536207
+  },
+  "volterra_laguerre_3|release_ms": {
+   "level_ratio_median": 3.2795545120370964,
+   "content_log_sd": 0.43531673293008155
+  },
+  "wiener_hammerstein|allpass": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|coloration_db": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|cross_term": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|cubic": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|delay_samples": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|echo_beyond_memory": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|gain": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|noise_db": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|order_beyond_degree": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|prefilter_hz": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|quadratic": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|redistribution_bias": {
+   "level_ratio_median": null,
+   "content_log_sd": null
+  },
+  "wiener_hammerstein|release_ms": {
+   "level_ratio_median": null,
+   "content_log_sd": null
   }
  },
  "families": [

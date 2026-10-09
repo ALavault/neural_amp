@@ -1,195 +1,287 @@
 # Sondes d'analyse comme métriques de fidélité : rapport de validation
 
 Voie produit, aucune revendication scientifique ni perceptive. Protocole, écarts et règles de
-lecture : `NOTE.md` (tout ce qui est préinscrit y est daté avant les chiffres). Tableau principal :
-`table_test.csv` (**métrique × défaut × sévérité × condition d'excitation**) ; synthèse :
-`summary_test.json` ; figures : `figures/`. **BROUILLON : Volterra–Laguerre (bruit, multisinus, sinus glissant, deux tons, DI) en attente.**
+lecture : `NOTE.md`, qui date tout ce qui est préinscrit avant les chiffres. Tableau principal :
+`table_test.csv` (**métrique × défaut × sévérité × condition d'excitation**). Synthèse :
+`summary_test.json`. Chaque chiffre cité ici est recalculé par `report_numbers.py` dans
+`report_numbers.json`. Figures : `figures/`. Coût : `cost.json`.
+
+**Question.** Quelles différences entre une sortie de référence et une sortie évaluée (même
+entrée) chaque sonde détecte-t-elle, avec quelle sensibilité, quelle robustesse et quels angles
+morts ?
 
 ## Ce que recouvre chaque type de résultat
 
-| Type | Contenu | Où |
+| Type | Contenu | Fichiers |
 |---|---|---|
-| Exécuté, synthétique | 13 défauts DSP connus × 3 sévérités × 6 familles d'excitation × 3 niveaux × 3 graines ; sondes FIR, Hammerstein 3 et 5 (v1), Volterra–Laguerre 2 et 3, Wiener–Hammerstein (v2) ; ESR, MR-STFT, IMD, signature harmonique | `calibration_test_*.csv` |
-| Exécuté, réel | VS100R (envoi FX) : 3 répétitions, 12 contrôles négatifs, 8 changements réels ; JVM410H : échelles d'un bouton | `real_pairs_*.csv` |
-| Hypothèses | Lectures marquées « post hoc » ou « exploratoire » ci-dessous | — |
-| Non mesurable sans nouvelles captures | BLA stricte sur le réel, phase harmonique synchronisée sur la VS100R, niveaux hors des 3 sinus glissants, répétabilité d'un jour à l'autre, > 20/24 kHz, sortie après l'étage de tonalité | `manifest.json` |
+| Exécuté, synthétique | 13 défauts DSP connus × 3 sévérités, 6 familles d'excitation (bruit coloré, multisinus, sinus glissant synchronisé, deux tons, plucks, DI réelle) × 3 niveaux × 3 graines (DI : 1 réalisation) ; sondes FIR, Hammerstein 3 et 5, Volterra–Laguerre 2 et 3, Wiener–Hammerstein ; ESR, MR-STFT, IMD, signature harmonique | `calibration_test_*.csv` |
+| Exécuté, réel | VS100R (envoi FX) : 3 répétitions, 12 contrôles négatifs, 8 changements réels ; JVM410H : 26 réglages d'un bouton × 2 sorties | `real_pairs_*.csv` |
+| Hypothèses | lectures marquées « post hoc », « exploratoire » ou « hypothèse » ci-dessous | — |
+| Non mesurable sans nouvelles captures | BLA stricte sur le réel ; phase harmonique synchronisée sur la VS100R ; niveaux hors des 3 sinus glissants ; plancher apparié dans le temps et répétabilité d'un jour à l'autre ; > 20/24 kHz ; sortie VS100R après l'étage de tonalité | `manifest.json` |
 
 ## Contrôles mathématiques
 
-- Borne |d_audio − d_probe| ≤ r_ref + r_eval : **0 violation** sur 1 755 lignes par sonde v1.
-- Sondes linéaires en paramètres : fit(Δy) = Δθ et d_probe² = Δθᵀ G_B Δθ vérifiés numériquement
-  (tests `test_linear_equivalence_and_gram_norm`, `test_volterra_fit_is_linear_in_the_output`).
-- Contre-exemple F = x + 0,1 x³ / G = x + 0,2 x³ : écart d'erreur de fit < 1e-6 relatif, score
-  d_probe = 0,1 RMS(x_B³) à 1e-4 près, porté par la seule branche d'ordre 3.
-- Wiener–Hammerstein : deux reparamétrisations exactes (signe, gain) donnent un rendu identique
-  au bit pour des paramètres éloignés ; entre départs, les paramètres diffèrent ~30 fois plus que
-  les rendus. Aucune métrique ne compare donc des paramètres.
-- Emboîtement Hammerstein / Volterra–Laguerre mesuré : absent dans les deux sens (NOTE, v2).
+- **Borne** |d_audio − d_probe| ≤ r_ref + r_eval : aucune violation, sur toutes les lignes
+  d'étalonnage de chaque sonde (de 120 lignes pour WH à 1 920 pour FIR et Hammerstein) et sur
+  toutes les paires réelles.
+- **Linéarité.** Pour les sondes linéaires en paramètres, fit(Δy) = Δθ et
+  d_probe² = Δθᵀ G_B Δθ sont vérifiés numériquement (tests unitaires). Cela suppose que la
+  normalisation et la régularisation ne dépendent que de x_A.
+- **Contre-exemple F = x + 0,1 x³ / G = x + 0,2 x³.** L'écart entre les erreurs de fit est
+  inférieur à 1e-6 en relatif, tandis que d_probe = 0,1 RMS(x_B³) à 1e-4 près, porté par la
+  seule branche d'ordre 3.
+- **Wiener–Hammerstein.** Deux reparamétrisations exactes (signe, gain) rendent la même sortie
+  au bit près, avec des paramètres éloignés. Entre deux départs, les paramètres diffèrent environ
+  30 fois plus que les rendus. Aucune métrique ne compare donc des paramètres.
+- **Emboîtement Hammerstein 5 / Volterra–Laguerre 3 : absent dans les deux sens.** Une colonne
+  xᵏ retardée est de 13 à 96 % hors de l'espace Volterra ; une colonne Volterra est en médiane
+  à 66 % hors de l'espace Hammerstein. Un écart de score entre ces deux sondes ne se lit donc
+  pas comme un écart de capacité.
 
-## Résultats sur défauts connus (v1 ; v2 à compléter)
+## Défauts connus
 
-Lecture préinscrite : rapport de détection R = score / plancher de répétition (même chaîne, deux
-bruits à −80 dB) ; « détecté » si R ≥ 10, « non détecté » si R < 3. ESR et IMD lus en amplitude.
-Ajouts post hoc signalés : part captée d_probe / d_audio et profils relatifs à d_audio.
+**Lecture préinscrite.** Rapport de détection R = score / plancher. Le plancher est le score
+obtenu entre deux mesures de la même chaîne, chacune avec un bruit à −80 dB. « Détecté » si
+R ≥ 10, « non détecté » si R < 3. L'ESR et l'IMD sont lues en amplitude.
 
-### Quels défauts chaque métrique détecte-t-elle ?
+**Lectures ajoutées.** Elles sont signalées comme telles :
+- la **part captée** d_probe / d_audio ;
+- la **part non représentée** ;
+- les **profils relatifs à d_audio**, qui retirent l'échelle de sévérité.
 
-À sévérité maximale et niveau médian, toutes familles confondues (défauts × familles) :
-FIR 63 détectés / 2 limites ; Hammerstein 3 et 5 : 63 / 1 / 1 ; ESR et d_audio 59 / 1 / 5 non
-détectés ; MR-STFT 7 / 6 / 52 non détectés ; IMD (deux tons) 13 / 13 ; signature harmonique (sinus
-glissant) 12 / 13.
+### 1. Quels défauts chaque métrique détecte-t-elle ?
 
-**Le seul seuil de détection ne départage pas les sondes.** Leur plancher est très bas parce
-qu'elles ne représentent pas le bruit blanc : elles « détectent » ainsi presque tout, y compris un
-écho hors de leur mémoire. Ce qu'elles voient vraiment se lit dans la **part captée**
-(d_probe / d_audio, médiane sur les familles, niveau médian, sévérité maximale) :
+Comptes à sévérité maximale et niveau médian, sur toutes les familles (une cellule = un défaut
+× une famille) :
 
-| Défaut | FIR | H3 | H5 |
+| Métrique | Détectés | Limites | Non détectés |
 |---|---|---|---|
-| gain, coloration, retard, passe-tout, préfiltre, redistribution à THD égal | 0,97–0,99 | 1,00 | 1,00 |
-| relâchement d'enveloppe | 0,96 | 0,98 | 0,98 |
-| terme cubique | 0,79 | 0,99 | 0,99 |
-| terme quadratique | 0,67 | 0,92 | 0,92 |
-| interaction x[n]·x[n−5] | 0,47 | 0,83 | 0,83 |
-| ordre au-delà du degré (u⁷) | 0,36 | 0,77 | 0,97 |
-| écho à 30 ms (hors mémoire) | 0,10 | 0,14 | 0,16 |
-| bruit additif | 0,03 | 0,06 | 0,08 |
+| FIR | 76 | 2 | 0 |
+| Hammerstein 3 et 5 | 76 | 1 | 1 |
+| ESR (= d_audio en amplitude) | 72 | 1 | 5 |
+| MR-STFT | 8 | 7 | 63 |
+| IMD (deux tons) | 13 | 0 | 0 |
+| Signature harmonique totale (sinus glissant) | 12 | 1 | 0 |
 
-- **Signature harmonique D_k** : spécifique par ordre. Le défaut quadratique ne touche que
-  l'ordre 2, le cubique les ordres 1 et 3 ; elle sépare défauts pairs et impairs, ce qu'aucune
-  métrique globale ne fait.
-- **FIR** : voit les changements non linéaires seulement par leur effet sur la réponse
-  linéaire équivalente au niveau de l'excitation (part captée 0,47 à 0,79).
+**Le seuil seul ne départage pas les sondes.** Elles ne représentent pas le bruit blanc, donc
+leur plancher est très bas, et elles « détectent » presque tout. Ce qu'elles représentent
+vraiment se lit dans la part captée (médiane sur les familles, sévérité maximale, niveau
+médian ; part non représentée entre parenthèses) :
 
-### Quels défauts manque-t-elle ?
+| Défaut | FIR | H3 | H5 | VL2 | VL3 |
+|---|---|---|---|---|---|
+| gain | 0,99 (0,10) | 1,00 (0,05) | 1,00 (0,05) | 0,98 (0,19) | 0,99 (0,08) |
+| coloration, préfiltre, redistribution à THD égal | 0,99 | 1,00 | 1,00 | 0,97–0,99 | 0,99–1,00 |
+| retard fractionnaire | 0,97 (0,18) | 1,00 (0,06) | 1,00 (0,05) | 0,97 (0,23) | 0,89 (0,45) |
+| passe-tout | 0,97 (0,18) | 1,00 (0,06) | 1,00 (0,05) | 0,97 (0,25) | 0,93 (0,36) |
+| relâchement d'enveloppe | 0,95 (0,22) | 0,97 (0,15) | 0,97 (0,15) | 0,95 (0,25) | 0,96 (0,21) |
+| cubique (après passe-haut) | 0,79 (0,60) | 0,99 (0,30) | 0,99 (0,30) | 0,79 (0,61) | 0,99 (0,12) |
+| quadratique (après passe-haut) | 0,64 (0,77) | 0,96 (0,42) | 0,96 (0,42) | 0,98 (0,17) | 0,98 (0,15) |
+| interaction u[n]·u[n−5] | 0,45 (0,90) | 0,85 (0,58) | 0,86 (0,57) | 0,97 (0,26) | 0,99 (0,12) |
+| terme u⁷ (au-delà du degré) | 0,35 (0,94) | 0,81 (0,72) | 0,98 (0,52) | 0,39 (0,95) | 0,97 (0,65) |
+| écho à 30 ms (au-delà de la mémoire) | 0,16 (0,99) | 0,19 (1,00) | 0,21 (1,00) | 0,11 (0,99) | 0,15 (0,99) |
+| bruit additif | 0,02 (1,00) | 0,06 (1,00) | 0,08 (1,00) | 0,01 (1,00) | 0,03 (1,00) |
 
-- **Bruit additif et écho hors mémoire** : non représentés par les sondes (part captée ≤ 0,16 sur
-  bruit coloré). Content-dépendant : sur plucks (notes périodiques), l'écho est capté à ~0,5,
-  vu comme un filtre en peigne.
-- **Non-linéarité préfiltrée** (terme sur u = passe-haut(x)) : sur bruit coloré, Hammerstein
-  laisse ~0,47 de l'écart non représenté ; (PH ∗ x)³ n'est pas une somme de xᵏ filtrés.
-- **MR-STFT (`metrics/spectral.py`)** : aveugle au passe-tout et au retard (magnitude seule) et
-  dominée par un bruit à −80 dB dans les bandes où la référence est faible (log-magnitude) ; 52
-  angles morts sur 65.
-- **Ordres harmoniques individuels** : chacun manque les défauts des autres ordres, par
-  construction ; c'est le total ou l'ensemble des ordres qui se lit.
+VL2 et VL3 = Volterra–Laguerre d'ordre 2 et 3 ; la DI est comprise pour FIR et Hammerstein.
+Une part captée et une part non représentée ne s'additionnent pas : rien ne les rend
+orthogonales hors échantillon.
 
-### L'extraction est-elle plus stable que les écarts recherchés ?
+- **Sensibilité sous le bruit brut.** À la plus faible sévérité, les sondes voient le cubique
+  sur toutes les familles, alors que l'ESR ne le voit sur aucune ; même chose pour le
+  quadratique (ESR : 3 familles sur 6). La sonde moyenne sur toute l'estimation et rejette ce
+  qui sort de son espace, comme une détection synchrone. Le gain dépend de sa capacité et d'un
+  plancher de bruit blanc (voir le réel ci-dessous).
+- **Signature harmonique D_k, spécifique par ordre.** Le quadratique ne touche que l'ordre 2 ;
+  le cubique touche les ordres 1 et 3 ; l'interaction croisée l'ordre 2. Elle est quasi
+  déterministe d'une réalisation à l'autre et exige un sinus glissant.
+- **Complémentarité Hammerstein / Volterra–Laguerre.** Volterra–Laguerre, avec ses produits de x
+  filtré, représente les non-linéarités qui suivent un filtre et les interactions temporelles.
+  Hammerstein, avec ses 256 taps, représente mieux la mémoire linéaire longue.
+- **FIR.** Il ne voit les changements non linéaires que par la réponse linéaire équivalente au
+  niveau de l'excitation.
 
-Oui, sur ce banc : écart-type du log du score entre graines (indépendantes) médian ≤ 0,007 pour
-toutes les métriques (90e centile 0,14–0,31) ; la signature harmonique est quasi déterministe
-(D_k est une propriété du système). Wiener–Hammerstein fait exception : dispersion entre
-départs 0,09 du RMS de la sortie, comparable aux petits défauts (voir v2).
+### 2. Quels défauts manque-t-elle ?
 
-### Que révèlent les sondes au-delà des métriques existantes ?
+- **Bruit additif et écho hors mémoire** : non représentés par aucune sonde. Pour l'écho, cela
+  dépend du contenu : il est capté à ~0,5 sur des notes périodiques (plucks), où il ressemble à
+  un filtre en peigne, et à ~0,2 sur la DI.
+- **Non-linéarité préfiltrée** : Hammerstein laisse 0,30 à 0,42 non représenté ; Volterra–Laguerre
+  3 seulement 0,12 à 0,15.
+- **Interaction croisée** : Hammerstein l'attribue à l'ordre 2 quand l'excitation est corrélée
+  sur 5 échantillons (bruit coloré, plucks). Sa décomposition par branche ne distingue alors
+  pas « carré » et « produit retardé ».
+- **Dynamique d'enveloppe sur jeu réel** : sur la DI, le relâchement n'est capté qu'à 0,60–0,66,
+  contre 0,97 sur bruit stationnaire. Ce manque n'apparaît qu'avec une excitation réaliste.
+- **Terme u⁷ à faible sévérité** : vu par presque aucune métrique (FIR 2 familles sur 6).
+- **MR-STFT de `metrics/spectral.py`** (epsilon 1e-7) : aveugle au passe-tout et au retard
+  (magnitude seule) et dominée par un bruit à −80 dB dans les bandes où la référence est faible.
+  Constat propre à cette implémentation.
 
-- **Robustesse au bruit de mesure** : le bruit additif n'entre presque pas dans le score
-  (part captée 0,03–0,08), alors que l'ESR et d_audio le comptent entièrement.
-- **Sensibilité aux écarts structurés sous le bruit** : un terme u⁷ dont la différence brute est à
-  peine au-dessus du plancher (ESR ×1,75 sur deux tons) est vu à ×100–400 par les sondes, qui
-  moyennent sur toute l'estimation et rejettent ce qui est hors de leur espace (comme une
-  détection synchrone). Ce gain dépend de la capacité de la sonde.
-- **Nature de l'écart** : la décomposition par branche (H5) range les défauts linéaires à
-  l'ordre 1, le quadratique à l'ordre 2, le cubique aux ordres 1 et 3, u⁷ à l'ordre 5. **Mais**
-  l'interaction x[n]·x[n−5] est attribuée à l'ordre 2 sur bruit coloré comme sur plucks : une
-  excitation corrélée sur 5 échantillons ne sépare pas « carré » et « produit retardé ». La
-  décomposition est conditionnée par la base et par l'excitation.
-- **Complémentarité mesurée** (profils relatifs à d_audio, post hoc) : H3 ≈ H5 (ρ = 0,96) ;
-  ESR et H5 non corrélés (ρ ≈ 0), l'ESR insistant sur bruit et écho hors mémoire ; MR-STFT
-  séparée par le passe-tout et le retard.
+### 3. L'extraction est-elle plus stable que les écarts recherchés ?
 
-### Quand refuser de conclure ?
+Oui, sauf pour Wiener–Hammerstein. Entre graines indépendantes, l'écart-type du log du score a
+une médiane de 0,0016 à 0,007 pour toutes les métriques sauf l'IMD (0,026). La signature
+harmonique est quasi déterministe.
 
-- Part non représentée ou r / RMS(y) élevés (avertissement de capacité) : un faible score n'est
-  pas une garantie de fidélité.
-- Contributions par branche qui se compensent (somme > 2,5 × le score ; seuil exploratoire,
-  choisi après l'étalonnage) : décomposition non identifiable (bruit : 3,7–4,6 ; écho : 3,7–8,7).
-- Dispersion entre initialisations comparable à l'écart (Wiener–Hammerstein).
-- Référence quasi silencieuse.
-- Excitation absente pour la métrique (« non mesurable »), ou lecture hors du domaine excité
-  (deux tons d'estimation et de lecture différents : corrigé, voir NOTE).
-- Entrées non communes entre deux prises réelles (comparaisons directes d'enregistrements).
+**Réserve.** Les sinus glissants de test sont bit à bit ceux du développement : la durée y est
+tirée de graine % 3 (voir `NOTE.md`). Sur cette famille, la stabilité ne vaut donc pas
+généralisation à de nouvelles réalisations.
 
-### Ensemble minimal (provisoire)
+Wiener–Hammerstein : voir la section dédiée.
 
-À confirmer après v2 et le réel : FIR (repère linéaire), Hammerstein 3 (H5 redondant ici),
-signature harmonique par ordre sur sinus glissant, ESR (ou d_audio) pour ce que les sondes ne
-représentent pas, et la part non représentée de la sonde comme indicateur de couverture.
+### 4. Que révèlent les sondes au-delà des métriques existantes ?
+
+- **La nature de l'écart.** La part captée et la part non représentée disent si l'écart est
+  linéaire, une non-linéarité statique, une interaction temporelle, ou hors de toute sonde
+  (bruit, écho long). La décomposition par branche et la signature harmonique donnent l'ordre.
+- **La robustesse au bruit de mesure.** Le bruit additif n'entre presque pas dans les scores de
+  sonde (part captée de 0,01 à 0,08), alors que l'ESR le compte entièrement.
+- **La robustesse aux défauts d'acquisition sur le réel.** Chaque sonde est ajustée sur sa propre
+  entrée enregistrée. Exemple, le contrôle négatif aigus 10, dont la section contient un
+  glissement : ESR à 3,7 planchers, Hammerstein 3 sous 1.
+- **Une limite.** À entrée commune, les sondes ne séparent pas mieux que l'ESR des changements
+  réels (voir le réel ci-dessous).
+- **Un signal de non-identifiabilité (exploratoire).** Quand la somme des contributions par
+  branche dépasse 2,5 fois le score, les branches se compensent. Le seuil a été choisi après
+  l'étalonnage : 1,2 à 1,8 pour les défauts linéaires et statiques, 3,7 à 8,7 pour le bruit et
+  l'écho. Il est à valider ailleurs.
+
+### 5. Quand faut-il refuser de conclure ?
+
+- Part non représentée ou rapport r / RMS(y) élevé : un faible score n'est pas une garantie de
+  fidélité.
+- Branches qui se compensent : la décomposition par ordre n'est pas lisible.
+- Dispersion entre initialisations comparable à l'écart mesuré (Wiener–Hammerstein).
+- Référence quasi silencieuse, ou signature harmonique sans fondamental : « non mesurable ».
+- Lecture hors du domaine excité. Exemple corrigé en cours de campagne : les deux tons
+  d'estimation et de lecture n'avaient pas les mêmes fréquences.
+- Comparaison directe d'enregistrements à entrée non commune.
+- Plancher réel non apparié dans le temps (voir la VS100R).
+- Score de sonde au-dessus de d_audio (hors échantillon, une branche peut extrapoler : 1,10 à
+  1,14 sur la DI pour les termes pairs) : écart surestimé.
+
+### 6. Ensemble minimal de métriques complémentaires
+
+- **FIR** : repère linéaire, très bon marché (0,1 s).
+- **Hammerstein 3** : H5 lui est redondant ici. Il voit les non-linéarités statiques et garde la
+  mémoire linéaire longue.
+- **Volterra–Laguerre 3** : il voit les non-linéarités préfiltrées et les interactions
+  temporelles que Hammerstein manque ; plus coûteux (6 s).
+- **Signature harmonique par ordre**, quand un sinus glissant est disponible : elle sépare les
+  défauts pairs et impairs.
+- **ESR (ou d_audio)** : elle voit ce qu'aucune sonde ne représente, bruit et écho long.
+- **La part non représentée** de chaque sonde, comme indicateur de couverture.
+- **Écartés.** Wiener–Hammerstein : peu fiable ici et très coûteux. MR-STFT telle qu'implémentée :
+  aveugle à la phase et sensible au bruit.
+
+## Wiener–Hammerstein
+
+**À compléter** avec l'étalonnage corrigé (relecture Codex : la renormalisation de h_in annulait
+le pas de Gauss–Newton ; h_out était ajusté sur une autre région que les autres étapes).
+Développement corrigé : capacité 0,186, dispersion médiane entre départs 0,092, sous le seuil
+« peu fiable avant défaut » (0,093) de justesse.
 
 ## Sorties réelles VS100R (envoi FX, 26/09, sans modèle neuronal)
 
-`real_pairs_vs100r.csv`. Chaque sonde ajustée sur l'entrée de sa propre prise, lue sur le
-bouclage de la prise de référence ; A = `di_train`, B = `di_test` (sources indépendantes) et
-bruit rose ; signature harmonique sur les trois sinus glissants (non synchronisés).
+`real_pairs_vs100r.csv`. Chaque sonde est ajustée sur l'entrée de sa propre prise, puis lue sur
+le bouclage de la prise de référence. A = `di_train`, B = `di_test` (sources indépendantes) et
+bruit rose. La signature harmonique est mesurée sur les trois sinus glissants, qui ne sont pas
+synchronisés.
 
-**Entrée.** Le bouclage diffère de −42 dB entre la prise 1 (début de séance) et les autres, de
-−60 à −70 dB entre prises ultérieures ; sept sections `di_test` contiennent un glissement
-(−16 à −24 dB) et sont marquées « entrée non commune » pour les comparaisons directes.
+**Entrée.** Le bouclage de la prise 1 (début de séance) diffère de −42 dB de celui des autres
+prises, contre −60 à −70 dB entre prises ultérieures. Sept sections `di_test` contiennent un
+glissement (−16 à −24 dB) : elles sont marquées « entrée non commune » pour les comparaisons
+directes.
 
-**Lecture préinscrite** (plancher réel = médiane des trois répétitions du centre) :
+**Lecture préinscrite** (plancher réel = médiane des trois répétitions du centre), sur
+`di_test` :
 
-| Métrique (di_test) | répétitions | contrôles négatifs : médiane (max) | changements réels |
+| Métrique | Répétitions | Contrôles négatifs : médiane (max) | Changements réels |
 |---|---|---|---|
-| FIR | 1,18 ; 1,00 ; 0,23 | 0,12 (1,26) | 0,6 à 2,9 ; gain 0 : 7,7 |
 | Hammerstein 3 | 1,17 ; 1,00 ; 0,23 | 0,13 (1,23) | 0,6 à 3,2 ; gain 0 : 7,7 |
-| Hammerstein 5 | 1,18 ; 1,00 ; 0,23 | 0,12 (1,22) | 0,7 à 3,5 ; gain 0 : 7,8 |
-| ESR (amplitude) | 1,20 ; 1,00 ; 0,31 | 0,26 (**3,73**) | 0,9 à 5,2 ; gain 0 : 7,2 |
+| ESR (amplitude) | 1,20 ; 1,00 ; 0,31 | 0,26 (3,73, entrée non commune) | 0,9 à 5,2 ; gain 0 : 7,2 |
 | MR-STFT | 1,21 ; 1,00 ; 0,63 | 0,57 (1,32) | 0,7 à 6,2 ; gain 0 : 15,6 |
 
-- **Contrôles négatifs** (basses, médiums, aigus, avant l'étage de tonalité) : sous 3 pour toutes
-  les sondes, comme attendu. L'ESR dépasse 3 sur une paire (aigus 10, prise 23) dont la section
-  contient un glissement d'acquisition : ESR 0,52 contre 0,009 pour Hammerstein 3 ajusté sur sa
-  propre entrée.
-- **Changements réels** : l'attente « ≥ 10 » n'est tenue par **aucune** métrique. Le plancher est
-  dominé par la dérive dans la séance : les deux répétitions avec la prise 1 (14 h 26) valent
-  ~5 fois la répétition 20–39 (2 h d'écart), alors que les contrôles négatifs sont appariés à la
-  prise centrale la plus proche dans le temps.
+- **Contrôles négatifs** (basses, médiums, aigus, réglés avant l'étage de tonalité) : sous 3
+  pour toutes les sondes, comme attendu. Le seul dépassement (ESR) vient d'une section à
+  glissement.
+- **Changements réels** : l'attente « ≥ 10 » n'est tenue par **aucune** métrique. Le plancher
+  est dominé par la dérive au cours de la séance. Les deux répétitions avec la prise 1 (14 h 26)
+  valent environ 5 fois la répétition 20–39 (2 h d'écart), alors que chaque contrôle est apparié
+  à la prise centrale la plus proche dans le temps.
 
-**Lectures post hoc** (non préinscrites) :
-- Séparation changements réels (7, gain 0 exclu) / contrôles négatifs (12), AUC et p exact
-  unilatéral : sur `di_test`, FIR, H3, H5 0,98 (p = 0,0001), ESR 0,89 (p = 0,002), MR-STFT 0,93 ;
-  sur bruit rose, toutes 0,96–0,99 ; signature harmonique à −10 dBFS 0,99 (total, ordres 2 et 3).
-- À −3 dBFS, la signature harmonique ne sépare plus (AUC 0,44–0,63). Pas d'écrêtage à
-  l'acquisition (crêtes de l'envoi −10 à −12 dBFS) ; la crête ne monte que d'environ 1 dB entre
-  −20 et −3 dBFS : le canal sature profondément. Hypothèse non vérifiée : les réglages y donnent
-  des signatures voisines, noyées dans la variabilité entre répétitions.
-- Un contour ±2,5 reste dans l'étendue des contrôles négatifs pour toutes les métriques : à ce
-  niveau de dérive, un tel changement n'est pas distinguable sur une seule paire.
+**Lectures post hoc** (non préinscrites) : séparation des changements réels (gain 0 exclu) et
+des contrôles négatifs, mesurée par l'AUC avec un p exact unilatéral.
 
-**Conséquence pour la lecture des scores sur le réel** : un plancher fait de répétitions éloignées
-dans le temps surestime le bruit d'une comparaison rapprochée ; il faut un plancher apparié dans
-le temps (répétitions encadrant la prise évaluée), absent de cette séance. Mesurable seulement
-avec de nouvelles captures (répétitions du centre intercalées).
+| Segment | Métrique | Toutes les paires (7 / 12) | Entrée commune seulement |
+|---|---|---|---|
+| `di_test` | Hammerstein 3 | 0,98 (p = 8e-5) | 0,98 (p = 7e-4, 5 / 10) |
+| `di_test` | ESR | 0,89 (p = 0,002) | **0,98** (p = 7e-4, 5 / 10) |
+| `di_test` | MR-STFT | 0,93 | 0,92 (p = 0,004) |
+| bruit rose | ESR | 0,99 | 0,99 |
+| sinus glissant −10 dBFS | signature harmonique totale | 0,99 (p = 4e-5) | — |
+| sinus glissant −3 dBFS | signature harmonique totale | 0,63 (p = 0,19) | — |
+
+- **À entrée commune, ESR et sondes séparent pareillement.** L'avantage apparent des sondes sur
+  toutes les paires vient des sections à glissement. Sur le réel, leur intérêt est de rester
+  utilisables malgré l'acquisition, pas de mieux séparer.
+- **À −3 dBFS, la signature harmonique ne sépare plus.** Aucun échantillon n'est écrêté à
+  l'acquisition (crêtes de −10 à −12 dBFS). Mais la crête de l'envoi ne monte que d'environ 1 dB
+  entre −20 et −3 dBFS : la saturation est profonde, et les contrôles négatifs y valent autant
+  que les répétitions. Hypothèse non vérifiée : la sonde de degré 5 ne représente plus cette
+  saturation, et les réglages y donnent des signatures voisines.
+- **Un contour ±2,5 reste dans l'étendue des contrôles négatifs** pour toutes les métriques.
+
+**Conséquence.** Un plancher fait de répétitions éloignées dans le temps surestime le bruit
+d'une comparaison rapprochée. Il faudrait des répétitions du centre intercalées entre les
+prises, ce qui demande de nouvelles captures.
 
 ## Sorties réelles JVM410H OD1 (ToneTwist, sans modèle neuronal)
 
-`real_pairs_jvm.csv`. Échelles d'un seul bouton autour de B5 M5 T5 G5 (gain 0 à 10 ; basses,
-médiums, aigus 0 à 10), sorties préampli et haut-parleur, entrée sèche commune. A = 0–150 s,
-B = 215–300 s du même fichier : **indépendance A/B non établie** (frontières de sources non
-documentées). Pas de répétition : aucun plancher réel.
+`real_pairs_jvm.csv`. Échelles d'un seul bouton autour de B5 M5 T5 G5, aux sorties préampli et
+haut-parleur, avec une entrée sèche commune. A = 0–150 s et B = 215–300 s du même fichier :
+**l'indépendance de A et B n'est pas établie**. Il n'y a pas de répétition, donc pas de
+plancher réel.
 
-- **Monotonie observée** : sur chaque échelle et chaque côté du centre, toutes les métriques
-  (FIR, H3, H5, ESR, MR-STFT) croissent strictement avec la distance au centre (ρ = +1), aux deux
-  sorties. Non imposée, et peu discriminante entre métriques sur ce plan.
-- **Couverture** : Hammerstein 5 capte ~0,62 de l'écart (médiane), part non représentée ~0,75,
-  au préampli comme au haut-parleur. Sur cet ampli à lampes, les scores de sonde sont des
-  signatures partielles ; un faible score n'y vaudrait pas fidélité. Causes possibles non
-  départagées : non-linéarité et mémoire réelles hors de la capacité gelée (256 taps à
-  44,1 kHz, degré 5), A et B non indépendants, niveaux de la DI variables.
-- Borne : aucune violation.
+- **Monotonie observée.** Sur les 40 échelles par sortie (4 boutons × 2 côtés × 5 métriques),
+  le score croît strictement avec la distance au centre (ρ de Spearman = +1 partout). Ce n'était
+  pas imposé.
+- **Couverture.** Hammerstein 5 capte 0,63 (préampli) et 0,62 (haut-parleur) de l'écart, avec
+  une part non représentée de 0,75 à 0,76. Sur cet ampli à lampes, les scores de sonde sont des
+  signatures partielles. Causes possibles, non départagées : non-linéarité et mémoire réelles
+  au-delà de la capacité gelée, A et B non indépendants, niveaux variables de la DI.
+- **Borne** : aucune violation.
+
+## Coût de calcul
+
+Une paire, 4 s d'estimation et 4 s de lecture à 48 kHz, machine partagée (charge 15 à 18 sur
+32 cœurs) :
+
+| Métrique | Temps |
+|---|---|
+| ESR | 0,001 s |
+| MR-STFT | 0,08 s |
+| FIR | 0,11 s |
+| IMD | 0,16 s |
+| Hammerstein 3 / 5 | 0,39 / 0,68 s |
+| Signature harmonique | 0,81 s |
+| Volterra–Laguerre 2 / 3 | 1,4 / 6,1 s |
+| Wiener–Hammerstein | 32 s pour 1 s d'estimation |
 
 ## Commandes de reproduction
 
 ```sh
 uv run pytest tests/unit/test_probe_metrics.py tests/unit/test_defect_bench.py -q
-CUDA_VISIBLE_DEVICES="" .venv/bin/python diagnosis/probe_metrics/dev_select.py
-CUDA_VISIBLE_DEVICES="" .venv/bin/python diagnosis/probe_metrics/dev_select_v2.py
-CUDA_VISIBLE_DEVICES="" .venv/bin/python diagnosis/probe_metrics/calibrate.py --phase test --families noise multisine
-CUDA_VISIBLE_DEVICES="" .venv/bin/python diagnosis/probe_metrics/calibrate.py --phase test --probes v2 --families noise multisine
-CUDA_VISIBLE_DEVICES="" .venv/bin/python diagnosis/probe_metrics/calibrate.py --phase test --probes wh --families noise --levels -20 --seconds 1
-CUDA_VISIBLE_DEVICES="" .venv/bin/python diagnosis/probe_metrics/decomposition.py noise
-CUDA_VISIBLE_DEVICES="" .venv/bin/python diagnosis/probe_metrics/real_pairs.py vs100r
-.venv/bin/python diagnosis/probe_metrics/summarize.py && .venv/bin/python diagnosis/probe_metrics/figures.py
-.venv/bin/python diagnosis/probe_metrics/manifest.py
+export CUDA_VISIBLE_DEVICES=""
+P=diagnosis/probe_metrics
+.venv/bin/python $P/dev_select.py && .venv/bin/python $P/dev_select_v2.py
+for f in "noise multisine" "sweep two_tone" plucks di; do
+  .venv/bin/python $P/calibrate.py --phase test --families $f
+  .venv/bin/python $P/calibrate.py --phase test --probes v2 --families $f
+done   # Volterra sur DI : --levels -20
+.venv/bin/python $P/calibrate.py --phase test --probes wh --families noise --levels -20 --seconds 1
+.venv/bin/python $P/decomposition.py noise && .venv/bin/python $P/decomposition.py plucks
+.venv/bin/python $P/real_pairs.py vs100r && .venv/bin/python $P/real_pairs.py jvm
+.venv/bin/python $P/cost.py && .venv/bin/python $P/manifest.py
+.venv/bin/python $P/summarize.py && .venv/bin/python $P/figures.py && .venv/bin/python $P/report_numbers.py
 ```
-(les autres familles : `--families sweep two_tone`, `plucks`, `di`.)
