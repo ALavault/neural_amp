@@ -60,6 +60,12 @@ def synthetic() -> dict:
             "di_test: idmt-bass, idmt-gtr4-ib (files never in di_train)",
         },
         "two_tone_note": "tone pair from seed % 50: shared by A (s) and B (s + 50)",
+        "steps_note": "level steps for E2 (dynamics_bench.py): 44 segments of "
+        f"{db.STEP_S} s, loud level in {list(db.LEVELS_DB['strong_rms'])} dBFS RMS, "
+        f"quiet {db.STEP_DROP_DB} dB lower; seeds 100-102 (check), 200-202 (test); "
+        "all defects applied to the DYNAMIC chain",
+        "sweep_note": "sweep duration from seed % 3: test sweeps 200-202 equal dev "
+        "sweeps 102, 100, 101 (reported limitation)",
     }
 
 

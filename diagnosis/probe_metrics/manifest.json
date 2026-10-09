@@ -3,6 +3,16 @@
   "kind": "synthetic DSP reference and known-defect variants (defect_bench.py)",
   "rate_hz": 48000,
   "families": {
+   "steps": {
+    "level_kind": "strong_rms",
+    "levels_db": [
+     -12.0,
+     -9.0,
+     -6.0
+    ],
+    "estimation_seeds": "s (dev 100-102, test 200-202)",
+    "reading_seeds": "s + 50"
+   },
    "noise": {
     "level_kind": "rms",
     "levels_db": [
@@ -72,7 +82,9 @@
    "independent_sources": true,
    "note": "di_train: idmt-gtr2, idmt-gtr4-sg, nam, prvt-gtr, yt-bass; di_test: idmt-bass, idmt-gtr4-ib (files never in di_train)"
   },
-  "two_tone_note": "tone pair from seed % 50: shared by A (s) and B (s + 50)"
+  "two_tone_note": "tone pair from seed % 50: shared by A (s) and B (s + 50)",
+  "steps_note": "level steps for E2 (dynamics_bench.py): 44 segments of 1.2 s, loud level in [-12.0, -9.0, -6.0] dBFS RMS, quiet 20.0 dB lower; seeds 100-102 (check), 200-202 (test); all defects applied to the DYNAMIC chain",
+  "sweep_note": "sweep duration from seed % 3: test sweeps 200-202 equal dev sweeps 102, 100, 101 (reported limitation)"
  },
  "vs100r": {
   "kind": "VS100R FX send, own recording 2026-09-26 (raw audio not committed)",

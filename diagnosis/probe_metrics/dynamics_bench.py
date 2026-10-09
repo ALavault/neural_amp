@@ -111,6 +111,28 @@ def per_level(cells: dict, level: float) -> dict:
     }
 
 
+def all_cells(rows) -> dict:
+    """Every (level, defect, severity): median, min and max over the test seeds of the
+    release and attack scores (reported without threshold, as pre-registered)."""
+    cells = {}
+    for r in rows:
+        if int(r["seed"]) in TEST_SEEDS:
+            key = f"{r['level_db']}|{r['defect']}|{r['severity']}"
+            cells.setdefault(key, []).append(
+                (float(r["release_db"]), float(r["attack_db"]))
+            )
+    out = {}
+    for key, values in cells.items():
+        release, attack = [v[0] for v in values], [v[1] for v in values]
+        out[key] = {
+            "release_median": statistics.median(release),
+            "release_seed_range": [min(release), max(release)],
+            "attack_median": statistics.median(attack),
+            "attack_seed_range": [min(attack), max(attack)],
+        }
+    return out
+
+
 def verdict() -> None:
     rows = list(csv.DictReader((HERE / "dynamics_bench.csv").open()))
     cells = medians(rows)
@@ -124,6 +146,7 @@ def verdict() -> None:
         "criteria_met": {k: v >= 2 for k, v in count.items() if k != "control"}
         | {"control": count["control"] == len(levels)},
         "counts": count,
+        "all_defects": all_cells(rows),
     }
     (HERE / "dynamics_verdict.json").write_text(json.dumps(result, indent=1) + "\n")
     print(json.dumps(result["criteria_met"], indent=1))
