@@ -122,3 +122,58 @@ identiques aux 39 prises existantes.
 - Rien sur des signaux synthétiques à la place de la guitare.
 - Peu de chose sur les réglages non vus : un seul couple (prise 16), rapporté sans seuil.
 - Avec 3 paires, seuls des effets nets ressortent.
+
+## Co-lecture à retard compensé (règle ajoutée le 2026-10-09, avant la lecture P)
+
+**Écrite avant que l'évaluation ne tourne.** `eval_train_length.json` n'existe pas, et aucun
+chiffre de la lecture P n'a été calculé pour L10 ou L20. En revanche, les ESR de test du banc
+(`test_last` dans `demo/nablafx_bench/vs100r48len*.json`) existent déjà sur disque pour les six
+runs L10 et L20 : elles portent sur une autre agrégation. La session qui écrit cette section n'en
+a pas affiché les valeurs ; on ne peut pas exclure qu'une session précédente les ait vues.
+
+**Ordre d'exécution.** La lecture P tourne d'abord, avec `eval_train_length.py` inchangé depuis
+36d08bb. La co-lecture tourne ensuite, dans un script séparé qui ne modifie ni ce script ni son
+JSON. Elle est rapportée comme « règle écrite avant P, exécutée après P ».
+
+**Pourquoi.** Sur les modèles VS100R à 48 kHz, un retard *oracle* ajusté par prise sur la section
+de test vaut 0,80 à 0,85 échantillon en médiane, et ce réajustement divise l'ESR par 2 à 9,4 sur
+la plupart des prises (`DIAGNOSIS_vs100r_192k.md`). L'origine de ce décalage n'est pas établie : un
+oracle peut absorber aussi une erreur de phase du modèle. Si c'est un retard pur (environ 18 µs),
+il est inaudible. Une différence d'ESR brute entre bras peut donc venir en bonne partie de la façon
+dont chaque bras approche cette phase sous-échantillon. La lecture P préinscrite n'en tient pas
+compte. Cette co-lecture le fait sans oracle sur le test, sans remplacer P.
+
+**Règle.** Pour chaque run des trois bras, checkpoint `last` :
+- un seul retard commun τ, sur la grille de −2 à +3 échantillons au pas de 0,05, celui qui
+  minimise l'ESR médiane sur les 35 prises hors faible signal, **section `di_validation`** (30 s,
+  hors section notée ; c'est du matériau d'entraînement pour la plupart des prises) ;
+- ce retard est appliqué tel quel à la sortie du modèle sur `di_test`, sans nouvel ajustement :
+  pas d'oracle par prise de test, qui absorberait aussi des erreurs de phase ou de timbre ;
+- retard fractionnaire par rampe de phase FFT (`delayed()` de
+  `demo/capture/valvestate/timing_shift.py`), après un remplissage de 0,1 s de zéros de chaque
+  côté contre le repliement circulaire. Le noyau d'un retard fractionnaire reste à support
+  infini : un effet de bord résiduel subsiste dans la région notée (`scored()`, inchangée). Il
+  est mesuré (contrôles ci-dessous), pas supposé nul ;
+- mêmes agrégats que P (moyenne des ln ESR par couple gain–contour, couple non vu exclu ; d_i
+  par graine ; d), mêmes étiquettes et même seuil d'acceptation, calculés à titre descriptif. Les
+  retards τ de chaque run sont rapportés : un retard qui change selon le bras est en soi une
+  information.
+
+**Lecture fixée d'avance.**
+- Si P et la co-lecture donnent la même étiquette et la même acceptabilité : le résultat est
+  rapporté comme robuste au calage.
+- Si elles divergent : les deux sont rapportées, et l'écart est attribué au calage sous ce
+  protocole, sans autre cause. **La règle de décision pour la campagne reste celle de P.** Une
+  divergence sur l'acceptabilité est soumise à l'utilisateur, qui tranche ; elle ne modifie pas
+  la règle d'elle-même.
+
+**Contrôles de l'instrument.**
+- **Effet de bord.** Sur la première prise de la liste, la sortie FX de `di_test` est retardée de
+  0,8 échantillon de deux façons : sur la section seule (comme la co-lecture), et sur la section
+  prolongée d'une seconde de chaque côté puis recoupée. L'énergie de leur différence dans la
+  région notée, rapportée à celle du signal, doit rester sous 1 % de la plus petite ESR lue par
+  la co-lecture. Sinon, la co-lecture est déclarée non fiable et n'est pas lue.
+- **Bord de grille.** Un run dont τ tombe sur −2 ou +3 est exclu de la co-lecture, avec sa
+  raison ; les paires de graines qui en dépendent ne sont pas lues.
+- **Retard du bras C.** Les τ des trois runs C sont rapportés sans seuil ; d'après
+  `DIAGNOSIS_vs100r_192k.md`, on attend une valeur absolue proche de 0,8.
