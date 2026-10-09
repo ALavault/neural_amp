@@ -213,3 +213,31 @@ développement, sur bruit coloré −20 dBFS RMS, graines 100–102 : on rapport
 dispersion entre départs (même données). Aucun choix n'en dépend ; si la dispersion médiane
 dépasse la moitié de la part inexpliquée, la sonde est déclarée peu fiable dans cette
 configuration avant tout défaut.
+
+## Lecture des résultats d'étalonnage (fixée avant les chiffres de test)
+
+Écrite pendant la passe de test, avant d'en lire un chiffre. Seul l'essai court de la graine 200
+(sinus glissant et deux tons à −10 dBFS, deux tons alors erronés) a été vu ; il a motivé l'écart
+ci-dessus et la mise en évidence de la sensibilité de la MR-STFT au bruit, rien d'autre.
+
+Pour chaque métrique m (sondes FIR, H3, H5, signature harmonique totale et par ordre, ESR,
+MR-STFT, IMD) et chaque condition c (famille × niveau) :
+- **plancher** F(m, c) : médiane sur les graines du score « même chaîne, deux bruits à −80 dB » ;
+- **rapport de détection** R = médiane sur les graines du score / F(m, c). « Détecté » si R ≥ 10,
+  « non détecté » si R < 3, sinon « limite ». Seuil d'instrument, pas d'audibilité ;
+- **répétabilité** : écart-type entre graines du log du score ;
+- **monotonie observée** : part des (condition, graine) où le score croît strictement avec les trois
+  sévérités ; rapportée, jamais imposée (le défaut de redistribution, par exemple, n'a pas de
+  raison d'être monotone pour toutes les métriques) ;
+- **dépendance au niveau** : rapport des médianes au niveau le plus fort et au plus faible ;
+- **dépendance au contenu** : dispersion entre familles, à sévérité et niveau médians ;
+- **angle mort** : (défaut, condition) où la métrique est « non détectée » à la sévérité maximale
+  alors que d_audio (RMS de la différence) est « détecté » ;
+- **redondance** : corrélation de Spearman entre métriques sur toutes les cellules (log des
+  scores), et, pour chaque paire, les défauts qui les séparent ;
+- **part non représentée et borne** : pour les sondes, médiane de la part non représentée et
+  nombre de violations de la borne (attendu : 0).
+Le coût de calcul est mesuré à part, sur une condition fixe, par métrique.
+
+Ces lectures disent ce que chaque métrique voit sur ce banc ; aucune validité perceptive n'en
+découle sans données d'écoute.
