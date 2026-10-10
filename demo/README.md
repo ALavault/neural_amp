@@ -65,3 +65,40 @@ niveau du programme en dBFS, et refuse une prise écrêtée ou silencieuse.
 plugins. Chaque chiffre est lu dans `demo/report.json` et `demo/RUNS.jsonl`, donc
 une nouvelle mesure met le dossier à jour et aucun chiffre ne peut dériver de sa
 source.
+
+## Index des dossiers (2026-10-10)
+
+Voie produit (D-PRODUCT-001) : aucun de ces dossiers ne porte de revendication scientifique. Les
+verdicts sont dans les documents cités, pas ici. Le registre des runs est `RUNS.jsonl`.
+
+**Captures et fichiers sources**
+- `capture/valvestate/` : séance VS100R du 2026-09-26 (envoi d'effets et sortie ligne) : `SESSION.md`,
+  `layout.json`, `settings.csv` ; prévisions et analyses dans les `predictions_*.md` du dossier.
+- `capture/valvestate_mic/` : séance VS100R au micro : `SESSION.md`, `AUDIT_20261008.md`.
+- `capture/v2/` : fichier source et feuille de séance de la prochaine capture, logicielle
+  (Nolly, ampli Rhythm, 192 kHz) : `SESSION.md`, `layout.json`. Générés par
+  `scripts/product_capture_v2.py`.
+- `capture/v2_44k1/` : variante 44,1 kHz séparée, pour le banc KIPR seulement : `PROTOCOL.md`.
+  Générée par `scripts/product_capture_v2_44k1.py`.
+
+**Évaluations préinscrites** (le document contient règles, résultats et lecture)
+- `train_length/predictions.md` : longueur d'entraînement par prise (30, 60 ou 150 s), co-lecture
+  à retard compensé, décision de l'utilisateur.
+- `odd_gate/predictions.md` : porte impaire (structure KIPR) contre la porte actuelle.
+- `greybox/predictions.md` : boîte grise façon KIPR contre SSM-WaveNet.
+- `kipr_known_answer/predictions.md` : banc à réponse connue (plancher de 2ᵉ harmonique).
+- `fft_size/` : taille de FFT et TF32 : `NOTE.md`, `predictions_fast_notf32.md`.
+- `sr_transfer/` : transfert de fréquence d'échantillonnage : `RESULTS.md` et ses `predictions_*.md`.
+- `param/` : modèles paramétriques FiLM : `RESULTS.md` et ses `predictions_*.md`.
+- `chain_ultrasonic/` : test D sur systèmes synthétiques : `RESULTS.md`.
+
+**Sorties et outils**
+- `nablafx_bench/` : une sortie JSON par run du banc ; `butterfly/` : sorties des pilotes
+  papillon (analyse dans `diagnosis/butterfly/`).
+- `listening/` : pages d'écoute (`seeds.html`, `butterfly.html`) ; `plugin/` : plugin JUCE ;
+  `deck/` : dossier généré par `make demo` ; `runs/` : journaux des files.
+- `resplit/`, `resplit_fulltone/` : manifestes des découpages intra-prise.
+- `REPORT.md`, `DIAGNOSTICS.md`, `DATA_DIAGNOSIS.md`, `SOTA_COMPARISON.md`,
+  `RESPLIT_COMPARISON.md` : fiches de septembre ; lire l'erratum en tête quand il y en a un.
+
+Hors de `demo/` : la mission sondes de métriques est dans `diagnosis/probe_metrics/REPORT.md`.
