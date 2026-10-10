@@ -138,6 +138,32 @@ Prédictions, écrites avant ces mesures :
 Témoin : l'ESR_B de C (graine 42) sur les mêmes blocs, qui montre ce qu'un modèle atteint.
 Mesures inchangées : H2 (b), H5 et les deux contrôles d'instrument.
 
+### Écarts issus de la relecture Codex (2026-10-10, en cours de mesure)
+
+**Déjà vu à ce moment-là :**
+- les oracles de 3 prises de test sur 8 (V0 à V4) ;
+- 1 prise de la section de validation (V0, V1, V4) ;
+- les contrôles d'instrument et la co-lecture compensée.
+
+**Écarts :**
+- **Témoins d'optimisation.** Chaque variante repart de son parent ajusté et reçoit 1 500 pas
+  de plus sur tous ses coefficients. Son gain peut donc venir de l'optimisation supplémentaire,
+  pas du composant ajouté, surtout si le parent n'a pas convergé (H4).
+  - Deux témoins sont ajoutés, sans rien ajouter au modèle :
+    - V0c : V0 ré-ajusté 1 500 pas de plus ;
+    - V2c : V2 ré-ajusté 1 500 pas de plus.
+  - **Les rapports de H1 à H3 se lisent désormais contre ces témoins**, au même nombre total de
+    pas : r(V1) = ESR_B(V0c) / ESR_B(V1), de même pour V2 et V4, et r(V3) = ESR_B(V2c) /
+    ESR_B(V3).
+  - Les seuils ne changent pas. Les rapports contre V0 et V2 restent rapportés, à titre
+    descriptif.
+  - Les témoins tournent dans une passe séparée, avec la même graine 0 ; on vérifie que V0
+    y est identique.
+- **Contrôle des sondes** : les branches xᵏ étaient normalisées sur A et B ensemble, ce qui
+  laissait passer des caractéristiques de l'entrée B dans l'ajustement sur A. Elles sont
+  maintenant normalisées sur A seulement, et le contrôle est refait. La conclusion
+  d'instrument est rapportée avec les nouveaux chiffres.
+
 ## 4. Mesures et verdict
 
 *À remplir après les mesures.*

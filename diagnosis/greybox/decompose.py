@@ -56,7 +56,8 @@ def probe_check(x: np.ndarray, y: np.ndarray) -> dict:
     """Shares of y captured by FIR / Hammerstein 3 / 5 fitted on A, read on A and B."""
     part_a, part_b = windows(len(x))
     powers = [x**k for k in range(1, 6)]
-    u = [s / np.sqrt(np.mean(s**2)) for s in powers]
+    # Branch scales from A alone, so nothing of B reaches the fit (Codex review).
+    u = [s / np.sqrt(np.mean(s[part_a] ** 2)) for s in powers]
     gram, rhs = normal_equations(Probe(taps=TAPS), [s[part_a] for s in u], y[part_a])
     out = {
         "rms_x": {"A": float(x[part_a].std()), "B": float(x[part_b].std())},

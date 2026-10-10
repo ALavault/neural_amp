@@ -19,7 +19,8 @@ Writes diagnosis/greybox/oracle.json.
 
 --section di_validation --seeds 42 --variants V1 V4: the same on the validation
 section (not test), for the design of demo/greybox_deep; writes
-oracle_di_validation.json.
+oracle_di_validation.json. --variants V2 V0c V2c --tag controls: the controls (each
+parent refitted STEPS more steps, nothing added), oracle_controls.json.
 """
 
 from __future__ import annotations
@@ -52,6 +53,10 @@ VARIANTS = {
     "V2": ("V0", {"bias": True}),
     "V3": ("V2", {"bias": True, "slow_s": (0.05, 0.3)}),
     "V4": ("V0", {"stages": 2}),
+    # Controls (Codex review): the parent refitted for STEPS more steps, nothing added,
+    # so a variant is read against the same total optimisation.
+    "V0c": ("V0", {}),
+    "V2c": ("V2", {"bias": True}),
 }
 DEVICE = torch.device("cuda")
 torch.backends.cuda.matmul.allow_tf32 = False
@@ -133,6 +138,7 @@ def main() -> None:
     parser.add_argument("--seeds", type=int, nargs="+", default=list(SEEDS))
     parser.add_argument("--variants", nargs="+", default=list(VARIANTS))
     parser.add_argument("--no-default", action="store_true")
+    parser.add_argument("--tag", default="", help="suffix of the output file")
     args = parser.parse_args()
     seeds = args.seeds
     variants = {k: VARIANTS[k] for k in args.variants}
@@ -197,7 +203,8 @@ def main() -> None:
     }
     if not args.no_default:
         result["ratios"]["V0_s42_vs_V0_default"] = ratio("V0_s42", "V0_default")
-    name = "oracle.json" if args.section == "di_test" else f"oracle_{args.section}.json"
+    name = "oracle" + ("" if args.section == "di_test" else f"_{args.section}")
+    name += f"_{args.tag}.json" if args.tag else ".json"
     (HERE / name).write_text(json.dumps(result, indent=1) + "\n")
     print(json.dumps(result["ratios"], indent=1), flush=True)
 
