@@ -84,25 +84,24 @@ def main() -> None:
     lay192 = json.loads(v2.LAYOUT.read_text())
     assert v2.sha256(v2.AUDIO) == lay192["sha256"], "reamp_v2_192k.wav changed"
     by_name = {s["section"]: s for s in lay192["sections"]}
-    vs.RATE = FS  # the VS100R generators read the module rate at call time
     rng = np.random.default_rng(vs.SEED)
     gap = np.zeros(FS // 2)
     head = [
         ("pad_start", np.zeros(vs.PAD_START_S * FS), {}),
-        ("markers_start", vs.markers(), {}),
+        ("markers_start", vs.markers(FS), {}),
         ("silence", np.zeros(5 * FS), {}),
         (None, gap, {}),
-        ("pink_noise_-30dBFS_rms", vs.pink_noise(5, -30, rng), {}),
+        ("pink_noise_-30dBFS_rms", vs.pink_noise(5, -30, rng, FS), {}),
         (None, gap, {}),
     ]
     for level in (-20, -10, -3):
-        head += [(f"sweep_{level}dBFS", vs.sweep(5, level), {}), (None, gap, {})]
+        head += [(f"sweep_{level}dBFS", vs.sweep(5, level, FS), {}), (None, gap, {})]
     head += [(n, di_section(n, by_name), {"resampled_from": "192 kHz v2"}) for n in DI]
     head.append((None, gap, {}))
     for name, x, params in v2.new_sections(FS):
         assert np.max(np.abs(x)) < 10 ** (-1 / 20), f"{name} peaks above -1 dBFS"
         head += [(name, x, params), (None, gap, {})]
-    head += [("markers_end", vs.markers(), {}), ("pad_end", np.zeros(6 * FS), {})]
+    head += [("markers_end", vs.markers(FS), {}), ("pad_end", np.zeros(6 * FS), {})]
     layout, position = [], 0
     for name, x, params in head:
         if name is not None:

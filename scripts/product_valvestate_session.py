@@ -63,23 +63,23 @@ TEST = [("idmt-bass", 60), ("idmt-gtr4-ib", 60)]
 SECONDS = {"train": 120, "validation": 30, "test": 30}
 
 
-def blip() -> np.ndarray:
-    n = int(BLIP_MS * RATE / 1000)
+def blip(fs: int = RATE) -> np.ndarray:
+    n = int(BLIP_MS * fs / 1000)
     i = np.arange(n)
     return (
         BLIP_AMPLITUDE
-        * np.cos(2 * np.pi * BLIP_HZ * i / RATE)
+        * np.cos(2 * np.pi * BLIP_HZ * i / fs)
         * np.cos(0.5 * np.pi * i / n)
     )
 
 
-def markers() -> np.ndarray:
-    gap = np.zeros(int(GAP_S * RATE))
-    return np.concatenate([gap, blip(), gap, blip(), gap])
+def markers(fs: int = RATE) -> np.ndarray:
+    gap = np.zeros(int(GAP_S * fs))
+    return np.concatenate([gap, blip(fs), gap, blip(fs), gap])
 
 
-def fade(x: np.ndarray) -> np.ndarray:
-    n = int(FADE_S * RATE)
+def fade(x: np.ndarray, fs: int = RATE) -> np.ndarray:
+    n = int(FADE_S * fs)
     ramp = 0.5 - 0.5 * np.cos(np.pi * np.arange(n) / n)
     x = x.copy()
     x[:n] *= ramp
@@ -87,24 +87,26 @@ def fade(x: np.ndarray) -> np.ndarray:
     return x
 
 
-def pink_noise(seconds: float, rms_dbfs: float, rng: np.random.Generator) -> np.ndarray:
-    n = int(seconds * RATE)
+def pink_noise(
+    seconds: float, rms_dbfs: float, rng: np.random.Generator, fs: int = RATE
+) -> np.ndarray:
+    n = int(seconds * fs)
     spectrum = np.fft.rfft(rng.standard_normal(n))
-    freqs = np.fft.rfftfreq(n, 1 / RATE)
+    freqs = np.fft.rfftfreq(n, 1 / fs)
     band = (freqs >= 20) & (freqs <= 20_000)
     spectrum[~band] = 0
     spectrum[band] /= np.sqrt(freqs[band])
     x = np.fft.irfft(spectrum, n)
-    return fade(x * 10 ** (rms_dbfs / 20) / np.sqrt(np.mean(x**2)))
+    return fade(x * 10 ** (rms_dbfs / 20) / np.sqrt(np.mean(x**2)), fs)
 
 
-def sweep(seconds: float, peak_dbfs: float) -> np.ndarray:
+def sweep(seconds: float, peak_dbfs: float, fs: int = RATE) -> np.ndarray:
     """Exponential sine sweep, 20 Hz to 20 kHz."""
-    t = np.arange(int(seconds * RATE)) / RATE
+    t = np.arange(int(seconds * fs)) / fs
     f0, f1 = 20.0, 20_000.0
     k = np.log(f1 / f0)
     phase = 2 * np.pi * f0 * seconds / k * (np.exp(t * k / seconds) - 1)
-    return fade(10 ** (peak_dbfs / 20) * np.sin(phase))
+    return fade(10 ** (peak_dbfs / 20) * np.sin(phase), fs)
 
 
 def di(excerpts: list[tuple[str, int]], seconds: int) -> np.ndarray:
