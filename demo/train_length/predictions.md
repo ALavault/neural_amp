@@ -286,3 +286,25 @@ d'équivalent. Garder 150 s serait alors une décision de l'utilisateur, hors r�
 
 **L'effet d'un réentraînement à cible avancée sur cette comparaison reste inconnu** : il n'a pas
 été mesuré.
+
+## Décision (utilisateur, 2026-10-10)
+
+> « 150 s, on garde la longueur actuelle. Pour le moment. Dans l'idéal, contenir les 30s dans les
+> 150 (une pierre, deux coups) »
+
+**La partie d'entraînement du fichier de la prochaine capture reste à 150 s**, à titre provisoire.
+C'est une décision de l'utilisateur, hors règle : la règle préinscrite donnait 30 s (L10, d'après
+P).
+
+**Les 30 s restent contenues dans les 150 s, par construction.** `--train-segments-per-take 10`
+garde les positions `k × 50 // 10` du découpage en 50 segments de 3 s
+(`keep_segments_per_take`, `scripts/product_nablafx_bench.py`) : les positions 0, 5, …, 45, dont
+deux (40 et 45) tombent dans `di_validation`. Une capture faite avec le même fichier sert donc aux
+deux longueurs, à une condition : `di_train` et `di_validation` (150 s, 50 × 3 s) doivent rester
+identiques au bit près à ceux de `reamp_valvestate_192k.wav`, dans le même ordre. Les nouveaux
+signaux de mesure se placent hors de cette partie, et `layout.json` est régénéré. Le contrôle porte
+sur une empreinte des seuls échantillons de cette partie, l'empreinte du fichier entier changeant
+avec les ajouts.
+
+Le sous-ensemble ainsi contenu reste celui de ce test : des extraits répartis, joués dans leur
+contexte de 150 s. Un bloc continu de 30 s serait un autre plan, non testé ici.
