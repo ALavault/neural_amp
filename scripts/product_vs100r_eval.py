@@ -61,6 +61,7 @@ def load(run_id: str | None) -> BlackBoxModel:
     if run_id:
         record = json.loads((bench.RESULTS_DIR / f"{run_id}.json").read_text())
         ssm, model = record["ssm"] or {}, record["model"]
+        ssm |= record.get("greybox") or {}
     args = argparse.Namespace(model=model, device="vs100r", **ssm)
     processor = bench.build_processor(args)
     if run_id:

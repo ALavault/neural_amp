@@ -16,10 +16,20 @@ export PYTHONPATH="${PWD}/src"
 # The GPU is shared with RACLETTE and ollama: wait for GPU_FREE_MIB (default 18.5 GiB)
 # free six minutes running. A queue whose preflight measured more raises it.
 GPU_FREE_MIB=${GPU_FREE_MIB:-18500}
+# Free GPU memory (MiB). nvidia-smi fails while the driver and its NVML library differ
+# (2026-10-10, until a reboot); the CUDA runtime still answers through torch.
+gpu_free_mib() {
+  local free
+  if free=$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits 2>&1); then
+    echo "${free}"
+  else
+    .venv/bin/python3 -c "import torch; print(torch.cuda.mem_get_info()[0] // 2**20)"
+  fi
+}
 wait_gpu() {
   local free_minutes=0
   while [ "${free_minutes}" -lt 6 ]; do
-    if [ "$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits)" -ge "${GPU_FREE_MIB}" ]; then
+    if [ "$(gpu_free_mib)" -ge "${GPU_FREE_MIB}" ]; then
       free_minutes=$((free_minutes + 1))
     else
       free_minutes=0

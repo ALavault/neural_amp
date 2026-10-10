@@ -58,6 +58,7 @@ from nablafx.evaluation.flexible_loss import FlexibleLoss  # noqa: E402
 from nablafx.evaluation.registry import EvaluationRegistry  # noqa: E402
 from nablafx.processors import S4  # noqa: E402
 
+from fssr_nam.models.deep_greybox import DeepGreyBoxAmp  # noqa: E402
 from fssr_nam.models.greybox import GreyBoxAmp  # noqa: E402
 from fssr_nam.models.ssm_wavenet import DiagonalSSMLayer, SSMWaveNet  # noqa: E402
 from fssr_nam.product.data import advance  # noqa: E402
@@ -435,15 +436,17 @@ class PolarityGuard(pl.Callback):
         if trainer.sanity_checking or self.inner >= 0:
             return
         processor = system.model.processor
-        layer = (
-            processor.output_net[3]
-            if isinstance(processor, SSMWaveNet)
-            else processor.contract
-        )
+        if isinstance(processor, SSMWaveNet):
+            layer = processor.output_net[3]
+            parameters = (layer.weight, layer.bias)
+        elif isinstance(processor, DeepGreyBoxAmp):
+            parameters = (processor.post_fir,)
+        else:
+            parameters = (processor.contract.weight, processor.contract.bias)
         state = trainer.optimizers[0].state
         with torch.no_grad():
-            # act_type 'odd' has no bias there.
-            for parameter in (p for p in (layer.weight, layer.bias) if p is not None):
+            # act_type 'odd' and the grey boxes have no bias there.
+            for parameter in (p for p in parameters if p is not None):
                 parameter.neg_()
                 if "exp_avg" in state.get(parameter, {}):
                     state[parameter]["exp_avg"].neg_()
@@ -456,7 +459,30 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--model",
         required=True,
-        choices=["s4-tf-l-16", "s4-l-16", "ssm-wavenet", "s4-param", "greybox"],
+        choices=[
+            "s4-tf-l-16",
+            "s4-l-16",
+            "ssm-wavenet",
+            "s4-param",
+            "greybox",
+            "deepgreybox",
+        ],
+    )
+    parser.add_argument(
+        "--gb-stages", type=int, default=1, help="deepgreybox: stages in series"
+    )
+    parser.add_argument(
+        "--gb-taps", type=int, default=32, help="deepgreybox: input/output FIR taps"
+    )
+    parser.add_argument(
+        "--gb-bias", action="store_true", help="deepgreybox: bias before the clipper"
+    )
+    parser.add_argument(
+        "--gb-slow",
+        type=float,
+        nargs="*",
+        default=[],
+        help="deepgreybox: time constants (s) of the slow envelopes",
     )
     parser.add_argument(
         "--device",
@@ -627,6 +653,14 @@ def build_processor(args: argparse.Namespace) -> torch.nn.Module:
         )
     if args.model == "greybox":
         return GreyBoxAmp(num_controls=controls)
+    if args.model == "deepgreybox":
+        return DeepGreyBoxAmp(
+            num_controls=controls,
+            stages=args.gb_stages,
+            taps=args.gb_taps,
+            bias=args.gb_bias,
+            slow_s=tuple(args.gb_slow),
+        )
     if args.model == "s4-param":
         # cfg/model/s4-param/model_bb-param_s4-f-b8-s32-c16.yaml: static FiLM (MLP).
         return S4(
@@ -999,6 +1033,16 @@ def main() -> None:
                 "act_type": args.act_type,
             }
             if args.model == "ssm-wavenet"
+            else None
+        ),
+        "greybox": (
+            {
+                "gb_stages": args.gb_stages,
+                "gb_taps": args.gb_taps,
+                "gb_bias": args.gb_bias,
+                "gb_slow": args.gb_slow,
+            }
+            if args.model == "deepgreybox"
             else None
         ),
         "resumed": resume_from is not None,
