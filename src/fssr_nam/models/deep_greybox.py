@@ -10,8 +10,9 @@ GreyBoxAmp exactly: with stages=1, taps=32, bias=False and no slow envelope it c
 the same function from the same coefficients (`from_greybox`).
 - bias: b + sum_k k_k e_k before the clipper, the clipper of that bias subtracted, so
   zero input gives zero output; b = k = 0 at the start.
-- slow envelopes: one-pole envelopes of |u| at `slow_s` (time constants, learnable);
-  they scale the drive by exp(-sum_k g_k e_k) and feed the bias; g = k = 0 at the start.
+- slow envelopes: one-pole envelopes of |u| at `slow_s` (time constants, learnable,
+  in seconds at `sample_rate`); they scale the drive by exp(-sum_k g_k e_k), the
+  exponent bounded to [-6, 6], and feed the bias; g = k = 0 at the start.
 - extra stages: direct path of weight 1 and branch mix of weight 0 at the start.
 Everything is feedforward: filters and envelopes are linear recurrences, computed as
 FFT convolutions over a segment and by `step` sample by sample, from a zero state.
@@ -192,9 +193,9 @@ class DeepGreyBoxAmp(nn.Module):
             (c[f"slow_gain_{k}"] * envelopes[1 + k] for k in range(self.slow)),
             torch.zeros_like(u),
         )
-        drive = (
-            c["drive"] * torch.exp(-log_scale) / (1 + c["compression"] * envelopes[0])
-        )
+        # Bounded like log_drive: a large negative slow gain would overflow exp.
+        compression = 1 + c["compression"] * envelopes[0]
+        drive = c["drive"] * torch.exp(-log_scale.clamp(-6, 6)) / compression
         if not self.bias:
             y = soft_clip(signed(u * drive, c["beta_in"]), c["hardness"])
             return signed(y, c["beta_out"])

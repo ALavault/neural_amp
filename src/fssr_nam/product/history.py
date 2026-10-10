@@ -5,14 +5,20 @@ material (DI guitar), unlike E2 (dynamics.py), which needs level steps.
 Per frame of FRAME_S (hop HOP_S): present level a = input power (dB) over the frame,
 output level o = output power (dB) over the frame, history level h_T = input power
 (dB) over the T seconds that end GAP_S before the frame. Frames more than FLOOR_DB
-below the loudest input frame are dropped. The static part of o is its mean per
-BIN_DB bin of a; the history slope gamma_T is the pooled within-bin regression slope
-of o on d = h_T - a (dB of output per dB of past excess). A system without memory
-longer than GAP_S gives gamma near 0 whatever its static curve; a gain that recovers
-slowly after loud passages (sag, slow compression) gives gamma < 0. Spectral effects
-(a filter before a saturation) and linear tails longer than GAP_S (a cabinet) also
-move gamma: read it against a memoryless reference on the same input, or between a
-reference and an evaluated output (`history_deviation`).
+below the loudest input frame are dropped, and BIN_DB bins of a with fewer than
+MIN_PER_BIN frames. Within each bin, o, a, (a - bin mean)^2 and h_T are centred; the
+history slope gamma_T is the coefficient of h_T in the pooled least-squares fit of o
+on those three (dB of output per dB of history at a fixed present level), and
+`explained` the share of the residual variance left by a and a^2 that h_T removes.
+Holding a in the fit matters: centring per bin alone leaves o and h - a both tied to
+the within-bin spread of a (the identity gave gamma = -0.5 to -0.9 on noise; Codex
+review, demo/greybox_deep/HISTORY_MEASURE.md). Too few frames: NaN.
+
+A gain that recovers slowly after loud passages (sag, slow compression) gives
+gamma < 0. A memoryless system gives gamma = 0 only up to waveform effects (the same
+level carried by an attack or by a decay drives a saturation differently), and linear
+tails longer than GAP_S (a cabinet) move gamma: read it between a reference and an
+evaluated output on the same input (`history_deviation`), beside a memoryless check.
 """
 
 from __future__ import annotations
@@ -41,7 +47,7 @@ def frames(x: np.ndarray, y: np.ndarray, fs: float) -> dict:
     longest = round(max(HISTORY_S) * fs)
     starts = np.arange(gap + longest, len(x) - width, hop)
     a = _power_db(x, starts, width)
-    keep = a >= a.max() - FLOOR_DB
+    keep = a >= a.max() - FLOOR_DB if len(a) else np.zeros(0, bool)
     out = {"a": a[keep], "o": _power_db(y, starts, width)[keep]}
     for t in HISTORY_S:
         span = round(t * fs)
@@ -49,27 +55,39 @@ def frames(x: np.ndarray, y: np.ndarray, fs: float) -> dict:
     return out
 
 
+def _centred(values: np.ndarray, bins: np.ndarray) -> np.ndarray:
+    out = values.astype(np.float64).copy()
+    for label in np.unique(bins):
+        m = bins == label
+        out[m] -= values[m].mean()
+    return out
+
+
 def history_slopes(x: np.ndarray, y: np.ndarray, fs: float) -> dict:
-    """gamma_T per history length, with the share of the within-bin variance of o
-    that the slope explains."""
+    """gamma_T and the share of variance it explains, per history length."""
     f = frames(x, y, fs)
     bins = np.floor(f["a"] / BIN_DB).astype(int)
     labels, counts = np.unique(bins, return_counts=True)
     kept = np.isin(bins, labels[counts >= MIN_PER_BIN])
     out = {"frames": int(kept.sum())}
+    b = bins[kept]
+    a = _centred(f["a"][kept], b)
+    held = np.column_stack([a, _centred(a**2, b)]) if len(b) else np.zeros((0, 2))
+    o = _centred(f["o"][kept], b)
     for t in HISTORY_S:
-        o, d, b = f["o"][kept], (f[t] - f["a"])[kept], bins[kept]
-        oc, dc = o.copy(), d.copy()
-        for label in np.unique(b):
-            m = b == label
-            oc[m] -= o[m].mean()
-            dc[m] -= d[m].mean()
-        gamma = float(oc @ dc / max(dc @ dc, 1e-30))
-        residual = oc - gamma * dc
-        out[t] = {
-            "gamma": gamma,
-            "explained": 1 - float(residual @ residual) / max(float(oc @ oc), 1e-30),
-        }
+        h = _centred(f[t][kept], b)
+        design = np.column_stack([held, h])
+        if len(b) < 10 or np.linalg.matrix_rank(design) < 3:
+            out[t] = {"gamma": float("nan"), "explained": float("nan")}
+            continue
+        coefs, *_ = np.linalg.lstsq(design, o, rcond=None)
+        base, *_ = np.linalg.lstsq(held, o, rcond=None)
+        full = o - design @ coefs
+        reduced = o - held @ base
+        # Nothing left once a is held (o a function of a): no share to explain.
+        left = float(reduced @ reduced)
+        share = 1 - float(full @ full) / left if left > 1e-12 else float("nan")
+        out[t] = {"gamma": float(coefs[2]), "explained": share}
     return out
 
 
@@ -77,10 +95,13 @@ def history_deviation(x, y_ref, y_eval, fs: float) -> dict:
     """Difference of history slopes, evaluated minus reference, per history length."""
     ref, ev = history_slopes(x, y_ref, fs), history_slopes(x, y_eval, fs)
     return {
-        t: {
-            "gamma_ref": ref[t]["gamma"],
-            "gamma_eval": ev[t]["gamma"],
-            "delta": ev[t]["gamma"] - ref[t]["gamma"],
-        }
-        for t in HISTORY_S
+        "frames": {"ref": ref["frames"], "eval": ev["frames"]},
+        **{
+            t: {
+                "gamma_ref": ref[t]["gamma"],
+                "gamma_eval": ev[t]["gamma"],
+                "delta": ev[t]["gamma"] - ref[t]["gamma"],
+            }
+            for t in HISTORY_S
+        },
     }

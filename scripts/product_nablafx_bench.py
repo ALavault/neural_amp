@@ -660,6 +660,8 @@ def build_processor(args: argparse.Namespace) -> torch.nn.Module:
             taps=args.gb_taps,
             bias=args.gb_bias,
             slow_s=tuple(args.gb_slow),
+            # Nominal device rate, as for the SSM steps (at_rate): 48 kHz unless set.
+            sample_rate=device_rate(device),
         )
     if args.model == "s4-param":
         # cfg/model/s4-param/model_bb-param_s4-f-b8-s32-c16.yaml: static FiLM (MLP).

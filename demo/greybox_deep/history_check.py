@@ -3,6 +3,7 @@
 own history slopes. Read-only, CPU.
 
 Synthetic chains on the real DI loops (di_test of the 8 VS100R test takes, 48 kHz):
+instrument checks identity (y = x: gamma 0 by construction) and tanh(10 x) alone;
 S0 high-pass 100 Hz -> tanh(10 x) -> low-pass 5 kHz (first-order filters); S1a/S1b
 drive divided by 1 + k e (e: envelope of |x|, 100 ms; median 3 / 6 dB); S2 S0 then a
 150 ms cabinet FIR; S3 tanh(10 x + b e) - tanh(b e), median of b e = 0.3. Devices:
@@ -60,7 +61,11 @@ def chains(x: np.ndarray, fs: float) -> dict[str, np.ndarray]:
     u = lfilter(*high, x)
     e = envelope(x, fs)
     m = loud_median(e)
-    out = {"S0": lfilter(*low, np.tanh(DRIVE * u))}
+    out = {
+        "identity": x.copy(),
+        "tanh_alone": np.tanh(DRIVE * x),
+        "S0": lfilter(*low, np.tanh(DRIVE * u)),
+    }
     for name, db in (("S1a", 3.0), ("S1b", 6.0)):
         k = (10 ** (db / 20) - 1) / m
         out[name] = lfilter(*low, np.tanh(DRIVE * u / (1 + k * e)))

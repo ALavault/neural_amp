@@ -37,6 +37,21 @@ Lecture :
 - On rapporte aussi la part de variance, à l'intérieur des tranches, expliquée par la pente.
 - Entre une référence et une sortie évaluée, l'écart est Δγ_T = γ_T(évaluée) − γ_T(référence).
 
+**Correction de la définition (2026-10-10, relecture Codex, après la première validation).**
+La version ci-dessus est fausse en général.
+
+- **Le défaut.** Retirer la moyenne par tranche de 2 dB ne fixe pas a, car a varie encore à
+  l'intérieur d'une tranche. Or o et d = h − a dépendent tous deux de cette variation : sur un
+  bruit blanc, l'identité y = x donnait γ = −0,54, −0,82 et −0,94.
+- **La version corrigée** (`history.py`). Dans chaque tranche, on centre o, a, (a − moyenne)²
+  et h_T. γ_T est alors le coefficient de h_T dans la régression de o sur les trois termes,
+  c'est-à-dire la pente sur l'historique à niveau présent tenu. `explained` est la part de la
+  variance laissée par a et a² que h_T retire.
+- **Les cas indéfinis** (trop peu de trames, sortie entièrement fonction de a) donnent NaN,
+  au lieu de 0 et 1.
+- **Deux contrôles d'instrument** sont ajoutés à la validation : l'identité (γ = 0 par
+  construction) et tanh(10x) sans filtre.
+
 ## Validation sur chaînes synthétiques (`demo/greybox_deep/history_check.py`)
 
 **Entrée** : les boucles DI réelles, `di_test` des 8 prises de test de la VS100R à 48 kHz.
@@ -81,9 +96,86 @@ Les variantes ne changent qu'un élément de S0 :
 - Une pente non nulle sur un appareil avec baffle ne se lit pas comme une mémoire non linéaire
   (voir S2).
 
-## Résultats de la validation (2026-10-10)
+## Résultats de la validation (2026-10-10, définition corrigée)
 
 Script `history_check.py`, sortie `history_check.json`. Valeurs de γ_T : médiane
+[min, max] sur les 8 prises (sur les 9 réglages pour le JVM).
+
+| Système | γ_30 | γ_100 | γ_300 |
+|---|---|---|---|
+| identité (contrôle) | 0,000 | 0,000 | 0,000 |
+| tanh(10x) seul (contrôle) | −0,001 | +0,009 | +0,013 |
+| S0, sans mémoire longue | +0,015 | −0,052 | −0,123 |
+| S1a, affaissement 3 dB | −0,145 | −0,246 | −0,354 |
+| S1b, affaissement 6 dB | −0,263 | −0,388 | −0,522 |
+| S2, baffle 150 ms | +0,648 | +0,424 | +0,337 |
+| S3, polarisation qui se déplace | −0,080 | −0,169 | −0,260 |
+| VS100R, envoi FX | +0,072 [+0,050 ; +0,099] | +0,044 [−0,023 ; +0,064] | +0,033 [−0,125 ; +0,063] |
+| S0 sur l'entrée JVM | +0,052 | +0,075 | +0,107 |
+| JVM410H, sortie HP | +0,054 [+0,016 ; +0,073] | +0,103 [+0,073 ; +0,121] | +0,198 [+0,155 ; +0,236] |
+
+Part de variance expliquée par h_T, à niveau tenu :
+
+| | à 100 ms | à 300 ms |
+|---|---|---|
+| S1b | 0,35 | 0,51 |
+| VS100R | au plus 0,040 | au plus 0,048 |
+| JVM | au plus 0,021 | au plus 0,063 |
+
+**Lecture face aux attentes écrites :**
+- **Contrôles : tenus.**
+  - L'identité donne γ = 0 exactement.
+  - Une saturation sans filtre donne |γ| ≤ 0,013 : la mesure n'invente pas de mémoire pour
+    une courbe statique.
+- **S0 : attente non tenue à 100 et 300 ms** (−0,052 et −0,123 pour une borne de 0,05).
+  - Le contraste avec tanh seul **établit** que ce plancher vient des filtres de S0.
+  - *Supposé*, sur le mécanisme : à niveau présent égal, les trames de déclin, plus graves,
+    sont moins excitées après le passe-haut.
+  - Le plancher dépend aussi de l'entrée : le même S0 donne −0,123 sur l'entrée VS100R et
+    +0,107 sur l'entrée JVM, à 300 ms.
+  - Conséquence : γ seul ne se lit pas comme une mémoire. Seul Δγ se lit, entre deux systèmes
+    sur la même entrée.
+- **S1 : attentes tenues.**
+  - Écart à S0 à 100 ms : −0,19 (3 dB) et −0,34 (6 dB) ; à 300 ms, −0,23 et −0,40.
+  - |γ| croît avec l'affaissement.
+- **S2 : attente tenue.** Faux positif de +0,48 à 100 ms. Sur un appareil avec baffle, γ est
+  inutilisable sans compensation.
+- **S3 : attente non tenue.** Vu à −0,12 de S0 à 100 ms : le décalage réduit le gain petit
+  signal de tanh. La mesure ne le distingue pas d'un affaissement.
+- **Résolution : non mesurée.** Les 8 prises VS100R ont la même entrée DI, puisque c'est le
+  même fichier source. Leur écart sur S0 (≤ 0,002) n'est que le bruit du bouclage, et le JVM
+  n'a qu'une entrée.
+
+**Mémoire propre des appareils :**
+- **VS100R** : écart à S0 sur la même entrée de +0,10 à 100 ms.
+- **JVM** : écart de +0,03 à 100 ms et de +0,09 à 300 ms.
+- **Signe** : les deux écarts sont positifs, de sens opposé à un affaissement.
+- **Variance expliquée** : au plus 0,063.
+
+Ces écarts sont du même ordre que la variation du plancher de S0 d'une entrée à l'autre
+(de −0,12 à +0,11 à 300 ms). **Aucun affaissement de l'ordre de S1a (3 dB) n'est détecté sur
+ces deux sorties.** L'absence de mémoire n'est pas établie pour autant : la référence sans
+mémoire propre à chaque appareil est inconnue.
+
+**Usage retenu** : Δγ_T entre l'appareil et un modèle, sur la même entrée
+(`history_deviation`, qui rapporte aussi le nombre de trames). Il dit si le modèle reproduit
+la dépendance à l'historique de l'appareil, quelle qu'en soit l'origine. On le rapporte à côté
+du plancher de S0 et de l'ordre de grandeur de S1a (0,19).
+
+### Première version, invalide (conservée)
+
+Chiffres obtenus avec la définition fautive, avant la relecture Codex. Sur cette entrée de
+guitare, ils diffèrent des chiffres corrigés de moins de 0,01 : le défaut pesait surtout
+quand h varie peu, comme sur un bruit blanc.
+
+Deux phrases de cette version étaient fausses (relecture Codex) :
+- la plage de −0,13 à +0,10 venait du **même** S0 sur deux entrées, pas d'une structure à
+  l'autre ;
+- le plafond « au plus 0,04 » ne valait qu'à 100 ms.
+
+#### Tableau et lecture de la première version
+
+Script `history_check.py` ; sa sortie de l'époque est remplacée par celle de la version corrigée. Valeurs de γ_T : médiane
 [min, max] sur les 8 prises.
 
 | Système | γ_30 | γ_100 | γ_300 |

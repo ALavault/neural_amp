@@ -123,3 +123,12 @@ def test_whole_matches_step_and_reset() -> None:
     # Three stages of FFT convolutions against recursions: rounding reaches ~1e-12.
     torch.testing.assert_close(steps, whole, rtol=0, atol=1e-10)
     torch.testing.assert_close(again, fresh, rtol=0, atol=1e-10)
+
+
+def test_negative_slow_gain_stays_finite() -> None:
+    """A large negative slow gain on a loud constant input: bounded, still finite."""
+    amp = DeepGreyBoxAmp(slow_s=(0.05,))
+    with torch.no_grad():
+        amp.base[0]["slow_gain_0"].fill_(-5.0)
+    y = amp(torch.ones(1, 1, 24_000))
+    assert torch.isfinite(y).all()
