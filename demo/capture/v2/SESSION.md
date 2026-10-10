@@ -1,6 +1,6 @@
 # Séance de capture v2 : ampli logiciel
 
-Voie produit. Généré par `scripts/product_capture_v2.py` (graine 20261010) ; ne pas éditer à la main, relancer le script. Appareil **logiciel** seulement (research-memory D-0013) : Overloud TH-U 2 ou Neural DSP Archetype: Nolly. Un dossier par logiciel (`thu2/`, `nolly/`).
+Voie produit. Généré par `scripts/product_capture_v2.py` (graine 20261010) ; ne pas éditer à la main, relancer le script. Appareil **logiciel** seulement (research-memory D-0013) : Neural DSP Archetype: Nolly, ampli **Rhythm**, qui a les cinq commandes de tonalité de la feuille (choix de l'utilisateur, 2026-10-10). Rendus dans le dossier `nolly/`.
 
 ## Avant la première prise
 
@@ -18,7 +18,7 @@ Rendre la piste source **sans le plugin** (`loopback_software.wav`), avec exacte
 - **Coupés** : noise gate (il couperait les paliers faibles, le silence et le bruit rose), toutes les pédales, EQ graphique, doubler, delay, reverb, transposition, accordeur.
 - **Baffle (cab)** : coupé, sauf le bloc de contrôle *cab on* en fin de séance (même baffle, mêmes micros, même placement pour ses trois prises).
 - **Fixes et notés** : gain d'entrée, gain de sortie, volume ou master de l'ampli, mode de qualité ou de suréchantillonnage.
-- **Modèle d'ampli** : un seul pour toute la séance ; pas une émulation Blackstar ni 1176 (volet scientifique scellé).
+- **Ampli** : Rhythm pour toute la séance.
 - **Boutons** : valeur exacte, vérifiée sur l'affichage numérique du plugin ; la méthode dépend du plugin (chez Nolly X, le double clic rétablit la valeur par défaut : réglage fin par glissement avec la touche indiquée dans le manuel). Si l'affichage est en %, 10 = 100 %. Pour chaque prise, enregistrer le preset sous le nom du fichier et une capture d'écran.
 
 ### Pré-contrôles sur l'ampli choisi (centre, tous boutons à 5)
@@ -28,13 +28,12 @@ Rendre la piste source **sans le plugin** (`loopback_software.wav`), avec exacte
 - **Stéréo** : rendre le centre une fois en stéréo (`center_stereo.wav`) ; les deux canaux doivent être identiques, sinon un étage stéréo est resté actif. L'envoyer avec `loopback_software.wav` : je vérifie les deux.
 - **Latence** : noter la PDC affichée par Reaper pour le plugin.
 
-Valeurs fixes, à noter une fois par logiciel :
+Valeurs fixes, à noter une fois :
 
 | | valeur |
 |---|---|
-| Logiciel, version, format (VST3/AU) | |
+| Version de Neural DSP Archetype: Nolly, format (VST3/AU) | |
 | Système, version de Reaper | |
-| Modèle d'ampli, canal | |
 | Commande de l'ampli pour « gain » (G) | |
 | Commande de l'ampli pour « grave » (B) | |
 | Commande de l'ampli pour « médium » (M) | |
@@ -49,7 +48,7 @@ Valeurs fixes, à noter une fois par logiciel :
 
 ## Prises, dans cet ordre
 
-Boutons de 0 à 10. Nommer chaque rendu comme dans la dernière colonne, dans le dossier du logiciel.
+Boutons de 0 à 10. Nommer chaque rendu comme dans la dernière colonne, dans `nolly/`.
 
 | # | fait | gain | grave | médium | aigu | présence | baffle | rôle | fichier |
 |---|---|---|---|---|---|---|---|---|---|

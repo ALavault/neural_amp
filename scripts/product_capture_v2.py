@@ -14,7 +14,7 @@ Writes, with fixed seeds:
 - demo/capture/v2/layout.json: where each section starts, the parameters of every new
   excitation, the file's sha256 and the training part's.
 - demo/capture/v2/settings.csv and SESSION.md: the session sheet for an amp-sim plugin
-  (Overloud TH-U 2 or Neural DSP Archetype: Nolly), rendered offline in Reaper; the
+  (Neural DSP Archetype: Nolly, Rhythm amp), rendered offline in Reaper; the
   VS100R design (centre three times, one knob at a time, combinations) on five generic
   tone controls mapped at the session start, plus a cab-on control block.
 """
@@ -77,7 +77,7 @@ TEST = (
     (5, 7.5, 7.5, 2.5, 2.5),
     (7.5, 2.5, 2.5, 7.5, 2.5),
 )
-SOFTWARE = {"thu2": "Overloud TH-U 2", "nolly": "Neural DSP Archetype: Nolly"}
+SOFTWARE, AMP, FOLDER = "Neural DSP Archetype: Nolly", "Rhythm", "nolly"
 
 
 def to_int(x: np.ndarray) -> np.ndarray:
@@ -217,11 +217,9 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "",
         "Voie produit. Généré par `scripts/product_capture_v2.py` (graine "
         f"{SEED}) ; ne pas éditer à la main, relancer le script. Appareil **logiciel** "
-        "seulement (research-memory D-0013) : "
-        + " ou ".join(SOFTWARE.values())
-        + ". Un dossier par logiciel ("
-        + ", ".join(f"`{k}/`" for k in SOFTWARE)
-        + ").",
+        f"seulement (research-memory D-0013) : {SOFTWARE}, ampli **{AMP}**, qui a "
+        "les cinq commandes de tonalité de la feuille (choix de l'utilisateur, "
+        f"2026-10-10). Rendus dans le dossier `{FOLDER}/`.",
         "",
         "## Avant la première prise",
         "",
@@ -261,8 +259,7 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "séance (même baffle, mêmes micros, même placement pour ses trois prises).",
         "- **Fixes et notés** : gain d'entrée, gain de sortie, volume ou master de "
         "l'ampli, mode de qualité ou de suréchantillonnage.",
-        "- **Modèle d'ampli** : un seul pour toute la séance ; pas une émulation "
-        "Blackstar ni 1176 (volet scientifique scellé).",
+        f"- **Ampli** : {AMP} pour toute la séance.",
         "- **Boutons** : valeur exacte, vérifiée sur l'affichage numérique du plugin ; "
         "la méthode dépend du plugin (chez Nolly X, le double clic rétablit la valeur "
         "par défaut : réglage fin par glissement avec la touche indiquée dans le "
@@ -282,13 +279,12 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "actif. L'envoyer avec `loopback_software.wav` : je vérifie les deux.",
         "- **Latence** : noter la PDC affichée par Reaper pour le plugin.",
         "",
-        "Valeurs fixes, à noter une fois par logiciel :",
+        "Valeurs fixes, à noter une fois :",
         "",
         "| | valeur |",
         "|---|---|",
-        "| Logiciel, version, format (VST3/AU) | |",
+        f"| Version de {SOFTWARE}, format (VST3/AU) | |",
         "| Système, version de Reaper | |",
-        "| Modèle d'ampli, canal | |",
         *[f"| Commande de l'ampli pour « {v} » ({k}) | |" for k, v in KNOBS.items()],
         "| Autres commandes de l'ampli (valeur fixe) | |",
         "| Gain d'entrée, gain de sortie | |",
@@ -300,7 +296,7 @@ def session_sheet(rows: list[dict], layout: dict) -> str:
         "## Prises, dans cet ordre",
         "",
         "Boutons de 0 à 10. Nommer chaque rendu comme dans la dernière colonne, dans "
-        "le dossier du logiciel.",
+        f"`{FOLDER}/`.",
         "",
         f"| # | fait | {knobs} | baffle | rôle | fichier |",
         "|---|---|" + "---|" * len(KNOBS) + "---|---|---|",
