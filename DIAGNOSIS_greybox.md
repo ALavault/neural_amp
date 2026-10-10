@@ -166,4 +166,87 @@ Mesures inchangées : H2 (b), H5 et les deux contrôles d'instrument.
 
 ## 4. Mesures et verdict
 
-*À remplir après les mesures.*
+Sorties :
+- `diagnosis/greybox/decompose.json` : contrôles d'instrument, H2 (b), H5 ;
+- `oracle.json`, `oracle_controls.json`, `oracle_di_validation.json` et
+  `oracle_di_validation_controls.json` : les oracles ;
+- `summary.json` : synthèse par `summarize.py`.
+
+Les oracles sont ajustés sur la prise elle-même et étiquetés comme tels. Valeurs : médiane
+[min, max] sur les 8 prises.
+
+**Instrument :**
+- **(a) Tenu.** Rendus refaits sur GPU, la chaîne redonne les s de la lecture P à moins de
+  1e-5 près, pour les six runs.
+- **(b) Défaut confirmé, il aggrave l'écart.** Retard commun estimé sur `di_validation` :
+  −0,55, −0,40 et −0,50 échantillon pour GREY.
+  - GREY gagne au plus 0,025 en ln (s compensé : −1,577, −0,838 et −1,732).
+  - C gagne environ 1,6 en ln (−5,517, −5,633 et −5,436).
+  - L'écart compensé est donc d = +4,15, soit une ESR × 63, contre × 13,2 brut.
+- **Contrôle des sondes**, refait avec la normalisation sur A seul : Hammerstein 5 capte
+  0,767 sur A et −0,235 sur B (crête relative 1e-4), puis −0,067 sur B (crête 1e-2). La
+  conclusion ne change pas : la décomposition par sondes reste abandonnée.
+
+**Témoins d'optimisation.** Prolonger V0 de 1 500 pas sans rien ajouter (V0c) divise
+l'ESR_B par 1,044 sur test et par 1,044 sur validation.
+
+**Déterminisme.** V0 n'est pas identique au bit d'une passe à l'autre, à cause des
+arrondis GPU : l'écart relatif atteint 0,18 % sur test et 2,2 % sur validation, faible
+devant les rapports lus.
+
+| Hypothèse | Mesure | Test | Validation | Verdict |
+|---|---|---|---|---|
+| H1, portée linéaire | r(V1) contre V0c | **2,94** [2,05 ; 3,70] | **2,36** [2,01 ; 2,65] | **soutenue** (≥ 2) |
+| H2, forme statique | r(V2) contre V0c | 1,025 [1,00 ; 1,06] | — | **réfutée** (≤ 1,2) |
+| H2 (b), pente de H2/H1 de −20 à −10 dBFS | GREY / appareil (dB pour 10 dB) | +2,6 / +17,6 (C : +5,6) | — | critère non tenu (borne +2) ; ne change pas le verdict |
+| H3, mémoire longue | r(V3) contre V2c | 1,017 [0,995 ; 1,034] | — | **réfutée** (≤ 1,1) |
+| H4, optimisation | ESR_B(GREY) / ESR_B(V0), graines 42 / 43 / 44 | 1,67 / 2,26 / 1,49 | 1,71 (graine 42) | **indécidable** (entre 1,5 et 3) |
+| H5, conditionnement | plage de l'excès ; ρ avec gain et contour | 2,48 ; −0,05 et −0,19 | — | **indécidable** : excès très inégal, mais sans lien avec les boutons |
+| profondeur (descriptif) | r(V4) contre V0c | 1,21 [1,03 ; 2,16] | 1,19 [1,02 ; 1,63] | apport modeste en médiane, net sur 2 prises |
+
+**Descriptif :**
+- **Initialisation par défaut.** Partir des constantes par défaut au lieu des coefficients
+  de GREY donne, en 1 500 pas, une ESR_B 3,7 fois plus grande. La structure s'optimise mal
+  à froid.
+- **Comparaison à C.** L'oracle V1 reste en médiane au double de C sur les mêmes blocs
+  (0,038 contre 0,019 sur test, 0,050 contre 0,027 sur validation). Il ne passe sous C que
+  sur 2 prises sur 8, dont la prise 16, où C est faible.
+- **Profondeur selon les prises.** Le second étage aide surtout sur les prises 30
+  (gain 10) et 33 (gain 7,5, contour 2,5) : ×2,2 sur test, ×1,5 à 1,6 sur validation.
+  Il n'aide presque pas sur la prise 2, qui a pourtant le même réglage que la prise 33
+  (×1,03).
+
+## 5. Contribution retenue
+
+**H1, portée linéaire.**
+- **Prédicat** : l'écart se concentre dans ce que deux FIR de 32 coefficients (0,67 ms) et
+  des filtres du premier ordre ne peuvent pas rendre. Ce sont la réponse linéaire longue de
+  l'envoi FX (passe-haut vers 120 Hz, retard de groupe dispersif, E-0037).
+- **Mesure** : porter les FIR à 512 coefficients (10,7 ms) divise l'ESR des oracles par 2,9
+  (test) et 2,4 (validation), contre un témoin qui reçoit le même nombre de pas.
+- **Ce que l'oracle ne mesure pas** : ni le biais, ni les enveloppes lentes, ni la forme
+  statique n'apportent plus de 6 %.
+- **Prédiction pour le correctif** : le bras L de `demo/greybox_deep/predictions.md` (GREY
+  avec des FIR de 512 coefficients, entraîné comme GREY) doit atteindre d ≤ −0,7 contre
+  GREY, soit une ESR au moins divisée par 2.
+
+## 6. Non expliqué
+
+- **Le reste de l'écart à C.** Même ré-ajusté prise par prise avec des FIR longs, l'oracle
+  reste en médiane au double de C. Un modèle conditionné, entraîné sur toutes les prises,
+  fera moins bien qu'un oracle.
+  - Une part vient de l'entraînement (H4 indécidable : de 1,5 à 2,3 selon la graine).
+  - Une autre vient de l'initialisation : à froid, la structure s'optimise mal.
+  - Le reste n'est pas localisé.
+- **La croissance de H2 avec le niveau** (+17,6 dB pour 10 dB sur l'appareil) n'est
+  reproduite ni par GREY (+2,6) ni par C (+5,6). Elle ne pèse presque pas sur l'ESR (H2
+  réfutée par l'oracle), mais reste un écart audible possible.
+- **À tester :**
+  - **La profondeur aide sur certaines prises seulement** (30 et 33), sans lien simple avec
+    les boutons : les prises 2 et 33 ont le même réglage. Mesure : le bras F3 contre F1 de la
+    piste, prise par prise.
+  - **Si l'excès de GREY suit le passage de la séance** (les prises n'ont pas toutes été
+    enregistrées dans le même passage Reaper) plutôt que le réglage. Mesure : l'excès par
+    prise, groupé par passage (`passes.json`).
+- **Non fait** : la décomposition par sondes de H1 à H3, abandonnée parce qu'elle échoue à
+  son contrôle d'instrument sur cette saturation.
