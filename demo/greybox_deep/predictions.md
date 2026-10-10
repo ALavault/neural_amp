@@ -206,3 +206,14 @@ changent pas.
 - **Correctif** : la bibliothèque n'active ces segments que si `nvidia-smi` répond.
 - La porte `_r2` doit rester identique au bit à la référence, qui avait été calculée avec ces
   segments actifs. Si elle échoue, la file s'arrête.
+
+**Relance `_r3` (2026-10-10, 21 h).**
+- La porte `_r2` est identique au bit : 372 valeurs, 0 écart, dernier pas 299. Couper les
+  segments extensibles ne change donc pas les calculs.
+- La file s'est pourtant arrêtée : en décrivant l'environnement, `repro_gate.environment()`
+  appelait `nvidia-smi`, qui échoue.
+- La ligne d'échec écrite par la file porte un motif faux (« gate not identical »). Une ligne
+  `gate` ajoutée ensuite au registre, avec sa note, rétablit le résultat.
+- **Correctif** : quand `nvidia-smi` échoue, `environment()` lit la version du module dans
+  `/proc/driver/nvidia/version`.
+- La file repart avec une nouvelle porte (`_r3`).

@@ -42,12 +42,18 @@ def environment() -> dict:
     import lightning
     import torch
 
-    driver = subprocess.run(
+    smi = subprocess.run(
         ["nvidia-smi", "--query-gpu=driver_version,name", "--format=csv,noheader"],
         capture_output=True,
         text=True,
-        check=True,
-    ).stdout.strip()
+    )
+    if smi.returncode == 0:
+        driver = smi.stdout.strip()
+    else:
+        # nvidia-smi fails while the kernel module and its NVML library differ
+        # (2026-10-10, until a reboot): the module's own version line instead.
+        module = Path("/proc/driver/nvidia/version").read_text().splitlines()[0]
+        driver = f"{module}, {torch.cuda.get_device_name(0)}"
     return {
         "torch": torch.__version__,
         "cuda": torch.version.cuda,
