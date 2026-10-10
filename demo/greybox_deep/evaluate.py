@@ -72,6 +72,14 @@ JVM_COMPARISONS = (
     ("GREY", "A", False),
     ("L", "A", False),
 )
+# Reading references of the history slope (HISTORY_MEASURE.md): the S0 floor on each
+# input and the size of a 3 dB sag (S1a - S0 at 100 ms).
+CHECK = json.loads((HERE / "history_check.json").read_text())["summary"]
+HISTORY_REFERENCES = {
+    "S0_vs100r_input": {t: v["median"] for t, v in CHECK["S0"].items()},
+    "S0_jvm_input": {t: v["median"] for t, v in CHECK["S0_jvm_input"].items()},
+    "sag_3db_at_100ms": CHECK["S1a"]["0.1"]["median"] - CHECK["S0"]["0.1"]["median"],
+}
 JVM_DATA = (
     ROOT / "datasets/raw/external/tone_twist_param/extracted"
     "/Marshall-JVM410H-ChOD1-trimmed"
@@ -113,9 +121,11 @@ def load(run_id: str, device: str) -> BlackBoxModel:
 
 
 def parameters(model: BlackBoxModel) -> dict:
-    """Total, knob head and processing; head 0 for models without a `head` (SSM-WaveNet
-    conditions through FiLM inside its blocks, not separated here)."""
-    head = getattr(model.processor, "head", None)
+    """Total, knob head (`head` of the grey boxes, `film_net` of SSM-WaveNet) and
+    processing."""
+    head = getattr(model.processor, "head", None) or getattr(
+        model.processor, "film_net", None
+    )
     total = sum(p.numel() for p in model.processor.parameters())
     in_head = sum(p.numel() for p in head.parameters()) if head is not None else 0
     return {"total": total, "head": in_head, "processing": total - in_head}
@@ -129,13 +139,48 @@ def p_reading(ln_esr: dict, takes: list[dict]) -> float:
     return statistics.mean(statistics.mean(v) for v in pairs.values())
 
 
-def compare(values: dict, arm: str, reference: str, primary: bool) -> dict:
+def compare(values: dict, arm: str, reference: str, primary: bool, names: dict) -> dict:
+    """Paired differences, P label and acceptability; for a primary reading, the
+    pre-registered verdict sentence (names: what the reference is called)."""
     d_i = {k: values[arm][k] - values[reference][k] for k in values[reference]}
     out = {"d_i": d_i, "d": statistics.mean(d_i.values())}
     out["ratio"] = math.exp(out["d"])
     out["label"] = tl.verdict(list(d_i.values()))
-    if primary:
-        out["acceptable"] = tl.acceptable(list(d_i.values()))
+    out["acceptable"] = tl.acceptable(list(d_i.values()))
+    if primary and reference == "GREY":
+        out["verdict"] = (
+            "boîte grise approfondie meilleure que GREY"
+            if out["label"] == "meilleur"
+            else f"étiquette : {out['label']}"
+        )
+    elif primary:
+        out["verdict"] = (
+            f"boîte grise approfondie équivalente à {names[reference]} (ESR)"
+            if out["acceptable"]
+            else f"boîte grise approfondie moins bonne que {names[reference]} (ESR)"
+        )
+    return out
+
+
+def aligned_reading(runs: dict, arm: str, reference: str, raw: dict) -> dict:
+    """coreading_delay.py's rule: a seed whose run or reference run is on a grid edge
+    is dropped, and a reading with a dropped seed gets no label; against the raw
+    reading, same label and acceptability: robust to the alignment."""
+    d_i = {}
+    for seed in SEEDS:
+        a, r = (runs[VS100R[k].format(seed)] for k in (arm, reference))
+        if not (a["grid_edge"] or r["grid_edge"]):
+            d_i[seed] = a["s_pairs_aligned"] - r["s_pairs_aligned"]
+    out = {"d_i": d_i, "d": statistics.mean(d_i.values()) if d_i else None}
+    if len(d_i) == len(SEEDS):
+        label = tl.verdict(list(d_i.values()))
+        accept = tl.acceptable(list(d_i.values()))
+        same = (label, accept) == (raw["label"], raw["acceptable"])
+        out |= {
+            "label": label,
+            "acceptable": accept,
+            "against_raw": "robuste au calage" if same else "divergence",
+        }
     return out
 
 
@@ -166,7 +211,7 @@ def vs100r_readings(arms: list[str]) -> dict:
         for t in takes
     }
     tests = [t for t in takes if t["split"] == "test"]
-    runs, raw, aligned = {}, {}, {}
+    runs, raw = {}, {}
     for arm in arms:
         for seed in SEEDS:
             run_id = VS100R[arm].format(seed)
@@ -200,27 +245,50 @@ def vs100r_readings(arms: list[str]) -> dict:
                     for t in tests
                 ],
             }
+            # predictions.md, before reading: 15 000 steps, the check against C ok for
+            # the new arms, finite values; an invalid run leaves its arm incomplete.
+            entry["valid"] = (
+                entry["global_step"] == 15_000
+                and (arm in ("C", "GREY") or entry["check_ok"] is True)
+                and math.isfinite(entry["s_pairs"])
+                and math.isfinite(entry["s_pairs_aligned"])
+            )
             runs[run_id] = entry
-            raw.setdefault(arm, {})[seed] = entry["s_pairs"]
-            aligned.setdefault(arm, {})[seed] = entry["s_pairs_aligned"]
+            if entry["valid"]:
+                raw.setdefault(arm, {})[seed] = entry["s_pairs"]
             print(
                 f"{run_id}: s {entry['s_pairs']:.3f}, aligned"
                 f" {entry['s_pairs_aligned']:.3f} (tau {tau:+.2f})",
                 flush=True,
             )
     complete = {a for a in arms if len(raw.get(a, {})) == len(SEEDS)}
+    # Edge effect of the shift in the scored region, bound of coreading_delay.py.
+    edge = cd.edge_effect(takes[0])
+    smallest = min(
+        math.exp(v)
+        for r in runs.values()
+        if r["valid"] and not r["grid_edge"]
+        for v in r["ln_esr_by_take"].values()
+    )
+    edge_ok = edge < 0.01 * smallest
     readings = {}
     for arm, reference, primary in VS100R_COMPARISONS:
         if {arm, reference} <= complete:
-            readings[f"{arm}_vs_{reference}"] = {
-                "raw": compare(raw, arm, reference, primary),
-                "aligned": compare(aligned, arm, reference, False),
-            }
+            row = {"raw": compare(raw, arm, reference, primary, {"C": "C"})}
+            if edge_ok:
+                row["aligned"] = aligned_reading(runs, arm, reference, row["raw"])
+            readings[f"{arm}_vs_{reference}"] = row
     history = {
         arm: memory([h for r in runs.values() if r["arm"] == arm for h in r["history"]])
         for arm in complete
     }
-    return {"runs": runs, "readings": readings, "history": history}
+    return {
+        "runs": runs,
+        "readings": readings,
+        "edge_effect": {"energy": edge, "bound": 0.01 * smallest, "reliable": edge_ok},
+        "history": history,
+        "history_references": HISTORY_REFERENCES,
+    }
 
 
 @torch.no_grad()
@@ -254,15 +322,20 @@ def jvm_readings() -> dict:
                 **checks(run_id),
                 "history": memory(deviations),
             }
-            ln_esr.setdefault(arm, {})[p] = math.log(esr)
+            if math.isfinite(esr) and esr > 0:
+                ln_esr.setdefault(arm, {})[p] = math.log(esr)
             print(f"{run_id}: test ESR {esr:.4f}", flush=True)
     complete = {a for a, v in ln_esr.items() if len(v) == len(PARTITIONS)}
     readings = {
-        f"{arm}_vs_{reference}": compare(ln_esr, arm, reference, primary)
+        f"{arm}_vs_{reference}": compare(ln_esr, arm, reference, primary, {"A": "A"})
         for arm, reference, primary in JVM_COMPARISONS
         if {arm, reference} <= complete
     }
-    return {"runs": runs, "readings": readings}
+    return {
+        "runs": runs,
+        "readings": readings,
+        "history_references": HISTORY_REFERENCES,
+    }
 
 
 def main() -> None:

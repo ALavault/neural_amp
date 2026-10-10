@@ -169,3 +169,40 @@ Estimation, à corriger au premier run :
 
 Total : 24 runs, de 35 à 50 h de GPU. L'ordre de la file permet de s'arrêter en gardant des
 comparaisons complètes.
+
+## Corrections avant tout run (2026-10-10, relecture Codex et relance)
+
+Aucun run de la piste n'a abouti au moment de ces corrections. Les règles de verdict ne
+changent pas.
+
+**`evaluate.py` applique maintenant ce que le texte annonçait :**
+- **Contrôles avant lecture.** Un run ne compte que s'il a 15 000 pas, un contrôle contre C
+  `ok` (nouveaux bras VS100R) et des valeurs finies. Sinon, son bras est incomplet et n'est
+  pas lu.
+- **Co-lecture compensée.** On reprend la règle de `coreading_delay.py` en entier :
+  - une graine est retirée si son run ou celui de la référence touche le bord de la grille ;
+  - une lecture privée d'une graine ne reçoit pas d'étiquette ;
+  - le contrôle d'effet de bord conditionne la lecture ;
+  - le résultat est confronté à la lecture brute (« robuste au calage » ou « divergence »).
+- **Paramètres.** La tête FiLM de SSM-WaveNet (`film_net`) est comptée comme tête, et non
+  plus comme traitement.
+- **Sorties ajoutées** : les phrases de verdict des lectures principales, ainsi que le
+  plancher de S0 et l'ordre de grandeur d'un affaissement de 3 dB, à côté des Δγ.
+
+**Précisions de texte :**
+- Le retard compensé ne concerne que la VS100R : aucun protocole de calage n'est défini pour
+  le JVM.
+- Les essais de 100 pas sont notés dans le journal de la file. Seuls leurs échecs vont dans
+  `demo/RUNS.jsonl`, comme pour les runs principaux, réussis ou non.
+
+**Relance `_r2`.**
+- La première porte (`repro_gate_vs100r48_greybox_deep`) a échoué avant tout pas : PyTorch
+  plante dans `PeerToPeerAccess.cpp`, faute de NVML. L'échec est inscrit dans
+  `demo/RUNS.jsonl`.
+- **Cause, établie par un essai minimal** : avec `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`,
+  posé par `product_queue_lib.sh`, PyTorch a besoin de NVML. Or le pilote et sa bibliothèque
+  NVML sont désaccordés depuis le 2026-10-10, jusqu'au prochain redémarrage. Sans ce réglage,
+  CUDA fonctionne.
+- **Correctif** : la bibliothèque n'active ces segments que si `nvidia-smi` répond.
+- La porte `_r2` doit rester identique au bit à la référence, qui avait été calculée avec ces
+  segments actifs. Si elle échoue, la file s'arrête.

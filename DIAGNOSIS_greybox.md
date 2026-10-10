@@ -190,29 +190,31 @@ Les oracles sont ajustés sur la prise elle-même et étiquetés comme tels. Val
 **Témoins d'optimisation.** Prolonger V0 de 1 500 pas sans rien ajouter (V0c) divise
 l'ESR_B par 1,044 sur test et par 1,044 sur validation.
 
-**Déterminisme.** V0 n'est pas identique au bit d'une passe à l'autre, à cause des
-arrondis GPU : l'écart relatif atteint 0,18 % sur test et 2,2 % sur validation, faible
-devant les rapports lus.
+**Déterminisme.** V0 n'est pas identique au bit d'une passe à l'autre : l'écart relatif
+atteint 0,18 % sur test et 2,2 % sur validation, faible devant les rapports lus. C'est
+compatible avec des différences numériques du GPU, sans que la cause soit isolée.
 
 | Hypothèse | Mesure | Test | Validation | Verdict |
 |---|---|---|---|---|
-| H1, portée linéaire | r(V1) contre V0c | **2,94** [2,05 ; 3,70] | **2,36** [2,01 ; 2,65] | **soutenue** (≥ 2) |
+| H1, portée linéaire | r(V1) contre V0c | **2,94** [2,04 ; 3,70] | **2,36** [2,01 ; 2,64] | **soutenue** (≥ 2) |
 | H2, forme statique | r(V2) contre V0c | 1,025 [1,00 ; 1,06] | — | **réfutée** (≤ 1,2) |
 | H2 (b), pente de H2/H1 de −20 à −10 dBFS | GREY / appareil (dB pour 10 dB) | +2,6 / +17,6 (C : +5,6) | — | critère non tenu (borne +2) ; ne change pas le verdict |
 | H3, mémoire longue | r(V3) contre V2c | 1,017 [0,995 ; 1,034] | — | **réfutée** (≤ 1,1) |
-| H4, optimisation | ESR_B(GREY) / ESR_B(V0), graines 42 / 43 / 44 | 1,67 / 2,26 / 1,49 | 1,71 (graine 42) | **indécidable** (entre 1,5 et 3) |
-| H5, conditionnement | plage de l'excès ; ρ avec gain et contour | 2,48 ; −0,05 et −0,19 | — | **indécidable** : excès très inégal, mais sans lien avec les boutons |
+| H4, optimisation | ESR_B(GREY) / ESR_B(V0), graines 42 / 43 / 44 | 1,67 / 2,26 / 1,49 | 1,71 (graine 42) | **indécidable pour 42 et 43** (entre 1,5 et 3), **réfutée pour 44** (≤ 1,5) ; aucune règle d'agrégation entre graines n'était écrite |
+| H5, conditionnement | plage de l'excès ; ρ avec gain et contour | 2,48 ; −0,05 et −0,19 | — | **indécidable** : excès très inégal, faible association monotone avec chaque bouton pris seul (interaction non testée) |
 | profondeur (descriptif) | r(V4) contre V0c | 1,21 [1,03 ; 2,16] | 1,19 [1,02 ; 1,63] | apport modeste en médiane, net sur 2 prises |
 
 **Descriptif :**
 - **Initialisation par défaut.** Partir des constantes par défaut au lieu des coefficients
   de GREY donne, en 1 500 pas, une ESR_B 3,7 fois plus grande. La structure s'optimise mal
   à froid.
-- **Comparaison à C.** L'oracle V1 reste en médiane au double de C sur les mêmes blocs
-  (0,038 contre 0,019 sur test, 0,050 contre 0,027 sur validation). Il ne passe sous C que
-  sur 2 prises sur 8, dont la prise 16, où C est faible.
+- **Comparaison à C.** Sur les mêmes blocs, l'oracle V1 reste au-dessus de C. Le rapport
+  par prise vaut 1,95 sur test et 1,59 sur validation en médiane. Le rapport des médianes
+  vaut 2,05 et 1,84 (0,038 contre 0,019, puis 0,050 contre 0,027). V1 ne passe sous C que
+  sur 2 prises sur 8 (2 et 16, où C est faible).
 - **Profondeur selon les prises.** Le second étage aide surtout sur les prises 30
-  (gain 10) et 33 (gain 7,5, contour 2,5) : ×2,2 sur test, ×1,5 à 1,6 sur validation.
+  (gain 10) et 33 (gain 7,5, contour 2,5) : ×2,16 et ×2,15 sur test, ×1,5 à 1,6 sur
+  validation.
   Il n'aide presque pas sur la prise 2, qui a pourtant le même réglage que la prise 33
   (×1,03).
 
@@ -220,12 +222,15 @@ devant les rapports lus.
 
 **H1, portée linéaire.**
 - **Prédicat** : l'écart se concentre dans ce que deux FIR de 32 coefficients (0,67 ms) et
-  des filtres du premier ordre ne peuvent pas rendre. Ce sont la réponse linéaire longue de
-  l'envoi FX (passe-haut vers 120 Hz, retard de groupe dispersif, E-0037).
+  des filtres du premier ordre ne peuvent pas rendre.
+  - *Supposé* : c'est une réponse linéaire plus longue de l'envoi FX (passe-haut vers
+    120 Hz, retard de groupe dispersif, E-0037).
+  - V1 établit le bénéfice de FIR plus longs, sans isoler laquelle de ces causes joue.
 - **Mesure** : porter les FIR à 512 coefficients (10,7 ms) divise l'ESR des oracles par 2,9
   (test) et 2,4 (validation), contre un témoin qui reçoit le même nombre de pas.
-- **Ce que l'oracle ne mesure pas** : ni le biais, ni les enveloppes lentes, ni la forme
-  statique n'apportent plus de 6 %.
+- **Les autres ajouts mesurés** (le biais de V2, les enveloppes lentes de V3) n'apportent
+  pas plus de 6 % contre leur témoin. Cela vaut pour ces variantes-là, pas pour toute
+  correction de la forme statique ou de la mémoire.
 - **Prédiction pour le correctif** : le bras L de `demo/greybox_deep/predictions.md` (GREY
   avec des FIR de 512 coefficients, entraîné comme GREY) doit atteindre d ≤ −0,7 contre
   GREY, soit une ESR au moins divisée par 2.
@@ -233,14 +238,16 @@ devant les rapports lus.
 ## 6. Non expliqué
 
 - **Le reste de l'écart à C.** Même ré-ajusté prise par prise avec des FIR longs, l'oracle
-  reste en médiane au double de C. Un modèle conditionné, entraîné sur toutes les prises,
-  fera moins bien qu'un oracle.
-  - Une part vient de l'entraînement (H4 indécidable : de 1,5 à 2,3 selon la graine).
+  reste au-dessus de C (rapport par prise : 1,95 sur test, 1,59 sur validation, en médiane).
+  Cet oracle n'est pas une borne : 1 500 pas depuis GREY, sur A, lus sur B. Un entraînement
+  conditionné sur toutes les prises peut faire mieux ou moins bien.
+  - Une part vient de l'entraînement (H4 : rapports de 1,49 à 2,26 selon la graine).
   - Une autre vient de l'initialisation : à froid, la structure s'optimise mal.
   - Le reste n'est pas localisé.
 - **La croissance de H2 avec le niveau** (+17,6 dB pour 10 dB sur l'appareil) n'est
-  reproduite ni par GREY (+2,6) ni par C (+5,6). Elle ne pèse presque pas sur l'ESR (H2
-  réfutée par l'oracle), mais reste un écart audible possible.
+  reproduite ni par GREY (+2,6) ni par C (+5,6). L'ajout de biais testé (V2) n'y change
+  presque rien en ESR. Une autre correction de cette croissance n'est pas exclue, et l'écart
+  peut rester audible.
 - **À tester :**
   - **La profondeur aide sur certaines prises seulement** (30 et 33), sans lien simple avec
     les boutons : les prises 2 et 33 ont le même réglage. Mesure : le bras F3 contre F1 de la
@@ -250,3 +257,15 @@ devant les rapports lus.
     prise, groupé par passage (`passes.json`).
 - **Non fait** : la décomposition par sondes de H1 à H3, abandonnée parce qu'elle échoue à
   son contrôle d'instrument sur cette saturation.
+
+### Corrections après relecture Codex des sections 4 à 6 (2026-10-10)
+
+Les chiffres ont été recalculés depuis les JSON et correspondent. Six passages ont été
+corrigés :
+- **H4** : graine 44 réfutée, graines 42 et 43 indécidables, sans règle d'agrégation.
+- **Deux arrondis** : 2,04 au lieu de 2,05, 2,64 au lieu de 2,65.
+- **« Au double de C »** : distinction entre rapport par prise et rapport des médianes.
+- **« L'oracle borne le modèle conditionné »** : retiré.
+- **Attributions causales ramenées à ce que les mesures montrent** : réponse linéaire
+  longue *supposée*, biais testé seulement, association monotone avec les boutons.
+- **Écarts de V0 entre passes** : « compatibles » avec le GPU, la cause n'est pas isolée.

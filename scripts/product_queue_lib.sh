@@ -5,7 +5,11 @@
 # demo/RUNS.jsonl before the queue moves on. A relaunch takes a new id, e.g. _r2.
 # Detach the calling queue with: nohup setsid bash <queue> >> <log> 2>&1 < /dev/null &
 set -u
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+# Expandable segments need NVML: off while nvidia-smi fails (driver and NVML library
+# disagree since 2026-10-10, until a reboot; the gate crashed in PeerToPeerAccess.cpp).
+if nvidia-smi > /dev/null 2>&1; then
+  export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+fi
 export TMPDIR=/fastdata/lavaulta/tmp
 # Queues run from a worktree pinned at a commit (scripts/product_runner_worktree.sh), so
 # code edited in the main tree during a multi-day queue never reaches its runs. The
