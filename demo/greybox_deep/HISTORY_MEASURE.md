@@ -80,3 +80,59 @@ Les variantes ne changent qu'un élément de S0 :
 - Rien sur les harmoniques (voir S3).
 - Une pente non nulle sur un appareil avec baffle ne se lit pas comme une mémoire non linéaire
   (voir S2).
+
+## Résultats de la validation (2026-10-10)
+
+Script `history_check.py`, sortie `history_check.json`. Valeurs de γ_T : médiane
+[min, max] sur les 8 prises.
+
+| Système | γ_30 | γ_100 | γ_300 |
+|---|---|---|---|
+| S0, sans mémoire longue | +0,010 | −0,059 | −0,131 |
+| S1a, affaissement 3 dB | −0,150 | −0,252 | −0,360 |
+| S1b, affaissement 6 dB | −0,267 | −0,393 | −0,527 |
+| S2, baffle 150 ms | +0,642 | +0,416 | +0,329 |
+| S3, polarisation qui se déplace | −0,085 | −0,176 | −0,267 |
+| VS100R, envoi FX | +0,070 [+0,049 ; +0,095] | +0,042 [−0,030 ; +0,061] | +0,030 [−0,131 ; +0,061] |
+| S0 sur l'entrée JVM | +0,051 | +0,072 | +0,101 |
+| JVM410H, sortie HP (9 réglages) | +0,051 [+0,012 ; +0,078] | +0,102 [+0,066 ; +0,129] | +0,192 [+0,146 ; +0,249] |
+
+Part de variance expliquée par la pente, à 100 ms : 0,35 pour S1b, de 0,000 à 0,038 pour
+la VS100R, de 0,005 à 0,021 pour le JVM.
+
+**Lecture face aux attentes écrites :**
+- **S0 : attente non tenue à 100 et 300 ms** (−0,059 et −0,131 pour une borne de 0,05).
+  - Une chaîne sans mémoire longue ne donne pas γ ≈ 0. Ce plancher dépend de la structure
+    (filtre avant saturation) : il vaut +0,072 sur l'entrée JVM, avec le même S0.
+  - *Supposé* : effet spectral. À présent égal, les trames de déclin, plus graves, sont moins
+    excitées après le passe-haut que les attaques.
+  - Conséquence : γ seul ne se lit pas comme une mémoire. Seule une différence sur la même
+    entrée se lit (Δγ entre deux systèmes).
+- **S1 : attentes tenues.**
+  - Écart à S0 à 100 ms : −0,19 (3 dB) et −0,33 (6 dB) ; à 300 ms, −0,23 et −0,40.
+  - |γ| croît avec l'affaissement.
+  - L'écart vaut 3 à 6 fois le plancher de S0.
+- **S2 : attente tenue.** Le baffle donne un faux positif de +0,48 à 100 ms, plus gros que
+  l'affaissement de 6 dB. Sur un appareil avec baffle, γ est inutilisable sans compensation.
+- **S3 : attente non tenue.** Le déplacement de polarisation est vu, à −0,12 de S0 à
+  100 ms : le décalage réduit le gain petit signal de tanh. La mesure le confond avec un
+  affaissement, sans pouvoir les distinguer.
+- **Résolution : non mesurée.** Les 8 prises VS100R ont la même entrée DI, puisque c'est le
+  même fichier source. Leur écart sur S0 (≤ 0,002) n'est que le bruit du bouclage, et le JVM
+  n'a qu'une entrée. La dispersion due au matériau joué reste inconnue.
+
+**Mémoire propre des appareils** :
+- **VS100R** : écart à S0 sur la même entrée de +0,10 à 100 ms.
+- **JVM** : écart de +0,03 à 100 ms et de +0,09 à 300 ms.
+- **Signe** : les deux écarts sont positifs, de sens opposé à un affaissement.
+- **Variance expliquée** : au plus 0,04.
+
+Ces écarts sont du même ordre que la variation du plancher sans mémoire d'une structure à
+l'autre (de −0,13 à +0,10). **Aucun affaissement de l'ordre de S1a (3 dB) n'est détecté sur
+ces deux sorties.** On ne peut pas en dire plus. En particulier, l'absence de mémoire n'est
+pas établie : la référence sans mémoire de chaque appareil est inconnue.
+
+**Usage retenu** : Δγ_T entre l'appareil et un modèle, sur la même entrée
+(`history_deviation`). Il dit si le modèle reproduit la dépendance à l'historique de
+l'appareil, quelle qu'en soit l'origine. On le rapporte à côté du plancher de S0 et de
+l'ordre de grandeur de S1a.
