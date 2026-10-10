@@ -81,6 +81,63 @@ décomposition de l'erreur de C, comme témoin.
   ≥ 1,5 en ln entre prises et suit le gain (|ρ de Spearman| ≥ 0,6), réfutée si sa plage est
   ≤ 0,5.**
 
+### Écart à la mesure prévue de H1–H3 (2026-10-10, avant toute mesure de remplacement)
+
+**La décomposition par sondes échoue à son propre contrôle d'instrument.** Contrôle fait sur la
+sortie de l'appareil elle-même, prise 1, avant toute erreur de modèle (`decompose.py`,
+fonction `decompose` ; essai interactif) :
+- Les deux moitiés de la fenêtre notée n'ont pas le même niveau : RMS de l'entrée 0,073 sur A,
+  0,042 sur B (−5 dB) ; crête 0,46 contre 0,30.
+- L'appareil sature fort (OD2). Son gain linéaire apparent dépend donc du niveau :
+  - un FIR de 512 coefficients capte 0,61 de la sortie sur A et 0,17 sur B ;
+  - Hammerstein 5, qui contient ce FIR, capte 0,77 sur A et **−0,23** sur B.
+- Une crête de régularisation 100 fois plus forte ne corrige pas : Hammerstein 5 vaut encore
+  −0,08 sur B.
+- Les polynômes extrapolent mal hors de leurs amplitudes, et une saturation dure n'est pas
+  polynomiale. C'est l'angle mort déjà connu des sondes sur un appareil à fort gain
+  (`diagnosis/probe_metrics/REPORT.md`, Q-0014).
+
+Les parts captées par ces sondes ne mesurent donc pas ce que H1–H3 demandent. Cette
+mesure est abandonnée, sans aucun chiffre lu sur une erreur de modèle.
+
+**Mesure de remplacement : oracles emboîtés par prise.** Elle fait varier la variable du
+mécanisme dans la structure de GREY elle-même.
+
+Cadre commun :
+- **Prises** : les 8 prises de test (`split == "test"`).
+- **Découpage** : blocs de 1 s alternés, A les impairs et B les pairs, de sorte que A et B
+  aient la même distribution de niveaux.
+- **Ajustement** : coefficients ajustés sur A (Adam, ESR), lus sur B, tous étiquetés
+  **oracle**.
+- **Point de départ (V0)** : structure de GREY sans tête, chargée avec les coefficients de GREY
+  graine 42 au réglage de la prise, puis ré-ajustée sur A.
+- **Variantes** : chacune part de la solution V0 et n'ajoute qu'un composant, initialisé à la
+  neutralité. Elle contient donc V0.
+  - **V1, portée linéaire (H1)** : FIR d'entrée et de sortie portés de 32 à 512 coefficients,
+    les nouveaux à zéro.
+  - **V2, forme statique (H2)** : un biais par branche avant le coupe-pic, dont on retranche la
+    sortie statique (zéro en entrée donne zéro en sortie), initialisé à 0.
+  - **V3, mémoire longue (H3)** : deux enveloppes lentes de |u| (50 et 300 ms) qui modulent le
+    gain d'attaque et le biais, avec des poids initialisés à 0. V3 inclut V2 ; on la compare
+    donc à V2.
+  - **V4, profondeur (descriptif)** : un second étage complet en série, initialisé à
+    l'identité par un chemin direct de poids 1 et des branches de poids 0.
+
+Mesure : r = ESR_B(référence) / ESR_B(variante), en médiane sur les 8 prises. La référence
+est V0 pour V1, V2 et V4, et V2 pour V3.
+
+Prédictions, écrites avant ces mesures :
+- **H1** : soutenue si r(V1) ≥ 2, réfutée si r(V1) ≤ 1,2.
+- **H2** : soutenue si r(V2) ≥ 2 et si la pente de H2/H1 suit le critère (b) inchangé ;
+  réfutée si r(V2) ≤ 1,2.
+- **H3** : soutenue si r(V3) ≥ 1,5, réfutée si r(V3) ≤ 1,1.
+- **H4**, mesure inchangée et faite sur ce même découpage : r = ESR_B(GREY conditionné) /
+  ESR_B(V0). Soutenue si r ≥ 3, réfutée si r ≤ 1,5. On calcule V0 depuis les graines 42, 43
+  et 44, et aussi depuis l'initialisation par défaut.
+
+Témoin : l'ESR_B de C (graine 42) sur les mêmes blocs, qui montre ce qu'un modèle atteint.
+Mesures inchangées : H2 (b), H5 et les deux contrôles d'instrument.
+
 ## 4. Mesures et verdict
 
 *À remplir après les mesures.*
