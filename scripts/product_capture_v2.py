@@ -86,8 +86,8 @@ def to_int(x: np.ndarray) -> np.ndarray:
     return q << 8
 
 
-def faded(x: np.ndarray) -> np.ndarray:
-    n = int(FADE_S * RATE)
+def faded(x: np.ndarray, fs: int = RATE) -> np.ndarray:
+    n = int(FADE_S * fs)
     ramp = 0.5 - 0.5 * np.cos(np.pi * np.arange(n) / n)
     x = x.copy()
     x[:n] *= ramp
@@ -108,10 +108,10 @@ def training_hash(path: Path, sections: list[dict]) -> str:
     return hashlib.sha256(x.astype("<i4").tobytes()).hexdigest()
 
 
-def new_sections() -> list[tuple[str, np.ndarray, dict]]:
+def new_sections(fs: int = RATE) -> list[tuple[str, np.ndarray, dict]]:
     out = []
     for peak in SWEEP_PEAKS_DB:
-        x, sweep = db.synchronized_sweep(SWEEP_S, RATE)
+        x, sweep = db.synchronized_sweep(SWEEP_S, fs)
         params = {
             "peak_dbfs": peak,
             "f0": sweep.f0,
@@ -122,24 +122,24 @@ def new_sections() -> list[tuple[str, np.ndarray, dict]]:
         out.append((f"sweep_sync_{peak:g}dBFS", db.at_level(x, peak, "peak"), params))
     for level in NOISE_RMS_DB:
         for r in range(1, MULTISINE_REALIZATIONS + 1):
-            x = db.multisine_signal(MULTISINE_PERIODS, RATE, seed=r)
+            x = db.multisine_signal(MULTISINE_PERIODS, fs, seed=r)
             params = {
                 "rms_dbfs": level,
                 "seed": r,
-                "period_samples": RATE,
+                "period_samples": fs,
                 "periods": MULTISINE_PERIODS,
                 **MULTISINE_LINES,
             }
             name = f"multisine_{level:g}dBFS_rms_r{r}"
             out.append((name, db.at_level(x, level, "rms"), params))
     for peak in SWEEP_PEAKS_DB:
-        x = db.two_tone_signal(TWO_TONE_S, RATE, TWO_TONE_SEED)
+        x = db.two_tone_signal(TWO_TONE_S, fs, TWO_TONE_SEED)
         f1, f2 = db.two_tone_frequencies(TWO_TONE_SEED)
         params = {"peak_dbfs": peak, "seed": TWO_TONE_SEED, "f1": f1, "f2": f2}
-        x = faded(db.at_level(x, peak, "peak"))
+        x = faded(db.at_level(x, peak, "peak"), fs)
         out.append((f"two_tone_{peak:g}dBFS", x, params))
     for level in NOISE_RMS_DB:
-        x, onsets = db.steps_signal(level, STEPS_SEED, RATE)
+        x, onsets = db.steps_signal(level, STEPS_SEED, fs)
         params = {
             "loud_rms_dbfs": level,
             "drop_db": db.STEP_DROP_DB,
