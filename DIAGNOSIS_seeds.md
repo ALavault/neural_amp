@@ -95,6 +95,16 @@ partition train/validation. En rendant la chaîne de données commune à six gra
 soit le plancher du non-déterminisme GPU seul, 0,18. Une fois la partition et l'ordre des lots
 fixés, l'initialisation ne contribue plus rien de mesurable.
 
+> **Correction du 2026-10-02** (relecture critique, vérifiée ; reprise de
+> `paper/RESULTS_SSM_SEEDS.md`, ajoutée ici le 2026-10-10) : les six runs du pilote E portent
+> `"deterministic": false`. Leur 0,191 contient donc le non-déterminisme GPU et ne peut pas isoler
+> l'initialisation ; la comparaison au plancher n'a pas de force (intervalles à 95 % de
+> [0,12 ; 0,47] pour 0,191 et de [0,10 ; 0,67] pour 0,18). « L'initialisation ne contribue plus
+> rien de mesurable » n'est pas établi : le tirage des données reste la lecture du pilote, sans
+> exclure une contribution de l'initialisation du même ordre. La même réserve vaut pour le
+> *prédicat* ci-dessous (« non par la trajectoire d'optimisation ») et pour la section 6
+> (« on sait maintenant d'où il vient ») : ce sont des lectures du pilote E, pas des faits établis.
+
 *Prédicat* : la dispersion inter-graines de l'ESR de test sur ce dispositif est portée par le
 tirage des données, non par la trajectoire d'optimisation. *Mécanisme* : le jeu de validation de
 douze segments fixe à la fois ce que le modèle ne voit pas et ce sur quoi toutes ses décisions
@@ -113,6 +123,12 @@ dégrade la qualité d'un facteur 2,4 (`pilot_F_threshold.md`) ; aucun seuil fix
 déclenchement reproductible (`plateau_simulation.md`) ; et surveiller l'ESR de validation à la
 place déclenche plus tôt et plus erratiquement (`monitored_quantity.py`).
 
+> **Correction du 2026-10-02** (`plateau_margin.md`, ajoutée ici le 2026-10-10) : « 44 à 88 fois »
+> rapporte le seuil à une fluctuation médiane sur tout le run, dominée par les époques tardives à
+> petit pas. Sur les 40 époques qui précèdent chaque division, autour des premières divisions, le
+> seuil est 370 à 680 fois sous le bruit local, et les marges des quinze divisions valent 0,00 à 0,54, sauf une à 1,18 : presque
+> toutes les décisions sont fragiles.
+
 En revanche, **retirer le déclencheur** — un calendrier fixe commun — coupe la queue des
 catastrophes et gagne 20 % de qualité moyenne, sans resserrer le gros de la distribution
 (`pilot_C_common_schedule.md`). Et le test du canal y montre que la partition agit *par*
@@ -129,7 +145,9 @@ global et celle, réfutée, qui plaçait l'écart sur les segments calmes :
 
 - **Part non attribuée** : le facteur global reste sans mécanisme. On sait maintenant *d'où* il
   vient — le tirage des données — mais pas *comment* une partition produit un facteur commun à
-  tous les segments de test.
+  tous les segments de test. *Réserve (2026-10-10, d'après la correction du 2026-10-02 en §5)* :
+  « d'où il vient » est la lecture d'un pilote non déterministe ; une contribution de
+  l'initialisation du même ordre n'est pas exclue.
 - **Partition et ordre des lots** restent inséparés : tirés du même générateur au même instant.
   Les distinguer demanderait de toucher au module de données de nablafx.
 - **H2 est close, et ce qui la remplace est au même point.** Le pilote G a mis la propriété
@@ -157,6 +175,12 @@ global et celle, réfutée, qui plaçait l'écart sur les segments calmes :
   (0,35). L'élargissement aux partitions 744 et 369 départagera. SSM-WaveNet y est plus bas d'un
   facteur 1,8 sur les trois partitions, en comparant des recettes publiées et non des
   architectures.
+  *Mise à jour (ajoutée le 2026-10-10)* : l'élargissement a eu lieu (`paired_protocol.md`, verdict
+  du 2026-09-28) : à cinq partitions, r₅ = 0,048 (IC à 95 % [0,029 ; 0,137]), appariement soutenu,
+  la réserve sur l'estimation ponctuelle tombe. *Correction de lecture du 2026-10-02* : r₅ est
+  petit surtout parce que chaque bras disperse peu à initialisation fixe (corrélation entre bras
+  0,31, IC de −0,79 à 0,94 ; l'appariement ne retire qu'environ 28 % de la variance) ; un couplage
+  fort entre architectures n'est pas démontré.
 - **Toute affirmation d'ordre est fragile** (`variance_sources.md`) : un autre tirage de douze
   segments de test réordonnerait les six runs du banc dans 41 % des cas.
 - **Hors de cause, vérifié** : la règle d'arrêt (`best` et `last` donnent le même ESR à 0,0005

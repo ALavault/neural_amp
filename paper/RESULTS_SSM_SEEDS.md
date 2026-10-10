@@ -106,6 +106,10 @@ section Setup) :
   la dispersion à 0,344 pour un critère à 0,25 et coûte un facteur 2,4 en qualité, et **aucun seuil
   fixe** ne rend le déclenchement reproductible. **Interdit** : présenter le réglage du seuil comme
   un correctif.
+  **Correction du 2026-10-02** (`diagnosis/butterfly/plateau_margin.md`, reportée ici le
+  2026-10-10) : en fluctuation locale (40 époques avant chaque division), autour des premières
+  divisions, le seuil est 370 à 680 fois sous le bruit, pas 44 à 88, et les marges des quinze divisions valent 0,00 à 0,54, sauf une
+  à 1,18.
 - **La règle d'arrêt est hors de cause** : `best` et `last` donnent le même ESR à 0,0005 près sur
   quinze runs.
 - **S4-TF-L-16 se comporte à l'inverse de SSM-WaveNet** (`diagnosis/seeds/s4_nested.md`) : aucun
@@ -167,6 +171,12 @@ pré-enregistré le 2026-09-22, verdict du 2026-09-24).
   architectures (paramètres ×6,2, arrêt propre à chacune).
 - **Formulation autorisée** : « à partition commune, l'écart entre les deux architectures varie
   peu d'une partition à l'autre (r = 0,066, trois partitions, intervalle 0,034–0,41) ».
+  *Mise à jour (reportée le 2026-10-10)* : à cinq partitions (`paired_protocol.md`, verdict du
+  2026-09-28), r₅ = 0,048 (IC à 95 % [0,029 ; 0,137]) : appariement soutenu, la réserve sur
+  l'estimation ponctuelle tombe ; facteur descriptif 1,79. *Correction de lecture du
+  2026-10-02* : r₅ est petit surtout parce que chaque bras disperse peu à initialisation fixe
+  (corrélation entre bras 0,31, IC de −0,79 à 0,94 ; l'appariement ne retire qu'environ 28 % de la
+  variance) ; un couplage fort entre architectures n'est pas démontré.
 - **Interdit** : présenter l'appariement comme validé, ou le facteur 1,80 comme un effet
   d'architecture.
 
@@ -217,6 +227,11 @@ témoin, sans arrêt anticipé.
   facteur 2 entre les deux dispersions en log est imposé par les définitions. Au-delà de
   ce facteur, le passage validation → test ajoute ×2,5 (décide) et ×1,9 (rejoue) ; les
   décisions, elles, dilatent l'écart de validation d'un facteur 16.
+  **Précision du 2026-10-02** (`decided_when.md`, reportée ici le 2026-10-10) : le facteur 2 « par
+  définition » est une borne basse ; la pente de log ESR contre log L1 vaut 2,29 (pilote C, bras
+  fixe), 2,51 (bras décide) et 2,82 (pilote A, enfants décide de la fourche 100) sur les métriques
+  de test journalisées. Les facteurs « au-delà » ci-dessus supposent 2 et ne sont pas recalculés
+  ici ; `decided_when.md` ne donne pas de pente pour le bras rejoue.
 - *Connectivité linéaire des modes* (`diagnosis/butterfly/mode_connectivity.md`).
   L'enfant le plus divergent franchit une barrière réelle : ESR 0,0567 au milieu du
   chemin contre 0,0341 et 0,0510 aux extrémités, présente dans 12 segments sur 12. Mais
@@ -291,7 +306,8 @@ avec la profondeur de la fourche (rapport 1,76 à l'époque 5, 0,52 à 25, 0,06 
 ## 4. En attente
 
 - Protocole apparié : élargissement aux partitions 744 et 369, après journalisation des indices du
-  sampler aux époques 1, 2 et 50.
+  sampler aux époques 1, 2 et 50. *Fait le 2026-09-28* (r₅ = 0,048, voir la section du protocole
+  apparié).
 - Écoute : parcourir l'échelle d'audibilité, qui donnerait la marge de la divergence sous
   le seuil, dans l'unité de la divergence elle-même.
 - Question ouverte, sans expérience prévue : la direction de la perturbation. C'est k = 1
