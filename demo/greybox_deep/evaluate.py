@@ -90,6 +90,12 @@ def exists(run_id: str) -> bool:
     return (bench.RESULTS_DIR / f"{run_id}.json").exists()
 
 
+def attempt(run_id: str) -> str:
+    """The run read under a planned id: its _r2 relaunch when the first attempt was
+    killed without a record (predictions.md, relance du 2026-10-11)."""
+    return run_id if exists(run_id) or not exists(f"{run_id}_r2") else f"{run_id}_r2"
+
+
 def checks(run_id: str) -> dict:
     """Steps of the record and the queue's check line, if any (predictions.md)."""
     record = json.loads((bench.RESULTS_DIR / f"{run_id}.json").read_text())
@@ -168,7 +174,7 @@ def aligned_reading(runs: dict, arm: str, reference: str, raw: dict) -> dict:
     reading, same label and acceptability: robust to the alignment."""
     d_i = {}
     for seed in SEEDS:
-        a, r = (runs[VS100R[k].format(seed)] for k in (arm, reference))
+        a, r = (runs[attempt(VS100R[k].format(seed))] for k in (arm, reference))
         if not (a["grid_edge"] or r["grid_edge"]):
             d_i[seed] = a["s_pairs_aligned"] - r["s_pairs_aligned"]
     out = {"d_i": d_i, "d": statistics.mean(d_i.values()) if d_i else None}
@@ -214,7 +220,7 @@ def vs100r_readings(arms: list[str]) -> dict:
     runs, raw = {}, {}
     for arm in arms:
         for seed in SEEDS:
-            run_id = VS100R[arm].format(seed)
+            run_id = attempt(VS100R[arm].format(seed))
             if not exists(run_id):
                 print(f"{run_id}: absent", flush=True)
                 continue
@@ -301,7 +307,8 @@ def jvm_readings() -> dict:
     runs, ln_esr = {}, {}
     for arm, pattern in JVM.items():
         for p in PARTITIONS:
-            run_id = pattern[p] if isinstance(pattern, dict) else pattern.format(p)
+            planned = pattern[p] if isinstance(pattern, dict) else pattern.format(p)
+            run_id = attempt(planned)
             if not exists(run_id):
                 print(f"{run_id}: absent", flush=True)
                 continue

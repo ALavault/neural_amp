@@ -1,7 +1,8 @@
 #!/bin/bash
 # Deeper grey box (demo/greybox_deep/predictions.md, D-0014), from the runner given as
 # $1, whose lib cd's there: a bitwise gate of the default path (300 steps of
-# vs100r_gc_film_joint_s925_r2, the bench changed since), a 100-step smoke of each new
+# vs100r_gc_film_joint_s925_r2, the bench changed since) and, once it exists, of
+# vs100r48gbF3_s42 (300 steps, after the driver change of 2026-10-11), a 100-step smoke of each new
 # configuration, then the runs, most informative first so that a stop leaves complete
 # comparisons: VS100R L and F3 (seeds 42-44, arm C's flags and halving steps), JVM GREY
 # and L (partitions of arm A, arm A's schedule), VS100R F1, JVM F3. Each VS100R run is
@@ -57,20 +58,25 @@ EOF
 }
 
 GPU_FREE_MIB=21000
-gate=repro_gate_vs100r48_greybox_deep${RETRY:-}
-wait_gpu
-echo "=== ${gate}: start $(date '+%a %d %H:%M')"
-.venv/bin/python3 scripts/product_nablafx_bench.py --run-id "${gate}" --no-record \
-  --model ssm-wavenet --device vs100r --discretization zoh --honor-optim --deterministic \
-  --split-seed 925 --l1-weight 0.5 --mrstft-weight 0.5 --cond film --cond-head joint \
-  --cond-hidden 32 --head-act leaky --seed 42 --max-steps 300 \
-  > "demo/runs/${gate}.log" 2>&1 || fail "${gate}" "gate bench exit $?"
-GATE="${gate}" .venv/bin/python3 - <<'EOF' || fail "${gate}" "gate not identical"
+# Runs killed without a record (reboot of 2026-10-11 03:44): relaunched once as <id>_r2.
+RELAUNCHED=" vs100r48gbF3_s43 "
+attempt() {  # attempt <run id>: the id to run under
+  case "${RELAUNCHED}" in *" $1 "*) echo "$1_r2" ;; *) echo "$1" ;; esac
+}
+
+gate() {  # gate <gate id> <reference run> <bench args...>: 300 steps bitwise equal, or stop
+  local gate=$1 reference=$2
+  shift 2
+  wait_gpu
+  echo "=== ${gate}: start $(date '+%a %d %H:%M')"
+  .venv/bin/python3 scripts/product_nablafx_bench.py --run-id "${gate}" --no-record "$@" \
+    --max-steps 300 > "demo/runs/${gate}.log" 2>&1 || fail "${gate}" "gate bench exit $?"
+  GATE="${gate}" REFERENCE="${reference}" .venv/bin/python3 - <<'EOF' || fail "${gate}" "gate not identical"
 import json, os, sys
 from datetime import datetime
 sys.path.insert(0, "diagnosis/seeds")
 import repro_gate
-gate, reference = os.environ["GATE"], "vs100r_gc_film_joint_s925_r2"
+gate, reference = os.environ["GATE"], os.environ["REFERENCE"]
 r = repro_gate.compare(gate, reference)
 print(f"=== {gate}: {r['values_compared']} values, {r['mismatches']} mismatches, identical {r['identical']}, last step {r['last_step']}")
 with open("demo/RUNS.jsonl", "a", encoding="utf-8") as stream:
@@ -81,6 +87,17 @@ with open("demo/RUNS.jsonl", "a", encoding="utf-8") as stream:
         "timestamp": datetime.now().astimezone().isoformat(timespec="seconds")}) + "\n")
 sys.exit(0 if r["identical"] and r["last_step"] >= 299 else 1)
 EOF
+}
+
+gate "repro_gate_vs100r48_greybox_deep${RETRY:-}" vs100r_gc_film_joint_s925_r2 \
+  --model ssm-wavenet --device vs100r --discretization zoh --honor-optim --deterministic \
+  --split-seed 925 --l1-weight 0.5 --mrstft-weight 0.5 --cond film --cond-head joint \
+  --cond-hidden 32 --head-act leaky --seed 42
+# The deep grey box itself, once runs trained before a driver change exist.
+if [ -f demo/nablafx_bench/vs100r48gbF3_s42.json ]; then
+  gate "repro_gate_vs100r48gbF3${RETRY:-}" vs100r48gbF3_s42 ${F3} ${VS} --seed 42 \
+    --lr-halving-steps $(c_steps 42)
+fi
 
 for arm in L F1 F3; do
   smoke="smoke_greybox_deep_${arm}${RETRY:-}"
@@ -95,7 +112,7 @@ vs100r() {  # vs100r <arm>: the three seeds
   local arm=$1 seed steps run
   for seed in 42 43 44; do
     steps=$(c_steps "${seed}") || fail "vs100r48gb${arm}_s${seed}" "no arm C halving steps"
-    run="vs100r48gb${arm}_s${seed}"
+    run=$(attempt "vs100r48gb${arm}_s${seed}")
     echo "=== ${run}: halvings of arm C at steps [${steps}]"
     run_once "${run}" ${!arm} ${VS} --seed "${seed}" --lr-halving-steps ${steps} \
       || { echo "=== ${run} failed, queue stopped"; exit 1; }
@@ -105,10 +122,11 @@ vs100r() {  # vs100r <arm>: the three seeds
 }
 
 jvm() {  # jvm <arm> <run prefix>: the five partitions of arm A, seed 42
-  local arm=$1 prefix=$2 p
+  local arm=$1 prefix=$2 p run
   for p in ${PARTITIONS}; do
-    run_once "${prefix}_s${p}" ${!arm} ${JV} --seed 42 --split-seed "${p}" \
-      || { echo "=== ${prefix}_s${p} failed, queue stopped"; exit 1; }
+    run=$(attempt "${prefix}_s${p}")
+    run_once "${run}" ${!arm} ${JV} --seed 42 --split-seed "${p}" \
+      || { echo "=== ${run} failed, queue stopped"; exit 1; }
   done
 }
 

@@ -217,3 +217,31 @@ changent pas.
 - **Correctif** : quand `nvidia-smi` échoue, `environment()` lit la version du module dans
   `/proc/driver/nvidia/version`.
 - La file repart avec une nouvelle porte (`_r3`).
+
+## Relance après le redémarrage du 2026-10-11 (avant toute lecture)
+
+Aucun résultat de la piste n'a été lu. Les règles de verdict ne changent pas.
+
+**Ce qui s'est arrêté.**
+- Le redémarrage de 03 h 44, après un `apt upgrade`, a tué la file et
+  `vs100r48gbF3_s43` vers le pas 5 220 sur 15 000, sans fiche ni ligne d'échec.
+- Le run est inscrit à la main dans `demo/RUNS.jsonl` avec le statut `killed`. Son
+  journal et son dossier portent le suffixe `_killed`.
+- Runs terminés avant l'arrêt, sous le pilote 595.91.07 et sans segments extensibles :
+  L (graines 42 à 44) et F3 (graine 42).
+
+**Ce qui change.**
+- Le pilote passe à 595.99.02. `nvidia-smi` répond de nouveau, donc
+  `product_queue_lib.sh` réactive les segments extensibles.
+- `vs100r48gbF3_s43` repart une seule fois sous `vs100r48gbF3_s43_r2`. Un run tué n'est
+  jamais repris sous le même identifiant.
+- `evaluate.py` lit `<id>_r2` quand `<id>` n'a pas de fiche. Les clés de sortie portent
+  l'identifiant réellement lu.
+
+**Deux portes avant les runs (`_r4`).**
+- La porte habituelle : 300 pas de SSM-WaveNet contre `vs100r_gc_film_joint_s925_r2`.
+- Une porte nouvelle sur la boîte grise elle-même : 300 pas de F3, graine 42, contre
+  `vs100r48gbF3_s42` entraîné avant le changement de pilote. Elle vérifie que les runs
+  d'un même bras, avant et après le redémarrage, calculent les mêmes bits.
+- La file s'arrête si l'une échoue. En cas d'écart sur F3 seul, on relance cette porte une
+  fois sans segments extensibles avant d'attribuer l'écart au pilote.
