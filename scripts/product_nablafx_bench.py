@@ -73,6 +73,8 @@ FFUZZ = PARAM / "MultidrivePedalPro-F-Fuzz"
 VS100R = ROOT / "datasets/raw/internal/valvestate_vs100r/explore_48k"
 # The same takes, not decimated (demo/capture/valvestate/predictions_192k.md).
 VS100R_192K = ROOT / "datasets/raw/internal/valvestate_vs100r/explore_192k"
+# Nolly renders of the software capture v2 (scripts/product_nolly_dataset.py, D-0015).
+NOLLY = ROOT / "datasets/raw/internal/capture_v2/nolly_48k"
 # auraloss's MultiResolutionSTFTLoss defaults, in samples at 48 kHz; a device at another
 # rate scales them so the loss keeps the same resolution in seconds and Hz.
 MRSTFT_48K = {
@@ -122,6 +124,16 @@ DEVICES = {
         "benchmark": (
             "Marshall VS100R exploratory capture 2026-09-26, OD2, PD off, 192 kHz"
         ),
+    },
+    "nolly": {
+        # Offline renders of the source file v2 (software device, D-0015), built by
+        # product_nolly_dataset.py: input = the source, target = the render.
+        "dry": NOLLY / "dry",
+        "wet": NOLLY / "wet",
+        "params": [0, 1, 2, 3, 4],  # gain, bass, middle, treble, presence
+        "data_to_use": 1.0,
+        "held_out": [],
+        "benchmark": "Neural DSP Archetype: Nolly, Rhythm amp, software capture v2",
     },
 }
 
