@@ -156,3 +156,16 @@ Big Muff is a regression control against the t33 memory runs (median may not
 rise by more than `0.05`). `PROTOCOL_LOCK.yaml` (M4-P4-v1) and the NO-GO verdict
 are unchanged. Like D-M4-010, this is an exception to the D-PRODUCT-001 freeze,
 motivated by the completed diagnosis.
+
+## 2026-10-11 — D-PRODUCT-002 — Publier les résultats préinscrits de la voie produit, étiquetés exploratoires
+
+Décision de l'utilisateur, le 2026-10-11, pour préparer des articles (dossiers
+`paper/p1_alignment`, `paper/p2_butterfly`, `paper/p3_sample_rate`,
+`paper/p4_probe_metrics`). Les résultats de la voie produit dont la règle de
+lecture a été commitée avant les chiffres peuvent être publiés, avec
+l'étiquette « exploratoire ». Ils ne sont pas confirmés sur les captures
+scellées : Blackstar HT1, UA 1176 et `EXTERNAL_REPORT_ONLY` restent non lus, et
+une confirmation ultérieure relèverait de la voie scientifique. Les lectures
+post hoc et les résultats retirés ou réfutés restent étiquetés comme tels.
+D-PRODUCT-001 reste en vigueur pour tout le reste : itération autorisée,
+lignées `.codex_campaign/` gelées.
