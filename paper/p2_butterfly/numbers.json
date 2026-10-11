@@ -314,6 +314,81 @@
   "text": "15,6",
   "source": "diagnosis/butterfly/validation_noise.json"
  },
+ "rank_val_best_kept": {
+  "value": 0.8122,
+  "text": "81,2",
+  "source": "diagnosis/butterfly/validation_noise.json"
+ },
+ "rank_val_pairs": {
+  "value": 36,
+  "text": "36",
+  "source": "diagnosis/butterfly/validation_noise.json"
+ },
+ "rank_val_discordant_median": {
+  "value": 2,
+  "text": "2",
+  "source": "diagnosis/butterfly/validation_noise.json"
+ },
+ "rank_val_flip_gap": {
+  "value": 0.0054130134832997,
+  "text": "0,005",
+  "source": "diagnosis/butterfly/validation_noise.json"
+ },
+ "rank_val_spread": {
+  "value": 0.08808250518515903,
+  "text": "0,088",
+  "source": "diagnosis/butterfly/validation_noise.json"
+ },
+ "rank_seed_best_kept": {
+  "value": 0.9998,
+  "text": "99,98",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_seed_pairs": {
+  "value": 15,
+  "text": "15",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_seed_discordant_median": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_seed_flip_gap": {
+  "value": 0.022541764391104113,
+  "text": "0,023",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_seed_spread": {
+  "value": 1.047354477563153,
+  "text": "1,047",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_child_best_kept": {
+  "value": 0.7869,
+  "text": "78,69",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_child_pairs": {
+  "value": 36,
+  "text": "36",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_child_discordant_median": {
+  "value": 2,
+  "text": "2",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_child_flip_gap": {
+  "value": 0.0072958779200660295,
+  "text": "0,007",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_child_spread": {
+  "value": 0.34636329154281187,
+  "text": "0,346",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
  "pilot_e_sd": {
   "value": 0.19140227441506613,
   "text": "0,191",
@@ -368,6 +443,16 @@
   "value": 2.3569002088925375,
   "text": "2,4",
   "source": "demo/nablafx_bench/plateau2e2_seed42.json; demo/nablafx_bench/plateau2e2_seed42_repeat.json; demo/nablafx_bench/plateau2e2_seed43.json; demo/nablafx_bench/plateau2e2_seed43_repeat.json; demo/nablafx_bench/plateau2e2_seed44.json; demo/nablafx_bench/plateau2e2_seed44_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed42_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed43_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed44.json; demo/nablafx_bench/ssmzoh_guard_seed44_repeat.json"
+ },
+ "pilot_f_g_threshold": {
+  "value": 0.082,
+  "text": "0,082",
+  "source": "diagnosis/seeds/pilot_F_threshold.md"
+ },
+ "pilot_f_s_threshold": {
+  "value": 0.25,
+  "text": "0,25",
+  "source": "diagnosis/seeds/pilot_F_threshold.md"
  },
  "pilot_f_steps": {
   "value": 3290,

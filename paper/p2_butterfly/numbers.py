@@ -108,26 +108,59 @@ def exact_spearman(x, y) -> tuple[float, float]:
     return rho, float(np.mean(np.abs(r) >= abs(rho) - 1e-12))
 
 
+def bootstrap_ranking(scores: np.ndarray, logged: bool) -> dict:
+    """Bootstrap over segments (columns) of the ranking of runs (rows) by mean score.
+
+    Same generator and draw order as diagnosis/seeds/variance_sources.py and the
+    first loop of diagnosis/butterfly/validation_noise.py, so "kept" reproduces their
+    recorded share. Added here (post hoc, 2026-10-11): how often the best run keeps its
+    rank, the median number of discordant pairs, and the largest gap in mean score
+    between two runs whose order flips in at least 5 % of draws.
+    """
+    means = scores.mean(1)
+    order = np.argsort(means)
+    rows, cols = scores.shape
+    rng = np.random.default_rng(0)
+    kept = best = 0
+    flips = np.zeros((rows, rows))
+    discordant = []
+    pairs = list(itertools.combinations(range(rows), 2))
+    for _ in range(10_000):
+        m = scores[:, rng.integers(0, cols, cols)].mean(1)
+        kept += np.array_equal(np.argsort(m), order)
+        best += int(np.argmin(m) == order[0])
+        d = 0
+        for i, j in pairs:
+            if (means[i] - means[j]) * (m[i] - m[j]) < 0:
+                flips[i, j] += 1
+                d += 1
+        discordant.append(d)
+    # Gaps in log units: test scores are already log ESR; validation losses are logged
+    # after averaging.
+    level = means if logged else np.log(means)
+    gaps = [abs(level[i] - level[j]) for i, j in pairs if flips[i, j] >= 500]
+    return {
+        "kept": kept / 10_000,
+        "best": best / 10_000,
+        "pairs": len(pairs),
+        "discordant": float(np.median(discordant)),
+        "gap": max(gaps) if gaps else 0.0,
+        "range": float(level.max() - level.min()),
+    }
+
+
 def decompose(table: np.ndarray) -> dict:
     """diagnosis/seeds/variance_sources.py:decompose, same generator and draws."""
     logs = np.log(table)
     grand = logs.mean()
     run, segment = logs.mean(1) - grand, logs.mean(0) - grand
     interaction = logs - grand - run[:, None] - segment[None, :]
-    order = np.argsort(logs.mean(1))
-    rng = np.random.default_rng(0)
-    kept = sum(
-        np.array_equal(
-            np.argsort(logs[:, rng.integers(0, logs.shape[1], logs.shape[1])].mean(1)),
-            order,
-        )
-        for _ in range(10_000)
-    )
+    boot = bootstrap_ranking(logs, logged=True)
     return {
         "run": float(run.std(ddof=1)),
         "segment": float(segment.std(ddof=1)),
         "interaction": float(interaction.std(ddof=1)),
-        "kept": kept / 10_000,
+        **boot,
     }
 
 
@@ -304,8 +337,32 @@ def evaluation(n: Numbers) -> dict:
     n.add("rank_best_last_runs", len(gaps), VARSRC)
     n.add("rank_best_last_max_gap", max(gaps), VARSRC, 4)
     noise = f"{BFLY}/validation_noise.json"
-    kept = load(noise)["ranking_unchanged"]
+    vn = load(noise)
+    kept = vn["ranking_unchanged"]
     n.add("rank_val_children_kept", kept, noise, text=fr(100 * kept, 1))
+    # Best child by mean validation loss, and how often it keeps its name (recorded).
+    names = list(vn["per_segment"])
+    val = np.array([vn["per_segment"][r] for r in names])
+    best_name = names[int(np.argmin(val.mean(1)))][-12:]
+    best_share = vn["bootstrap_winners"][best_name] / sum(
+        vn["bootstrap_winners"].values()
+    )
+    n.add("rank_val_best_kept", best_share, noise, text=fr(100 * best_share, 1))
+    # Size of the inversions (computed here; the full-ranking share matches the record).
+    vb = bootstrap_ranking(val, logged=False)
+    assert abs(vb["kept"] - kept) < 1e-12
+    n.add("rank_val_pairs", vb["pairs"], noise)
+    n.add("rank_val_discordant_median", round(vb["discordant"]), noise)
+    n.add("rank_val_flip_gap", vb["gap"], noise, 3)
+    n.add("rank_val_spread", vb["range"], noise, 3)
+    for name, group in (("seed", seeds), ("child", kids)):
+        n.add(
+            f"rank_{name}_best_kept", group["best"], VARSRC, text=pct(group["best"], 2)
+        )
+        n.add(f"rank_{name}_pairs", group["pairs"], VARSRC)
+        n.add(f"rank_{name}_discordant_median", round(group["discordant"]), VARSRC)
+        n.add(f"rank_{name}_flip_gap", group["gap"], VARSRC, 3)
+        n.add(f"rank_{name}_spread", group["range"], VARSRC, 3)
     return seeds
 
 
@@ -341,6 +398,19 @@ def threshold_tuning(n: Numbers) -> None:
     g, g_ref = gmean(esr(r) for r in runs), gmean(esr(r) for r in ref)
     n.add("pilot_f_gmean", g, bpath(*runs), 3)
     n.add("pilot_f_quality_factor", g / g_ref, bpath(*runs, *ref), 1)
+    pre_f = f"{SEEDS}/pilot_F_threshold.md"
+    n.add(
+        "pilot_f_g_threshold",
+        md(pre_f, r"\*\*Correctif utile\*\* : s ≤ 0,25 \*\*et\*\* g ≤ (0,\d+)"),
+        pre_f,
+        3,
+    )
+    n.add(
+        "pilot_f_s_threshold",
+        md(pre_f, r"\*\*Correctif utile\*\* : s ≤ (0,\d+)"),
+        pre_f,
+        2,
+    )
     for key, group in (("pilot_f_steps", runs), ("pilot_f_steps_ref", ref)):
         steps = round(st.fmean(bench(r)["global_step"] for r in group))
         n.add(key, steps, bpath(*group), text=f"{steps:,}".replace(",", " "))
