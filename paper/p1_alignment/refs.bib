@@ -1,0 +1,378 @@
+% Bibliographie du dossier P1 (pièges d'alignement et de polarité), revue du 2026-10-11.
+% Convention : une entrée avec DOI porte un champ doi vérifié (doi.org/api/handles,
+% responseCode 1) et titre, auteurs et année comparés à la notice CSL de doi.org.
+% Une entrée sans DOI (préprint arXiv, actes DAFx, logiciel, dépôt GitHub, e-Brief AES)
+% est précédée d'une ligne CHECK et porte url et/ou eprint ; métadonnées relues sur la
+% page d'origine (API arXiv, archive DAFx, GitHub, PDF).
+% Statut de lecture [V]/[NV] de chaque entrée : voir RELATED.md.
+
+% ---------------------------------------------------------------------------
+% Modèles neuronaux d'effets et d'amplificateurs : pertes, métriques, données
+% ---------------------------------------------------------------------------
+
+% src: archive DAFx (details/tieFMcaohHBxl_2yPyIGFA) + en-tête du PDF DAFx2019_paper_43.
+% CHECK
+@inproceedings{wright2019realtime,
+  author    = {Alec Wright and Eero-Pekka Damsk{\"a}gg and Vesa V{\"a}lim{\"a}ki},
+  title     = {Real-Time Black-Box Modelling With Recurrent Neural Networks},
+  booktitle = {Proc. 22nd Int. Conf. Digital Audio Effects (DAFx-19)},
+  address   = {Birmingham, UK},
+  year      = {2019},
+  url       = {https://dafx.de/paper-archive/details/tieFMcaohHBxl_2yPyIGFA}
+}
+
+% src: notice CSL doi.org (pages 251-255) + arXiv 1911.08922 (texte lu).
+@inproceedings{wright2020perceptual,
+  author    = {Alec Wright and Vesa V{\"a}lim{\"a}ki},
+  title     = {Perceptual Loss Function for Neural Modelling of Audio Systems},
+  booktitle = {Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP)},
+  year      = {2020},
+  pages     = {251--255},
+  doi       = {10.1109/ICASSP40776.2020.9052944},
+  eprint    = {1911.08922}
+}
+
+% src: notice CSL doi.org (pages 471-475) + arXiv 1811.00334 (texte lu).
+@inproceedings{damskagg2019icassp,
+  author    = {Eero-Pekka Damsk{\"a}gg and Lauri Juvela and Etienne Thuillier and Vesa V{\"a}lim{\"a}ki},
+  title     = {Deep Learning for Tube Amplifier Emulation},
+  booktitle = {Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP)},
+  year      = {2019},
+  pages     = {471--475},
+  doi       = {10.1109/ICASSP.2019.8682805},
+  eprint    = {1811.00334}
+}
+
+% src: notice CSL doi.org + arXiv 2211.00497 v2 (texte lu ; le DOI y est déclaré).
+@inproceedings{comunita2023icassp,
+  author    = {Marco Comunit{\`a} and Christian J. Steinmetz and Huy Phan and Joshua D. Reiss},
+  title     = {Modelling Black-Box Audio Effects with Time-Varying Feature Modulation},
+  booktitle = {Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP)},
+  year      = {2023},
+  doi       = {10.1109/ICASSP49357.2023.10097173},
+  eprint    = {2211.00497}
+}
+
+% src: API arXiv (2502.11668 v2, 25 févr. 2025). Aucune version évaluée trouvée.
+% CHECK
+@misc{comunita2025nablafx,
+  author       = {Marco Comunit{\`a} and Christian J. Steinmetz and Joshua D. Reiss},
+  title        = {{NablAFx}: A Framework for Differentiable Black-box and Gray-box Modeling of Audio Effects},
+  howpublished = {arXiv preprint arXiv:2502.11668},
+  year         = {2025},
+  eprint       = {2502.11668},
+  url          = {https://arxiv.org/abs/2502.11668}
+}
+
+% src: notice CSL doi.org (Frontiers in Signal Processing, vol. 5, art. 1580395) ;
+% texte lu dans le préprint arXiv 2502.14405 v1 (mêmes titre et auteurs) ; passages des sections 3.3
+% et 4.3 relus, identiques, dans la version publiée (page frontiersin.org).
+@article{comunita2025frontiers,
+  author  = {Marco Comunit{\`a} and Christian J. Steinmetz and Joshua D. Reiss},
+  title   = {Differentiable Black-box and Gray-box Modeling of Nonlinear Audio Effects},
+  journal = {Frontiers in Signal Processing},
+  volume  = {5},
+  year    = {2025},
+  note    = {Art. no. 1580395},
+  doi     = {10.3389/frsip.2025.1580395},
+  eprint  = {2502.14405}
+}
+
+% src: README du dépôt (branche master, dernier commit 76ae7c8 du 2025-02-24, lu le 2026-10-11).
+% CHECK
+@misc{comunita2025tonetwist,
+  author       = {Marco Comunit{\`a} and Christian J. Steinmetz and Joshua D. Reiss},
+  title        = {{ToneTwist AFx} Dataset},
+  howpublished = {GitHub repository},
+  year         = {2025},
+  url          = {https://github.com/mcomunita/tonetwist-afx-dataset}
+}
+
+% src: API Zenodo, enregistrement 10901450 (créateur, titre, version 1.0, publié le 2024-03-31,
+% licence CC BY-NC 4.0) + notice CSL doi.org.
+@misc{comunita2024ffuzz,
+  author       = {Marco Comunit{\`a}},
+  title        = {{ToneTwist AFx} Dataset: Multidrive Pedal Pro {F-Fuzz}},
+  howpublished = {Zenodo, version 1.0},
+  year         = {2024},
+  doi          = {10.5281/zenodo.10901450}
+}
+
+% src: API GitHub (dépôt sdatkinson/neural-amp-modeler, étiquette v0.13.0 -> commit f261129,
+% 2026-06-02), version épinglée dans third_party/neural-amp-modeler ; code lu : nam/train/core.py.
+% CHECK
+@misc{atkinson2023nam,
+  author       = {Steven Atkinson},
+  title        = {{NAM}: {Neural Amp Modeler}},
+  howpublished = {GitHub repository, release v0.13.0},
+  year         = {2026},
+  url          = {https://github.com/sdatkinson/neural-amp-modeler}
+}
+
+% src: notice CSL doi.org (huit auteurs) ; texte lu dans arXiv 2403.08559 v1, dont la notice
+% n'en liste que sept (sans K. Rauhanen). L'ordre et la liste suivent la notice IEEE.
+@inproceedings{juvela2023endtoend,
+  author    = {Lauri Juvela and Eero-Pekka Damsk{\"a}gg and Aleksi Peussa and Jaakko M{\"a}kinen and Thomas Sherson and Stylianos I. Mimilakis and Kimmo Rauhanen and Athanasios Gotsopoulos},
+  title     = {End-to-End Amp Modeling: From Data to Controllable Guitar Amplifier Models},
+  booktitle = {Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP)},
+  year      = {2023},
+  doi       = {10.1109/ICASSP49357.2023.10094769},
+  eprint    = {2403.08559}
+}
+
+% src: notice CSL doi.org + arXiv 2211.00943 v2 (texte lu).
+@inproceedings{wright2023adversarial,
+  author    = {Alec Wright and Vesa V{\"a}lim{\"a}ki and Lauri Juvela},
+  title     = {Adversarial Guitar Amplifier Modelling with Unpaired Data},
+  booktitle = {Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP)},
+  year      = {2023},
+  doi       = {10.1109/ICASSP49357.2023.10094600},
+  eprint    = {2211.00943}
+}
+
+% src: archive DAFx (details/Wr-4rh7sj7ksIHvBvB6h4g) + PDF DAFx23_paper_51 (numérotation
+% DAFx.1 à DAFx.8, pas de pagination des actes) + API arXiv 2305.16862.
+% CHECK
+@inproceedings{mikkonen2023tape,
+  author    = {Otto Mikkonen and Alec Wright and Eloi Moliner and Vesa V{\"a}lim{\"a}ki},
+  title     = {Neural Modeling of Magnetic Tape Recorders},
+  booktitle = {Proc. 26th Int. Conf. Digital Audio Effects (DAFx23)},
+  address   = {Copenhagen, Denmark},
+  year      = {2023},
+  eprint    = {2305.16862},
+  url       = {https://dafx.de/paper-archive/details/Wr-4rh7sj7ksIHvBvB6h4g}
+}
+
+% src: archive DAFx (details/CZ9Y0PFn5s3n96qUw4tScg) + PDF DAFx23_paper_22 + API arXiv 2306.00860.
+% CHECK
+@inproceedings{bargum2023allpass,
+  author    = {Anders R. Bargum and Stefania Serafin and Cumhur Erkut and Julian D. Parker},
+  title     = {Differentiable All-Pass Filters for Phase Response Estimation and Automatic Signal Alignment},
+  booktitle = {Proc. 26th Int. Conf. Digital Audio Effects (DAFx23)},
+  address   = {Copenhagen, Denmark},
+  year      = {2023},
+  eprint    = {2306.00860},
+  url       = {https://dafx.de/paper-archive/details/CZ9Y0PFn5s3n96qUw4tScg}
+}
+
+% src: archive DAFx (details/BSnsZuBLe41uhCwtZV7vyg) + PDF DAFx24_paper_30 (pages 192-199)
+% + API arXiv 2406.15751 (« Accepted to DAFx 2024 »).
+% CHECK
+@inproceedings{chen2024unaligned,
+  author    = {Yu-Hua Chen and Woosung Choi and Wei-Hsiang Liao and Marco Mart{\'i}nez-Ram{\'i}rez and Kin Wai Cheuk and Yuki Mitsufuji and Jyh-Shing Roger Jang and Yi-Hsuan Yang},
+  title     = {Improving Unsupervised Clean-to-Rendered Guitar Tone Transformation Using {GANs} and Integrated Unaligned Clean Data},
+  booktitle = {Proc. 27th Int. Conf. Digital Audio Effects (DAFx24)},
+  address   = {Guildford, UK},
+  year      = {2024},
+  pages     = {192--199},
+  eprint    = {2406.15751},
+  url       = {https://dafx.de/paper-archive/details/BSnsZuBLe41uhCwtZV7vyg}
+}
+
+% src: notice CSL doi.org (vol. 2025, numéro 1) ; texte lu dans arXiv 2405.04124 v6,
+% préprint de cet article.
+@article{simionato2025ssm,
+  author  = {Riccardo Simionato and Stefano Fasciani},
+  title   = {Comparative Study of State-based Neural Networks for Virtual Analog Audio Effects Modeling},
+  journal = {EURASIP Journal on Audio, Speech, and Music Processing},
+  volume  = {2025},
+  number  = {1},
+  year    = {2025},
+  doi     = {10.1186/s13636-025-00416-3},
+  eprint  = {2405.04124}
+}
+
+% src: archive DAFx (details/FNweyWEsUB1pJp7pF0PUNw) + PDF DAFx25_paper_13 (pages 55-62)
+% + API arXiv 2504.04589.
+% CHECK
+@inproceedings{gu2025buscomp,
+  author    = {Yicheng Gu and Runsong Zhang and Lauri Juvela and Zhizheng Wu},
+  title     = {{Solid State Bus-Comp}: A Large-Scale and Diverse Dataset for Dynamic Range Compressor Virtual Analog Modeling},
+  booktitle = {Proc. 28th Int. Conf. Digital Audio Effects (DAFx25)},
+  address   = {Ancona, Italy},
+  year      = {2025},
+  pages     = {55--62},
+  eprint    = {2504.04589},
+  url       = {https://dafx.de/paper-archive/details/FNweyWEsUB1pJp7pF0PUNw}
+}
+
+% src: PDF du dépôt ORBi (Université de Liège), en-tête « Convention e-Brief 129, 145th Convention,
+% New York, 2018 » ; notice OpenAlex (lien e-library AES elib=19754). Pas de DOI trouvé.
+% CHECK
+@inproceedings{schmitz2018dataset,
+  author    = {Thomas Schmitz and Jean-Jacques Embrechts},
+  title     = {Introducing a Dataset of Guitar Amplifier Sounds for Nonlinear Emulation Benchmarking},
+  booktitle = {Audio Engineering Society 145th Convention, e-Brief 129},
+  address   = {New York, NY, USA},
+  year      = {2018},
+  url       = {https://orbi.uliege.be/bitstream/2268/228910/1/TSCHMITZ_AES2018_FINAL.pdf}
+}
+
+% src: notice CSL doi.org (sept auteurs). Texte intégral non lu (accès bloqué) ; résumé OpenAlex.
+@article{vanhatalo2022review,
+  author  = {Tara Vanhatalo and Pierrick Legrand and Myriam Desainte-Catherine and Pierre Hanna and Antoine Brusco and Guillaume Pille and Yann Bayle},
+  title   = {A Review of Neural Network-Based Emulation of Guitar Amplifiers},
+  journal = {Applied Sciences},
+  volume  = {12},
+  number  = {12},
+  year    = {2022},
+  note    = {Art. no. 5894},
+  doi     = {10.3390/app12125894}
+}
+
+% src: notice CSL doi.org et Crossref (vol. 74, no. 10, pages 762-772, 2026-10-09).
+% Texte intégral non lu (page AES refusée) ; résumé Crossref.
+@article{wright2026subjective,
+  author  = {Alec Wright and Gloria {Dal Santo} and Sebastian J. Schlecht},
+  title   = {Predicting Subjective Ratings of Guitar Amplifier Emulations},
+  journal = {Journal of the Audio Engineering Society},
+  volume  = {74},
+  number  = {10},
+  pages   = {762--772},
+  year    = {2026},
+  doi     = {10.17743/jaes.2026.0304}
+}
+
+% ---------------------------------------------------------------------------
+% Pertes spectrales et ambiguïté de signe
+% ---------------------------------------------------------------------------
+
+% src: PDF du résumé étendu lié depuis le README d'auraloss (en-tête « DMRN+15 ... Tue 15 December
+% 2020 ») ; code lu : auraloss v0.4.0 (third_party/auraloss, auraloss/freq.py).
+% CHECK
+@inproceedings{steinmetz2020auraloss,
+  author    = {Christian J. Steinmetz and Joshua D. Reiss},
+  title     = {{auraloss}: Audio-focused loss functions in {PyTorch}},
+  booktitle = {Digital Music Research Network One-day Workshop (DMRN+15)},
+  address   = {London, UK},
+  year      = {2020},
+  url       = {https://github.com/csteinmetz1/auraloss}
+}
+
+% src: notice CSL doi.org (pages 6199-6203) + arXiv 1910.11480 (texte lu).
+@inproceedings{yamamoto2020pwg,
+  author    = {Ryuichi Yamamoto and Eunwoo Song and Jae-Min Kim},
+  title     = {{Parallel WaveGAN}: A Fast Waveform Generation Model Based on Generative Adversarial Networks with Multi-Resolution Spectrogram},
+  booktitle = {Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP)},
+  year      = {2020},
+  pages     = {6199--6203},
+  doi       = {10.1109/ICASSP40776.2020.9053795},
+  eprint    = {1910.11480}
+}
+
+% src: notice CSL doi.org (vol. 26, no. 1, pages 94-98, 2019) + arXiv 1808.06719 (texte lu).
+@article{arik2019spectrogram,
+  author  = {Sercan {\"O}. Ar{\i}k and Heewoo Jun and Gregory Diamos},
+  title   = {Fast Spectrogram Inversion Using Multi-Head Convolutional Neural Networks},
+  journal = {IEEE Signal Processing Letters},
+  volume  = {26},
+  number  = {1},
+  pages   = {94--98},
+  year    = {2019},
+  doi     = {10.1109/LSP.2018.2880284},
+  eprint  = {1808.06719}
+}
+
+% src: notice CSL doi.org (vol. 10, no. 4, pages 770-781) + arXiv 1508.02820 (texte lu).
+@article{jaganathan2016stft,
+  author  = {Kishore Jaganathan and Yonina C. Eldar and Babak Hassibi},
+  title   = {{STFT} Phase Retrieval: Uniqueness Guarantees and Recovery Algorithms},
+  journal = {IEEE Journal of Selected Topics in Signal Processing},
+  volume  = {10},
+  number  = {4},
+  pages   = {770--781},
+  year    = {2016},
+  doi     = {10.1109/JSTSP.2016.2549507},
+  eprint  = {1508.02820}
+}
+
+% src: API arXiv 2606.10868 (v1 publiée le 2026-06-09 ; texte lu en v2 du 2026-08-27).
+% Aucune version évaluée trouvée.
+% CHECK
+@misc{esmail2026seismo,
+  author       = {Waleed Esmail and Stuart Russell and Jana Klinge and Alexander Kappes and Christine Thomas},
+  title        = {When Do Autoregressive Sequence Models Forecast Physical Wavefields? {A} Controlled Study on Synthetic Seismograms},
+  howpublished = {arXiv preprint arXiv:2606.10868},
+  year         = {2026},
+  eprint       = {2606.10868},
+  url          = {https://arxiv.org/abs/2606.10868}
+}
+
+% ---------------------------------------------------------------------------
+% Estimation de retard et retard fractionnaire
+% ---------------------------------------------------------------------------
+
+% src: notice CSL doi.org (vol. 13, no. 1, pages 30-60) ; résumé OpenAlex. Texte non lu.
+% Titre imprimé « Splitting the Unit Delay: Tools for Fractional Delay Filter Design ».
+@article{laakso1996unitdelay,
+  author  = {T. I. Laakso and V. V{\"a}lim{\"a}ki and M. Karjalainen and U. K. Laine},
+  title   = {Splitting the Unit Delay: Tools for Fractional Delay Filter Design},
+  journal = {IEEE Signal Processing Magazine},
+  volume  = {13},
+  number  = {1},
+  pages   = {30--60},
+  year    = {1996},
+  doi     = {10.1109/79.482137}
+}
+
+% src: notice CSL doi.org (vol. 24, no. 4, pages 320-327) ; résumé OpenAlex. Texte non lu.
+@article{knapp1976gcc,
+  author  = {C. Knapp and G. Carter},
+  title   = {The Generalized Correlation Method for Estimation of Time Delay},
+  journal = {IEEE Transactions on Acoustics, Speech, and Signal Processing},
+  volume  = {24},
+  number  = {4},
+  pages   = {320--327},
+  year    = {1976},
+  doi     = {10.1109/TASSP.1976.1162830}
+}
+
+% src: API arXiv 2203.09723 (v2, 23 mars 2022, texte lu). Version évaluée non trouvée
+% (Crossref : seule la version WASPAA 2019 à deux capteurs, non lue).
+% CHECK
+@misc{yamaoka2022subsample,
+  author       = {Kouei Yamaoka and Yukoh Wakabayashi and Nobutaka Ono},
+  title        = {Estimation of Consistent Time Delays in Subsample via Auxiliary-Function-Based Iterative Updates},
+  howpublished = {arXiv preprint arXiv:2203.09723},
+  year         = {2022},
+  eprint       = {2203.09723},
+  url          = {https://arxiv.org/abs/2203.09723}
+}
+
+% src: notice CSL doi.org + arXiv 2409.15884 v2 (texte lu).
+@inproceedings{carson2025interpolation,
+  author    = {Alistair Carson and Alec Wright and Stefan Bilbao},
+  title     = {Interpolation Filter Design for Sample Rate Independent Audio Effect {RNNs}},
+  booktitle = {Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP)},
+  year      = {2025},
+  doi       = {10.1109/ICASSP49660.2025.10889121},
+  eprint    = {2409.15884}
+}
+
+% ---------------------------------------------------------------------------
+% Métriques d'évaluation qui tolèrent une déformation (analogues)
+% ---------------------------------------------------------------------------
+
+% src: notice CSL doi.org (vol. 14, no. 4, pages 1462-1469) ; résumé OpenAlex. Texte non lu
+% (dépôt HAL refusé au téléchargement).
+@article{vincent2006bsseval,
+  author  = {E. Vincent and R. Gribonval and C. F{\'e}votte},
+  title   = {Performance Measurement in Blind Audio Source Separation},
+  journal = {IEEE Transactions on Audio, Speech, and Language Processing},
+  volume  = {14},
+  number  = {4},
+  pages   = {1462--1469},
+  year    = {2006},
+  doi     = {10.1109/TSA.2005.858005}
+}
+
+% src: notice CSL doi.org (pages 626-630, quatre auteurs) + arXiv 1811.02508 (texte lu).
+@inproceedings{leroux2019sdr,
+  author    = {Jonathan {Le Roux} and Scott Wisdom and Hakan Erdogan and John R. Hershey},
+  title     = {{SDR} -- Half-baked or Well Done?},
+  booktitle = {Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP)},
+  year      = {2019},
+  pages     = {626--630},
+  doi       = {10.1109/ICASSP.2019.8683855},
+  eprint    = {1811.02508}
+}
