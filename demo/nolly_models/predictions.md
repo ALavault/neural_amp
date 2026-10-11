@@ -92,8 +92,9 @@ identifiant. La file s'arrête sur elle. La relance la liste dans `RELAUNCHED` e
 repartir sous `<id>_r2`, identifiant que `evaluate.py` lit quand `<id>` n'a pas de fiche. Les
 pas de division et les contrôles suivent l'identifiant réellement lancé.
 
-**Contrôle après chaque run** : 15 000 pas, 1 306 segments d'entraînement, et même partition que
-le C de même graine (sauf pour C).
+**Contrôle après chaque run** : 15 000 pas et 1 306 segments d'entraînement. Pour GREY, L et F3,
+s'y ajoutent la même partition que le C de même graine, et des pas de division enregistrés
+égaux à ceux relevés sur C. C lui-même n'a aucun pas fixé : il suit le plateau.
 
 **Portée de la porte au bit** : elle compare le chemin par défaut du banc (300 pas) à
 `vs100r_gc_film_joint_s925_r2`. Elle prouve seulement que le chemin VS100R n'a pas bougé. Aucun
@@ -189,5 +190,11 @@ Total : 12 runs, environ **26 h de GPU**, plus 1 h pour la porte et les essais.
    construit `datasets/raw/internal/capture_v2/nolly_48k` et son manifeste (comptes, médiane,
    avance), ou refuse si une porte a échoué.
 3. Runner `neural_amp_runner_nolly` épinglé sur le commit de ce texte, ou sur un commit qui ne
-   touche ni ce texte ni ses scripts.
-4. Lancement par `nohup setsid`, enchaîné après la file boîte grise par `kill -0`.
+   touche ni ce texte ni ses scripts. Commande lancée seule :
+   `scripts/product_runner_worktree.sh <commit> <runner>`. Elle lie `demo/runs`,
+   `demo/nablafx_bench`, `demo/RUNS.jsonl` et `datasets/raw` à l'arbre principal ; la porte y
+   trouve sa référence.
+4. Lancement, enchaîné après la file en cours, jamais à côté :
+   `nohup setsid bash -c 'while kill -0 -- -<PGID en cours> 2>/dev/null; do sleep 60; done;
+   exec bash <runner>/scripts/product_nolly_queue.sh <runner>' >> demo/runs/nolly_queue.log
+   2>&1 < /dev/null &`

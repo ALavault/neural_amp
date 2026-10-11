@@ -56,8 +56,9 @@ print(" ".join(steps))
 EOF
 }
 
-check() {  # check <run> [<C run>]: steps, segment count and, given C, the same split
-  RUN="$1" REF="${2:-}" .venv/bin/python3 - <<'EOF'
+check() {  # check <run> [<C run> <C's halving steps>]: steps, segment count and, given
+  # C, the same split and the halvings replayed (none fixed for C itself: plateau)
+  RUN="$1" REF="${2:-}" STEPS="${3:-}" .venv/bin/python3 - <<'EOF'
 import json, os, sys
 from datetime import datetime
 run, ref = os.environ["RUN"], os.environ["REF"]
@@ -65,11 +66,14 @@ r = json.load(open(f"demo/nablafx_bench/{run}.json"))
 same = None
 if ref:
     same = r["val_indices"] == json.load(open(f"demo/nablafx_bench/{ref}.json"))["val_indices"]
-ok = r["global_step"] == 15000 and r["train_segments"] == 1306 and same is not False
-print(f"=== {run}: validation as {ref or '-'} {same}, train segments {r['train_segments']}, step {r['global_step']}")
+halvings = [int(s) for s in os.environ["STEPS"].split()] if ref else None
+ok = (r["global_step"] == 15000 and r["train_segments"] == 1306 and same is not False
+      and r["lr_halving_steps"] == halvings)
+print(f"=== {run}: validation as {ref or '-'} {same}, train segments {r['train_segments']}, step {r['global_step']}, halvings {r['lr_halving_steps']}")
 with open("demo/RUNS.jsonl", "a", encoding="utf-8") as stream:
     stream.write(json.dumps({"run_id": run, "status": "check", "reference": ref or None,
         "val_identical": same, "train_segments": r["train_segments"],
+        "lr_halving_steps": r["lr_halving_steps"], "expected_halving_steps": halvings,
         "global_step": r["global_step"], "ok": ok,
         "timestamp": datetime.now().astimezone().isoformat(timespec="seconds")}) + "\n")
 sys.exit(0 if ok else 1)
@@ -142,7 +146,7 @@ for seed in 42 43 44; do
     echo "=== ${run}: halvings of ${c} at steps [${steps}]"
     run_once "${run}" ${!arm} ${NO} --seed "${seed}" --lr-halving-steps ${steps} \
       || { echo "=== ${run} failed, queue stopped"; exit 1; }
-    check "${run}" "${c}" || { echo "=== ${run}: check FAILED, queue stopped"; exit 1; }
+    check "${run}" "${c}" "${steps}" || { echo "=== ${run}: check FAILED, queue stopped"; exit 1; }
   done
 done
 echo "=== nolly queue finished $(date '+%a %d %H:%M')"
