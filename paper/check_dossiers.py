@@ -166,6 +166,7 @@ def typed_decimals(d: Path) -> tuple[bool, str]:
 
 def no_prose(d: Path) -> tuple[bool, str]:
     files = [*sorted(d.glob("*.src.md")), d / "OUTLINE.md", d / "RELATED.md"]
+    files = [f for f in files if f.exists()]
     prose = [f"{f.name}:{n}" for f in files for n in paragraphs(f)]
     return not prose, ", ".join(prose[:8]) or "items only"
 
@@ -217,6 +218,8 @@ def outline_ok(d: Path, name: str) -> tuple[bool, str]:
 
 
 def refs_ok(d: Path) -> tuple[bool, str]:
+    if not ((d / "refs.bib").exists() and (d / "RELATED.md").exists()):
+        return False, "refs.bib or RELATED.md missing"
     chunks = re.split(r"(?=^@)", (d / "refs.bib").read_text(), flags=re.MULTILINE)
     related = [
         line for line in (d / "RELATED.md").read_text().splitlines() if line[:1] == "|"
@@ -252,7 +255,7 @@ def check(name: str) -> list[tuple[str, bool, str]]:
     d = PAPER / name
     missing = [f for f in REQUIRED if not (d / f).exists()]
     out = [("files", not missing, f"missing {missing}" if missing else "10/10")]
-    if missing:
+    if set(missing) - {"refs.bib", "RELATED.md"}:
         return out
     tex = [str(p.relative_to(d)) for p in d.rglob("*.tex")]
     out.append(("no .tex", not tex, ", ".join(tex) or "none"))
