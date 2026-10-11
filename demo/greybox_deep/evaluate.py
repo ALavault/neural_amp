@@ -234,6 +234,7 @@ def vs100r_readings(arms: list[str]) -> dict:
                 for t in takes
             }
             tau, _ = cd.common_delay(model, takes, validation)
+            aligned = cd.score(model, takes, data, tau)
             entry = {
                 "arm": arm,
                 "seed": seed,
@@ -241,7 +242,8 @@ def vs100r_readings(arms: list[str]) -> dict:
                 "ln_esr_by_take": ln_esr,
                 "tau": tau,
                 "grid_edge": tau in (cd.DELAYS[0], cd.DELAYS[-1]),
-                "s_pairs_aligned": cd.score(model, takes, data, tau)["s_pairs"],
+                "s_pairs_aligned": aligned["s_pairs"],
+                "ln_esr_aligned_by_take": aligned["ln_esr_by_take"],
                 "parameters": parameters(model),
                 **checks(run_id),
                 "history": [
@@ -268,13 +270,14 @@ def vs100r_readings(arms: list[str]) -> dict:
                 flush=True,
             )
     complete = {a for a in arms if len(raw.get(a, {})) == len(SEEDS)}
-    # Edge effect of the shift in the scored region, bound of coreading_delay.py.
+    # Edge effect of the shift in the scored region, bound of coreading_delay.py: 1 % of
+    # the smallest delay-compensated ESR (correction of 2026-10-11, predictions.md).
     edge = cd.edge_effect(takes[0])
     smallest = min(
         math.exp(v)
         for r in runs.values()
         if r["valid"] and not r["grid_edge"]
-        for v in r["ln_esr_by_take"].values()
+        for v in r["ln_esr_aligned_by_take"].values()
     )
     edge_ok = edge < 0.01 * smallest
     readings = {}

@@ -250,3 +250,16 @@ Aucun résultat de la piste n'a été lu. Les règles de verdict ne changent pas
   suffit pas : `product_queue_lib.sh` réactive les segments dès que `nvidia-smi` répond.
   Il faut appeler le banc directement, sans `PYTORCH_CUDA_ALLOC_CONF`, sous un nouvel
   identifiant de porte.
+
+## Correction de la lecture avant toute lecture (2026-10-11, relecture Codex de la piste Nolly)
+
+Aucun résultat de la piste n'a été lu. La relecture du script de lecture Nolly, calqué sur
+`evaluate.py`, a relevé un écart à la règle de `coreading_delay.py`, que ce texte déclare
+appliquer inchangée.
+- **Règle** : la co-lecture n'est lue que si l'effet de bord du décalage reste sous 1 % de la
+  plus petite ESR **recalée** des runs hors bord de grille (`ln_esr_by_take` de `score()`).
+- **Écart** : `evaluate.py` prenait la plus petite ESR **brute**.
+- **Correction** : il garde les ESR recalées par prise (`ln_esr_aligned_by_take`) et borne
+  sur elles.
+
+Les verdicts, les lectures principales et les autres règles ne changent pas.
