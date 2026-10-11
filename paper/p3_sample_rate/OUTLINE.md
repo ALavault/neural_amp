@@ -18,11 +18,11 @@
 
 ## Thèse
 
-- Le maintien d'ordre zéro (ZOH) fige à la fréquence d'entraînement un écart de premier moment 2 Re(w φ(z)) : rapporté à un gain continu non nul, une avance du retard de groupe à fréquence nulle, qui tend vers un demi-échantillon pour un mode lent ; le maintien du premier ordre (FOH) n'en a pas (T1, démontré ; `t1_phi0`).
+- Le maintien d'ordre zéro (ZOH) fige à la fréquence d'entraînement un écart de premier moment 2 Re(w φ(z)) : rapporté à un gain continu non nul, un écart signé du retard de groupe à fréquence nulle, avance dans ]0 ; 1/2[ échantillon pour un mode réel, de signe libre pour un mode complexe, tendant vers un demi-échantillon quand Δ → 0 à λ et c fixés ; le maintien du premier ordre (FOH) n'en a pas (T1, démontré ; `t1_phi0`).
 - Rééchelonner Δ transfère SSM-WaveNet de 48 kHz à 44 100 Hz sans perte face au rééchantillonnage (P1 et P2 préinscrites, 3 partitions ; `down_delta_around_ratio_max`).
-- En montée (88 200 Hz à 192 kHz), l'écart au modèle à 48 kHz vient de cette avance : il ne s'effondre pas à −20 dB (H3 ; `hold_m20db_ratio_min`), il croît comme le carré du retard (lecture post hoc ; `up_delta_ratio_192_96_min`).
+- En montée (88 200 Hz à 192 kHz), l'écart au modèle à 48 kHz est compatible avec une contribution dominante de cet écart de premier moment : il ne s'effondre pas à −20 dB (critère H3 ; `hold_m20db_ratio_min`), il croît comme le carré du retard (lecture post hoc ; `up_delta_ratio_192_96_min`) ; la part du repliement n'est pas isolée.
 - Une correction causale à deux coefficients par mode, égale à la relecture du checkpoint ZOH en FOH, ramène toutes les fréquences de montée à une ESR de `twotap_esr_min` à `twotap_esr_max` du modèle à 48 kHz, sans réentraînement (H6 ; F-0026, F-0027).
-- Le plancher résiduel n'est ni le rééchantillonneur ni la précision ; son origine n'est pas attribuée.
+- Le plancher résiduel persiste avec le rééchantillonneur haute qualité et en float64 (R et P réfutées selon les critères préinscrits) ; son origine n'est pas attribuée.
 - Entraîner directement en FOH est étiqueté inférieur à 48 kHz (E-0036, une partition sur trois en cause) : la voie retenue est la relecture FOH.
 - Au niveau du réseau, le retard non corrigé suit κ (1 − 48 000/fs′)/2 avec κ propre au checkpoint (T4, mesuré ; `kappa_bm_min` à `kappa_bm_max`) ; un modèle entraîné en FOH ne prend qu'un petit retard, sous le seuil préinscrit, signe non établi (T1-P1 ; `fohk_primaire`).
 
@@ -80,4 +80,8 @@
 - Écoute à l'aveugle 48 kHz contre montée corrigée : session d'écoute de l'utilisateur ; sans elle, aucune formulation perceptive.
 - Coût du moteur natif, si cité : remesure avec sortie JSON (banc existant `cpp/benchmarks/ssm_wavenet_benchmark.cpp`), CPU, une heure.
 - Anonymisation : miroir anonyme du code des figures et de `numbers.py`, sans nom de dépôt ; quelques heures.
+- Témoins de mécanisme (relecture Codex) : correction du seul retard global appliquée à tout le test, pour situer l'apport propre de la correction par mode ; contrôle linéarisé ou synthétique séparant erreur de maintien, repliement des pôles et repliement des non-linéarités ; pour S4-TF-L-16, interventions séparées sur la durée physique du TFiLM et sur les modes repliés ; nouvelles expériences CPU préinscrites.
+- Unités statistiques : le test Big Muff est fait de 12 segments de 5 s d'un seul fichier, pas de prises indépendantes ; les plages min–max décrivent 3 checkpoints, ce ne sont pas des intervalles de confiance ; l'étiquette FOH « inférieur » est une règle préinscrite, pas un test d'infériorité ; à dire dans le texte.
+- Reproductibilité pour un tiers : accès documenté aux poids des checkpoints, aux données et à l'environnement, séquence de reproduction de chaque bras ; le miroir anonyme doit couvrir ces dépendances, pas seulement les figures.
+- `THEORY.md`, T1 : la formulation « en avance de 2 Re(w φ(z)) » est signée ; préciser que le signe et la borne ne valent que pour un mode réel (travail sur le registre, hors de ce dossier).
 - Vérifier sur les appels officiels la date limite, le format et le modèle de relecture de WASPAA 2027 (à confirmer).
