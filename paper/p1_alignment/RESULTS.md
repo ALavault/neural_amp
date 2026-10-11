@@ -6,7 +6,8 @@
 
 ## Établi
 
-- **Latence de 4 échantillons des cibles F-Fuzz, non apprise par deux architectures.**
+- **Retard relatif cible–sortie de 4 échantillons sur F-Fuzz, commun à deux architectures et non appris.**
+  Interprétation : latence de rendu des données, non isolée d'une erreur de phase commune aux modèles ; le retard entrée–cible mesuré sur l'audio seul varie de −11 à +4 selon le fichier (`DIAGNOSIS_ffuzz.md`), ce n'est pas une mesure propre de latence (relecture Codex du 2026-10-11).
   Retard optimal sortie → cible de +4 échantillons dans 1463 segments de test sur 1463 (SSM-WaveNet-FiLM) et 1459 (S4-param ; +3 dans les 4 autres) ; +4 dans 100 et 100 segments d'entraînement sur 100.
   ESR de test brute 0,1366 et 0,1377 (rapport 1,01) alors que la MR-STFT de test diffère d'un facteur 1,6 (0,18 contre 0,29) : plancher d'ESR commun.
   ESR intérieure 0,136 et 0,137 au retard 0, 0,0013 et 0,0032 réalignée (division par 103 et 43) ; au retard 0, l'ESR croît avec le fuzz, de 0,113 (F000) à 0,182 (F100) pour SSM.
@@ -21,7 +22,8 @@
   Statut : préinscrit ; rapport relu par Codex en lecture seule.
   Conditions : avance de 4 échantillons à l'entraînement, la validation et le test ; une graine, une partition par architecture, aucune barre d'erreur sur le rapport ; 15000 et 14944 pas (arrêt anticipé de S4) ; relance de SSM après un arrêt externe, écart déclaré avant relance ; changement de pilote NVIDIA couvert par une porte au bit pour SSM-FiLM, pas pour le FiLM statique de S4-param.
 
-- **La latence est propre aux rendus F-Fuzz (contrôles Big Muff et Marshall, même instrument).**
+- **Les témoins Big Muff et Marshall ne présentent pas le retard entier uniforme de +4 de F-Fuzz (même instrument).**
+  Retards non nuls sur une partie des segments, de plusieurs échantillons sur certains réglages Marshall ; instrument au pas entier, un résidu fractionnaire n'est pas exclu.
   Big Muff : retard 0 dans 11 segments de test sur 12 pour SSM-WaveNet et 11 pour S4-TF ; ESR 0,0415 → 0,0413 au réalignement.
   Marshall : retard 0 dans 121 (SSM) et 96 (S4) segments sur 153 ; réalignement par segment 0,101 → 0,088 (gain de 13 %, optimiste car le retard est choisi sur le segment).
   Preuve : F-0027, E-0027 ; `diagnosis/ffuzz/other_devices_lag.json`, `diagnosis/ffuzz/other_devices_lag.py`, `DIAGNOSIS_ffuzz.md` (section 6).
@@ -53,7 +55,7 @@
   Conditions : inférence GPU (écart d'instrument déclaré), parité GPU–CPU en ln ESR au plus 1,9·10⁻⁵ ; effet de bord du retard fractionnaire 8,6·10⁻¹³ pour une borne de 1,0·10⁻⁵ ; 0 run au bord de grille ; retard par rampe de phase FFT.
 
 - **Piège de polarité de L1 + MR-STFT le long du gain de sortie (théorème T2).**
-  Avec L = w₁ L1 + w₂ MRSTFT et ŷ = (−1 + ε) y, ŷ = −y est un minimum local strict du chemin de gain si w₁ E|y| < w₂ m, et n'en est pas un si w₁ E|y| > w₂ m (m : moyenne sur les résolutions de ρ_r + f_r).
+  Sous les hypothèses de T2 (perte auraloss spécifiée, poids positifs, cible non nulle, aucune puissance STFT de la cible exactement au plancher), avec L = w₁ L1 + w₂ MRSTFT et ŷ = (−1 + ε) y, ŷ = −y est un minimum local strict du chemin de gain si w₁ E|y| < w₂ m, et n'en est pas un si w₁ E|y| > w₂ m (m : moyenne sur les résolutions de ρ_r + f_r).
   Preuve : `THEORY.md` (T2), `theory/T2_polarity_trap.md`, `theory/t2_check.py`.
   Statut : énoncé théorique, D (2026-10-02) au registre `THEORY.md` (preuve, contrôles symbolique et numérique, relecture Codex en deux passes) ; une direction, une solution exacte, un lot ; rien sur la dynamique ni sur la probabilité d'inversion ; corollaire non établi pour la tête tanh du banc.
   Conditions : perte du banc `scripts/product_nablafx_bench.py` (auraloss par défaut) ; marge numérique sur Big Muff en attente (voir En attente).
@@ -71,8 +73,8 @@
   Statut : descriptif, post hoc ; un retournement du garde n'est pas une inversion finale.
   Conditions : 6 runs SSM-WaveNet ZOH (graines 42 à 44, répétitions) et 3 runs S4-TF-L-16, Big Muff.
 
-- **Facultatif : sur DI calme, les modèles amplifient le résidu de quantification de l'entrée ; l'ESR ne le voit pas.**
-  Sortie des modèles +7,2 dB au-dessus du plancher de la pédale (L médian 5,3, de 2,7 à 8,9) : −67,0 contre −74,2 dBFS ; cohérence avec la cible 0,0046 (passages forts 0,96) ; DI calme mis à zéro : −64,4 dB ; amplification d'environ 33 dB d'un résidu à −99,9 dBFS.
+- **Facultatif : sur DI calme, les modèles amplifient le résidu de quantification de l'entrée ; sa contribution à l'ESR globale est très faible.**
+  Excès médian de la sortie des modèles : +7,2 dB au-dessus du plancher de la pédale (L médian 5,3, de 2,7 à 8,9) : −67,0 contre −74,2 dBFS ; aucune cohérence détectable avec la cible (0,0046, sous le plancher de l'estimateur) (passages forts 0,96) ; DI calme annulé : puissance relative −64,4 dB en médiane (10 log₁₀ P₀/P) ; 32 checkpoints ne sont pas 32 réplications indépendantes ; amplification d'environ 33 dB d'un résidu à −99,9 dBFS.
   Preuve : F-0029, E-0031 ; `diagnosis/noise/predictions_quiet.md`, `diagnosis/noise/quiet_frames.json`, `diagnosis/noise/control_zero_di.json`.
   Statut : préinscrit, contrôle déclaré avant de tourner ; issue du tableau préinscrit : « soutenue : exces propre aux passages calmes ».
   Conditions : 32 checkpoints SSM-WaveNet Big Muff du pilote C, 225 fenêtres calmes, inférence CPU ; cause (MR-STFT ou extrapolation) non attribuable ; on ignore si la pédale a reçu ce résidu.

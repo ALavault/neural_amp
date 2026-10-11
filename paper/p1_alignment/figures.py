@@ -104,16 +104,6 @@ def ffuzz_lag() -> None:
                 ls=ls,
                 mfc="white" if ls == "--" else color,
             )
-    ax.axhline(v("ffuzz_thr_esr"), color=MUTED, lw=0.8, ls="-.")
-    ax.text(
-        1,
-        v("ffuzz_thr_esr") / 1.15,
-        "seuil préinscrit",
-        ha="left",
-        va="top",
-        fontsize=6,
-        color=MUTED,
-    )
     arm_handles = [
         plt.Line2D([], [], color=c, marker=m, ls="none", label=n)
         for n, c, m, *_ in arms

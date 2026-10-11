@@ -20,9 +20,9 @@
 
 ## Thèse
 
-- Les comparaisons en ESR brute entre modèles neuronaux d'effets ou d'amplis peuvent être dominées par des erreurs d'alignement que les modèles apprennent mal ou que les données contiennent : latence de rendu (F-Fuzz), retard sous-échantillon (VS100R), inversion de polarité (Big Muff).
+- Les comparaisons en ESR brute entre modèles neuronaux d'effets ou d'amplis peuvent être dominées par des erreurs d'alignement que les modèles apprennent mal ou que les données contiennent : retard relatif cible–sortie interprété comme une latence de rendu (F-Fuzz), retard sous-échantillon (VS100R), inversion de polarité (Big Muff).
 - Une co-lecture à retard commun compensé, estimé hors de la section notée, et une garde de polarité rendent ces comparaisons lisibles ; elles ne les corrigent pas.
-- Preuve la plus forte : le correctif préinscrit F-Fuzz (latence mesurée, cibles avancées, tous les critères tenus).
+- Preuve la plus forte : le correctif préinscrit F-Fuzz (retard relatif mesuré, cibles avancées, tous les critères tenus).
 - Preuve méthodologique : sur une question préinscrite (longueur d'entraînement), la lecture brute et la co-lecture donnent des étiquettes opposées.
 - Preuve théorique : T2, condition sous laquelle une sortie inversée est un minimum local strict le long du gain pour L1 + MR-STFT.
 - Ce que la thèse ne dit pas : l'origine du retard VS100R, la nécessité de la garde, une supériorité d'architecture, un effet audible.
@@ -34,7 +34,7 @@
 | 1. Introduction | ESR comme métrique de classement ; trois pièges ; contributions (diagnostic, correctif préinscrit, co-lecture, T2) | 0,5 | — |
 | 2. Pièges et métriques | ESR, MR-STFT ; coût d'un retard pur sur l'ESR ; insensibilité de la MR-STFT au signe ; énoncé T2 | 0,75 | — |
 | 3. Protocole | Données (ToneTwist, VS100R), modèles (SSM-WaveNet-FiLM, S4-param, S4-TF), instruments : retard optimal par intercorrélation, retard oracle, co-lecture à τ commun sur `di_validation`, garde de polarité | 0,75 | Tableau 1 (runs, graines, n, préinscrit ou post hoc) |
-| 4. Latence de rendu F-Fuzz | Retard +4 partout, plancher commun, contrôles Big Muff et Marshall, correctif préinscrit | 0,75 | `figures/ffuzz_lag.pdf` |
+| 4. Retard relatif F-Fuzz | Retard relatif +4 sur presque tous les segments, plancher commun, contrôles Big Muff et Marshall, correctif préinscrit | 0,75 | `figures/ffuzz_lag.pdf` |
 | 5. Retard sous-échantillon VS100R | Oracle par prise (post hoc) puis co-lecture préinscrite sur la longueur d'entraînement ; divergence des étiquettes | 1,0 | `figures/delay_curves.pdf`, `figures/train_length_readings.pdf` |
 | 6. Polarité | Run inversée, garde, modèles publiés compatibles, T2 | 0,5 | `figures/polarity_published.pdf` ou tableau |
 | 7. Limites et recommandations | Une graine pour F-Fuzz, une capture VS100R, origine inconnue, oracle absorbe la phase, pas d'écoute | 0,25 | — |
@@ -45,7 +45,7 @@
 
 | Fichier | Générateur | Clés et sources | Place |
 |---|---|---|---|
-| `figures/ffuzz_lag.pdf` | `figures.py:ffuzz_lag` | `ffuzz_thr_esr` ; séries par réglage depuis `diagnosis/ffuzz/segments.json` et `diagnosis/ffuzz/segments_adv4.json` (moyennes de `ffuzz_esr_interior_lag0_*`, `ffuzz_esr_realigned_*`, `ffuzz_adv4_interior_*`) | Retenue, section 4 ; légende : le seuil préinscrit porte sur la moyenne des réglages, pas sur chaque réglage |
+| `figures/ffuzz_lag.pdf` | `figures.py:ffuzz_lag` | séries par réglage depuis `diagnosis/ffuzz/segments.json` et `diagnosis/ffuzz/segments_adv4.json` (moyennes de `ffuzz_esr_interior_lag0_*`, `ffuzz_esr_realigned_*`, `ffuzz_adv4_interior_*`) | Retenue, section 4 ; ESR intérieure par réglage ; le seuil préinscrit porte sur l'ESR de test agrégée du banc et reste hors de la figure (relecture Codex) |
 | `figures/delay_curves.pdf` | `figures.py:delay_curves` | `trainlen_tau_c_min`, `trainlen_tau_l10_min`, `trainlen_tau_l20_min` (et max) ; courbes `median_esr_curve` de `demo/train_length/eval_train_length_aligned.json` | Retenue, section 5 |
 | `figures/train_length_readings.pdf` | `figures.py:train_length_readings` | `trainlen_thr_verdict`, `trainlen_thr_accept_seed`, `trainlen_p_l10_d`, `trainlen_a_l10_d`, `trainlen_p_l20_d`, `trainlen_a_l20_d` | Retenue, section 5 (peut fusionner avec la précédente en deux panneaux) |
 | `figures/polarity_published.pdf` | `figures.py:polarity_published` | `polar_two_mean_abs_y`, `polar_inv_esr`, `polar_inv_esr_negated`, `polar_pub_l1_ratio_min` ; `paper/icassp2027/data/published_bigmuff.json` | Réserve, section 6 ; remplaçable par une ligne de tableau |
@@ -82,3 +82,7 @@
 - Venue : confirmer dates, gabarit, nombre de pages et texte exact de la politique IA d'EUSIPCO 2027.
 - Droits : vérifier les conditions d'attribution de ToneTwist AFx pour des figures dérivées ; décider si la capture VS100R est publiée.
 - Tableau 1 : à composer par l'auteur à partir des clés listées.
+- Calibration de la co-lecture (relecture Codex) : `di_validation` contient du matériau entraîné pour la plupart des prises, avec une exposition différente selon les bras ; une section de calibration exclue de tous les entraînements renforcerait la comparaison recalée ; nouvelle capture ou nouveaux entraînements.
+- Unités de réplication : les segments F-Fuzz viennent de deux fichiers de test réutilisés entre réglages, ce ne sont pas des réplications indépendantes ; une graine et une partition par architecture pour F-Fuzz ; les trois graines VS100R ne mesurent ni les sessions ni les captures ; les étiquettes « meilleur » et « équivalent » sont des règles descriptives, pas des tests statistiques ; à dire dans le texte.
+- Portée : trois études de cas, pas un plan croisé appareils × architectures × pièges ; la comparaison 48 / 192 kHz change aussi la durée de contexte, l'exposition audio et le contenu de la perte (`demo/capture/valvestate/predictions_192k.md`) ; aucune conclusion générale.
+- Reproductibilité : inventaire public des artefacts (checkpoints, données, environnements) et des commandes qui produisent exactement les résultats retenus ; les runs de la voie produit restent locaux.
