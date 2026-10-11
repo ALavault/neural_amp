@@ -22,13 +22,13 @@
 ## Thèse
 
 - Une sonde d'identification (FIR régularisé, Hammerstein 3 et 5, Volterra sur base de Laguerre gelée), ajustée séparément à la sortie de référence et à la sortie évaluée sur une excitation A puis comparée par ses rendus sur une excitation B indépendante, donne un score d'écart comportemental (pseudo-distance, D-0010).
-- Le rapport de détection seul ne départage pas les sondes ; leur part captée d_probe / d_audio et leur part non représentée disent de quel type de défaut il s'agit (linéaire, statique, interaction temporelle, hors de toute sonde) : lecture post hoc.
+- Le rapport de détection seul ne départage pas les sondes ; leur part captée d_probe / d_audio et leur part non représentée décrivent la couverture des défauts connus (linéaire, statique, interaction temporelle, hors de toute sonde) et suggèrent des hypothèses diagnostiques, sans classification établie : lecture post hoc.
 - Volterra–Laguerre voit la non-linéarité préfiltrée et les termes croisés que Hammerstein laisse hors de son espace ; Hammerstein garde la mémoire linéaire longue ; l'emboîtement est absent dans les deux sens : complémentarité, pas classement.
 - Aucune sonde ne représente le bruit additif ni un écho hors mémoire : seule l'ESR les voit ; les sondes sont robustes au bruit de mesure.
 - Sur captures réelles VS100R, à entrée commune, l'ESR sépare les changements réels aussi bien que les sondes ; les sondes apportent la robustesse aux défauts d'acquisition (post hoc) ; l'attente préinscrite de 10 planchers n'est tenue par aucune métrique.
 - La sortie à fort gain de la JVM410H n'est représentable par aucune classe de sonde essayée : les sondes ne servent alors qu'à signaler leur insuffisance ; cause ouverte (Q-0014).
 - Un score de dynamique d'enveloppe E2 remplit ses critères préinscrits au banc mais co-répond à l'écho ; pas de validation matérielle.
-- Portée : détection et nature d'un écart, sans lien perceptif.
+- Portée : détection d'un écart et couverture par les sondes, sans lien perceptif.
 
 ## Plan et budget
 
@@ -86,3 +86,10 @@
 - Droits audio : vérifier ToneTwist CC BY-NC, licence Nolly et sources DI avant tout exemple sonore.
 - Énoncés théoriques à écrire dans `THEORY.md`.
 - Confirmer le CfP DAFx27 : date, pages avec ou sans références, politique IA.
+- Utilité pour évaluer des émulateurs (relecture Codex) : les comparaisons réelles portent sur des réglages matériels, aucun ensemble d'émulateurs n'est évalué contre ses références ; c'est l'expérience qui manque le plus à la thèse ; les changements de réglage de Nolly ne suffiront pas à eux seuls.
+- Inférence : paires réutilisant les prises centrales, multiplicité des métriques, segments et sous-ensembles ; p de Mann–Whitney nominales et exploratoires ; deux AUC voisines ne démontrent pas une équivalence ; à dire dans le texte.
+- Banc : plancher blanc à −80 dB favorable aux sondes qui rejettent ce bruit ; aucun taux de fausses alarmes ni robustesse générale aux nuisances d'acquisition ; les contrôles négatifs VS100R sont des boutons sans effet au point de prélèvement.
+- Excitation B : les deux tons ont des phases indépendantes mais des fréquences communes à A et B ; qualifier « B indépendante » dans la thèse et dans C1.
+- Théorie : zéro violation de la borne triangulaire vérifie la cohérence du calcul, pas le pouvoir discriminant du score ; dire quand les résidus permettent de conclure ; l'équivalence linéaire ne se transporte pas aux entrées enregistrées différentes ni à Wiener–Hammerstein.
+- Nouveauté : identifier puis comparer a des précédents (`RELATED.md`) ; la contribution défendable est une procédure conditionnée par l'excitation, avec rendus, résidus et règles de refus, étalonnée sur des défauts connus et documentant ses échecs réels.
+- Reproductibilité : parcours autonome distinguant ce qui se reproduit depuis les artefacts publics et ce qui exige les captures originales ; coûts mesurés sur machine partagée, ordres de grandeur seulement.
