@@ -241,7 +241,12 @@ Aucun résultat de la piste n'a été lu. Les règles de verdict ne changent pas
 **Deux portes avant les runs (`_r4`).**
 - La porte habituelle : 300 pas de SSM-WaveNet contre `vs100r_gc_film_joint_s925_r2`.
 - Une porte nouvelle sur la boîte grise elle-même : 300 pas de F3, graine 42, contre
-  `vs100r48gbF3_s42` entraîné avant le changement de pilote. Elle vérifie que les runs
-  d'un même bras, avant et après le redémarrage, calculent les mêmes bits.
+  `vs100r48gbF3_s42` entraîné avant le changement de pilote. Elle compare au bit les
+  valeurs journalisées pendant ces 300 pas (perte, normes de gradient, taux, validations
+  aux pas 86, 173 et 260). Une divergence plus tardive, ou propre à une autre graine, reste
+  possible malgré une porte réussie.
 - La file s'arrête si l'une échoue. En cas d'écart sur F3 seul, on relance cette porte une
-  fois sans segments extensibles avant d'attribuer l'écart au pilote.
+  fois sans segments extensibles avant d'attribuer l'écart au pilote. Relancer la file ne
+  suffit pas : `product_queue_lib.sh` réactive les segments dès que `nvidia-smi` répond.
+  Il faut appeler le banc directement, sans `PYTORCH_CUDA_ALLOC_CONF`, sous un nouvel
+  identifiant de porte.
