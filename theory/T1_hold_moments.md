@@ -1,4 +1,4 @@
-# T1 — Moments du maintien : avance du ZOH, avance nulle du FOH
+# T1 — Moments du maintien : écart signé du ZOH, nul en FOH
 
 Preuve de l'entrée T1 de `THEORY.md` (statut : voir le registre). Contrôle :
 `theory/t1_check.py` (symbolique et numérique sur le code réel).
@@ -32,8 +32,10 @@ Portée). Pour Re λ < 0 (toujours vrai ici) et Δ > 0 :
 3. **ZOH.** Premier moment continu − premier moment discret = 2 Re(w φ(z)), avec
    φ(z) = −1/z − 1/(e^{−z} − 1) = 1/2 + z/12 − z³/720 + O(z⁵).
 4. **Canal.** Avec plusieurs modes et D, quand le gain continu G = Σ_m 2 Re(w_m) + D est non nul,
-   le retard de groupe à fréquence nulle (premier moment / gain) du ZOH est en avance sur le
-   système continu de Σ_m 2 Re(w_m φ(z_m)) / G échantillons ; celui du FOH ne l'est pas (0).
+   le retard de groupe à fréquence nulle (premier moment / gain) du ZOH diffère de celui du
+   système continu de Σ_m 2 Re(w_m φ(z_m)) / G échantillons (retard continu moins retard ZOH,
+   quantité signée) : une avance pour un mode réel isolé, sans voie directe (point 5) ; aucune
+   garantie de signe pour le canal général. Celui du FOH n'en diffère pas (0).
 5. **Modes réels** (ω = 0, z = −s, s > 0, Re c ≠ 0, r > 1). L'avance vaut (1 − g(s))/s = 1/s − 1/(e^s − 1), dans
    ]0 ; 1/2[, avec g(x) = x/(e^x − 1). Si l'on remplace Δ par Δ/r (fréquence r fois
    plus haute, sans autre correction), le modèle rééchelonné prend un retard, compté en
@@ -104,10 +106,11 @@ Séries géométriques, |a| < 1 : Σ a^k = 1/(1 − a), Σ k a^k = a/(1 − a)²
 ## Rétrodictions et prédictions
 
 - **Rétrodiction.** Le « demi-échantillon » de `demo/sr_transfer/FIX_foh.md` et
-  `RESULTS_hold.md` est la limite s → 0 du point 3 ; le point 5 le précise : un mode lent porte
-  une demi-jauge entière, un mode rapide presque rien.
+  `RESULTS_hold.md` est la limite s → 0 du point 3 ; le point 5 le précise pour la contribution
+  normalisée d'un mode réel isolé : un mode lent porte une demi-jauge entière, un mode rapide
+  presque rien ; cela ne dit pas quels modes dominent dans le réseau.
 - **Rétrodiction.** Les modèles entraînés en FOH (`paired_ssm_wavenet_foh_s{925,736,688}`) ont un
   ESR de 2,8·10⁻⁴ à 4,0·10⁻⁴ face à leur propre sortie à 48 kHz après rééchelonnement à 88,2, 96
   et 192 kHz (`demo/sr_transfer/sr_transfer_paired_ssm_wavenet_foh_s925_last_plain.json`), contre
   0,036 à 0,077 pour le ZOH sans correction : compatible avec un retard de transfert nul.
-- **Prédiction nouvelle (non mesurée)**, voir `THEORY.md`, T1-P1.
+- **Prédiction T1-P1**, mesurée ; résultat et portée dans `THEORY.md`, T1-P1.

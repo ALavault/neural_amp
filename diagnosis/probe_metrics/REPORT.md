@@ -15,7 +15,7 @@ morts ?
 | Type | Contenu | Fichiers |
 |---|---|---|
 | Exécuté, synthétique | 13 défauts DSP connus × 3 sévérités, 6 familles d'excitation (bruit coloré, multisinus, sinus glissant synchronisé, deux tons, plucks, DI réelle) × 3 niveaux × 3 graines (DI : 1 réalisation) ; sondes FIR, Hammerstein 3 et 5, Volterra–Laguerre 2 et 3, Wiener–Hammerstein ; ESR, MR-STFT, IMD, signature harmonique | `calibration_test_*.csv` |
-| Exécuté, réel | VS100R (envoi FX) : 3 répétitions, 12 contrôles négatifs, 8 changements réels ; JVM410H : 26 réglages d'un bouton × 2 sorties | `real_pairs_*.csv` |
+| Exécuté, réel | VS100R (envoi FX) : 3 répétitions, 12 contrôles négatifs, 8 changements réels ; JVM410H : 25 réglages d'un bouton autour du centre × 2 sorties | `real_pairs_*.csv` |
 | Hypothèses | lectures marquées « post hoc », « exploratoire » ou « hypothèse » ci-dessous | — |
 | Non mesurable sans nouvelles captures | BLA stricte sur le réel ; phase harmonique synchronisée sur la VS100R ; niveaux hors des 3 sinus glissants ; plancher apparié dans le temps et répétabilité d'un jour à l'autre ; > 20/24 kHz ; sortie VS100R après l'étage de tonalité | `manifest.json` |
 
@@ -92,10 +92,11 @@ Une part captée et une part non représentée ne s'additionnent pas : rien ne l
 orthogonales hors échantillon.
 
 - **Sensibilité sous le bruit brut.** À la plus faible sévérité, les sondes voient le cubique
-  sur toutes les familles, alors que l'ESR ne le voit sur aucune ; même chose pour le
-  quadratique (ESR : 3 familles sur 6). La sonde moyenne sur toute l'estimation et rejette ce
-  qui sort de son espace, comme une détection synchrone. Le gain dépend de sa capacité et d'un
-  plancher de bruit blanc (voir le réel ci-dessous).
+  sur toutes les familles (Hammerstein 5 : 5 sur 6), alors que l'ESR ne le voit sur aucune ;
+  même chose pour le quadratique (ESR : 3 familles sur 6). Mécanisme proposé, non testé à part :
+  la sonde moyenne sur toute l'estimation et rejette ce qui sort de son espace, comme une
+  détection synchrone. Le gain dépend de sa capacité et d'un plancher de bruit blanc (voir le réel
+  ci-dessous).
 - **Signature harmonique D_k, spécifique par ordre.** Le quadratique ne touche que l'ordre 2 ;
   le cubique touche les ordres 1 et 3 ; l'interaction croisée l'ordre 2. Elle est quasi
   déterministe d'une réalisation à l'autre et exige un sinus glissant.
@@ -108,15 +109,16 @@ orthogonales hors échantillon.
 ### 2. Quels défauts manque-t-elle ?
 
 - **Bruit additif et écho hors mémoire** : non représentés par aucune sonde. Pour l'écho, cela
-  dépend du contenu : il est capté à ~0,5 sur des notes périodiques (plucks), où il ressemble à
-  un filtre en peigne, et à ~0,2 sur la DI.
+  dépend du contenu : il est capté de 0,28 à 0,51 selon la sonde sur des notes périodiques
+  (plucks), où il ressemble à un filtre en peigne, et de 0,14 à 0,25 sur la DI.
 - **Non-linéarité préfiltrée** : Hammerstein laisse 0,30 à 0,42 non représenté ; Volterra–Laguerre
   3 seulement 0,10 à 0,11.
 - **Interaction croisée** : Hammerstein l'attribue à l'ordre 2 quand l'excitation est corrélée
   sur 5 échantillons (bruit coloré, plucks). Sa décomposition par branche ne distingue alors
   pas « carré » et « produit retardé ».
-- **Dynamique d'enveloppe sur jeu réel** : sur la DI, le relâchement n'est capté qu'à 0,60–0,66,
-  contre 0,97 sur bruit stationnaire. Ce manque n'apparaît qu'avec une excitation réaliste.
+- **Dynamique d'enveloppe sur jeu réel** : sur la DI, le relâchement n'est capté qu'à 0,56–0,69
+  selon la sonde, contre 0,95–0,97 sur bruit stationnaire. Ce manque n'apparaît qu'avec une
+  excitation réaliste.
 - **Terme u⁷ à faible sévérité** : vu par presque aucune métrique (FIR 2 familles sur 6).
 - **MR-STFT de `metrics/spectral.py`** (epsilon 1e-7) : aveugle au passe-tout et au retard
   (magnitude seule) et dominée par un bruit à −80 dB dans les bandes où la référence est faible.
@@ -125,14 +127,15 @@ orthogonales hors échantillon.
 ### 3. L'extraction est-elle plus stable que les écarts recherchés ?
 
 Oui, sauf pour Wiener–Hammerstein et, dans une moindre mesure, pour l'IMD. On mesure
-l'écart-type, entre graines indépendantes, du log du score, puis sa médiane sur toutes les
-cellules :
-- 0,0016 (ESR) à 0,011 (enveloppe) pour toutes les métriques, sauf deux : l'IMD (0,026) et
+l'écart-type, entre graines indépendantes, du log du score, puis sa médiane sur les cellules,
+défaut de bruit additif exclu :
+- 0,0016 (ESR) à 0,011 (enveloppe) pour toutes les métriques, sauf deux : l'IMD (0,025) et
   WH (0,034) ;
 - quasi nulle pour la signature harmonique, puisque D_k est une propriété du système.
 
-Les 90e centiles vont de 0,07 à 0,26. La phase atteint 0,26 parce qu'elle est nulle pour un
-gain pur, et WH monte à 0,77.
+Hors signature harmonique, les 90e centiles vont de 0,07 à 0,26, sauf l'IMD (0,31) et WH (0,77).
+La phase atteint 0,26 parce qu'elle est nulle pour un gain pur. Ceux des ordres harmoniques
+montent jusqu'à 0,47 (ordre 1).
 
 **Réserve.** Les sinus glissants de test sont bit à bit ceux du développement : la durée y est
 tirée de graine % 3 (voir `NOTE.md`). Sur cette famille, la stabilité ne vaut donc pas
@@ -142,9 +145,11 @@ Wiener–Hammerstein : voir la section dédiée.
 
 ### 4. Que révèlent les sondes au-delà des métriques existantes ?
 
-- **La nature de l'écart.** La part captée et la part non représentée disent si l'écart est
-  linéaire, une non-linéarité statique, une interaction temporelle, ou hors de toute sonde
-  (bruit, écho long). La décomposition par branche et la signature harmonique donnent l'ordre.
+- **La couverture des défauts connus.** Sur le banc, la part captée et la part non représentée
+  décrivent la couverture de chaque sonde (linéaire, non-linéarité statique, interaction
+  temporelle, hors de toute sonde : bruit, écho long) et suggèrent des hypothèses diagnostiques ;
+  aucun critère de classification ni taux de confusion n'est établi. La décomposition par branche
+  et la signature harmonique suggèrent l'ordre.
 - **La robustesse au bruit de mesure.** Le bruit additif n'entre presque pas dans les scores de
   sonde (part captée de 0,01 à 0,08), alors que l'ESR le compte entièrement.
 - **La robustesse aux défauts d'acquisition sur le réel.** Chaque sonde est ajustée sur sa propre
@@ -168,12 +173,12 @@ Wiener–Hammerstein : voir la section dédiée.
   d'estimation et de lecture n'avaient pas les mêmes fréquences.
 - Comparaison directe d'enregistrements à entrée non commune.
 - Plancher réel non apparié dans le temps (voir la VS100R).
-- Score de sonde au-dessus de d_audio (hors échantillon, une branche peut extrapoler : 1,10 à
+- Score de sonde au-dessus de d_audio (hors échantillon, une branche peut extrapoler : 1,09 à
   1,14 sur la DI pour les termes pairs) : écart surestimé.
 
 ### 6. Ensemble minimal de métriques complémentaires
 
-- **ESR (ou d_audio)** : écart global. C'est la seule à voir ce qu'aucune sonde ne représente
+- **ESR (ou d_audio)** : écart global, y compris les composantes qu'aucune sonde ne représente
   (bruit, écho long).
 - **Magnitude et phase** (`metrics/spectral.py`, déjà dans le dépôt) : elles séparent le gain
   et les non-linéarités statiques (magnitude) du retard et du passe-tout (phase). Elles
@@ -185,8 +190,8 @@ Wiener–Hammerstein : voir la section dédiée.
   temporelles que Hammerstein manque. Plus coûteux (~2 min par minute d'audio).
 - **Signature harmonique par ordre**, si un sinus glissant intact est disponible : elle sépare
   les défauts pairs et impairs.
-- **Dynamique d'enveloppe E2** (ad hoc), si des sauts de niveau sont disponibles : c'est la seule
-  métrique spécifique au relâchement (voir plus bas).
+- **Dynamique d'enveloppe E2** (ad hoc), si des sauts de niveau sont disponibles : sensible au
+  relâchement sur le banc, avec co-réponse à l'écho et au préfiltre (voir plus bas).
 - **La part non représentée** de chaque sonde, comme indicateur de couverture, et
   l'avertissement de capacité.
 - **Écartés.** Wiener–Hammerstein : peu fiable ici et très coûteux. MR-STFT telle qu'implémentée :
@@ -238,8 +243,8 @@ testée.
 | Critère | Résultat |
 |---|---|
 | Monotonie | relâchement 60 → 100 → 200 ms : 0,12 → 0,54 → 1,28 dB à −12 dBFS ; 0,20 → 0,88 → 2,06 dB à −6 dBFS |
-| Sensibilité | relâchement 60 ms ≫ 3 × le plancher (~6e-5 dB) |
-| Spécificité | le pire autre défaut (coloration, 0,05 dB) est 25 à 40 fois plus faible que le relâchement à 200 ms ; gain et polynômes ≈ 0 |
+| Sensibilité | relâchement 60 ms ≫ 3 × le plancher (5,4e-5 à 7,6e-5 dB) |
+| Spécificité | le pire autre défaut, co-répondants préinscrits exclus (coloration, 0,05 dB), est 25 à 40 fois plus faible que le relâchement à 200 ms ; gain et polynômes ≈ 0 |
 | Contrôle interne | l'indice d'attaque du défaut de relâchement vaut 0,06 à 0,09 de son indice de relâchement, à toutes les sévérités |
 
 **Limites.**
@@ -299,7 +304,7 @@ des contrôles négatifs, mesurée par l'AUC avec un p exact unilatéral.
   d'acquisition** à l'intérieur du sinus glissant −3 dBFS de la prise 20 en est un facteur établi.
   Cette prise sert de référence à la plupart des paires (contrôle post hoc `gap_checks.py`,
   `gap_checks_sweep.json`). Entre répétitions, l'écart d'ordre 3 passe de 0,007 à −10 dBFS à 0,21
-  à −3 dBFS avec cette prise. L'écart entre réglages baisse aussi de 0,13 à 0,07–0,10 : une
+  à −3 dBFS avec cette prise. L'écart entre réglages baisse aussi de 0,12–0,13 à 0,07–0,10 : une
   contribution de la saturation n'est donc pas exclue. Sans la section touchée, AUC 0,88
   (p = 0,13, 4 contre 2 paires seulement). Ajuster sur l'entrée propre ne protège pas la signature
   harmonique : un saut temporel casse la correspondance temps–fréquence du sinus exponentiel.
@@ -309,8 +314,8 @@ des contrôles négatifs, mesurée par l'AUC avec un p exact unilatéral.
     dès que deux fenêtres quelconques s'écartent de 12 échantillons à 192 kHz (un demi-quantum de
     glissement), par rapport au profil médian de la séance. Un saut réparti sur deux fenêtres est
     ainsi rattrapé. En contrepartie, une seule fenêtre aberrante suffit à rejeter la section :
-    faux positif possible, mais aucun observé, ni sur la séance ni sous bruit ajouté jusqu'à un
-    RSB de 0 dB (contrôle Codex).
+    faux positif possible, mais aucun observé sur la séance. Sous bruit ajouté jusqu'à un RSB de
+    0 dB, aucun non plus (contrôle Codex non archivé, observation non régénérable).
   - Validation sur des glissements de 24 échantillons insérés tous les 0,05 s : tous sont
     détectés entre ~1,3 et 4,7 s. Aucun décalage global (±72, 200 échantillons) n'est signalé, et
     seules la prise 20 à −3 dBFS et la prise 38 à −20 dBFS sont signalées sur la séance.
@@ -318,8 +323,8 @@ des contrôles négatifs, mesurée par l'AUC avec un p exact unilatéral.
     supprimés du bouclage et de l'envoi d'une prise intacte, −10 dBFS, ordre par ordre, rapporté à
     la répétition 20–39 du même ordre) :
     - avant ~115 Hz (0,5 à 1,26 s) : au plus 0,39 du plancher ;
-    - à la fin du balayage : au plus 0,64 du plancher aux positions de la grille, et 0,75 à
-      4,74 s (point ajouté par Codex) ;
+    - à la fin du balayage : au plus 0,64 du plancher aux positions de la grille ; un point
+      ajouté par Codex à 4,74 s donnait 0,75 (non archivé, observation non régénérable) ;
     - jamais au-dessus du plancher aux positions testées, sans que ce soit une borne générale ;
     - à titre de comparaison, les glissements détectés montent jusqu'à 100 fois le plancher
       (ordre 2 à 3,5 s), certains ordres restant à peine touchés.
@@ -332,7 +337,7 @@ seulement) : séparation des changements réels (gain 0 exclu) et des contrôles
 
 | Métrique | `di_test` (5 changements / 10 contrôles) | bruit rose (7 / 12) |
 |---|---|---|
-| magnitude | 0,98 (p = 7e-4) | 0,98 (p = 1e-4) |
+| magnitude | 0,98 (p = 7e-4) | 0,98 (p = 8e-5) |
 | phase | 0,94 (p = 0,002) | 1,00 (p < 1e-4) |
 | enveloppe | 0,94 (p = 0,002) | 0,90 (p = 0,001) |
 
@@ -473,15 +478,16 @@ Le coût réel d'un usage dépend aussi de ce qu'il exige en données, qui limit
 | Usage | Ensemble proposé | Coût pour 1 min d'audio | Données nécessaires |
 |---|---|---|---|
 | Contrôle rapide, tri de nombreuses sorties pour une même entrée | ESR (amplitude) + magnitude + phase ; FIR si l'on veut écarter le bruit | < 5 s | entrée commune ; seuils fixés sur des répétitions et des défauts acceptables |
-| Diagnostic de la nature d'un écart | Hammerstein 3 + Volterra–Laguerre 3, avec part captée et part non représentée ; magnitude/phase ; signature harmonique si un sinus glissant existe ; E2 si des sauts de niveau existent | ~2 min | données d'estimation riches (DI, bruit) ; lecture indépendante ; capacité vérifiée sur la référence ; excitations dédiées (sinus glissant, sauts) |
+| Hypothèses diagnostiques sur un écart (aucun critère de classification établi) | Hammerstein 3 + Volterra–Laguerre 3, avec part captée et part non représentée ; magnitude/phase ; signature harmonique si un sinus glissant existe ; E2 si des sauts de niveau existent | ~2 min | données d'estimation riches (DI, bruit) ; lecture indépendante ; capacité vérifiée sur la référence ; excitations dédiées (sinus glissant, sauts) |
 | Comparaison de captures réelles (prises, séances) | FIR/H3 ajustés sur l'entrée propre de chaque prise ; ESR seulement sur les sections à entrée commune ; garde d'intégrité des sinus glissants | ~5–10 s | bouclage de chaque prise ; **plancher apparié dans le temps** (répétitions intercalées : à capturer) |
 | Signature non linéaire contrôlée | signature harmonique par ordre (≤ 7 pour L ≈ 0,7 s) ; IMD | < 1 s par excitation | sinus glissant (idéalement synchronisé, T ≥ 5,9 s pour l'ordre 9) ; deux tons |
 | Écart structuré sous le bruit de mesure | FIR/H3 (moyennent sur l'estimation) | ~5 s | capacité de la sonde vérifiée sur la référence (sinon refus) |
 | À éviter | WH (peu fiable, ~40 min/min) ; MR-STFT de `spectral.py` (aveugle à la phase, dominée par le bruit) ; rapport de détection seul | — | — |
 
 **Limite décisive, mesurée sur la JVM410H.** Sur un canal à fort gain, aucune classe de sonde
-essayée ne ramène le résidu sous ~0,6 du RMS de la sortie en lecture (ESR ≥ 0,35), ni même sous
-~0,59 en échantillon pour les sondes linéaires en paramètres. Voir « Angles morts réels ». Dans ce
+essayée ne ramène le résidu sous ~0,6 du RMS de la sortie en lecture (ESR ≥ 0,34), ni même sous
+~0,59 en échantillon pour les sondes linéaires en paramètres dont cette valeur est archivée
+(Hammerstein 5 et sonde parallèle à préfiltres de Laguerre). Voir « Angles morts réels ». Dans ce
 cas, les sondes ne servent qu'à signaler leur propre insuffisance (avertissement de capacité),
 et l'ESR, la magnitude, la phase et l'enveloppe restent les seules lectures globales. Elles sont
 toutes monotones le long des échelles JVM.
@@ -489,8 +495,9 @@ toutes monotones le long des échelles JVM.
 ## Angles morts réels : ce qui les explique
 
 Contrôles post hoc (`gap_checks.py`, `gap_checks_*.json`) :
-- **VS100R, −3 dBFS : expliqué.** Un glissement d'acquisition dans le sinus glissant de la prise
-  20 en est la cause (voir plus haut). Remède : la garde d'intégrité des sinus glissants.
+- **VS100R, −3 dBFS : un facteur établi.** Un glissement d'acquisition dans le sinus glissant de
+  la prise 20 y contribue (voir plus haut) ; une contribution de la saturation reste possible.
+  Remède au glissement : la garde d'intégrité des sinus glissants.
 - **JVM410H : limite de capacité, cause restante non établie** (`gap_checks_jvm*.json`).
   Les résidus sont des rapports RMS (√ESR), pas des parts d'énergie.
   - Hammerstein 5, sur la sortie de *référence* : résidu de 0,71 au gain 5 (ESR ≈ 0,50), contre
@@ -503,7 +510,8 @@ Contrôles post hoc (`gap_checks.py`, `gap_checks_*.json`) :
       0,59–0,66 en échantillon, 0,68–0,83 en lecture ;
     - Wiener–Hammerstein ajusté sur 1 s : 0,39 en échantillon mais 1,08 en lecture
       (surapprentissage).
-  - Écartés, par les mesures de `gap_checks_jvm_causes.json` :
+  - Non appuyés par ces contrôles, dans les conditions testées (`gap_checks_jvm_causes.json` ;
+    ils ne les réfutent pas en général) :
     - **bruit** : la sortie pendant les silences d'entrée est à −28 dB du RMS au gain 5 (−26 au
       gain 0, où le résidu de 0,06 ≈ −24 dB s'y explique) ;
     - **dynamique à 0,5 s** : à niveau d'entrée égal, le résidu vaut 0,67 après un passage plus fort

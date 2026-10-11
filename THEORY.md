@@ -5,14 +5,17 @@ Statuts : **D** démontré (preuve complète, contrôle symbolique, contrôle nu
 réel, relecture indépendante) ; **E** esquisse ; **S** supposé ; **M** mesuré sous
 préinscription, sans preuve ; **PH** post hoc ; **R** réfuté.
 
-## T1 — Moments du maintien : avance du ZOH, avance nulle du FOH
+## T1 — Moments du maintien : écart signé du ZOH, nul en FOH
 
 Statut : D (2026-10-02) ; à revérifier si `src/fssr_nam/models/ssm_wavenet.py`
 (`DiagonalSSMLayer`, `phi2`, `pole`, `foh_late`) change
 Énoncé : pour un mode diagonal stable (λ, Δ, c), z = λΔ, w = −c/λ : le noyau ZOH et le noyau
 FOH ont le gain continu 2 Re(w) ; le premier moment du FOH égale celui du mode continu ; celui du
-ZOH est en avance de 2 Re(w φ(z)), φ(z) = −1/z − 1/(e^{−z} − 1) = 1/2 + z/12 − z³/720 + O(z⁵).
-Pour un mode réel (z = −s, Re c ≠ 0), l'avance vaut 1/s − 1/(e^s − 1) ∈ ]0 ; 1/2[ échantillon, et le
+ZOH en diffère de 2 Re(w φ(z)) (moment continu moins moment ZOH, quantité signée),
+φ(z) = −1/z − 1/(e^{−z} − 1) = 1/2 + z/12 − z³/720 + O(z⁵). Rapporté à un gain continu non nul,
+c'est un écart signé du retard de groupe à fréquence nulle, qui tend vers 1/2 échantillon quand
+Δ → 0 à λ et c fixés. Pour un mode complexe, il peut être de signe opposé (un retard). Pour un
+mode réel (z = −s, Re c ≠ 0), c'est une avance : 1/s − 1/(e^s − 1) ∈ ]0 ; 1/2[ échantillon, et le
 retard pris quand Δ → Δ/r (r > 1) vaut κ_mode·(1 − 1/r)/2 échantillon d'origine, avec
 κ_mode = 2 (g(s/r) − g(s))/(s (1 − 1/r)) ∈ ]0 ; 1[, g(x) = x/(e^x − 1).
 Hypothèses : H1 Re λ < 0, Δ > 0 [mathématique ; vrai par construction, λ = −e^{α} + iω] ;
@@ -21,8 +24,10 @@ exacte et formules fermées [mathématique ; le code s'en écarte par `phi2` en 
 `pole`, `foh_late` et l'arrondi, et pour |z| ≲ 10⁻⁸ en float32 a s'arrondit à 1] ; H4 gain non
 nul (G ≠ 0 pour un canal, Re c ≠ 0 pour un mode réel) [mathématique]
 Portée : fréquence nulle seulement (premier moment), pas les retards par bande ; une couche
-linéaire, pas le réseau ; le rapport par canal exige un gain continu non nul ; la borne κ_mode < 1
-ne vaut que pour les modes réels (les modes entraînés sont surtout complexes) ; noyaux décalés par
+linéaire, pas le réseau ; le rapport par canal exige un gain continu non nul ; le signe et la
+borne ]0 ; 1/2[ de l'avance, comme la borne κ_mode < 1, ne valent que pour un mode réel isolé,
+sans voie directe (les modes entraînés sont surtout complexes) ; aucune garantie de signe pour le
+canal général ; noyaux décalés par
 les boutons non contrôlés ; le code tourne en complex64, le contrôle en float64
 Objet : `src/fssr_nam/models/ssm_wavenet.py:DiagonalSSMLayer` (`_kernel`, `_foh_kernel`,
 `_foh_inputs`) @ 2d49ac7 ; correspondance dans la preuve
@@ -36,8 +41,10 @@ contre code flottant (H3 et Portée), comptes 96 modes et 24 canaux (corrigés) 
 d'en-tête de `ssm_wavenet.py` en désaccord avec le code exécuté (signalé, non modifié). Passe 2 :
 chaque correction juste et suffisante, r > 1 à reporter (fait) ; « preuve complète, statut
 démontré possible »
-Utilité : dit quelle quantité la correction de transfert de fréquence doit annuler (l'avance du
-premier ordre, portée surtout par les modes lents) et pourquoi la relecture ou l'entraînement en
+Utilité : dit quelle quantité la correction de transfert de fréquence doit annuler (l'écart signé
+de premier moment ; pour un mode réel isolé, une avance qui, rapportée à son gain, croît quand le
+mode ralentit, sans que la part des modes lents dans le réseau soit établie) et pourquoi la
+relecture ou l'entraînement en
 FOH l'annule exactement à fréquence nulle (`demo/sr_transfer/FIX_foh.md`) ; borne la part d'un
 mode réel dans κ (T4)
 Rétrodictions : le « demi-échantillon » de `demo/sr_transfer/RESULTS_hold.md` (limite s → 0) ;
@@ -74,7 +81,9 @@ Prédictions nouvelles :
   Relecture Codex gpt-6-astra, lecture seule, 2026-10-02 : règle, portes et chiffres conformes ;
   deux formulations corrigées (plage ZOH par bandes, signe non établi).
 Historique : 2026-10-02 — → E : preuve et contrôles écrits ; 2026-10-02 E → D : relecture
-en deux passes, corrections appliquées
+en deux passes, corrections appliquées ; 2026-10-11 : écart de premier moment dit signé (avance et
+borne pour un mode réel seulement, limite 1/2 à λ et c fixés), d'après la relecture du dossier
+`paper/p3_sample_rate` ; statut inchangé
 
 ## T2 — Piège de polarité de L1 + MR-STFT le long du gain de sortie
 
@@ -146,25 +155,35 @@ en deux passes, critère corrigé au cas d'égalité
 
 ## T3 — Déclenchement de l'ordonnanceur à patience
 
-Statut : M pour l'indépendance au seuil, S pour la loi de premier passage (2026-10-02) ; à
+Statut : M pour la faible sensibilité au seuil de la statistique agrégée simulée, S pour la loi de premier passage (2026-10-02) ; à
 revérifier si `diagnosis/seeds/plateau_simulation.py` ou la configuration de
 `ReduceLROnPlateau` (mode min, seuil relatif 10⁻⁴, patience 20) changent
-Énoncé : (a) l'époque de la première division ne dépend pas du seuil θ dans [10⁻⁵ ; 10⁻³] ;
-(b) c'est le temps de premier passage d'une tendance plus un bruit indépendant de l'époque à
-l'époque.
-Hypothèses : H1 résidus de log L de validation indépendants d'une époque à l'autre [mesurée :
-VR(10) médian 0,166, `diagnosis/butterfly/patience_law.json`] ; H2 tendance quadratique en
-log(époque + 1) [supposée]
+Énoncé : (a) la statistique agrégée simulée (médiane, sur les runs, des médianes prédites de
+l'époque de la première division) est peu sensible au seuil θ aux valeurs testées 10⁻⁵ et 10⁻³
+(protocole : 10⁻⁴) ; ce n'est pas l'indépendance des dates individuelles ; (b) l'époque de la
+première division est le temps de premier passage d'une tendance plus un bruit indépendant de
+l'époque à l'époque.
+Hypothèses : H1 résidus de log L de validation indépendants d'une époque à l'autre [mesurée, non
+établie : VR(10) médian 0,166, sous le seuil 0,3 de la règle préinscrite, mais un AR(1) de
+coefficient 0,4 donne 0,167 ; `diagnosis/butterfly/patience_law.json`] ; H2 tendance quadratique
+en log(époque + 1) [supposée]
 Portée : 21 runs SSM-WaveNet Big Muff (5 enfants de la fourche 100, 16 runs du pilote C) ; une
 architecture, une configuration de l'ordonnanceur
 Objet : idéal (simulation) ; rejeu `plateau_simulation.halvings`, porte 21 sur 21
 Preuve : aucune ; mesure `diagnosis/butterfly/patience_law.md`
 Vérifications : mesure préinscrite (commit 2b447f3) ; (a) médiane des médianes prédites décalée
-de 0 et −1 époque contre un critère de 5 ; (b) couverture 12/21 = 0,57, intermédiaire (soutien
+de 0 et −1 époque contre un critère de 5 ; contre-exemple individuel post hoc : rejouée sur sa
+courbe, la première division de l'enfant décide k = 3 passe de l'époque 175 (seuil du protocole)
+à 69 (dix fois) ; (b) couverture 12/21 = 0,57, intermédiaire (soutien
 ≥ 0,60, réfutation ≤ 0,40), les 9 écarts tous vers une division plus tardive que prévu
-Utilité : ne pas régler θ ; traiter les décisions précoces de l'ordonnanceur comme aléatoires
-entre graines ; (b) reste à corriger (tendance ou mémoire du bruit) avant de prédire une loi
-Historique : 2026-10-02 — → M (a), S (b) : résultats de `patience_law.md`
+Utilité : (a) passer θ à ces valeurs déplace peu la médiane agrégée, mais peut déplacer une date
+individuelle : (a) ne dit pas que régler θ est inutile ; traiter les décisions précoces
+de l'ordonnanceur comme aléatoires entre graines ; (b) reste à corriger (tendance ou mémoire du
+bruit) avant de prédire une loi
+Historique : 2026-10-02 — → M (a), S (b) : résultats de `patience_law.md` ; 2026-10-11 : énoncé
+(a), H1 et Utilité resserrés d'après la relecture du dossier `paper/p2_butterfly` (statistique
+agrégée simulée, contre-exemple individuel, indépendance des résidus non établie) ; statut
+inchangé ; 2026-10-11 : libellé du statut aligné, statut inchangé
 
 ## T4 — Décalage du réseau au transfert de fréquence (κ)
 
@@ -174,13 +193,15 @@ Statut : M (2026-10-02) pour la forme ; à revérifier si `src/fssr_nam/models/s
 κ (1 − 48 000/fs′)/2 échantillon à 48 kHz, avec κ propre au checkpoint.
 Hypothèses : H1 forme (1 − T′/T) [mesurée : R1 de `demo/sr_transfer/predictions_kappa.md`,
 rapport κ(192)/κ(96) de 0,991 à 1,031 sur 4 checkpoints] ; H2 κ constant pour une architecture
-[réfutée : R3, κ de 1,90 à 2,53 entre trois graines Big Muff]
-Portée : ZOH, Δ rééchelonné sans correction, 96 et 192 kHz ; pas le FOH (T1-P1) ; retard pur
-(R4) sur Big Muff, dispersif sur le VS100R (500 Hz moins retardé)
+[réfutée : R3, κ de 1,90 à 2,53 entre trois partitions Big Muff, graine 42]
+Portée : ZOH, Δ rééchelonné sans correction, 96 et 192 kHz ; pas le FOH (T1-P1) ; critère R4 de
+faible dispersion du retard entre bandes satisfait sur Big Muff, dispersion plus forte sur le
+VS100R (500 Hz moins retardé)
 Objet : `demo/sr_transfer/kappa.py` @ fa44f45
-Preuve : aucune pour le réseau. T1 borne κ_mode ∈ ]0 ; 1[ pour un mode réel ; κ > 1 partout
-exige donc une cascade de couches, des modes complexes ou des signes mêlés, non départagés
-(la mesure par bloc, R5, est invalide par construction)
+Preuve : aucune pour le réseau. T1 borne κ_mode ∈ ]0 ; 1[ pour un mode réel isolé, à fréquence
+nulle ; cette borne ne s'applique pas directement aux κ > 1 mesurés par bande sur le réseau.
+Cascade de couches, modes complexes ou signes mêlés sont des pistes non départagées (la mesure par
+bloc, R5, est invalide par construction)
 Vérifications : mesure préinscrite (2b447f3) ; κ VS100R 1,964, en accord avec l'estimation
 indirecte 1,86 (R2)
 Utilité : taille du retard non corrigé à 96 et 192 kHz pour le produit (0,25 κ et 0,375 κ

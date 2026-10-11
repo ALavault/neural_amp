@@ -1,6 +1,6 @@
 # P3 — Plan de l'article
 
-- Titre de travail : Transfert de fréquence d'échantillonnage des modèles audio à espace d'états : avance du maintien d'ordre zéro et correction à deux coefficients.
+- Titre de travail : Transfert de fréquence d'échantillonnage des modèles audio à espace d'états : écart de premier moment du maintien d'ordre zéro et correction à deux coefficients.
 - Dossier sans prose : l'auteur rédige le texte ; chiffres dans `numbers.json` (clés citées entre accents graves), résultats dans `RESULTS.md`, revendications dans `CLAIMS.md`.
 
 ## Cible
@@ -31,7 +31,7 @@
 | Section | Contenu | Pages | Figures/tableaux |
 |---|---|---|---|
 | 1 Introduction | Modèles d'effets audio à espace d'états, hôtes à 44 100 Hz à 192 kHz ; problème : un modèle entraîné à une fréquence ; contributions C2 à C7 de `CLAIMS.md` | 1/2 | aucun |
-| 2 Moments du maintien (T1) | Noyaux ZOH et FOH d'un mode diagonal ; gain continu commun ; écart de premier moment 2 Re(w φ(z)), avance du retard de groupe pour un gain non nul ; mode réel : avance dans ]0 ; 1/2[, κ_mode dans ]0 ; 1[ | 3/4 | `figures/fig_zoh_advance.pdf` (panneau du haut) |
+| 2 Moments du maintien (T1) | Noyaux ZOH et FOH d'un mode diagonal ; gain continu commun ; écart de premier moment 2 Re(w φ(z)), écart signé du retard de groupe pour un gain non nul ; mode réel : avance dans ]0 ; 1/2[, κ_mode dans ]0 ; 1[ | 3/4 | `figures/fig_zoh_advance.pdf` (panneau du haut) |
 | 3 Dispositif | SSM-WaveNet, Big Muff ToneTwist et protocole NablAFx, 3 partitions ; bras `delta`, `around`, `naive`, maintien à un coefficient, deux coefficients, relecture FOH ; mesures (descente contre l'appareil, montée dans la bande commune contre le modèle à 48 kHz, intérieur des segments) ; préinscriptions | 1/2 | Tableau 1 (bras et mesures) |
 | 4 Descente et montée sans correction | P1, P2, P7 ; P3 et P5 partielles ; loi en τ² post hoc ; H3 | 1/2 | `figures/fig_esr_vs_rate.pdf` (courbes ZOH seules) |
 | 5 Correction à deux coefficients = relecture FOH | Construction (gain continu et premier moment du mode à 48 kHz) ; équivalence avec la relecture FOH ; H6, H7 réfutée, H8 ; plancher : R et P réfutées, attribution ouverte | 3/4 | `figures/fig_esr_vs_rate.pdf` ; Tableau 2 (réductions et plancher) |
@@ -53,12 +53,12 @@
 
 | Énoncé | Statut | Rôle dans l'article |
 |---|---|---|
-| T1 | D (2026-10-02) | Section 2 : dit quelle quantité la correction doit annuler (l'avance au premier moment) et pourquoi la relecture FOH l'annule à fréquence nulle ; borne κ_mode < 1 d'un mode réel, contraste avec les κ mesurés |
+| T1 | D (2026-10-02) | Section 2 : dit quelle quantité la correction doit annuler (l'écart signé au premier moment, une avance pour un mode réel isolé sans voie directe) et pourquoi la relecture FOH l'annule à fréquence nulle ; borne κ_mode < 1 d'un mode réel, contraste avec les κ mesurés |
 | T4 | M (2026-10-02) pour la forme | Section 6 : forme du retard du réseau mesurée (R1), κ par checkpoint (H2 réfutée) ; aucune preuve pour le réseau, présenté comme mesure |
 
 - T5 (conditionnement des pôles) non retenu : hors du sujet du transfert de fréquence.
 - À développer : l'équivalence « relecture FOH = correction à deux coefficients » (argument analytique de `demo/sr_transfer/FIX_foh.md`, section 3, test `tests/numerical/test_ssm_discretization.py`) n'est pas inscrite dans `THEORY.md` ; l'inscrire, avec relecture indépendante, avant de la présenter comme proposition.
-- À développer : κ > 1 au niveau du réseau ; T1 borne un mode réel sous 1, l'excès exige une cascade de couches, des modes complexes ou des signes mêlés, non départagés.
+- À développer : κ > 1 au niveau du réseau ; T1 borne un mode réel isolé sous 1, à fréquence nulle, ce qui ne s'applique pas directement aux κ mesurés par bande sur le réseau ; cascade de couches, modes complexes ou signes mêlés sont des pistes non départagées.
 - À développer : plancher résiduel non attribué (repliement non linéaire N contre discrétisation dépendante du contenu Q).
 - À développer : T1 ne porte que sur la fréquence nulle ; les retards par bande d'octave mesurés (500 Hz à 8 kHz) n'en découlent pas directement.
 - À développer : une preuve, même partielle, de la forme (1 − T′/T) pour un réseau de couches linéaires en cascade ferait passer T4 de M à E.
@@ -83,5 +83,5 @@
 - Témoins de mécanisme (relecture Codex) : correction du seul retard global appliquée à tout le test, pour situer l'apport propre de la correction par mode ; contrôle linéarisé ou synthétique séparant erreur de maintien, repliement des pôles et repliement des non-linéarités ; pour S4-TF-L-16, interventions séparées sur la durée physique du TFiLM et sur les modes repliés ; nouvelles expériences CPU préinscrites.
 - Unités statistiques : le test Big Muff est fait de 12 segments de 5 s d'un seul fichier, pas de prises indépendantes ; les plages min–max décrivent 3 checkpoints, ce ne sont pas des intervalles de confiance ; l'étiquette FOH « inférieur » est une règle préinscrite, pas un test d'infériorité ; à dire dans le texte.
 - Reproductibilité pour un tiers : accès documenté aux poids des checkpoints, aux données et à l'environnement, séquence de reproduction de chaque bras ; le miroir anonyme doit couvrir ces dépendances, pas seulement les figures.
-- `THEORY.md`, T1 : la formulation « en avance de 2 Re(w φ(z)) » est signée ; préciser que le signe et la borne ne valent que pour un mode réel (travail sur le registre, hors de ce dossier).
+- `THEORY.md`, T1 : formulation « en avance de 2 Re(w φ(z)) » remplacée le 2026-10-11 par un écart signé ; le signe et la borne ne valent que pour un mode réel isolé, sans voie directe (fait dans le registre).
 - Vérifier sur les appels officiels la date limite, le format et le modèle de relecture de WASPAA 2027 (à confirmer).

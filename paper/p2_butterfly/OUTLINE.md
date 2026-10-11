@@ -59,7 +59,7 @@ CLAIMS.md ; ici seules les clés de numbers.json sont nommées. -->
 
 | Énoncé | Statut | Rôle dans l'article |
 |---|---|---|
-| T3 | M pour l'indépendance au seuil, S pour la loi de premier passage (2026-10-02) | Section 4 : (a) faible sensibilité de la statistique agrégée simulée (médiane des médianes prédites) aux seuils testés, mesurée (M), l'indépendance des résidus restant une hypothèse de la règle préinscrite ; (b) loi de premier passage, supposée (S), comme modèle candidat seulement |
+| T3 | M pour la faible sensibilité au seuil de la statistique agrégée simulée, S pour la loi de premier passage (2026-10-02) | Section 4 : (a) faible sensibilité de la statistique agrégée simulée (médiane des médianes prédites) aux seuils testés, mesurée (M), l'indépendance des résidus restant une hypothèse de la règle préinscrite ; (b) loi de premier passage, supposée (S), comme modèle candidat seulement |
 | T2 | D (2026-10-02) | Section 2 : condition du piège de polarité le long du gain ; motive le contrôle de polarité, la garde reste un choix de protocole ; sans probabilité d'inversion |
 
 - Pour porter T3 au statut D (preuve complète, contrôle symbolique, contrôle numérique sur le code réel, relecture indépendante) :
@@ -90,7 +90,7 @@ CLAIMS.md ; ici seules les clés de numbers.json sont nommées. -->
 - Bibliographie : `RELATED.md` et `refs.bib` (autre agent) ; vérifier la nouveauté de « décisions de validation comme amplificateurs » (recherche bornée de E-0008, nouveauté non établie) ; pas d'expérience.
 - Appel DAFx27 : dates, politique IA, gabarit et règles de pages à confirmer à sa parution ; pas d'expérience.
 - Anonymisation : miroir anonyme du code et des fiches, page d'écoute sans nom ; pas d'expérience.
-- Énoncé de T3 (a) dans `THEORY.md` à resserrer (« l'époque de la première division ne dépend pas du seuil » dit plus que la mesure : statistique agrégée simulée, contre-exemple individuel `t3_counter_k3_proto` / `t3_counter_k3_up`, indépendance des résidus non établie `t3_ar1_vr10`) ; travail de registre hors du dossier, non fait ici ; pas d'expérience.
+- Énoncé de T3 (a) dans `THEORY.md` resserré le 2026-10-11 (statistique agrégée simulée peu sensible au seuil aux valeurs testées, contre-exemple individuel `t3_counter_k3_proto` / `t3_counter_k3_up`, indépendance des résidus non établie `t3_ar1_vr10`) ; fait dans le registre, statut inchangé ; pas d'expérience.
 - Intervalles χ² : ceux des bras de fourche mêlent quatre perturbations et un témoin non perturbé (pas des tirages i.i.d.), et la normalité des log ESR est douteuse à ces effectifs ; la figure `figures/dispersion.pdf` ne donne plus d'intervalle pour les bras de fourche ni pour les plans emboîtés ; décider d'un intervalle par bootstrap ou n'en donner aucun ; pas d'expérience.
 - Contraste décide/rejoue : le bras rejoue impose aussi la durée d'entraînement du témoin ; à la fourche 5 la garde de polarité reste active ; l'ordre des lots est partagé entre enfants ; séparer l'ordonnanceur du dispositif décide/rejoue (calendrier rejoué avec arrêt propre, ou calendrier propre avec arrêt imposé) ; nouvelle expérience (deux bras de plus × 5 runs à la fourche 100).
 - « Époque 100 » n'établit pas une « phase tardive » comparable à celle d'autres travaux, ni un chaos au sens des systèmes dynamiques (aucun exposant de Lyapunov mesuré) ; à formuler comme époque de ce protocole ; pas d'expérience, ou mesure de divergence en fonction du temps si l'on veut le terme.
