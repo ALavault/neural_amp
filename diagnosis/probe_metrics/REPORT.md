@@ -360,6 +360,78 @@ plancher réel.
 - **Métriques existantes** (`real_extra_jvm.csv`, post hoc) : magnitude, phase et enveloppe
   croissent aussi strictement le long des 8 échelles de chaque sortie (ρ = +1).
 
+## Sorties réelles Nolly (capture v2 logicielle, 11/10, sans modèle neuronal)
+
+Neural DSP Archetype: Nolly, ampli Rhythm, rendu hors ligne à 192 kHz depuis le fichier source v2
+(`demo/capture/v2`). Règles figées avant tout rendu : `NOLLY_READING.md`, lues par
+`nolly_reading.py` ; sortie `nolly_reading.json` (le `.npz` des approximations linéaires des
+multisinus, 12 Mo, n'est pas commité : il se régénère avec la lecture). Chiffres : `report_numbers.json`, clé
+`real_nolly`. Écarts de séance et de lecture : `NOLLY_READING.md`, section « Écarts » ; valeurs de
+séance : `demo/capture/v2/SESSION_VALUES.md`.
+
+**Portes.**
+- Bouclage et stéréo : écart nul.
+- Porte 4 : 34 prises sur 42 passent. Les 8 autres (09, 12, 13, 18, 23, 24, 38, 41) échouent
+  toutes au seul critère « même retard aux deux marqueurs » et sont exclues, comme le prévoit la
+  règle. Les ancres 01, 20 et 39 passent.
+- Paliers faibles : au moins −48,4 dBFS. Marqueurs : au moins 107,7 dB au-dessus du silence.
+- Latence : médiane des retards de 175 échantillons à 192 kHz (0,9 ms), sous la limite de 1 024.
+- Déterminisme : les ancres ne sont pas identiques au bit, et la lecture prend la branche des
+  planchers. Sur `di_test`, l'ESR entre ancres vaut 2,0·10⁻⁸ pour chacune des trois paires ; les
+  changements d'un seul bouton valent de 9·10⁴ à 3,5·10⁷ fois ce plancher. Ces écarts dépassent
+  largement le plancher mesuré au réglage central ; celui-ci ne borne pas la variabilité des
+  autres réglages.
+
+**Lectures préinscrites.**
+
+| | Verdict | Détail |
+|---|---|---|
+| H1, monotonie | confirmée | 45 signes sur 50, aucun échec ; 5 comparaisons non mesurées (côté haut de la présence, prise 23 exclue) |
+| H2, capacité (Q-0014) | refus à tous les gains ; croissance « non » | tableau ci-dessous |
+| H3, linéarité du baffle | non mesurable | la règle prend la pire des trois paires, et la prise 41 est exclue |
+| H4, spécificité de E2 | non mesurable | même cause |
+
+H2, capacité r/RMS sur `di_test` (part de la sortie que la sonde laisse inexpliquée, en amplitude ;
+seuil gelé 0,3) :
+
+| Gain | 0 | 2,5 | 5 | 7,5 | 10 |
+|---|---|---|---|---|---|
+| Hammerstein 5 | 0,48 | 0,79 | 0,80 | 0,80 | 0,75 |
+| Volterra–Laguerre 3 | 0,50 | 0,79 | 0,79 | 0,79 | 0,75 |
+
+- **Le refus s'applique partout** : les 34 paires lues portent l'indicateur « signature
+  partielle » pour Hammerstein 5 sur `di_test`. Sur Nolly, seuls ESR, magnitude et phase restent
+  des lectures globales.
+- **Pas de croissance avec le gain** : le résidu normalisé augmente entre les gains 0 et 2,5,
+  plafonne, puis baisse un peu à 10 ; 2 pas sur 4 montent, et tous dépassent 0,3. Le substitut
+  synthétique prévoyait une croissance et un passage du seuil vers le gain 5. La mesure ne sépare
+  ni une non-linéarité trop complexe, ni une mémoire plus longue que celle des sondes (5,3 ms), ni
+  une limite de l'ajustement.
+- **H3, descriptif seulement** : sur les deux paires baffle lisibles (40 et 42), ρ vaut 0,0007
+  sur `di_test` et 0,0008 à 0,0009 sur le bruit rose, sous le seuil de 0,02 ; énergie du filtre au
+  delà de 0,25 s inférieure à 10⁻⁶. Ce n'est pas un verdict.
+
+**Contrôle post hoc des marqueurs** (`nolly_marker_drift.py`, `nolly_marker_drift.json`, non
+préinscrit). Les deux sections de marqueurs, séparées de 441 s, portent la même entrée. Pour
+chaque prise, la sortie aux marqueurs de fin est comparée à celle des marqueurs de début.
+- **Décalage** : aucun décalage entier détecté par cette comparaison, dans ±512 échantillons,
+  sur les 42 prises.
+- **Écart entre les deux réponses** :
+  - ancres : −43,9 à −43,8 dB ;
+  - présence 10 et gain d'au moins 5 (09, 13, 23, 24, 38, 41) : **−16,2 à −7,5 dB**, pic de la
+    différence entre 1 148 et 1 242 Hz, 48 à 77 % de son énergie sous 2 kHz ;
+  - autres prises : −47,9 à −32,8 dB, dont cinq au-dessus de −40 dB (04 : −32,8 ; 10 : −38,3 ;
+    25 : −37,9 ; 29 : −38,3 ; 30 : −36,2) ; la prise 18 (présence 10, gain 2,5) : −47,0 dB.
+- **Silence** : RMS de la section de silence au plus −141,5 dBFS, sur toutes les prises.
+- **Lecture** : à présence 10 et gain d'au moins 5, Nolly répond autrement à la même entrée,
+  précédée d'une histoire différente. Une histoire différente, un état interne ou un aléa restent
+  des explications possibles ; ces observations n'en identifient pas la cause, et aucun rendu
+  répété de ces réglages ne permet de les séparer. Pour 12 et 18, l'échec de la porte 4 vient de
+  deux échantillons adjacents presque ex æquo au sommet du pic de corrélation.
+
+**Ce que cette lecture ne dit pas** : rien sur un modèle, ni sur un ampli réel ; un seul ampli,
+un seul canal, une séance, suréchantillonnage NORMAL du plugin ; ni H3 ni H4 n'ont été testées.
+
 ## Coût de calcul
 
 Une paire, 4 s d'estimation et 4 s de lecture à 48 kHz, machine partagée (charge 15 à 18 sur
@@ -463,5 +535,7 @@ done   # Volterra sur DI : --levels -20
 .venv/bin/python $P/decomposition.py noise && .venv/bin/python $P/decomposition.py plucks
 .venv/bin/python $P/real_pairs.py vs100r && .venv/bin/python $P/real_pairs.py jvm
 .venv/bin/python $P/cost.py && .venv/bin/python $P/manifest.py
+.venv/bin/python $P/nolly_reading.py datasets/raw/internal/capture_v2/nolly --jobs 10  # ~30 min
+.venv/bin/python $P/nolly_marker_drift.py
 .venv/bin/python $P/summarize.py && .venv/bin/python $P/figures.py && .venv/bin/python $P/report_numbers.py
 ```

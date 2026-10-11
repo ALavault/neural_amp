@@ -1840,6 +1840,120 @@
    "bound_violations": 0
   }
  },
+ "real_nolly": {
+  "loopback_max_diff": 0.0,
+  "stereo_max_lr": 0.0,
+  "takes": 42,
+  "usable": 34,
+  "excluded": [
+   "9",
+   "12",
+   "13",
+   "18",
+   "23",
+   "24",
+   "38",
+   "41"
+  ],
+  "excluded_only_same_lag": true,
+  "median_lag_192k": 175.0,
+  "quiet_step_min_db": -48.4,
+  "markers_over_silence_min_db": 107.7,
+  "anchors_identical": false,
+  "anchor_esr_di_test": [
+   2.0103435691470004e-08,
+   2.018258611888611e-08,
+   2.0169033360590066e-08
+  ],
+  "one_knob_esr_over_floor_di_test": [
+   89860,
+   35155708
+  ],
+  "h5_partial_signature_pairs": [
+   34,
+   34
+  ],
+  "H1": {
+   "signs": 45,
+   "of": 50,
+   "verdict": "confirmée",
+   "unmeasured": 5
+  },
+  "H2": {
+   "hammerstein_5": {
+    "0": 0.48,
+    "2.5": 0.79,
+    "5": 0.8,
+    "7.5": 0.8,
+    "10": 0.75
+   },
+   "volterra_laguerre_3": {
+    "0": 0.5,
+    "2.5": 0.79,
+    "5": 0.79,
+    "7.5": 0.79,
+    "10": 0.75
+   },
+   "increases_with_gain": "non"
+  },
+  "H3": "non mesurable",
+  "H3_rho_descriptive": {
+   "40": {
+    "late_energy": 6.480178629794545e-07,
+    "di_test": 0.0007,
+    "pink_noise_-30dBFS_rms": 0.0009
+   },
+   "42": {
+    "late_energy": 9.006413741625079e-07,
+    "di_test": 0.0007,
+    "pink_noise_-30dBFS_rms": 0.0008
+   }
+  },
+  "H4": {
+   "verdict": "non mesurable",
+   "missing": [
+    41
+   ]
+  },
+  "drift_lag_all_zero": true,
+  "drift_p10_gain5_takes": [
+   "9",
+   "13",
+   "23",
+   "24",
+   "38",
+   "41"
+  ],
+  "drift_p10_gain5_db": [
+   -16.19,
+   -7.47
+  ],
+  "drift_p10_gain5_peak_hz": [
+   1148.44,
+   1242.19
+  ],
+  "drift_p10_gain5_share_below_2k": [
+   0.48,
+   0.77
+  ],
+  "drift_anchors_db": [
+   -43.89,
+   -43.82
+  ],
+  "drift_others_db": [
+   -47.86,
+   -32.8
+  ],
+  "drift_others_above_minus_40_db": {
+   "4": -32.8,
+   "10": -38.3,
+   "25": -37.9,
+   "29": -38.3,
+   "30": -36.2
+  },
+  "drift_take18_db": -47.0,
+  "silence_rms_max_dbfs": -141.5
+ },
  "wiener_hammerstein": {
   "repeat_floor|-80": {
    "d_norm": 5.274577524513401e-05,

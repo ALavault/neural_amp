@@ -223,3 +223,43 @@ Ces chiffres valident l'instrument, pas une attente sur Nolly. Le JSON de l'essa
 Après cet essai, seuls ont changé le calcul des planchers de la branche non déterministe (un ordre
 harmonique peut manquer à une répétition), qui ne s'exécute pas quand les ancres sont identiques,
 et une docstring. Relectures Codex en lecture seule : trois passes, chaque point vérifié et corrigé.
+
+## Écarts
+
+### 2026-10-11, rendus réels et lecture
+
+Les règles ci-dessus n'ont pas changé ; le script a tourné tel quel sur les 42 rendus. Résultats
+et chiffres : `REPORT.md`, section « Sorties réelles Nolly ».
+
+**Séance** (valeurs : `demo/capture/v2/SESSION_VALUES.md`) :
+- **Déterminisme** : non atteint. Deux rendus du même réglage diffèrent, même d'une seule
+  instance rendue deux fois. `SESSION.md` demandait de s'arrêter dans ce cas. La séance a
+  continué sur décision de l'utilisateur, après diagnostic du worker. La lecture a pris la branche
+  « non » de la porte 7, prévue pour ce cas : planchers tirés des trois paires d'ancres.
+- **Suréchantillonnage du plugin** : NORMAL, choisi par l'utilisateur après ce diagnostic, au
+  lieu du réglage HIGH de l'état de base proposé. `SESSION.md` demande seulement un mode fixe et
+  noté.
+- **Presets** : enregistrés comme chaînes d'effets REAPER (état complet de l'instance), le preset
+  interne du plugin ne pouvant pas être enregistré par script.
+- **Préférences REAPER** modifiées pendant la séance puis restaurées (moteur audio actif, médias
+  gardés en ligne) : sans elles, des réglages n'atteignaient pas le plugin, ou une source hors
+  ligne se rendait en silence. Aucun rendu gardé n'a été fait dans ces conditions.
+
+**Lecture** :
+- **8 prises exclues par la porte 4**, comme le prévoit la règle : 09, 12, 13, 18, 23, 24, 38 et
+  41. Toutes échouent au seul critère « même retard aux deux marqueurs ». Les paires qui en
+  dépendent ne sont pas lues, d'où :
+  - H1 : les 5 comparaisons du côté haut de la présence (prise 23) sont non mesurées ;
+  - H3 et H4 : « non mesurable », faute de la prise 41.
+- **Contrôle post hoc, non préinscrit** (`nolly_marker_drift.py`, `nolly_marker_drift.json`) :
+  la sortie aux marqueurs de fin, corrélée à la sortie aux marqueurs de début (même entrée), ne
+  montre aucun décalage entier dans ±512 échantillons, sur les 42 prises :
+  - 12 et 18 : deux échantillons adjacents presque ex æquo au sommet du pic de corrélation ;
+    sortie aux deux marqueurs aussi proche que pour les ancres ;
+  - 09, 13, 23, 24, 38 et 41 (présence 10, gain d'au moins 5) : le plugin répond autrement à la
+    même entrée, précédée d'une histoire différente, avec un pic de la différence vers 1,2 kHz.
+    La cause n'est pas identifiée.
+  Le critère de retard est appliqué tel que préinscrit, sans que son échec identifie la cause de
+  l'écart. La règle n'est pas modifiée.
+- Ce contrôle sert à la condition de l'entraînement (`demo/nolly_models/predictions.md`,
+  « Écarts »), pas à cette lecture.

@@ -1,0 +1,338 @@
+{
+ "1": {
+  "setting": "G050_B050_M050_T050_P050",
+  "lag": 0,
+  "difference_db": -43.82318485837097,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.42162721794664126,
+  "silence_rms_dbfs": -157.4397662699396
+ },
+ "2": {
+  "setting": "G050_B100_M050_T050_P050",
+  "lag": 0,
+  "difference_db": -45.941575040201215,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.44130631694893163,
+  "silence_rms_dbfs": -153.42048119661146
+ },
+ "3": {
+  "setting": "G050_B050_M000_T050_P050",
+  "lag": 0,
+  "difference_db": -44.55724348199966,
+  "difference_peak_hz": 23.4375,
+  "difference_share_below_2k": 0.42031825919198645,
+  "silence_rms_dbfs": -156.41407024485116
+ },
+ "4": {
+  "setting": "G050_B050_M050_T100_P050",
+  "lag": 0,
+  "difference_db": -32.802266819044306,
+  "difference_peak_hz": 1054.6875,
+  "difference_share_below_2k": 0.6229027700641908,
+  "silence_rms_dbfs": -159.35703891732177
+ },
+ "5": {
+  "setting": "G050_B050_M050_T050_P025",
+  "lag": 0,
+  "difference_db": -44.932474608089606,
+  "difference_peak_hz": 93.75,
+  "difference_share_below_2k": 0.418054821946711,
+  "silence_rms_dbfs": -157.56181399243
+ },
+ "6": {
+  "setting": "G075_B050_M050_T050_P050",
+  "lag": 0,
+  "difference_db": -43.48405503269039,
+  "difference_peak_hz": 93.75,
+  "difference_share_below_2k": 0.46788023146616176,
+  "silence_rms_dbfs": -156.88540521842947
+ },
+ "7": {
+  "setting": "G100_B050_M050_T050_P050",
+  "lag": 0,
+  "difference_db": -44.9779335056912,
+  "difference_peak_hz": 23.4375,
+  "difference_share_below_2k": 0.41128410497236206,
+  "silence_rms_dbfs": -154.10163273370162
+ },
+ "8": {
+  "setting": "G050_B075_M075_T025_P025",
+  "lag": 0,
+  "difference_db": -46.23261900508613,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.5236840610444812,
+  "silence_rms_dbfs": -152.41136774373092
+ },
+ "9": {
+  "setting": "G050_B075_M000_T075_P100",
+  "lag": 0,
+  "difference_db": -16.193213217847347,
+  "difference_peak_hz": 1195.3125,
+  "difference_share_below_2k": 0.47654347343351805,
+  "silence_rms_dbfs": -151.02225108004276
+ },
+ "10": {
+  "setting": "G050_B000_M050_T050_P050",
+  "lag": 0,
+  "difference_db": -38.280572152278296,
+  "difference_peak_hz": 1078.125,
+  "difference_share_below_2k": 0.5073989494477592,
+  "silence_rms_dbfs": -153.69283436620785
+ },
+ "11": {
+  "setting": "G050_B050_M050_T025_P050",
+  "lag": 0,
+  "difference_db": -45.366402242790684,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.4193607408069331,
+  "silence_rms_dbfs": -154.90740744102823
+ },
+ "12": {
+  "setting": "G075_B025_M025_T075_P025",
+  "lag": 0,
+  "difference_db": -42.063124893540014,
+  "difference_peak_hz": 93.75,
+  "difference_share_below_2k": 0.41030058017308074,
+  "silence_rms_dbfs": -163.1814072644971
+ },
+ "13": {
+  "setting": "G050_B000_M075_T100_P100",
+  "lag": 0,
+  "difference_db": -7.468138377504373,
+  "difference_peak_hz": 1171.875,
+  "difference_share_below_2k": 0.7355511328745202,
+  "silence_rms_dbfs": -155.50835766044915
+ },
+ "14": {
+  "setting": "G050_B100_M000_T100_P000",
+  "lag": 0,
+  "difference_db": -45.78497574024454,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.3990771843136875,
+  "silence_rms_dbfs": -156.59093821400964
+ },
+ "15": {
+  "setting": "G100_B025_M075_T050_P025",
+  "lag": 0,
+  "difference_db": -44.70364936458073,
+  "difference_peak_hz": 23.4375,
+  "difference_share_below_2k": 0.4092937764040717,
+  "silence_rms_dbfs": -157.75277594149216
+ },
+ "16": {
+  "setting": "G025_B050_M050_T050_P050",
+  "lag": 0,
+  "difference_db": -44.93134733935594,
+  "difference_peak_hz": 70.3125,
+  "difference_share_below_2k": 0.4113587623187245,
+  "silence_rms_dbfs": -146.61872491201666
+ },
+ "17": {
+  "setting": "G025_B050_M075_T025_P000",
+  "lag": 0,
+  "difference_db": -46.67908721070857,
+  "difference_peak_hz": 70.3125,
+  "difference_share_below_2k": 0.42175974995709786,
+  "silence_rms_dbfs": -150.6229922509735
+ },
+ "18": {
+  "setting": "G025_B050_M000_T000_P100",
+  "lag": 0,
+  "difference_db": -47.01483316961992,
+  "difference_peak_hz": 70.3125,
+  "difference_share_below_2k": 0.2406708034301477,
+  "silence_rms_dbfs": -144.7393968052671
+ },
+ "19": {
+  "setting": "G100_B100_M000_T025_P025",
+  "lag": 0,
+  "difference_db": -47.85886038533039,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.4781065059754608,
+  "silence_rms_dbfs": -141.47395747221037
+ },
+ "20": {
+  "setting": "G050_B050_M050_T050_P050",
+  "lag": 0,
+  "difference_db": -43.85551577189814,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.43145697155353585,
+  "silence_rms_dbfs": -157.51438040656262
+ },
+ "21": {
+  "setting": "G050_B075_M050_T050_P050",
+  "lag": 0,
+  "difference_db": -45.412831815450325,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.4428256958317557,
+  "silence_rms_dbfs": -154.29367382776155
+ },
+ "22": {
+  "setting": "G050_B025_M050_T050_P050",
+  "lag": 0,
+  "difference_db": -42.30597743173579,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.44239387228645144,
+  "silence_rms_dbfs": -159.99337839869395
+ },
+ "23": {
+  "setting": "G050_B050_M050_T050_P100",
+  "lag": 0,
+  "difference_db": -12.866999462179196,
+  "difference_peak_hz": 1171.875,
+  "difference_share_below_2k": 0.6665406122306446,
+  "silence_rms_dbfs": -153.59569436899
+ },
+ "24": {
+  "setting": "G050_B025_M050_T025_P100",
+  "lag": 0,
+  "difference_db": -12.04097574669472,
+  "difference_peak_hz": 1148.4375,
+  "difference_share_below_2k": 0.6384056057797555,
+  "silence_rms_dbfs": -156.10302033877386
+ },
+ "25": {
+  "setting": "G000_B025_M025_T100_P050",
+  "lag": 0,
+  "difference_db": -37.86065291088106,
+  "difference_peak_hz": 23.4375,
+  "difference_share_below_2k": 0.5521773449733766,
+  "silence_rms_dbfs": -162.9979828869191
+ },
+ "26": {
+  "setting": "G050_B050_M025_T050_P050",
+  "lag": 0,
+  "difference_db": -44.247861634538495,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.39899807302138696,
+  "silence_rms_dbfs": -157.52425839835146
+ },
+ "27": {
+  "setting": "G025_B075_M050_T000_P075",
+  "lag": 0,
+  "difference_db": -47.36591101520196,
+  "difference_peak_hz": 23.4375,
+  "difference_share_below_2k": 0.47696028832031895,
+  "silence_rms_dbfs": -143.12362510048052
+ },
+ "28": {
+  "setting": "G050_B050_M050_T050_P075",
+  "lag": 0,
+  "difference_db": -41.903324859303275,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.4702145566551199,
+  "silence_rms_dbfs": -155.6735116930416
+ },
+ "29": {
+  "setting": "G025_B075_M025_T075_P075",
+  "lag": 0,
+  "difference_db": -38.29758399344522,
+  "difference_peak_hz": 1031.25,
+  "difference_share_below_2k": 0.5327249371569681,
+  "silence_rms_dbfs": -148.85517350011972
+ },
+ "30": {
+  "setting": "G000_B050_M050_T050_P050",
+  "lag": 0,
+  "difference_db": -36.17402338841779,
+  "difference_peak_hz": 23.4375,
+  "difference_share_below_2k": 0.5428458156945439,
+  "silence_rms_dbfs": -167.0621055260578
+ },
+ "31": {
+  "setting": "G050_B050_M050_T075_P050",
+  "lag": 0,
+  "difference_db": -43.31929025773226,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.4441210942653654,
+  "silence_rms_dbfs": -159.8513857156667
+ },
+ "32": {
+  "setting": "G075_B025_M075_T025_P050",
+  "lag": 0,
+  "difference_db": -42.722508247428465,
+  "difference_peak_hz": 23.4375,
+  "difference_share_below_2k": 0.5216513914458608,
+  "silence_rms_dbfs": -157.21836628190184
+ },
+ "33": {
+  "setting": "G050_B050_M050_T000_P050",
+  "lag": 0,
+  "difference_db": -45.52695656610403,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.5000969317661802,
+  "silence_rms_dbfs": -153.1045418345844
+ },
+ "34": {
+  "setting": "G050_B050_M075_T050_P050",
+  "lag": 0,
+  "difference_db": -43.087376188290456,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.4827659147516941,
+  "silence_rms_dbfs": -156.70563613270292
+ },
+ "35": {
+  "setting": "G050_B050_M100_T050_P050",
+  "lag": 0,
+  "difference_db": -44.30729916017107,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.45148669526105706,
+  "silence_rms_dbfs": -156.17905504572687
+ },
+ "36": {
+  "setting": "G050_B050_M050_T050_P000",
+  "lag": 0,
+  "difference_db": -44.704979844182546,
+  "difference_peak_hz": 93.75,
+  "difference_share_below_2k": 0.43199511355280196,
+  "silence_rms_dbfs": -157.72308515806617
+ },
+ "37": {
+  "setting": "G100_B050_M100_T100_P000",
+  "lag": 0,
+  "difference_db": -43.13143212629377,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.4651459856549504,
+  "silence_rms_dbfs": -157.11915252594335
+ },
+ "38": {
+  "setting": "G050_B000_M100_T000_P100",
+  "lag": 0,
+  "difference_db": -8.360249017643564,
+  "difference_peak_hz": 1148.4375,
+  "difference_share_below_2k": 0.6597060085313009,
+  "silence_rms_dbfs": -162.2317035375701
+ },
+ "39": {
+  "setting": "G050_B050_M050_T050_P050",
+  "lag": 0,
+  "difference_db": -43.893051281548374,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.430018097685819,
+  "silence_rms_dbfs": -157.49430999715872
+ },
+ "40": {
+  "setting": "G075_B025_M075_T025_P050_X100",
+  "lag": 0,
+  "difference_db": -43.94219524653288,
+  "difference_peak_hz": 93.75,
+  "difference_share_below_2k": 0.8474880513722789,
+  "silence_rms_dbfs": -167.77516805066023
+ },
+ "41": {
+  "setting": "G050_B000_M100_T000_P100_X100",
+  "lag": 0,
+  "difference_db": -8.55024940572883,
+  "difference_peak_hz": 1242.1875,
+  "difference_share_below_2k": 0.7729538883863593,
+  "silence_rms_dbfs": -172.22076548928618
+ },
+ "42": {
+  "setting": "G050_B050_M050_T050_P050_X100",
+  "lag": 0,
+  "difference_db": -43.44671720823595,
+  "difference_peak_hz": 117.1875,
+  "difference_share_below_2k": 0.8224007007224559,
+  "silence_rms_dbfs": -168.2195900164135
+ }
+}
