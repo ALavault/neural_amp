@@ -1,0 +1,2418 @@
+{
+ "protocol": {
+  "SKIP": 2400,
+  "SKIP_is_0.05s_at_48k": true,
+  "FLOOR": 0.0001,
+  "FLOOR_is_Protocol_floor": true,
+  "FS": 48000,
+  "DOWN": 4,
+  "gain_takes": {
+   "0": 30,
+   "2.5": 16,
+   "5": 20,
+   "7.5": 6,
+   "10": 7
+  },
+  "gain_takes_from_settings": {
+   "0": 30,
+   "2.5": 16,
+   "7.5": 6,
+   "10": 7
+  },
+  "decimation_di_test": {
+   "x": {
+    "samples_192k": 5760000,
+    "samples_48k": 1440000,
+    "max_abs_diff_vs_cache": 0.0
+   },
+   "20": {
+    "samples_192k": 5760000,
+    "samples_48k": 1440000,
+    "max_abs_diff_vs_cache": 0.0
+   }
+  }
+ },
+ "seconds": {
+  "protocol": 1.3,
+  "quotes": 0.0,
+  "units": 0.0,
+  "h5_on_validation": 37.9,
+  "scratch_scaling": 275.6,
+  "lead4": 95.7,
+  "instrument": 253.7
+ },
+ "quotes": {
+  "checked": 199,
+  "mismatch_over_0.005_or_absent": [],
+  "rounding_gaps_0.0006_to_0.005": [
+   {
+    "lead": 2,
+    "label": "H5 usable median",
+    "quoted": 0.799,
+    "actual": 0.7978686520659413,
+    "source": "baseline.json",
+    "abs_diff": 0.0011313479340587795,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 other G5 takes max ('0.84')",
+    "quoted": 0.84,
+    "actual": 0.8355234315709613,
+    "source": "baseline",
+    "abs_diff": 0.004476568429038652,
+    "exists": true,
+    "note": "[2, 3, 4, 5, 8, 10, 11, 14, 21, 22, 26, 28, 31, 33, 34, 35, 36, 42]"
+   }
+  ],
+  "scratch_exposure": {
+   "pairs_exposed_on_B_by_scratch": [
+    2,
+    4,
+    7,
+    28,
+    30,
+    31,
+    35,
+    36
+   ],
+   "scratch_reference_take": 1,
+   "lead1_says": "6 pairs: 1->2, 1->4, 1->7, 39->30, 39->35, 39->36"
+  },
+  "rows": [
+   {
+    "lead": 1,
+    "label": "hammerstein_5 G0",
+    "quoted": 0.476,
+    "actual": 0.47599940478232655,
+    "source": "baseline.json",
+    "abs_diff": 5.952176734269621e-07,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 1,
+    "label": "hammerstein_5 G2.5",
+    "quoted": 0.794,
+    "actual": 0.7941675959166509,
+    "source": "baseline.json",
+    "abs_diff": 0.00016759591665083118,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 1,
+    "label": "hammerstein_5 G5",
+    "quoted": 0.803,
+    "actual": 0.8026467715249123,
+    "source": "baseline.json",
+    "abs_diff": 0.00035322847508778565,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 1,
+    "label": "hammerstein_5 G7.5",
+    "quoted": 0.8,
+    "actual": 0.7999921975516107,
+    "source": "baseline.json",
+    "abs_diff": 7.802448389382377e-06,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 1,
+    "label": "hammerstein_5 G10",
+    "quoted": 0.747,
+    "actual": 0.7472586934798691,
+    "source": "baseline.json",
+    "abs_diff": 0.00025869347986906543,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 1,
+    "label": "volterra_laguerre_3 G0",
+    "quoted": 0.497,
+    "actual": 0.4968158312372745,
+    "source": "baseline.json",
+    "abs_diff": 0.00018416876272547844,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 1,
+    "label": "volterra_laguerre_3 G2.5",
+    "quoted": 0.786,
+    "actual": 0.7862338165951475,
+    "source": "baseline.json",
+    "abs_diff": 0.00023381659514742914,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 1,
+    "label": "volterra_laguerre_3 G5",
+    "quoted": 0.793,
+    "actual": 0.7934784436157526,
+    "source": "baseline.json",
+    "abs_diff": 0.0004784436157525551,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 1,
+    "label": "volterra_laguerre_3 G7.5",
+    "quoted": 0.79,
+    "actual": 0.7903428485136905,
+    "source": "baseline.json",
+    "abs_diff": 0.00034284851369048575,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 1,
+    "label": "volterra_laguerre_3 G10",
+    "quoted": 0.754,
+    "actual": 0.7535222589050047,
+    "source": "baseline.json",
+    "abs_diff": 0.0004777410949953209,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "hammerstein_5 G0",
+    "quoted": 0.476,
+    "actual": 0.47599940478232655,
+    "source": "baseline.json",
+    "abs_diff": 5.952176734269621e-07,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "hammerstein_5 G2.5",
+    "quoted": 0.794,
+    "actual": 0.7941675959166509,
+    "source": "baseline.json",
+    "abs_diff": 0.00016759591665083118,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "hammerstein_5 G5",
+    "quoted": 0.803,
+    "actual": 0.8026467715249123,
+    "source": "baseline.json",
+    "abs_diff": 0.00035322847508778565,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "hammerstein_5 G7.5",
+    "quoted": 0.8,
+    "actual": 0.7999921975516107,
+    "source": "baseline.json",
+    "abs_diff": 7.802448389382377e-06,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "hammerstein_5 G10",
+    "quoted": 0.747,
+    "actual": 0.7472586934798691,
+    "source": "baseline.json",
+    "abs_diff": 0.00025869347986906543,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "volterra_laguerre_3 G0",
+    "quoted": 0.497,
+    "actual": 0.4968158312372745,
+    "source": "baseline.json",
+    "abs_diff": 0.00018416876272547844,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "volterra_laguerre_3 G2.5",
+    "quoted": 0.786,
+    "actual": 0.7862338165951475,
+    "source": "baseline.json",
+    "abs_diff": 0.00023381659514742914,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "volterra_laguerre_3 G5",
+    "quoted": 0.793,
+    "actual": 0.7934784436157526,
+    "source": "baseline.json",
+    "abs_diff": 0.0004784436157525551,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "volterra_laguerre_3 G7.5",
+    "quoted": 0.79,
+    "actual": 0.7903428485136905,
+    "source": "baseline.json",
+    "abs_diff": 0.00034284851369048575,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "volterra_laguerre_3 G10",
+    "quoted": 0.754,
+    "actual": 0.7535222589050047,
+    "source": "baseline.json",
+    "abs_diff": 0.0004777410949953209,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 3,
+    "label": "hammerstein_5 G0",
+    "quoted": 0.476,
+    "actual": 0.47599940478232655,
+    "source": "baseline.json",
+    "abs_diff": 5.952176734269621e-07,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 3,
+    "label": "hammerstein_5 G2.5",
+    "quoted": 0.794,
+    "actual": 0.7941675959166509,
+    "source": "baseline.json",
+    "abs_diff": 0.00016759591665083118,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 3,
+    "label": "hammerstein_5 G5",
+    "quoted": 0.803,
+    "actual": 0.8026467715249123,
+    "source": "baseline.json",
+    "abs_diff": 0.00035322847508778565,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 3,
+    "label": "hammerstein_5 G7.5",
+    "quoted": 0.8,
+    "actual": 0.7999921975516107,
+    "source": "baseline.json",
+    "abs_diff": 7.802448389382377e-06,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 3,
+    "label": "hammerstein_5 G10",
+    "quoted": 0.747,
+    "actual": 0.7472586934798691,
+    "source": "baseline.json",
+    "abs_diff": 0.00025869347986906543,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 3,
+    "label": "volterra_laguerre_3 G0",
+    "quoted": 0.497,
+    "actual": 0.4968158312372745,
+    "source": "baseline.json",
+    "abs_diff": 0.00018416876272547844,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 3,
+    "label": "volterra_laguerre_3 G2.5",
+    "quoted": 0.786,
+    "actual": 0.7862338165951475,
+    "source": "baseline.json",
+    "abs_diff": 0.00023381659514742914,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 3,
+    "label": "volterra_laguerre_3 G5",
+    "quoted": 0.793,
+    "actual": 0.7934784436157526,
+    "source": "baseline.json",
+    "abs_diff": 0.0004784436157525551,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 3,
+    "label": "volterra_laguerre_3 G7.5",
+    "quoted": 0.79,
+    "actual": 0.7903428485136905,
+    "source": "baseline.json",
+    "abs_diff": 0.00034284851369048575,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 3,
+    "label": "volterra_laguerre_3 G10",
+    "quoted": 0.754,
+    "actual": 0.7535222589050047,
+    "source": "baseline.json",
+    "abs_diff": 0.0004777410949953209,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 5,
+    "label": "hammerstein_5 G0",
+    "quoted": 0.476,
+    "actual": 0.47599940478232655,
+    "source": "baseline.json",
+    "abs_diff": 5.952176734269621e-07,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 5,
+    "label": "hammerstein_5 G2.5",
+    "quoted": 0.794,
+    "actual": 0.7941675959166509,
+    "source": "baseline.json",
+    "abs_diff": 0.00016759591665083118,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 5,
+    "label": "hammerstein_5 G5",
+    "quoted": 0.803,
+    "actual": 0.8026467715249123,
+    "source": "baseline.json",
+    "abs_diff": 0.00035322847508778565,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 5,
+    "label": "hammerstein_5 G7.5",
+    "quoted": 0.8,
+    "actual": 0.7999921975516107,
+    "source": "baseline.json",
+    "abs_diff": 7.802448389382377e-06,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 5,
+    "label": "hammerstein_5 G10",
+    "quoted": 0.747,
+    "actual": 0.7472586934798691,
+    "source": "baseline.json",
+    "abs_diff": 0.00025869347986906543,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "hammerstein_5 G0",
+    "quoted": 0.476,
+    "actual": 0.47599940478232655,
+    "source": "baseline.json",
+    "abs_diff": 5.952176734269621e-07,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "hammerstein_5 G2.5",
+    "quoted": 0.794,
+    "actual": 0.7941675959166509,
+    "source": "baseline.json",
+    "abs_diff": 0.00016759591665083118,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "hammerstein_5 G5",
+    "quoted": 0.803,
+    "actual": 0.8026467715249123,
+    "source": "baseline.json",
+    "abs_diff": 0.00035322847508778565,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "hammerstein_5 G7.5",
+    "quoted": 0.8,
+    "actual": 0.7999921975516107,
+    "source": "baseline.json",
+    "abs_diff": 7.802448389382377e-06,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "hammerstein_5 G10",
+    "quoted": 0.747,
+    "actual": 0.7472586934798691,
+    "source": "baseline.json",
+    "abs_diff": 0.00025869347986906543,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "volterra_laguerre_3 G0",
+    "quoted": 0.497,
+    "actual": 0.4968158312372745,
+    "source": "baseline.json",
+    "abs_diff": 0.00018416876272547844,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "volterra_laguerre_3 G2.5",
+    "quoted": 0.786,
+    "actual": 0.7862338165951475,
+    "source": "baseline.json",
+    "abs_diff": 0.00023381659514742914,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "volterra_laguerre_3 G5",
+    "quoted": 0.793,
+    "actual": 0.7934784436157526,
+    "source": "baseline.json",
+    "abs_diff": 0.0004784436157525551,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "volterra_laguerre_3 G7.5",
+    "quoted": 0.79,
+    "actual": 0.7903428485136905,
+    "source": "baseline.json",
+    "abs_diff": 0.00034284851369048575,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "volterra_laguerre_3 G10",
+    "quoted": 0.754,
+    "actual": 0.7535222589050047,
+    "source": "baseline.json",
+    "abs_diff": 0.0004777410949953209,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "harness",
+    "label": "fir G0",
+    "quoted": 0.511,
+    "actual": 0.5106096716390913,
+    "source": "baseline.json",
+    "abs_diff": 0.00039032836090868717,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "harness",
+    "label": "fir G2.5",
+    "quoted": 0.825,
+    "actual": 0.8253949347064241,
+    "source": "baseline.json",
+    "abs_diff": 0.00039493470642415485,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "harness",
+    "label": "fir G5",
+    "quoted": 0.831,
+    "actual": 0.8313321209296118,
+    "source": "baseline.json",
+    "abs_diff": 0.0003321209296118788,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "harness",
+    "label": "fir G7.5",
+    "quoted": 0.83,
+    "actual": 0.8301570667118876,
+    "source": "baseline.json",
+    "abs_diff": 0.00015706671188764343,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "harness",
+    "label": "fir G10",
+    "quoted": 0.8,
+    "actual": 0.7997905977087663,
+    "source": "baseline.json",
+    "abs_diff": 0.0002094022912337845,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G0 (power)",
+    "quoted": 0.261,
+    "actual": 0.2607222367713807,
+    "source": "baseline.json",
+    "abs_diff": 0.0002777632286193321,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G2.5 (power)",
+    "quoted": 0.681,
+    "actual": 0.6812767982390221,
+    "source": "baseline.json",
+    "abs_diff": 0.0002767982390220469,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G5 (power)",
+    "quoted": 0.691,
+    "actual": 0.6911130952893267,
+    "source": "baseline.json",
+    "abs_diff": 0.00011309528932679225,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G7.5 (power)",
+    "quoted": 0.689,
+    "actual": 0.6891607554116854,
+    "source": "baseline.json",
+    "abs_diff": 0.0001607554116854759,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G10 (power)",
+    "quoted": 0.64,
+    "actual": 0.6396650001833456,
+    "source": "baseline.json",
+    "abs_diff": 0.00033499981665441325,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "hammerstein_5^2 G0 (power)",
+    "quoted": 0.227,
+    "actual": 0.22657543335312916,
+    "source": "baseline.json",
+    "abs_diff": 0.0004245666468708498,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "hammerstein_5^2 G2.5 (power)",
+    "quoted": 0.631,
+    "actual": 0.6307021704040329,
+    "source": "baseline.json",
+    "abs_diff": 0.0002978295959671362,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "hammerstein_5^2 G5 (power)",
+    "quoted": 0.644,
+    "actual": 0.6442418398393647,
+    "source": "baseline.json",
+    "abs_diff": 0.0002418398393646548,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "hammerstein_5^2 G7.5 (power)",
+    "quoted": 0.64,
+    "actual": 0.6399875161434553,
+    "source": "baseline.json",
+    "abs_diff": 1.2483856544731609e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "hammerstein_5^2 G10 (power)",
+    "quoted": 0.558,
+    "actual": 0.5583955549812409,
+    "source": "baseline.json",
+    "abs_diff": 0.0003955549812408865,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "volterra_laguerre_3^2 G0 (power)",
+    "quoted": 0.247,
+    "actual": 0.24682597016798405,
+    "source": "baseline.json",
+    "abs_diff": 0.00017402983201594835,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "volterra_laguerre_3^2 G2.5 (power)",
+    "quoted": 0.618,
+    "actual": 0.618163614357772,
+    "source": "baseline.json",
+    "abs_diff": 0.00016361435777201283,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "volterra_laguerre_3^2 G5 (power)",
+    "quoted": 0.63,
+    "actual": 0.6296080404828771,
+    "source": "baseline.json",
+    "abs_diff": 0.00039195951712289734,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "volterra_laguerre_3^2 G7.5 (power)",
+    "quoted": 0.625,
+    "actual": 0.6246418181967344,
+    "source": "baseline.json",
+    "abs_diff": 0.00035818180326563365,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "volterra_laguerre_3^2 G10 (power)",
+    "quoted": 0.568,
+    "actual": 0.567795794665301,
+    "source": "baseline.json",
+    "abs_diff": 0.0002042053346990036,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G5 quintile 1",
+    "quoted": 0.864,
+    "actual": 0.8644796251590793,
+    "source": "baseline",
+    "abs_diff": 0.0004796251590792888,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G5 quintile 2",
+    "quoted": 0.764,
+    "actual": 0.7639230503076236,
+    "source": "baseline",
+    "abs_diff": 7.694969237637128e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G5 quintile 3",
+    "quoted": 0.7,
+    "actual": 0.7001389905115166,
+    "source": "baseline",
+    "abs_diff": 0.00013899051151666786,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G5 quintile 4",
+    "quoted": 0.567,
+    "actual": 0.5668211989960363,
+    "source": "baseline",
+    "abs_diff": 0.00017880100396361343,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G5 quintile 5",
+    "quoted": 0.592,
+    "actual": 0.5922864825824158,
+    "source": "baseline",
+    "abs_diff": 0.0002864825824158146,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G0 quintile 1",
+    "quoted": 0.313,
+    "actual": 0.31326316275067445,
+    "source": "baseline",
+    "abs_diff": 0.0002631627506744505,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G0 quintile 2",
+    "quoted": 0.331,
+    "actual": 0.33097823858783315,
+    "source": "baseline",
+    "abs_diff": 2.1761412166865224e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G0 quintile 3",
+    "quoted": 0.324,
+    "actual": 0.3243161391085202,
+    "source": "baseline",
+    "abs_diff": 0.0003161391085201859,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G0 quintile 4",
+    "quoted": 0.235,
+    "actual": 0.234976877053525,
+    "source": "baseline",
+    "abs_diff": 2.312294647499602e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "fir^2 G0 quintile 5",
+    "quoted": 0.219,
+    "actual": 0.21927491363368629,
+    "source": "baseline",
+    "abs_diff": 0.00027491363368628563,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 4,
+    "label": "median fir^2 over usable G>=2.5 takes",
+    "quoted": 0.687,
+    "actual": 0.6871130993891599,
+    "source": "baseline.json",
+    "abs_diff": 0.00011309938915982087,
+    "exists": true,
+    "note": "n = 32"
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G0 bin 1",
+    "quoted": 0.412,
+    "actual": 0.41178472492896595,
+    "source": "base",
+    "abs_diff": 0.00021527507103402677,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G0 bin 2",
+    "quoted": 0.456,
+    "actual": 0.4557686765218595,
+    "source": "base",
+    "abs_diff": 0.00023132347814053267,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G0 bin 3",
+    "quoted": 0.485,
+    "actual": 0.48526165623253315,
+    "source": "base",
+    "abs_diff": 0.0002616562325331584,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G0 bin 4",
+    "quoted": 0.456,
+    "actual": 0.4557594462155873,
+    "source": "base",
+    "abs_diff": 0.00024055378441273367,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G0 bin 5",
+    "quoted": 0.502,
+    "actual": 0.5023455272912659,
+    "source": "base",
+    "abs_diff": 0.0003455272912659124,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G2.5 bin 1",
+    "quoted": 0.881,
+    "actual": 0.8809673141389652,
+    "source": "base",
+    "abs_diff": 3.2685861034775776e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G2.5 bin 2",
+    "quoted": 0.818,
+    "actual": 0.8176059796095588,
+    "source": "base",
+    "abs_diff": 0.0003940203904411188,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G2.5 bin 3",
+    "quoted": 0.788,
+    "actual": 0.7878574380471209,
+    "source": "base",
+    "abs_diff": 0.00014256195287909446,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G2.5 bin 4",
+    "quoted": 0.733,
+    "actual": 0.7325965094479813,
+    "source": "base",
+    "abs_diff": 0.00040349055201871487,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G2.5 bin 5",
+    "quoted": 0.765,
+    "actual": 0.7648498755227248,
+    "source": "base",
+    "abs_diff": 0.00015012447727524858,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G5 bin 1",
+    "quoted": 0.895,
+    "actual": 0.8948974320804313,
+    "source": "base",
+    "abs_diff": 0.00010256791956875233,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G5 bin 2",
+    "quoted": 0.83,
+    "actual": 0.8295433096196654,
+    "source": "base",
+    "abs_diff": 0.000456690380334579,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G5 bin 3",
+    "quoted": 0.806,
+    "actual": 0.8057011421464563,
+    "source": "base",
+    "abs_diff": 0.0002988578535437769,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G5 bin 4",
+    "quoted": 0.739,
+    "actual": 0.7393348465168299,
+    "source": "base",
+    "abs_diff": 0.00033484651682991196,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G5 bin 5",
+    "quoted": 0.75,
+    "actual": 0.7497405611131531,
+    "source": "base",
+    "abs_diff": 0.00025943888684687444,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G7.5 bin 1",
+    "quoted": 0.898,
+    "actual": 0.8982842453594331,
+    "source": "base",
+    "abs_diff": 0.0002842453594330552,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G7.5 bin 2",
+    "quoted": 0.826,
+    "actual": 0.8260546948867453,
+    "source": "base",
+    "abs_diff": 5.46948867453656e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G7.5 bin 3",
+    "quoted": 0.803,
+    "actual": 0.8026357116995569,
+    "source": "base",
+    "abs_diff": 0.00036428830044310523,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G7.5 bin 4",
+    "quoted": 0.733,
+    "actual": 0.733156466190902,
+    "source": "base",
+    "abs_diff": 0.00015646619090203817,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G7.5 bin 5",
+    "quoted": 0.744,
+    "actual": 0.7435449615487818,
+    "source": "base",
+    "abs_diff": 0.00045503845121819264,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G10 bin 1",
+    "quoted": 0.88,
+    "actual": 0.879583989519962,
+    "source": "base",
+    "abs_diff": 0.00041601048003803154,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G10 bin 2",
+    "quoted": 0.784,
+    "actual": 0.7836616347018496,
+    "source": "base",
+    "abs_diff": 0.0003383652981504559,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G10 bin 3",
+    "quoted": 0.732,
+    "actual": 0.7318324382373286,
+    "source": "base",
+    "abs_diff": 0.00016756176267140876,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G10 bin 4",
+    "quoted": 0.653,
+    "actual": 0.6529967510435354,
+    "source": "base",
+    "abs_diff": 3.248956464640962e-06,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "H5 G10 bin 5",
+    "quoted": 0.677,
+    "actual": 0.6770850618744291,
+    "source": "base",
+    "abs_diff": 8.506187442902657e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 1->2",
+    "quoted": 0.829,
+    "actual": 0.8286637060577974,
+    "source": "base",
+    "abs_diff": 0.00033629394220258124,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 1->2",
+    "quoted": 0.886,
+    "actual": 0.8861159973057932,
+    "source": "base",
+    "abs_diff": 0.00011599730579314738,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 1->3",
+    "quoted": 0.809,
+    "actual": 0.8089621892899114,
+    "source": "base",
+    "abs_diff": 3.781071008868153e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 1->3",
+    "quoted": 0.772,
+    "actual": 0.7715394920612645,
+    "source": "base",
+    "abs_diff": 0.00046050793873553264,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 1->4",
+    "quoted": 0.877,
+    "actual": 0.8770225352615385,
+    "source": "base",
+    "abs_diff": 2.253526153850327e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 1->4",
+    "quoted": 0.863,
+    "actual": 0.8625013038020962,
+    "source": "base",
+    "abs_diff": 0.0004986961979037696,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 1->5",
+    "quoted": 0.888,
+    "actual": 0.8879920901884898,
+    "source": "base",
+    "abs_diff": 7.909811510220521e-06,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 1->5",
+    "quoted": 0.868,
+    "actual": 0.8684374491199219,
+    "source": "base",
+    "abs_diff": 0.0004374491199219399,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 1->6",
+    "quoted": 0.979,
+    "actual": 0.9791673307452915,
+    "source": "base",
+    "abs_diff": 0.00016733074529151626,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 1->6",
+    "quoted": 0.981,
+    "actual": 0.9807237919758872,
+    "source": "base",
+    "abs_diff": 0.00027620802411276735,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 1->7",
+    "quoted": 0.905,
+    "actual": 0.9048562960726547,
+    "source": "base",
+    "abs_diff": 0.00014370392734530668,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 1->7",
+    "quoted": 0.905,
+    "actual": 0.9054159627175156,
+    "source": "base",
+    "abs_diff": 0.0004159627175155389,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 1->10",
+    "quoted": 0.767,
+    "actual": 0.7672861544958101,
+    "source": "base",
+    "abs_diff": 0.0002861544958100426,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 1->10",
+    "quoted": 0.764,
+    "actual": 0.7635487714282121,
+    "source": "base",
+    "abs_diff": 0.00045122857178792053,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 20->11",
+    "quoted": 0.872,
+    "actual": 0.8717059722376032,
+    "source": "base",
+    "abs_diff": 0.00029402776239684236,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 20->11",
+    "quoted": 0.85,
+    "actual": 0.849879307248891,
+    "source": "base",
+    "abs_diff": 0.00012069275110893063,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 20->16",
+    "quoted": 0.97,
+    "actual": 0.9697669728378628,
+    "source": "base",
+    "abs_diff": 0.00023302716213713381,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 20->16",
+    "quoted": 0.972,
+    "actual": 0.9721549371159296,
+    "source": "base",
+    "abs_diff": 0.0001549371159296209,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 20->21",
+    "quoted": 0.828,
+    "actual": 0.8279616457235348,
+    "source": "base",
+    "abs_diff": 3.8354276465146775e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 20->21",
+    "quoted": 0.882,
+    "actual": 0.8817872652341835,
+    "source": "base",
+    "abs_diff": 0.00021273476581651352,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 20->22",
+    "quoted": 0.808,
+    "actual": 0.8077232588500265,
+    "source": "base",
+    "abs_diff": 0.00027674114997355836,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 20->22",
+    "quoted": 0.829,
+    "actual": 0.8293048566193443,
+    "source": "base",
+    "abs_diff": 0.00030485661934431807,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 20->26",
+    "quoted": 0.801,
+    "actual": 0.8005942381282211,
+    "source": "base",
+    "abs_diff": 0.0004057618717789868,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 20->26",
+    "quoted": 0.764,
+    "actual": 0.7640380614406548,
+    "source": "base",
+    "abs_diff": 3.8061440654768575e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 20->28",
+    "quoted": 0.914,
+    "actual": 0.913514171707316,
+    "source": "base",
+    "abs_diff": 0.00048582829268406513,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 20->28",
+    "quoted": 0.898,
+    "actual": 0.8980123545584289,
+    "source": "base",
+    "abs_diff": 1.2354558428850915e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 39->30",
+    "quoted": 0.951,
+    "actual": 0.951399505844796,
+    "source": "base",
+    "abs_diff": 0.00039950584479608864,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 39->30",
+    "quoted": 0.955,
+    "actual": 0.9550856700417819,
+    "source": "base",
+    "abs_diff": 8.567004178194892e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 39->31",
+    "quoted": 0.875,
+    "actual": 0.8752201213633517,
+    "source": "base",
+    "abs_diff": 0.00022012136335169963,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 39->31",
+    "quoted": 0.858,
+    "actual": 0.8577799180740753,
+    "source": "base",
+    "abs_diff": 0.00022008192592470888,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 39->33",
+    "quoted": 0.873,
+    "actual": 0.8729403910749813,
+    "source": "base",
+    "abs_diff": 5.960892501866155e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 39->33",
+    "quoted": 0.85,
+    "actual": 0.8499147947631689,
+    "source": "base",
+    "abs_diff": 8.520523683108738e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 39->34",
+    "quoted": 0.794,
+    "actual": 0.794452076975261,
+    "source": "base",
+    "abs_diff": 0.00045207697526095103,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 39->34",
+    "quoted": 0.76,
+    "actual": 0.7602457875255713,
+    "source": "base",
+    "abs_diff": 0.0002457875255712505,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 39->35",
+    "quoted": 0.794,
+    "actual": 0.7941522714734077,
+    "source": "base",
+    "abs_diff": 0.00015227147340768354,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 39->35",
+    "quoted": 0.764,
+    "actual": 0.763541725261223,
+    "source": "base",
+    "abs_diff": 0.0004582747387770203,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 39->36",
+    "quoted": 0.882,
+    "actual": 0.8824311925731498,
+    "source": "base",
+    "abs_diff": 0.00043119257314983006,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 39->36",
+    "quoted": 0.862,
+    "actual": 0.8624506692177316,
+    "source": "base",
+    "abs_diff": 0.00045066921773162516,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,2,3,6",
+    "label": "H5 share 20->23",
+    "quoted": 0.955,
+    "actual": 0.954970573502792,
+    "source": "base",
+    "abs_diff": 2.942649720794055e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2,3,6",
+    "label": "VL3 share 20->23",
+    "quoted": 0.948,
+    "actual": 0.9475547048572805,
+    "source": "base",
+    "abs_diff": 0.00044529514271940407,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 usable min",
+    "quoted": 0.476,
+    "actual": 0.47599940478232655,
+    "source": "baseline.json",
+    "abs_diff": 5.952176734269621e-07,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 usable median",
+    "quoted": 0.799,
+    "actual": 0.7978686520659413,
+    "source": "baseline.json",
+    "abs_diff": 0.0011313479340587795,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 usable max",
+    "quoted": 0.836,
+    "actual": 0.8355234315709613,
+    "source": "baseline.json",
+    "abs_diff": 0.0004765684290386485,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 gate-4 min",
+    "quoted": 0.756,
+    "actual": 0.756385506444022,
+    "source": "baseline.json",
+    "abs_diff": 0.0003855064440220213,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 gate-4 max",
+    "quoted": 0.874,
+    "actual": 0.8736536971831297,
+    "source": "baseline.json",
+    "abs_diff": 0.00034630281687031417,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 take 37",
+    "quoted": 0.764,
+    "actual": 0.7640026564624092,
+    "source": "baseline.json",
+    "abs_diff": 2.6564624091562905e-06,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 take 7",
+    "quoted": 0.747,
+    "actual": 0.7472586934798691,
+    "source": "baseline.json",
+    "abs_diff": 0.00025869347986906543,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 take 15",
+    "quoted": 0.743,
+    "actual": 0.7425154525813425,
+    "source": "baseline.json",
+    "abs_diff": 0.0004845474186574439,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 take 19",
+    "quoted": 0.717,
+    "actual": 0.7166099434122459,
+    "source": "baseline.json",
+    "abs_diff": 0.0003900565877540396,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 take 29",
+    "quoted": 0.821,
+    "actual": 0.8214977238094614,
+    "source": "baseline.json",
+    "abs_diff": 0.0004977238094614478,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 2,
+    "label": "H5 other G5 takes min ('0.77')",
+    "quoted": 0.77,
+    "actual": 0.7704231935368525,
+    "source": "baseline",
+    "abs_diff": 0.0004231935368524953,
+    "exists": true,
+    "note": "[2, 3, 4, 5, 8, 10, 11, 14, 21, 22, 26, 28, 31, 33, 34, 35, 36, 42]"
+   },
+   {
+    "lead": 2,
+    "label": "H5 other G5 takes max ('0.84')",
+    "quoted": 0.84,
+    "actual": 0.8355234315709613,
+    "source": "baseline",
+    "abs_diff": 0.004476568429038652,
+    "exists": true,
+    "note": "[2, 3, 4, 5, 8, 10, 11, 14, 21, 22, 26, 28, 31, 33, 34, 35, 36, 42]"
+   },
+   {
+    "lead": 5,
+    "label": "H5 take 9 (presence 10, gate 4)",
+    "quoted": 0.836,
+    "actual": 0.8359861232136848,
+    "source": "base",
+    "abs_diff": 1.3876786315147882e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 5,
+    "label": "H5 take 13 (presence 10, gate 4)",
+    "quoted": 0.874,
+    "actual": 0.8736536971831297,
+    "source": "base",
+    "abs_diff": 0.00034630281687031417,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 5,
+    "label": "H5 take 18 (presence 10, gate 4)",
+    "quoted": 0.756,
+    "actual": 0.756385506444022,
+    "source": "base",
+    "abs_diff": 0.0003855064440220213,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 5,
+    "label": "H5 take 23 (presence 10, gate 4)",
+    "quoted": 0.826,
+    "actual": 0.8259777662674002,
+    "source": "base",
+    "abs_diff": 2.2233732599796774e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 5,
+    "label": "H5 take 24 (presence 10, gate 4)",
+    "quoted": 0.814,
+    "actual": 0.8144960030225923,
+    "source": "base",
+    "abs_diff": 0.0004960030225923395,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 5,
+    "label": "H5 take 38 (presence 10, gate 4)",
+    "quoted": 0.829,
+    "actual": 0.828709907490182,
+    "source": "base",
+    "abs_diff": 0.00029009250981792967,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 1,
+    "label": "median frozen hammerstein_5 share, class tone",
+    "quoted": 0.829,
+    "actual": 0.8286637060577974,
+    "source": "nolly_reading.json pairs",
+    "abs_diff": 0.00033629394220258124,
+    "exists": true,
+    "note": "n = 17, missing from reading: []"
+   },
+   {
+    "lead": 1,
+    "label": "median frozen volterra_laguerre_3 share, class tone",
+    "quoted": 0.85,
+    "actual": 0.8499147947631692,
+    "source": "nolly_reading.json pairs",
+    "abs_diff": 8.520523683075432e-05,
+    "exists": true,
+    "note": "n = 17, missing from reading: []"
+   },
+   {
+    "lead": 1,
+    "label": "median frozen hammerstein_5 share, class gain",
+    "quoted": 0.933,
+    "actual": 0.9334729912416584,
+    "source": "nolly_reading.json pairs",
+    "abs_diff": 0.00047299124165833817,
+    "exists": true,
+    "note": "n = 12, missing from reading: []"
+   },
+   {
+    "lead": 1,
+    "label": "median frozen volterra_laguerre_3 share, class gain",
+    "quoted": 0.934,
+    "actual": 0.9337930689065119,
+    "source": "nolly_reading.json pairs",
+    "abs_diff": 0.00020693109348812744,
+    "exists": true,
+    "note": "n = 12, missing from reading: []"
+   },
+   {
+    "lead": 1,
+    "label": "median frozen hammerstein_5 share, class cab",
+    "quoted": 0.83,
+    "actual": 0.8303905252019107,
+    "source": "nolly_reading.json pairs",
+    "abs_diff": 0.0003905252019107408,
+    "exists": true,
+    "note": "n = 2, missing from reading: []"
+   },
+   {
+    "lead": 1,
+    "label": "median frozen volterra_laguerre_3 share, class cab",
+    "quoted": 0.858,
+    "actual": 0.8583332966082391,
+    "source": "nolly_reading.json pairs",
+    "abs_diff": 0.00033329660823910867,
+    "exists": true,
+    "note": "n = 2, missing from reading: []"
+   },
+   {
+    "lead": "2 (3: 0.748)",
+    "label": "scratch wsat_bla_256 G0",
+    "quoted": 0.381,
+    "actual": 0.38090637056809296,
+    "source": "capacity_split",
+    "abs_diff": 9.362943190704964e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2 (3: 0.748)",
+    "label": "scratch wsat_bla_256 G2.5",
+    "quoted": 0.729,
+    "actual": 0.7284650483740415,
+    "source": "capacity_split",
+    "abs_diff": 0.000534951625958513,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2 (3: 0.748)",
+    "label": "scratch wsat_bla_256 G5",
+    "quoted": 0.748,
+    "actual": 0.7482733417047727,
+    "source": "capacity_split",
+    "abs_diff": 0.00027334170477266717,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2 (3: 0.748)",
+    "label": "scratch wsat_bla_256 G7.5",
+    "quoted": 0.748,
+    "actual": 0.7475548455856731,
+    "source": "capacity_split",
+    "abs_diff": 0.0004451544143269093,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2 (3: 0.748)",
+    "label": "scratch wsat_bla_256 G10",
+    "quoted": 0.683,
+    "actual": 0.6831784623217239,
+    "source": "capacity_split",
+    "abs_diff": 0.0001784623217238046,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2 (3: 0.6919)",
+    "label": "scratch wsat_hp300_256 G0",
+    "quoted": 0.52,
+    "actual": 0.52043112350017,
+    "source": "capacity_split",
+    "abs_diff": 0.0004311235001699387,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2 (3: 0.6919)",
+    "label": "scratch wsat_hp300_256 G2.5",
+    "quoted": 0.614,
+    "actual": 0.6141003346324306,
+    "source": "capacity_split",
+    "abs_diff": 0.00010033463243064311,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2 (3: 0.6919)",
+    "label": "scratch wsat_hp300_256 G5",
+    "quoted": 0.692,
+    "actual": 0.691894049475433,
+    "source": "capacity_split",
+    "abs_diff": 0.00010595052456696674,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2 (3: 0.6919)",
+    "label": "scratch wsat_hp300_256 G7.5",
+    "quoted": 0.696,
+    "actual": 0.6960952844672762,
+    "source": "capacity_split",
+    "abs_diff": 9.528446727624651e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "2 (3: 0.6919)",
+    "label": "scratch wsat_hp300_256 G10",
+    "quoted": 0.71,
+    "actual": 0.7104204717402096,
+    "source": "capacity_split",
+    "abs_diff": 0.00042047174020964917,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,6",
+    "label": "yfir 1->2",
+    "quoted": 0.488,
+    "actual": 0.4882242956296171,
+    "source": "capacity_split pairs_vs_01",
+    "abs_diff": 0.00022429562961712168,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,6",
+    "label": "yfir1024 1->2",
+    "quoted": 0.411,
+    "actual": 0.4111919928998964,
+    "source": "capacity_split pairs_vs_01",
+    "abs_diff": 0.00019199289989640933,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,6",
+    "label": "yfir 1->4",
+    "quoted": 0.461,
+    "actual": 0.4610471572002486,
+    "source": "capacity_split pairs_vs_01",
+    "abs_diff": 4.715720024855985e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,6",
+    "label": "yfir 1->7",
+    "quoted": 0.664,
+    "actual": 0.66436617792645,
+    "source": "capacity_split pairs_vs_01",
+    "abs_diff": 0.00036617792644999536,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": "1,6",
+    "label": "yfir 39->30 (scratch: 1->30)",
+    "quoted": 0.461,
+    "actual": 0.4609615585437335,
+    "source": "capacity_split pairs_vs_01",
+    "abs_diff": 3.844145626652473e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 1->3 vs lead 1 yfir",
+    "quoted": 0.149,
+    "actual": 0.14920462210587382,
+    "source": "lead1 JSON",
+    "abs_diff": 0.00020462210587382512,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 20->26 vs lead 1 yfir",
+    "quoted": 0.191,
+    "actual": 0.19064493037203917,
+    "source": "lead1 JSON",
+    "abs_diff": 0.00035506962796083563,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 39->34 vs lead 1 yfir",
+    "quoted": 0.25,
+    "actual": 0.25029243086234115,
+    "source": "lead1 JSON",
+    "abs_diff": 0.0002924308623411531,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 39->35 vs lead 1 yfir",
+    "quoted": 0.298,
+    "actual": 0.2980466319655101,
+    "source": "lead1 JSON",
+    "abs_diff": 4.663196551013549e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 1->5 vs lead 1 yfir",
+    "quoted": 0.308,
+    "actual": 0.3076772135196519,
+    "source": "lead1 JSON",
+    "abs_diff": 0.00032278648034811397,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 20->28 vs lead 1 yfir",
+    "quoted": 0.421,
+    "actual": 0.4207480365714154,
+    "source": "lead1 JSON",
+    "abs_diff": 0.00025196342858457843,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 39->36 vs lead 1 yfir",
+    "quoted": 0.287,
+    "actual": 0.2869512110679025,
+    "source": "lead1 JSON",
+    "abs_diff": 4.878893209747659e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 1->4 vs lead 1 yfir",
+    "quoted": 0.461,
+    "actual": 0.4610471572002486,
+    "source": "lead1 JSON",
+    "abs_diff": 4.715720024855985e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 20->11 vs lead 1 yfir",
+    "quoted": 0.385,
+    "actual": 0.38481131073210073,
+    "source": "lead1 JSON",
+    "abs_diff": 0.00018868926789927798,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 39->31 vs lead 1 yfir",
+    "quoted": 0.438,
+    "actual": 0.437962680179918,
+    "source": "lead1 JSON",
+    "abs_diff": 3.7319820081982424e-05,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 39->33 vs lead 1 yfir",
+    "quoted": 0.359,
+    "actual": 0.35860552688095276,
+    "source": "lead1 JSON",
+    "abs_diff": 0.0003944731190472228,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 1->2 vs lead 1 yfir",
+    "quoted": 0.488,
+    "actual": 0.4882242956296171,
+    "source": "lead1 JSON",
+    "abs_diff": 0.00022429562961712168,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 1->10 vs lead 1 yfir",
+    "quoted": 0.174,
+    "actual": 0.17435045580191968,
+    "source": "lead1 JSON",
+    "abs_diff": 0.00035045580191969683,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 20->21 vs lead 1 yfir",
+    "quoted": 0.472,
+    "actual": 0.47214412991955074,
+    "source": "lead1 JSON",
+    "abs_diff": 0.0001441299195507617,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 20->22 vs lead 1 yfir",
+    "quoted": 0.36,
+    "actual": 0.36032592566897154,
+    "source": "lead1 JSON",
+    "abs_diff": 0.0003259256689715495,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 1->6 vs lead 1 yfir",
+    "quoted": 0.671,
+    "actual": 0.6708453988419574,
+    "source": "lead1 JSON",
+    "abs_diff": 0.0001546011580426665,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 1->7 vs lead 1 yfir",
+    "quoted": 0.664,
+    "actual": 0.66436617792645,
+    "source": "lead1 JSON",
+    "abs_diff": 0.00036617792644999536,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 20->16 vs lead 1 yfir",
+    "quoted": 0.84,
+    "actual": 0.8395338298892974,
+    "source": "lead1 JSON",
+    "abs_diff": 0.0004661701107026017,
+    "exists": true,
+    "note": ""
+   },
+   {
+    "lead": 6,
+    "label": "FIR fed y_ref 39->30 vs lead 1 yfir",
+    "quoted": 0.461,
+    "actual": 0.4609616453430355,
+    "source": "lead1 JSON",
+    "abs_diff": 3.835465696450102e-05,
+    "exists": true,
+    "note": ""
+   }
+  ]
+ },
+ "units": {
+  "lead4_power_as_amplitude": {
+   "lead4 non-causal scheduled FIR (G0..G10)": [
+    0.4393,
+    0.7733,
+    0.7823,
+    0.7817,
+    0.7362
+   ],
+   "lead4 causal scheduled FIR (G0..G10)": [
+    0.4733,
+    0.8408,
+    0.8556,
+    0.8562,
+    0.8402
+   ],
+   "lead4 multisine D read at window levels, B-weighted (G0..G10)": [
+    0.2665,
+    0.645,
+    0.6565,
+    0.6708,
+    0.6892
+   ],
+   "lead4 multisine D at -30/-24/-18, G5": [
+    0.6442,
+    0.6527,
+    0.6633
+   ],
+   "lead4 DI band FIR group median -30/-24/-18": [
+    0.8093,
+    0.7925,
+    0.7483
+   ],
+   "lead4 frozen FIR group median -30/-24/-18": [
+    0.9116,
+    0.8456,
+    0.7423
+   ]
+  },
+  "others_amplitude_as_power": {
+   "lead2 WH3 frozen from take 20, B (G0..G10)": [
+    0.1076,
+    0.1537,
+    0.0666,
+    0.1274,
+    0.257
+   ],
+   "lead3 hp300 union (G0..G10)": [
+    0.0676,
+    0.297,
+    0.3745,
+    0.3919,
+    0.4277
+   ],
+   "lead5 LPV causal 10 ms (G0..G10)": [
+    0.191,
+    0.5746,
+    0.5852,
+    0.5806,
+    0.4956
+   ],
+   "lead5 LPV anticausal 10 ms (G0..G10)": [
+    0.1998,
+    0.558,
+    0.5806,
+    0.5791,
+    0.4956
+   ],
+   "lead6 Nolly fir_pen (G0..G10)": [
+    0.2381,
+    0.4436,
+    0.4928,
+    0.517,
+    0.5852
+   ]
+  }
+ },
+ "h5_on_validation": {
+  "di_validation": 0.8422305496398486,
+  "di_test": 0.802646771524912
+ },
+ "scratch_scaling": {
+  "scale_A": 0.0707204757188541,
+  "scale_B": 0.041483725877896456,
+  "scale_ratio_B_over_A_db": -4.633348351966901,
+  "take_30": {
+   "per_section_scratch": 0.5204311235001339,
+   "A_scaled": 0.2698440731793151
+  },
+  "take_20": {
+   "per_section_scratch": 0.691894049475418,
+   "A_scaled": 0.6337582731543538
+  },
+  "linearity_A_scaled_pair_1_7": 6.949556909071961e-14
+ },
+ "lead4": {
+  "multisine_D": {
+   "20": {
+    "-30": {
+     "excited_lines": 7493,
+     "D_plain": 0.35078584680640057,
+     "D_bias_corrected": 0.4149106955700649,
+     "D_loo": 0.5004104223147895
+    },
+    "-24": {
+     "excited_lines": 7493,
+     "D_plain": 0.3644887111414644,
+     "D_bias_corrected": 0.42598731600845463,
+     "D_loo": 0.5079853037058416
+    },
+    "-18": {
+     "excited_lines": 7493,
+     "D_plain": 0.37271036553715886,
+     "D_bias_corrected": 0.44002257712840387,
+     "D_loo": 0.5297722370254254
+    }
+   },
+   "7": {
+    "-30": {
+     "excited_lines": 7493,
+     "D_plain": 0.39673870646742715,
+     "D_bias_corrected": 0.46682521454713155,
+     "D_loo": 0.5602741937947412
+    },
+    "-24": {
+     "excited_lines": 7493,
+     "D_plain": 0.3959669040980802,
+     "D_bias_corrected": 0.4708956268023238,
+     "D_loo": 0.5708006980190123
+    },
+    "-18": {
+     "excited_lines": 7493,
+     "D_plain": 0.3978418838910872,
+     "D_bias_corrected": 0.4763624156127685,
+     "D_loo": 0.5810564845340659
+    }
+   },
+   "30": {
+    "-30": {
+     "excited_lines": 7493,
+     "D_plain": 0.0007940036745859302,
+     "D_bias_corrected": 0.0009537274938581364,
+     "D_loo": 0.001166700864006319
+    },
+    "-24": {
+     "excited_lines": 7493,
+     "D_plain": 0.010294370039024225,
+     "D_bias_corrected": 0.012593540656743563,
+     "D_loo": 0.015659092016395558
+    },
+    "-18": {
+     "excited_lines": 7493,
+     "D_plain": 0.08585333884003421,
+     "D_bias_corrected": 0.10530123913183576,
+     "D_loo": 0.13123174755743355
+    }
+   }
+  },
+  "frozen_in_band": {
+   "20": {
+    "fir": {
+     "-30": 0.8332057082327464,
+     "-24": 0.720040760668252,
+     "-18": 0.5567729155874883
+    },
+    "hammerstein_5": {
+     "-30": 0.7600100658198807,
+     "-24": 0.6607236608489883,
+     "-18": 0.5394735730636279
+    },
+    "volterra_laguerre_3": {
+     "-30": 0.7697944315177483,
+     "-24": 0.6440015041792184,
+     "-18": 0.5233898310459778
+    }
+   },
+   "7": {
+    "fir": {
+     "-30": 0.8008246004479619,
+     "-24": 0.6629601718988084,
+     "-18": 0.4724442763380083
+    },
+    "hammerstein_5": {
+     "-30": 0.7071037625890686,
+     "-24": 0.5667371902318895,
+     "-18": 0.42103722255073145
+    },
+    "volterra_laguerre_3": {
+     "-30": 0.7262003680338815,
+     "-24": 0.5752814096054717,
+     "-18": 0.43269557534505865
+    }
+   }
+  },
+  "band_windows_B": {
+   "-30": 110,
+   "-24": 221,
+   "-18": 193
+  },
+  "group_median_in_band_G_ge_2.5": {
+   "n": 32,
+   "fir": {
+    "-30": 0.8310020156810831,
+    "-24": 0.7153841602847599,
+    "-18": 0.5505304742201835
+   },
+   "hammerstein_5": {
+    "-30": 0.7563577541302904,
+    "-24": 0.6550212061719081,
+    "-18": 0.5303659316069256
+   },
+   "volterra_laguerre_3": {
+    "-30": 0.7667341715835307,
+    "-24": 0.639806753889955,
+    "-18": 0.5185357502842272
+   }
+  },
+  "band_firs": {
+   "gram_seconds": 22.8,
+   "selector_agreement_with_current": {
+    "window_current_noncausal (lead 4)": 1.0,
+    "window_previous (lead 4 causal)": 0.7345575959933222,
+    "trailing_50ms_causal": 0.8365595436839176,
+    "trailing_10ms_causal": 0.6848052309404563,
+    "leading_50ms_anticausal": 0.829547857540345,
+    "leading_10ms_anticausal": 0.6855578742348358
+   },
+   "takes": {
+    "20": {
+     "lead4_reported": null,
+     "window_current_noncausal (lead 4)": 0.6122668128946085,
+     "window_previous (lead 4 causal)": 0.7315160207461385,
+     "trailing_50ms_causal": 0.6183241664453154,
+     "trailing_10ms_causal": 0.5979225505175075,
+     "leading_50ms_anticausal": 0.6303721161260453,
+     "leading_10ms_anticausal": 0.9410538307881074,
+     "global_fir_own": 0.6911130978744915,
+     "frozen_fir_baseline": 0.6911130952893267
+    },
+    "7": {
+     "lead4_reported": null,
+     "window_current_noncausal (lead 4)": 0.5421127459965004,
+     "window_previous (lead 4 causal)": 0.7056019319227694,
+     "trailing_50ms_causal": 0.5513333277987946,
+     "trailing_10ms_causal": 0.5219568329017762,
+     "leading_50ms_anticausal": 0.565167996860631,
+     "leading_10ms_anticausal": 1.0286632628741004,
+     "global_fir_own": 0.6396650025611293,
+     "frozen_fir_baseline": 0.6396650001833456
+    },
+    "16": {
+     "lead4_reported": null,
+     "window_current_noncausal (lead 4)": 0.5984957803693549,
+     "window_previous (lead 4 causal)": 0.7072963851154882,
+     "trailing_50ms_causal": 0.6036238537627451,
+     "trailing_10ms_causal": 0.5740720463322352,
+     "leading_50ms_anticausal": 0.6165849427588161,
+     "leading_10ms_anticausal": 0.9005925214428695,
+     "global_fir_own": 0.6812768029039695,
+     "frozen_fir_baseline": 0.6812767982390221
+    },
+    "6": {
+     "lead4_reported": null,
+     "window_current_noncausal (lead 4)": 0.61113103001193,
+     "window_previous (lead 4 causal)": 0.733252938004886,
+     "trailing_50ms_causal": 0.6171690793218884,
+     "trailing_10ms_causal": 0.5959574150744488,
+     "leading_50ms_anticausal": 0.6296961457457017,
+     "leading_10ms_anticausal": 0.9545515381437337,
+     "global_fir_own": 0.6891607624931734,
+     "frozen_fir_baseline": 0.6891607554116854
+    },
+    "30": {
+     "lead4_reported": null,
+     "window_current_noncausal (lead 4)": 0.19297922891605596,
+     "window_previous (lead 4 causal)": 0.22426789792048424,
+     "trailing_50ms_causal": 0.19243655582892769,
+     "trailing_10ms_causal": 0.1800499293985394,
+     "leading_50ms_anticausal": 0.20073509264915923,
+     "leading_10ms_anticausal": 0.2646015879618773,
+     "global_fir_own": 0.26072216159378625,
+     "frozen_fir_baseline": 0.2607222367713807
+    }
+   },
+   "linearity_pair_1_7": 3.011074645907636e-15
+  },
+  "lead4_json_keys": [
+   "protocol",
+   "excitation",
+   "takes",
+   "instrument_check",
+   "summary",
+   "h2_rule"
+  ]
+ },
+ "instrument": {
+  "H2": {
+   "hammerstein_5|G0|take30": {
+    "fresh_refit": 0.4759994047823259,
+    "nolly_reading": 0.4759994047823251,
+    "rel_diff": 1.632682960166733e-15,
+    "harness_cache": 0.47599940478232655,
+    "seconds": 9.6
+   },
+   "hammerstein_5|G10|take7": {
+    "fresh_refit": 0.7472586934798691,
+    "nolly_reading": 0.747258693479869,
+    "rel_diff": 1.4857278132891548e-16,
+    "harness_cache": 0.7472586934798691,
+    "seconds": 10.6
+   },
+   "volterra_laguerre_3|G0|take30": {
+    "fresh_refit": 0.49681583123727113,
+    "nolly_reading": 0.4968158312372727,
+    "rel_diff": 3.1285481193390153e-15,
+    "harness_cache": 0.4968158312372745,
+    "seconds": 84.8
+   },
+   "volterra_laguerre_3|G10|take7": {
+    "fresh_refit": 0.7535222589050049,
+    "nolly_reading": 0.7535222589050047,
+    "rel_diff": 2.9467557500915724e-16,
+    "harness_cache": 0.7535222589050047,
+    "seconds": 138.3
+   }
+  },
+  "feature_probe": {
+   "take": 7,
+   "feature_probe_x1_x5": 0.7472586934798691,
+   "hammerstein_5_refit": 0.7472586934798691,
+   "max_rel_prediction_gap": 0.0
+  }
+ },
+ "summary": {
+  "instrument": "H5 and VL3 refitted from scratch (fit_probe, no cache) on takes 30 (G0) and 7 (G10): rel diff to readings.H2_capacity.by_gain <= 3.1e-15; FeatureProbe [x^1..x^5] on take 7 = H5 refit (prediction gap 0.0). SKIP 2400 = 0.05 s at 48 kHz, floor 1e-4 = Protocol.floor, decimation resample_poly(.,1,4): cache = fresh cut+dec of di_test (x, take 20), max abs diff 0.0.",
+  "quotes": "199 quoted frozen/scratch baselines found in baseline.json, nolly_reading.json, capacity_split.json or lead 1 JSON, all within 0.005; rounding: H5 usable median 0.7979 (quoted 0.799 by harness and lead 2). Lead 2 'other G5 takes 0.236-0.29' is 0.236-0.308 in its own JSON (take 14).",
+  "scratch_hp300": "Scratch Wiener-HP300 numbers quoted by lead 2 (0.520 G0, 0.692 G5) are out of protocol: z scaled by the RMS of the section being read (hp(x_B) is 4.6 dB below hp(x_A)). Reproduced exactly (0.52043, 0.69189); in protocol (A-scaled) the same features give 0.2698 (G0) and 0.6338 (G5). The 300 Hz cutoff was chosen by a scratch scan read on take 20's di_test (run_a.py hpscan: 100 Hz 0.711, 300 Hz 0.692, 700 Hz 0.716, 1500 Hz 0.750, 3000 Hz 0.776). Linearity of the A-scaled probe on pair 1->7: 6.9e-14.",
+  "lead4_D": "Multisine D reproduced with own code: bias-corrected 0.4149/0.4260/0.4400 (G5), 0.4668/0.4709/0.4764 (G10), 0.0010/0.0126/0.1053 (G0) = lead 4. Estimator bracket: plain in-sample 0.351-0.373 (G5), LOO BLA 0.500-0.530 (G5).",
+  "lead4_bands": "Frozen probes in the +-3 dB bands (own windows on cached predictions) and the 32-take group medians reproduce lead 4 tables B and C to 3 decimals.",
+  "lead4_schedule": "Own band-FIR reimplementation reproduces lead 4: power 0.6123 (current window) / 0.7315 (previous window) at G5. Causal per-sample selectors: trailing 50 ms 0.6183, trailing 10 ms 0.5979 (better than the non-causal window); leading 10 ms 0.9411 (selector artefact). Same order at G0/2.5/7.5/10. The non-causal/causal gap is staleness of the level, not look-ahead. Trailing 10 ms in amplitude: 0.424/0.758/0.773/0.772/0.722 (G0..G10), close to lead 5 LPV causal 10 ms 0.437/0.758/0.765/0.762/0.704. Linearity of the band FIRs, pair 1->7: 3.0e-15.",
+  "h5_on_V": "H5 take 20: V 0.8422, B 0.8026 (lead 5 quotes 0.842)."
+ }
+}
