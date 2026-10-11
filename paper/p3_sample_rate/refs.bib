@@ -1,0 +1,381 @@
+% Bibliographie du dossier P3 (transfert de fréquence d'échantillonnage des modèles à espace d'états).
+% Vérifiée le 2026-10-11. Chaque DOI résout sur doi.org (responseCode 1) et son enregistrement CSL
+% concorde en titre, auteurs et année ; chaque entrée sans DOI est précédée de « % CHECK » et porte
+% url, eprint ou isbn. La provenance des métadonnées est donnée dans la ligne « % src: » de l'entrée.
+% Ce que chaque entrée établit, et son statut [V]/[NV], est dans RELATED.md.
+
+% ---------------------------------------------------------------------------
+% Indépendance à la fréquence d'échantillonnage des effets audio neuronaux
+% ---------------------------------------------------------------------------
+
+% src: enregistrement CSL du DOI (IEEE TASLP, vol. 33, pp. 2163-2174) + PDF arXiv 2501.18470v2.
+@article{carson2025resampling,
+  author  = {Alistair Carson and Vesa V{\"a}lim{\"a}ki and Alec Wright and Stefan Bilbao},
+  title   = {Resampling Filter Design for Multirate Neural Audio Effect Processing},
+  journal = {IEEE Transactions on Audio, Speech and Language Processing},
+  volume  = {33},
+  pages   = {2163--2174},
+  year    = {2025},
+  doi     = {10.1109/TASLPRO.2025.3574878},
+  eprint  = {2501.18470}
+}
+
+% src: enregistrement CSL du DOI (ICASSP 2025, pp. 1-5) + PDF arXiv 2409.15884v2.
+@inproceedings{carson2025interp,
+  author    = {Alistair Carson and Alec Wright and Stefan Bilbao},
+  title     = {Interpolation Filter Design for Sample Rate Independent Audio Effect {RNNs}},
+  booktitle = {Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP)},
+  year      = {2025},
+  pages     = {1--5},
+  doi       = {10.1109/ICASSP49660.2025.10889121},
+  eprint    = {2409.15884}
+}
+
+% src: en-tête du PDF arXiv 2406.06293v1 (DAFx24, Guildford) + fiche de l'archive DAFx (titre).
+% CHECK
+@inproceedings{carson2024srirnn,
+  author    = {Alistair Carson and Alec Wright and Jatin Chowdhury and Vesa V{\"a}lim{\"a}ki and Stefan Bilbao},
+  title     = {Sample Rate Independent Recurrent Neural Networks for Audio Effects Processing},
+  booktitle = {Proc. 27th Int. Conf. Digital Audio Effects (DAFx24)},
+  address   = {Guildford, UK},
+  year      = {2024},
+  eprint    = {2406.06293},
+  url       = {https://dafx.de/paper-archive/details/tgfLZTRbWpI4AXsPDAfaRg}
+}
+
+% src: listes de références de carson2024srirnn (réf. 16) et carson2025resampling (réf. 14, « Apr. 2022 »).
+% La page renvoie 403 au téléchargement le 2026-10-11 ; contenu non lu.
+% CHECK
+@misc{chowdhury2022agnostic,
+  author       = {Jatin Chowdhury},
+  title        = {Sample-Rate Agnostic Recurrent Neural Networks},
+  howpublished = {Billet de blog, Medium},
+  year         = {2022},
+  url          = {https://jatinchowdhury18.medium.com/sample-rate-agnostic-recurrent-neural-networks-238731446b2}
+}
+
+% src: en-tête du PDF de l'archive DAFx (DAFx20in22, Vienne) + fiche de l'archive DAFx ; arXiv 2205.01897.
+% CHECK
+@inproceedings{wilczek2022ode,
+  author    = {Jan Wilczek and Alec Wright and Vesa V{\"a}lim{\"a}ki and Emanu{\"e}l A. P. Habets},
+  title     = {Virtual Analog Modeling of Distortion Circuits Using Neural Ordinary Differential Equations},
+  booktitle = {Proc. 25th Int. Conf. Digital Audio Effects (DAFx20in22)},
+  address   = {Vienna, Austria},
+  year      = {2022},
+  eprint    = {2205.01897},
+  url       = {https://dafx.de/paper-archive/details/wmBVWfzWkPK1E4-3huejZw}
+}
+
+% src: PDF DAFx26 (en-tête « Proceedings of the 29th ... (DAFx26), Cambridge, MA » ; pages 217 à 224)
+% + fiche de l'archive DAFx.
+% CHECK
+@inproceedings{massi2026fno,
+  author    = {Oliviero Massi and Alessandro Ilic Mezza and Alberto Bernardini},
+  title     = {Fourier Neural Operators for Sample-Rate-Independent Virtual Analog Modeling},
+  booktitle = {Proc. 29th Int. Conf. Digital Audio Effects (DAFx26)},
+  address   = {Cambridge, MA, USA},
+  year      = {2026},
+  pages     = {217--224},
+  url       = {https://dafx.de/paper-archive/details/r4BVkltXkLx4Tx4sU6IDDw}
+}
+
+% src: enregistrement CSL du DOI (EUSIPCO 2021, pp. 321-325) + PDF arXiv 2105.04079v1.
+@inproceedings{saito2021sfi,
+  author    = {Koichi Saito and Tomohiko Nakamura and Kohei Yatabe and Yuma Koizumi and Hiroshi Saruwatari},
+  title     = {Sampling-Frequency-Independent Audio Source Separation Using Convolution Layer Based on Impulse Invariant Method},
+  booktitle = {Proc. 29th European Signal Processing Conf. (EUSIPCO)},
+  year      = {2021},
+  pages     = {321--325},
+  doi       = {10.23919/EUSIPCO54536.2021.9615941},
+  eprint    = {2105.04079}
+}
+
+% ---------------------------------------------------------------------------
+% Modèles de séquence à espace d'états et leur discrétisation
+% ---------------------------------------------------------------------------
+
+% src: BibTeX des actes NeurIPS (hachage 102f0bb6efb3a6128a3c750dd16729be) + PDF arXiv 2008.07669v2.
+% CHECK
+@inproceedings{gu2020hippo,
+  author    = {Albert Gu and Tri Dao and Stefano Ermon and Atri Rudra and Christopher R{\'e}},
+  title     = {{HiPPO}: Recurrent Memory with Optimal Polynomial Projections},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {33},
+  pages     = {1474--1487},
+  year      = {2020},
+  eprint    = {2008.07669},
+  url       = {https://proceedings.neurips.cc/paper_files/paper/2020/hash/102f0bb6efb3a6128a3c750dd16729be-Abstract.html}
+}
+
+% src: commentaire arXiv de 2111.00396v3 (« ICLR 2022 ») ; OpenReview non joignable par API le 2026-10-11.
+% CHECK
+@inproceedings{gu2022s4,
+  author    = {Albert Gu and Karan Goel and Christopher R{\'e}},
+  title     = {Efficiently Modeling Long Sequences with Structured State Spaces},
+  booktitle = {Int. Conf. Learning Representations (ICLR)},
+  year      = {2022},
+  eprint    = {2111.00396},
+  url       = {https://arxiv.org/abs/2111.00396}
+}
+
+% src: enregistrement CSL du DOI (NeurIPS 35, pp. 35971-35983). Ordre des auteurs pris dans le PDF et
+% l'arXiv 2206.11893 (Gu, Gupta, Goel, Ré) ; l'enregistrement du DOI place Goel avant Gupta.
+@inproceedings{gu2022s4d,
+  author    = {Albert Gu and Ankit Gupta and Karan Goel and Christopher R{\'e}},
+  title     = {On the Parameterization and Initialization of Diagonal State Space Models},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {35},
+  pages     = {35971--35983},
+  year      = {2022},
+  doi       = {10.52202/068431-2607},
+  eprint    = {2206.11893}
+}
+
+% src: en-tête du PDF arXiv 2208.04933v3 (« Published as a conference paper at ICLR 2023 ») et fiche
+% OpenReview (recherche par titre, ICLR 2023).
+% CHECK
+@inproceedings{smith2023s5,
+  author    = {Jimmy T. H. Smith and Andrew Warrington and Scott W. Linderman},
+  title     = {Simplified State Space Layers for Sequence Modeling},
+  booktitle = {Int. Conf. Learning Representations (ICLR)},
+  year      = {2023},
+  eprint    = {2208.04933},
+  url       = {https://arxiv.org/abs/2208.04933}
+}
+
+% src: enregistrement CSL du DOI (NeurIPS 35, pp. 2846-2861 ; titre « ... with State Spaces »,
+% l'arXiv 2210.06583 porte « ... Using State Spaces »).
+@inproceedings{nguyen2022s4nd,
+  author    = {Eric Nguyen and Karan Goel and Albert Gu and Gordon W. Downs and Preey Shah and Tri Dao and Stephen A. Baccus and Christopher R{\'e}},
+  title     = {{S4ND}: Modeling Images and Videos as Multidimensional Signals with State Spaces},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {35},
+  pages     = {2846--2861},
+  year      = {2022},
+  doi       = {10.52202/068431-0206},
+  eprint    = {2210.06583}
+}
+
+% src: recherche OpenReview (note tEYskw1VY2, venueid colmweb.org/COLM/2024/Conference) + PDF arXiv 2312.00752v2.
+% CHECK
+@inproceedings{gu2024mamba,
+  author    = {Albert Gu and Tri Dao},
+  title     = {{Mamba}: Linear-Time Sequence Modeling with Selective State Spaces},
+  booktitle = {Proc. 1st Conf. Language Modeling (COLM)},
+  year      = {2024},
+  eprint    = {2312.00752},
+  url       = {https://openreview.net/forum?id=tEYskw1VY2}
+}
+
+% src: commentaire arXiv de 2603.15569v1 (« ICLR 2026 ») + recherche OpenReview (note HwCvaJOiCj, ICLR 2026 Oral).
+% CHECK
+@inproceedings{lahoti2026mamba3,
+  author    = {Aakash Lahoti and Kevin Y. Li and Berlin Chen and Caitlin Wang and Aviv Bick and J. Zico Kolter and Tri Dao and Albert Gu},
+  title     = {{Mamba-3}: Improved Sequence Modeling using State Space Principles},
+  booktitle = {Int. Conf. Learning Representations (ICLR)},
+  year      = {2026},
+  eprint    = {2603.15569},
+  url       = {https://openreview.net/forum?id=HwCvaJOiCj}
+}
+
+% src: enregistrement de l'API arXiv (2604.20606v1, sans commentaire ni référence de revue).
+% CHECK
+@article{ibrahim2026beyondzoh,
+  author  = {Fady Ibrahim and Guangjun Liu and Guanghui Wang},
+  title   = {Beyond {ZOH}: Advanced Discretization Strategies for Vision {Mamba}},
+  journal = {arXiv preprint arXiv:2604.20606},
+  year    = {2026},
+  eprint  = {2604.20606},
+  url     = {https://arxiv.org/abs/2604.20606}
+}
+
+% src: enregistrement CSL du DOI (ICASSP 2025, pp. 1-5) + API arXiv 2509.08458v2 (« Accept by ICASSP 2025 »).
+@inproceedings{zhu2025fssm,
+  author    = {Yujie Zhu and Xinyi Zhang and Yekai Lu and Guang Yang and Faming Fang and Guixu Zhang},
+  title     = {First-order State Space Model for Lightweight Image Super-resolution},
+  booktitle = {Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP)},
+  year      = {2025},
+  pages     = {1--5},
+  doi       = {10.1109/ICASSP49660.2025.10887656},
+  eprint    = {2509.08458}
+}
+
+% src: commentaire arXiv de 2508.05287v3 (« Proceedings of the 43rd ICML, Seoul ... PMLR 306, 2026 »)
+% + recherche OpenReview (note 9yNGBueKgZ, ICML 2026). Pages non vérifiées.
+% CHECK
+@inproceedings{graf2026flowstate,
+  author    = {Lars Graf and Thomas Ortner and Stanis{\l}aw Wo{\'z}niak and Angeliki Pantazi},
+  title     = {{FlowState}: Sampling-Rate-Equivariant Time-Series Forecasting},
+  booktitle = {Proc. 43rd Int. Conf. Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {306},
+  address   = {Seoul, South Korea},
+  year      = {2026},
+  eprint    = {2508.05287},
+  url       = {https://arxiv.org/abs/2508.05287}
+}
+
+% src: enregistrement CSL du DOI (CVPR 2024, pp. 5819-5828) + API arXiv 2402.15584v3.
+@inproceedings{zubic2024event,
+  author    = {Nikola Zubi{\'c} and Mathias Gehrig and Davide Scaramuzza},
+  title     = {State Space Models for Event Cameras},
+  booktitle = {Proc. IEEE/CVF Conf. Computer Vision and Pattern Recognition (CVPR)},
+  address   = {Seattle, WA, USA},
+  year      = {2024},
+  pages     = {5819--5828},
+  doi       = {10.1109/CVPR52733.2024.00556},
+  eprint    = {2402.15584}
+}
+
+% src: API arXiv 2608.28472v1 ; le PDF indique « submitted to the IEEE for possible publication ».
+% CHECK
+@article{boulanger2026pdm,
+  author  = {Ludovic Boulanger and Sean U. N. Wood},
+  title   = {Multirate State Space Models for End-to-End Processing of Pulse Density Modulated Speech Signals},
+  journal = {arXiv preprint arXiv:2608.28472},
+  year    = {2026},
+  eprint  = {2608.28472},
+  url     = {https://arxiv.org/abs/2608.28472}
+}
+
+% ---------------------------------------------------------------------------
+% Modèles à espace d'états pour l'audio et les effets
+% ---------------------------------------------------------------------------
+
+% src: enregistrement CSL du DOI + Crossref (vol. 114, no 8, article 175) + PDF Springer en accès ouvert.
+@article{bittner2025sedge,
+  author  = {Matthias Bittner and Daniel Schn{\"o}ll and Matthias Wess and Axel Jantsch},
+  title   = {Efficient and Interpretable Raw Audio Classification with Diagonal State Space Models},
+  journal = {Machine Learning},
+  volume  = {114},
+  number  = {8},
+  note    = {Art. no. 175},
+  year    = {2025},
+  doi     = {10.1007/s10994-025-06807-z}
+}
+
+% src: en-tête du PDF DAFx25 (Ancona) + fiche de l'archive DAFx ; pages non vérifiées.
+% CHECK
+@inproceedings{dallinger2025pianossm,
+  author    = {Dominik Dallinger and Matthias Bittner and Daniel Schn{\"o}ll and Matthias Wess and Axel Jantsch},
+  title     = {{Piano-SSM}: Diagonal State Space Models for Efficient {MIDI}-to-Raw Audio Synthesis},
+  booktitle = {Proc. 28th Int. Conf. Digital Audio Effects (DAFx25)},
+  address   = {Ancona, Italy},
+  year      = {2025},
+  url       = {https://dafx.de/paper-archive/details/KDDAw8nWwIOPmq0vWzXkjA}
+}
+
+% src: API arXiv 2403.16331v1 (sans revue indiquée).
+% CHECK
+@article{yin2024drc,
+  author  = {Hanzhi Yin and Gang Cheng and Christian J. Steinmetz and Ruibin Yuan and Richard M. Stern and Roger B. Dannenberg},
+  title   = {Modeling Analog Dynamic Range Compressors using Deep Learning and State-space Models},
+  journal = {arXiv preprint arXiv:2403.16331},
+  year    = {2024},
+  eprint  = {2403.16331},
+  url     = {https://arxiv.org/abs/2403.16331}
+}
+
+% src: enregistrement CSL du DOI + Crossref (vol. 2025, no 1, article 30) ; préprint arXiv 2405.04124v6.
+@article{simionato2025ssm,
+  author  = {Riccardo Simionato and Stefano Fasciani},
+  title   = {Comparative Study of State-based Neural Networks for Virtual Analog Audio Effects Modeling},
+  journal = {EURASIP Journal on Audio, Speech, and Music Processing},
+  volume  = {2025},
+  number  = {1},
+  note    = {Art. no. 30},
+  year    = {2025},
+  doi     = {10.1186/s13636-025-00416-3},
+  eprint  = {2405.04124}
+}
+
+% src: enregistrement CSL du DOI + Crossref (vol. 5, article 1580395) ; contenu lu dans le préprint arXiv 2502.14405.
+@article{comunita2025frontiers,
+  author  = {Marco Comunit{\`a} and Christian J. Steinmetz and Joshua D. Reiss},
+  title   = {Differentiable Black-box and Gray-box Modeling of Nonlinear Audio Effects},
+  journal = {Frontiers in Signal Processing},
+  volume  = {5},
+  note    = {Art. no. 1580395},
+  year    = {2025},
+  doi     = {10.3389/frsip.2025.1580395},
+  eprint  = {2502.14405}
+}
+
+% src: en-tête du PDF DAFx25 (Ancona) + fiche de l'archive DAFx ; pages non vérifiées.
+% CHECK
+@inproceedings{esqueda2025lru,
+  author    = {Fabi{\'a}n Esqueda and Shogo Murai},
+  title     = {Antialiased Black-Box Modeling of Audio Distortion Circuits Using Real Linear Recurrent Units},
+  booktitle = {Proc. 28th Int. Conf. Digital Audio Effects (DAFx25)},
+  address   = {Ancona, Italy},
+  year      = {2025},
+  url       = {https://dafx.de/paper-archive/details/ZCW-eJ6Y6-TVr3g8w53JXg}
+}
+
+% ---------------------------------------------------------------------------
+% Discrétisation, maintiens, retard fractionnaire et repliement
+% ---------------------------------------------------------------------------
+
+% src: PDF de l'archive DAFx (en-tête DAFx-16, Brno ; pages DAFX-137 à DAFX-144) + fiche de l'archive DAFx.
+% CHECK
+@inproceedings{parker2016adaa,
+  author    = {Julian D. Parker and Vadim Zavalishin and Efflam {Le Bivic}},
+  title     = {Reducing the Aliasing of Nonlinear Waveshaping Using Continuous-Time Convolution},
+  booktitle = {Proc. 19th Int. Conf. Digital Audio Effects (DAFx-16)},
+  address   = {Brno, Czech Republic},
+  year      = {2016},
+  pages     = {137--144},
+  url       = {https://dafx.de/paper-archive/details/vem_XXF5qBbfiWOH2RVVAA}
+}
+
+% src: enregistrement CSL du DOI (vol. 7, no 10, pp. 273-275) ; résumé de l'auteur lu sur le dépôt
+% institutionnel de l'University of Rhode Island ; texte intégral non lu.
+@article{jackson2000impulse,
+  author  = {Leland B. Jackson},
+  title   = {A Correction to Impulse Invariance},
+  journal = {IEEE Signal Processing Letters},
+  volume  = {7},
+  number  = {10},
+  pages   = {273--275},
+  year    = {2000},
+  doi     = {10.1109/97.870677}
+}
+
+% src: enregistrement CSL du DOI (vol. 13, no 1, pp. 30-60 ; titre suivi dans l'enregistrement du
+% descripteur entre crochets « FIR/all pass filters design ») ; texte non lu.
+@article{laakso1996splitting,
+  author  = {T. I. Laakso and V. V{\"a}lim{\"a}ki and M. Karjalainen and U. K. Laine},
+  title   = {Splitting the Unit Delay},
+  journal = {IEEE Signal Processing Magazine},
+  volume  = {13},
+  number  = {1},
+  pages   = {30--60},
+  year    = {1996},
+  doi     = {10.1109/79.482137}
+}
+
+% src: notice OpenLibrary de l'ISBN 0201820544 (3e éd., Addison Wesley, 1998, 742 p., auteurs
+% Franklin, Powell, Workman) ; aucun exemplaire consultable, contenu non lu.
+% CHECK
+@book{franklin1998digital,
+  author    = {Gene F. Franklin and J. David Powell and Michael L. Workman},
+  title     = {Digital Control of Dynamic Systems},
+  edition   = {3rd},
+  publisher = {Addison-Wesley},
+  address   = {Menlo Park, CA},
+  year      = {1998},
+  isbn      = {0-201-82054-4}
+}
+
+% src: notice OpenLibrary de l'ISBN 9780486486130 (3e éd., Dover, Mineola, 2011 ; « Originally
+% published: Prentice Hall, c1997 ») ; aucun exemplaire consultable, contenu non lu.
+% CHECK
+@book{astrom2011computer,
+  author    = {Karl J. {\AA}str{\"o}m and Bj{\"o}rn Wittenmark},
+  title     = {Computer-Controlled Systems: Theory and Design},
+  edition   = {3rd},
+  publisher = {Dover Publications},
+  address   = {Mineola, NY},
+  year      = {2011},
+  isbn      = {978-0-486-48613-0}
+}
