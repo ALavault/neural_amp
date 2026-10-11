@@ -10,7 +10,9 @@ the same over the 29 train takes (seen settings, unseen audio); the delay-compen
 co-reading (rule of coreading_delay.py: one common delay on its grid, the one that
 minimises the median ESR over the test takes on di_validation, applied to di_test);
 history slopes against the device on the 8 test takes; the device's slopes along the
-gain ladder. Writes demo/nolly_models/evaluation.json.
+gain ladder. Écart of 2026-10-11 (predictions.md): the same aggregates without
+the presence-10 takes (test and seen), descriptive. Writes
+demo/nolly_models/evaluation.json.
 """
 
 from __future__ import annotations
@@ -50,8 +52,22 @@ COMPARISONS = (
     ("L", "GREY", False),
     ("L", "C", False),
 )
+# Descriptive aggregates: seen settings, and both without presence 10 (Écart of
+# 2026-10-11).
+DESCRIPTIVE = {
+    "seen": "s_seen",
+    "test_no_p10": "s_test_no_p10",
+    "seen_no_p10": "s_seen_no_p10",
+}
 GAIN_LADDER = (30, 16, 1, 6, 7)  # gain 0, 2.5, 5, 7.5, 10, the other knobs at 5
 DATASET = nolly.DATA / "nolly_48k"
+
+
+def no_p10(take: dict) -> bool:
+    """Écart of 2026-10-11: the takes with presence at 10 (18 and 38 in test; 9, 13,
+    23 and 24 in train) are left out of the descriptive *_no_p10 aggregates, by
+    setting."""
+    return take["knobs"][4] != 10.0
 
 
 def knobs(take: dict) -> torch.Tensor:
@@ -96,6 +112,10 @@ def reading(model, takes: list[dict], data: dict, validation: dict) -> dict:
     return {
         "s_test": statistics.mean(ln_esr[t["order"]] for t in tests),
         "s_seen": statistics.mean(ln_esr[t["order"]] for t in seen),
+        "s_test_no_p10": statistics.mean(
+            ln_esr[t["order"]] for t in tests if no_p10(t)
+        ),
+        "s_seen_no_p10": statistics.mean(ln_esr[t["order"]] for t in seen if no_p10(t)),
         "ln_esr_by_take": ln_esr,
         "tau": tau,
         "grid_edge": tau in (cd.DELAYS[0], cd.DELAYS[-1]),
@@ -129,6 +149,24 @@ def aligned_reading(runs: dict, arm: str, reference: str, raw: dict) -> dict:
     return out
 
 
+def compare_arms(
+    runs: dict, raw: dict, described: dict, complete: set, edge_ok: bool
+) -> dict:
+    """The comparisons of predictions.md: raw (primary or descriptive), the
+    descriptive aggregates of complete arms, and the co-reading when it is reliable."""
+    readings = {}
+    for arm, reference, primary in COMPARISONS:
+        if {arm, reference} <= complete:
+            row = {"raw": gd.compare(raw, arm, reference, primary, {"C": "C"})}
+            for name, values in described.items():
+                if all(len(values.get(a, {})) == len(SEEDS) for a in (arm, reference)):
+                    row[name] = gd.compare(values, arm, reference, False, {})
+            if edge_ok:
+                row["aligned"] = aligned_reading(runs, arm, reference, row["raw"])
+            readings[f"{arm}_vs_{reference}"] = row
+    return readings
+
+
 @torch.no_grad()
 def main() -> None:
     # The renders and the advance the dataset was built from (its manifest).
@@ -148,7 +186,8 @@ def main() -> None:
         )
         for t in tests
     }
-    runs, raw, seen = {}, {}, {}
+    runs, raw = {}, {}
+    described = {name: {} for name in DESCRIPTIVE}
     for arm, pattern in ARMS.items():
         for seed in SEEDS:
             run_id = gd.attempt(pattern.format(seed))
@@ -174,17 +213,17 @@ def main() -> None:
             runs[run_id] = entry
             if entry["valid"]:
                 raw.setdefault(arm, {})[seed] = entry["s_test"]
-                # Seen settings: read only from finite values, the arm otherwise
+                # Descriptive readings: from finite values only, the arm otherwise
                 # incomplete for that reading.
-                if math.isfinite(entry["s_seen"]):
-                    seen.setdefault(arm, {})[seed] = entry["s_seen"]
+                for name, key in DESCRIPTIVE.items():
+                    if math.isfinite(entry[key]):
+                        described[name].setdefault(arm, {})[seed] = entry[key]
             print(
                 f"{run_id}: s_test {entry['s_test']:.3f}, aligned"
                 f" {entry['s_test_aligned']:.3f} (tau {entry['tau']:+.2f})",
                 flush=True,
             )
     complete = {a for a in ARMS if len(raw.get(a, {})) == len(SEEDS)}
-    seen_complete = {a for a in ARMS if len(seen.get(a, {})) == len(SEEDS)}
     edge = edge_effect(tests[0], renders, advance)
     # Bound of coreading_delay.py: 1 % of the smallest delay-compensated ESR.
     smallest = min(
@@ -197,15 +236,7 @@ def main() -> None:
         default=0.0,
     )
     edge_ok = edge < 0.01 * smallest
-    readings = {}
-    for arm, reference, primary in COMPARISONS:
-        if {arm, reference} <= complete:
-            row = {"raw": gd.compare(raw, arm, reference, primary, {"C": "C"})}
-            if {arm, reference} <= seen_complete:
-                row["seen"] = gd.compare(seen, arm, reference, False, {})
-            if edge_ok:
-                row["aligned"] = aligned_reading(runs, arm, reference, row["raw"])
-            readings[f"{arm}_vs_{reference}"] = row
+    readings = compare_arms(runs, raw, described, complete, edge_ok)
     result = {
         "advance_48k": advance,
         "runs": runs,

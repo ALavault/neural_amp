@@ -198,3 +198,50 @@ Total : 12 runs, environ **26 h de GPU**, plus 1 h pour la porte et les essais.
    `nohup setsid bash -c 'while kill -0 -- -<PGID en cours> 2>/dev/null; do sleep 60; done;
    exec bash <runner>/scripts/product_nolly_queue.sh <runner>' >> demo/runs/nolly_queue.log
    2>&1 < /dev/null &`
+
+## Écarts
+
+### 2026-10-11, après la lecture des sondes et avant toute construction du jeu (option 4)
+
+Décision de l'utilisateur, le 2026-10-11, avant tout entraînement et toute lecture de modèle.
+
+- **Constat** : la lecture des sondes (`diagnosis/probe_metrics/nolly_reading.json`) exclut
+  8 prises à sa porte 4, toutes sur le seul critère « même retard aux deux marqueurs » : 09, 13,
+  23 et 24 (entraînement), 12, 18 et 38 (test), 41 (contrôle baffle). Les autres critères de la
+  porte passent. La condition ci-dessus ferait donc refuser le jeu.
+- **Contrôle ajouté** (`fssr_nam.product.nolly.marker_drift`,
+  `diagnosis/probe_metrics/nolly_marker_drift.py`) : les deux sections de marqueurs portent la
+  même entrée. La sortie aux marqueurs de fin, corrélée à celle des marqueurs de début, ne
+  montre aucun décalage entier dans ±512 échantillons, sur les 42 prises. Le critère échouait
+  dans deux situations :
+  - 12 et 18 : écart de retard d'un échantillon, deux échantillons adjacents presque ex æquo au
+    sommet du pic de corrélation ; la sortie aux deux marqueurs diffère de −42 et −47 dB, comme
+    pour les ancres (−44 dB) ;
+  - 09, 13, 23, 24 et 38 (et 41) : écart de 175 échantillons pour 09, de 91 à 99 pour les
+    autres ; la sortie aux deux marqueurs diffère de −16 à −7,5 dB, avec un pic vers 1,2 kHz.
+    Le plugin répond autrement à la même entrée, précédée d'une histoire différente ; la
+    section de silence reste au plus à −141,5 dBFS. Toutes ces prises ont la présence à 10 et un
+    gain d'au moins 5. Ces observations n'en identifient pas la cause ; l'écart est retenu comme
+    une propriété de la cible. Cinq autres réglages en montrent une trace plus faible (−38 à
+    −33 dB : 04, 10, 25, 29 et 30).
+- **Condition remplacée** : une prise des modèles qui échoue à la porte 4 sur ce seul critère
+  est gardée si la comparaison sortie contre sortie ne trouve aucun décalage entier. Tous les autres critères de la porte 4,
+  ainsi que bouclage, stéréo, ancres et latence, restent exigés. La médiane des retards reste
+  celle de la lecture (175 échantillons, avance 44), calculée sur les prises qui passent. Les
+  prises gardées ainsi sont listées dans le manifeste du jeu, sous `waived`.
+- **Inchangés** : les 29 prises d'entraînement, les 8 combinaisons de test, les comptes
+  (1 450 segments ; 1 306 / 144), les bras, la lecture principale P Nolly sur les 8 tests, les
+  verdicts et les attentes.
+- **Lecture secondaire ajoutée, descriptive** (`evaluate.py`, `*_no_p10`) : les mêmes
+  comparaisons sans les prises dont la présence vaut 10, définies par le réglage : 18 et 38 en
+  test (6 combinaisons restent), 09, 13, 23 et 24 parmi les réglages vus (25 restent). La prise
+  18 en fait partie par son réglage, bien que sa sortie ne montre pas l'écart (−47 dB). Les
+  modèles ne sont pas réentraînés pour cette lecture. Elle décrit la sensibilité des
+  comparaisons à l'exclusion des réglages de présence 10 ; elle n'isole pas une composante
+  aléatoire ou imprédictible, puisque ces réglages diffèrent aussi par leur timbre et leur
+  difficulté.
+- **Portée** : les deux marqueurs sont séparés de 441 s et précédés d'histoires différentes. Si un
+  modèle donnait la même prédiction aux deux sections, son erreur quadratique moyenne y serait au
+  moins le quart de l'énergie de la différence des cibles ; cette condition n'est pas établie
+  ici, et aucun plancher n'en découle pour `di_test`. La lecture principale contient ces prises ;
+  la lecture secondaire les retire.

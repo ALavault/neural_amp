@@ -15,7 +15,7 @@ from pathlib import Path
 
 import numpy as np
 import soundfile as sf
-from scipy.signal import resample_poly
+from scipy.signal import correlate, resample_poly
 
 ROOT = Path(__file__).resolve().parents[3]
 SHEET = ROOT / "demo/capture/v2"
@@ -95,6 +95,27 @@ def output(
     shift = DOWN * advance
     y = read(renders / take["file"], a - margin + shift, b + margin + shift)
     return resample_poly(y, 1, DOWN)
+
+
+def marker_drift(take: dict, renders: Path = RENDERS, search: int = 512) -> dict:
+    """The take's output at the end markers against its output at the start markers
+    (the same input, at the capture rate): the lag of the largest |correlation|
+    within +-search samples, and the RMS of their difference at lag 0 relative to the
+    start (dB). A lag of 0: no integer shift found between the two ends within the
+    search; it says nothing on the cause of a large difference."""
+    s0, s1 = SECTIONS["markers_start"], SECTIONS["markers_end"]
+    n = s0["samples"]
+    start = read(renders / take["file"], s0["start"], s0["start"] + n)
+    end = read(renders / take["file"], s1["start"] - search, s1["start"] + n + search)
+    c = correlate(end, start, mode="valid", method="fft")
+    lag = int(np.argmax(np.abs(c))) - search
+    difference = end[search : search + n] - start
+    return {
+        "lag": lag,
+        "difference_db": float(
+            10 * np.log10(np.mean(difference**2) / np.mean(start**2))
+        ),
+    }
 
 
 def audio(
