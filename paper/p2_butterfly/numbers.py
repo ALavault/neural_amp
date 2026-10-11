@@ -324,7 +324,6 @@ def data_chain(n: Numbers, seeds: dict) -> None:
     lo, hi = chi2_ci(s, len(values) - 1)
     n.add("pilot_e_ci_lo", lo, bpath(*runs), 2)
     n.add("pilot_e_ci_hi", hi, bpath(*runs), 2)
-    n.add("pilot_e_var_ratio", (seeds["run"] / s) ** 2, f"{VARSRC}; " + bpath(*runs), 1)
     n.add(
         "pilot_e_nondeterministic",
         sum(not bench(r)["deterministic"] for r in runs),
@@ -502,6 +501,11 @@ def pilot_a(n: Numbers) -> None:
         "pilot_a_control_first_halving", g["fork100_decide"]["halvings"][0][0], PILOT_A
     )
     n.add("pilot_a_runs_per_arm", len(dec), PILOT_A)
+    n.add("pilot_a_perturbed_per_arm", len(g["fork100_decide"]["delta"]), PILOT_A)
+    for arm in ("decide", "replay"):
+        delta = g[f"fork100_{arm}"]["delta"]
+        n.add(f"pilot_a_delta_{arm}_min", min(delta), PILOT_A, text=frs(min(delta), 3))
+        n.add(f"pilot_a_delta_{arm}_max", max(delta), PILOT_A, text=frs(max(delta), 3))
     ulp = g["fork100_decide"]["nudge"][1]["largest_change"]
     n.add("pilot_a_largest_nudge", ulp, PILOT_A, text=sci(ulp, 2))
     assert (
@@ -930,6 +934,21 @@ def theory_t3(n: Numbers) -> None:
     )
     widths = [v["0.0001"]["q90"] - v["0.0001"]["q10"] for v in runs.values()]
     n.add("t3_width_median", st.median(widths), PATIENCE, 0)
+    # One curve, one child: first halving of decide k3 replayed at the protocol
+    # threshold and at ten times it (plateau_simulation.json, curve index), plus
+    # the gate's one-epoch convention (patience_law.json): epochs of the child.
+    sim_path = f"{SEEDS}/plateau_simulation.json"
+    sim = load(sim_path)
+    shift = law["gate"]["shift"]
+    key = "enfants f100 (un pas float32)|20|"
+    for name, theta in (("proto", "0.0001"), ("up", "0.001")):
+        first = sim[key + theta]["first"][3] + shift
+        n.add(f"t3_counter_k3_{name}", first, f"{sim_path}; {PATIENCE}")
+    # VR(10) of an AR(1) residual with the lag-1 autocorrelation seen by the 2026-10-01
+    # re-reading: (1 - phi^10) / (10 (1 - phi)); white noise gives 1/10.
+    phi = md(pre, r"autocorrélation de 0,2 à (0,\d) au retard 1")
+    n.add("t3_ar1_phi", phi, pre, 1)
+    n.add("t3_ar1_vr10", (1 - phi**10) / (10 * (1 - phi)), pre, 3)
 
 
 def determinism(n: Numbers) -> None:

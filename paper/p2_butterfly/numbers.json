@@ -339,11 +339,6 @@
   "text": "0,47",
   "source": "demo/nablafx_bench/splitfix_seed42.json; demo/nablafx_bench/splitfix_seed43.json; demo/nablafx_bench/splitfix_seed44.json; demo/nablafx_bench/splitfix_seed45.json; demo/nablafx_bench/splitfix_seed46.json; demo/nablafx_bench/splitfix_seed47.json"
  },
- "pilot_e_var_ratio": {
-  "value": 3.846621376031922,
-  "text": "3,8",
-  "source": "diagnosis/seeds/variance_sources.json; demo/nablafx_bench/splitfix_seed42.json; demo/nablafx_bench/splitfix_seed43.json; demo/nablafx_bench/splitfix_seed44.json; demo/nablafx_bench/splitfix_seed45.json; demo/nablafx_bench/splitfix_seed46.json; demo/nablafx_bench/splitfix_seed47.json"
- },
  "pilot_e_nondeterministic": {
   "value": 6,
   "text": "6",
@@ -592,6 +587,31 @@
  "pilot_a_runs_per_arm": {
   "value": 5,
   "text": "5",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_perturbed_per_arm": {
+  "value": 4,
+  "text": "4",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_delta_decide_min": {
+  "value": 0.06795057906342006,
+  "text": "+0,068",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_delta_decide_max": {
+  "value": 0.40467809892246454,
+  "text": "+0,405",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_delta_replay_min": {
+  "value": -0.02277368257561685,
+  "text": "−0,023",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_delta_replay_max": {
+  "value": -0.006976233827293399,
+  "text": "−0,007",
   "source": "diagnosis/butterfly/pilot_A_results.json"
  },
  "pilot_a_largest_nudge": {
@@ -1403,6 +1423,26 @@
   "value": 72.1,
   "text": "72",
   "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "t3_counter_k3_proto": {
+  "value": 175,
+  "text": "175",
+  "source": "diagnosis/seeds/plateau_simulation.json; diagnosis/butterfly/patience_law.json"
+ },
+ "t3_counter_k3_up": {
+  "value": 69,
+  "text": "69",
+  "source": "diagnosis/seeds/plateau_simulation.json; diagnosis/butterfly/patience_law.json"
+ },
+ "t3_ar1_phi": {
+  "value": 0.4,
+  "text": "0,4",
+  "source": "diagnosis/butterfly/patience_law.md"
+ },
+ "t3_ar1_vr10": {
+  "value": 0.1666491904,
+  "text": "0,167",
+  "source": "diagnosis/butterfly/patience_law.md"
  },
  "det_ssm_nondet_max_diff": {
   "value": 1.7297908775508404,

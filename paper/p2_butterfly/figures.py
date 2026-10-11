@@ -110,8 +110,9 @@ def fork_spread() -> None:
 def dispersion() -> None:
     """sd(log ESR) per condition, all on the same Big Muff test set.
 
-    Chi-square 95 % intervals only for independent runs; the two designs of 3 seeds
-    x 2 runs (bench, pilot F) are nested and get the point estimate alone.
+    Chi-square 95 % intervals only for independent seeds; the nested designs of 3 seeds
+    x 2 runs (bench, pilot F) and the fork arms (four perturbations plus the unperturbed
+    control, not i.i.d.) get the point estimate alone.
     """
     bench = "demo/nablafx_bench"
     c = load("diagnosis/butterfly/pilot_C_results.json")["esr"]
@@ -156,8 +157,8 @@ def dispersion() -> None:
             [esr(f"{bench}/paired_s4_tf_l_16_s{s}.json") for s in splits],
             True,
         ),
-        ("Fourche 100, décide", a["fork100_decide"]["test_esr"], True),
-        ("Fourche 100, rejoue", a["fork100_replay"]["test_esr"], True),
+        ("Fourche 100, décide (sans IC)", a["fork100_decide"]["test_esr"], True),
+        ("Fourche 100, rejoue (sans IC)", a["fork100_replay"]["test_esr"], True),
     ]
     within = load("diagnosis/seeds/global_factor.json")["nested"]["ssm-changes"][
         "within_seed_sd"
@@ -196,7 +197,7 @@ def dispersion() -> None:
     fig.legend(
         handles, labels, frameon=False, loc="upper center", ncol=3, handlelength=1.5
     )
-    fig.subplots_adjust(left=0.37, right=0.89, top=0.93, bottom=0.15)
+    fig.subplots_adjust(left=0.41, right=0.89, top=0.93, bottom=0.15)
     savefig(fig, HERE / "figures/dispersion.pdf")
     plt.close(fig)
 
