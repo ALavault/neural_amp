@@ -74,7 +74,7 @@
   Conditions : 6 runs SSM-WaveNet ZOH (graines 42 à 44, répétitions) et 3 runs S4-TF-L-16, Big Muff.
 
 - **Facultatif : sur DI calme, les modèles amplifient le résidu de quantification de l'entrée ; sa contribution à l'ESR globale est très faible.**
-  Excès médian de la sortie des modèles : +7,2 dB au-dessus du plancher de la pédale (L médian 5,3, de 2,7 à 8,9) : −67,0 contre −74,2 dBFS ; aucune cohérence détectable avec la cible (0,0046, sous le plancher de l'estimateur) (passages forts 0,96) ; DI calme annulé : puissance relative −64,4 dB en médiane (10 log₁₀ P₀/P) ; 32 checkpoints ne sont pas 32 réplications indépendantes ; amplification d'environ 33 dB d'un résidu à −99,9 dBFS.
+  Excès médian de la sortie des modèles : +7,2 dB au-dessus du plancher de la pédale (L médian 5,3, de 2,7 à 8,9) : −67,0 contre −74,2 dBFS ; aucune cohérence détectable avec la cible (0,0046, au niveau du plancher de l'estimateur) (passages forts 0,96) ; DI calme annulé : puissance relative −64,4 dB en médiane (10 log₁₀ P₀/P) ; 32 checkpoints ne sont pas 32 réplications indépendantes ; amplification d'environ 33 dB d'un résidu à −99,9 dBFS.
   Preuve : F-0029, E-0031 ; `diagnosis/noise/predictions_quiet.md`, `diagnosis/noise/quiet_frames.json`, `diagnosis/noise/control_zero_di.json`.
   Statut : préinscrit, contrôle déclaré avant de tourner ; issue du tableau préinscrit : « soutenue : exces propre aux passages calmes ».
   Conditions : 32 checkpoints SSM-WaveNet Big Muff du pilote C, 225 fenêtres calmes, inférence CPU ; cause (MR-STFT ou extrapolation) non attribuable ; on ignore si la pédale a reçu ce résidu.
