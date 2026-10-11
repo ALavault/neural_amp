@@ -1,0 +1,370 @@
+% Bibliographie du dossier P4 (sondes d'identification comme métriques de fidélité).
+% Vérifiée le 2026-10-11. Chaque DOI résout sur doi.org (api/handles, responseCode 1) et son
+% enregistrement CSL concorde en titre, auteurs et année ; chaque entrée sans DOI est précédée
+% de « % CHECK » et porte une url (et un eprint quand il existe). La ligne « % src: » donne la
+% provenance des métadonnées et la version du texte lu. Ce que chaque entrée établit, et son
+% statut [V]/[NV], est dans RELATED.md.
+
+% ---------------------------------------------------------------------------
+% Identification non linéaire : feuille de route, blocs, BLA, Volterra
+% ---------------------------------------------------------------------------
+
+% src: CSL du DOI (vol. 39, no 6, pp. 28-99) ; texte lu : préprint arXiv 1902.00683v1.
+@article{schoukens2019roadmap,
+  author  = {Johan Schoukens and Lennart Ljung},
+  title   = {Nonlinear System Identification: A User-Oriented Road Map},
+  journal = {IEEE Control Systems Magazine},
+  volume  = {39},
+  number  = {6},
+  pages   = {28--99},
+  year    = {2019},
+  doi     = {10.1109/MCS.2019.2938121},
+  eprint  = {1902.00683}
+}
+
+% src: CSL du DOI (vol. 85, pp. 272-292) ; texte lu : préprint arXiv 1607.01217v3.
+@article{schoukens2017blockoriented,
+  author  = {Maarten Schoukens and Koen Tiels},
+  title   = {Identification of Block-Oriented Nonlinear Systems Starting from Linear Approximations: A Survey},
+  journal = {Automatica},
+  volume  = {85},
+  pages   = {272--292},
+  year    = {2017},
+  doi     = {10.1016/j.automatica.2017.06.044},
+  eprint  = {1607.01217}
+}
+
+% src: CSL du DOI (Wiley, 2e édition, ISBN 9780470640371) ; texte non lu.
+@book{pintelon2012system,
+  author    = {Rik Pintelon and Johan Schoukens},
+  title     = {System Identification: A Frequency Domain Approach},
+  edition   = {2},
+  publisher = {Wiley},
+  year      = {2012},
+  isbn      = {9780470640371},
+  doi       = {10.1002/9781118287422}
+}
+
+% src: CSL du DOI (vol. 21, no 6, pp. 573-589) ; texte non lu.
+@article{marmarelis1993laguerre,
+  author  = {Vasilis Z. Marmarelis},
+  title   = {Identification of Nonlinear Biological Systems Using {L}aguerre Expansions of Kernels},
+  journal = {Annals of Biomedical Engineering},
+  volume  = {21},
+  number  = {6},
+  pages   = {573--589},
+  year    = {1993},
+  doi     = {10.1007/BF02368639}
+}
+
+% src: CSL du DOI (vol. 32, no 11, pp. 1150-1161) ; texte lu : PDF de l'article (page de l'auteur).
+@article{boyd1985fading,
+  author  = {Stephen Boyd and Leon O. Chua},
+  title   = {Fading Memory and the Problem of Approximating Nonlinear Operators with {V}olterra Series},
+  journal = {IEEE Transactions on Circuits and Systems},
+  volume  = {32},
+  number  = {11},
+  pages   = {1150--1161},
+  year    = {1985},
+  doi     = {10.1109/TCS.1985.1085649}
+}
+
+% ---------------------------------------------------------------------------
+% Sinus glissant exponentiel et modèles de Hammerstein en audio
+% ---------------------------------------------------------------------------
+
+% src: préprint AES lu (en-tête : 108th Convention, Paris, 19-22 février 2000, préprint 5093).
+% CHECK
+@inproceedings{farina2000swept,
+  author    = {Angelo Farina},
+  title     = {Simultaneous Measurement of Impulse Response and Distortion with a Swept-Sine Technique},
+  booktitle = {Audio Engineering Society 108th Convention},
+  address   = {Paris, France},
+  note      = {Préprint 5093},
+  year      = {2000},
+  url       = {http://www.angelofarina.it/Public/Papers/134-AES00.PDF}
+}
+
+% src: CSL du DOI (vol. 59, no 8, pp. 2220-2229) ; texte lu : version auteur HAL hal-02504286.
+@article{novak2010identification,
+  author  = {Anton{\'\i}n Nov{\'a}k and Laurent Simon and Franti{\v s}ek Kadlec and Pierrick Lotton},
+  title   = {Nonlinear System Identification Using Exponential Swept-Sine Signal},
+  journal = {IEEE Transactions on Instrumentation and Measurement},
+  volume  = {59},
+  number  = {8},
+  pages   = {2220--2229},
+  year    = {2010},
+  doi     = {10.1109/TIM.2009.2031836}
+}
+
+% src: CSL du DOI (article 793816) ; texte lu : version auteur HAL hal-02504303.
+@article{novak2010classification,
+  author  = {Antonin Novak and Laurent Simon and Pierrick Lotton},
+  title   = {Analysis, Synthesis, and Classification of Nonlinear Systems Using Synchronized Swept-Sine Method for Audio Effects},
+  journal = {EURASIP Journal on Advances in Signal Processing},
+  volume  = {2010},
+  pages   = {793816},
+  year    = {2010},
+  doi     = {10.1155/2010/793816}
+}
+
+% src: CSL du DOI (vol. 63, no 10, pp. 786-798) ; texte lu : version auteur HAL hal-02504321.
+@article{novak2015synchronized,
+  author  = {Antonin Novak and Pierrick Lotton and Laurent Simon},
+  title   = {Synchronized Swept-Sine: Theory, Application, and Implementation},
+  journal = {Journal of the Audio Engineering Society},
+  volume  = {63},
+  number  = {10},
+  pages   = {786--798},
+  year    = {2015},
+  doi     = {10.17743/jaes.2015.0071}
+}
+
+% src: page de l'archive DAFx et PDF lu (DAFx-15, Trondheim, 30 nov.-3 déc. 2015).
+% CHECK
+@inproceedings{eichas2015classification,
+  author    = {Felix Eichas and Marco Fink and Udo Z{\"o}lzer},
+  title     = {Feature Design for the Classification of Audio Effect Units by Input/Output Measurements},
+  booktitle = {Proceedings of the 18th International Conference on Digital Audio Effects (DAFx-15)},
+  address   = {Trondheim, Norway},
+  year      = {2015},
+  url       = {https://dafx.de/paper-archive/details/JDrDk4kO_KSmWRnxJdhdeQ}
+}
+
+% src: page de l'archive DAFx et PDF lu (DAFx-16, Brno, 5-9 sept. 2016).
+% CHECK
+@inproceedings{eichas2016blockoriented,
+  author    = {Felix Eichas and Udo Z{\"o}lzer},
+  title     = {Black-Box Modeling of Distortion Circuits with Block-Oriented Models},
+  booktitle = {Proceedings of the 19th International Conference on Digital Audio Effects (DAFx-16)},
+  address   = {Brno, Czech Republic},
+  year      = {2016},
+  url       = {https://dafx.de/paper-archive/details/aW-6gR1PsD9EqSfEI9CYcg}
+}
+
+% ---------------------------------------------------------------------------
+% Métriques objectives de qualité audio et pertes spectrales
+% ---------------------------------------------------------------------------
+
+% src: page ITU-R et PDF lu (Recommandation BS.1387-2, 05/2023, en vigueur).
+% CHECK
+@techreport{itu2023bs1387,
+  author      = {{ITU-R}},
+  title       = {Method for Objective Measurements of Perceived Audio Quality},
+  institution = {International Telecommunication Union},
+  type        = {Recommendation},
+  number      = {ITU-R BS.1387-2},
+  address     = {Geneva},
+  year        = {2023},
+  url         = {https://www.itu.int/rec/R-REC-BS.1387/en}
+}
+
+% src: page ITU-R et PDF lu (Recommandation BS.1534-3, 10/2015, en vigueur).
+% CHECK
+@techreport{itu2015bs1534,
+  author      = {{ITU-R}},
+  title       = {Method for the Subjective Assessment of Intermediate Quality Level of Audio Systems},
+  institution = {International Telecommunication Union},
+  type        = {Recommendation},
+  number      = {ITU-R BS.1534-3},
+  address     = {Geneva},
+  year        = {2015},
+  url         = {https://www.itu.int/rec/R-REC-BS.1534/en}
+}
+
+% src: CSL du DOI (article 13) ; texte lu : PDF de l'éditeur (accès ouvert).
+@article{hines2015visqol,
+  author  = {Andrew Hines and Jan Skoglund and Anil C. Kokaram and Naomi Harte},
+  title   = {{ViSQOL}: An Objective Speech Quality Model},
+  journal = {EURASIP Journal on Audio, Speech, and Music Processing},
+  volume  = {2015},
+  pages   = {13},
+  year    = {2015},
+  doi     = {10.1186/s13636-015-0054-9}
+}
+
+% src: CSL du DOI (pp. 2350-2354) ; texte lu : PDF de l'archive ISCA.
+@inproceedings{kilgour2019fad,
+  author    = {Kevin Kilgour and Mauricio Zuluaga and Dominik Roblek and Matthew Sharifi},
+  title     = {Fr{\'e}chet Audio Distance: A Reference-Free Metric for Evaluating Music Enhancement Algorithms},
+  booktitle = {Proceedings of Interspeech 2019},
+  pages     = {2350--2354},
+  year      = {2019},
+  doi       = {10.21437/Interspeech.2019-2219}
+}
+
+% src: CSL du DOI (pp. 6199-6203) ; texte lu : préprint arXiv 1910.11480.
+@inproceedings{yamamoto2020parallelwavegan,
+  author    = {Ryuichi Yamamoto and Eunwoo Song and Jae-Min Kim},
+  title     = {Parallel {WaveGAN}: A Fast Waveform Generation Model Based on Generative Adversarial Networks with Multi-Resolution Spectrogram},
+  booktitle = {Proceedings of the IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages     = {6199--6203},
+  year      = {2020},
+  doi       = {10.1109/ICASSP40776.2020.9053795},
+  eprint    = {1910.11480}
+}
+
+% src: CSL du DOI (vol. 29, pp. 1530-1541) ; texte lu : préprint arXiv 2110.11438 (mise en page de la revue).
+@article{torcoli2021objective,
+  author  = {Matteo Torcoli and Thorsten Kastner and J{\"u}rgen Herre},
+  title   = {Objective Measures of Perceptual Audio Quality Reviewed: An Evaluation of Their Application Domain Dependence},
+  journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},
+  volume  = {29},
+  pages   = {1530--1541},
+  year    = {2021},
+  doi     = {10.1109/TASLP.2021.3069302},
+  eprint  = {2110.11438}
+}
+
+% ---------------------------------------------------------------------------
+% Évaluation des émulations d'amplis et d'effets : ESR, écoutes, corrélations
+% ---------------------------------------------------------------------------
+
+% src: CSL du DOI (pp. 471-475) ; texte lu : préprint arXiv 1811.00334v2.
+@inproceedings{damskagg2019deep,
+  author    = {Eero-Pekka Damsk{\"a}gg and Lauri Juvela and Etienne Thuillier and Vesa V{\"a}lim{\"a}ki},
+  title     = {Deep Learning for Tube Amplifier Emulation},
+  booktitle = {Proceedings of the IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages     = {471--475},
+  year      = {2019},
+  doi       = {10.1109/ICASSP.2019.8682805},
+  eprint    = {1811.00334}
+}
+
+% src: CSL du DOI (vol. 10, no 3, article 766) ; texte lu : page HTML de l'éditeur (copie archivée).
+@article{wright2020realtime,
+  author  = {Alec Wright and Eero-Pekka Damsk{\"a}gg and Lauri Juvela and Vesa V{\"a}lim{\"a}ki},
+  title   = {Real-Time Guitar Amplifier Emulation with Deep Learning},
+  journal = {Applied Sciences},
+  volume  = {10},
+  number  = {3},
+  pages   = {766},
+  year    = {2020},
+  doi     = {10.3390/app10030766}
+}
+
+% src: CSL du DOI (pp. 251-255) ; texte lu : préprint arXiv 1911.08922v1.
+@inproceedings{wright2020perceptual,
+  author    = {Alec Wright and Vesa V{\"a}lim{\"a}ki},
+  title     = {Perceptual Loss Function for Neural Modeling of Audio Systems},
+  booktitle = {Proceedings of the IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages     = {251--255},
+  year      = {2020},
+  doi       = {10.1109/ICASSP40776.2020.9052944},
+  eprint    = {1911.08922}
+}
+
+% src: CSL du DOI (vol. 12, no 12, article 5894) ; texte lu : page HTML de l'éditeur (copie archivée).
+@article{vanhatalo2022review,
+  author  = {Tara Vanhatalo and Pierrick Legrand and Myriam Desainte-Catherine and Pierre Hanna and Antoine Brusco and Guillaume Pille and Yann Bayle},
+  title   = {A Review of Neural Network-Based Emulation of Guitar Amplifiers},
+  journal = {Applied Sciences},
+  volume  = {12},
+  number  = {12},
+  pages   = {5894},
+  year    = {2022},
+  doi     = {10.3390/app12125894}
+}
+
+% src: CSL du DOI (vol. 5, article 1580395) ; texte lu : préprint arXiv 2502.14405v1, version publiée non relue.
+@article{comunita2025differentiable,
+  author  = {Marco Comunit{\`a} and Christian J. Steinmetz and Joshua D. Reiss},
+  title   = {Differentiable Black-Box and Gray-Box Modeling of Nonlinear Audio Effects},
+  journal = {Frontiers in Signal Processing},
+  volume  = {5},
+  pages   = {1580395},
+  year    = {2025},
+  doi     = {10.3389/frsip.2025.1580395},
+  eprint  = {2502.14405}
+}
+
+% src: CSL du DOI (article 9) ; texte lu : PDF de l'éditeur (accès ouvert, dépôt institutionnel).
+@article{hinrichs2024blind,
+  author  = {Reemt Hinrichs and Kevin Gerkens and Alexander Lange and J{\"o}rn Ostermann},
+  title   = {Blind Extraction of Guitar Effects through Blind System Inversion and Neural Guitar Effect Modeling},
+  journal = {EURASIP Journal on Audio, Speech, and Music Processing},
+  volume  = {2024},
+  pages   = {9},
+  year    = {2024},
+  doi     = {10.1186/s13636-024-00330-0}
+}
+
+% ---------------------------------------------------------------------------
+% Dynamique : compresseurs, trajectoires de gain
+% ---------------------------------------------------------------------------
+
+% src: page de l'archive DAFx et PDF lu (DAFx20in22, Vienne, septembre 2022).
+% CHECK
+@inproceedings{wright2022greybox,
+  author    = {Alec Wright and Vesa V{\"a}lim{\"a}ki},
+  title     = {Grey-Box Modelling of Dynamic Range Compression},
+  booktitle = {Proceedings of the 25th International Conference on Digital Audio Effects (DAFx20in22)},
+  address   = {Vienna, Austria},
+  year      = {2022},
+  url       = {https://dafx.de/paper-archive/details/Oz5HVaU0tKAjfD3ivOlv5g}
+}
+
+% src: page de l'archive DAFx et PDF lu (DAFx26, Cambridge MA, 1-4 sept. 2026) ; aussi arXiv 2606.18573v1.
+% CHECK
+@inproceedings{thompson2026compressor,
+  author    = {Benjamin R. Thompson and Michael C. Heilemann},
+  title     = {Evaluating Dynamic Range Compressor Models Using Control-Voltage Measurements: An Approach and Dataset},
+  booktitle = {Proceedings of the 29th International Conference on Digital Audio Effects (DAFx26)},
+  address   = {Cambridge, MA, USA},
+  year      = {2026},
+  eprint    = {2606.18573},
+  url       = {https://dafx.de/paper-archive/details/fSOfD3g-AmB3zPPOWHL43w}
+}
+
+% ---------------------------------------------------------------------------
+% Comparer deux systèmes par des modèles identifiés
+% ---------------------------------------------------------------------------
+
+% src: préprint AES lu (en-tête : 103rd Convention, New York, 26-29 sept. 1997, préprint 4606),
+% copie d'auteur archivée (page de l'Université d'Essex, 2006).
+% CHECK
+@inproceedings{reed1997volterra,
+  author    = {Martin J. Reed and Malcolm O. J. Hawksford},
+  title     = {Comparison of Audio System Nonlinear Performance in {V}olterra Space},
+  booktitle = {Audio Engineering Society 103rd Convention},
+  address   = {New York, NY, USA},
+  note      = {Préprint 4606},
+  year      = {1997},
+  url       = {http://web.archive.org/web/20060513230901/http://www.essex.ac.uk:80/ese/research/audio_lab/malcolmspubdocs/C90%20Non%20linear%20comparison%20in%20Volterra%20space.pdf}
+}
+
+% src: CSL du DOI (vol. 48, no 1-2, pp. 247-259) ; texte lu : version auteur HAL hal-01001853.
+@article{rebillat2014damage,
+  author  = {Marc R{\'e}billat and Rafik Hajrya and Nazih Mechbal},
+  title   = {Nonlinear Structural Damage Detection Based on Cascade of {H}ammerstein Models},
+  journal = {Mechanical Systems and Signal Processing},
+  volume  = {48},
+  number  = {1--2},
+  pages   = {247--259},
+  year    = {2014},
+  doi     = {10.1016/j.ymssp.2014.03.009}
+}
+
+% src: CSL du DOI (vol. 628, article 012012) ; texte lu : PDF de l'éditeur (accès ouvert).
+@article{shiki2015damage,
+  author  = {Sidney Bruce Shiki and Samuel da Silva},
+  title   = {Evaluation of Damage Indexes for Structural Health Monitoring in Nonlinear Mechanical Systems Based on {V}olterra Series},
+  journal = {Journal of Physics: Conference Series},
+  volume  = {628},
+  pages   = {012012},
+  year    = {2015},
+  doi     = {10.1088/1742-6596/628/1/012012}
+}
+
+% src: CSL du DOI (vol. 1, no 2, pp. 286-291) ; texte lu : préprint arXiv 1703.01923v1.
+@article{lauwers2017distance,
+  author  = {Oliver Lauwers and Bart De Moor},
+  title   = {A Time Series Distance Measure for Efficient Clustering of Input/Output Signals by Their Underlying Dynamics},
+  journal = {IEEE Control Systems Letters},
+  volume  = {1},
+  number  = {2},
+  pages   = {286--291},
+  year    = {2017},
+  doi     = {10.1109/LCSYS.2017.2715399},
+  eprint  = {1703.01923}
+}

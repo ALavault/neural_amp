@@ -1,0 +1,2462 @@
+{
+ "dev_fir_ridge": {
+  "value": 0.01,
+  "text": "1·10⁻²",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_h_ridge": {
+  "value": 0.0001,
+  "text": "1·10⁻⁴",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_fir_taps": {
+  "value": 256,
+  "text": "256",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_fir_capacity": {
+  "value": 0.09433423717408804,
+  "text": "0,094",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_fir_condition": {
+  "value": 3334.9392510554,
+  "text": "3,3·10³",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_h3_taps": {
+  "value": 256,
+  "text": "256",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_h3_capacity": {
+  "value": 0.06238495026270773,
+  "text": "0,062",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_h3_condition": {
+  "value": 695947.6005086818,
+  "text": "7,0·10⁵",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_h5_taps": {
+  "value": 256,
+  "text": "256",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_h5_capacity": {
+  "value": 0.061885585160037365,
+  "text": "0,062",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_h5_condition": {
+  "value": 1263631.393833887,
+  "text": "1,3·10⁶",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_fir_capacity_128": {
+  "value": 0.1307441880084049,
+  "text": "0,131",
+  "source": "diagnosis/probe_metrics/dev_select.json"
+ },
+ "dev_vl2_size": {
+  "value": 8,
+  "text": "8",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "dev_vl2_pole": {
+  "value": 0.8,
+  "text": "0,80",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "dev_vl2_ridge": {
+  "value": 0.0001,
+  "text": "1·10⁻⁴",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "dev_vl2_capacity": {
+  "value": 0.21978620322935355,
+  "text": "0,220",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "dev_vl3_size": {
+  "value": 8,
+  "text": "8",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "dev_vl3_pole": {
+  "value": 0.9,
+  "text": "0,90",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "dev_vl3_ridge": {
+  "value": 0.0001,
+  "text": "1·10⁻⁴",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "dev_vl3_capacity": {
+  "value": 0.11943486971106254,
+  "text": "0,119",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "wh_dev_capacity": {
+  "value": 0.186385539302642,
+  "text": "0,186",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "wh_dev_spread": {
+  "value": 0.09247720935165187,
+  "text": "0,092",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "wh_dev_threshold": {
+  "value": 0.093192769651321,
+  "text": "0,093",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "nest_h_out_vl_min": {
+  "value": 0.12830816145986051,
+  "text": "0,13",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "nest_h_out_vl_max": {
+  "value": 0.9625423746535436,
+  "text": "0,96",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "nest_vl_out_h_median": {
+  "value": 0.663476973254543,
+  "text": "0,66",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "nest_vl_out_h_max": {
+  "value": 0.9440383418350473,
+  "text": "0,94",
+  "source": "diagnosis/probe_metrics/dev_select_v2.json"
+ },
+ "proto_capacity_warning": {
+  "value": 0.3,
+  "text": "0,3",
+  "source": "src/fssr_nam/product/fidelity.py"
+ },
+ "proto_cancelling": {
+  "value": 2.5,
+  "text": "2,5",
+  "source": "src/fssr_nam/product/fidelity.py"
+ },
+ "bench_defects": {
+  "value": 13,
+  "text": "13",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "bench_families": {
+  "value": 6,
+  "text": "6",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "math_bound_violations": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "math_bound_rows_total": {
+  "value": 9560,
+  "text": "9560",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "math_bound_rows_fir": {
+  "value": 1920,
+  "text": "1920",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "math_bound_rows_vl3": {
+  "value": 1840,
+  "text": "1840",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "math_bound_rows_wh": {
+  "value": 120,
+  "text": "120",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_fir_yes": {
+  "value": 76,
+  "text": "76",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_fir_lim": {
+  "value": 2,
+  "text": "2",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_fir_no": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_h3_yes": {
+  "value": 76,
+  "text": "76",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_h3_lim": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_h3_no": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_h5_yes": {
+  "value": 76,
+  "text": "76",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_h5_lim": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_h5_no": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_vl2_yes": {
+  "value": 77,
+  "text": "77",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_vl2_lim": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_vl2_no": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_vl3_yes": {
+  "value": 77,
+  "text": "77",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_vl3_lim": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_vl3_no": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_esr_yes": {
+  "value": 72,
+  "text": "72",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_esr_lim": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_esr_no": {
+  "value": 5,
+  "text": "5",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_mrstft_yes": {
+  "value": 8,
+  "text": "8",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_mrstft_lim": {
+  "value": 7,
+  "text": "7",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_mrstft_no": {
+  "value": 63,
+  "text": "63",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_imd_yes": {
+  "value": 13,
+  "text": "13",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_imd_lim": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_imd_no": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_harm_yes": {
+  "value": 12,
+  "text": "12",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_harm_lim": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_harm_no": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_mag_yes": {
+  "value": 61,
+  "text": "61",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_mag_lim": {
+  "value": 7,
+  "text": "7",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_mag_no": {
+  "value": 10,
+  "text": "10",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_phase_yes": {
+  "value": 50,
+  "text": "50",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_phase_lim": {
+  "value": 8,
+  "text": "8",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_phase_no": {
+  "value": 20,
+  "text": "20",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_env_yes": {
+  "value": 76,
+  "text": "76",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_env_lim": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "det_env_no": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_cubic_fir": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_cubic_h3": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_cubic_h5": {
+  "value": "5/6",
+  "text": "5/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_cubic_vl2": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_cubic_vl3": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_cubic_esr": {
+  "value": "0/6",
+  "text": "0/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_cubic_mrstft": {
+  "value": "0/6",
+  "text": "0/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_cubic_mag": {
+  "value": "0/6",
+  "text": "0/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_quad_fir": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_quad_h3": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_quad_h5": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_quad_vl2": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_quad_vl3": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_quad_esr": {
+  "value": "3/6",
+  "text": "3/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_quad_mrstft": {
+  "value": "0/6",
+  "text": "0/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_quad_mag": {
+  "value": "4/6",
+  "text": "4/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_u7_fir": {
+  "value": "2/6",
+  "text": "2/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_u7_h3": {
+  "value": "1/6",
+  "text": "1/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_u7_h5": {
+  "value": "1/6",
+  "text": "1/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_u7_vl2": {
+  "value": "1/6",
+  "text": "1/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_u7_vl3": {
+  "value": "1/6",
+  "text": "1/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_u7_esr": {
+  "value": "0/6",
+  "text": "0/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_u7_mrstft": {
+  "value": "0/6",
+  "text": "0/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_u7_mag": {
+  "value": "0/6",
+  "text": "0/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_allpass_fir": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_allpass_h3": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_allpass_h5": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_allpass_vl2": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_allpass_vl3": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_allpass_esr": {
+  "value": "4/6",
+  "text": "4/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_allpass_mrstft": {
+  "value": "0/6",
+  "text": "0/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_allpass_mag": {
+  "value": "0/6",
+  "text": "0/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_delay_fir": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_delay_h3": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_delay_h5": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_delay_vl2": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_delay_vl3": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_delay_esr": {
+  "value": "6/6",
+  "text": "6/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_delay_mrstft": {
+  "value": "0/6",
+  "text": "0/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "weak_delay_mag": {
+  "value": "0/6",
+  "text": "0/6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_gain_fir": {
+  "value": 0.992,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_gain_fir": {
+  "value": 0.102,
+  "text": "0,10",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_gain_h3": {
+  "value": 0.998,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_gain_h3": {
+  "value": 0.053,
+  "text": "0,05",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_gain_h5": {
+  "value": 0.999,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_gain_h5": {
+  "value": 0.053,
+  "text": "0,05",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_gain_vl2": {
+  "value": 0.982,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_gain_vl2": {
+  "value": 0.197,
+  "text": "0,20",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_gain_vl3": {
+  "value": 0.993,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_gain_vl3": {
+  "value": 0.092,
+  "text": "0,09",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_color_fir": {
+  "value": 0.987,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_color_fir": {
+  "value": 0.125,
+  "text": "0,12",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_color_h3": {
+  "value": 0.999,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_color_h3": {
+  "value": 0.047,
+  "text": "0,05",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_color_h5": {
+  "value": 1.0,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_color_h5": {
+  "value": 0.044,
+  "text": "0,04",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_color_vl2": {
+  "value": 0.994,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_color_vl2": {
+  "value": 0.107,
+  "text": "0,11",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_color_vl3": {
+  "value": 0.99,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_color_vl3": {
+  "value": 0.128,
+  "text": "0,13",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_delay_fir": {
+  "value": 0.968,
+  "text": "0,97",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_delay_fir": {
+  "value": 0.179,
+  "text": "0,18",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_delay_h3": {
+  "value": 0.999,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_delay_h3": {
+  "value": 0.055,
+  "text": "0,06",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_delay_h5": {
+  "value": 1.0,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_delay_h5": {
+  "value": 0.046,
+  "text": "0,05",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_delay_vl2": {
+  "value": 0.969,
+  "text": "0,97",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_delay_vl2": {
+  "value": 0.226,
+  "text": "0,23",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_delay_vl3": {
+  "value": 0.92,
+  "text": "0,92",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_delay_vl3": {
+  "value": 0.314,
+  "text": "0,31",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_allpass_fir": {
+  "value": 0.966,
+  "text": "0,97",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_allpass_fir": {
+  "value": 0.184,
+  "text": "0,18",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_allpass_h3": {
+  "value": 0.999,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_allpass_h3": {
+  "value": 0.056,
+  "text": "0,06",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_allpass_h5": {
+  "value": 1.0,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_allpass_h5": {
+  "value": 0.046,
+  "text": "0,05",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_allpass_vl2": {
+  "value": 0.962,
+  "text": "0,96",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_allpass_vl2": {
+  "value": 0.238,
+  "text": "0,24",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_allpass_vl3": {
+  "value": 0.934,
+  "text": "0,93",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_allpass_vl3": {
+  "value": 0.283,
+  "text": "0,28",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_redistrib_fir": {
+  "value": 0.986,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_redistrib_fir": {
+  "value": 0.14,
+  "text": "0,14",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_redistrib_h3": {
+  "value": 0.997,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_redistrib_h3": {
+  "value": 0.069,
+  "text": "0,07",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_redistrib_h5": {
+  "value": 0.998,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_redistrib_h5": {
+  "value": 0.068,
+  "text": "0,07",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_redistrib_vl2": {
+  "value": 0.979,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_redistrib_vl2": {
+  "value": 0.215,
+  "text": "0,21",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_redistrib_vl3": {
+  "value": 0.993,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_redistrib_vl3": {
+  "value": 0.11,
+  "text": "0,11",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_prefilter_fir": {
+  "value": 0.986,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_prefilter_fir": {
+  "value": 0.15,
+  "text": "0,15",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_prefilter_h3": {
+  "value": 0.996,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_prefilter_h3": {
+  "value": 0.087,
+  "text": "0,09",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_prefilter_h5": {
+  "value": 0.996,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_prefilter_h5": {
+  "value": 0.087,
+  "text": "0,09",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_prefilter_vl2": {
+  "value": 0.957,
+  "text": "0,96",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_prefilter_vl2": {
+  "value": 0.304,
+  "text": "0,30",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_prefilter_vl3": {
+  "value": 0.996,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_prefilter_vl3": {
+  "value": 0.081,
+  "text": "0,08",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_release_fir": {
+  "value": 0.954,
+  "text": "0,95",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_release_fir": {
+  "value": 0.222,
+  "text": "0,22",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_release_h3": {
+  "value": 0.972,
+  "text": "0,97",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_release_h3": {
+  "value": 0.151,
+  "text": "0,15",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_release_h5": {
+  "value": 0.973,
+  "text": "0,97",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_release_h5": {
+  "value": 0.148,
+  "text": "0,15",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_release_vl2": {
+  "value": 0.947,
+  "text": "0,95",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_release_vl2": {
+  "value": 0.271,
+  "text": "0,27",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_release_vl3": {
+  "value": 0.939,
+  "text": "0,94",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_release_vl3": {
+  "value": 0.262,
+  "text": "0,26",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_cubic_fir": {
+  "value": 0.792,
+  "text": "0,79",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_cubic_fir": {
+  "value": 0.604,
+  "text": "0,60",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_cubic_h3": {
+  "value": 0.986,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_cubic_h3": {
+  "value": 0.298,
+  "text": "0,30",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_cubic_h5": {
+  "value": 0.993,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_cubic_h5": {
+  "value": 0.298,
+  "text": "0,30",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_cubic_vl2": {
+  "value": 0.783,
+  "text": "0,78",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_cubic_vl2": {
+  "value": 0.62,
+  "text": "0,62",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_cubic_vl3": {
+  "value": 0.981,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_cubic_vl3": {
+  "value": 0.103,
+  "text": "0,10",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_quad_fir": {
+  "value": 0.635,
+  "text": "0,64",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_quad_fir": {
+  "value": 0.77,
+  "text": "0,77",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_quad_h3": {
+  "value": 0.96,
+  "text": "0,96",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_quad_h3": {
+  "value": 0.42,
+  "text": "0,42",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_quad_h5": {
+  "value": 0.96,
+  "text": "0,96",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_quad_h5": {
+  "value": 0.419,
+  "text": "0,42",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_quad_vl2": {
+  "value": 0.982,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_quad_vl2": {
+  "value": 0.191,
+  "text": "0,19",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_quad_vl3": {
+  "value": 0.982,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_quad_vl3": {
+  "value": 0.107,
+  "text": "0,11",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_cross_fir": {
+  "value": 0.451,
+  "text": "0,45",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_cross_fir": {
+  "value": 0.901,
+  "text": "0,90",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_cross_h3": {
+  "value": 0.854,
+  "text": "0,85",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_cross_h3": {
+  "value": 0.576,
+  "text": "0,58",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_cross_h5": {
+  "value": 0.862,
+  "text": "0,86",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_cross_h5": {
+  "value": 0.573,
+  "text": "0,57",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_cross_vl2": {
+  "value": 0.943,
+  "text": "0,94",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_cross_vl2": {
+  "value": 0.283,
+  "text": "0,28",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_cross_vl3": {
+  "value": 0.988,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_cross_vl3": {
+  "value": 0.089,
+  "text": "0,09",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_u7_fir": {
+  "value": 0.353,
+  "text": "0,35",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_u7_fir": {
+  "value": 0.944,
+  "text": "0,94",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_u7_h3": {
+  "value": 0.806,
+  "text": "0,81",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_u7_h3": {
+  "value": 0.724,
+  "text": "0,72",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_u7_h5": {
+  "value": 0.981,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_u7_h5": {
+  "value": 0.52,
+  "text": "0,52",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_u7_vl2": {
+  "value": 0.359,
+  "text": "0,36",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_u7_vl2": {
+  "value": 0.947,
+  "text": "0,95",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_u7_vl3": {
+  "value": 0.884,
+  "text": "0,88",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_u7_vl3": {
+  "value": 0.641,
+  "text": "0,64",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_echo_fir": {
+  "value": 0.156,
+  "text": "0,16",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_echo_fir": {
+  "value": 0.995,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_echo_h3": {
+  "value": 0.189,
+  "text": "0,19",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_echo_h3": {
+  "value": 0.996,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_echo_h5": {
+  "value": 0.209,
+  "text": "0,21",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_echo_h5": {
+  "value": 0.998,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_echo_vl2": {
+  "value": 0.122,
+  "text": "0,12",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_echo_vl2": {
+  "value": 0.99,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_echo_vl3": {
+  "value": 0.174,
+  "text": "0,17",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_echo_vl3": {
+  "value": 0.998,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_noise_fir": {
+  "value": 0.02,
+  "text": "0,02",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_noise_fir": {
+  "value": 1.0,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_noise_h3": {
+  "value": 0.056,
+  "text": "0,06",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_noise_h3": {
+  "value": 1.001,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_noise_h5": {
+  "value": 0.078,
+  "text": "0,08",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_noise_h5": {
+  "value": 1.003,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_noise_vl2": {
+  "value": 0.012,
+  "text": "0,01",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_noise_vl2": {
+  "value": 1.0,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_noise_vl3": {
+  "value": 0.021,
+  "text": "0,02",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_noise_vl3": {
+  "value": 1.0,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_noise_min": {
+  "value": 0.012,
+  "text": "0,01",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_noise_max": {
+  "value": 0.078,
+  "text": "0,08",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_echo_min": {
+  "value": 0.99,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_echo_max": {
+  "value": 0.998,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_u7_min": {
+  "value": 0.52,
+  "text": "0,52",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "unrep_u7_max": {
+  "value": 0.947,
+  "text": "0,95",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "wh_capt_gain": {
+  "value": 0.983,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "wh_capt_cubic": {
+  "value": 0.875,
+  "text": "0,88",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "capt_echo_plucks_min": {
+  "value": 0.2839330344190989,
+  "text": "0,28",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_echo_plucks_max": {
+  "value": 0.5058702869842856,
+  "text": "0,51",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_echo_di_min": {
+  "value": 0.13722399702873173,
+  "text": "0,14",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_echo_di_max": {
+  "value": 0.25340892660597,
+  "text": "0,25",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_echo_noise_min": {
+  "value": 0.056590221818924556,
+  "text": "0,06",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_echo_noise_max": {
+  "value": 0.0981913056096023,
+  "text": "0,10",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_echo_twotone_min": {
+  "value": 0.9858689478778182,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_echo_twotone_max": {
+  "value": 0.9936582062356193,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_release_di_min": {
+  "value": 0.5633294521554334,
+  "text": "0,56",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_release_di_max": {
+  "value": 0.6884706853952607,
+  "text": "0,69",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_release_noise_min": {
+  "value": 0.9492254744093187,
+  "text": "0,95",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_release_noise_max": {
+  "value": 0.9684389516777389,
+  "text": "0,97",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_over_di_min": {
+  "value": 1.0940572880467319,
+  "text": "1,09",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "capt_over_di_max": {
+  "value": 1.1404916163118668,
+  "text": "1,14",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "base_mag_allpass_r": {
+  "value": 1.5808891516172745,
+  "text": "1,6",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "base_mag_delay_r": {
+  "value": 5.469222512282654,
+  "text": "5,5",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "base_phase_cubic_r": {
+  "value": 1.4844421857936267,
+  "text": "1,5",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "base_phase_gain_score_max": {
+  "value": 2.0717478359569287e-15,
+  "text": "2,1·10⁻¹⁵",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "base_env_gain_r": {
+  "value": 14030.950865692774,
+  "text": "1,4·10⁴",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "base_env_release_r": {
+  "value": 9485.672016094348,
+  "text": "9,5·10³",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "harm_orders_quad": {
+  "value": "2",
+  "text": "2",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "harm_orders_cubic": {
+  "value": "1 et 3",
+  "text": "1 et 3",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "harm_orders_cross": {
+  "value": "2",
+  "text": "2",
+  "source": "diagnosis/probe_metrics/table_test.csv"
+ },
+ "rep_core_median_min": {
+  "value": 0.0016,
+  "text": "0,0016",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_core_median_max": {
+  "value": 0.0059,
+  "text": "0,0059",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_core_p90_min": {
+  "value": 0.0706,
+  "text": "0,07",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_core_p90_max": {
+  "value": 0.2151,
+  "text": "0,22",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_base_median_min": {
+  "value": 0.0035,
+  "text": "0,0035",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_base_median_max": {
+  "value": 0.0109,
+  "text": "0,011",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_base_p90_min": {
+  "value": 0.1038,
+  "text": "0,10",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_base_p90_max": {
+  "value": 0.2596,
+  "text": "0,26",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_esr_median": {
+  "value": 0.0016,
+  "text": "0,0016",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_env_median": {
+  "value": 0.0109,
+  "text": "0,011",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_imd_median": {
+  "value": 0.0255,
+  "text": "0,025",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_imd_p90": {
+  "value": 0.3109,
+  "text": "0,31",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_wh_median": {
+  "value": 0.0335,
+  "text": "0,034",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_wh_p90": {
+  "value": 0.772,
+  "text": "0,77",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_phase_p90": {
+  "value": 0.2596,
+  "text": "0,26",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_harm_total_p90": {
+  "value": 0.0001,
+  "text": "1·10⁻⁴",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "rep_harm_order_p90_max": {
+  "value": 0.468,
+  "text": "0,47",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "wh_cells": {
+  "value": 39,
+  "text": "39",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "wh_unreliable_cells": {
+  "value": 35,
+  "text": "35",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "wh_spread_median": {
+  "value": 0.087265809294901,
+  "text": "0,087",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "wh_cost_s": {
+  "value": 32.440810978994705,
+  "text": "32",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "decomp_cross_h3_order2_min": {
+  "value": 0.9638490407489249,
+  "text": "0,96",
+  "source": "diagnosis/probe_metrics/decomposition_noise.json; diagnosis/probe_metrics/decomposition_plucks.json"
+ },
+ "decomp_cross_h3_order2_max": {
+  "value": 0.9786404150007886,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/decomposition_noise.json; diagnosis/probe_metrics/decomposition_plucks.json"
+ },
+ "decomp_quad_h3_order2_min": {
+  "value": 0.8666550543524785,
+  "text": "0,87",
+  "source": "diagnosis/probe_metrics/decomposition_noise.json; diagnosis/probe_metrics/decomposition_plucks.json"
+ },
+ "decomp_quad_h3_order2_max": {
+  "value": 0.9743478310159037,
+  "text": "0,97",
+  "source": "diagnosis/probe_metrics/decomposition_noise.json; diagnosis/probe_metrics/decomposition_plucks.json"
+ },
+ "decomp_static_min": {
+  "value": 1.2073678588087986,
+  "text": "1,2",
+  "source": "diagnosis/probe_metrics/decomposition_noise.json; diagnosis/probe_metrics/decomposition_plucks.json"
+ },
+ "decomp_static_max": {
+  "value": 1.7686133687793715,
+  "text": "1,8",
+  "source": "diagnosis/probe_metrics/decomposition_noise.json; diagnosis/probe_metrics/decomposition_plucks.json"
+ },
+ "decomp_unrep_min": {
+  "value": 3.7060064770021417,
+  "text": "3,7",
+  "source": "diagnosis/probe_metrics/decomposition_noise.json; diagnosis/probe_metrics/decomposition_plucks.json"
+ },
+ "decomp_unrep_max": {
+  "value": 8.738691820508594,
+  "text": "8,7",
+  "source": "diagnosis/probe_metrics/decomposition_noise.json; diagnosis/probe_metrics/decomposition_plucks.json"
+ },
+ "e2_release_m12_60": {
+  "value": 0.12233353803823777,
+  "text": "0,12",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_release_m12_100": {
+  "value": 0.537309379725991,
+  "text": "0,54",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_release_m12_200": {
+  "value": 1.2826489663525789,
+  "text": "1,28",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_release_m6_60": {
+  "value": 0.20099941564499169,
+  "text": "0,20",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_release_m6_100": {
+  "value": 0.8756401668379469,
+  "text": "0,88",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_release_m6_200": {
+  "value": 2.0641329280016723,
+  "text": "2,06",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_floor_min": {
+  "value": 5.3815545450481696e-05,
+  "text": "5,4·10⁻⁵",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_floor_max": {
+  "value": 7.551152598046265e-05,
+  "text": "7,6·10⁻⁵",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_worst_other": {
+  "value": 0.05149093108545265,
+  "text": "0,05",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_worst_other_name": {
+  "value": "coloration",
+  "text": "coloration",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_spec_ratio_min": {
+  "value": 24.937782264141646,
+  "text": "25",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_spec_ratio_max": {
+  "value": 40.01833038087363,
+  "text": "40",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_attack_ratio_min": {
+  "value": 0.06284907068169636,
+  "text": "0,06",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_attack_ratio_max": {
+  "value": 0.09372580418342295,
+  "text": "0,09",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_echo_min": {
+  "value": 0.6576844316156322,
+  "text": "0,66",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_echo_max": {
+  "value": 0.8065887176854956,
+  "text": "0,81",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_prefilter_min": {
+  "value": 0.225928460967422,
+  "text": "0,23",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_prefilter_max": {
+  "value": 0.2719210575911022,
+  "text": "0,27",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_levels": {
+  "value": 3,
+  "text": "3",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "e2_criteria_all_levels": {
+  "value": 3,
+  "text": "3",
+  "source": "diagnosis/probe_metrics/dynamics_verdict.json"
+ },
+ "vs_auc_h3_all": {
+  "value": 0.976,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_h3_all": {
+  "value": 8e-05,
+  "text": "8,0·10⁻⁵",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_h3_all": {
+  "value": 7,
+  "text": "7",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_h3_all": {
+  "value": 12,
+  "text": "12",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_auc_h3_common": {
+  "value": 0.98,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_h3_common": {
+  "value": 0.00067,
+  "text": "6,7·10⁻⁴",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_h3_common": {
+  "value": 5,
+  "text": "5",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_h3_common": {
+  "value": 10,
+  "text": "10",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_auc_fir_common": {
+  "value": 0.98,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_fir_common": {
+  "value": 0.00067,
+  "text": "6,7·10⁻⁴",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_fir_common": {
+  "value": 5,
+  "text": "5",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_fir_common": {
+  "value": 10,
+  "text": "10",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_auc_esr_all": {
+  "value": 0.893,
+  "text": "0,89",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_esr_all": {
+  "value": 0.00187,
+  "text": "1,9·10⁻³",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_esr_all": {
+  "value": 7,
+  "text": "7",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_esr_all": {
+  "value": 12,
+  "text": "12",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_auc_esr_common": {
+  "value": 0.98,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_esr_common": {
+  "value": 0.00067,
+  "text": "6,7·10⁻⁴",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_esr_common": {
+  "value": 5,
+  "text": "5",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_esr_common": {
+  "value": 10,
+  "text": "10",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_auc_mrstft_all": {
+  "value": 0.929,
+  "text": "0,93",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_mrstft_all": {
+  "value": 0.0006,
+  "text": "6,0·10⁻⁴",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_mrstft_all": {
+  "value": 7,
+  "text": "7",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_mrstft_all": {
+  "value": 12,
+  "text": "12",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_auc_mrstft_common": {
+  "value": 0.92,
+  "text": "0,92",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_mrstft_common": {
+  "value": 0.004,
+  "text": "4,0·10⁻³",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_mrstft_common": {
+  "value": 5,
+  "text": "5",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_mrstft_common": {
+  "value": 10,
+  "text": "10",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_auc_pink_esr": {
+  "value": 0.988,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_pink_esr": {
+  "value": 4e-05,
+  "text": "4,0·10⁻⁵",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_pink_esr": {
+  "value": 7,
+  "text": "7",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_pink_esr": {
+  "value": 12,
+  "text": "12",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_auc_pink_h3": {
+  "value": 0.976,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_pink_h3": {
+  "value": 8e-05,
+  "text": "8,0·10⁻⁵",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_pink_h3": {
+  "value": 7,
+  "text": "7",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_pink_h3": {
+  "value": 12,
+  "text": "12",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_auc_sweep10_harm": {
+  "value": 0.988,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_sweep10_harm": {
+  "value": 4e-05,
+  "text": "4,0·10⁻⁵",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_sweep10_harm": {
+  "value": 7,
+  "text": "7",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_sweep10_harm": {
+  "value": 12,
+  "text": "12",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_auc_sweep20_harm": {
+  "value": 0.986,
+  "text": "0,99",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_sweep20_harm": {
+  "value": 0.00011,
+  "text": "1,1·10⁻⁴",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_sweep20_harm": {
+  "value": 6,
+  "text": "6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_sweep20_harm": {
+  "value": 12,
+  "text": "12",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_auc_sweep3_harm_guarded": {
+  "value": 0.875,
+  "text": "0,88",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_p_sweep3_harm_guarded": {
+  "value": 0.13333,
+  "text": "0,13",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_npos_sweep3_harm_guarded": {
+  "value": 4,
+  "text": "4",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_nneg_sweep3_harm_guarded": {
+  "value": 2,
+  "text": "2",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_neg_median_h3": {
+  "value": 0.126,
+  "text": "0,13",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_neg_max_h3": {
+  "value": 1.23,
+  "text": "1,23",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_pos_min_h3": {
+  "value": 0.63,
+  "text": "0,6",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_pos_max_h3": {
+  "value": 3.2,
+  "text": "3,2",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_neg_median_esr": {
+  "value": 0.263,
+  "text": "0,26",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_neg_max_esr": {
+  "value": 3.73,
+  "text": "3,73",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_pos_min_esr": {
+  "value": 0.86,
+  "text": "0,9",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_pos_max_esr": {
+  "value": 5.18,
+  "text": "5,2",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_neg_median_mrstft": {
+  "value": 0.566,
+  "text": "0,57",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_neg_max_mrstft": {
+  "value": 1.316,
+  "text": "1,32",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_pos_min_mrstft": {
+  "value": 0.67,
+  "text": "0,7",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_pos_max_mrstft": {
+  "value": 6.24,
+  "text": "6,2",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_pos_max_all": {
+  "value": 7.27,
+  "text": "7,3",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_pos_ge10": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_harm_total_pos_max": {
+  "value": 5.99,
+  "text": "6,0",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "vs_gain0_h3": {
+  "value": 7.695805081117247,
+  "text": "7,7",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_treble10_h3": {
+  "value": 0.10938213796413093,
+  "text": "0,11",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_gain0_esr": {
+  "value": 7.229054789352409,
+  "text": "7,2",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_treble10_esr": {
+  "value": 3.729657138998959,
+  "text": "3,73",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_gain0_mrstft": {
+  "value": 15.584224345240154,
+  "text": "15,6",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_treble10_mrstft": {
+  "value": 0.5087509724792729,
+  "text": "0,51",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_drift_min": {
+  "value": 4.342331416221137,
+  "text": "4,3",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_drift_max": {
+  "value": 5.080233528259824,
+  "text": "5,1",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_harm_order_pos_max": {
+  "value": 61.44020601518934,
+  "text": "61,4",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv; diagnosis/probe_metrics/sweep_integrity.json"
+ },
+ "vs_harm_order_ge10_cells": {
+  "value": 3,
+  "text": "3",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv; diagnosis/probe_metrics/sweep_integrity.json"
+ },
+ "vs_harm_order_ge10_changes": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv; diagnosis/probe_metrics/sweep_integrity.json"
+ },
+ "vs_harm_order_ge10_orders": {
+  "value": "2, 4 et 5",
+  "text": "2, 4 et 5",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv; diagnosis/probe_metrics/sweep_integrity.json"
+ },
+ "vs_harm_order_ge10_segment": {
+  "value": "sweep_-20dBFS",
+  "text": "sweep_-20dBFS",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv; diagnosis/probe_metrics/sweep_integrity.json"
+ },
+ "vs_bound_rows": {
+  "value": 138,
+  "text": "138",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_bound_violations": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_auc_sweep3_harm_raw": {
+  "value": 0.6309523809523809,
+  "text": "0,63",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_p_sweep3_harm_raw": {
+  "value": 0.19222830832737953,
+  "text": "0,19",
+  "source": "diagnosis/probe_metrics/real_pairs_vs100r.csv"
+ },
+ "vs_auc_di_mag": {
+  "value": 0.98,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "vs_p_di_mag": {
+  "value": 0.000666000666000666,
+  "text": "6,7·10⁻⁴",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "vs_auc_di_phase": {
+  "value": 0.94,
+  "text": "0,94",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "vs_p_di_phase": {
+  "value": 0.002331002331002331,
+  "text": "2,3·10⁻³",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "vs_auc_di_env": {
+  "value": 0.94,
+  "text": "0,94",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "vs_p_di_env": {
+  "value": 0.002331002331002331,
+  "text": "2,3·10⁻³",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "vs_auc_pink_mag": {
+  "value": 0.9761904761904762,
+  "text": "0,98",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "vs_p_pink_mag": {
+  "value": 7.938398031277289e-05,
+  "text": "7,9·10⁻⁵",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "vs_auc_pink_phase": {
+  "value": 1.0,
+  "text": "1,00",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "vs_p_pink_phase": {
+  "value": 1.9845995078193222e-05,
+  "text": "2,0·10⁻⁵",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "vs_auc_pink_env": {
+  "value": 0.9047619047619048,
+  "text": "0,90",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "vs_p_pink_env": {
+  "value": 0.0013098356751607525,
+  "text": "1,3·10⁻³",
+  "source": "diagnosis/probe_metrics/real_extra_vs100r.csv"
+ },
+ "slip_rep_order3_m10": {
+  "value": 0.007064037251639877,
+  "text": "0,007",
+  "source": "diagnosis/probe_metrics/gap_checks_sweep.json"
+ },
+ "slip_rep_order3_m3": {
+  "value": 0.20843017503368919,
+  "text": "0,21",
+  "source": "diagnosis/probe_metrics/gap_checks_sweep.json"
+ },
+ "slip_gain_setting": {
+  "value": 7.5,
+  "text": "7,5",
+  "source": "diagnosis/probe_metrics/gap_checks_sweep.json"
+ },
+ "slip_gain_m10_min": {
+  "value": 0.12324708035381644,
+  "text": "0,12",
+  "source": "diagnosis/probe_metrics/gap_checks_sweep.json"
+ },
+ "slip_gain_m10_max": {
+  "value": 0.13288819206329713,
+  "text": "0,13",
+  "source": "diagnosis/probe_metrics/gap_checks_sweep.json"
+ },
+ "slip_gain_m3_min": {
+  "value": 0.07141173901280325,
+  "text": "0,07",
+  "source": "diagnosis/probe_metrics/gap_checks_sweep.json"
+ },
+ "slip_gain_m3_max": {
+  "value": 0.09761958346494211,
+  "text": "0,10",
+  "source": "diagnosis/probe_metrics/gap_checks_sweep.json"
+ },
+ "slip_missed_early_max": {
+  "value": 0.38743781605116273,
+  "text": "0,39",
+  "source": "diagnosis/probe_metrics/gap_checks_slip_harm.json"
+ },
+ "slip_missed_late_max": {
+  "value": 0.6429398718361701,
+  "text": "0,64",
+  "source": "diagnosis/probe_metrics/gap_checks_slip_harm.json"
+ },
+ "slip_detected_max": {
+  "value": 100.38769361526316,
+  "text": "100",
+  "source": "diagnosis/probe_metrics/gap_checks_slip_harm.json"
+ },
+ "slip_grid_positions": {
+  "value": 13,
+  "text": "13",
+  "source": "diagnosis/probe_metrics/gap_checks_slip_harm.json"
+ },
+ "slip_flagged_sections": {
+  "value": 2,
+  "text": "2",
+  "source": "diagnosis/probe_metrics/sweep_integrity.json"
+ },
+ "jvm_ladders": {
+  "value": 40,
+  "text": "40",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "jvm_spearman_min": {
+  "value": 1.0,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "jvm_h5_capt_pre": {
+  "value": 0.633,
+  "text": "0,63",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "jvm_h5_capt_spk": {
+  "value": 0.624,
+  "text": "0,62",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "jvm_h5_unrep_pre": {
+  "value": 0.746,
+  "text": "0,75",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "jvm_h5_unrep_spk": {
+  "value": 0.764,
+  "text": "0,76",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "jvm_bound_violations": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/probe_metrics/report_numbers.json"
+ },
+ "jvm_bound_rows": {
+  "value": 150,
+  "text": "150",
+  "source": "diagnosis/probe_metrics/real_pairs_jvm.csv"
+ },
+ "jvm_eval_settings": {
+  "value": 25,
+  "text": "25",
+  "source": "diagnosis/probe_metrics/real_pairs_jvm.csv"
+ },
+ "jvm_extra_ladders": {
+  "value": 48,
+  "text": "48",
+  "source": "diagnosis/probe_metrics/real_extra_jvm.csv"
+ },
+ "jvm_extra_spearman_min": {
+  "value": 1.0,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/real_extra_jvm.csv"
+ },
+ "jvm_h5_res_g0": {
+  "value": 0.05979308541787726,
+  "text": "0,06",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_saturating.json"
+ },
+ "jvm_h5_res_g5": {
+  "value": 0.7066451633117237,
+  "text": "0,71",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_saturating.json"
+ },
+ "jvm_h5_res_g10": {
+  "value": 0.6568843329343883,
+  "text": "0,66",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_saturating.json"
+ },
+ "jvm_h5_esr_g5": {
+  "value": 0.4993473868318526,
+  "text": "0,50",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_saturating.json"
+ },
+ "jvm_tanh_res_g5": {
+  "value": 0.6721131203855655,
+  "text": "0,67",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_saturating.json"
+ },
+ "jvm_tanh_res_g10": {
+  "value": 0.5866278789309389,
+  "text": "0,59",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_saturating.json"
+ },
+ "jvm_h5_1024_res_g5": {
+  "value": 0.7163821121281666,
+  "text": "0,72",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm.json"
+ },
+ "jvm_vl3_unrep_min": {
+  "value": 0.6815805662678774,
+  "text": "0,68",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm.json"
+ },
+ "jvm_vl3_unrep_max": {
+  "value": 0.9681332802490774,
+  "text": "0,97",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm.json"
+ },
+ "jvm_h5_unrep_pairs_min": {
+  "value": 0.684552343641684,
+  "text": "0,68",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm.json"
+ },
+ "jvm_h5_unrep_pairs_max": {
+  "value": 0.968661779989311,
+  "text": "0,97",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm.json"
+ },
+ "jvm_par_in_min": {
+  "value": 0.5868718700563217,
+  "text": "0,59",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_parallel.json"
+ },
+ "jvm_par_in_max": {
+  "value": 0.6570204085866224,
+  "text": "0,66",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_parallel.json"
+ },
+ "jvm_par_read_min": {
+  "value": 0.6780112479527561,
+  "text": "0,68",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_parallel.json"
+ },
+ "jvm_par_read_max": {
+  "value": 0.832067347652652,
+  "text": "0,83",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_parallel.json"
+ },
+ "jvm_insample_150": {
+  "value": 0.7411414398359064,
+  "text": "0,74",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "jvm_insample_30": {
+  "value": 0.653924823843721,
+  "text": "0,65",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "jvm_silence_g5_db": {
+  "value": -28.055193523696037,
+  "text": "−28",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "jvm_silence_g0_db": {
+  "value": -25.81690311710217,
+  "text": "−26",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "jvm_after_louder": {
+  "value": 0.672462983937779,
+  "text": "0,67",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "jvm_no_louder": {
+  "value": 0.6563970909628541,
+  "text": "0,66",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "jvm_lag_abs_max": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "jvm_wh_in": {
+  "value": 0.39436932575627576,
+  "text": "0,39",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "jvm_wh_read": {
+  "value": 1.0839885271540963,
+  "text": "1,08",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "jvm_best_reading_res": {
+  "value": 0.5866278789309389,
+  "text": "0,59",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_saturating.json; diagnosis/probe_metrics/gap_checks_jvm.json; diagnosis/probe_metrics/gap_checks_jvm_parallel.json; diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "jvm_best_reading_esr": {
+  "value": 0.34413226833901234,
+  "text": "0,34",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_saturating.json; diagnosis/probe_metrics/gap_checks_jvm.json; diagnosis/probe_metrics/gap_checks_jvm_parallel.json; diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "jvm_best_insample_linear": {
+  "value": 0.5868718700563217,
+  "text": "0,59",
+  "source": "diagnosis/probe_metrics/gap_checks_jvm_parallel.json; diagnosis/probe_metrics/gap_checks_jvm_causes.json"
+ },
+ "cost_esr_s": {
+  "value": 0.0008525470038875937,
+  "text": "8,5·10⁻⁴",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "cost_mrstft_s": {
+  "value": 0.07967778097372502,
+  "text": "0,080",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "cost_fir_s": {
+  "value": 0.11446642607916147,
+  "text": "0,11",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "cost_imd_s": {
+  "value": 0.1628393930150196,
+  "text": "0,16",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "cost_h3_s": {
+  "value": 0.39208301703911275,
+  "text": "0,39",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "cost_h5_s": {
+  "value": 0.6765511799603701,
+  "text": "0,68",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "cost_harm_s": {
+  "value": 0.8149034390226007,
+  "text": "0,81",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "cost_vl2_s": {
+  "value": 1.3825764559442177,
+  "text": "1,4",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "cost_vl3_s": {
+  "value": 6.064382686978206,
+  "text": "6,1",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "cost_load_min": {
+  "value": 15.32861328125,
+  "text": "15",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "cost_load_max": {
+  "value": 17.7626953125,
+  "text": "18",
+  "source": "diagnosis/probe_metrics/cost.json"
+ },
+ "scale_esr_exponent": {
+  "value": 1.1932268674224251,
+  "text": "1,2",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_esr_per_min_s": {
+  "value": 0.02605503839731682,
+  "text": "0,026",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_mrstft_exponent": {
+  "value": 1.1243673881701437,
+  "text": "1,1",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_mrstft_per_min_s": {
+  "value": 2.239122462233354,
+  "text": "2,2",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_fir_exponent": {
+  "value": 1.016711518907265,
+  "text": "1,0",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_fir_per_min_s": {
+  "value": 1.782474231440574,
+  "text": "1,8",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_h3_exponent": {
+  "value": 0.930712616957411,
+  "text": "0,9",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_h3_per_min_s": {
+  "value": 4.932447945757303,
+  "text": "4,9",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_h5_exponent": {
+  "value": 1.0053395549961348,
+  "text": "1,0",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_h5_per_min_s": {
+  "value": 10.21085733838845,
+  "text": "10",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_vl2_exponent": {
+  "value": 1.0906759707634404,
+  "text": "1,1",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_vl2_per_min_s": {
+  "value": 21.596606350358343,
+  "text": "22",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_vl3_exponent": {
+  "value": 0.840422779040973,
+  "text": "0,8",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_vl3_per_min_s": {
+  "value": 116.96952988408157,
+  "text": "117",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_wh_exponent": {
+  "value": 1.0939762253251166,
+  "text": "1,1",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_wh_per_min_s": {
+  "value": 2285.7494871667586,
+  "text": "2286",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ },
+ "scale_wh_per_min_min": {
+  "value": 38.095824786112644,
+  "text": "38",
+  "source": "diagnosis/probe_metrics/cost_scaling.json"
+ }
+}

@@ -1,0 +1,173 @@
+# P4 : sondes d'identification comme métriques de fidélité (résultats)
+
+<!-- Dossier sans prose. Chaque nombre décimal est une clé de numbers.json entre doubles accolades, régénérée par numbers.py depuis diagnosis/probe_metrics/ (fichiers suivis par git). Rendu : uv run python paper/render.py paper/p4_probe_metrics. -->
+<!-- Classement (D-PRODUCT-002, étiquette de publication « exploratoire ») : Établi = règle de lecture ou attente commitée avant les chiffres (diagnosis/probe_metrics/NOTE.md), mesurée sur le test ou la séance réelle ; Préliminaire = lectures post hoc (« lectures ajoutées », gap_checks.py, baselines_extra.py, AUC), seuils choisis après les données, lectures réelles sans indépendance A/B établie ; Retiré ou réfuté = attente préinscrite non tenue, outil écarté, lecture retirée ; En attente = non mesuré ou non régénérable. -->
+<!-- Vocabulaire (D-0010) : « score d'écart » ou « pseudo-distance », jamais « distance » ; les sondes sont des instruments d'analyse, jamais des émulateurs. -->
+
+## Établi
+
+- Protocole gelé avant toute lecture d'un défaut, choisi sur la seule capacité d'extraction de la référence statique (aucune détection lue).
+  - FIR et Hammerstein 3 et 5 : {{dev_fir_taps}} taps ; ridge {{dev_fir_ridge}} (FIR), {{dev_h_ridge}} (Hammerstein). Volterra–Laguerre 2 et 3 : {{dev_vl2_size}} filtres de Laguerre gelés, pôles {{dev_vl2_pole}} et {{dev_vl3_pole}}, ridge {{dev_vl2_ridge}}.
+  - Capacité r_ref / RMS(y_ref) sur la lecture B du développement : FIR {{dev_fir_capacity}}, H3 {{dev_h3_capacity}}, H5 {{dev_h5_capacity}}, VL2 {{dev_vl2_capacity}}, VL3 {{dev_vl3_capacity}}.
+  - Limite consignée : taps au bord de la grille préinscrite, non étendue après coup (FIR {{dev_fir_capacity_128}} à 128 taps).
+  - Preuve : `diagnosis/probe_metrics/NOTE.md` (Protocole gelé v1 et v2), `diagnosis/probe_metrics/dev_select.json`, `diagnosis/probe_metrics/dev_select_v2.json` ; commits 26a1904 et b800268 ; E-0048.
+  - Statut : préinscrit (règles de choix écrites avant les chiffres).
+  - Conditions : 48 kHz, référence DSP statique, bruit coloré et sinus glissant synchronisé, 3 niveaux, graines 100 à 102, lecture sur la graine + 50.
+- Borne |d_audio − d_probe| ≤ r_ref + r_eval : {{math_bound_violations}} violation sur {{math_bound_rows_total}} lignes d'étalonnage (de {{math_bound_rows_wh}} lignes pour WH à {{math_bound_rows_fir}} pour FIR et Hammerstein), {{vs_bound_violations}} sur {{vs_bound_rows}} lignes de sonde VS100R, {{jvm_bound_violations}} sur {{jvm_bound_rows}} lignes JVM410H.
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` (bound), `diagnosis/probe_metrics/real_pairs_vs100r.csv`, `diagnosis/probe_metrics/real_pairs_jvm.csv`.
+  - Statut : préinscrit (NOTE, attendu 0). Inégalité triangulaire sur B, vraie sur ces données ; elle ne fait pas du score une distance.
+- Équivalence linéaire en paramètres fit(y_eval) − fit(y_ref) = fit(y_eval − y_ref) et égalité d_probe² = Δθᵀ G_B Δθ (G_B : Gram des caractéristiques de lecture), vérifiées numériquement ; contre-exemple F = x + a·x³, G = x + 2a·x³ : erreurs de fit égales, score d'écart porté par la seule branche d'ordre 3.
+  - Preuve : `tests/unit/test_probe_metrics.py` (test_linear_equivalence_and_gram_norm, test_same_fit_error_but_different_systems_are_separated).
+  - Statut : préinscrit (NOTE, contrôles mathématiques). Hypothèse : normalisation et régularisation fonctions de x_A seulement. Aucun chiffre de résultat archivé (tolérances du test seulement).
+- Emboîtement Hammerstein 5 / Volterra–Laguerre 3 absent dans les deux sens : part d'une colonne xᵏ retardée hors de l'espace Volterra–Laguerre 3 de {{nest_h_out_vl_min}} à {{nest_h_out_vl_max}} ; part médiane d'une colonne Volterra hors de l'espace Hammerstein 5 {{nest_vl_out_h_median}} (max {{nest_vl_out_h_max}}).
+  - Conséquence : un écart de score entre ces deux sondes ne se lit pas comme un écart de capacité.
+  - Preuve : `diagnosis/probe_metrics/dev_select_v2.json` (nesting) ; commit b800268.
+  - Statut : préinscrit (règle v2 : mesuré à part, jamais supposé).
+  - Conditions : bruit coloré, graine 100, 32 768 échantillons, moindres carrés sans régularisation.
+- Détection à sévérité maximale et niveau médian (une cellule = un défaut × une famille ; « détecté » si R = score / plancher ≥ 10, « non détecté » si R < 3) : FIR {{det_fir_yes}} détectés, {{det_fir_lim}} limites, {{det_fir_no}} non détecté ; H3 {{det_h3_yes}} / {{det_h3_lim}} / {{det_h3_no}} ; H5 {{det_h5_yes}} / {{det_h5_lim}} / {{det_h5_no}} ; VL3 {{det_vl3_yes}} / {{det_vl3_lim}} / {{det_vl3_no}} ; ESR {{det_esr_yes}} / {{det_esr_lim}} / {{det_esr_no}} ; MR-STFT {{det_mrstft_yes}} / {{det_mrstft_lim}} / {{det_mrstft_no}} ; IMD (deux tons) {{det_imd_yes}} / {{det_imd_lim}} / {{det_imd_no}} ; signature harmonique totale (sinus glissant) {{det_harm_yes}} / {{det_harm_lim}} / {{det_harm_no}}.
+  - Lecture du rapport : les sondes ne représentent pas le bruit blanc, leur plancher est très bas et elles « détectent » presque tout ; le seuil seul ne les départage pas.
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` (readings_strongest_middle), `diagnosis/probe_metrics/table_test.csv`.
+  - Statut : règle préinscrite (NOTE, lecture fixée avant les chiffres de test) ; seuil d'instrument, pas d'audibilité.
+  - Conditions : {{bench_defects}} défauts DSP connus × 3 sévérités, {{bench_families}} familles d'excitation × 3 niveaux × 3 graines (200 à 202 ; DI : une réalisation), plancher = même chaîne mesurée deux fois avec un bruit indépendant à −80 dB.
+- Sensibilité à la plus faible sévérité (niveau médian, familles détectées sur 6) : cubique préfiltré vu par FIR {{weak_cubic_fir}}, H3 {{weak_cubic_h3}}, H5 {{weak_cubic_h5}}, VL2 {{weak_cubic_vl2}}, VL3 {{weak_cubic_vl3}}, contre ESR {{weak_cubic_esr}} ; quadratique : ESR {{weak_quad_esr}}, sondes {{weak_quad_h3}} ; terme u⁷ (au-delà du degré) vu par presque aucune métrique (FIR {{weak_u7_fir}}, H3 {{weak_u7_h3}}, ESR {{weak_u7_esr}}).
+  - Mécanisme avancé par le rapport (non testé à part) : la sonde moyenne sur toute l'estimation et rejette ce qui sort de son espace, comme une détection synchrone.
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` (weakest_detected).
+  - Statut : règle préinscrite.
+- Signature harmonique par ordre, spécifique : à sévérité maximale sur le sinus glissant synchronisé, ordres détectés : quadratique {{harm_orders_quad}}, cubique {{harm_orders_cubic}}, terme croisé u[n]·u[n−5] {{harm_orders_cross}} ; quasi déterministe d'une réalisation à l'autre (90e centile de l'écart-type du log du total {{rep_harm_total_p90}}).
+  - Preuve : `diagnosis/probe_metrics/table_test.csv`, `diagnosis/probe_metrics/report_numbers.json` (repeatability).
+  - Statut : métrique et règle préinscrites.
+  - Réserve : sinus glissants de test identiques bit à bit à ceux du développement (durée tirée de graine % 3) ; exige un sinus glissant.
+- Répétabilité entre graines (écart-type du log du score, médiane sur les cellules) : de {{rep_core_median_min}} (ESR) à {{rep_core_median_max}} pour ESR, MR-STFT et les sondes FIR, H3, H5, VL2, VL3 ; IMD {{rep_imd_median}} ; WH {{rep_wh_median}}. 90e centiles : {{rep_core_p90_min}} à {{rep_core_p90_max}} pour ces métriques, IMD {{rep_imd_p90}}, WH {{rep_wh_p90}}, ordres harmoniques jusqu'à {{rep_harm_order_p90_max}}.
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` (repeatability).
+  - Statut : lecture préinscrite (NOTE). Bruit additif exclu du calcul. Magnitude, phase et enveloppe, ajoutées post hoc, sont rapportées en préliminaire.
+  - Réserve : sur les sinus glissants, la stabilité ne vaut pas généralisation à de nouvelles réalisations.
+- Détecteur ad hoc de dynamique d'enveloppe E2 : les quatre critères préinscrits sont remplis aux {{e2_criteria_all_levels}} niveaux sur {{e2_levels}} (−12, −9, −6 dBFS).
+  - Monotonie : relâchement 60 → 100 → 200 ms : {{e2_release_m12_60}} → {{e2_release_m12_100}} → {{e2_release_m12_200}} dB à −12 dBFS ; {{e2_release_m6_60}} → {{e2_release_m6_100}} → {{e2_release_m6_200}} dB à −6 dBFS.
+  - Sensibilité : relâchement 60 ms bien au-dessus de 3 × le plancher ({{e2_floor_min}} à {{e2_floor_max}} dB).
+  - Spécificité : pire autre défaut, co-répondants exclus par construction : {{e2_worst_other_name}} ({{e2_worst_other}} dB), {{e2_spec_ratio_min}} à {{e2_spec_ratio_max}} fois sous le relâchement 200 ms ; gain et polynômes quasi nuls.
+  - Contrôle interne : indice d'attaque du défaut de relâchement = {{e2_attack_ratio_min}} à {{e2_attack_ratio_max}} de son indice de relâchement, à toutes les sévérités (d'abord codé à 200 ms seul, étendu comme préinscrit après relecture Codex).
+  - Co-répondants déclarés d'avance et rapportés : écho {{e2_echo_min}} à {{e2_echo_max}} dB, préfiltre {{e2_prefilter_min}} à {{e2_prefilter_max}} dB ; l'indice n'est pas exclusif d'un écho.
+  - Preuve : `diagnosis/probe_metrics/dynamics_verdict.json`, `src/fssr_nam/product/dynamics.py`, `diagnosis/probe_metrics/NOTE.md` (préinscription E2) ; commits 20af272, 4555f06, ab8ce38 ; E-0049, F-0036.
+  - Statut : préinscrit avant implémentation.
+  - Conditions : chaîne dynamique synthétique, 13 défauts appliqués à cette chaîne, sauts de niveau sur bruit coloré (22 sauts fort → faible, 21 faible → fort), graines 200 à 202 ; plancher trivial (bruit à −80 dB moyenné sur les sauts) ; aucune validation sur matériel.
+- VS100R, contrôles négatifs (basses, médiums, aigus réglés avant l'étage de tonalité) sous 3 planchers réels pour toutes les sondes : H3 médiane {{vs_neg_median_h3}} (max {{vs_neg_max_h3}}) ; ESR {{vs_neg_median_esr}} (max {{vs_neg_max_esr}}, seul dépassement, sur une section à glissement d'entrée) ; MR-STFT {{vs_neg_median_mrstft}} (max {{vs_neg_max_mrstft}}).
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` (real_vs100r), `diagnosis/probe_metrics/real_pairs_vs100r.csv`.
+  - Statut : attente préinscrite (NOTE, paires réelles), tenue pour les sondes.
+  - Conditions : envoi FX VS100R, séance unique, sans modèle neuronal, `di_test` (sources indépendantes de `di_train`), plancher réel = médiane des trois répétitions du centre (prises 1, 20, 39), ESR lue en amplitude.
+- Coût d'une paire (4 s d'estimation + 4 s de lecture, 48 kHz) : ESR {{cost_esr_s}} s, MR-STFT {{cost_mrstft_s}} s, FIR {{cost_fir_s}} s, IMD {{cost_imd_s}} s, H3 {{cost_h3_s}} s, H5 {{cost_h5_s}} s, signature harmonique {{cost_harm_s}} s, VL2 {{cost_vl2_s}} s, VL3 {{cost_vl3_s}} s ; WH {{wh_cost_s}} s pour 1 s d'estimation.
+  - Preuve : `diagnosis/probe_metrics/cost.json`.
+  - Statut : mesure préinscrite (NOTE : coût mesuré à part, condition fixe).
+  - Conditions : machine partagée, charge {{cost_load_min}} à {{cost_load_max}} sur 32 cœurs, CPU.
+
+## Préliminaire
+
+- Part captée d_probe / d_audio et part non représentée disent la nature de l'écart (sévérité maximale, niveau médian, médiane sur les 6 familles) : défauts linéaires et statiques presque entièrement captés par Hammerstein (gain {{capt_gain_h3}}, retard {{capt_delay_h3}}, passe-tout {{capt_allpass_h3}}) ; FIR ne voit les non-linéarités que par la réponse linéaire équivalente (cubique {{capt_cubic_fir}}, quadratique {{capt_quad_fir}}, croisé {{capt_cross_fir}}) ; bruit additif à peine capté par aucune sonde ({{capt_noise_min}} à {{capt_noise_max}}) ; écho à 30 ms hors mémoire non représenté ({{unrep_echo_min}} à {{unrep_echo_max}}) ; terme u⁷ part non représentée {{unrep_u7_min}} à {{unrep_u7_max}}.
+  - Conforme aux attentes descriptives écrites avant les mesures (NOTE : bruit additif, défauts hors capacité).
+  - Robustesse au bruit de mesure qui en découle : le bruit additif n'entre presque pas dans les scores de sonde, alors que l'ESR le compte entièrement.
+  - Part captée et part non représentée ne s'additionnent pas (aucune orthogonalité hors échantillon).
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` (captured_strongest_middle), `diagnosis/probe_metrics/table_test.csv` ; F-0033 ; figure `figures/captured_share.pdf`.
+  - Statut : post hoc. La part captée est une lecture ajoutée (REPORT) ; la part non représentée figure parmi les lectures descriptives de NOTE mais REPORT la liste aussi comme lecture ajoutée.
+- Volterra–Laguerre 3 représente la non-linéarité préfiltrée et les termes croisés que Hammerstein laisse en partie hors de son espace : part non représentée VL3 {{unrep_cubic_vl3}} (cubique), {{unrep_quad_vl3}} (quadratique), {{unrep_cross_vl3}} (croisé u[n]·u[n−5]) contre H3 {{unrep_cubic_h3}}, {{unrep_quad_h3}}, {{unrep_cross_h3}} ; Hammerstein (256 taps) garde mieux la mémoire linéaire longue (retard : H3 {{unrep_delay_h3}}, VL3 {{unrep_delay_vl3}} ; passe-tout : H3 {{unrep_allpass_h3}}, VL3 {{unrep_allpass_vl3}}).
+  - Sur excitation corrélée (bruit coloré, plucks), Hammerstein 3 attribue le terme croisé à sa branche d'ordre 2 ({{decomp_cross_h3_order2_min}} à {{decomp_cross_h3_order2_max}} du score, contre {{decomp_quad_h3_order2_min}} à {{decomp_quad_h3_order2_max}} pour le quadratique) : sa décomposition par branche ne distingue pas « carré » et « produit retardé ».
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json`, `diagnosis/probe_metrics/decomposition_noise.json`, `diagnosis/probe_metrics/decomposition_plucks.json` ; F-0033.
+  - Statut : post hoc ; emboîtement absent (voir Établi) : complémentarité, pas classement de capacité.
+- Dépendance au contenu de l'excitation (sévérité maximale, niveau médian, plage sur les 5 sondes) : écho capté de {{capt_echo_plucks_min}} à {{capt_echo_plucks_max}} sur plucks, {{capt_echo_di_min}} à {{capt_echo_di_max}} sur DI, {{capt_echo_noise_min}} à {{capt_echo_noise_max}} sur bruit coloré, au moins {{capt_echo_twotone_min}} sur deux tons ; relâchement d'enveloppe capté de {{capt_release_di_min}} à {{capt_release_di_max}} sur DI contre {{capt_release_noise_min}} à {{capt_release_noise_max}} sur bruit stationnaire : ce manque n'apparaît qu'avec une excitation réaliste.
+  - Preuve : `diagnosis/probe_metrics/table_test.csv`.
+  - Statut : post hoc. REPORT cite pour la DI une plage plus étroite, sans préciser sondes ni niveau : à réconcilier.
+- Score de sonde au-dessus de d_audio sur la DI pour les termes pairs (H3 et H5, quadratique et croisé) : part captée {{capt_over_di_min}} à {{capt_over_di_max}} ; hors échantillon, une branche peut extrapoler ; écart surestimé, cas de refus de conclure.
+  - Preuve : `diagnosis/probe_metrics/table_test.csv`.
+  - Statut : post hoc.
+- Signal de non-identifiabilité : somme des contributions par branche de Hammerstein 5 rapportée au score de {{decomp_static_min}} à {{decomp_static_max}} pour les défauts linéaires et statiques, de {{decomp_unrep_min}} à {{decomp_unrep_max}} pour le bruit et l'écho ; seuil {{proto_cancelling}} au-delà duquel les branches « se compensent ».
+  - Preuve : `diagnosis/probe_metrics/decomposition_noise.json`, `diagnosis/probe_metrics/decomposition_plucks.json`, `src/fssr_nam/product/fidelity.py` (CANCELLING).
+  - Statut : exploratoire ; seuil choisi après l'étalonnage, à valider sur d'autres données.
+  - Conditions : bruit coloré −20 dBFS et plucks −10 dBFS, graine 200 (lecture 250), sévérité maximale.
+- Métriques existantes du dépôt au banc : magnitude aveugle au passe-tout et au retard (R {{base_mag_allpass_r}} et {{base_mag_delay_r}}) ; phase exactement nulle pour un gain (score au plus {{base_phase_gain_score_max}}) et aveugle au cubique (R {{base_phase_cubic_r}}) ; ensemble, elles séparent ce que la MR-STFT confond.
+  - Répétabilité entre graines de ces trois métriques : médianes de {{rep_base_median_min}} à {{rep_base_median_max}} (enveloppe), 90e centiles de {{rep_base_p90_min}} à {{rep_base_p90_max}} (phase, nulle pour un gain pur).
+  - Preuve : `diagnosis/probe_metrics/table_test.csv`, `diagnosis/probe_metrics/baselines_extra.py`, `diagnosis/probe_metrics/report_numbers.json` (repeatability).
+  - Statut : post hoc (mêmes règles de lecture que le banc). Médianes sur les familles, sévérité maximale, niveau médian.
+- VS100R, séparation des changements réels (gain 0 exclu) et des contrôles négatifs, AUC avec p exact unilatéral, sur `di_test` : toutes paires, H3 {{vs_auc_h3_all}} (p = {{vs_p_h3_all}}, {{vs_npos_h3_all}} changements contre {{vs_nneg_h3_all}} contrôles), ESR {{vs_auc_esr_all}} (p = {{vs_p_esr_all}}), MR-STFT {{vs_auc_mrstft_all}} ; entrée commune seulement, H3 {{vs_auc_h3_common}} (p = {{vs_p_h3_common}}, {{vs_npos_h3_common}} contre {{vs_nneg_h3_common}}), ESR {{vs_auc_esr_common}} (p = {{vs_p_esr_common}}), MR-STFT {{vs_auc_mrstft_common}} (p = {{vs_p_mrstft_common}}) ; bruit rose, ESR {{vs_auc_pink_esr}}, H3 {{vs_auc_pink_h3}}.
+  - Lecture : à entrée commune, ESR et sondes séparent pareillement ; l'avantage apparent des sondes sur toutes les paires vient des sections à glissement d'acquisition.
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` (real_vs100r), `diagnosis/probe_metrics/real_pairs_vs100r.csv` ; F-0034 ; figure `figures/vs100r_separation.pdf`.
+  - Statut : post hoc (AUC non préinscrites ; comparaisons directes restreintes à l'entrée commune après relecture Codex).
+  - Conditions : 7 changements réels hors gain 0 et 12 contrôles négatifs ; une seule répétition à entrée commune sur `di_test`.
+- Robustesse aux défauts d'acquisition : sur le contrôle négatif « aigus 10 », dont la section `di_test` contient un glissement, ESR à {{vs_treble10_esr}} planchers, MR-STFT {{vs_treble10_mrstft}}, H3 {{vs_treble10_h3}} ; chaque sonde est ajustée sur l'entrée enregistrée de sa propre prise.
+  - Preuve : `diagnosis/probe_metrics/real_pairs_vs100r.csv`, `tests/unit/test_probe_metrics.py` (test_own_input_fit_removes_an_input_mismatch).
+  - Statut : post hoc ; un seul cas. La procédure d'ajustement sur l'entrée propre a été fixée avant tout score (écart de procédure daté dans NOTE).
+- Plancher réel dominé par la dérive au cours de la séance : les deux répétitions avec la prise 1 valent {{vs_drift_min}} à {{vs_drift_max}} fois la répétition 20–39 (H3, `di_test`).
+  - Preuve : `diagnosis/probe_metrics/real_pairs_vs100r.csv` ; F-0034.
+  - Statut : lecture post hoc ; conséquence : un plancher fait de répétitions éloignées surestime le bruit d'une comparaison rapprochée.
+- Métriques existantes sur le réel, entrée commune : `di_test` (5 changements, 10 contrôles) magnitude {{vs_auc_di_mag}} (p = {{vs_p_di_mag}}), phase {{vs_auc_di_phase}} (p = {{vs_p_di_phase}}), enveloppe {{vs_auc_di_env}} (p = {{vs_p_di_env}}) ; bruit rose (7 contre 12) magnitude {{vs_auc_pink_mag}} (p = {{vs_p_pink_mag}}), phase {{vs_auc_pink_phase}} (p = {{vs_p_pink_phase}}), enveloppe {{vs_auc_pink_env}} (p = {{vs_p_pink_env}}).
+  - Preuve : `diagnosis/probe_metrics/real_extra_vs100r.csv`.
+  - Statut : post hoc.
+- Sinus glissant −3 dBFS : la signature harmonique totale ne sépare plus (AUC {{vs_auc_sweep3_harm_raw}}, p = {{vs_p_sweep3_harm_raw}}, contre {{vs_auc_sweep10_harm}} à −10 dBFS, p = {{vs_p_sweep10_harm}}) ; un glissement d'acquisition dans le sinus −3 dBFS de la prise 20, référence de la plupart des paires, en est un facteur établi : écart d'ordre 3 entre répétitions {{slip_rep_order3_m10}} à −10 dBFS, {{slip_rep_order3_m3}} à −3 dBFS.
+  - Contribution de la saturation non exclue : l'écart entre réglages (gain {{slip_gain_setting}} contre centre, ordres impairs 3 à 9) baisse aussi, de {{slip_gain_m10_min}} à {{slip_gain_m10_max}} vers {{slip_gain_m3_min}} à {{slip_gain_m3_max}}.
+  - Sans la section touchée : AUC {{vs_auc_sweep3_harm_guarded}} (p = {{vs_p_sweep3_harm_guarded}}, {{vs_npos_sweep3_harm_guarded}} changements contre {{vs_nneg_sweep3_harm_guarded}} contrôles seulement).
+  - Preuve : `diagnosis/probe_metrics/gap_checks_sweep.json`, `diagnosis/probe_metrics/real_pairs_vs100r.csv`, `diagnosis/probe_metrics/report_numbers.json`.
+  - Statut : post hoc (`diagnosis/probe_metrics/gap_checks.py`).
+- Garde d'intégrité des sinus glissants (alignement global, retards par fenêtres, rejet dès un décalage persistant d'un demi-quantum de glissement) : {{slip_flagged_sections}} sections signalées sur la séance (prise 20 à −3 dBFS, prise 38 à −20 dBFS) ; sur une grille de {{slip_grid_positions}} glissements de 24 échantillons insérés à −10 dBFS, les glissements non détectés coûtent au plus {{slip_missed_early_max}} du plancher de chaque ordre en début de balayage et {{slip_missed_late_max}} en fin, les glissements détectés jusqu'à {{slip_detected_max}} planchers.
+  - Preuve : `diagnosis/probe_metrics/gap_checks_slip_harm.json`, `diagnosis/probe_metrics/sweep_integrity.json`, `diagnosis/probe_metrics/real_pairs.py` ; commits 9d56ed6, c50cc50, 5a7df99.
+  - Statut : outil post hoc, réécrit après deux relectures Codex ; pas une borne générale (positions testées seulement).
+- JVM410H OD1 (ToneTwist), monotonie observée : sur {{jvm_ladders}} échelles par sortie (4 boutons × 2 côtés × 5 métriques), le score croît strictement avec la distance au centre (ρ de Spearman minimal {{jvm_spearman_min}}) ; magnitude, phase et enveloppe aussi ({{jvm_extra_ladders}} échelles, ρ minimal {{jvm_extra_spearman_min}}).
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` (real_jvm), `diagnosis/probe_metrics/real_extra_jvm.csv`.
+  - Statut : lecture préinscrite (monotonie observée, non imposée), rangée en préliminaire : A (0 à 150 s) et B (215 à 300 s) viennent du même fichier, indépendance non établie ; aucune répétition, donc aucun plancher réel. Lecture des métriques existantes post hoc.
+- JVM410H, couverture partielle : Hammerstein 5 capte {{jvm_h5_capt_pre}} (préampli) et {{jvm_h5_capt_spk}} (haut-parleur) de l'écart, part non représentée {{jvm_h5_unrep_pre}} et {{jvm_h5_unrep_spk}} ; les scores de sonde y sont des signatures partielles.
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` (real_jvm).
+  - Statut : post hoc ; causes possibles non départagées (capacité gelée dépassée, A et B non indépendants, niveaux variables de la DI).
+- JVM410H, limite de capacité à fort gain : sur la sortie de référence, résidu de lecture de Hammerstein 5 {{jvm_h5_res_g5}} au gain 5 (ESR {{jvm_h5_esr_g5}}) contre {{jvm_h5_res_g0}} au gain 0 ; aucune classe essayée ne descend sous {{jvm_best_reading_res}} en lecture (ESR {{jvm_best_reading_esr}} ; c'est le même fait, les résidus sont des rapports RMS), ni sous {{jvm_best_insample_linear}} en échantillon pour les sondes linéaires en paramètres dont la valeur en échantillon est archivée (Hammerstein 5 et sonde parallèle à préfiltres de Laguerre ; F-0035 inclut aussi 1 024 taps, base tanh et Volterra–Laguerre 3, sans valeur en échantillon archivée).
+  - Classes essayées : 1 024 taps {{jvm_h5_1024_res_g5}} ; base saturante tanh {{jvm_tanh_res_g5}} (gain 5) et {{jvm_tanh_res_g10}} (gain 10) ; Wiener–Hammerstein parallèle à préfiltres de Laguerre fixes {{jvm_par_in_min}} à {{jvm_par_in_max}} en échantillon, {{jvm_par_read_min}} à {{jvm_par_read_max}} en lecture ; Wiener–Hammerstein ajusté sur 1 s {{jvm_wh_in}} en échantillon mais {{jvm_wh_read}} en lecture (surapprentissage) ; Volterra–Laguerre 3 comparable à Hammerstein 5 sur les paires (part non représentée {{jvm_vl3_unrep_min}} à {{jvm_vl3_unrep_max}} contre {{jvm_h5_unrep_pairs_min}} à {{jvm_h5_unrep_pairs_max}}). Hammerstein 5 en échantillon : {{jvm_insample_150}} sur 150 s, {{jvm_insample_30}} sur 30 s.
+  - Causes écartées : bruit (sortie pendant les silences d'entrée à {{jvm_silence_g5_db}} dB du RMS au gain 5, {{jvm_silence_g0_db}} dB au gain 0) ; dynamique sur une demi-seconde (résidu {{jvm_after_louder}} après un passage plus fort, {{jvm_no_louder}} sans) ; dérive d'horloge (retard optimal à ± {{jvm_lag_abs_max}} échantillon près sur 300 s) ; séparation A/B (même résultat en échantillon).
+  - Preuve : `diagnosis/probe_metrics/gap_checks_jvm.json`, `diagnosis/probe_metrics/gap_checks_jvm_causes.json`, `diagnosis/probe_metrics/gap_checks_jvm_parallel.json`, `diagnosis/probe_metrics/gap_checks_jvm_saturating.json` ; F-0035 ; figure `figures/jvm_residual.pdf`.
+  - Statut : post hoc (`diagnosis/probe_metrics/gap_checks.py`) ; cause restante en attente (Q-0014).
+- Coût en fonction de la durée : exposant de la loi temps ∝ T^k proche de 1 (ESR {{scale_esr_exponent}}, FIR {{scale_fir_exponent}}, H5 {{scale_h5_exponent}}, VL3 {{scale_vl3_exponent}}, WH {{scale_wh_exponent}}) ; extrapolation linéaire à une minute d'audio depuis la plus longue durée mesurée : ESR {{scale_esr_per_min_s}} s, MR-STFT {{scale_mrstft_per_min_s}} s, FIR {{scale_fir_per_min_s}} s, H3 {{scale_h3_per_min_s}} s, H5 {{scale_h5_per_min_s}} s, VL2 {{scale_vl2_per_min_s}} s, VL3 {{scale_vl3_per_min_s}} s, WH {{scale_wh_per_min_min}} min.
+  - Preuve : `diagnosis/probe_metrics/cost_scaling.json`.
+  - Statut : mesure post hoc (demandée après le protocole, D-0010), machine partagée.
+- Ensemble minimal de métriques complémentaires proposé : ESR (seule à voir bruit et écho long) ; magnitude et phase de `src/fssr_nam/metrics/spectral.py` ; FIR ; Hammerstein 3 (H5 redondant ici) ; Volterra–Laguerre 3 ; signature harmonique par ordre si un sinus glissant intact existe ; E2 si des sauts de niveau existent ; part non représentée et avertissement de capacité (seuil {{proto_capacity_warning}}).
+  - Preuve : `diagnosis/probe_metrics/REPORT.md` (ensemble minimal, usages et coût), `src/fssr_nam/product/fidelity.py`.
+  - Statut : synthèse post hoc, non testée comme ensemble.
+
+## Retiré ou réfuté
+
+- Attente préinscrite VS100R « changements réels au-dessus de 10 planchers réels » : non tenue par aucune métrique sur l'ensemble des changements. Changements hors gain 0 : H3 {{vs_pos_min_h3}} à {{vs_pos_max_h3}}, ESR {{vs_pos_min_esr}} à {{vs_pos_max_esr}}, MR-STFT {{vs_pos_min_mrstft}} à {{vs_pos_max_mrstft}} ; maximum sur sondes, ESR et MR-STFT, `di_test` et bruit rose : {{vs_pos_max_all}} ({{vs_pos_ge10}} rapport ≥ 10) ; signature harmonique totale sur les sinus glissants : au plus {{vs_harm_total_pos_max}} ; signature par ordre (ordres 1 à 5, sections signalées par la garde exclues) : {{vs_harm_order_ge10_cells}} rapports ≥ 10, tous sur {{vs_harm_order_ge10_changes}} changement (ordres {{vs_harm_order_ge10_orders}}, `{{vs_harm_order_ge10_segment}}`, au plus {{vs_harm_order_pos_max}}). Gain 0 (faible signal, rapporté à part, hors AUC) : H3 {{vs_gain0_h3}}, ESR {{vs_gain0_esr}}, MR-STFT {{vs_gain0_mrstft}} (seul rapport ≥ 10, sur ce seul changement).
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` (real_vs100r), `diagnosis/probe_metrics/real_pairs_vs100r.csv`.
+  - Statut : préinscrit, réfuté. Explication post hoc : plancher dominé par la dérive (voir Préliminaire).
+- Wiener–Hammerstein retiré de l'ensemble : peu fiable dans {{wh_unreliable_cells}} cellules sur {{wh_cells}} (règle préinscrite : dispersion entre départs > la moitié du score) ; dispersion d'environ {{wh_spread_median}} du RMS de la sortie quel que soit le défaut, sous l'écart mesuré seulement pour les plus gros (redistribution et préfiltre à leurs deux plus fortes sévérités) ; au développement, dispersion {{wh_dev_spread}} juste sous le seuil {{wh_dev_threshold}} (capacité {{wh_dev_capacity}}).
+  - Part captée d'apparence sage (gain {{wh_capt_gain}}, cubique {{wh_capt_cubic}}) : effet du jumelage des ajustements référence / évaluation partis des mêmes initialisations, qui masque la non-unicité.
+  - Coût {{wh_cost_s}} s pour 1 s d'estimation ; répétabilité la pire du banc (médiane {{rep_wh_median}}, 90e centile {{rep_wh_p90}}).
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` (wiener_hammerstein, dev_v2), `diagnosis/probe_metrics/calibration_test_wh_noise.csv`, `diagnosis/probe_metrics/cost.json` ; F-0033 ; correctifs 7064c38.
+  - Statut : règle préinscrite ; retrait de l'ensemble minimal post hoc. Exclu aussi de la lecture Nolly.
+  - Conditions : bruit coloré −20 dBFS, 1 s d'estimation et 1 s de lecture, 3 départs, graines 200 à 202.
+- MR-STFT de `src/fssr_nam/metrics/spectral.py` écartée : {{det_mrstft_yes}} détectés, {{det_mrstft_lim}} limites, {{det_mrstft_no}} non détectés à sévérité maximale ; aveugle au passe-tout et au retard à la plus faible sévérité ({{weak_allpass_mrstft}} et {{weak_delay_mrstft}}), magnitude seule, dominée par un bruit à −80 dB dans les bandes où la référence est faible.
+  - Preuve : `diagnosis/probe_metrics/report_numbers.json` ; F-0033.
+  - Statut : règle préinscrite ; retrait post hoc ; constat propre à cette implémentation, non généralisable aux MR-STFT.
+- `envelope_error` (`src/fssr_nam/metrics/transient.py`) écartée comme mesure de dynamique : non spécifique (R {{base_env_gain_r}} pour un gain, {{base_env_release_r}} pour le relâchement).
+  - Preuve : `diagnosis/probe_metrics/table_test.csv`.
+  - Statut : post hoc.
+- Lecture retirée : corrélation de profil entre ESR et sondes ; lue en amplitude, l'ESR est identique à d_audio et la corrélation n'était que du bruit d'arrondi.
+  - Preuve : `diagnosis/probe_metrics/NOTE.md` (relecture Codex) ; commit 7064c38.
+- Résultats Wiener–Hammerstein antérieurs au correctif (renormalisation de h_in qui annulait le pas de Gauss–Newton, h_out ajusté sur une autre région) : remplacés ; seuls les chiffres recalculés sont cités.
+  - Preuve : `diagnosis/probe_metrics/NOTE.md` ; commit 7064c38 ; les anciens restent dans l'historique git.
+- Garde d'intégrité par quarts de sinus glissant retirée : elle pouvait manquer un glissement et en inventer un ; formulation « au pire environ 60 % du plancher » corrigée par la mesure sur grille.
+  - Preuve : `diagnosis/probe_metrics/NOTE.md` (deuxième et troisième relectures Codex) ; commits 9d56ed6, c50cc50, 5a7df99.
+- Essai court à deux tons hors domaine (fréquences d'estimation et de lecture différentes, scores Hammerstein au-dessus de d_audio) : exclu des résultats, correction avant la passe de test.
+  - Preuve : `diagnosis/probe_metrics/calibration_smoke_two_tone_sweep.csv`, `diagnosis/probe_metrics/NOTE.md` (écart au protocole).
+- Première procédure des paires réelles (alignement après décimation, glissement jugé par quarts, 21 paires sur 23 exclues) : remplacée avant tout score par l'ajustement de chaque sonde sur sa propre entrée.
+  - Preuve : `diagnosis/probe_metrics/NOTE.md` (écart de procédure, paires réelles).
+
+## En attente
+
+- Lecture des rendus Neural DSP Archetype: Nolly, ampli Rhythm (E-0051) : règles figées avant tout rendu (`diagnosis/probe_metrics/NOLLY_READING.md`, `diagnosis/probe_metrics/nolly_reading.py`, commit eb4438c) ; `diagnosis/probe_metrics/nolly_reading.json` n'existe pas : aucun chiffre.
+  - H1, monotonie le long des échelles : 5 boutons × 2 côtés × 5 métriques = 50 comparaisons ; « confirmée » à 45 signes ou plus, « non confirmée » si plus de 5 comparaisons mesurées échouent.
+  - H2, capacité des sondes (lien Q-0014) : r/RMS de Hammerstein 5 et Volterra–Laguerre 3 aux cinq réglages de l'échelle de gain ; règle de refus au-dessus du seuil gelé d'avertissement de capacité ; croissance « oui » si au moins 3 des 4 pas croissent pour les deux sondes.
+  - H3, linéarité du baffle : résidu relatif d'un filtre estimé baffle coupé → baffle actif, seuil gelé à environ trois fois le plancher de la méthode mesuré sur le substitut ; au-delà, « linéarité non établie », jamais « non-linéaire ».
+  - H4, spécificité de E2 face au baffle : 9 comparaisons requises ; attendu préinscrit « co-réponse au baffle ».
+  - Essai à blanc sur substitut synthétique : JSON non commité, chiffres non citables.
+- Cause de l'irreprésentabilité de la sortie JVM410H à fort gain (Q-0014) : non testables avec ces données, le déterminisme de l'enregistrement (aucune répétition) et une cascade d'étages non linéaires ; demande des prises répétées ou une sonde à plusieurs étages.
+- Lien perceptif : aucune donnée d'écoute ; le seuil 10 est un seuil d'instrument ; portée limitée à la détection.
+- E2 sur matériel : aucun saut de niveau daté dans les captures (sauts de gain ToneTwist non datés, `bursts_recovery` sur une seule prise micro aux réglages connus) ; pas de nouvelle capture matérielle possible pour l'instant (D-0013).
+- Plancher réel apparié dans le temps et répétabilité d'un jour à l'autre sur la VS100R : demandent des répétitions du centre intercalées entre les prises (nouvelles captures).
+- Non mesurable avec ces données : BLA au sens strict sur le réel, phase des réponses harmoniques au sens du sinus synchronisé sur la VS100R, niveaux hors des trois sinus glissants, contenu au-dessus de 20 kHz (sinus) ou 24 kHz (DI), sortie VS100R après l'étage de tonalité.
+  - Preuve : `diagnosis/probe_metrics/manifest.json`, `diagnosis/probe_metrics/NOTE.md`.
+- Contrôles Codex cités dans REPORT sans fichier archivé : point de glissement non détecté ajouté en fin de balayage, absence de faux positif de la garde sous bruit ajouté ; non régénérables, non cités.
+- Généralisation des lectures sur sinus glissant à de nouvelles réalisations : demande des sinus de test distincts de ceux du développement.
+- Validation du seuil de compensation des branches sur d'autres données.
+- Énoncés théoriques (équivalence linéaire, norme de Gram, borne triangulaire) : absents de `THEORY.md`, à formaliser.
