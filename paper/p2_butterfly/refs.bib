@@ -1,0 +1,412 @@
+% Bibliographie du dossier P2 (effet papillon). Revue du 2026-10-11.
+% Chaque entrée porte sa source de vérification (ligne « % src: »).
+% Entrées avec DOI : poignée doi.org vérifiée (responseCode 1) et métadonnées CSL
+% (titre, auteurs, année) comparées à l'entrée.
+% Entrées sans DOI : précédées de « % CHECK », vérifiées sur l'enregistrement arXiv,
+% PMLR, NeurIPS, MLSys, OpenReview, l'archive DAFx ou la page de documentation citée.
+% Statut [V]/[NV] de chaque affirmation : voir RELATED.md.
+
+% ---------------------------------------------------------------------------
+% Variance entre runs, graines et reproductibilité
+% ---------------------------------------------------------------------------
+
+% src: proceedings.mlsys.org (citation_* et BibTeX, vol. 3, p. 747-769) + arXiv 2103.03098v1.
+% CHECK
+@inproceedings{bouthillier2021variance,
+  author    = {Xavier Bouthillier and Pierre Delaunay and Mirko Bronzi and Assya Trofimov and Brennan Nichyporuk and Justin Szeto and Nazanin Mohammadi Sepahvand and Edward Raff and Kanika Madan and Vikram Voleti and Samira Ebrahimi Kahou and Vincent Michalski and Tal Arbel and Chris Pal and Ga{\"e}l Varoquaux and Pascal Vincent},
+  title     = {Accounting for Variance in Machine Learning Benchmarks},
+  booktitle = {Proceedings of Machine Learning and Systems (MLSys)},
+  volume    = {3},
+  pages     = {747--769},
+  year      = {2021},
+  eprint    = {2103.03098},
+  url       = {https://proceedings.mlsys.org/paper_files/paper/2021/hash/0184b0cd3cfb185989f858a1d9f5c1eb-Abstract.html}
+}
+
+% src: API arXiv 2109.08203 (v2 du 2023-05-11). Aucune version publiée trouvée.
+% CHECK
+@misc{picard2021seed,
+  author        = {David Picard},
+  title         = {torch.manual\_seed(3407) is all you need: On the influence of random seeds in deep learning architectures for computer vision},
+  year          = {2021},
+  eprint        = {2109.08203},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2109.08203}
+}
+
+% src: API arXiv 2002.06305 (v1). Aucune version publiée trouvée.
+% CHECK
+@misc{dodge2020finetuning,
+  author        = {Jesse Dodge and Gabriel Ilharco and Roy Schwartz and Ali Farhadi and Hannaneh Hajishirzi and Noah Smith},
+  title         = {Fine-Tuning Pretrained Language Models: Weight Initializations, Data Orders, and Early Stopping},
+  year          = {2020},
+  eprint        = {2002.06305},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2002.06305}
+}
+
+% src: page PMLR v139 summers21a (citation_*, p. 9913-9922) + arXiv 2103.04514v3.
+% CHECK
+@inproceedings{summers2021nondeterminism,
+  author    = {Cecilia Summers and Michael J. Dinneen},
+  title     = {Nondeterminism and Instability in Neural Network Optimization},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {139},
+  pages     = {9913--9922},
+  year      = {2021},
+  eprint    = {2103.04514},
+  url       = {https://proceedings.mlr.press/v139/summers21a.html}
+}
+
+% src: proceedings.mlsys.org (citation_* et BibTeX, vol. 4, p. 316-336) + arXiv 2106.11872v1.
+% CHECK
+@inproceedings{zhuang2022randomness,
+  author    = {Donglin Zhuang and Xingyao Zhang and Shuaiwen Leon Song and Sara Hooker},
+  title     = {Randomness in Neural Network Training: Characterizing the Impact of Tooling},
+  booktitle = {Proceedings of Machine Learning and Systems (MLSys)},
+  volume    = {4},
+  pages     = {316--336},
+  year      = {2022},
+  eprint    = {2106.11872},
+  url       = {https://proceedings.mlsys.org/paper_files/paper/2022/hash/427e0e886ebf87538afdf0badb805b7f-Abstract.html}
+}
+
+% src: Crossref et CSL de 10.1145/3324884.3416545 (titre + sous-titre « an analysis of variance », p. 771-783)
+% + PDF auteur (en-tête ASE '20).
+@inproceedings{pham2020variance,
+  author    = {Hung Viet Pham and Shangshu Qian and Jiannan Wang and Thibaud Lutellier and Jonathan Rosenthal and Lin Tan and Yaoliang Yu and Nachiappan Nagappan},
+  title     = {Problems and Opportunities in Training Deep Learning Software Systems: An Analysis of Variance},
+  booktitle = {Proceedings of the 35th IEEE/ACM International Conference on Automated Software Engineering (ASE)},
+  pages     = {771--783},
+  year      = {2020},
+  doi       = {10.1145/3324884.3416545}
+}
+
+% src: API arXiv 2204.07610 (v2 du 2023-04-14). Aucune version publiée trouvée (Crossref).
+% CHECK
+@misc{gundersen2022sources,
+  author        = {Odd Erik Gundersen and Kevin Coakley and Christine Kirkpatrick and Yolanda Gil},
+  title         = {Sources of Irreproducibility in Machine Learning: A Review},
+  year          = {2022},
+  eprint        = {2204.07610},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2204.07610}
+}
+
+% src: OpenReview pEGSdJu52I (venue « ICLR 2024 poster ») + arXiv 2304.01910v4 (en-tête « Published as a
+% conference paper at ICLR 2024 »).
+% CHECK
+@inproceedings{jordan2024variance,
+  author    = {Keller Jordan},
+  title     = {On the Variance of Neural Network Training with respect to Test Sets and Distributions},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024},
+  eprint    = {2304.01910},
+  url       = {https://openreview.net/forum?id=pEGSdJu52I}
+}
+
+% src: Crossref et CSL de 10.18653/v1/D17-1035 (p. 338-348) + PDF ACL Anthology.
+@inproceedings{reimers2017reporting,
+  author    = {Nils Reimers and Iryna Gurevych},
+  title     = {Reporting Score Distributions Makes a Difference: Performance Study of {LSTM}-networks for Sequence Tagging},
+  booktitle = {Proceedings of the 2017 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  pages     = {338--348},
+  year      = {2017},
+  doi       = {10.18653/v1/D17-1035}
+}
+
+% src: Crossref et CSL de 10.1109/ICASSP.2017.7952564 (p. 2287-2291). Texte lu : arXiv 1606.04521v1.
+@inproceedings{vandenberg2017speech,
+  author    = {Ewout van den Berg and Bhuvana Ramabhadran and Michael Picheny},
+  title     = {Training Variance and Performance Evaluation of Neural Networks in Speech},
+  booktitle = {Proceedings of the IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages     = {2287--2291},
+  year      = {2017},
+  doi       = {10.1109/ICASSP.2017.7952564},
+  eprint    = {1606.04521}
+}
+
+% ---------------------------------------------------------------------------
+% Déterminisme de l'entraînement
+% ---------------------------------------------------------------------------
+
+% src: API arXiv 1809.05676 (v5 du 2019-06-09) ; le PDF v5 indique « Presented at the AAAI 2019
+% Workshop on Reproducible AI ». Pas d'actes avec DOI trouvés.
+% CHECK
+@misc{nagarajan2019deterministic,
+  author        = {Prabhat Nagarajan and Garrett Warnell and Peter Stone},
+  title         = {Deterministic Implementations for Reproducibility in Deep Reinforcement Learning},
+  year          = {2019},
+  note          = {AAAI 2019 Workshop on Reproducible AI},
+  eprint        = {1809.05676},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/1809.05676}
+}
+
+% src: page de documentation PyTorch 2.13 (version verrouillée dans uv.lock), lue le 2026-10-11.
+% CHECK
+@misc{pytorch2026reproducibility,
+  author       = {{PyTorch Contributors}},
+  title        = {Reproducibility},
+  howpublished = {PyTorch 2.13 documentation, notes},
+  year         = {2026},
+  url          = {https://docs.pytorch.org/docs/2.13/notes/randomness.html},
+  note         = {Consulté le 2026-10-11}
+}
+
+% src: page de documentation PyTorch 2.13 (version verrouillée dans uv.lock), lue le 2026-10-11.
+% CHECK
+@misc{pytorch2026plateau,
+  author       = {{PyTorch Contributors}},
+  title        = {torch.optim.lr\_scheduler.{ReduceLROnPlateau}},
+  howpublished = {PyTorch 2.13 documentation},
+  year         = {2026},
+  url          = {https://docs.pytorch.org/docs/2.13/generated/torch.optim.lr_scheduler.ReduceLROnPlateau.html},
+  note         = {Consulté le 2026-10-11}
+}
+
+% ---------------------------------------------------------------------------
+% Chaos, effet papillon et connectivité des modes
+% ---------------------------------------------------------------------------
+
+% src: page PMLR v267 altintas25a (citation_*, p. 1314-1342) + PDF PMLR (ordre des auteurs Altıntaş,
+% Kwok, Raffel, Rolnick ; contribution égale des deux premiers). La v1 arXiv 2506.13234 place Kwok en
+% premier : c'est la « Kwok et al. 2025 » de diagnosis/butterfly/pilot_A.md.
+% CHECK
+@inproceedings{altintas2025butterfly,
+  author    = {G{\"u}l Sena Alt{\i}nta{\c{s}} and Devin Kwok and Colin Raffel and David Rolnick},
+  title     = {The Butterfly Effect: Neural Network Training Trajectories Are Highly Sensitive to Initial Conditions},
+  booktitle = {Proceedings of the 42nd International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {267},
+  pages     = {1314--1342},
+  year      = {2025},
+  eprint    = {2506.13234},
+  url       = {https://proceedings.mlr.press/v267/altintas25a.html}
+}
+
+% src: page et BibTeX NeurIPS 2020 (vol. 33, p. 5850-5861) + arXiv 2010.15110v1.
+% CHECK
+@inproceedings{fort2020kernel,
+  author    = {Stanislav Fort and Gintare Karolina Dziugaite and Mansheej Paul and Sepideh Kharaghani and Daniel M. Roy and Surya Ganguli},
+  title     = {Deep learning versus kernel learning: an empirical study of loss landscape geometry and the time evolution of the Neural Tangent Kernel},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {33},
+  pages     = {5850--5861},
+  year      = {2020},
+  eprint    = {2010.15110},
+  url       = {https://proceedings.neurips.cc/paper_files/paper/2020/hash/405075699f065e43581f27d67bb68478-Abstract.html}
+}
+
+% src: page NeurIPS 2022 (citation_*, vol. 35, p. 5219-5229) + CSL de 10.52202/068431-0377.
+@inproceedings{herrmann2022chaotic,
+  author    = {Luis Herrmann and Maximilian Granz and Tim Landgraf},
+  title     = {Chaotic Dynamics are Intrinsic to Neural Network Training with {SGD}},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {35},
+  pages     = {5219--5229},
+  year      = {2022},
+  doi       = {10.52202/068431-0377}
+}
+
+% src: page PMLR v119 frankle20a (citation_*, p. 3259-3269) + arXiv 1912.05671v4.
+% CHECK
+@inproceedings{frankle2020lmc,
+  author    = {Jonathan Frankle and Gintare Karolina Dziugaite and Daniel M. Roy and Michael Carbin},
+  title     = {Linear Mode Connectivity and the Lottery Ticket Hypothesis},
+  booktitle = {Proceedings of the 37th International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {119},
+  pages     = {3259--3269},
+  year      = {2020},
+  eprint    = {1912.05671},
+  url       = {https://proceedings.mlr.press/v119/frankle20a.html}
+}
+
+% src: page et BibTeX NeurIPS 2018 (vol. 31 ; pages absentes du BibTeX officiel, donc omises)
+% + arXiv 1802.10026v4.
+% CHECK
+@inproceedings{garipov2018loss,
+  author    = {Timur Garipov and Pavel Izmailov and Dmitrii Podoprikhin and Dmitry Vetrov and Andrew Gordon Wilson},
+  title     = {Loss Surfaces, Mode Connectivity, and Fast Ensembling of {DNNs}},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {31},
+  year      = {2018},
+  eprint    = {1802.10026},
+  url       = {https://proceedings.neurips.cc/paper_files/paper/2018/hash/be3087e74e9100d4bc4c6268cdbe8456-Abstract.html}
+}
+
+% src: page PMLR v80 draxler18a (citation_*, p. 1309-1318 ; la journal-ref arXiv écrit 1308-1317,
+% la page PMLR fait foi) + arXiv 1803.00885v5.
+% CHECK
+@inproceedings{draxler2018barriers,
+  author    = {Felix Draxler and Kambis Veschgini and Manfred Salmhofer and Fred A. Hamprecht},
+  title     = {Essentially No Barriers in Neural Network Energy Landscape},
+  booktitle = {Proceedings of the 35th International Conference on Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {80},
+  pages     = {1309--1318},
+  year      = {2018},
+  eprint    = {1803.00885},
+  url       = {https://proceedings.mlr.press/v80/draxler18a.html}
+}
+
+% src: API arXiv 2510.05606 (v2 ; commentaire « To be published in Nature Machine Intelligence »).
+% Aucun DOI éditeur trouvé sur Crossref le 2026-10-11 : citer la prépublication.
+% CHECK
+@misc{ly2025fractal,
+  author        = {Andrew Ly and Pulin Gong},
+  title         = {Fractal basin geometry and the limits to predictability and reproducibility in deep learning},
+  year          = {2025},
+  eprint        = {2510.05606},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2510.05606}
+}
+
+% ---------------------------------------------------------------------------
+% Arrêt anticipé et décisions pilotées par la validation
+% ---------------------------------------------------------------------------
+
+% src: Crossref et CSL de 10.1007/3-540-49430-8_3 (livre « Neural Networks: Tricks of the Trade »,
+% LNCS, p. 55-69). Texte lu : prépublication de l'auteur (1997).
+@incollection{prechelt1998early,
+  author    = {Lutz Prechelt},
+  title     = {Early Stopping -- But When?},
+  booktitle = {Neural Networks: Tricks of the Trade},
+  series    = {Lecture Notes in Computer Science},
+  publisher = {Springer},
+  pages     = {55--69},
+  year      = {1998},
+  doi       = {10.1007/3-540-49430-8_3}
+}
+
+% ---------------------------------------------------------------------------
+% Comparaison statistique de procédures d'apprentissage
+% ---------------------------------------------------------------------------
+
+% src: Crossref et CSL de 10.1162/089976698300017197 (vol. 10, no 7, p. 1895-1923). Texte lu :
+% prépublication de l'auteur (1997-12-30).
+@article{dietterich1998approximate,
+  author  = {Thomas G. Dietterich},
+  title   = {Approximate Statistical Tests for Comparing Supervised Classification Learning Algorithms},
+  journal = {Neural Computation},
+  volume  = {10},
+  number  = {7},
+  pages   = {1895--1923},
+  year    = {1998},
+  doi     = {10.1162/089976698300017197}
+}
+
+% src: page NeurIPS 2021 (citation_*, vol. 34, p. 29304-29320) + arXiv 2108.13264v4.
+% CHECK
+@inproceedings{agarwal2021precipice,
+  author    = {Rishabh Agarwal and Max Schwarzer and Pablo Samuel Castro and Aaron Courville and Marc G. Bellemare},
+  title     = {Deep Reinforcement Learning at the Edge of the Statistical Precipice},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {34},
+  pages     = {29304--29320},
+  year      = {2021},
+  eprint    = {2108.13264},
+  url       = {https://proceedings.neurips.cc/paper_files/paper/2021/hash/f514cec81cb148559cf475e7426eed5e-Abstract.html}
+}
+
+% ---------------------------------------------------------------------------
+% Modèles neuronaux d'effets audio et variance en audio
+% ---------------------------------------------------------------------------
+
+% src: archive DAFx (details/tieFMcaohHBxl_2yPyIGFA) + en-tête du PDF (DAFx-19, Birmingham).
+% CHECK
+@inproceedings{wright2019realtime,
+  author    = {Alec Wright and Eero-Pekka Damsk{\"a}gg and Vesa V{\"a}lim{\"a}ki},
+  title     = {Real-Time Black-Box Modelling With Recurrent Neural Networks},
+  booktitle = {Proceedings of the 22nd International Conference on Digital Audio Effects (DAFx-19)},
+  address   = {Birmingham, UK},
+  year      = {2019},
+  url       = {https://dafx.de/paper-archive/details/tieFMcaohHBxl_2yPyIGFA}
+}
+
+% src: Crossref et CSL de 10.3389/frsip.2025.1580395 (vol. 5, art. 1580395). Texte lu : arXiv 2502.14405v1.
+@article{comunita2025frontiers,
+  author  = {Marco Comunit{\`a} and Christian J. Steinmetz and Joshua D. Reiss},
+  title   = {Differentiable Black-box and Gray-box Modeling of Nonlinear Audio Effects},
+  journal = {Frontiers in Signal Processing},
+  volume  = {5},
+  note    = {Art. no. 1580395},
+  year    = {2025},
+  doi     = {10.3389/frsip.2025.1580395},
+  eprint  = {2502.14405}
+}
+
+% src: API arXiv 2502.11668 (v2 du 2025-02-25). Aucune version publiée trouvée (Crossref).
+% CHECK
+@misc{comunita2025nablafx,
+  author        = {Marco Comunit{\`a} and Christian J. Steinmetz and Joshua D. Reiss},
+  title         = {{NablAFx}: A Framework for Differentiable Black-box and Gray-box Modeling of Audio Effects},
+  year          = {2025},
+  eprint        = {2502.11668},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2502.11668}
+}
+
+% src: Crossref et CSL de 10.1186/s13636-025-00416-3 (vol. 2025, no 1, art. 30) + arXiv 2405.04124 (texte lu).
+@article{simionato2025ssm,
+  author  = {Riccardo Simionato and Stefano Fasciani},
+  title   = {Comparative Study of State-based Neural Networks for Virtual Analog Audio Effects Modeling},
+  journal = {EURASIP Journal on Audio, Speech, and Music Processing},
+  volume  = {2025},
+  number  = {1},
+  note    = {Art. no. 30},
+  year    = {2025},
+  doi     = {10.1186/s13636-025-00416-3},
+  eprint  = {2405.04124}
+}
+
+% src: archive DAFx (details/mhMH4Cb9dPokNgyPfAMdBQ) + arXiv 2505.04082v2 (en-tête DAFx25, Ancona).
+% CHECK
+@inproceedings{sato2025aliasing,
+  author    = {Ryota Sato and Julius O. Smith III},
+  title     = {Aliasing Reduction in Neural Amp Modeling by Smoothing Activations},
+  booktitle = {Proceedings of the 28th International Conference on Digital Audio Effects (DAFx25)},
+  address   = {Ancona, Italy},
+  year      = {2025},
+  eprint    = {2505.04082},
+  url       = {https://dafx.de/paper-archive/details/mhMH4Cb9dPokNgyPfAMdBQ}
+}
+
+% src: archive DAFx (details/delH19nOMHUMkmpV_0BY8w) + arXiv 2512.07393v1 (journal-ref DAFx25, Ancona).
+% CHECK
+@inproceedings{bourdin2025tbptt,
+  author    = {Yann Bourdin and Pierrick Legrand and Fanny Roche},
+  title     = {Empirical Results for Adjusting Truncated Backpropagation Through Time while Training Neural Audio Effects},
+  booktitle = {Proceedings of the 28th International Conference on Digital Audio Effects (DAFx25)},
+  address   = {Ancona, Italy},
+  year      = {2025},
+  eprint    = {2512.07393},
+  url       = {https://dafx.de/paper-archive/details/delH19nOMHUMkmpV_0BY8w}
+}
+
+% src: Crossref et CSL de 10.1186/s13636-024-00347-5 (vol. 2024, no 1, art. 26). Texte intégral non
+% obtenu (éditeur et dépôts institutionnels refusent l'accès automatisé) : affirmations [NV].
+@article{mikkonen2024sampling,
+  author  = {Otto Mikkonen and Alec Wright and Vesa V{\"a}lim{\"a}ki},
+  title   = {Sampling the User Controls in Neural Modeling of Audio Devices},
+  journal = {EURASIP Journal on Audio, Speech, and Music Processing},
+  volume  = {2024},
+  number  = {1},
+  note    = {Art. no. 26},
+  year    = {2024},
+  doi     = {10.1186/s13636-024-00347-5}
+}
+
+% src: API arXiv 2603.09187 (v1 du 2026-03-10). Aucune version publiée trouvée (Crossref) ; une
+% prépublication voisine des mêmes auteurs existe (arXiv 2609.21918), non lue.
+% CHECK
+@misc{magron2026bsrnn,
+  author        = {Paul Magron and Romain Serizel and Constance Douwes},
+  title         = {The Costs of Reproducibility in Music Separation Research: a Replication of Band-Split {RNN}},
+  year          = {2026},
+  eprint        = {2603.09187},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2603.09187}
+}

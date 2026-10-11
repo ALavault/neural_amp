@@ -1,0 +1,1512 @@
+{
+ "proto_lr": {
+  "value": 0.01,
+  "text": "0,01",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json"
+ },
+ "proto_mrstft_weight": {
+  "value": 0.1,
+  "text": "0,1",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json"
+ },
+ "proto_clip": {
+  "value": 1,
+  "text": "1",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json"
+ },
+ "proto_params_ssm": {
+  "value": 11329,
+  "text": "11 329",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json"
+ },
+ "proto_params_s4": {
+  "value": 70193,
+  "text": "70 193",
+  "source": "demo/nablafx_bench/s4tfl16_seed42.json"
+ },
+ "proto_params_ratio": {
+  "value": 6.195869008738636,
+  "text": "6,2",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/s4tfl16_seed42.json"
+ },
+ "proto_theta": {
+  "value": 0.0001,
+  "text": "1·10⁻⁴",
+  "source": "demo/nablafx_bench/pilotC_decide_seed42.json"
+ },
+ "proto_inverted_esr": {
+  "value": 3.9451358318328857,
+  "text": "3,95",
+  "source": "paper/icassp2027/data/polarity_ssmzoh_seed42.json"
+ },
+ "proto_inverted_negated_esr": {
+  "value": 0.05235747992992401,
+  "text": "0,052",
+  "source": "paper/icassp2027/data/polarity_ssmzoh_seed42.json"
+ },
+ "proto_inverted_step": {
+  "value": 5100,
+  "text": "5 100",
+  "source": "paper/icassp2027/data/polarity_ssmzoh_seed42.json"
+ },
+ "proto_two_mean_abs": {
+  "value": 0.02988974004983902,
+  "text": "0,0299",
+  "source": "paper/icassp2027/data/polarity_ssmzoh_seed42.json"
+ },
+ "proto_published_inverted_n": {
+  "value": 3,
+  "text": "3",
+  "source": "paper/icassp2027/data/published_bigmuff.json"
+ },
+ "proto_published_l1_min": {
+  "value": 0.0293,
+  "text": "0,0293",
+  "source": "paper/icassp2027/data/published_bigmuff.json"
+ },
+ "proto_published_l1_max": {
+  "value": 0.0295,
+  "text": "0,0295",
+  "source": "paper/icassp2027/data/published_bigmuff.json"
+ },
+ "proto_guard_runs": {
+  "value": 9,
+  "text": "9",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed42_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed43_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed44.json; demo/nablafx_bench/ssmzoh_guard_seed44_repeat.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed42.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed43.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed44.json"
+ },
+ "proto_guard_flips": {
+  "value": 21,
+  "text": "21",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed42_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed43_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed44.json; demo/nablafx_bench/ssmzoh_guard_seed44_repeat.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed42.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed43.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed44.json"
+ },
+ "proto_guard_last_epoch": {
+  "value": 20,
+  "text": "20",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed42_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed43_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed44.json; demo/nablafx_bench/ssmzoh_guard_seed44_repeat.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed42.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed43.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed44.json"
+ },
+ "bench_ssm_gmean": {
+  "value": 0.06778061396645474,
+  "text": "0,068",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed42_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed43_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed44.json; demo/nablafx_bench/ssmzoh_guard_seed44_repeat.json"
+ },
+ "bench_s4_changes_gmean": {
+  "value": 0.12357128685500364,
+  "text": "0,124",
+  "source": "demo/nablafx_bench/s4tfl16_nowd_guard_seed42.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed43.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed44.json"
+ },
+ "bench_s4_released_gmean": {
+  "value": 0.136143686933728,
+  "text": "0,136",
+  "source": "demo/nablafx_bench/s4tfl16_seed42.json; demo/nablafx_bench/s4tfl16_seed43.json; demo/nablafx_bench/s4tfl16_seed44.json"
+ },
+ "bench_gmean_ratio": {
+  "value": 1.8231066321730314,
+  "text": "1,8",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed42_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed43_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed44.json; demo/nablafx_bench/ssmzoh_guard_seed44_repeat.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed42.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed43.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed44.json"
+ },
+ "bench_mw_pmin": {
+  "value": 0.1,
+  "text": "0,10",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed44.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed42.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed43.json; demo/nablafx_bench/s4tfl16_nowd_guard_seed44.json"
+ },
+ "bench_raw_sd": {
+  "value": 0.45220880066578106,
+  "text": "0,452",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed42_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed43_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed44.json; demo/nablafx_bench/ssmzoh_guard_seed44_repeat.json"
+ },
+ "bench_se_share_min": {
+  "value": 19,
+  "text": "19",
+  "source": "diagnosis/seeds/spread.txt"
+ },
+ "bench_se_share_max": {
+  "value": 24,
+  "text": "24",
+  "source": "diagnosis/seeds/spread.txt"
+ },
+ "seed_global_f_min": {
+  "value": 9.34245953774792,
+  "text": "9",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "seed_global_f_max": {
+  "value": 36.33608787785807,
+  "text": "36",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "seed_run_sd_ssm": {
+  "value": 0.5258538092157684,
+  "text": "0,53",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "seed_run_sd_s4_changes": {
+  "value": 0.27369647660311874,
+  "text": "0,27",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "seed_run_sd_s4_released": {
+  "value": 0.16184580004402044,
+  "text": "0,16",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "nested_within_sd": {
+  "value": 0.18478931034830862,
+  "text": "0,18",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "nested_seed_sd": {
+  "value": 0.3653307293936614,
+  "text": "0,37",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "nested_f": {
+  "value": 8.817154837609287,
+  "text": "8,8",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "nested_p": {
+  "value": 0.05543664843417974,
+  "text": "0,06",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "nested_seed_share": {
+  "value": 0.7962749866857506,
+  "text": "80",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "nested_gpu_factor": {
+  "value": 1.550360465381513,
+  "text": "1,55",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "nested_within_ci_lo": {
+  "value": 0.10468121263615508,
+  "text": "0,10",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "nested_within_ci_hi": {
+  "value": 0.6889956797012736,
+  "text": "0,69",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "seed_segment_ratio_min": {
+  "value": 0.8340069432971541,
+  "text": "0,83",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "seed_segment_ratio_max": {
+  "value": 8.819749710361037,
+  "text": "8,82",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "seed_segment_ratio_median": {
+  "value": 3.300997368286558,
+  "text": "3,30",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "seed_segment_ratio_logmedian": {
+  "value": 1.1942246556234064,
+  "text": "1,19",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "seed_segment_ratio_sdlog": {
+  "value": 0.6288693210149126,
+  "text": "0,629",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "s4_within_sd": {
+  "value": 0.24793232805920354,
+  "text": "0,248",
+  "source": "diagnosis/seeds/s4_nested_verdict.json"
+ },
+ "s4_seed_sd": {
+  "value": 0.0,
+  "text": "0",
+  "source": "diagnosis/seeds/s4_nested_verdict.json"
+ },
+ "s4_f": {
+  "value": 0.1547421882636279,
+  "text": "0,15",
+  "source": "diagnosis/seeds/s4_nested_verdict.json"
+ },
+ "s4_p": {
+  "value": 0.863060775674872,
+  "text": "0,86",
+  "source": "diagnosis/seeds/s4_nested_verdict.json"
+ },
+ "s4_gpu_factor": {
+  "value": 1.6474124288561927,
+  "text": "1,65",
+  "source": "diagnosis/seeds/s4_nested_verdict.json"
+ },
+ "s4_stop_repeat": {
+  "value": 905,
+  "text": "905",
+  "source": "demo/nablafx_bench/s4tfl16_seed42_repeat.json; demo/nablafx_bench/s4tfl16_seed42_redo.json"
+ },
+ "s4_stop_redo": {
+  "value": 403,
+  "text": "403",
+  "source": "demo/nablafx_bench/s4tfl16_seed42_repeat.json; demo/nablafx_bench/s4tfl16_seed42_redo.json"
+ },
+ "rank_seed_run_effect": {
+  "value": 0.3753935570710388,
+  "text": "0,375",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_seed_segment_effect": {
+  "value": 1.0164883128248603,
+  "text": "1,016",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_seed_interaction": {
+  "value": 0.24062187534106536,
+  "text": "0,241",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_interaction_share": {
+  "value": 0.6409856291047918,
+  "text": "64",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_child_run_effect": {
+  "value": 0.10955381860424153,
+  "text": "0,110",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_seed_kept": {
+  "value": 0.5909,
+  "text": "59",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_seed_reordered": {
+  "value": 0.4091,
+  "text": "41",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_child_kept": {
+  "value": 0.167,
+  "text": "17",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_seed_run_effect_best": {
+  "value": 0.3756506754992822,
+  "text": "0,376",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_child_run_effect_best": {
+  "value": 0.10878397965632608,
+  "text": "0,109",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_best_last_runs": {
+  "value": 15,
+  "text": "15",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_best_last_max_gap": {
+  "value": 0.0005716163044174535,
+  "text": "0,0006",
+  "source": "diagnosis/seeds/variance_sources.json"
+ },
+ "rank_val_children_kept": {
+  "value": 0.1561,
+  "text": "15,6",
+  "source": "diagnosis/butterfly/validation_noise.json"
+ },
+ "pilot_e_sd": {
+  "value": 0.19140227441506613,
+  "text": "0,191",
+  "source": "demo/nablafx_bench/splitfix_seed42.json; demo/nablafx_bench/splitfix_seed43.json; demo/nablafx_bench/splitfix_seed44.json; demo/nablafx_bench/splitfix_seed45.json; demo/nablafx_bench/splitfix_seed46.json; demo/nablafx_bench/splitfix_seed47.json"
+ },
+ "pilot_e_gmean": {
+  "value": 0.08314929203807522,
+  "text": "0,0831",
+  "source": "demo/nablafx_bench/splitfix_seed42.json; demo/nablafx_bench/splitfix_seed43.json; demo/nablafx_bench/splitfix_seed44.json; demo/nablafx_bench/splitfix_seed45.json; demo/nablafx_bench/splitfix_seed46.json; demo/nablafx_bench/splitfix_seed47.json"
+ },
+ "pilot_e_threshold": {
+  "value": 0.25,
+  "text": "0,25",
+  "source": "diagnosis/seeds/pilot_E_split.md"
+ },
+ "pilot_e_ci_lo": {
+  "value": 0.119474831340454,
+  "text": "0,12",
+  "source": "demo/nablafx_bench/splitfix_seed42.json; demo/nablafx_bench/splitfix_seed43.json; demo/nablafx_bench/splitfix_seed44.json; demo/nablafx_bench/splitfix_seed45.json; demo/nablafx_bench/splitfix_seed46.json; demo/nablafx_bench/splitfix_seed47.json"
+ },
+ "pilot_e_ci_hi": {
+  "value": 0.4694358956703511,
+  "text": "0,47",
+  "source": "demo/nablafx_bench/splitfix_seed42.json; demo/nablafx_bench/splitfix_seed43.json; demo/nablafx_bench/splitfix_seed44.json; demo/nablafx_bench/splitfix_seed45.json; demo/nablafx_bench/splitfix_seed46.json; demo/nablafx_bench/splitfix_seed47.json"
+ },
+ "pilot_e_var_ratio": {
+  "value": 3.846621376031922,
+  "text": "3,8",
+  "source": "diagnosis/seeds/variance_sources.json; demo/nablafx_bench/splitfix_seed42.json; demo/nablafx_bench/splitfix_seed43.json; demo/nablafx_bench/splitfix_seed44.json; demo/nablafx_bench/splitfix_seed45.json; demo/nablafx_bench/splitfix_seed46.json; demo/nablafx_bench/splitfix_seed47.json"
+ },
+ "pilot_e_nondeterministic": {
+  "value": 6,
+  "text": "6",
+  "source": "demo/nablafx_bench/splitfix_seed42.json; demo/nablafx_bench/splitfix_seed43.json; demo/nablafx_bench/splitfix_seed44.json; demo/nablafx_bench/splitfix_seed45.json; demo/nablafx_bench/splitfix_seed46.json; demo/nablafx_bench/splitfix_seed47.json"
+ },
+ "pilot_e_runs": {
+  "value": 6,
+  "text": "6",
+  "source": "demo/nablafx_bench/splitfix_seed42.json; demo/nablafx_bench/splitfix_seed43.json; demo/nablafx_bench/splitfix_seed44.json; demo/nablafx_bench/splitfix_seed45.json; demo/nablafx_bench/splitfix_seed46.json; demo/nablafx_bench/splitfix_seed47.json"
+ },
+ "pilot_f_theta": {
+  "value": 0.02,
+  "text": "2·10⁻²",
+  "source": "demo/nablafx_bench/plateau2e2_seed42.json"
+ },
+ "pilot_f_sd": {
+  "value": 0.3441187700176918,
+  "text": "0,344",
+  "source": "demo/nablafx_bench/plateau2e2_seed42.json; demo/nablafx_bench/plateau2e2_seed42_repeat.json; demo/nablafx_bench/plateau2e2_seed43.json; demo/nablafx_bench/plateau2e2_seed43_repeat.json; demo/nablafx_bench/plateau2e2_seed44.json; demo/nablafx_bench/plateau2e2_seed44_repeat.json"
+ },
+ "pilot_f_gmean": {
+  "value": 0.1597521432164016,
+  "text": "0,160",
+  "source": "demo/nablafx_bench/plateau2e2_seed42.json; demo/nablafx_bench/plateau2e2_seed42_repeat.json; demo/nablafx_bench/plateau2e2_seed43.json; demo/nablafx_bench/plateau2e2_seed43_repeat.json; demo/nablafx_bench/plateau2e2_seed44.json; demo/nablafx_bench/plateau2e2_seed44_repeat.json"
+ },
+ "pilot_f_quality_factor": {
+  "value": 2.3569002088925375,
+  "text": "2,4",
+  "source": "demo/nablafx_bench/plateau2e2_seed42.json; demo/nablafx_bench/plateau2e2_seed42_repeat.json; demo/nablafx_bench/plateau2e2_seed43.json; demo/nablafx_bench/plateau2e2_seed43_repeat.json; demo/nablafx_bench/plateau2e2_seed44.json; demo/nablafx_bench/plateau2e2_seed44_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed42_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed43_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed44.json; demo/nablafx_bench/ssmzoh_guard_seed44_repeat.json"
+ },
+ "pilot_f_steps": {
+  "value": 3290,
+  "text": "3 290",
+  "source": "demo/nablafx_bench/plateau2e2_seed42.json; demo/nablafx_bench/plateau2e2_seed42_repeat.json; demo/nablafx_bench/plateau2e2_seed43.json; demo/nablafx_bench/plateau2e2_seed43_repeat.json; demo/nablafx_bench/plateau2e2_seed44.json; demo/nablafx_bench/plateau2e2_seed44_repeat.json"
+ },
+ "pilot_f_steps_ref": {
+  "value": 5778,
+  "text": "5 778",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed42_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed43_repeat.json; demo/nablafx_bench/ssmzoh_guard_seed44.json; demo/nablafx_bench/ssmzoh_guard_seed44_repeat.json"
+ },
+ "plateau_sim_sd_protocol": {
+  "value": 49.934957694985584,
+  "text": "50",
+  "source": "diagnosis/seeds/plateau_simulation.json"
+ },
+ "plateau_sim_sd_min": {
+  "value": 14.39791651594077,
+  "text": "14",
+  "source": "diagnosis/seeds/plateau_simulation.json"
+ },
+ "plateau_sim_count_at_min_lo": {
+  "value": 22,
+  "text": "22",
+  "source": "diagnosis/seeds/plateau_simulation.json"
+ },
+ "plateau_sim_count_at_min_hi": {
+  "value": 23,
+  "text": "23",
+  "source": "diagnosis/seeds/plateau_simulation.json"
+ },
+ "plateau_sim_thresholds": {
+  "value": 8,
+  "text": "8",
+  "source": "diagnosis/seeds/plateau_simulation.json"
+ },
+ "plateau_whole_run_ratio_min": {
+  "value": 44.49722878546762,
+  "text": "44",
+  "source": "diagnosis/butterfly/plateau_margin.json"
+ },
+ "plateau_whole_run_ratio_max": {
+  "value": 87.71789702120257,
+  "text": "88",
+  "source": "diagnosis/butterfly/plateau_margin.json"
+ },
+ "plateau_local_fluct_min": {
+  "value": 0.037096659877805555,
+  "text": "3,7",
+  "source": "diagnosis/butterfly/plateau_margin.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "plateau_local_fluct_max": {
+  "value": 0.06772579311663354,
+  "text": "6,8",
+  "source": "diagnosis/butterfly/plateau_margin.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "plateau_local_ratio_min": {
+  "value": 370.9665987780555,
+  "text": "370",
+  "source": "diagnosis/butterfly/plateau_margin.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "plateau_local_ratio_max": {
+  "value": 677.2579311663354,
+  "text": "680",
+  "source": "diagnosis/butterfly/plateau_margin.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "plateau_halvings_n": {
+  "value": 15,
+  "text": "15",
+  "source": "diagnosis/butterfly/plateau_margin.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "plateau_margin_min": {
+  "value": 0.003550355268857116,
+  "text": "0,00",
+  "source": "diagnosis/butterfly/plateau_margin.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "plateau_margin_max_main": {
+  "value": 0.5390128676007413,
+  "text": "0,54",
+  "source": "diagnosis/butterfly/plateau_margin.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "plateau_margin_outlier": {
+  "value": 1.1790916533211373,
+  "text": "1,18",
+  "source": "diagnosis/butterfly/plateau_margin.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "plateau_margins_below_one": {
+  "value": 14,
+  "text": "14",
+  "source": "diagnosis/butterfly/plateau_margin.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "plateau_k0_first_margin": {
+  "value": 0.5390128676007413,
+  "text": "0,54",
+  "source": "diagnosis/butterfly/plateau_margin.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "mq_replay_exact": {
+  "value": 8,
+  "text": "8",
+  "source": "diagnosis/seeds/plateau_simulation.py; diagnosis/seeds/monitored_quantity.py; demo/runs/nablafx_pilotC_decide_seed42/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed43/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed44/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed45/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed46/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed47/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed48/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed49/logs/metrics.csv"
+ },
+ "mq_runs": {
+  "value": 8,
+  "text": "8",
+  "source": "diagnosis/seeds/plateau_simulation.py; diagnosis/seeds/monitored_quantity.py; demo/runs/nablafx_pilotC_decide_seed42/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed43/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed44/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed45/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed46/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed47/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed48/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed49/logs/metrics.csv"
+ },
+ "mq_total_median": {
+  "value": 200,
+  "text": "200",
+  "source": "diagnosis/seeds/plateau_simulation.py; diagnosis/seeds/monitored_quantity.py; demo/runs/nablafx_pilotC_decide_seed42/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed43/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed44/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed45/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed46/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed47/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed48/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed49/logs/metrics.csv"
+ },
+ "mq_esr_median": {
+  "value": 36,
+  "text": "36",
+  "source": "diagnosis/seeds/plateau_simulation.py; diagnosis/seeds/monitored_quantity.py; demo/runs/nablafx_pilotC_decide_seed42/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed43/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed44/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed45/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed46/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed47/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed48/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed49/logs/metrics.csv"
+ },
+ "mq_total_sd": {
+  "value": 54.85288766978714,
+  "text": "55",
+  "source": "diagnosis/seeds/plateau_simulation.py; diagnosis/seeds/monitored_quantity.py; demo/runs/nablafx_pilotC_decide_seed42/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed43/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed44/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed45/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed46/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed47/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed48/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed49/logs/metrics.csv"
+ },
+ "mq_esr_sd": {
+  "value": 111.16389123400509,
+  "text": "111",
+  "source": "diagnosis/seeds/plateau_simulation.py; diagnosis/seeds/monitored_quantity.py; demo/runs/nablafx_pilotC_decide_seed42/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed43/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed44/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed45/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed46/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed47/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed48/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed49/logs/metrics.csv"
+ },
+ "mq_mrstft_same": {
+  "value": 7,
+  "text": "7",
+  "source": "diagnosis/seeds/plateau_simulation.py; diagnosis/seeds/monitored_quantity.py; demo/runs/nablafx_pilotC_decide_seed42/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed43/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed44/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed45/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed46/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed47/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed48/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed49/logs/metrics.csv"
+ },
+ "mq_l1_same": {
+  "value": 1,
+  "text": "1",
+  "source": "diagnosis/seeds/plateau_simulation.py; diagnosis/seeds/monitored_quantity.py; demo/runs/nablafx_pilotC_decide_seed42/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed43/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed44/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed45/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed46/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed47/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed48/logs/metrics.csv; demo/runs/nablafx_pilotC_decide_seed49/logs/metrics.csv"
+ },
+ "pilot_a_s_decide": {
+  "value": 0.15575224353510503,
+  "text": "0,156",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_s_replay": {
+  "value": 0.008731463758941347,
+  "text": "0,009",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_delta_ratio": {
+  "value": 13.211598550147954,
+  "text": "13,2",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_threshold_s": {
+  "value": 0.1,
+  "text": "0,10",
+  "source": "diagnosis/butterfly/pilot_A.md"
+ },
+ "pilot_a_replay_bound": {
+  "value": 0.07787612176755251,
+  "text": "0,078",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_p0_s": {
+  "value": 0.2072975018519598,
+  "text": "0,207",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_control_esr": {
+  "value": 0.03413549065589905,
+  "text": "0,0341",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_decide_esr_max": {
+  "value": 0.0511629544198513,
+  "text": "0,0512",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_replay_esr_min": {
+  "value": 0.03336688503623009,
+  "text": "0,0334",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_out_decide_min": {
+  "value": 0.0008727135718800128,
+  "text": "8,7·10⁻⁴",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_out_decide_max": {
+  "value": 0.007237725425511599,
+  "text": "7,2·10⁻³",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_out_replay_min": {
+  "value": 0.00041869666893035173,
+  "text": "4,2·10⁻⁴",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_out_replay_max": {
+  "value": 0.0007251271745190024,
+  "text": "7,3·10⁻⁴",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_k1_delta": {
+  "value": 0.40467809892246454,
+  "text": "0,405",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_k1_first_halving": {
+  "value": 35,
+  "text": "35",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_control_first_halving": {
+  "value": 113,
+  "text": "113",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_runs_per_arm": {
+  "value": 5,
+  "text": "5",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "pilot_a_largest_nudge": {
+  "value": 9.5367431640625e-07,
+  "text": "9,54·10⁻⁷",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork5_s_decide": {
+  "value": 0.2072975018519598,
+  "text": "0,207",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork5_s_replay": {
+  "value": 0.3652498365964745,
+  "text": "0,365",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork5_delta_ratio": {
+  "value": 0.5769278091899261,
+  "text": "0,58",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork5_replay_bound": {
+  "value": 0.1036487509259799,
+  "text": "0,104",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork5_replay_k1_delta": {
+  "value": 0.74953703941362,
+  "text": "0,75",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork25_s_decide": {
+  "value": 0.10644192571621591,
+  "text": "0,106",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork25_s_replay": {
+  "value": 0.0557763169455881,
+  "text": "0,056",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork25_s_ratio": {
+  "value": 0.5240070260875678,
+  "text": "0,52",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork25_delta_ratio": {
+  "value": 0.9868155494955553,
+  "text": "0,99",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork5_containment": {
+  "value": 1.7619596634469592,
+  "text": "1,76",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork25_containment": {
+  "value": 0.5240070260875678,
+  "text": "0,52",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "fork100_containment": {
+  "value": 0.056059954969273754,
+  "text": "0,06",
+  "source": "diagnosis/butterfly/pilot_A_results.json"
+ },
+ "decided_big_pairs": {
+  "value": 4,
+  "text": "4",
+  "source": "diagnosis/butterfly/decided_when.json"
+ },
+ "decided_big_first": {
+  "value": 98,
+  "text": "98",
+  "source": "diagnosis/butterfly/decided_when.json"
+ },
+ "decided_big_last": {
+  "value": 191,
+  "text": "191",
+  "source": "diagnosis/butterfly/decided_when.json"
+ },
+ "decided_big_gap_min": {
+  "value": 0.29222745006932604,
+  "text": "0,29",
+  "source": "diagnosis/butterfly/decided_when.json"
+ },
+ "decided_small_gap_max": {
+  "value": 0.11245064885313842,
+  "text": "0,11",
+  "source": "diagnosis/butterfly/decided_when.json"
+ },
+ "decided_small_first": {
+  "value": 269,
+  "text": "269",
+  "source": "diagnosis/butterfly/decided_when.json"
+ },
+ "decided_small_last": {
+  "value": 652,
+  "text": "652",
+  "source": "diagnosis/butterfly/decided_when.json"
+ },
+ "decided_small_never": {
+  "value": 2,
+  "text": "2",
+  "source": "diagnosis/butterfly/decided_when.json"
+ },
+ "decided_control_stop": {
+  "value": 922,
+  "text": "922",
+  "source": "diagnosis/butterfly/decided_when.json"
+ },
+ "decided_val_sd_decide": {
+  "value": 0.03153213577091105,
+  "text": "0,032",
+  "source": "diagnosis/butterfly/pilot_A_results.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "decided_test_over_val_decide": {
+  "value": 4.939476496824843,
+  "text": "4,9",
+  "source": "diagnosis/butterfly/pilot_A_results.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "decided_beyond_two_decide": {
+  "value": 2.4697382484124213,
+  "text": "2,5",
+  "source": "diagnosis/butterfly/pilot_A_results.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv"
+ },
+ "decided_val_sd_replay": {
+  "value": 0.002279002649499371,
+  "text": "0,002",
+  "source": "diagnosis/butterfly/pilot_A_results.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k4/logs/metrics.csv"
+ },
+ "decided_test_over_val_replay": {
+  "value": 3.8312652953077477,
+  "text": "3,8",
+  "source": "diagnosis/butterfly/pilot_A_results.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k4/logs/metrics.csv"
+ },
+ "decided_beyond_two_replay": {
+  "value": 1.9156326476538739,
+  "text": "1,9",
+  "source": "diagnosis/butterfly/pilot_A_results.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k4/logs/metrics.csv"
+ },
+ "decided_val_dilation": {
+  "value": 13.83593642501369,
+  "text": "14",
+  "source": "diagnosis/butterfly/pilot_A_results.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_decide_k4/logs/metrics.csv; diagnosis/butterfly/pilot_A_results.json; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k0/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k1/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k2/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k3/logs/metrics.csv; demo/runs/nablafx_butterfly_ssm_seed42_f100_replay_k4/logs/metrics.csv"
+ },
+ "decided_slope_fixe": {
+  "value": 2.2871289465218263,
+  "text": "2,29",
+  "source": "demo/nablafx_bench/pilotC_fixe_seed42.json; demo/nablafx_bench/pilotC_fixe_seed43.json; demo/nablafx_bench/pilotC_fixe_seed44.json; demo/nablafx_bench/pilotC_fixe_seed45.json; demo/nablafx_bench/pilotC_fixe_seed46.json; demo/nablafx_bench/pilotC_fixe_seed47.json; demo/nablafx_bench/pilotC_fixe_seed48.json; demo/nablafx_bench/pilotC_fixe_seed49.json; demo/nablafx_bench/pilotC_fixe_seed50.json; demo/nablafx_bench/pilotC_fixe_seed51.json; demo/nablafx_bench/pilotC_fixe_seed52.json; demo/nablafx_bench/pilotC_fixe_seed53.json; demo/nablafx_bench/pilotC_fixe_seed54.json; demo/nablafx_bench/pilotC_fixe_seed55.json; demo/nablafx_bench/pilotC_fixe_seed56.json; demo/nablafx_bench/pilotC_fixe_seed57.json"
+ },
+ "decided_slope_decide": {
+  "value": 2.5108018848440437,
+  "text": "2,51",
+  "source": "demo/nablafx_bench/pilotC_decide_seed42.json; demo/nablafx_bench/pilotC_decide_seed43.json; demo/nablafx_bench/pilotC_decide_seed44.json; demo/nablafx_bench/pilotC_decide_seed45.json; demo/nablafx_bench/pilotC_decide_seed46.json; demo/nablafx_bench/pilotC_decide_seed47.json; demo/nablafx_bench/pilotC_decide_seed48.json; demo/nablafx_bench/pilotC_decide_seed49.json; demo/nablafx_bench/pilotC_decide_seed50.json; demo/nablafx_bench/pilotC_decide_seed51.json; demo/nablafx_bench/pilotC_decide_seed52.json; demo/nablafx_bench/pilotC_decide_seed53.json; demo/nablafx_bench/pilotC_decide_seed54.json; demo/nablafx_bench/pilotC_decide_seed55.json; demo/nablafx_bench/pilotC_decide_seed56.json; demo/nablafx_bench/pilotC_decide_seed57.json"
+ },
+ "decided_slope_children": {
+  "value": 2.822344650422938,
+  "text": "2,82",
+  "source": "demo/butterfly/butterfly_ssm_seed42_f100_decide_k0.json; demo/butterfly/butterfly_ssm_seed42_f100_decide_k1.json; demo/butterfly/butterfly_ssm_seed42_f100_decide_k2.json; demo/butterfly/butterfly_ssm_seed42_f100_decide_k3.json; demo/butterfly/butterfly_ssm_seed42_f100_decide_k4.json"
+ },
+ "lmc_mid_esr": {
+  "value": 0.05666288128122687,
+  "text": "0,0567",
+  "source": "diagnosis/butterfly/mode_connectivity.json"
+ },
+ "lmc_end_control": {
+  "value": 0.03412609066193303,
+  "text": "0,0341",
+  "source": "diagnosis/butterfly/mode_connectivity.json"
+ },
+ "lmc_end_child": {
+  "value": 0.05104553245473653,
+  "text": "0,0510",
+  "source": "diagnosis/butterfly/mode_connectivity.json"
+ },
+ "lmc_segments_above": {
+  "value": 12,
+  "text": "12",
+  "source": "diagnosis/butterfly/mode_connectivity.json"
+ },
+ "lmc_rho_distance": {
+  "value": 0.9047619047619048,
+  "text": "0,90",
+  "source": "diagnosis/butterfly/mode_connectivity.json"
+ },
+ "lmc_p_distance": {
+  "value": 0.002008275505429469,
+  "text": "0,002",
+  "source": "diagnosis/butterfly/mode_connectivity.json"
+ },
+ "lmc_children": {
+  "value": 8,
+  "text": "8",
+  "source": "diagnosis/butterfly/mode_connectivity.json"
+ },
+ "lmc_barrier_ratio": {
+  "value": 5.275441240639897,
+  "text": "5,3",
+  "source": "diagnosis/butterfly/mode_connectivity.json"
+ },
+ "lmc_distance_k1": {
+  "value": 8.220008002054687,
+  "text": "8,22",
+  "source": "diagnosis/butterfly/mode_connectivity.json"
+ },
+ "lmc_distance_k3": {
+  "value": 8.370130168520635,
+  "text": "8,37",
+  "source": "diagnosis/butterfly/mode_connectivity.json"
+ },
+ "eq_esr_raw": {
+  "value": 0.0072308797389268875,
+  "text": "0,0072",
+  "source": "diagnosis/butterfly/is_it_eq.json"
+ },
+ "eq_esr_filtered": {
+  "value": 0.007131797261536121,
+  "text": "0,0071",
+  "source": "diagnosis/butterfly/is_it_eq.json"
+ },
+ "eq_removed": {
+  "value": 0.013702686390614893,
+  "text": "1",
+  "source": "diagnosis/butterfly/is_it_eq.json"
+ },
+ "eq_band_db_min": {
+  "value": -0.04422155022621155,
+  "text": "−0,04",
+  "source": "diagnosis/butterfly/is_it_eq.json"
+ },
+ "eq_band_db_max": {
+  "value": 0.016001418232917786,
+  "text": "+0,02",
+  "source": "diagnosis/butterfly/is_it_eq.json"
+ },
+ "eq_band_lo_hz": {
+  "value": 99,
+  "text": "99",
+  "source": "diagnosis/butterfly/is_it_eq.json"
+ },
+ "eq_band_hi_hz": {
+  "value": 3175,
+  "text": "3175",
+  "source": "diagnosis/butterfly/is_it_eq.json"
+ },
+ "aud_fall_db_seg0": {
+  "value": 5.294523239135742,
+  "text": "5,3",
+  "source": "diagnosis/butterfly/when_audible.json"
+ },
+ "aud_hold_db_seg0": {
+  "value": 15.975907325744629,
+  "text": "16,0",
+  "source": "diagnosis/butterfly/when_audible.json"
+ },
+ "aud_fall_db_seg1": {
+  "value": 2.3282740116119385,
+  "text": "2,3",
+  "source": "diagnosis/butterfly/when_audible.json"
+ },
+ "aud_hold_db_seg1": {
+  "value": 25.34206199645996,
+  "text": "25,3",
+  "source": "diagnosis/butterfly/when_audible.json"
+ },
+ "aud_rho_rms": {
+  "value": -0.1188811188811189,
+  "text": "−0,12",
+  "source": "diagnosis/butterfly/where_audible.json"
+ },
+ "aud_rho_crest": {
+  "value": 0.1188811188811189,
+  "text": "+0,12",
+  "source": "diagnosis/butterfly/where_audible.json"
+ },
+ "aud_rho_centroid": {
+  "value": 0.4265734265734266,
+  "text": "+0,43",
+  "source": "diagnosis/butterfly/where_audible.json"
+ },
+ "aud_rho_quiet": {
+  "value": 0.1940110709403283,
+  "text": "+0,19",
+  "source": "diagnosis/butterfly/where_audible.json"
+ },
+ "aud_segments": {
+  "value": 12,
+  "text": "12",
+  "source": "diagnosis/butterfly/where_audible.json"
+ },
+ "pilot_a_control_concat_esr": {
+  "value": 0.024478466715430157,
+  "text": "0,0245",
+  "source": "diagnosis/butterfly/where_audible.json"
+ },
+ "aud_seg0_share": {
+  "value": 0.9323151207222294,
+  "text": "0,93",
+  "source": "diagnosis/butterfly/where_audible.json"
+ },
+ "aud_seg11_share": {
+  "value": 0.09622422754287237,
+  "text": "0,10",
+  "source": "diagnosis/butterfly/where_audible.json"
+ },
+ "aud_seg0_quiet": {
+  "value": 0.504,
+  "text": "50",
+  "source": "diagnosis/butterfly/where_audible.json"
+ },
+ "aud_seg11_quiet": {
+  "value": 0.496,
+  "text": "50",
+  "source": "diagnosis/butterfly/where_audible.json"
+ },
+ "listen_real_control": {
+  "value": 0.0152,
+  "text": "1,52·10⁻²",
+  "source": "diagnosis/butterfly/listening.md"
+ },
+ "listen_control_child": {
+  "value": 0.0168,
+  "text": "1,68·10⁻²",
+  "source": "diagnosis/butterfly/listening.md"
+ },
+ "pilot_c_sd_decide": {
+  "value": 0.5352274985937694,
+  "text": "0,535",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_sd_fixe": {
+  "value": 0.29959458772975095,
+  "text": "0,300",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_ratio": {
+  "value": 0.5597518597547606,
+  "text": "0,56",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_support": {
+  "value": 0.5,
+  "text": "0,50",
+  "source": "diagnosis/butterfly/pilot_C_common_schedule.md"
+ },
+ "pilot_c_refute": {
+  "value": 0.75,
+  "text": "0,75",
+  "source": "diagnosis/butterfly/pilot_C_common_schedule.md"
+ },
+ "pilot_c_f": {
+  "value": 3.19160333081235,
+  "text": "3,19",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_f_p": {
+  "value": 0.07432626913072765,
+  "text": "0,074",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_loo_min": {
+  "value": 0.48410307459218943,
+  "text": "0,48",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_loo_max": {
+  "value": 0.6892341255280131,
+  "text": "0,69",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_mean_gain": {
+  "value": -0.2189680909596381,
+  "text": "−0,219",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_mean_factor": {
+  "value": 0.8033473517877249,
+  "text": "0,80",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_sd_decide_wo": {
+  "value": 0.3572191560935801,
+  "text": "0,357",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_sd_fixe_wo": {
+  "value": 0.3483699045841912,
+  "text": "0,348",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_ratio_wo": {
+  "value": 0.9752273881217314,
+  "text": "0,98",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_arm_residual": {
+  "value": 0.30140836432839246,
+  "text": "0,301",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_esr_48": {
+  "value": 0.15798944234848022,
+  "text": "0,158",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_esr_49": {
+  "value": 0.17807912826538086,
+  "text": "0,178",
+  "source": "diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_c_rho_quiet_decide": {
+  "value": 0.8095238095238096,
+  "text": "+0,81",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/seeds/split_property.json; diagnosis/butterfly/patience_law.json"
+ },
+ "pilot_c_p_quiet_decide": {
+  "value": 0.02177579365079365,
+  "text": "0,022",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/seeds/split_property.json; diagnosis/butterfly/patience_law.json"
+ },
+ "pilot_c_rho_quiet_fixe": {
+  "value": 0.261904761904762,
+  "text": "+0,26",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/seeds/split_property.json; diagnosis/butterfly/patience_law.json"
+ },
+ "pilot_c_p_quiet_fixe": {
+  "value": 0.5364087301587301,
+  "text": "0,536",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/seeds/split_property.json; diagnosis/butterfly/patience_law.json"
+ },
+ "pilot_c_rho_halving_decide": {
+  "value": -0.8095238095238096,
+  "text": "−0,81",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/seeds/split_property.json; diagnosis/butterfly/patience_law.json"
+ },
+ "pilot_c_p_halving_decide": {
+  "value": 0.02177579365079365,
+  "text": "0,022",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/seeds/split_property.json; diagnosis/butterfly/patience_law.json"
+ },
+ "pilot_c_rho_halving_fixe": {
+  "value": -0.30952380952380953,
+  "text": "−0,31",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/seeds/split_property.json; diagnosis/butterfly/patience_law.json"
+ },
+ "pilot_c_p_halving_fixe": {
+  "value": 0.4618055555555556,
+  "text": "0,462",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/seeds/split_property.json; diagnosis/butterfly/patience_law.json"
+ },
+ "pilot_cx_r_early": {
+  "value": 1.5275628302533006,
+  "text": "1,53",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_r_late": {
+  "value": 1.0210480071347108,
+  "text": "1,02",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_pred_early": {
+  "value": 0.6,
+  "text": "0,6",
+  "source": "diagnosis/butterfly/pilot_C_extension.md"
+ },
+ "pilot_cx_pred_late": {
+  "value": 0.9,
+  "text": "0,9",
+  "source": "diagnosis/butterfly/pilot_C_extension.md"
+ },
+ "pilot_cx_r_eight": {
+  "value": 1.7096929558308374,
+  "text": "1,71",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_r_sixteen": {
+  "value": 0.6752628125124602,
+  "text": "0,68",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_loo_early_min": {
+  "value": 1.1684978223762295,
+  "text": "1,17",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_loo_early_max": {
+  "value": 2.859325808545958,
+  "text": "2,86",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_loo_late_min": {
+  "value": 0.9141578513704063,
+  "text": "0,91",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_loo_late_max": {
+  "value": 1.1880056287421583,
+  "text": "1,19",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_worst_decide": {
+  "value": 0.07784797996282578,
+  "text": "0,078",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_mean_gain": {
+  "value": -0.027528190565116635,
+  "text": "−0,028",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_sd_decide": {
+  "value": 0.1509232179101122,
+  "text": "0,15",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_sd_fixe": {
+  "value": 0.2580323625322413,
+  "text": "0,26",
+  "source": "diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_sd_decide_wo": {
+  "value": 0.24813169336030697,
+  "text": "0,248",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_sd_fixe_wo": {
+  "value": 0.2884049309821825,
+  "text": "0,288",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_r_wo": {
+  "value": 1.1623058992443807,
+  "text": "1,16",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "pilot_cx_rho_quiet": {
+  "value": 0.30952380952380953,
+  "text": "+0,31",
+  "source": "diagnosis/butterfly/pilot_C_extension_channel.json"
+ },
+ "pilot_cx_p_quiet": {
+  "value": 0.4618055555555556,
+  "text": "0,462",
+  "source": "diagnosis/butterfly/pilot_C_extension_channel.json"
+ },
+ "pilot_cx_rho_halving": {
+  "value": 0.7142857142857144,
+  "text": "+0,71",
+  "source": "diagnosis/butterfly/pilot_C_extension_channel.json"
+ },
+ "pilot_cx_p_halving": {
+  "value": 0.05758928571428571,
+  "text": "0,058",
+  "source": "diagnosis/butterfly/pilot_C_extension_channel.json"
+ },
+ "pilot_cx_rho_gain": {
+  "value": 0.9285714285714287,
+  "text": "+0,93",
+  "source": "diagnosis/butterfly/pilot_C_extension_channel.json"
+ },
+ "pilot_cx_p_gain": {
+  "value": 0.002232142857142857,
+  "text": "0,002",
+  "source": "diagnosis/butterfly/pilot_C_extension_channel.json"
+ },
+ "pilot_cx_rho_stop_gain": {
+  "value": 0.8333333333333335,
+  "text": "+0,83",
+  "source": "diagnosis/butterfly/pilot_C_extension_channel.json"
+ },
+ "pilot_cx_p_stop_gain": {
+  "value": 0.015376984126984126,
+  "text": "0,015",
+  "source": "diagnosis/butterfly/pilot_C_extension_channel.json"
+ },
+ "pilot_cx_sign_follows": {
+  "value": 15,
+  "text": "15",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/butterfly/pilot_C_extension_results.json; diagnosis/butterfly/pilot_C_extension_groups.json; diagnosis/butterfly/patience_law.json"
+ },
+ "pilot_cx_seeds_total": {
+  "value": 16,
+  "text": "16",
+  "source": "diagnosis/butterfly/pilot_C_results.json; diagnosis/butterfly/pilot_C_extension_results.json"
+ },
+ "paired_r3": {
+  "value": 0.06549365989427464,
+  "text": "0,065",
+  "source": "diagnosis/seeds/paired_protocol.json"
+ },
+ "paired_r3_ci_lo": {
+  "value": 0.03409981544031489,
+  "text": "0,034",
+  "source": "diagnosis/seeds/paired_protocol.json"
+ },
+ "paired_r3_ci_hi": {
+  "value": 0.411610276737361,
+  "text": "0,41",
+  "source": "diagnosis/seeds/paired_protocol.json"
+ },
+ "paired_support": {
+  "value": 0.25,
+  "text": "0,25",
+  "source": "diagnosis/seeds/paired_protocol.md"
+ },
+ "paired_refute": {
+  "value": 0.35,
+  "text": "0,35",
+  "source": "diagnosis/seeds/paired_protocol.md"
+ },
+ "paired_factor3": {
+  "value": 1.802165182025305,
+  "text": "1,80",
+  "source": "diagnosis/seeds/paired_protocol.json"
+ },
+ "paired_r5": {
+  "value": 0.047593492648835084,
+  "text": "0,048",
+  "source": "diagnosis/seeds/paired_extension.json"
+ },
+ "paired_r5_ci_lo": {
+  "value": 0.028514838653054222,
+  "text": "0,029",
+  "source": "diagnosis/seeds/paired_extension.json"
+ },
+ "paired_r5_ci_hi": {
+  "value": 0.13676254894652035,
+  "text": "0,137",
+  "source": "diagnosis/seeds/paired_extension.json"
+ },
+ "paired_factor5": {
+  "value": 1.7879266920292936,
+  "text": "1,79",
+  "source": "diagnosis/seeds/paired_extension.json; demo/nablafx_bench/paired_ssm_wavenet_s369.json; demo/nablafx_bench/paired_s4_tf_l_16_s369.json; demo/nablafx_bench/paired_ssm_wavenet_s688.json; demo/nablafx_bench/paired_s4_tf_l_16_s688.json; demo/nablafx_bench/paired_ssm_wavenet_s736.json; demo/nablafx_bench/paired_s4_tf_l_16_s736.json; demo/nablafx_bench/paired_ssm_wavenet_s744.json; demo/nablafx_bench/paired_s4_tf_l_16_s744.json; demo/nablafx_bench/paired_ssm_wavenet_s925.json; demo/nablafx_bench/paired_s4_tf_l_16_s925.json"
+ },
+ "paired_sd_ssm": {
+  "value": 0.06678905038165737,
+  "text": "0,067",
+  "source": "diagnosis/seeds/paired_extension.json; demo/nablafx_bench/paired_ssm_wavenet_s369.json; demo/nablafx_bench/paired_s4_tf_l_16_s369.json; demo/nablafx_bench/paired_ssm_wavenet_s688.json; demo/nablafx_bench/paired_s4_tf_l_16_s688.json; demo/nablafx_bench/paired_ssm_wavenet_s736.json; demo/nablafx_bench/paired_s4_tf_l_16_s736.json; demo/nablafx_bench/paired_ssm_wavenet_s744.json; demo/nablafx_bench/paired_s4_tf_l_16_s744.json; demo/nablafx_bench/paired_ssm_wavenet_s925.json; demo/nablafx_bench/paired_s4_tf_l_16_s925.json"
+ },
+ "paired_sd_s4": {
+  "value": 0.04266062819146494,
+  "text": "0,043",
+  "source": "diagnosis/seeds/paired_extension.json; demo/nablafx_bench/paired_ssm_wavenet_s369.json; demo/nablafx_bench/paired_s4_tf_l_16_s369.json; demo/nablafx_bench/paired_ssm_wavenet_s688.json; demo/nablafx_bench/paired_s4_tf_l_16_s688.json; demo/nablafx_bench/paired_ssm_wavenet_s736.json; demo/nablafx_bench/paired_s4_tf_l_16_s736.json; demo/nablafx_bench/paired_ssm_wavenet_s744.json; demo/nablafx_bench/paired_s4_tf_l_16_s744.json; demo/nablafx_bench/paired_ssm_wavenet_s925.json; demo/nablafx_bench/paired_s4_tf_l_16_s925.json"
+ },
+ "paired_corr": {
+  "value": 0.30717161918775054,
+  "text": "0,31",
+  "source": "diagnosis/seeds/paired_extension.json; demo/nablafx_bench/paired_ssm_wavenet_s369.json; demo/nablafx_bench/paired_s4_tf_l_16_s369.json; demo/nablafx_bench/paired_ssm_wavenet_s688.json; demo/nablafx_bench/paired_s4_tf_l_16_s688.json; demo/nablafx_bench/paired_ssm_wavenet_s736.json; demo/nablafx_bench/paired_s4_tf_l_16_s736.json; demo/nablafx_bench/paired_ssm_wavenet_s744.json; demo/nablafx_bench/paired_s4_tf_l_16_s744.json; demo/nablafx_bench/paired_ssm_wavenet_s925.json; demo/nablafx_bench/paired_s4_tf_l_16_s925.json"
+ },
+ "paired_corr_ci_lo": {
+  "value": -0.7888991807855998,
+  "text": "−0,79",
+  "source": "diagnosis/seeds/paired_extension.json; demo/nablafx_bench/paired_ssm_wavenet_s369.json; demo/nablafx_bench/paired_s4_tf_l_16_s369.json; demo/nablafx_bench/paired_ssm_wavenet_s688.json; demo/nablafx_bench/paired_s4_tf_l_16_s688.json; demo/nablafx_bench/paired_ssm_wavenet_s736.json; demo/nablafx_bench/paired_s4_tf_l_16_s736.json; demo/nablafx_bench/paired_ssm_wavenet_s744.json; demo/nablafx_bench/paired_s4_tf_l_16_s744.json; demo/nablafx_bench/paired_ssm_wavenet_s925.json; demo/nablafx_bench/paired_s4_tf_l_16_s925.json"
+ },
+ "paired_corr_ci_hi": {
+  "value": 0.9358263745308812,
+  "text": "0,94",
+  "source": "diagnosis/seeds/paired_extension.json; demo/nablafx_bench/paired_ssm_wavenet_s369.json; demo/nablafx_bench/paired_s4_tf_l_16_s369.json; demo/nablafx_bench/paired_ssm_wavenet_s688.json; demo/nablafx_bench/paired_s4_tf_l_16_s688.json; demo/nablafx_bench/paired_ssm_wavenet_s736.json; demo/nablafx_bench/paired_s4_tf_l_16_s736.json; demo/nablafx_bench/paired_ssm_wavenet_s744.json; demo/nablafx_bench/paired_s4_tf_l_16_s744.json; demo/nablafx_bench/paired_ssm_wavenet_s925.json; demo/nablafx_bench/paired_s4_tf_l_16_s925.json"
+ },
+ "paired_r_uncorrelated": {
+  "value": 0.05603885459470946,
+  "text": "0,056",
+  "source": "diagnosis/seeds/paired_extension.json; demo/nablafx_bench/paired_ssm_wavenet_s369.json; demo/nablafx_bench/paired_s4_tf_l_16_s369.json; demo/nablafx_bench/paired_ssm_wavenet_s688.json; demo/nablafx_bench/paired_s4_tf_l_16_s688.json; demo/nablafx_bench/paired_ssm_wavenet_s736.json; demo/nablafx_bench/paired_s4_tf_l_16_s736.json; demo/nablafx_bench/paired_ssm_wavenet_s744.json; demo/nablafx_bench/paired_s4_tf_l_16_s744.json; demo/nablafx_bench/paired_ssm_wavenet_s925.json; demo/nablafx_bench/paired_s4_tf_l_16_s925.json"
+ },
+ "paired_removed_share": {
+  "value": 0.27869880209764797,
+  "text": "28",
+  "source": "diagnosis/seeds/paired_extension.json; demo/nablafx_bench/paired_ssm_wavenet_s369.json; demo/nablafx_bench/paired_s4_tf_l_16_s369.json; demo/nablafx_bench/paired_ssm_wavenet_s688.json; demo/nablafx_bench/paired_s4_tf_l_16_s688.json; demo/nablafx_bench/paired_ssm_wavenet_s736.json; demo/nablafx_bench/paired_s4_tf_l_16_s736.json; demo/nablafx_bench/paired_ssm_wavenet_s744.json; demo/nablafx_bench/paired_s4_tf_l_16_s744.json; demo/nablafx_bench/paired_ssm_wavenet_s925.json; demo/nablafx_bench/paired_s4_tf_l_16_s925.json"
+ },
+ "paired_splits": {
+  "value": 5,
+  "text": "5",
+  "source": "diagnosis/seeds/paired_extension.json; demo/nablafx_bench/paired_ssm_wavenet_s369.json; demo/nablafx_bench/paired_s4_tf_l_16_s369.json; demo/nablafx_bench/paired_ssm_wavenet_s688.json; demo/nablafx_bench/paired_s4_tf_l_16_s688.json; demo/nablafx_bench/paired_ssm_wavenet_s736.json; demo/nablafx_bench/paired_s4_tf_l_16_s736.json; demo/nablafx_bench/paired_ssm_wavenet_s744.json; demo/nablafx_bench/paired_s4_tf_l_16_s744.json; demo/nablafx_bench/paired_ssm_wavenet_s925.json; demo/nablafx_bench/paired_s4_tf_l_16_s925.json"
+ },
+ "paired_pilot_c_residual_ref": {
+  "value": 0.301,
+  "text": "0,301",
+  "source": "diagnosis/seeds/paired_protocol.md"
+ },
+ "pilot_g_rho": {
+  "value": -0.28743030285918214,
+  "text": "−0,29",
+  "source": "diagnosis/seeds/split_property_verdict.json"
+ },
+ "pilot_g_p": {
+  "value": 0.49001548522203403,
+  "text": "0,49",
+  "source": "diagnosis/seeds/split_property_verdict.json"
+ },
+ "pilot_g_support": {
+  "value": 0.74,
+  "text": "0,74",
+  "source": "diagnosis/seeds/pilot_G_split_property.md"
+ },
+ "pilot_g_refute": {
+  "value": 0.5,
+  "text": "0,50",
+  "source": "diagnosis/seeds/pilot_G_split_property.md"
+ },
+ "pilot_g_quiet_rho": {
+  "value": 0.8095238095238096,
+  "text": "+0,81",
+  "source": "diagnosis/seeds/split_property_verdict.json; diagnosis/seeds/split_property.json; diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_g_quiet_p": {
+  "value": 0.02177579365079365,
+  "text": "0,022",
+  "source": "diagnosis/seeds/split_property_verdict.json; diagnosis/seeds/split_property.json; diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_g_tested": {
+  "value": 6,
+  "text": "6",
+  "source": "diagnosis/seeds/split_property_verdict.json"
+ },
+ "pilot_g_quiet_sidak": {
+  "value": 0.12374515574195066,
+  "text": "0,124",
+  "source": "diagnosis/seeds/split_property_verdict.json; diagnosis/seeds/split_property.json; diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_g_reliability": {
+  "value": 0.8807998360409779,
+  "text": "0,88",
+  "source": "diagnosis/seeds/global_factor.json; diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_g_attenuation": {
+  "value": 0.9385093691812447,
+  "text": "0,94",
+  "source": "diagnosis/seeds/global_factor.json; diagnosis/butterfly/pilot_C_results.json"
+ },
+ "pilot_g_true_rho": {
+  "value": 0.9,
+  "text": "0,90",
+  "source": "diagnosis/seeds/pilot_G_split_property.md"
+ },
+ "pilot_g_seen_rho": {
+  "value": 0.8446584322631203,
+  "text": "0,84",
+  "source": "diagnosis/seeds/global_factor.json; diagnosis/butterfly/pilot_C_results.json; diagnosis/seeds/pilot_G_split_property.md"
+ },
+ "t3_runs": {
+  "value": 21,
+  "text": "21",
+  "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "t3_gate_exact": {
+  "value": 21,
+  "text": "21",
+  "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "t3_vr_median": {
+  "value": 0.1658842054272791,
+  "text": "0,166",
+  "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "t3_vr_max": {
+  "value": 0.6346859705277258,
+  "text": "0,635",
+  "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "t3_vr_below": {
+  "value": 20,
+  "text": "20",
+  "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "t3_vr_independent": {
+  "value": 0.3,
+  "text": "0,3",
+  "source": "diagnosis/butterfly/patience_law.md"
+ },
+ "t3_covered": {
+  "value": 12,
+  "text": "12",
+  "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "t3_coverage": {
+  "value": 0.5714285714285714,
+  "text": "0,57",
+  "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "t3_support": {
+  "value": 0.6,
+  "text": "0,60",
+  "source": "diagnosis/butterfly/patience_law.md"
+ },
+ "t3_refute": {
+  "value": 0.4,
+  "text": "0,40",
+  "source": "diagnosis/butterfly/patience_law.md"
+ },
+ "t3_misses_late": {
+  "value": 9,
+  "text": "9",
+  "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "t3_shift_up": {
+  "value": 0,
+  "text": "0",
+  "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "t3_shift_down": {
+  "value": -1,
+  "text": "−1",
+  "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "t3_width_median": {
+  "value": 72.1,
+  "text": "72",
+  "source": "diagnosis/butterfly/patience_law.json"
+ },
+ "det_ssm_nondet_max_diff": {
+  "value": 1.7297908775508404,
+  "text": "1,73",
+  "source": "diagnosis/butterfly/determinism.json"
+ },
+ "det_ssm_cost": {
+  "value": 0.05263157894736836,
+  "text": "5",
+  "source": "diagnosis/butterfly/determinism.json"
+ },
+ "det_s4_nondet_max_diff": {
+  "value": 2.138271749019623,
+  "text": "2,14",
+  "source": "diagnosis/butterfly/determinism.json"
+ },
+ "det_s4_cost": {
+  "value": 0.10612244897959178,
+  "text": "11",
+  "source": "diagnosis/butterfly/determinism.json"
+ },
+ "det_gate_paths": {
+  "value": 3,
+  "text": "3",
+  "source": "diagnosis/seeds/repro_gate.json"
+ },
+ "det_gate_values_min": {
+  "value": 348,
+  "text": "348",
+  "source": "diagnosis/seeds/repro_gate.json"
+ },
+ "retired_quiet_share_min": {
+  "value": 0.7657633166357615,
+  "text": "77",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "retired_quiet_share_max": {
+  "value": 0.8128366955277261,
+  "text": "81",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "retired_one_factor_min": {
+  "value": 0.7253610203827772,
+  "text": "73",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "retired_one_factor_max": {
+  "value": 0.8285106149937276,
+  "text": "83",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "retired_repeat_delta": {
+  "value": 0.011207573115825653,
+  "text": "0,011",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed42_repeat.json"
+ },
+ "retired_repeat42_log": {
+  "value": 0.2700890500114019,
+  "text": "+0,27",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "retired_ssm_mean": {
+  "value": 0.08221726988752683,
+  "text": "0,082",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed44.json"
+ },
+ "retired_ssm_std": {
+  "value": 0.04594911049281104,
+  "text": "0,046",
+  "source": "demo/nablafx_bench/ssmzoh_guard_seed42.json; demo/nablafx_bench/ssmzoh_guard_seed43.json; demo/nablafx_bench/ssmzoh_guard_seed44.json"
+ },
+ "retired_h4_cv_ssm": {
+  "value": 0.5583951313091368,
+  "text": "56",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "retired_h4_cv_ssm_energy": {
+  "value": 0.4963767294591746,
+  "text": "50",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "retired_h4_cv_s4": {
+  "value": 0.2735744671389743,
+  "text": "27",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "retired_h4_cv_s4_energy": {
+  "value": 0.28505128068134505,
+  "text": "29",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "retired_h4_reduction": {
+  "value": 0.11106544160684617,
+  "text": "11",
+  "source": "diagnosis/seeds/global_factor.json"
+ },
+ "retired_h4_predicted": {
+  "value": 30,
+  "text": "30",
+  "source": "DIAGNOSIS_seeds.md"
+ },
+ "retired_k0_old_margin": {
+  "value": 4.7957209722377785,
+  "text": "4,80",
+  "source": "diagnosis/butterfly/plateau_margin.json"
+ }
+}
